@@ -1,4 +1,4 @@
-package com.andone.memorip.ui.theme
+package com.andone.memorip.presentation.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

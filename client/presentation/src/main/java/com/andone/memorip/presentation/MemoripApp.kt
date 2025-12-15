@@ -1,4 +1,4 @@
-package com.andone.memorip
+package com.andone.memorip.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,7 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.andone.memorip.ui.theme.MemoripTheme
+import com.andone.memorip.presentation.theme.MemoripTheme
 
 @Composable
 fun MemoripApp() {
