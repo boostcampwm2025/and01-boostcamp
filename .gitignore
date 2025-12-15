@@ -1,0 +1,56 @@
+*.iml
+.gradle
+client/local.properties
+client/.idea/caches
+client/.idea/libraries
+client/.idea/modules.xml
+client/.idea/workspace.xml
+client/.idea/navEditor.xml
+client/.idea/assetWizardSettings.xml
+.DS_Store
+client/build
+client/captures
+.externalNativeBuild
+.cxx
+local.properties
+
+HELP.md
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### NetBeans ###
+server/nbproject/private/
+server/nbbuild/
+server/dist/
+server/nbdist/
+server/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+### Kotlin ###
+.kotlin
+
