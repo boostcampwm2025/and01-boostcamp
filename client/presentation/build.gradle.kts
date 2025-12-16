@@ -58,4 +58,8 @@ dependencies {
 
     // navigation
     implementation(libs.bundles.navigation3)
+
+    // Coil
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
 }
