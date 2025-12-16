@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Memorip</string>
+
+    <!-- MainBottomBar -->
+    <string name="main_bottom_bar_home">홈</string>
+    <string name="main_bottom_bar_user">마이페이지</string>
+
 </resources>
