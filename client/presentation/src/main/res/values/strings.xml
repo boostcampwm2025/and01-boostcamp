@@ -3,4 +3,6 @@
     <string name="dialog_cancel_message">취소</string>
     <string name="dialog_confirm_message">확인</string>
     <string name="dialog_close_button_description">입력 초기화 버튼</string>
+    <string name="dialog_name_place_holder">이름</string>
+    <string name="category_dialog_color_format">#%s</string>
 </resources>
