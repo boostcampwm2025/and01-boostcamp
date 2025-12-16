@@ -292,21 +292,17 @@ private fun DefaultDialog(
 @Composable
 private fun DefaultDialogPrev() {
     MemoripTheme(darkTheme = false) {
-        Box(
-            contentAlignment = Alignment.Center
+        DefaultDialog(
+            title = "앱 확인 알림",
+            onConfirmClick = {},
+            onCancelClick = {},
+            onDismissRequest = {}
         ) {
-            DefaultDialog(
-                title = "앱 확인 알림",
-                onConfirmClick = {},
-                onCancelClick = {},
-                onDismissRequest = {}
-            ) {
-                Text(
-                    text = "테스트하고자 생성한 Preview 입니다.\n어쩌고 저쩌고",
-                    style = LocalMemoripTypography.current.body1,
-                    textAlign = TextAlign.Center
-                )
-            }
+            Text(
+                text = "테스트하고자 생성한 Preview 입니다.\n어쩌고 저쩌고",
+                style = LocalMemoripTypography.current.body1,
+                textAlign = TextAlign.Center
+            )
         }
     }
 }
