@@ -9,6 +9,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
 import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.utils.ColorConstants.EXCLUDED_BRIGHT_COLOR_THRESHOLD
+import com.andone.memorip.presentation.utils.ColorConstants.MAX_LENGTH
 import kotlin.random.Random
 
 @Composable
@@ -16,13 +18,15 @@ fun rememberColorState(): ColorState {
     return rememberSaveable(saver = ColorState.ColorSaver) { ColorState() }
 }
 
+private object ColorConstants {
+    val EXCLUDED_BRIGHT_COLOR_THRESHOLD = 0.8f
+    val MAX_LENGTH = 6
+}
+
 class ColorState(
     color: Color? = null,
     inputColor: String? = null
 ) {
-    private val EXCLUDED_BRIGHT_COLOR_THRESHOLD = 0.8f
-    private val MAX_LENGTH = 6
-
     private var _color = mutableStateOf(color ?: getRandomColor())
     val color get() = _color.value
 
