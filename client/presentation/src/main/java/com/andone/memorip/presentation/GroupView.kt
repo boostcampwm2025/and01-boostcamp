@@ -41,7 +41,7 @@ fun GroupView(
 private fun GroupViewPreview() {
     MemoripTheme {
         GroupView(
-            name = "테스트 그룹",
+            name = "기본 그룹",
             images = listOf(
                 "https://picsum.photos/300/300?1",
                 "https://picsum.photos/300/300?1",
