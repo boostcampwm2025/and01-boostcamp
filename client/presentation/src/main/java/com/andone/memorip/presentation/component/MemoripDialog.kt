@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
@@ -21,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -29,16 +32,24 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.component.DialogConstants.MAX_LENGTH
 import com.andone.memorip.presentation.component.DialogDimens.INNER_PADDING
+import com.andone.memorip.presentation.component.DialogDimens.LEADING_ICON_SIZE
 import com.andone.memorip.presentation.component.DialogDimens.SPACING
 import com.andone.memorip.presentation.theme.LocalMemoripColors
 import com.andone.memorip.presentation.theme.LocalMemoripShapes
 import com.andone.memorip.presentation.theme.MemoripTheme
+import com.andone.memorip.presentation.utils.rememberColorState
 import org.andone.memorip.presentation.theme.LocalMemoripTypography
 
 private object DialogDimens {
     val INNER_PADDING = 24.dp
     val SPACING = 8.dp
+    val LEADING_ICON_SIZE = 36.dp
+}
+
+object DialogConstants {
+    val MAX_LENGTH = 6
 }
 
 @Composable
@@ -120,10 +131,105 @@ fun MemoripInputDialog(
 }
 
 @Composable
-fun MemoripColorInputDialog(
-
+fun MemoripCategoryInputDialog(
+    title: String,
+    onConfirmClick: (name: String, color: Color) -> Unit,
+    onCancelClick: () -> Unit,
+    onDismissRequest: () -> Unit,
 ) {
+    var name by remember { mutableStateOf("") }
+    val colorState = rememberColorState()
 
+    DefaultDialog(
+        title = title,
+        onConfirmClick = { onConfirmClick(name, colorState.color) },
+        onCancelClick = onCancelClick,
+        onDismissRequest = onDismissRequest
+    ) {
+        TextField(
+            value = name,
+            onValueChange = { name = it },
+            placeholder = {
+                Text(text = stringResource(R.string.dialog_name_place_holder))
+            },
+            label = {
+                Text(text = stringResource(R.string.dialog_name_place_holder))
+            },
+            textStyle = LocalMemoripTypography.current.body2,
+            trailingIcon = {
+                IconButton(onClick = { name = "" }) {
+                    Icon(
+                        tint = LocalMemoripColors.current.black,
+                        imageVector = ImageVector.vectorResource(R.drawable.close_ic),
+                        contentDescription = ""
+                    )
+                }
+            },
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = LocalMemoripColors.current.primaryContainer,
+                unfocusedContainerColor = LocalMemoripColors.current.primaryContainer,
+                focusedTextColor = LocalMemoripColors.current.black,
+                unfocusedTextColor = LocalMemoripColors.current.black,
+                focusedPlaceholderColor = LocalMemoripColors.current.outline,
+                unfocusedPlaceholderColor = LocalMemoripColors.current.outline,
+                focusedLabelColor = LocalMemoripColors.current.outline,
+                unfocusedLabelColor = LocalMemoripColors.current.outline,
+            )
+        )
+        TextField(
+            value = stringResource(
+                R.string.category_dialog_color_format,
+                colorState.inputColor
+            ),
+            onValueChange = { value ->
+                if (value.length <= MAX_LENGTH + 1) {
+                    colorState.updateColor(value)
+                }
+            },
+            textStyle = LocalMemoripTypography.current.body2,
+            maxLines = 1,
+            leadingIcon = {
+                Box(
+                    modifier = Modifier
+                        .size(LEADING_ICON_SIZE)
+                        .background(
+                            color = colorState.color,
+                            shape = MemoripTheme.shapes.defaultCorner
+                        )
+                )
+            },
+            isError = !colorState.isValidColorInput(),
+            supportingText = {
+                if (!colorState.isValidColorInput()) {
+                    Text(
+                        text = stringResource(colorState.getErrMsg()),
+                        style = LocalMemoripTypography.current.hint1
+                    )
+                }
+            },
+            trailingIcon = {
+                IconButton(
+                    enabled = colorState.inputColor.length == MAX_LENGTH,
+                    onClick = { colorState.refreshColor() }
+                ) {
+                    Icon(
+                        tint = LocalMemoripColors.current.black,
+                        imageVector = ImageVector.vectorResource(R.drawable.refresh_ic),
+                        contentDescription = ""
+                    )
+                }
+            },
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = LocalMemoripColors.current.primaryContainer,
+                unfocusedContainerColor = LocalMemoripColors.current.primaryContainer,
+                errorContainerColor = LocalMemoripColors.current.primaryContainer,
+                focusedTextColor = LocalMemoripColors.current.black,
+                unfocusedTextColor = LocalMemoripColors.current.black,
+                errorTextColor = LocalMemoripColors.current.error,
+                errorSupportingTextColor = LocalMemoripColors.current.error
+            )
+        )
+    }
 }
 
 @Composable
@@ -228,6 +334,19 @@ private fun MemoripInputDialogPrev() {
             hint = "input",
             label = "이름",
             onConfirmClick = {},
+            onCancelClick = {},
+            onDismissRequest = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun MemoripCategoryInputDialogPrev() {
+    MemoripTheme(darkTheme = false) {
+        MemoripCategoryInputDialog(
+            title = "카테고리 입력",
+            onConfirmClick = { name, color -> },
             onCancelClick = {},
             onDismissRequest = {}
         )
