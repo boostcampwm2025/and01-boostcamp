@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Memorip</string>
+
+    <string name="place_image">장소 이미지</string>
 </resources>
