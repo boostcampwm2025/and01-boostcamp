@@ -5,7 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Modifier.Companion.all
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
@@ -14,7 +13,7 @@ import kotlin.random.Random
 
 @Composable
 fun rememberColorState(): ColorState {
-    return rememberSaveable(saver = ColorState.ColorSaver){ ColorState() }
+    return rememberSaveable(saver = ColorState.ColorSaver) { ColorState() }
 }
 
 class ColorState(
@@ -47,17 +46,18 @@ class ColorState(
         return inputColor.isValidHexRgb() && inputColor.length == MAX_LENGTH
     }
 
-    @StringRes fun getErrMsg(): Int {
+    @StringRes
+    fun getErrMsg(): Int {
         return if (inputColor.length != MAX_LENGTH) R.string.category_dialog_max_length_err_hint
         else R.string.category_dialog_valid_color_err_hint
     }
 
     private fun String.isValidHexRgb(): Boolean {
-        return all{ it.isDigit() || it.uppercaseChar() in 'A'..'F' }
+        return all { it.isDigit() || it.uppercaseChar() in 'A'..'F' }
     }
 
     private fun getRandomColor(): Color {
-        var newColor: Color? = null
+        var newColor: Color?
         do {
             newColor = Color(
                 red = Random.nextFloat(),
@@ -65,7 +65,7 @@ class ColorState(
                 blue = Random.nextFloat(),
                 alpha = 1f
             )
-        } while(isReadableOnWhite(newColor))
+        } while (isReadableOnWhite(newColor))
 
         return newColor
     }
