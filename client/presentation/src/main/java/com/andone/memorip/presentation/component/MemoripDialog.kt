@@ -112,7 +112,7 @@ fun MemoripInputDialog(
                     Icon(
                         tint = LocalMemoripColors.current.black,
                         imageVector = ImageVector.vectorResource(R.drawable.close_ic),
-                        contentDescription = ""
+                        contentDescription = stringResource(R.string.dialog_close_button_description)
                     )
                 }
             },
@@ -161,7 +161,7 @@ fun MemoripCategoryInputDialog(
                     Icon(
                         tint = LocalMemoripColors.current.black,
                         imageVector = ImageVector.vectorResource(R.drawable.close_ic),
-                        contentDescription = ""
+                        contentDescription = stringResource(R.string.dialog_close_button_description)
                     )
                 }
             },
@@ -215,7 +215,7 @@ fun MemoripCategoryInputDialog(
                     Icon(
                         tint = LocalMemoripColors.current.black,
                         imageVector = ImageVector.vectorResource(R.drawable.refresh_ic),
-                        contentDescription = ""
+                        contentDescription = stringResource(R.string.dialog_refresh_button_description)
                     )
                 }
             },
