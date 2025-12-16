@@ -1,40 +1,69 @@
 package com.andone.memorip.domain.group
 
-fun buildGroupItems(
-    images: List<String>,
-    columns: Int = 5,
-    rows: Int = 3
-): List<GroupItem> {
-    return when (images.size) {
-        1 -> listOf(
-            GroupItem(columns, rows, images[0])
+fun buildBento5x3Items(images: List<String>): List<GroupItem> {
+    val visible = images.take(7)
+    val overflowCount = (images.size - 7).coerceAtLeast(0)
+
+    val patterns = BENTO_5x3_PATTERNS[visible.size]
+        ?: return emptyList()
+
+    return patterns.map { pattern ->
+        GroupItem(
+            colSpan = pattern.colSpan,
+            rowSpan = pattern.rowSpan,
+            imageUrl = visible[pattern.index],
+            overNumber = if (pattern.isOverflowTarget) overflowCount else null
         )
-        2 -> buildTwo(images, columns, rows)
-        3 -> buildThree(images, columns, rows)
-        in 4..6 -> buildFromPatternTable(images, columns, rows)
-        else -> buildOverflow(images, columns, rows)
     }
 }
 
-private fun buildTwo(
-    images: List<String>,
-    columns: Int,
-    rows: Int
-): List<GroupItem> {
-    return listOf(
-        GroupItem(colSpan = 2, rowSpan = 2, imageUrl = images[0]),
-        GroupItem(colSpan = 2, rowSpan = 2, imageUrl = images[1])
-    )
-}
+private val BENTO_5x3_PATTERNS = mapOf(
+    1 to listOf(
+        BentoPattern(5, 3, 0)
+    ),
 
-private fun buildThree(
-    images: List<String>,
-    columns: Int,
-    rows: Int
-): List<GroupItem> {
-    return listOf(
-        GroupItem(colSpan = 3, rowSpan = rows, imageUrl = images[0]),
-        GroupItem(colSpan = 2, rowSpan = 1, imageUrl = images[1]),
-        GroupItem(colSpan = 2, rowSpan = 1, imageUrl = images[2])
+    2 to listOf(
+        BentoPattern(3, 3, 0),
+        BentoPattern(2, 3, 1)
+    ),
+
+    3 to listOf(
+        BentoPattern(3, 3, 0),
+        BentoPattern(2, 2, 1),
+        BentoPattern(2, 1, 2)
+    ),
+
+    4 to listOf(
+        BentoPattern(3, 3, 0),
+        BentoPattern(2, 2, 1),
+        BentoPattern(1, 1, 2),
+        BentoPattern(1, 1, 3)
+    ),
+
+    5 to listOf(
+        BentoPattern(2, 2, 0),
+        BentoPattern(1, 3, 1),
+        BentoPattern(2, 1, 2),
+        BentoPattern(2, 1, 3),
+        BentoPattern(2, 2, 4)
+    ),
+
+    6 to listOf(
+        BentoPattern(2, 2, 0),
+        BentoPattern(1, 3, 1),
+        BentoPattern(1, 1, 2),
+        BentoPattern(1, 1, 3),
+        BentoPattern(2, 1, 4),
+        BentoPattern(2, 2, 5)
+    ),
+
+    7 to listOf(
+        BentoPattern(2, 2, 0),
+        BentoPattern(1, 3, 1),
+        BentoPattern(1, 1, 2),
+        BentoPattern(1, 1, 3),
+        BentoPattern(1, 1, 4),
+        BentoPattern(1, 1, 5),
+        BentoPattern(2, 2, 6, isOverflowTarget = true)
     )
-}
+)
