@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.andone.memorip.navigation.MemoripNav
 import com.andone.memorip.navigation.MemoripNavigator
-import com.andone.memorip.presentation.theme.component.MainBottomBar
+import com.andone.memorip.presentation.component.MainBottomBar
 
 @Composable
 fun MemoripApp(navigator: MemoripNavigator) {

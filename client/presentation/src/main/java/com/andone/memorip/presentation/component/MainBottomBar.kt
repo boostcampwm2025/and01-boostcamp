@@ -1,4 +1,4 @@
-package com.andone.memorip.presentation.theme.component
+package com.andone.memorip.presentation.component
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -16,7 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.navigation.MainBottomBarRoute
 import com.andone.memorip.presentation.theme.MemoripTheme
-import com.andone.memorip.presentation.theme.component.MainBottomBarDimens.DURATION_MILLIS
+import com.andone.memorip.presentation.component.MainBottomBarDimens.DURATION_MILLIS
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
