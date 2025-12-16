@@ -346,7 +346,7 @@ private fun MemoripCategoryInputDialogPrev() {
     MemoripTheme(darkTheme = false) {
         MemoripCategoryInputDialog(
             title = "카테고리 입력",
-            onConfirmClick = { name, color -> },
+            onConfirmClick = { _, _ -> },
             onCancelClick = {},
             onDismissRequest = {}
         )
