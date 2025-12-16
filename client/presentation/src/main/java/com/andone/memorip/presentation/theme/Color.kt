@@ -12,6 +12,7 @@ val Secondary = Color(0xFF36699A)
 val White = Color(0xFFFFFFFF)
 val OffWhite = Color(0xFFF5EDE8)
 val Black = Color(0xFF000000)
+val Outline = Color(0xFF7A5A4A)
 
 @Immutable
 data class MemoripColors(
@@ -22,6 +23,7 @@ data class MemoripColors(
     val white: Color,
     val offWhite: Color,
     val black: Color,
+    val outline: Color
 )
 
 internal val lightMemoripColors = MemoripColors(
@@ -32,6 +34,7 @@ internal val lightMemoripColors = MemoripColors(
     white = White,
     offWhite = OffWhite,
     black = Black,
+    outline = Outline
 )
 
 internal val darkMemoripColors = MemoripColors(
@@ -42,20 +45,23 @@ internal val darkMemoripColors = MemoripColors(
     white = White,
     offWhite = OffWhite,
     black = Black,
+    outline = Outline
 )
 
 internal val lightMaterialScheme = lightColorScheme(
     primary = lightMemoripColors.primary,
     primaryContainer = lightMemoripColors.primaryContainer,
     secondary = lightMemoripColors.secondary,
-    background = lightMemoripColors.background
+    background = lightMemoripColors.background,
+    outline = lightMemoripColors.outline
 )
 
 internal val darkMaterialScheme = darkColorScheme(
     primary = darkMemoripColors.primary,
     primaryContainer = darkMemoripColors.primaryContainer,
     secondary = darkMemoripColors.secondary,
-    background = darkMemoripColors.background
+    background = darkMemoripColors.background,
+    outline = lightMemoripColors.outline
 )
 
 internal val LocalMemoripColors = staticCompositionLocalOf {
