@@ -19,17 +19,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import coil3.compose.AsyncImage
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.theme.MemoripDimen
 import com.andone.memorip.presentation.theme.MemoripTheme
-
-data class ImageItem(
-    val id: Int,
-    val url: String
-)
 
 @Composable
 fun MemoripStaggeredGrid(
@@ -81,8 +75,15 @@ private fun StaggeredImageItem(
     }
 }
 
+// todo: 실제 Image 모델로 대체 에정
+data class ImageItem(
+    val id: Int,
+    val url: String
+)
+
 /**
  * 랜덤 높이 이미지 count 개 생성.
+ * picsum 사이트에서 200x랜덤height로 crop해서 가져옴.
  * todo: 백엔드에서 받아온 이미지로 변경
  */
 fun generateRandomImageUrls(count: Int): List<ImageItem> {
@@ -93,14 +94,5 @@ fun generateRandomImageUrls(count: Int): List<ImageItem> {
             id = id,
             url = "https://picsum.photos/id/$id/200/$height"
         )
-    }
-}
-
-@Preview(showBackground = true)
-@Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
-@Composable
-private fun MemoripStaggeredGridPreview() {
-    MemoripTheme {
-        MemoripStaggeredGrid()
     }
 }
