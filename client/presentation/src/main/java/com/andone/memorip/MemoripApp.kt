@@ -1,22 +1,28 @@
 package com.andone.memorip
 
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.navigation.MemoripNav
+import com.andone.memorip.navigation.MemoripNavigator
+import com.andone.memorip.presentation.theme.component.MainBottomBar
 
 @Composable
-fun MemoripApp() {
-    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-        MemoripNav(Modifier.padding(innerPadding))
+fun MemoripApp(navigator: MemoripNavigator) {
+    Scaffold(
+        bottomBar = {
+            MainBottomBar(
+                visible = navigator.isShowBottomBar,
+                tabs = navigator.mainBottomBars,
+                currentTab = navigator.currentTab,
+                onTabSelected = navigator::navigateToTab
+            )
+        }
+    ) { innerPadding ->
+        MemoripNav(
+            navigator = navigator,
+            modifier = Modifier.padding(innerPadding)
+        )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun MemoripAppPreview() {
-    MemoripApp()
 }
