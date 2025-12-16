@@ -11,6 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import com.andone.memorip.presentation.theme.MemoripTheme
 
 @Composable
 fun HomeScreen() {
@@ -44,3 +46,10 @@ fun HomeScreenContents() {
     }
 }
 
+@Composable
+@Preview(showBackground = true)
+private fun HomeScreenContentsPreview(){
+    MemoripTheme {
+        HomeScreenContents()
+    }
+}
