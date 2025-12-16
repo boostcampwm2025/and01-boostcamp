@@ -48,7 +48,7 @@ private object DialogDimens {
     val LEADING_ICON_SIZE = 36.dp
 }
 
-object DialogConstants {
+private object DialogConstants {
     val MAX_LENGTH = 6
 }
 
