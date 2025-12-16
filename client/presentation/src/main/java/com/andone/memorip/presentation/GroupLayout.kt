@@ -17,6 +17,7 @@ fun GroupLayout(
     modifier: Modifier = Modifier,
     columns: Int = 5,
     rows: Int = 3,
+    aspectRatio: Float = 5f / 3f,
     content: @Composable (GroupItem) -> Unit
 ) {
     Layout(
@@ -24,8 +25,11 @@ fun GroupLayout(
         content = { items.forEach { content(it) } }
     ) { measurables, constraints ->
 
-        val cellWidth = constraints.maxWidth / columns
-        val cellHeight = constraints.maxWidth / rows
+        val totalWidth = constraints.maxWidth
+        val totalHeight = (totalWidth / aspectRatio).toInt()
+
+        val cellWidth = totalWidth / columns
+        val cellHeight = totalHeight / rows
 
         val occupied = Array(rows) { BooleanArray(columns) }
 
