@@ -11,6 +11,7 @@ val PrimaryContainer = Color(0xFFCDAC9B)
 val Secondary = Color(0xFF36699A)
 val White = Color(0xFFFFFFFF)
 val OffWhite = Color(0xFFF5EDE8)
+val Gray = Color(0xFF808080)
 val Black = Color(0xFF000000)
 
 @Immutable
@@ -21,6 +22,7 @@ data class MemoripColors(
     val background: Color,
     val white: Color,
     val offWhite: Color,
+    val gray: Color,
     val black: Color,
 )
 
@@ -31,6 +33,7 @@ internal val lightMemoripColors = MemoripColors(
     background = White,
     white = White,
     offWhite = OffWhite,
+    gray = Gray,
     black = Black,
 )
 
@@ -41,6 +44,7 @@ internal val darkMemoripColors = MemoripColors(
     background = White,
     white = White,
     offWhite = OffWhite,
+    gray = Gray,
     black = Black,
 )
 
