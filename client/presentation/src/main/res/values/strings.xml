@@ -3,6 +3,7 @@
     <string name="dialog_cancel_message">취소</string>
     <string name="dialog_confirm_message">확인</string>
     <string name="dialog_close_button_description">입력 초기화 버튼</string>
+    <string name="dialog_refresh_button_description">색상 값 갱신 버튼</string>
     <string name="dialog_name_place_holder">이름</string>
     <string name="category_dialog_color_format">#%s</string>
     <string name="category_dialog_max_length_err_hint">6글자만 입력해주세요(# 제외)</string>
