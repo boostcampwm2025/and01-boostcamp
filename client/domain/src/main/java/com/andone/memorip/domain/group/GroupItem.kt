@@ -1,4 +1,4 @@
-package com.andone.memorip.presentation
+package com.andone.memorip.domain.group
 
 data class GroupItem(
     val colSpan: Int,

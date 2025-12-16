@@ -8,6 +8,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.tooling.preview.Preview
+import com.andone.memorip.domain.group.GroupItem
 import com.andone.memorip.presentation.theme.MemoripTheme
 
 @Composable
@@ -15,7 +16,7 @@ fun BentoLayout(
     items: List<GroupItem>,
     modifier: Modifier = Modifier,
     columns: Int = 5,
-    rows: Int = 4,
+    rows: Int = 3,
     content: @Composable (GroupItem) -> Unit
 ) {
     Layout(
@@ -102,12 +103,13 @@ fun BentoLayout(
 @Composable
 private fun BentoPreview() {
     val items = listOf(
+        GroupItem(colSpan = 1, rowSpan = 1),
+        GroupItem(colSpan = 1, rowSpan = 1),
+        GroupItem(colSpan = 1, rowSpan = 3),
+        GroupItem(colSpan = 2, rowSpan = 2),
         GroupItem(colSpan = 2, rowSpan = 2),
         GroupItem(colSpan = 1, rowSpan = 1),
-        GroupItem(colSpan = 1, rowSpan = 1),
-        GroupItem(colSpan = 1, rowSpan = 2),
-        GroupItem(colSpan = 2, rowSpan = 1),
-        GroupItem(colSpan = 5, rowSpan = 2)
+        GroupItem(colSpan = 1, rowSpan = 1)
     )
     MemoripTheme {
         BentoLayout(
