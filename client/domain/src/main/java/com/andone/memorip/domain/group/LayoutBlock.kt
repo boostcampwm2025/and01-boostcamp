@@ -1,6 +1,6 @@
 package com.andone.memorip.domain.group
 
-data class BentoPattern(
+data class LayoutBlock(
     val colSpan: Int,
     val rowSpan: Int,
     val index: Int,

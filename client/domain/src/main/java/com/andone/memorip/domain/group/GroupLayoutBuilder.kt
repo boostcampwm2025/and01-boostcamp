@@ -12,58 +12,58 @@ fun buildBento5x3Items(images: List<String>): List<GroupItem> {
             colSpan = pattern.colSpan,
             rowSpan = pattern.rowSpan,
             imageUrl = visible[pattern.index],
-            overNumber = if (pattern.isOverflowTarget) overflowCount else null
+            overNumber = if (pattern.isOverflowTarget) overflowCount else 0
         )
     }
 }
 
 private val BENTO_5x3_PATTERNS = mapOf(
     1 to listOf(
-        BentoPattern(5, 3, 0)
+        LayoutBlock(5, 3, 0)
     ),
 
     2 to listOf(
-        BentoPattern(3, 3, 0),
-        BentoPattern(2, 3, 1)
+        LayoutBlock(3, 3, 0),
+        LayoutBlock(2, 3, 1)
     ),
 
     3 to listOf(
-        BentoPattern(3, 3, 0),
-        BentoPattern(2, 2, 1),
-        BentoPattern(2, 1, 2)
+        LayoutBlock(3, 3, 0),
+        LayoutBlock(2, 2, 1),
+        LayoutBlock(2, 1, 2)
     ),
 
     4 to listOf(
-        BentoPattern(3, 3, 0),
-        BentoPattern(2, 2, 1),
-        BentoPattern(1, 1, 2),
-        BentoPattern(1, 1, 3)
+        LayoutBlock(3, 3, 0),
+        LayoutBlock(2, 2, 1),
+        LayoutBlock(1, 1, 2),
+        LayoutBlock(1, 1, 3)
     ),
 
     5 to listOf(
-        BentoPattern(2, 2, 0),
-        BentoPattern(1, 3, 1),
-        BentoPattern(2, 1, 2),
-        BentoPattern(2, 1, 3),
-        BentoPattern(2, 2, 4)
+        LayoutBlock(2, 1, 0),
+        LayoutBlock(1, 3, 1),
+        LayoutBlock(2, 2, 2),
+        LayoutBlock(2, 2, 3),
+        LayoutBlock(2, 1, 4)
     ),
 
     6 to listOf(
-        BentoPattern(2, 2, 0),
-        BentoPattern(1, 3, 1),
-        BentoPattern(1, 1, 2),
-        BentoPattern(1, 1, 3),
-        BentoPattern(2, 1, 4),
-        BentoPattern(2, 2, 5)
+        LayoutBlock(2, 1, 0),
+        LayoutBlock(1, 3, 1),
+        LayoutBlock(2, 2, 2),
+        LayoutBlock(2, 2, 3),
+        LayoutBlock(1, 1, 4),
+        LayoutBlock(1, 1, 5)
     ),
 
     7 to listOf(
-        BentoPattern(2, 2, 0),
-        BentoPattern(1, 3, 1),
-        BentoPattern(1, 1, 2),
-        BentoPattern(1, 1, 3),
-        BentoPattern(1, 1, 4),
-        BentoPattern(1, 1, 5),
-        BentoPattern(2, 2, 6, isOverflowTarget = true)
+        LayoutBlock(1, 1, 0),
+        LayoutBlock(1, 1, 1),
+        LayoutBlock(1, 3, 2),
+        LayoutBlock(2, 2, 3),
+        LayoutBlock(2, 2, 4),
+        LayoutBlock(1, 1, 5),
+        LayoutBlock(1, 1, 6, isOverflowTarget = true)
     )
 )

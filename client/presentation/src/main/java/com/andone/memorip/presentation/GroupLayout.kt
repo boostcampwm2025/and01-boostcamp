@@ -12,7 +12,7 @@ import com.andone.memorip.domain.group.GroupItem
 import com.andone.memorip.presentation.theme.MemoripTheme
 
 @Composable
-fun BentoLayout(
+fun GroupLayout(
     items: List<GroupItem>,
     modifier: Modifier = Modifier,
     columns: Int = 5,
@@ -101,7 +101,7 @@ fun BentoLayout(
 
 @Preview(showBackground = true)
 @Composable
-private fun BentoPreview() {
+private fun GroupLayoutPreview() {
     val items = listOf(
         GroupItem(colSpan = 1, rowSpan = 1),
         GroupItem(colSpan = 1, rowSpan = 1),
@@ -112,13 +112,13 @@ private fun BentoPreview() {
         GroupItem(colSpan = 1, rowSpan = 1)
     )
     MemoripTheme {
-        BentoLayout(
+        GroupLayout(
             items = items,
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color.White)
         ) { item ->
-            BentoCard(item)
+            ImageCard(item)
         }
     }
 }

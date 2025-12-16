@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,13 +20,14 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.theme.memoripShapes
 
 @Composable
-fun BentoCard(item: GroupItem) {
+fun ImageCard(item: GroupItem) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
     ) {
         Box(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .padding(2.dp)
                 .clip(memoripShapes.defaultCorner)
                 .background(Color.LightGray),
@@ -37,18 +39,32 @@ fun BentoCard(item: GroupItem) {
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
             )
+            if (item.overNumber > 0) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.Black.copy(alpha = 0.3f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "+${item.overNumber}",
+                        color = Color.White
+                    )
+                }
+            }
         }
     }
 }
 
 @Composable
 @Preview
-private fun BentoCardPreview(){
+private fun ImageCardPreview() {
     MemoripTheme {
-        BentoCard(item = GroupItem(
-            colSpan = 4,
-            rowSpan = 3,
-        )
+        ImageCard(
+            item = GroupItem(
+                colSpan = 4,
+                rowSpan = 3,
+            )
         )
     }
 }
