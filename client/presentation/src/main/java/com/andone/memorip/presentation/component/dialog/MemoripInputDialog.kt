@@ -16,7 +16,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.R
-import com.andone.memorip.presentation.theme.LocalMemoripColors
 import com.andone.memorip.presentation.theme.MemoripTheme
 
 @Composable
@@ -54,21 +53,21 @@ fun MemoripInputDialog(
             trailingIcon = {
                 IconButton(onClick = { value = "" }) {
                     Icon(
-                        tint = LocalMemoripColors.current.black,
+                        tint = MemoripTheme.colors.black,
                         imageVector = ImageVector.vectorResource(R.drawable.ic_close),
                         contentDescription = stringResource(R.string.dialog_close_button_description)
                     )
                 }
             },
             colors = TextFieldDefaults.colors(
-                focusedContainerColor = LocalMemoripColors.current.primaryContainer,
-                unfocusedContainerColor = LocalMemoripColors.current.primaryContainer,
-                focusedTextColor = LocalMemoripColors.current.black,
-                unfocusedTextColor = LocalMemoripColors.current.black,
-                focusedPlaceholderColor = LocalMemoripColors.current.outline,
-                unfocusedPlaceholderColor = LocalMemoripColors.current.outline,
-                focusedLabelColor = LocalMemoripColors.current.outline,
-                unfocusedLabelColor = LocalMemoripColors.current.outline,
+                focusedContainerColor = MemoripTheme.colors.primaryContainer,
+                unfocusedContainerColor = MemoripTheme.colors.primaryContainer,
+                focusedTextColor = MemoripTheme.colors.black,
+                unfocusedTextColor = MemoripTheme.colors.black,
+                focusedPlaceholderColor = MemoripTheme.colors.outline,
+                unfocusedPlaceholderColor = MemoripTheme.colors.outline,
+                focusedLabelColor = MemoripTheme.colors.outline,
+                unfocusedLabelColor = MemoripTheme.colors.outline,
             )
         )
     }

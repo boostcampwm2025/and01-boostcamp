@@ -20,10 +20,8 @@ import androidx.compose.ui.window.Dialog
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.dialog.DialogDimens.INNER_PADDING
 import com.andone.memorip.presentation.component.dialog.DialogDimens.SPACING
-import com.andone.memorip.presentation.theme.LocalMemoripColors
 import com.andone.memorip.presentation.theme.LocalMemoripShapes
 import com.andone.memorip.presentation.theme.MemoripTheme
-import org.andone.memorip.presentation.theme.LocalMemoripTypography
 
 object DialogDimens {
     val INNER_PADDING = 24.dp
@@ -43,9 +41,9 @@ internal fun DefaultDialog(
     Dialog(onDismissRequest = onDismissRequest) {
         Surface(
             modifier = modifier,
-            contentColor = LocalMemoripColors.current.black,
-            color = LocalMemoripColors.current.primaryContainer,
-            shape = LocalMemoripShapes.current.largeCorner
+            contentColor = MemoripTheme.colors.black,
+            color = MemoripTheme.colors.primaryContainer,
+            shape = MemoripTheme.shapes.largeCorner
         ) {
             Column(
                 modifier = Modifier.padding(horizontal = INNER_PADDING),
@@ -55,7 +53,7 @@ internal fun DefaultDialog(
                 Text(
                     modifier = Modifier.padding(vertical = INNER_PADDING),
                     text = title,
-                    style = LocalMemoripTypography.current.headline2
+                    style = MemoripTheme.typography.headline2
                 )
                 content()
                 Row(
@@ -70,15 +68,15 @@ internal fun DefaultDialog(
                     TextButton(onClick = onCancelClick) {
                         Text(
                             text = stringResource(R.string.dialog_cancel_message),
-                            style = LocalMemoripTypography.current.label1,
-                            color = LocalMemoripColors.current.primary
+                            style = MemoripTheme.typography.label1,
+                            color = MemoripTheme.colors.primary
                         )
                     }
                     TextButton(onClick = onConfirmClick) {
                         Text(
                             text = stringResource(R.string.dialog_confirm_message),
-                            style = LocalMemoripTypography.current.label1,
-                            color = LocalMemoripColors.current.primary
+                            style = MemoripTheme.typography.label1,
+                            color = MemoripTheme.colors.primary
                         )
                     }
                 }
@@ -99,7 +97,7 @@ private fun DefaultDialogPrev() {
         ) {
             Text(
                 text = "테스트하고자 생성한 Preview 입니다.\n어쩌고 저쩌고",
-                style = LocalMemoripTypography.current.body1,
+                style = MemoripTheme.typography.body1,
                 textAlign = TextAlign.Center
             )
         }

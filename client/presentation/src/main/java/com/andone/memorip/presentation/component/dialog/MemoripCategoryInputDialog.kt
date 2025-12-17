@@ -22,10 +22,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.dialog.DialogConstants.MAX_LENGTH
 import com.andone.memorip.presentation.component.dialog.DialogDimens.LEADING_ICON_SIZE
-import com.andone.memorip.presentation.theme.LocalMemoripColors
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.utils.rememberColorState
-import org.andone.memorip.presentation.theme.LocalMemoripTypography
 
 private object DialogConstants {
     val MAX_LENGTH = 6
@@ -56,25 +54,25 @@ fun MemoripCategoryInputDialog(
             label = {
                 Text(text = stringResource(R.string.dialog_name_place_holder))
             },
-            textStyle = LocalMemoripTypography.current.body2,
+            textStyle = MemoripTheme.typography.body2,
             trailingIcon = {
                 IconButton(onClick = { name = "" }) {
                     Icon(
-                        tint = LocalMemoripColors.current.black,
+                        tint = MemoripTheme.colors.black,
                         imageVector = ImageVector.vectorResource(R.drawable.ic_close),
                         contentDescription = stringResource(R.string.dialog_close_button_description)
                     )
                 }
             },
             colors = TextFieldDefaults.colors(
-                focusedContainerColor = LocalMemoripColors.current.primaryContainer,
-                unfocusedContainerColor = LocalMemoripColors.current.primaryContainer,
-                focusedTextColor = LocalMemoripColors.current.black,
-                unfocusedTextColor = LocalMemoripColors.current.black,
-                focusedPlaceholderColor = LocalMemoripColors.current.outline,
-                unfocusedPlaceholderColor = LocalMemoripColors.current.outline,
-                focusedLabelColor = LocalMemoripColors.current.outline,
-                unfocusedLabelColor = LocalMemoripColors.current.outline,
+                focusedContainerColor = MemoripTheme.colors.primaryContainer,
+                unfocusedContainerColor = MemoripTheme.colors.primaryContainer,
+                focusedTextColor = MemoripTheme.colors.black,
+                unfocusedTextColor = MemoripTheme.colors.black,
+                focusedPlaceholderColor = MemoripTheme.colors.outline,
+                unfocusedPlaceholderColor = MemoripTheme.colors.outline,
+                focusedLabelColor = MemoripTheme.colors.outline,
+                unfocusedLabelColor = MemoripTheme.colors.outline,
             )
         )
         TextField(
@@ -83,9 +81,11 @@ fun MemoripCategoryInputDialog(
                 colorState.inputColor
             ),
             onValueChange = { value ->
-                if (value.length <= MAX_LENGTH + 1) { colorState.updateColor(value) }
+                if (value.length <= MAX_LENGTH + 1) {
+                    colorState.updateColor(value)
+                }
             },
-            textStyle = LocalMemoripTypography.current.body2,
+            textStyle = MemoripTheme.typography.body2,
             maxLines = 1,
             leadingIcon = {
                 Box(
@@ -102,7 +102,7 @@ fun MemoripCategoryInputDialog(
                 if (!colorState.isValidColorInput()) {
                     Text(
                         text = stringResource(colorState.getErrMsg()),
-                        style = LocalMemoripTypography.current.hint1
+                        style = MemoripTheme.typography.hint1
                     )
                 }
             },
@@ -112,20 +112,20 @@ fun MemoripCategoryInputDialog(
                     onClick = { colorState.refreshColor() }
                 ) {
                     Icon(
-                        tint = LocalMemoripColors.current.black,
+                        tint = MemoripTheme.colors.black,
                         imageVector = ImageVector.vectorResource(R.drawable.ic_refresh),
                         contentDescription = stringResource(R.string.dialog_refresh_button_description)
                     )
                 }
             },
             colors = TextFieldDefaults.colors(
-                focusedContainerColor = LocalMemoripColors.current.primaryContainer,
-                unfocusedContainerColor = LocalMemoripColors.current.primaryContainer,
-                errorContainerColor = LocalMemoripColors.current.primaryContainer,
-                focusedTextColor = LocalMemoripColors.current.black,
-                unfocusedTextColor = LocalMemoripColors.current.black,
-                errorTextColor = LocalMemoripColors.current.error,
-                errorSupportingTextColor = LocalMemoripColors.current.error
+                focusedContainerColor = MemoripTheme.colors.primaryContainer,
+                unfocusedContainerColor = MemoripTheme.colors.primaryContainer,
+                errorContainerColor = MemoripTheme.colors.primaryContainer,
+                focusedTextColor = MemoripTheme.colors.black,
+                unfocusedTextColor = MemoripTheme.colors.black,
+                errorTextColor = MemoripTheme.colors.error,
+                errorSupportingTextColor = MemoripTheme.colors.error
             )
         )
     }

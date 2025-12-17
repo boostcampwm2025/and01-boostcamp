@@ -5,7 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.theme.MemoripTheme
-import org.andone.memorip.presentation.theme.LocalMemoripTypography
 
 @Composable
 fun MemoripDialog(
@@ -25,7 +24,7 @@ fun MemoripDialog(
     ) {
         Text(
             text = content,
-            style = LocalMemoripTypography.current.body1
+            style = MemoripTheme.typography.body1
         )
     }
 }
