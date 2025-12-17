@@ -15,8 +15,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.navigation.MainBottomBarRoute
-import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.component.MainBottomBarDimens.DURATION_MILLIS
+import com.andone.memorip.presentation.theme.MemoripTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -56,7 +56,13 @@ fun MainBottomBar(
                         )
                     },
                     label = { Text(text = stringResource(tab.titleTextId)) },
-                    colors = NavigationBarItemDefaults.colors(indicatorColor = MemoripTheme.colors.primaryContainer)
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = MemoripTheme.colors.black,
+                        selectedTextColor = MemoripTheme.colors.black,
+                        indicatorColor = MemoripTheme.colors.primaryContainer,
+                        unselectedIconColor = MemoripTheme.colors.gray,
+                        unselectedTextColor = MemoripTheme.colors.gray
+                    )
                 )
             }
         }
@@ -65,14 +71,16 @@ fun MainBottomBar(
 
 @Preview(showBackground = true)
 @Composable
-fun BottomBarPreview() {
-    MainBottomBar(
-        visible = true,
-        tabs = persistentListOf(
-            MainBottomBarRoute.HOME,
-            MainBottomBarRoute.USER
-        ),
-        currentTab = MainBottomBarRoute.HOME,
-        onTabSelected = {}
-    )
+private fun BottomBarPreview() {
+    MemoripTheme {
+        MainBottomBar(
+            visible = true,
+            tabs = persistentListOf(
+                MainBottomBarRoute.HOME,
+                MainBottomBarRoute.USER
+            ),
+            currentTab = MainBottomBarRoute.HOME,
+            onTabSelected = {}
+        )
+    }
 }
