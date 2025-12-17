@@ -1,5 +1,22 @@
 <resources>
     <string name="app_name">Memorip</string>
-    <string name="general_back_button_description">뒤로 가기 버튼</string>
+
+    <!-- Dialog -->
+    <string name="dialog_cancel_message">취소</string>
+    <string name="dialog_confirm_message">확인</string>
+    <string name="dialog_close_button_description">입력 초기화 버튼</string>
+    <string name="dialog_refresh_button_description">색상 값 갱신 버튼</string>
+    <string name="dialog_name_place_holder">이름</string>
+    <string name="category_dialog_color_format">#%s</string>
+    <string name="category_dialog_max_length_err_hint">6글자만 입력해주세요(# 제외)</string>
+    <string name="category_dialog_valid_color_err_hint">0~9, A~F까지의 값만 입력해주세요</string>
+
+    <!-- HomeScreen -->
+    <string name="home_search_contentDescription">Search</string>
+    <string name="home_add_contentDescription">Add</string>
+    <string name="home_overflow_count">+%1$d</string>
+
+    <!-- SelectCategoryScreen -->
+    <string name="select_category_back_button_description">뒤로 가기 버튼</string>
     <string name="select_category_title">카테고리 선택</string>
 </resources>
