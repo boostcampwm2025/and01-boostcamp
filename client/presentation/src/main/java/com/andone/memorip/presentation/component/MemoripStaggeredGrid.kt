@@ -55,7 +55,7 @@ private fun StaggeredImageItem(
     imageUrl: String,
     modifier: Modifier = Modifier,
     cornerRadius: Dp = StaggeredGridDimens.STAGGERED_GRID_IMAGE_CORNER_RADIUS,
-    contentDescription: String = stringResource(R.string.place_image)
+    contentDescription: String = stringResource(R.string.staggered_grid_image_contentDescription)
 ) {
     Box(
         modifier = modifier
