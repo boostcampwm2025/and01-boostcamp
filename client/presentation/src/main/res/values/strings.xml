@@ -10,6 +10,7 @@
     <string name="category_dialog_color_format">#%s</string>
     <string name="category_dialog_max_length_err_hint">6글자만 입력해주세요(# 제외)</string>
     <string name="category_dialog_valid_color_err_hint">0~9, A~F까지의 값만 입력해주세요</string>
+    <string name="category_dialog_empty_name_err_hint">이름을 입력해주세요</string>
 
     <!-- HomeScreen -->
     <string name="home_search_contentDescription">Search</string>
