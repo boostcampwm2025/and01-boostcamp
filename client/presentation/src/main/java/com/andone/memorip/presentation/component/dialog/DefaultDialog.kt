@@ -39,10 +39,9 @@ internal fun DefaultDialog(
     onCancelClick: () -> Unit,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
+    confirmEnabled: Boolean = true,
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    var isValidClick by remember { mutableStateOf(true) }
-
     Dialog(onDismissRequest = onDismissRequest) {
         Surface(
             modifier = modifier,
@@ -79,7 +78,7 @@ internal fun DefaultDialog(
                     }
                     TextButton(
                         onClick = onConfirmClick,
-                        enabled = isValidClick
+                        enabled = confirmEnabled
                     ) {
                         Text(
                             text = stringResource(R.string.dialog_confirm_message),
