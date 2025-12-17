@@ -10,6 +10,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.home.model.GroupItem
 import com.andone.memorip.presentation.home.component.BentoGridSpec.COLUMNS
 import com.andone.memorip.presentation.home.component.BentoGridSpec.ROWS
+import com.andone.memorip.presentation.home.model.Placed
 import com.andone.memorip.presentation.theme.MemoripTheme
 
 private object BentoGridSpec {
@@ -38,12 +39,6 @@ fun GroupLayout(
         val cellHeight = totalHeight / rows
 
         val columnHeights = IntArray(columns)
-
-        data class Placed(
-            val placeable: Placeable,
-            val row: Int,
-            val col: Int
-        )
 
         val placedItems = mutableListOf<Placed>()
 
