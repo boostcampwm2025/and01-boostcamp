@@ -63,6 +63,7 @@ dependencies {
     // Immutable
     implementation(libs.kotlinx.collections.immutable)
 
-    // coil
+    // Coil
     implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
 }
