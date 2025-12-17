@@ -78,8 +78,8 @@ private fun StaggeredImageItem(
             model = imageUrl,
             contentDescription = contentDescription,
             modifier = Modifier.fillMaxWidth(),
-            placeholder = ColorPainter(MemoripTheme.colors.gray),
-            error = ColorPainter(MemoripTheme.colors.gray),
+            placeholder = ColorPainter(MemoripTheme.colors.offWhite),
+            error = ColorPainter(MemoripTheme.colors.offWhite),
             contentScale = ContentScale.FillWidth
         )
     }
