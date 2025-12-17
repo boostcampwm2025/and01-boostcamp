@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.andone.memorip.domain.group.buildBento5x3Items
+import com.andone.memorip.presentation.theme.MemoripDimen
 import com.andone.memorip.presentation.theme.MemoripTheme
 
 @Composable
@@ -22,7 +23,7 @@ fun GroupView(
 ){
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(MemoripDimen.spacing8)
     ) {
         Text(name)
         GroupLayout(

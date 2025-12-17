@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.andone.memorip.domain.group.GroupItem
+import com.andone.memorip.presentation.theme.MemoripDimen
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.theme.memoripShapes
 
@@ -27,7 +28,7 @@ fun ImageCard(item: GroupItem) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(2.dp)
+                .padding(MemoripDimen.spacing2)
                 .clip(memoripShapes.defaultCorner)
                 .background(MemoripTheme.colors.offWhite),
             contentAlignment = Alignment.Center
