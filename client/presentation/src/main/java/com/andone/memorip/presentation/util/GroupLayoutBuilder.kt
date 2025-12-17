@@ -1,8 +1,16 @@
-package com.andone.memorip.domain.group
+package com.andone.memorip.presentation.util
+
+import com.andone.memorip.presentation.home.model.GroupItem
+import com.andone.memorip.presentation.home.model.LayoutBlock
+import com.andone.memorip.presentation.util.BENTO5x3.VISIBLE
+
+private object BENTO5x3 {
+    const val VISIBLE = 7
+}
 
 fun buildBento5x3Items(images: List<String>): List<GroupItem> {
-    val visible = images.take(7)
-    val overflowCount = (images.size - 7).coerceAtLeast(0)
+    val visible = images.take(VISIBLE)
+    val overflowCount = (images.size - VISIBLE).coerceAtLeast(0)
 
     val patterns = BENTO_5x3_PATTERNS[visible.size]
         ?: return emptyList()

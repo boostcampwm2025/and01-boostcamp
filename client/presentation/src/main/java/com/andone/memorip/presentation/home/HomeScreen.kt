@@ -1,4 +1,4 @@
-package com.andone.memorip.presentation
+package com.andone.memorip.presentation.home
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.padding
@@ -17,6 +17,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.component.GroupView
+import com.andone.memorip.presentation.home.model.GroupUiModel
 import com.andone.memorip.presentation.theme.MemoripTheme
 
 @Composable
@@ -39,7 +42,7 @@ fun HomeScreenContents(
                     IconButton(onClick = {}) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_search),
-                            contentDescription = stringResource(R.string.home_search_contentDescription)
+                            contentDescription = stringResource(id = R.string.home_search_contentDescription)
                         )
                     }
                 },

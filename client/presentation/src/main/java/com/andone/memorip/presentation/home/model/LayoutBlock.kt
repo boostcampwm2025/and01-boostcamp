@@ -1,4 +1,4 @@
-package com.andone.memorip.domain.group
+package com.andone.memorip.presentation.home.model
 
 data class LayoutBlock(
     val colSpan: Int,

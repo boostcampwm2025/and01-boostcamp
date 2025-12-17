@@ -1,4 +1,4 @@
-package com.andone.memorip.presentation
+package com.andone.memorip.presentation.home.model
 
 data class GroupUiModel(
     val name: String,

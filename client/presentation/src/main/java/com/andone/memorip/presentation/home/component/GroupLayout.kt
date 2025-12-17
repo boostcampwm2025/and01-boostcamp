@@ -1,23 +1,29 @@
-package com.andone.memorip.presentation
+package com.andone.memorip.presentation.home.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.tooling.preview.Preview
-import com.andone.memorip.domain.group.GroupItem
+import com.andone.memorip.presentation.home.model.GroupItem
+import com.andone.memorip.presentation.home.component.BentoGridSpec.COLUMNS
+import com.andone.memorip.presentation.home.component.BentoGridSpec.ROWS
 import com.andone.memorip.presentation.theme.MemoripTheme
+
+private object BentoGridSpec {
+    const val COLUMNS = 5
+    const val ROWS = 3
+}
 
 @Composable
 fun GroupLayout(
     items: List<GroupItem>,
     modifier: Modifier = Modifier,
-    columns: Int = 5,
-    rows: Int = 3,
     aspectRatio: Float = 5f / 3f,
+    columns: Int = COLUMNS,
+    rows: Int = ROWS,
     content: @Composable (GroupItem) -> Unit
 ) {
     Layout(
@@ -31,62 +37,47 @@ fun GroupLayout(
         val cellWidth = totalWidth / columns
         val cellHeight = totalHeight / rows
 
-        val occupied = Array(rows) { BooleanArray(columns) }
+        val columnHeights = IntArray(columns)
 
         data class Placed(
             val placeable: Placeable,
             val row: Int,
-            val col: Int,
-            val rowSpan: Int,
-            val colSpan: Int
+            val col: Int
         )
 
         val placedItems = mutableListOf<Placed>()
 
-        fun canPlace(r: Int, c: Int, rs: Int, cs: Int): Boolean {
-            if (r + rs > rows || c + cs > columns) return false
-            for (rr in r until r + rs) {
-                for (cc in c until c + cs) {
-                    if (occupied[rr][cc]) return false
-                }
-            }
-            return true
-        }
-
-        fun mark(r: Int, c: Int, rs: Int, cs: Int) {
-            for (rr in r until r + rs) {
-                for (cc in c until c + cs) {
-                    occupied[rr][cc] = true
-                }
-            }
-        }
-
         measurables.forEachIndexed { index, measurable ->
             val item = items[index]
 
-            var placed = false
-            for (r in 0 until rows) {
-                for (c in 0 until columns) {
-                    if (canPlace(r, c, item.rowSpan, item.colSpan)) {
-                        val width = cellWidth * item.colSpan
-                        val height = cellHeight * item.rowSpan
+            for (c in 0..columns - item.colSpan) {
 
-                        val placeable = measurable.measure(
-                            constraints.copy(
-                                minWidth = width,
-                                maxWidth = width,
-                                minHeight = height,
-                                maxHeight = height
-                            )
-                        )
+                val baseRow = (c until c + item.colSpan)
+                    .maxOf { columnHeights[it] }
 
-                        mark(r, c, item.rowSpan, item.colSpan)
-                        placedItems += Placed(placeable, r, c, item.rowSpan, item.colSpan)
-                        placed = true
-                        break
-                    }
+                if (baseRow + item.rowSpan > rows) continue
+
+                val width = cellWidth * item.colSpan
+                val height = cellHeight * item.rowSpan
+
+                val placeable = measurable.measure(
+                    constraints.copy(
+                        minWidth = width,
+                        maxWidth = width,
+                        minHeight = height,
+                        maxHeight = height
+                    )
+                )
+
+                for (cc in c until c + item.colSpan) {
+                    columnHeights[cc] = baseRow + item.rowSpan
                 }
-                if (placed) break
+
+                placedItems += Placed(
+                    placeable = placeable,
+                    row = baseRow,
+                    col = c)
+                break
             }
         }
 
@@ -120,9 +111,9 @@ private fun GroupLayoutPreview() {
             items = items,
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.White)
+                .background(MemoripTheme.colors.white)
         ) { item ->
-            ImageCard(item)
+            ImageCard(item = item)
         }
     }
 }

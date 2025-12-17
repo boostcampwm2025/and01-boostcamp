@@ -60,5 +60,6 @@ dependencies {
     // navigation
     implementation(libs.bundles.navigation3)
 
+    // coil
     implementation(libs.coil.compose)
 }
