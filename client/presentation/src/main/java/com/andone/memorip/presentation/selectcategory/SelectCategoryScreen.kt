@@ -119,7 +119,10 @@ private fun SelectCategoryContent(
                 .padding(innerPadding)
                 .padding(horizontal = PaddingMedium)
         ) {
-            items(categories) { category ->
+            items(
+                items = categories,
+                key = { it.id }
+            ) { category ->
                 CategoryItem(
                     category = category,
                     checked = category.id in checkedList,
