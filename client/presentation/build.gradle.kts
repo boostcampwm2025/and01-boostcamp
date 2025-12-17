@@ -57,8 +57,11 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    // navigation
+    // Navigation
     implementation(libs.bundles.navigation3)
+
+    // Immutable
+    implementation(libs.kotlinx.collections.immutable)
 
     // coil
     implementation(libs.coil.compose)
