@@ -111,7 +111,7 @@ fun MemoripInputDialog(
                 IconButton(onClick = { value = "" }) {
                     Icon(
                         tint = LocalMemoripColors.current.black,
-                        imageVector = ImageVector.vectorResource(R.drawable.close_ic),
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_close),
                         contentDescription = stringResource(R.string.dialog_close_button_description)
                     )
                 }
@@ -160,7 +160,7 @@ fun MemoripCategoryInputDialog(
                 IconButton(onClick = { name = "" }) {
                     Icon(
                         tint = LocalMemoripColors.current.black,
-                        imageVector = ImageVector.vectorResource(R.drawable.close_ic),
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_close),
                         contentDescription = stringResource(R.string.dialog_close_button_description)
                     )
                 }
@@ -214,7 +214,7 @@ fun MemoripCategoryInputDialog(
                 ) {
                     Icon(
                         tint = LocalMemoripColors.current.black,
-                        imageVector = ImageVector.vectorResource(R.drawable.refresh_ic),
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_refresh),
                         contentDescription = stringResource(R.string.dialog_refresh_button_description)
                     )
                 }
