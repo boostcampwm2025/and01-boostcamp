@@ -4,4 +4,5 @@
     <!-- HomeScreen -->
     <string name="home_search_contentDescription">Search</string>
     <string name="home_add_contentDescription">Add</string>
+    <string name="home_overflow_count">+%1$d</string>
 </resources>
