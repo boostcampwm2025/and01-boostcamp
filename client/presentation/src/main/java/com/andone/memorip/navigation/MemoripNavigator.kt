@@ -32,6 +32,12 @@ class MemoripNavigator(
         backStack.add(tab.route)
     }
 
+    fun navigateToRoute(route: NavKey) {
+        if (currentTab?.route == route) return
+
+        backStack.add(route)
+    }
+
     fun popBackStack() = backStack.removeLastOrNull()
 }
 
