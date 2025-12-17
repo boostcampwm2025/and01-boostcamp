@@ -23,21 +23,22 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.andone.memorip.presentation.R
-import com.andone.memorip.presentation.theme.MemoripDimen
+import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 
 private object StaggeredGridDimens {
     val STAGGERED_GRID_MIN_CELL_WIDTH = 160.dp
     val STAGGERED_GRID_IMAGE_CORNER_RADIUS = 4.dp
 }
+
 @Composable
 fun MemoripStaggeredGrid(modifier: Modifier = Modifier) {
     val images = remember { generateRandomImageUrls(50) }
 
     LazyVerticalStaggeredGrid(
         columns = StaggeredGridCells.Adaptive(StaggeredGridDimens.STAGGERED_GRID_MIN_CELL_WIDTH),
-        verticalItemSpacing = MemoripDimen.staggeredGridSpacing,
-        horizontalArrangement = Arrangement.spacedBy(MemoripDimen.staggeredGridSpacing),
+        verticalItemSpacing = MemoripSpace.SpaceXXSmall,
+        horizontalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXXSmall),
         modifier = modifier.fillMaxSize(),
         content = {
             items(images) { image ->
