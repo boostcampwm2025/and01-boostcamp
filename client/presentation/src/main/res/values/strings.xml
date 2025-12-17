@@ -11,11 +11,13 @@
     <string name="category_dialog_max_length_err_hint">6글자만 입력해주세요(# 제외)</string>
     <string name="category_dialog_valid_color_err_hint">0~9, A~F까지의 값만 입력해주세요</string>
 
+    <!-- StaggeredGrid-->
+    <string name="staggered_grid_image_content_description">장소 이미지</string>
+
     <!-- HomeScreen -->
     <string name="home_search_contentDescription">Search</string>
     <string name="home_add_contentDescription">Add</string>
     <string name="home_overflow_count">+%1$d</string>
-
 
     <!-- MainBottomBar -->
     <string name="main_bottom_bar_home">홈</string>
