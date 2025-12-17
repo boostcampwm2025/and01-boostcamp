@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Memorip</string>
+    <string name="general_back_button_description">뒤로 가기 버튼</string>
+    <string name="select_category_title">카테고리 선택</string>
 </resources>
