@@ -8,3 +8,6 @@ data object Home : NavKey
 
 @Serializable
 data object User : NavKey
+
+@Serializable
+data class PlaceDetailRoute(val id: Long = 0) : NavKey

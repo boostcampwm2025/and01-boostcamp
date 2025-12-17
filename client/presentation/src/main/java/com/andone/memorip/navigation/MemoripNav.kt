@@ -13,6 +13,7 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.andone.memorip.presentation.home.home
+import com.andone.memorip.presentation.placedetail.placeDetail
 
 @Composable
 fun MemoripNav(
@@ -44,7 +45,13 @@ fun MemoripNav(
                 onCreateGroupClick = {},
                 modifier = modifier.padding(innerPadding)
             )
+
             entry<User> { Text(text = "user") }
+
+            placeDetail(
+                onNavigateBack = {},
+                modifier = modifier
+            )
         },
     )
 }
