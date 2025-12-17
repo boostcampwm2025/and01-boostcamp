@@ -1,4 +1,4 @@
-package com.andone.memorip.presentation.utils
+package com.andone.memorip.presentation.util
 
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
@@ -9,8 +9,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
 import com.andone.memorip.presentation.R
-import com.andone.memorip.presentation.utils.ColorConstants.EXCLUDED_BRIGHT_COLOR_THRESHOLD
-import com.andone.memorip.presentation.utils.ColorConstants.MAX_LENGTH
+import com.andone.memorip.presentation.util.ColorConstants.EXCLUDED_BRIGHT_COLOR_THRESHOLD
+import com.andone.memorip.presentation.util.ColorConstants.MAX_LENGTH
 import kotlin.random.Random
 
 @Composable

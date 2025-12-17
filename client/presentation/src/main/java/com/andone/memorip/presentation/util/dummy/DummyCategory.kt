@@ -1,4 +1,4 @@
-package com.andone.memorip.presentation.utils.dummy
+package com.andone.memorip.presentation.util.dummy
 
 import androidx.compose.ui.graphics.Color
 
