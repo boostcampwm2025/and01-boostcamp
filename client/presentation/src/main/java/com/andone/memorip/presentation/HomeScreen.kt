@@ -1,7 +1,6 @@
 package com.andone.memorip.presentation
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -39,7 +38,7 @@ fun HomeScreenContents(
                 navigationIcon = {
                     IconButton(onClick = {}) {
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_search_24),
+                            painter = painterResource(id = R.drawable.ic_search),
                             contentDescription = stringResource(R.string.search)
                         )
                     }
@@ -57,7 +56,7 @@ fun HomeScreenContents(
                 contentColor = MemoripTheme.colors.black
             ) {
                 Icon(
-                    painter = painterResource(R.drawable.ic_add_24),
+                    painter = painterResource(R.drawable.ic_add),
                     contentDescription = stringResource(R.string.add)
                 )
             }
