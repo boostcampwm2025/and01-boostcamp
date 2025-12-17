@@ -4,19 +4,25 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.domain.group.GroupItem
+import com.andone.memorip.presentation.BentoGridSpec.COLUMNS
+import com.andone.memorip.presentation.BentoGridSpec.ROWS
 import com.andone.memorip.presentation.theme.MemoripTheme
+
+object BentoGridSpec {
+    const val COLUMNS = 5
+    const val ROWS = 3
+}
 
 @Composable
 fun GroupLayout(
     items: List<GroupItem>,
     modifier: Modifier = Modifier,
-    columns: Int = 5,
-    rows: Int = 3,
+    columns: Int = COLUMNS,
+    rows: Int = ROWS,
     content: @Composable (GroupItem) -> Unit
 ) {
     Layout(
