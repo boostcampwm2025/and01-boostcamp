@@ -1,4 +1,4 @@
-package com.andone.memorip.presentation.screen.selectcategory
+package com.andone.memorip.presentation.selectcategory
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -46,7 +46,7 @@ private fun SelectCategoryTopBar() {
         navigationIcon = {
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.back_ic),
-                contentDescription = stringResource(R.string.general_back_button_description)
+                contentDescription = stringResource(R.string.select_category_back_button_description)
             )
         },
         colors = TopAppBarDefaults.topAppBarColors(
