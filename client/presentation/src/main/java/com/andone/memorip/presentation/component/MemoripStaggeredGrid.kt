@@ -20,29 +20,29 @@ import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.theme.MemoripDimen
 import com.andone.memorip.presentation.theme.MemoripTheme
 
+private object StaggeredGridDimens {
+    val STAGGERED_GRID_MIN_CELL_WIDTH = 160.dp
+    val STAGGERED_GRID_IMAGE_CORNER_RADIUS = 4.dp
+}
 @Composable
-fun MemoripStaggeredGrid(
-    modifier: Modifier = Modifier,
-) {
-    val randomSizedPhotos = remember { 
-        generateRandomImageUrls(50) 
-    }
+fun MemoripStaggeredGrid(modifier: Modifier = Modifier) {
+    val images = remember { generateRandomImageUrls(50) }
 
     LazyVerticalStaggeredGrid(
-        columns = StaggeredGridCells.Adaptive(MemoripDimen.staggeredGridMinCellWidth),
+        columns = StaggeredGridCells.Adaptive(StaggeredGridDimens.STAGGERED_GRID_MIN_CELL_WIDTH),
         verticalItemSpacing = MemoripDimen.staggeredGridSpacing,
         horizontalArrangement = Arrangement.spacedBy(MemoripDimen.staggeredGridSpacing),
         modifier = modifier.fillMaxSize(),
         content = {
-            items(randomSizedPhotos) { image ->
+            items(images) { image ->
                 StaggeredImageItem(
-                    imageUrl = image.url,
-                    modifier = modifier
+                    imageUrl = image.url
                 )
             }
         }
@@ -53,15 +53,15 @@ fun MemoripStaggeredGrid(
 private fun StaggeredImageItem(
     imageUrl: String,
     modifier: Modifier = Modifier,
-    cornerRadius: Dp = MemoripDimen.imageCornerRadius,
+    cornerRadius: Dp = StaggeredGridDimens.STAGGERED_GRID_IMAGE_CORNER_RADIUS,
     contentDescription: String = stringResource(R.string.place_image)
 ) {
     Box(
         modifier = modifier
-            .clip(RoundedCornerShape(cornerRadius))
-            .background(MemoripTheme.colors.gray)
             .fillMaxWidth()
-            .wrapContentHeight(),
+            .wrapContentHeight()
+            .clip(RoundedCornerShape(cornerRadius))
+            .background(MemoripTheme.colors.gray),
         contentAlignment = Alignment.Center
     ) {
         AsyncImage(
@@ -88,7 +88,7 @@ data class ImageItem(
  */
 fun generateRandomImageUrls(count: Int): List<ImageItem> {
     return (1..count).map { id ->
-        val height = (200..400).random()
+        val height = (50..400).random()
 
         ImageItem(
             id = id,
