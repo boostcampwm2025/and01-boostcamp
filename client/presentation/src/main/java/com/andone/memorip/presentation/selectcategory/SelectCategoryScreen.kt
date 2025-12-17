@@ -25,12 +25,17 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.dialog.MemoripCategoryInputDialog
+import com.andone.memorip.presentation.selectcategory.Constants.MAX_SELECTABLE_COUNT
 import com.andone.memorip.presentation.selectcategory.component.CategoryItem
 import com.andone.memorip.presentation.selectcategory.model.Category
 import com.andone.memorip.presentation.theme.LocalMemoripColors
 import com.andone.memorip.presentation.theme.MemoripPadding.PaddingMedium
 import com.andone.memorip.presentation.theme.MemoripTheme
 import org.andone.memorip.presentation.theme.LocalMemoripTypography
+
+private object Constants {
+    val MAX_SELECTABLE_COUNT = 3
+}
 
 @Composable
 fun SelectCategoryScreen() {
@@ -62,7 +67,7 @@ fun SelectCategoryScreen() {
         onShowDialog = { showDialog = true },
         onCheckedChange = { id, checked ->
             if (checked) {
-                if (checkedSet.size < 3) checkedSet.add(id)
+                if (checkedSet.size < MAX_SELECTABLE_COUNT) checkedSet.add(id)
 //                else /** TODO snackbar로 3개까지만 담을 수 있다고 알려주기 */
             } else {
                 checkedSet.remove(id)
