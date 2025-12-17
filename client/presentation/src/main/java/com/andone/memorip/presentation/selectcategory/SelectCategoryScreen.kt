@@ -62,7 +62,7 @@ fun SelectCategoryScreen() {
         onShowDialog = { showDialog = true },
         onCheckedChange = { id, checked ->
             if (checked) {
-                if (checkedSet.size <= 3) checkedSet.add(id)
+                if (checkedSet.size < 3) checkedSet.add(id)
 //                else /** TODO snackbar로 3개까지만 담을 수 있다고 알려주기 */
             } else {
                 checkedSet.remove(id)
