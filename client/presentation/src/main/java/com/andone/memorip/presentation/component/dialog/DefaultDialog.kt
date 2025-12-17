@@ -10,6 +10,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -37,6 +41,8 @@ internal fun DefaultDialog(
     modifier: Modifier = Modifier,
     content: @Composable ColumnScope.() -> Unit,
 ) {
+    var isValidClick by remember { mutableStateOf(true) }
+
     Dialog(onDismissRequest = onDismissRequest) {
         Surface(
             modifier = modifier,
@@ -71,7 +77,10 @@ internal fun DefaultDialog(
                             style = MemoripTheme.typography.label1
                         )
                     }
-                    TextButton(onClick = onConfirmClick) {
+                    TextButton(
+                        onClick = onConfirmClick,
+                        enabled = isValidClick
+                    ) {
                         Text(
                             text = stringResource(R.string.dialog_confirm_message),
                             color = MemoripTheme.colors.primary,
