@@ -8,15 +8,19 @@ import androidx.compose.ui.unit.dp
 
 @Immutable
 data class MemoripShapes(
-    val defaultCorner: RoundedCornerShape,
-    val largeCorner: RoundedCornerShape,
-    val fullRounded: RoundedCornerShape
+    val roundedSmall: RoundedCornerShape,
+    val roundedMedium: RoundedCornerShape,
+    val roundedLarge: RoundedCornerShape,
+    val roundedXLarge: RoundedCornerShape,
+    val roundedMax: RoundedCornerShape
 )
 
 internal val memoripShapes = MemoripShapes(
-    defaultCorner = RoundedCornerShape(12.dp),
-    largeCorner = RoundedCornerShape(24.dp),
-    fullRounded = CircleShape
+    roundedSmall = RoundedCornerShape(12.dp),
+    roundedMedium = RoundedCornerShape(16.dp),
+    roundedLarge = RoundedCornerShape(20.dp),
+    roundedXLarge = RoundedCornerShape(24.dp),
+    roundedMax = CircleShape
 )
 
 internal val LocalMemoripShapes = staticCompositionLocalOf {

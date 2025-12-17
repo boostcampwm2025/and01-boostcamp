@@ -31,7 +31,7 @@ fun ImageCard(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(MemoripPadding.PaddingXXXSmall)
-                .clip(memoripShapes.defaultCorner)
+                .clip(memoripShapes.roundedSmall)
                 .background(MemoripTheme.colors.offWhite),
             contentAlignment = Alignment.Center
         ) {
