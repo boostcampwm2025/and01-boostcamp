@@ -23,7 +23,7 @@ import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.dialog.DialogConstants.MAX_LENGTH
 import com.andone.memorip.presentation.component.dialog.DialogDimens.LEADING_ICON_SIZE
 import com.andone.memorip.presentation.theme.MemoripTheme
-import com.andone.memorip.presentation.utils.rememberColorState
+import com.andone.memorip.presentation.util.rememberColorState
 
 private object DialogConstants {
     val MAX_LENGTH = 6
