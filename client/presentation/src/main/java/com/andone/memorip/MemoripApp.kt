@@ -1,5 +1,6 @@
 package com.andone.memorip
 
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -18,7 +19,8 @@ fun MemoripApp(navigator: MemoripNavigator) {
                 currentTab = navigator.currentTab,
                 onTabSelected = navigator::navigateToTab
             )
-        }
+        },
+        contentWindowInsets = WindowInsets(),
     ) { innerPadding ->
         MemoripNav(
             navigator = navigator,

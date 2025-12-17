@@ -1,6 +1,7 @@
 package com.andone.memorip.presentation.home
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -25,20 +26,23 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 
 @Composable
 fun HomeScreen(
-    onBackClick : () -> Unit,
-    onCreateGroupClick: () -> Unit
+    onCreateGroupClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     HomeScreenContents(
-        groups = emptyList()
+        groups = emptyList(),
+        modifier = modifier
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreenContents(
-    groups: List<GroupUiModel>
+    groups: List<GroupUiModel>,
+    modifier: Modifier = Modifier
 ) {
     Scaffold(
+        modifier = modifier,
         topBar = {
             TopAppBar(
                 title = {},
@@ -66,7 +70,8 @@ fun HomeScreenContents(
                     contentDescription = stringResource(R.string.home_add_contentDescription)
                 )
             }
-        }
+        },
+        contentWindowInsets = WindowInsets(),
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier
