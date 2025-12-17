@@ -15,8 +15,8 @@
     <string name="staggered_grid_image_content_description">장소 이미지</string>
 
     <!-- HomeScreen -->
-    <string name="home_search_content_description">Search</string>
-    <string name="home_add_content_description">Add</string>
+    <string name="home_search_contentDescription">Search</string>
+    <string name="home_add_contentDescription">Add</string>
     <string name="home_overflow_count">+%1$d</string>
 
 </resources>
