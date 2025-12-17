@@ -48,13 +48,13 @@ fun MemoripCategoryInputDialog(
         TextField(
             value = name,
             onValueChange = { name = it },
-            placeholder = {
-                Text(text = stringResource(R.string.dialog_name_place_holder))
-            },
+            textStyle = MemoripTheme.typography.body2,
             label = {
                 Text(text = stringResource(R.string.dialog_name_place_holder))
             },
-            textStyle = MemoripTheme.typography.body2,
+            placeholder = {
+                Text(text = stringResource(R.string.dialog_name_place_holder))
+            },
             trailingIcon = {
                 IconButton(onClick = { name = "" }) {
                     Icon(
@@ -76,17 +76,11 @@ fun MemoripCategoryInputDialog(
             )
         )
         TextField(
-            value = stringResource(
-                R.string.category_dialog_color_format,
-                colorState.inputColor
-            ),
+            value = stringResource(R.string.category_dialog_color_format,colorState.inputColor),
             onValueChange = { value ->
-                if (value.length <= MAX_LENGTH + 1) {
-                    colorState.updateColor(value)
-                }
+                if (value.length <= MAX_LENGTH + 1) { colorState.updateColor(value) }
             },
             textStyle = MemoripTheme.typography.body2,
-            maxLines = 1,
             leadingIcon = {
                 Box(
                     modifier = Modifier
@@ -96,15 +90,6 @@ fun MemoripCategoryInputDialog(
                             shape = MemoripTheme.shapes.defaultCorner
                         )
                 )
-            },
-            isError = !colorState.isValidColorInput(),
-            supportingText = {
-                if (!colorState.isValidColorInput()) {
-                    Text(
-                        text = stringResource(colorState.getErrMsg()),
-                        style = MemoripTheme.typography.hint1
-                    )
-                }
             },
             trailingIcon = {
                 IconButton(
@@ -118,6 +103,16 @@ fun MemoripCategoryInputDialog(
                     )
                 }
             },
+            supportingText = {
+                if (!colorState.isValidColorInput()) {
+                    Text(
+                        text = stringResource(colorState.getErrMsg()),
+                        style = MemoripTheme.typography.hint1
+                    )
+                }
+            },
+            isError = !colorState.isValidColorInput(),
+            maxLines = 1,
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = MemoripTheme.colors.primaryContainer,
                 unfocusedContainerColor = MemoripTheme.colors.primaryContainer,

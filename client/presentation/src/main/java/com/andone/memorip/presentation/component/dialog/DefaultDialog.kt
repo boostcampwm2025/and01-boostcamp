@@ -20,7 +20,6 @@ import androidx.compose.ui.window.Dialog
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.dialog.DialogDimens.INNER_PADDING
 import com.andone.memorip.presentation.component.dialog.DialogDimens.SPACING
-import com.andone.memorip.presentation.theme.LocalMemoripShapes
 import com.andone.memorip.presentation.theme.MemoripTheme
 
 object DialogDimens {
@@ -41,18 +40,18 @@ internal fun DefaultDialog(
     Dialog(onDismissRequest = onDismissRequest) {
         Surface(
             modifier = modifier,
-            contentColor = MemoripTheme.colors.black,
+            shape = MemoripTheme.shapes.largeCorner,
             color = MemoripTheme.colors.primaryContainer,
-            shape = MemoripTheme.shapes.largeCorner
+            contentColor = MemoripTheme.colors.black
         ) {
             Column(
                 modifier = Modifier.padding(horizontal = INNER_PADDING),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(space = SPACING)
+                verticalArrangement = Arrangement.spacedBy(space = SPACING),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    modifier = Modifier.padding(vertical = INNER_PADDING),
                     text = title,
+                    modifier = Modifier.padding(vertical = INNER_PADDING),
                     style = MemoripTheme.typography.headline2
                 )
                 content()
@@ -68,15 +67,15 @@ internal fun DefaultDialog(
                     TextButton(onClick = onCancelClick) {
                         Text(
                             text = stringResource(R.string.dialog_cancel_message),
-                            style = MemoripTheme.typography.label1,
-                            color = MemoripTheme.colors.primary
+                            color = MemoripTheme.colors.primary,
+                            style = MemoripTheme.typography.label1
                         )
                     }
                     TextButton(onClick = onConfirmClick) {
                         Text(
                             text = stringResource(R.string.dialog_confirm_message),
-                            style = MemoripTheme.typography.label1,
-                            color = MemoripTheme.colors.primary
+                            color = MemoripTheme.colors.primary,
+                            style = MemoripTheme.typography.label1
                         )
                     }
                 }

@@ -31,23 +31,23 @@ fun MemoripInputDialog(
     var value by remember { mutableStateOf("") }
 
     DefaultDialog(
-        modifier = modifier,
         title = title,
         onConfirmClick = { onConfirmClick(value) },
         onCancelClick = onCancelClick,
         onDismissRequest = onDismissRequest,
+        modifier = modifier,
     ) {
         TextField(
             value = value,
             onValueChange = { value = it },
-            placeholder = {
-                if (hint != null) {
-                    Text(text = hint)
-                }
-            },
             label = {
                 if (label != null) {
                     Text(text = label)
+                }
+            },
+            placeholder = {
+                if (hint != null) {
+                    Text(text = hint)
                 }
             },
             trailingIcon = {
@@ -79,11 +79,11 @@ private fun MemoripInputDialogPrev() {
     MemoripTheme {
         MemoripInputDialog(
             title = "그룹 추가",
-            hint = "input",
-            label = "이름",
             onConfirmClick = {},
             onCancelClick = {},
-            onDismissRequest = {}
+            onDismissRequest = {},
+            hint = "input",
+            label = "이름"
         )
     }
 }
