@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.GroupView
 import com.andone.memorip.presentation.home.model.GroupUiModel
+import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
 
 @Composable
@@ -32,7 +33,7 @@ fun HomeScreen() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreenContents(
-    groups : List<GroupUiModel>
+    groups: List<GroupUiModel>
 ) {
     Scaffold(
         topBar = {
@@ -59,18 +60,19 @@ fun HomeScreenContents(
                 contentColor = MemoripTheme.colors.black
             ) {
                 Icon(
-                    painter = painterResource(R.drawable.ic_add),
-                    contentDescription = stringResource(R.string.home_add_contentDescription)
+                    painter = painterResource(id = R.drawable.ic_add),
+                    contentDescription = stringResource(id = R.string.home_add_contentDescription)
                 )
             }
         }
     ) { innerPadding ->
         LazyColumn(
-            modifier = Modifier.padding(innerPadding)
-                .padding(horizontal = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(2.dp)
+            modifier = Modifier
+                .padding(paddingValues = innerPadding)
+                .padding(horizontal = MemoripPadding.PaddingXSmall),
+            verticalArrangement = Arrangement.spacedBy(space = MemoripPadding.PaddingXXXSmall)
         ) {
-            items(groups) {group ->
+            items(items = groups) { group ->
                 GroupView(
                     name = group.name,
                     images = group.images,
@@ -82,29 +84,27 @@ fun HomeScreenContents(
 
 @Composable
 @Preview(showBackground = true)
-private fun HomeScreenContentsPreview(){
+private fun HomeScreenContentsPreview() {
     val groups = listOf(
         GroupUiModel(
             name = "기본 그룹",
-            images = List(8) { "" }
+            images = List(size = 8) { "" }
         ),
         GroupUiModel(
             name = "부 산",
-            images = List(4) { "" }
+            images = List(size = 4) { "" }
         ),
         GroupUiModel(
             name = "제주도",
-            images = List(5) { "" }
+            images = List(size = 5) { "" }
         ),
         GroupUiModel(
             name = "대구 ",
-            images = List(1) { "" }
+            images = List(size = 1) { "" }
         )
     )
 
     MemoripTheme {
-        HomeScreenContents(
-            groups = groups
-        )
+        HomeScreenContents(groups = groups)
     }
 }
