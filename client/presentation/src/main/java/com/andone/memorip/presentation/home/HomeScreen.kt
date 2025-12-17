@@ -42,12 +42,11 @@ fun HomeScreenContents(
                 navigationIcon = {
                     IconButton(onClick = {}) {
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_search),
-                            contentDescription = stringResource(id = R.string.home_search_contentDescription)
+                            painter = painterResource(R.drawable.ic_search),
+                            contentDescription = stringResource(R.string.home_search_contentDescription)
                         )
                     }
                 },
-                actions = {},
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MemoripTheme.colors.primaryContainer
                 )
@@ -60,8 +59,8 @@ fun HomeScreenContents(
                 contentColor = MemoripTheme.colors.black
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_add),
-                    contentDescription = stringResource(id = R.string.home_add_contentDescription)
+                    painter = painterResource(R.drawable.ic_add),
+                    contentDescription = stringResource(R.string.home_add_contentDescription)
                 )
             }
         }
