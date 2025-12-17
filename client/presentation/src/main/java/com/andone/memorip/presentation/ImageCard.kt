@@ -47,7 +47,7 @@ fun ImageCard(item: GroupItem) {
                 ) {
                     Text(
                         text = stringResource(
-                            id = R.string.overflow_count,
+                            id = R.string.home_overflow_count,
                             item.overNumber
                         ),
                         color = MemoripTheme.colors.white
