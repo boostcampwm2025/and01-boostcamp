@@ -20,10 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.selectcategory.model.Category
 import com.andone.memorip.presentation.theme.MemoripIconSize.IconSizeMedium
-import com.andone.memorip.presentation.theme.MemoripIconSize.IconSizeSmall
 import com.andone.memorip.presentation.theme.MemoripPadding.PaddingXSmall
-import com.andone.memorip.presentation.theme.MemoripSpace.SpaceXLarge
-import com.andone.memorip.presentation.theme.MemoripSpace.SpaceXSmall
 import com.andone.memorip.presentation.theme.MemoripTheme
 
 @Composable
@@ -44,7 +41,8 @@ fun CategoryItem(
         )
         Text(
             text = category.category,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier
+                .weight(1f)
                 .padding(start = PaddingXSmall),
             style = MemoripTheme.typography.body2
         )
