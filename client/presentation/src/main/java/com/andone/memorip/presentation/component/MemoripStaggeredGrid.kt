@@ -23,8 +23,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
+import coil.compose.AsyncImage
 import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.model.ImageItem
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 
@@ -44,9 +45,7 @@ fun MemoripStaggeredGrid(modifier: Modifier = Modifier) {
         modifier = modifier.fillMaxSize(),
         content = {
             items(images) { image ->
-                StaggeredImageItem(
-                    imageUrl = image.url
-                )
+                StaggeredImageItem(imageUrl = image.url)
             }
         }
     )
@@ -77,19 +76,13 @@ private fun StaggeredImageItem(
         AsyncImage(
             model = imageUrl,
             contentDescription = contentDescription,
-            contentScale = ContentScale.FillWidth,
+            modifier = Modifier.fillMaxWidth(),
             placeholder = ColorPainter(MemoripTheme.colors.gray),
             error = ColorPainter(MemoripTheme.colors.gray),
-            modifier = Modifier.fillMaxWidth()
+            contentScale = ContentScale.FillWidth
         )
     }
 }
-
-// todo: 실제 Image 모델로 대체 에정
-data class ImageItem(
-    val id: Int,
-    val url: String
-)
 
 /**
  * 랜덤 높이 이미지 count 개 생성.
@@ -116,7 +109,6 @@ private fun MemoripStaggeredGridPreview() {
         val dummyHeights = remember {
             List(30) { (50..400).random() }
         }
-        
         LazyVerticalStaggeredGrid(
             columns = StaggeredGridCells.Adaptive(StaggeredGridDimens.STAGGERED_GRID_MIN_CELL_WIDTH),
             verticalItemSpacing = MemoripSpace.SpaceXXSmall,
