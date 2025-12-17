@@ -22,14 +22,14 @@ fun GroupView(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXSmall)
     ) {
-        Text(name)
+        Text(text = name)
         GroupLayout(
             items = buildBento5x3Items(images),
             modifier = Modifier
                 .fillMaxWidth()
                 .background(MemoripTheme.colors.white)
         ) { item ->
-            ImageCard(item)
+            ImageCard(item = item)
         }
     }
 }

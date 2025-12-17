@@ -12,7 +12,7 @@ import com.andone.memorip.presentation.BentoGridSpec.COLUMNS
 import com.andone.memorip.presentation.BentoGridSpec.ROWS
 import com.andone.memorip.presentation.theme.MemoripTheme
 
-object BentoGridSpec {
+private object BentoGridSpec {
     const val COLUMNS = 5
     const val ROWS = 3
 }
@@ -69,7 +69,10 @@ fun GroupLayout(
                     columnHeights[cc] = baseRow + item.rowSpan
                 }
 
-                placedItems += Placed(placeable, baseRow, c)
+                placedItems += Placed(
+                    placeable = placeable,
+                    row = baseRow,
+                    col = c)
                 break
             }
         }

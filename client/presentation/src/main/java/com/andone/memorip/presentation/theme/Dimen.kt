@@ -26,3 +26,30 @@ object MemoripIconSize {
     val IconSizeMedium = 24.dp
     val IconSizeLarge = 36.dp
 }
+
+object MemoripAlpha {
+    /* ---------- Disabled / Inactive ---------- */
+    const val DISABLED = 0.38f
+    const val INACTIVE = 0.6f
+    const val SECONDARY = 0.7f
+
+
+    /* ---------- Overlay ---------- */
+    const val SCRIM = 0.5f            // 모달/다이얼로그 배경
+    const val DIM = 0.4f              // 이미지 위 딤 처리
+
+
+    /* ---------- Press / Focus ---------- */
+    const val PRESSED = 0.8f
+    const val HOVER = 0.9f
+
+
+    /* ---------- Image ---------- */
+    const val IMAGE_PLACEHOLDER = 0.3f
+    const val IMAGE_OVERLAY = 0.6f
+
+
+    /* ---------- Divider / Border ---------- */
+    const val DIVIDER = 0.12f
+    const val BORDER = 0.2f
+}
