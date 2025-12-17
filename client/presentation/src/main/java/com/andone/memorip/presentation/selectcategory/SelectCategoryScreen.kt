@@ -112,10 +112,13 @@ private fun SelectCategoryContent(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = onShowDialog) {
+            FloatingActionButton(
+                onClick = onShowDialog,
+                containerColor = MemoripTheme.colors.primaryContainer,
+                contentColor = MemoripTheme.colors.black
+            ) {
                 Icon(
-                    /** TODO 아이콘 변경해야 함 */
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_close),
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_add),
                     contentDescription = stringResource(R.string.select_category_create_category_button_description)
                 )
             }
