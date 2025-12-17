@@ -25,6 +25,6 @@
 
     <!-- PlaceDetail -->
     <string name="place_detail_image_content_description">장소 이미지</string>
-    <string name="place_detail_image_count">%1$d / %2$d</string>
+    <string name="place_detail_image_count">%1$d/%2$d</string>
 
 </resources>
