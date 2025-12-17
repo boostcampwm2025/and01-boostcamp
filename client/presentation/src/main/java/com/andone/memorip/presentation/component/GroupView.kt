@@ -1,4 +1,4 @@
-package com.andone.memorip.presentation
+package com.andone.memorip.presentation.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -8,7 +8,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.andone.memorip.domain.group.buildBento5x3Items
+import com.andone.memorip.presentation.home.component.GroupLayout
+import com.andone.memorip.presentation.util.buildBento5x3Items
+import com.andone.memorip.presentation.home.component.ImageCard
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 
@@ -40,17 +42,7 @@ private fun GroupViewPreview() {
     MemoripTheme {
         GroupView(
             name = "기본 그룹",
-            images = listOf(
-                "https://picsum.photos/300/300?1",
-                "https://picsum.photos/300/300?1",
-                "https://picsum.photos/300/300?1",
-                "https://picsum.photos/300/300?1",
-                "https://picsum.photos/300/300?1",
-                "https://picsum.photos/300/300?1",
-                "https://picsum.photos/300/300?1",
-                "https://picsum.photos/300/300?1",
-                "https://picsum.photos/300/300?1",
-            )
+            images = List(8) {""}
         )
     }
 }

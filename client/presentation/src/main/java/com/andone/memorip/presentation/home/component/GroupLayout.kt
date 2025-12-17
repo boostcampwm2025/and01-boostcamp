@@ -1,4 +1,4 @@
-package com.andone.memorip.presentation
+package com.andone.memorip.presentation.home.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -7,9 +7,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.tooling.preview.Preview
-import com.andone.memorip.domain.group.GroupItem
-import com.andone.memorip.presentation.BentoGridSpec.COLUMNS
-import com.andone.memorip.presentation.BentoGridSpec.ROWS
+import com.andone.memorip.presentation.home.model.GroupItem
+import com.andone.memorip.presentation.home.component.BentoGridSpec.COLUMNS
+import com.andone.memorip.presentation.home.component.BentoGridSpec.ROWS
 import com.andone.memorip.presentation.theme.MemoripTheme
 
 private object BentoGridSpec {
@@ -109,7 +109,7 @@ private fun GroupLayoutPreview() {
                 .fillMaxWidth()
                 .background(MemoripTheme.colors.white)
         ) { item ->
-            ImageCard(item)
+            ImageCard(item = item)
         }
     }
 }

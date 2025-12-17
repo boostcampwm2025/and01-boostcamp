@@ -1,4 +1,4 @@
-package com.andone.memorip.presentation
+package com.andone.memorip.presentation.home.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -14,7 +14,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.AsyncImage
-import com.andone.memorip.domain.group.GroupItem
+import com.andone.memorip.presentation.home.model.GroupItem
+import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.theme.MemoripAlpha
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme

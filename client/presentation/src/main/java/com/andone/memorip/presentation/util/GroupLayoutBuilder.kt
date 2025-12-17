@@ -1,6 +1,8 @@
-package com.andone.memorip.domain.group
+package com.andone.memorip.presentation.util
 
-import com.andone.memorip.domain.group.BENTO5x3.VISIBLE
+import com.andone.memorip.presentation.home.model.GroupItem
+import com.andone.memorip.presentation.home.model.LayoutBlock
+import com.andone.memorip.presentation.util.BENTO5x3.VISIBLE
 
 private object BENTO5x3 {
     const val VISIBLE = 7
