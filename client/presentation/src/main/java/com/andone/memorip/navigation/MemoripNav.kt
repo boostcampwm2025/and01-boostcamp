@@ -7,30 +7,23 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
-import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
-import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import kotlinx.serialization.Serializable
-
-@Serializable
-data object Home : NavKey
+import com.andone.memorip.presentation.home.home
 
 @Composable
-fun MemoripNav(modifier: Modifier = Modifier) {
-    val backStack = rememberNavBackStack(Home)
-
+fun MemoripNav(
+    navigator: MemoripNavigator,
+    modifier: Modifier = Modifier
+) {
     NavDisplay(
+        backStack = navigator.backStack,
+        onBack = { navigator.popBackStack() },
         entryDecorators = listOf(
             rememberSaveableStateHolderNavEntryDecorator(),
             rememberViewModelStoreNavEntryDecorator()
         ),
-        backStack = backStack,
-        onBack = { backStack.removeLastOrNull() },
-        entryProvider = entryProvider {
-            entry<Home> { Text("Product List") }
-        },
         transitionSpec = {
             slideInHorizontally(initialOffsetX = { it }) togetherWith
                     slideOutHorizontally(targetOffsetX = { -it })
@@ -42,6 +35,13 @@ fun MemoripNav(modifier: Modifier = Modifier) {
         predictivePopTransitionSpec = {
             slideInHorizontally(initialOffsetX = { -it }) togetherWith
                     slideOutHorizontally(targetOffsetX = { it })
+        },
+        entryProvider = entryProvider {
+            home(
+                onCreateGroupClick = {},
+                modifier = modifier
+            )
+            entry<User> { Text(text = "user") }
         },
     )
 }

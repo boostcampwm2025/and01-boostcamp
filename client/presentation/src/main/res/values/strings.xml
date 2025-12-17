@@ -12,6 +12,9 @@
     <string name="category_dialog_valid_color_err_hint">0~9, A~F까지의 값만 입력해주세요</string>
     <string name="category_dialog_empty_name_err_hint">이름을 입력해주세요</string>
 
+    <!-- StaggeredGrid-->
+    <string name="staggered_grid_image_content_description">장소 이미지</string>
+
     <!-- HomeScreen -->
     <string name="home_search_contentDescription">Search</string>
     <string name="home_add_contentDescription">Add</string>
@@ -23,4 +26,9 @@
     <string name="select_category_dialog_title">카테고리 생성</string>
     <string name="select_category_confirm_button_description">카테고리 추가 확인 버튼</string>
     <string name="select_category_create_category_button_description">카테고리 추가 버튼</string>
+
+    <!-- MainBottomBar -->
+    <string name="main_bottom_bar_home">홈</string>
+    <string name="main_bottom_bar_user">마이페이지</string>
+
 </resources>
