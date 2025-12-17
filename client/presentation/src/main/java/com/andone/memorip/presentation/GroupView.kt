@@ -6,13 +6,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.andone.memorip.domain.group.buildBento5x3Items
-import com.andone.memorip.presentation.theme.MemoripDimen
+import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 
 @Composable
@@ -23,7 +20,7 @@ fun GroupView(
 ){
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(MemoripDimen.spacing8)
+        verticalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXSmall)
     ) {
         Text(name)
         GroupLayout(
