@@ -9,6 +9,7 @@ import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.home.model.GroupItem
 import com.andone.memorip.presentation.home.component.BentoGridSpec.COLUMNS
+import com.andone.memorip.presentation.home.component.BentoGridSpec.RATIO
 import com.andone.memorip.presentation.home.component.BentoGridSpec.ROWS
 import com.andone.memorip.presentation.home.model.Placed
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -16,12 +17,14 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 private object BentoGridSpec {
     const val COLUMNS = 5
     const val ROWS = 3
+    const val RATIO = 5f / 3f
 }
 
 @Composable
 fun GroupLayout(
     items: List<GroupItem>,
     modifier: Modifier = Modifier,
+    aspectRatio: Float = RATIO,
     columns: Int = COLUMNS,
     rows: Int = ROWS,
     content: @Composable (GroupItem) -> Unit
@@ -31,8 +34,11 @@ fun GroupLayout(
         content = { items.forEach { content(it) } }
     ) { measurables, constraints ->
 
-        val cellWidth = constraints.maxWidth / columns
-        val cellHeight = constraints.maxWidth / rows
+        val totalWidth = constraints.maxWidth
+        val totalHeight = (totalWidth / aspectRatio).toInt()
+
+        val cellWidth = totalWidth / columns
+        val cellHeight = totalHeight / rows
 
         val columnHeights = IntArray(columns)
 
