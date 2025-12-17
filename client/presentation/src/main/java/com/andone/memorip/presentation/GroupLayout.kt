@@ -33,59 +33,44 @@ fun GroupLayout(
         val cellWidth = constraints.maxWidth / columns
         val cellHeight = constraints.maxWidth / rows
 
-        val occupied = Array(rows) { BooleanArray(columns) }
+        val columnHeights = IntArray(columns)
 
         data class Placed(
             val placeable: Placeable,
             val row: Int,
-            val col: Int,
-            val rowSpan: Int,
-            val colSpan: Int
+            val col: Int
         )
 
         val placedItems = mutableListOf<Placed>()
 
-        fun canPlace(r: Int, c: Int, rs: Int, cs: Int): Boolean {
-            if (r + rs > rows || c + cs > columns) return false
-            for (rr in r until r + rs) {
-                for (cc in c until c + cs) {
-                    if (occupied[rr][cc]) return false
-                }
-            }
-            return true
-        }
-
-        fun mark(r: Int, c: Int, rs: Int, cs: Int) {
-            for (rr in r until r + rs) {
-                for (cc in c until c + cs) {
-                    occupied[rr][cc] = true
-                }
-            }
-        }
-
         measurables.forEachIndexed { index, measurable ->
             val item = items[index]
 
-            outer@ for (r in 0 until rows) {
-                for (c in 0 until columns) {
-                    if (canPlace(r, c, item.rowSpan, item.colSpan)) {
-                        val width = cellWidth * item.colSpan
-                        val height = cellHeight * item.rowSpan
+            for (c in 0..columns - item.colSpan) {
 
-                        val placeable = measurable.measure(
-                            constraints.copy(
-                                minWidth = width,
-                                maxWidth = width,
-                                minHeight = height,
-                                maxHeight = height
-                            )
-                        )
+                val baseRow = (c until c + item.colSpan)
+                    .maxOf { columnHeights[it] }
 
-                        mark(r, c, item.rowSpan, item.colSpan)
-                        placedItems += Placed(placeable, r, c, item.rowSpan, item.colSpan)
-                        break@outer
-                    }
+                if (baseRow + item.rowSpan > rows) continue
+
+                val width = cellWidth * item.colSpan
+                val height = cellHeight * item.rowSpan
+
+                val placeable = measurable.measure(
+                    constraints.copy(
+                        minWidth = width,
+                        maxWidth = width,
+                        minHeight = height,
+                        maxHeight = height
+                    )
+                )
+
+                for (cc in c until c + item.colSpan) {
+                    columnHeights[cc] = baseRow + item.rowSpan
                 }
+
+                placedItems += Placed(placeable, baseRow, c)
+                break
             }
         }
 
