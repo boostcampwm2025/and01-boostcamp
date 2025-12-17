@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Memorip</string>
+    <string name="overflow_count">+%1$d</string>
 </resources>

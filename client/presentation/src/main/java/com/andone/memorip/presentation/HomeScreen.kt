@@ -10,9 +10,5 @@ fun HomeScreen(){
 
 @Composable
 fun HomeScreenContents(){
-    Scaffold(
 
-    ) { innerPadding ->
-
-    }
 }

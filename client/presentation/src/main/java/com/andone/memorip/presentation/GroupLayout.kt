@@ -60,8 +60,7 @@ fun GroupLayout(
         measurables.forEachIndexed { index, measurable ->
             val item = items[index]
 
-            var placed = false
-            for (r in 0 until rows) {
+            outer@ for (r in 0 until rows) {
                 for (c in 0 until columns) {
                     if (canPlace(r, c, item.rowSpan, item.colSpan)) {
                         val width = cellWidth * item.colSpan
@@ -78,11 +77,9 @@ fun GroupLayout(
 
                         mark(r, c, item.rowSpan, item.colSpan)
                         placedItems += Placed(placeable, r, c, item.rowSpan, item.colSpan)
-                        placed = true
-                        break
+                        break@outer
                     }
                 }
-                if (placed) break
             }
         }
 
@@ -116,7 +113,7 @@ private fun GroupLayoutPreview() {
             items = items,
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.White)
+                .background(MemoripTheme.colors.white)
         ) { item ->
             ImageCard(item)
         }

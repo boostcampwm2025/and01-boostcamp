@@ -29,7 +29,7 @@ fun GroupView(
             items = buildBento5x3Items(images),
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.White)
+                .background(MemoripTheme.colors.white)
         ) { item ->
             ImageCard(item)
         }
