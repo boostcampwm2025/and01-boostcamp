@@ -112,9 +112,7 @@ private fun SelectCategoryContent(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = onShowDialog,
-            ) {
+            FloatingActionButton(onClick = onShowDialog) {
                 Icon(
                     /** TODO 아이콘 변경해야 함 */
                     imageVector = ImageVector.vectorResource(R.drawable.ic_close),
