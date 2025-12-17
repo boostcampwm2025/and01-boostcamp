@@ -18,7 +18,7 @@ fun MemoripNav(
 ) {
     NavDisplay(
         backStack = navigator.backStack,
-        onBack = { navigator.backStack.removeLastOrNull() },
+        onBack = { navigator.popBackStack() },
         entryDecorators = listOf(
             rememberSaveableStateHolderNavEntryDecorator(),
             rememberViewModelStoreNavEntryDecorator()
