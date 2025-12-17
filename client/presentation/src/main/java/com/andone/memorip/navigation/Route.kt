@@ -8,3 +8,6 @@ data object Home : NavKey
 
 @Serializable
 data object User : NavKey
+
+@Serializable
+data object SelectGroup: NavKey
