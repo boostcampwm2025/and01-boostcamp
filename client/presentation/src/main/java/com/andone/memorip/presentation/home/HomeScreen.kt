@@ -24,7 +24,10 @@ import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    onBackClick : () -> Unit,
+    onCreateGroupClick: () -> Unit
+) {
     HomeScreenContents(
         groups = emptyList()
     )

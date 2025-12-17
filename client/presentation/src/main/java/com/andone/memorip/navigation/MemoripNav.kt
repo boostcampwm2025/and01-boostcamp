@@ -10,6 +10,7 @@ import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDe
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import com.andone.memorip.presentation.home.HomeScreen
 
 @Composable
 fun MemoripNav(
@@ -36,7 +37,10 @@ fun MemoripNav(
                     slideOutHorizontally(targetOffsetX = { it })
         },
         entryProvider = entryProvider {
-            entry<Home> { Text(text = "home") }
+            entry<Home> { HomeScreen(
+                onBackClick = {navigator.popBackStack()},
+                onCreateGroupClick = {}
+            )}
             entry<User> { Text(text = "user") }
         },
     )
