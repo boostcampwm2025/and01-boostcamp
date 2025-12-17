@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -37,7 +38,10 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 import org.andone.memorip.presentation.theme.LocalMemoripTypography
 
 @Composable
-fun SelectGroupScreen() {
+fun SelectGroupScreen(
+    onBackClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     var showDialog by remember { mutableStateOf(false) }
     val groups = remember {
         mutableStateListOf(
@@ -63,7 +67,12 @@ fun SelectGroupScreen() {
     SelectGroupContent(
         groups = groups,
         onFABClick = { showDialog = true },
-        onGroupClick = { Log.d("UI TEST", "group ui model : $it") }
+        onGroupClick = {
+            /** TODO GROUP 선택 시 이전 화면으로 이동 및 데이터 전달 */
+            Log.d("UI TEST", "group ui model : $it")
+        },
+        onBackClick = onBackClick,
+        modifier = modifier
     )
 
     if (showDialog) {
@@ -90,10 +99,11 @@ private fun SelectGroupContent(
     groups: List<GroupUiModel>,
     onFABClick: () -> Unit,
     onGroupClick: (GroupUiModel) -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
-        topBar = { SelectGroupTopBar() },
+        topBar = { SelectGroupTopBar(onBackClick = onBackClick) },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = onFABClick,
@@ -126,7 +136,7 @@ private fun SelectGroupContent(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun SelectGroupTopBar() {
+private fun SelectGroupTopBar(onBackClick: () -> Unit) {
     TopAppBar(
         title = {
             Text(
@@ -135,10 +145,12 @@ private fun SelectGroupTopBar() {
             )
         },
         navigationIcon = {
-            Icon(
-                imageVector = ImageVector.vectorResource(R.drawable.back_ic),
-                contentDescription = stringResource(R.string.select_group_back_button_description)
-            )
+            IconButton(onClick = onBackClick) {
+                Icon(
+                    imageVector = ImageVector.vectorResource(R.drawable.back_ic),
+                    contentDescription = stringResource(R.string.select_group_back_button_description)
+                )
+            }
         },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = LocalMemoripColors.current.offWhite,
@@ -152,6 +164,6 @@ private fun SelectGroupTopBar() {
 @Composable
 private fun SelectGroupScreenPrev() {
     MemoripTheme {
-        SelectGroupScreen()
+        SelectGroupScreen(onBackClick = {})
     }
 }
