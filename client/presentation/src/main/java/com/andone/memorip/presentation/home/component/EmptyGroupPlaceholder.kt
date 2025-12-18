@@ -24,7 +24,7 @@ import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.theme.memoripShapes
 
-private object CardSpec{
+private object CardSpec {
     const val RATIO = 5f / 3f
 }
 
@@ -43,7 +43,11 @@ fun EmptyGroupPlaceholder(onClick: () -> Unit) {
                 color = MemoripTheme.colors.outline,
                 shape = memoripShapes.roundedSmall
             )
-            .clickable(onClick = onClick),
+            .clickable(
+                interactionSource = null,
+                indication = null,
+                onClick = onClick
+            ),
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -67,8 +71,8 @@ fun EmptyGroupPlaceholder(onClick: () -> Unit) {
 
 @Preview
 @Composable
-private fun EmptyGroupPlaceholderPreview(){
-    MemoripTheme{
+private fun EmptyGroupPlaceholderPreview() {
+    MemoripTheme {
         EmptyGroupPlaceholder(onClick = {})
     }
 }
