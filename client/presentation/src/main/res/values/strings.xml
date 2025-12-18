@@ -70,4 +70,13 @@
     <string name="place_detail_image_content_description">장소 이미지</string>
     <string name="place_detail_image_count">%1$d/%2$d</string>
 
+    <!-- PlaceImagesBottomSheet -->
+    <string name="placeimagebottomsheet_unknown_place">알 수 없는 장소</string>
+    <string name="placeimagebottomsheet_place_image_count">사진 %d장</string>
+
+    <!-- ErrorFullScreen -->
+    <string name="errorfullscreen_retry_button">다시 시도</string>
+    <string name="errorfullscreen_error_default_message">잠시 후 다시 시도해주세요.</string>
+    <string name="errorfullscreen_error_map_message">지도를 불러올 수 없습니다.</string>
+
 </resources>

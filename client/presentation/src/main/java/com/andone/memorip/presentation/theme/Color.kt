@@ -11,10 +11,15 @@ val PrimaryContainer = Color(0xFFCDAC9B)
 val Secondary = Color(0xFF36699A)
 val White = Color(0xFFFFFFFF)
 val OffWhite = Color(0xFFF5EDE8)
+val OnOffWhite = Color(0xFF2E2520)
 val Gray = Color(0xFF808080)
 val Black = Color(0xFF000000)
 val Outline = Color(0xFF7A5A4A)
 val Red = Color(0xFFB23A2E)
+
+// Dark 테마용 색상
+val DarkOffWhite = Color(0xFF3A3330)
+val DarkOnOffWhite = Color(0xFFF5EDE8)
 
 @Immutable
 data class MemoripColors(
@@ -24,6 +29,7 @@ data class MemoripColors(
     val background: Color,
     val white: Color,
     val offWhite: Color,
+    val onOffWhite: Color,
     val gray: Color,
     val black: Color,
     val outline: Color,
@@ -37,6 +43,7 @@ internal val lightMemoripColors = MemoripColors(
     background = White,
     white = White,
     offWhite = OffWhite,
+    onOffWhite = OnOffWhite,
     gray = Gray,
     black = Black,
     outline = Outline,
@@ -49,7 +56,8 @@ internal val darkMemoripColors = MemoripColors(
     secondary = Secondary,
     background = White,
     white = White,
-    offWhite = OffWhite,
+    offWhite = DarkOffWhite,
+    onOffWhite = DarkOnOffWhite,
     gray = Gray,
     black = Black,
     outline = Outline,

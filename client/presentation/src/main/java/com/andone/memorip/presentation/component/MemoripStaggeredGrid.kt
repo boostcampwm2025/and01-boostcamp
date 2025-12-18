@@ -21,7 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.andone.memorip.presentation.groupdetail.model.PlaceImageItem
+import com.andone.memorip.presentation.model.ImageItem
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
@@ -33,7 +33,7 @@ private object StaggeredGridDimens {
 
 @Composable
 fun MemoripStaggeredGrid(
-    images: List<PlaceImageItem>,
+    images: List<ImageItem>,
     onImageClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -95,7 +95,7 @@ private fun StaggeredImageItem(
 private fun MemoripStaggeredGridPreview() {
     MemoripTheme {
         MemoripStaggeredGrid(
-            images = DummyData.dummyImages,
+            images = DummyData.imageItems,
             onImageClick = {}
         )
     }
