@@ -78,9 +78,12 @@ fun PlaceCreateScreenContents(
             )
             Text(
                 text = stringResource(R.string.place_create_content_title),
-                style = MemoripTheme.typography.body2
+                style = MemoripTheme.typography.title1
             )
-            Text(text = stringResource(R.string.place_create_content))
+            Text(
+                text = stringResource(R.string.place_create_content),
+                style = MemoripTheme.typography.title1
+            )
         }
     }
 }

@@ -28,6 +28,10 @@ object MemoripIconSize {
     val IconButton = 84.dp
 }
 
+object MemoripHeight{
+    val TextBoxDefault = 120.dp
+}
+
 object MemoripBorderWidth {
     val Thin = 1.dp
     val Strong = 2.dp
