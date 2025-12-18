@@ -1,4 +1,4 @@
-package com.andone.memorip.presentation.groupdetail.component
+package com.andone.memorip.presentation.component
 
 import android.graphics.Bitmap
 import androidx.compose.foundation.Canvas
@@ -33,10 +33,9 @@ private object ImageMarkerDimen {
 @Composable
 fun ImageMarker(
     imageBitmap: Bitmap,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    borderColor: Color = MemoripTheme.colors.primaryContainer
 ) {
-    val borderColor = MemoripTheme.colors.primaryContainer
-
     Box(
         modifier = modifier.size(
             width = ImageMarkerDimen.ImageSize + MemoripPadding.PaddingXXSmall,
