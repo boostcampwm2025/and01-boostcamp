@@ -6,6 +6,7 @@ import androidx.compose.runtime.remember
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.rememberNavBackStack
+import com.andone.memorip.presentation.placedetail.navigateToPlaceDetail
 import kotlinx.collections.immutable.toImmutableList
 
 @Stable
@@ -31,6 +32,8 @@ class MemoripNavigator(
         backStack.clear()
         backStack.add(tab.route)
     }
+
+    fun navigateToPlaceDetail(id: Long) = backStack.navigateToPlaceDetail(id)
 
     fun navigateToCreatePlace(){
         backStack.add(PlaceCreate)

@@ -4,9 +4,6 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import org.andone.memorip.presentation.theme.LocalMemoripTypography
-import org.andone.memorip.presentation.theme.MemoripTypography
-import org.andone.memorip.presentation.theme.memoripTypography
 
 @Composable
 fun MemoripTheme(

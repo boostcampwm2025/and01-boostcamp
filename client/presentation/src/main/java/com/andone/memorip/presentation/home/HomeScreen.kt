@@ -25,6 +25,7 @@ import com.andone.memorip.presentation.component.GroupView
 import com.andone.memorip.presentation.home.model.GroupUiModel
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
+import com.andone.memorip.presentation.util.DummyData
 
 @Composable
 fun HomeScreen(
@@ -41,6 +42,8 @@ fun HomeScreen(
         modifier = modifier,
         onCreateGroupClick = onCreateGroupClick,
         onCreatePlaceClick = onCreatePlaceClick,
+        groups = DummyData.groups,
+        modifier = modifier
     )
 }
 
@@ -127,6 +130,7 @@ private fun HomeScreenContentsPreview() {
     )
 
     MemoripTheme {
+        HomeScreenContents(groups = DummyData.groups)
         HomeScreenContents(
             groups = groups,
             onCreateGroupClick = {},
