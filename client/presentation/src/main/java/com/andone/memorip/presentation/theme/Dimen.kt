@@ -25,6 +25,17 @@ object MemoripIconSize {
     val IconSizeSmall = 12.dp
     val IconSizeMedium = 24.dp
     val IconSizeLarge = 36.dp
+    val IconButton = 84.dp
+}
+
+object MemoripHeight{
+    val TextBoxHigh = 120.dp
+    val TextBoxDefault = 32.dp
+}
+
+object MemoripBorderWidth {
+    val Thin = 1.dp
+    val Strong = 2.dp
 }
 
 object MemoripAlpha {

@@ -28,11 +28,15 @@ data class MemoripTypography(
     val headline2: TextStyle,
     val bodyLarge: TextStyle,
     val bodySmall: TextStyle,
+    val title1: TextStyle,
+    val title2: TextStyle,
     val body1: TextStyle,
     val body2: TextStyle,
+    val caption1: TextStyle,
     val hint1: TextStyle,
     val labelLarge: TextStyle,
-    val label1: TextStyle
+    val label1: TextStyle,
+    val number1: TextStyle,
 )
 
 internal val memoripTypography = MemoripTypography(
@@ -95,7 +99,32 @@ internal val memoripTypography = MemoripTypography(
         fontWeight = FontWeight.Bold,
         fontSize = 14.sp,
         lineHeight = 20.sp
-    )
+    ),
+    title1 = TextStyle(
+        fontFamily = NotoSansKR,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 18.sp,
+        lineHeight = 24.sp
+    ),
+
+    title2 = TextStyle(
+        fontFamily = NotoSansKR,
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp,
+        lineHeight = 22.sp
+    ),
+    caption1 = TextStyle(
+        fontFamily = NotoSansKR,
+        fontWeight = FontWeight.Normal,
+        fontSize = 12.sp,
+        lineHeight = 16.sp
+    ),
+    number1 = TextStyle(
+        fontFamily = NotoSansKR,
+        fontWeight = FontWeight.Medium,
+        fontSize = 13.sp,
+        lineHeight = 18.sp
+    ),
 )
 
 internal val LocalMemoripTypography = staticCompositionLocalOf {

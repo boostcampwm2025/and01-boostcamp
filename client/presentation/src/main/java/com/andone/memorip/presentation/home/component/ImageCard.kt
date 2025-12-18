@@ -13,7 +13,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import coil3.compose.AsyncImage
+import coil.compose.AsyncImage
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.home.model.GroupItem
 import com.andone.memorip.presentation.theme.MemoripAlpha

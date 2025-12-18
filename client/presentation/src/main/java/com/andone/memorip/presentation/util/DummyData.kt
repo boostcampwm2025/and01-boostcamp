@@ -1,8 +1,8 @@
 package com.andone.memorip.presentation.util
 
+import com.andone.memorip.presentation.groupdetail.model.PlaceImageItem
 import com.andone.memorip.presentation.home.model.GroupUiModel
 import com.andone.memorip.presentation.placedetail.model.PlaceDetail
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 object DummyData {

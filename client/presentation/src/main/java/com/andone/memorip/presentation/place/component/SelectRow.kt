@@ -1,0 +1,78 @@
+package com.andone.memorip.presentation.place.component
+
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
+import com.andone.memorip.presentation.theme.MemoripIconSize
+import com.andone.memorip.presentation.theme.MemoripPadding
+import com.andone.memorip.presentation.theme.MemoripSpace
+import com.andone.memorip.presentation.theme.MemoripTheme
+import com.andone.memorip.presentation.R
+
+@Composable
+fun SelectRow(
+    label: String,
+    value: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    leadingIcon: Painter? = null
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+        leadingIcon?.let {
+            Icon(
+                painter = it,
+                contentDescription = null,
+                tint = MemoripTheme.colors.primary,
+                modifier = Modifier
+                    .size(MemoripIconSize.IconSizeLarge)
+                    .padding(end = MemoripPadding.PaddingXSmall)
+            )
+        }
+
+        Text(
+            text = label,
+            style = MemoripTheme.typography.title2,
+            color = MemoripTheme.colors.black
+        )
+
+        Spacer(modifier = Modifier.width(width = MemoripSpace.SpaceMedium))
+
+        Text(
+            text = value,
+            style = MemoripTheme.typography.title2,
+            color = MemoripTheme.colors.primary
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        Icon(
+            painter = painterResource(R.drawable.ic_chevron_forward),
+            contentDescription = null,
+            tint = MemoripTheme.colors.gray
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun SelectRowPreview(){
+    SelectRow(
+        label = "카테고리",
+        value = "맛집",
+        leadingIcon = painterResource(R.drawable.ic_tag),
+        onClick = { }
+    )
+}

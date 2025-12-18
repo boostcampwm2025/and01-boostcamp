@@ -4,7 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.Dialog
-import coil3.compose.AsyncImage
+import coil.compose.AsyncImage
 
 @Composable
 fun ImageDialog(

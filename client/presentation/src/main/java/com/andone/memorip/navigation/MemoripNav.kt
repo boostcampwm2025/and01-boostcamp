@@ -50,11 +50,15 @@ fun MemoripNav(
                 onGroupClick = { groupId ->
                     navigator.navigateToGroupDetail(groupId)
                 },
-                modifier = modifier.padding(innerPadding)
+                onCreatePlaceClick = {navigator.navigateToCreatePlace()},
+                onBackClick = {navigator.popBackStack()},
+                modifier = modifier.padding(paddingValues = innerPadding),
             )
+
             groupDetail(
                 onNavigateBack = { navigator.popBackStack() },
-                modifier = modifier
+                modifier = modifier,
+//                onCreatePlaceClick = {navigator.navigateToCreatePlace()},
             )
 
             entry<User> { Text(text = "user") }
@@ -63,7 +67,7 @@ fun MemoripNav(
                 onNavigateBack = {},
                 modifier = modifier
             )
-            
+
             selectGroup(
                 onBackClick = { navigator.popBackStack() },
                 modifier = modifier
