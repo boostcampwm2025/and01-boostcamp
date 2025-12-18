@@ -18,10 +18,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.andone.memorip.presentation.selectcategory.component.CategoryItemDimens.CATEGORY_ITEM_WIDTH
 import com.andone.memorip.presentation.selectcategory.model.Category
 import com.andone.memorip.presentation.theme.MemoripIconSize.IconSizeMedium
 import com.andone.memorip.presentation.theme.MemoripPadding.PaddingXSmall
 import com.andone.memorip.presentation.theme.MemoripTheme
+
+private object CategoryItemDimens {
+    val CATEGORY_ITEM_WIDTH = 6.dp
+}
 
 @Composable
 fun CategoryItem(
@@ -36,7 +41,7 @@ fun CategoryItem(
     ) {
         Box(
             modifier = Modifier
-                .size(width = 6.dp, height = IconSizeMedium)
+                .size(width = CATEGORY_ITEM_WIDTH, height = IconSizeMedium)
                 .background(color = category.color, shape = MemoripTheme.shapes.defaultCorner)
         )
         Text(
