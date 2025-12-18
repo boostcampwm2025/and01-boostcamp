@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.home
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -17,7 +18,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.home.component.ImageCountButton
+import com.andone.memorip.presentation.theme.MemoripPadding
+import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
+import org.andone.memorip.presentation.theme.MemoripTypography
 
 @Composable
 fun PlaceCreateScreen(
@@ -62,8 +67,20 @@ fun PlaceCreateScreenContents(
     ) { innerPadding ->
         Column(
             modifier = Modifier.padding(innerPadding)
+                .padding(MemoripPadding.PaddingXSmall),
+            verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXSmall)
         ) {
-
+            ImageCountButton(
+                current = 0,
+                max = 10,
+                onClick = {},
+                modifier = Modifier.padding(vertical = MemoripPadding.PaddingXSmall)
+            )
+            Text(
+                text = stringResource(R.string.place_create_content_title),
+                style = MemoripTheme.typography.body2
+            )
+            Text(text = stringResource(R.string.place_create_content))
         }
     }
 }
