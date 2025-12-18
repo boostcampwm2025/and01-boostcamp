@@ -7,6 +7,7 @@ import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.rememberNavBackStack
 import kotlinx.collections.immutable.toImmutableList
+import okhttp3.Route
 
 @Stable
 class MemoripNavigator(
@@ -32,12 +33,22 @@ class MemoripNavigator(
         backStack.add(tab.route)
     }
 
+    fun navigateToSelectCategory() = addStack(SelectCategory)
+
+    fun navigateToSelectGroup() = addStack(SelectGroup)
+
     fun navigateToRoute(route: NavKey) {
         if (currentTab?.route == route) return
         backStack.add(route)
     }
 
     fun popBackStack() = backStack.removeLastOrNull()
+
+    private fun addStack(route: NavKey) {
+        if (currentTab?.route == route) return
+
+        backStack.add(route)
+    }
 }
 
 @Composable
