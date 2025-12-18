@@ -43,7 +43,11 @@ fun ErrorFullScreen(
         Spacer(modifier = Modifier.height(MemoripSpace.SpaceLarge))
 
         Button(onClick = onRetry) {
-            Text(retryButtonText)
+            Text(
+                text = retryButtonText,
+                color = MemoripTheme.colors.white,
+                style = MemoripTheme.typography.label1
+            )
         }
     }
 }
