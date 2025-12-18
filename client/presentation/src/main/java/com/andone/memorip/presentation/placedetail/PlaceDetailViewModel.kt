@@ -27,7 +27,7 @@ class PlaceDetailViewModel(
     val uiEvent = _uiEvent.receiveAsFlow()
 
     init {
-        loadPlaceDetail(route.id)
+        loadPlaceDetail(route.placeId)
     }
 
     fun onAction(action: PlaceDetailAction) {

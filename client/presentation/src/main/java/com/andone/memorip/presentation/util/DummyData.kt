@@ -4,13 +4,13 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.graphics.Color
 import com.andone.memorip.presentation.groupdetail.model.PlaceImageItem
 import com.andone.memorip.presentation.home.model.GroupUiModel
-import com.andone.memorip.presentation.placedetail.model.PlaceDetail
+import com.andone.memorip.presentation.placedetail.model.PlaceUiModel
 import com.andone.memorip.presentation.selectcategory.model.Category
 import kotlinx.collections.immutable.persistentListOf
 
 object DummyData {
 
-    val place = PlaceDetail(
+    val place = PlaceUiModel(
         title = "제목",
         category = "맛집",
         locationName = "서울시 종로구",

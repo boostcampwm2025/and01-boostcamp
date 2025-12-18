@@ -42,9 +42,9 @@ import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.placedetail.PlaceDetailScreenConstants.IMAGE_ASPECT_RATIO
 import com.andone.memorip.presentation.placedetail.component.ImageDialog
 import com.andone.memorip.presentation.placedetail.component.PlaceDetailInfoSection
-import com.andone.memorip.presentation.placedetail.model.PlaceDetail
 import com.andone.memorip.presentation.placedetail.model.PlaceDetailAction
 import com.andone.memorip.presentation.placedetail.model.PlaceDetailEvent
+import com.andone.memorip.presentation.placedetail.model.PlaceUiModel
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -80,7 +80,7 @@ fun PlaceDetailScreen(
 
 @Composable
 private fun PlaceDetailScreen(
-    place: PlaceDetail,
+    place: PlaceUiModel,
     onAction: (PlaceDetailAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
