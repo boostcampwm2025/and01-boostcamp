@@ -43,7 +43,8 @@ fun MemoripCategoryInputDialog(
         title = title,
         onConfirmClick = { onConfirmClick(name, colorState.color) },
         onCancelClick = onCancelClick,
-        onDismissRequest = onDismissRequest
+        onDismissRequest = onDismissRequest,
+        confirmEnabled = name.isNotEmpty() && colorState.isValidColorInput()
     ) {
         TextField(
             value = name,
@@ -64,15 +65,27 @@ fun MemoripCategoryInputDialog(
                     )
                 }
             },
+            supportingText = {
+                if (name.isEmpty()) {
+                    Text(
+                        text = stringResource(R.string.category_dialog_empty_name_err_hint),
+                        style = MemoripTheme.typography.hint1
+                    )
+                }
+            },
+            isError = name.isEmpty(),
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = MemoripTheme.colors.primaryContainer,
                 unfocusedContainerColor = MemoripTheme.colors.primaryContainer,
+                errorContainerColor = MemoripTheme.colors.primaryContainer,
                 focusedTextColor = MemoripTheme.colors.black,
                 unfocusedTextColor = MemoripTheme.colors.black,
                 focusedPlaceholderColor = MemoripTheme.colors.outline,
                 unfocusedPlaceholderColor = MemoripTheme.colors.outline,
                 focusedLabelColor = MemoripTheme.colors.outline,
                 unfocusedLabelColor = MemoripTheme.colors.outline,
+                errorTextColor = MemoripTheme.colors.error,
+                errorSupportingTextColor = MemoripTheme.colors.error
             )
         )
         TextField(
@@ -87,7 +100,7 @@ fun MemoripCategoryInputDialog(
                         .size(LEADING_ICON_SIZE)
                         .background(
                             color = colorState.color,
-                            shape = MemoripTheme.shapes.defaultCorner
+                            shape = MemoripTheme.shapes.roundedSmall
                         )
                 )
             },
