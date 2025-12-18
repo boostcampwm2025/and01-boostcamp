@@ -10,6 +10,7 @@ data object Home : NavKey
 data object User : NavKey
 
 @Serializable
+data object PlaceCreate : NavKey
 
 @Serializable
 data object SelectGroup : NavKey
@@ -21,4 +22,4 @@ data object SelectCategory : NavKey
 data class GroupDetail(val groupId: String) : NavKey
 
 @Serializable
-data object PlaceCreate : NavKeydata class PlaceDetail(val placeId: Long = 0) : NavKey
+data class PlaceDetail(val placeId: Long = 0) : NavKey
