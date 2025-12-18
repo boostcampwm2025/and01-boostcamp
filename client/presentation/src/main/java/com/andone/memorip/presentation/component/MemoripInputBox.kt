@@ -61,12 +61,12 @@ fun MemoripInputBox(
 
             IconButton(
                 onClick = onClear,
-                enabled = value.isEmpty()
+                enabled = value.isNotEmpty()
             ) {
                 Icon(
                     imageVector = Icons.Filled.Close,
                     contentDescription = stringResource(R.string.place_create_clear),
-                    tint = if (value.isEmpty()) {
+                    tint = if (value.isNotEmpty()) {
                         MemoripTheme.colors.black
                     } else {
                         MemoripTheme.colors.gray

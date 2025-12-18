@@ -44,6 +44,7 @@ fun PlaceCreateScreen(
 fun PlaceCreateScreenContents(
     modifier: Modifier = Modifier
 ) {
+    var title by remember { mutableStateOf("") }
     var content by remember { mutableStateOf("") }
 
     Scaffold(
@@ -90,10 +91,10 @@ fun PlaceCreateScreenContents(
             )
             MemoripInputBox(
                 label = stringResource(R.string.place_create_content_title),
-                value = content,
+                value = title,
                 placeholder = stringResource(R.string.place_create_title_input),
-                onValueChange = { content = it },
-                onClear = { content = "" },
+                onValueChange = { title = it },
+                onClear = { title = "" },
                 height = MemoripHeight.TextBoxDefault
             )
             Text(
