@@ -19,7 +19,7 @@ fun EntryProviderScope<NavKey>.home(
             onCreateGroupClick = onCreateGroupClick,
             onGroupClick = onGroupClick,
             onCreatePlaceClick = onCreatePlaceClick,
-            modifier = modifier
+            modifier
         )
     }
     entry<PlaceCreate> {

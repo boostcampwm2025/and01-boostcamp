@@ -35,7 +35,7 @@ class MemoripNavigator(
     }
 
     fun navigateToPlaceDetail(id: Long) = backStack.navigateToPlaceDetail(id)
-    
+
     fun navigateToSelectCategory() = addStack(SelectCategory)
 
     fun navigateToSelectGroup() = addStack(SelectGroup)
@@ -44,6 +44,12 @@ class MemoripNavigator(
 
     fun navigateToCreatePlace(){
         backStack.add(PlaceCreate)
+    }
+
+    fun navigateToRoute(route: NavKey) {
+        if (currentTab?.route == route) return
+
+        backStack.add(route)
     }
 
     fun popBackStack() = backStack.removeLastOrNull()
