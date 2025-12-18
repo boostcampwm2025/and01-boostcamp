@@ -23,6 +23,8 @@
     <string name="place_create_title">Place 추가</string>
     <string name="place_create_back_content_description">뒤로가기</string>
     <string name="place_create_check_content_description">확인</string>
+    <string name="place_create_image_count_format">%1$d/%2$d</string>
+    <string name="place_create_add_image_content_description">사진추가</string>
 
     <!-- MainBottomBar -->
     <string name="main_bottom_bar_home">홈</string>
