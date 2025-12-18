@@ -40,7 +40,7 @@ import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 import org.andone.memorip.presentation.theme.MemoripTypography
 
-private object PictureSetting{
+private object PictureSetting {
     const val MAX_PICTURE_COUNT = 10
 }
 
@@ -64,15 +64,17 @@ fun PlaceCreateScreenContents(
     var title by remember { mutableStateOf("") }
     var content by remember { mutableStateOf("") }
     val selectedImages = remember { mutableStateListOf<Uri>() }
+    val remain = MAX_PICTURE_COUNT - selectedImages.size
 
     val imagePickerLauncher =
         rememberLauncherForActivityResult(
             contract = ActivityResultContracts.PickMultipleVisualMedia(
-                maxItems = MAX_PICTURE_COUNT
+                maxItems = remain
             )
         ) { uris ->
+            val canAdd = MAX_PICTURE_COUNT - selectedImages.size
             if (uris.isNotEmpty()) {
-                selectedImages.addAll(uris)
+                selectedImages.addAll(elements = uris.take(n = canAdd))
             }
         }
 
@@ -111,11 +113,9 @@ fun PlaceCreateScreenContents(
                 current = selectedImages.size,
                 max = MAX_PICTURE_COUNT,
                 onClick = {
-                    imagePickerLauncher.launch(
-                        PickVisualMediaRequest(
-                            ActivityResultContracts.PickVisualMedia.ImageOnly
-                        )
-                    )
+                    if (remain > 0) {
+                        imagePickerLauncher.launch(input = PickVisualMediaRequest(mediaType = ActivityResultContracts.PickVisualMedia.ImageOnly))
+                    }
                 },
                 modifier = Modifier.padding(vertical = MemoripPadding.PaddingXSmall)
             )
