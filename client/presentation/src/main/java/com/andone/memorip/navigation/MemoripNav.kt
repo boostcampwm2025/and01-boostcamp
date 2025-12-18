@@ -3,6 +3,8 @@ package com.andone.memorip.navigation
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -13,12 +15,14 @@ import androidx.navigation3.ui.NavDisplay
 import com.andone.memorip.presentation.groupdetail.groupDetail
 import com.andone.memorip.presentation.groupdetail.navigateToGroupDetail
 import com.andone.memorip.presentation.home.home
+import com.andone.memorip.presentation.placedetail.placeDetail
 import com.andone.memorip.presentation.selectgroup.selectGroup
 import com.andone.memorip.presentation.selectcategory.selectCategory
 
 @Composable
 fun MemoripNav(
     navigator: MemoripNavigator,
+    innerPadding: PaddingValues,
     modifier: Modifier = Modifier
 ) {
     NavDisplay(
@@ -46,14 +50,20 @@ fun MemoripNav(
                 onGroupClick = { groupId ->
                     navigator.navigateToGroupDetail(groupId)
                 },
-                modifier = modifier
+                modifier = modifier.padding(innerPadding)
             )
             groupDetail(
                 onNavigateBack = { navigator.popBackStack() },
                 modifier = modifier
             )
+
             entry<User> { Text(text = "user") }
 
+            placeDetail(
+                onNavigateBack = {},
+                modifier = modifier
+            )
+            
             selectGroup(
                 onBackClick = { navigator.popBackStack() },
                 modifier = modifier

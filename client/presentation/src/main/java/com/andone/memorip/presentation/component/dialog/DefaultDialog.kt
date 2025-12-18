@@ -41,7 +41,7 @@ internal fun DefaultDialog(
     Dialog(onDismissRequest = onDismissRequest) {
         Surface(
             modifier = modifier,
-            shape = MemoripTheme.shapes.largeCorner,
+            shape = MemoripTheme.shapes.roundedXLarge,
             color = MemoripTheme.colors.primaryContainer,
             contentColor = MemoripTheme.colors.black
         ) {
