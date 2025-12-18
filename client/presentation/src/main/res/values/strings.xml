@@ -19,6 +19,9 @@
     <string name="home_add_contentDescription">Add</string>
     <string name="home_overflow_count">+%1$d</string>
 
+    <!-- PlaceCreateScreen -->
+    <string name="place_create_title">Place 추가</string>
+
     <!-- MainBottomBar -->
     <string name="main_bottom_bar_home">홈</string>
     <string name="main_bottom_bar_user">마이페이지</string>
