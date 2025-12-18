@@ -42,9 +42,9 @@ fun HomeScreen(
 @Composable
 fun HomeScreenContents(
     groups: List<GroupUiModel>,
-    modifier: Modifier = Modifier,
     onCreateGroupClick: () -> Unit,
     onCreatePlaceClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Scaffold(
         modifier = modifier,

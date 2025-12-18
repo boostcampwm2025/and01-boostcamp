@@ -1,4 +1,4 @@
-package com.andone.memorip.presentation.home
+package com.andone.memorip.presentation.place
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -31,14 +31,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.MemoripInputBox
-import com.andone.memorip.presentation.home.PictureSetting.MAX_PICTURE_COUNT
-import com.andone.memorip.presentation.home.component.ImageCountButton
-import com.andone.memorip.presentation.home.component.SelectRow
+import com.andone.memorip.presentation.place.PictureSetting.MAX_PICTURE_COUNT
+import com.andone.memorip.presentation.place.component.ImageCountButton
+import com.andone.memorip.presentation.place.component.SelectRow
 import com.andone.memorip.presentation.theme.MemoripHeight
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
-import org.andone.memorip.presentation.theme.MemoripTypography
 
 private object PictureSetting {
     const val MAX_PICTURE_COUNT = 10
@@ -46,20 +45,20 @@ private object PictureSetting {
 
 @Composable
 fun PlaceCreateScreen(
-    modifier: Modifier = Modifier,
     onBackClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     PlaceCreateScreenContents(
+        onBackClick = onBackClick,
         modifier = modifier,
-        onBackClick = onBackClick
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlaceCreateScreenContents(
-    modifier: Modifier = Modifier,
     onBackClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     var title by remember { mutableStateOf("") }
     var content by remember { mutableStateOf("") }
@@ -67,11 +66,7 @@ fun PlaceCreateScreenContents(
     val remain = MAX_PICTURE_COUNT - selectedImages.size
 
     val imagePickerLauncher =
-        rememberLauncherForActivityResult(
-            contract = ActivityResultContracts.PickMultipleVisualMedia(
-                maxItems = remain
-            )
-        ) { uris ->
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.PickMultipleVisualMedia()) { uris ->
             val canAdd = MAX_PICTURE_COUNT - selectedImages.size
             if (uris.isNotEmpty()) {
                 selectedImages.addAll(elements = uris.take(n = canAdd))
@@ -119,6 +114,7 @@ fun PlaceCreateScreenContents(
                 },
                 modifier = Modifier.padding(vertical = MemoripPadding.PaddingXSmall)
             )
+
             Text(
                 text = stringResource(R.string.place_create_content_title),
                 style = MemoripTheme.typography.title1
@@ -131,6 +127,7 @@ fun PlaceCreateScreenContents(
                 onClear = { title = "" },
                 height = MemoripHeight.TextBoxDefault
             )
+
             Text(
                 text = stringResource(R.string.place_create_content),
                 style = MemoripTheme.typography.title1
@@ -142,6 +139,7 @@ fun PlaceCreateScreenContents(
                 onValueChange = { content = it },
                 onClear = { content = "" }
             )
+
             SelectRow(
                 label = stringResource(R.string.place_create_category),
                 value = "",
