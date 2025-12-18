@@ -48,7 +48,7 @@ fun MemoripNav(
             home(
                 onGroupClick = { groupId -> navigator.navigateToGroupDetail(groupId) },
                 onCreateGroupClick = {},
-                onCreatePlaceClick = navigator::navigateToCreatePlace,
+                onCreatePlaceClick = navigator::navigateToPlaceCreate,
                 modifier = modifier.padding(paddingValues = innerPadding),
             )
 
