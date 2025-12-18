@@ -56,9 +56,7 @@ fun ErrorFullScreen(
 @Composable
 private fun ErrorFullScreenPreview() {
     MemoripTheme {
-        ErrorFullScreen(
-            onRetry = {}
-        )
+        ErrorFullScreen(onRetry = {})
     }
 }
 
