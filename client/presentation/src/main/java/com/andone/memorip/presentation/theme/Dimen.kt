@@ -29,7 +29,8 @@ object MemoripIconSize {
 }
 
 object MemoripHeight{
-    val TextBoxDefault = 120.dp
+    val TextBoxHigh = 120.dp
+    val TextBoxDefault = 32.dp
 }
 
 object MemoripBorderWidth {

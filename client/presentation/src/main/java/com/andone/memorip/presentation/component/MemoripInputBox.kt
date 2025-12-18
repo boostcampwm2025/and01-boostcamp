@@ -11,8 +11,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -35,13 +33,13 @@ fun MemoripInputBox(
     placeholder: String,
     onClear: () -> Unit,
     modifier: Modifier = Modifier,
-    height: Dp = MemoripHeight.TextBoxDefault
+    height: Dp = MemoripHeight.TextBoxHigh
 ) {
     Column(
         modifier = modifier
             .fillMaxWidth()
             .border(
-                width = MemoripBorderWidth.Strong,
+                width = MemoripBorderWidth.Thin,
                 color = MemoripTheme.colors.primary,
                 shape = MemoripTheme.shapes.defaultCorner
             )
@@ -49,32 +47,33 @@ fun MemoripInputBox(
                 color = MemoripTheme.colors.offWhite,
                 shape = MemoripTheme.shapes.defaultCorner
             )
-            .padding(all = MemoripPadding.PaddingSmall)
+            .padding(start = MemoripPadding.PaddingSmall)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = label,
-                color = MemoripTheme.colors.black,
+                style = MemoripTheme.typography.label1
             )
 
             Spacer(modifier = Modifier.weight(1f))
 
-            if (value.isNotEmpty()) {
-                IconButton(
-                    onClick = onClear,
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Close,
-                        contentDescription = stringResource(R.string.place_create_clear),
-                        tint = MemoripTheme.colors.gray
-                    )
-                }
+            IconButton(
+                onClick = onClear,
+                enabled = value.isEmpty()
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Close,
+                    contentDescription = stringResource(R.string.place_create_clear),
+                    tint = if (value.isEmpty()) {
+                        MemoripTheme.colors.black
+                    } else {
+                        MemoripTheme.colors.gray
+                    }
+                )
             }
         }
-
-        Spacer(modifier = Modifier.height(height = MemoripPadding.PaddingXSmall))
 
         BasicTextField(
             value = value,
@@ -86,7 +85,7 @@ fun MemoripInputBox(
                 if (value.isEmpty()) {
                     Text(
                         text = placeholder,
-                        style = MemoripTheme.typography.body2
+                        style = MemoripTheme.typography.hint1
                     )
                 }
                 innerTextField()

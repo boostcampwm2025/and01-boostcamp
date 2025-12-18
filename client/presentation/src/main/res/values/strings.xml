@@ -28,6 +28,8 @@
     <string name="place_create_content_title">제목</string>
     <string name="place_create_content">내용</string>
     <string name="place_create_clear">지우기</string>
+    <string name="place_create_content_input">내용을 입력해주세요</string>
+    <string name="place_create_title_input">제목을 입력해주세요</string>
 
     <!-- MainBottomBar -->
     <string name="main_bottom_bar_home">홈</string>
