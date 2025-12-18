@@ -18,6 +18,7 @@ import com.andone.memorip.presentation.placecreate.placeCreate
 import com.andone.memorip.presentation.placedetail.placeDetail
 import com.andone.memorip.presentation.selectcategory.selectCategory
 import com.andone.memorip.presentation.selectgroup.selectGroup
+import com.andone.memorip.presentation.selectlocation.selectLocation
 
 @Composable
 fun MemoripNav(
@@ -57,7 +58,7 @@ fun MemoripNav(
 
             placeCreate(
                 onCategoryClick = navigator::navigateToSelectCategory,
-                onLocationClick = navigator::navigateToSelectGroup,
+                onLocationClick = navigator::navigateToSelectLocation,
                 onGroupClick = navigator::navigateToSelectGroup,
                 onBackClick = navigator::popBackStack
             )
@@ -66,10 +67,11 @@ fun MemoripNav(
 
             selectCategory(onBackClick = navigator::popBackStack)
 
+            selectLocation(onBackClick = navigator::popBackStack)
+
             groupDetail(
                 onNavigateBack = navigator::popBackStack,
                 onImageClick = navigator::navigateToPlaceDetail
-//                onCreatePlaceClick = {navigator.navigateToCreatePlace()},
             )
 
             placeDetail(onNavigateBack = navigator::popBackStack)
