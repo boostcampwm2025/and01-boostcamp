@@ -37,7 +37,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import com.andone.memorip.navigation.PlaceDetailRoute
+import com.andone.memorip.navigation.PlaceDetail
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.placedetail.PlaceDetailScreenConstants.IMAGE_ASPECT_RATIO
 import com.andone.memorip.presentation.placedetail.component.ImageDialog
@@ -58,7 +58,7 @@ private object PlaceDetailScreenConstants {
 
 @Composable
 fun PlaceDetailScreen(
-    route: PlaceDetailRoute,
+    route: PlaceDetail,
     onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PlaceDetailViewModel = PlaceDetailViewModel(route) // TODO: hiltViewModel() 적용

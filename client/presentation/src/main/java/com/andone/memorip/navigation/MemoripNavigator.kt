@@ -34,7 +34,7 @@ class MemoripNavigator(
         backStack.add(tab.route)
     }
 
-    fun navigateToPlaceDetail(id: Long) = backStack.navigateToPlaceDetail(id)
+    fun navigateToPlaceDetail(placeId: Long) = backStack.navigateToPlaceDetail(placeId)
 
     fun navigateToSelectCategory() = addStack(SelectCategory)
 

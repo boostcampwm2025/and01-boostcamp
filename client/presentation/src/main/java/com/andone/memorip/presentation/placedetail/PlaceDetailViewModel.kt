@@ -3,7 +3,7 @@ package com.andone.memorip.presentation.placedetail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.andone.memorip.navigation.PlaceDetailRoute
+import com.andone.memorip.navigation.PlaceDetail
 import com.andone.memorip.presentation.placedetail.model.PlaceDetailAction
 import com.andone.memorip.presentation.placedetail.model.PlaceDetailEvent
 import com.andone.memorip.presentation.placedetail.model.PlaceDetailUiState
@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class PlaceDetailViewModel(
-    route: PlaceDetailRoute
+    route: PlaceDetail
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(PlaceDetailUiState())
