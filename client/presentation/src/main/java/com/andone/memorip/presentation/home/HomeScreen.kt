@@ -18,8 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.GroupView
 import com.andone.memorip.presentation.home.model.GroupUiModel
@@ -33,12 +33,12 @@ fun HomeScreen(
     onGroupClick: (String) -> Unit,
     onCreatePlaceClick: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: HomeViewModel = viewModel(),
+    viewModel: HomeViewModel = hiltViewModel(),
 ) {
-    val state by viewModel.state.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     HomeScreenContents(
-        groups = state.groups,
+        groups = uiState.groups,
         onCreateGroupClick = onCreateGroupClick,
         onCreatePlaceClick = onCreatePlaceClick,
         modifier = modifier,

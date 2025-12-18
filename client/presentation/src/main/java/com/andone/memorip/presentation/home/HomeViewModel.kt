@@ -2,33 +2,44 @@ package com.andone.memorip.presentation.home
 
 import androidx.lifecycle.ViewModel
 import com.andone.memorip.presentation.home.model.GroupUiModel
-import com.andone.memorip.presentation.home.model.HomeIntent
-import com.andone.memorip.presentation.home.model.HomeState
+import com.andone.memorip.presentation.home.model.HomeAction
+import com.andone.memorip.presentation.home.model.HomeUiState
+import com.andone.memorip.presentation.util.DummyData
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 
+@HiltViewModel
 class HomeViewModel : ViewModel() {
 
-    private val _state = MutableStateFlow(HomeState())
-    val state: StateFlow<HomeState> = _state
+    private val _uiState = MutableStateFlow(HomeUiState())
+    val uiState: StateFlow<HomeUiState> = _uiState
 
-    fun onIntent(intent: HomeIntent) {
+    fun onAction(intent: HomeAction) {
         when (intent) {
-            is HomeIntent.AddGroup -> { reduceAddGroup(name = intent.name) }
-            is HomeIntent.UpdateGroup -> { reduceUpdateGroup(group = intent.group) }
-            is HomeIntent.SetGroups -> { _state.value = HomeState(groups = intent.groups) }
+            is HomeAction.OnGroupAdd -> {
+                reduceAddGroup(name = intent.name)
+            }
+
+            is HomeAction.OnGroupUpdate -> {
+                reduceUpdateGroup(group = intent.group)
+            }
+
+            is HomeAction.OnGroupsSet -> {
+                _uiState.value = HomeUiState(groups = intent.groups)
+            }
         }
     }
 
     private fun reduceAddGroup(name: String) {
-        _state.update { current ->
+        _uiState.update { current ->
             current.copy(groups = current.groups + GroupUiModel.create(name))
         }
     }
 
     private fun reduceUpdateGroup(group: GroupUiModel) {
-        _state.update { current ->
+        _uiState.update { current ->
             current.copy(
                 groups = current.groups.map {
                     if (it.id == group.id) group else it
