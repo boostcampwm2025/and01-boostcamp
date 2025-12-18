@@ -10,11 +10,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.andone.memorip.presentation.component.FullScreenErrorView
 import com.andone.memorip.presentation.model.Place
-import com.andone.memorip.presentation.theme.MemoripTheme
-import com.andone.memorip.presentation.util.DummyData
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.geometry.LatLngBounds
 import com.naver.maps.map.CameraUpdate
@@ -131,28 +127,4 @@ private fun calculateBounds(places: List<Place>): LatLngBounds {
         LatLng(minLat, minLng),
         LatLng(maxLat, maxLng)
     )
-}
-
-@Preview(name = "Map Tab - Normal", showBackground = true)
-@Composable
-private fun MapTabPreview() {
-    MemoripTheme {
-        MapTab(
-            places = DummyData.places,
-            markerImages = emptyMap(),
-            modifier = Modifier.fillMaxSize()
-        )
-    }
-}
-
-@Preview(name = "Map Tab - Error", showBackground = true)
-@Composable
-private fun MapTabErrorPreview() {
-    MemoripTheme {
-        FullScreenErrorView(
-            title = "지도를 불러올 수 없습니다",
-            message = "지도 인증에 실패했습니다\nNaver Cloud Platform 설정을 확인해주세요",
-            onRetry = {}
-        )
-    }
 }
