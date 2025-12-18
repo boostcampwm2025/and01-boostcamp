@@ -1,9 +1,9 @@
-package com.andone.memorip.presentation.groupdetail.model
+package com.andone.memorip.presentation.model
 
 import androidx.compose.runtime.Immutable
 
 @Immutable
-data class PlaceImageItem(
+data class ImageItem(
     val id: Int,
     val url: String,
     val width: Int,
