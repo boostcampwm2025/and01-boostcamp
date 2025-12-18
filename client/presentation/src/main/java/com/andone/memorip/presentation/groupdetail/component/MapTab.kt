@@ -25,10 +25,8 @@ import com.naver.maps.map.compose.ExperimentalNaverMapApi
 import com.naver.maps.map.compose.LocationTrackingMode
 import com.naver.maps.map.compose.MapProperties
 import com.naver.maps.map.compose.MapUiSettings
-import com.naver.maps.map.compose.MarkerComposable
 import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.rememberCameraPositionState
-import com.naver.maps.map.compose.rememberUpdatedMarkerState
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalNaverMapApi::class)
@@ -86,7 +84,7 @@ fun MapTab(
                 onMapLoaded = { mapLoaded = true },
                 onMapClick = { _, _ -> selectedPlace = null }
             ) {
-                PlaceMarkers(
+                PlaceImageMarkers(
                     places = places,
                     markerImages = markerImages,
                     onMarkerClick = { selectedPlace = it }
@@ -114,34 +112,6 @@ private fun AdjustCameraToPlaces(
             val bounds = calculateBounds(places)
             val cameraUpdate = CameraUpdate.fitBounds(bounds, 100)
             cameraPositionState.move(cameraUpdate)
-        }
-    }
-}
-
-@OptIn(ExperimentalNaverMapApi::class)
-@Composable
-private fun PlaceMarkers(
-    places: List<Place>,
-    markerImages: Map<String, Bitmap>,
-    onMarkerClick: (Place) -> Unit
-) {
-    places.forEach { place ->
-        val imageUrl = place.thumbnailImage.url
-        val bitmap = markerImages[imageUrl]
-
-        if (bitmap != null) {
-            MarkerComposable(
-                keys = arrayOf(place.id, imageUrl),
-                state = rememberUpdatedMarkerState(
-                    position = LatLng(place.latitude, place.longitude)
-                ),
-                onClick = {
-                    onMarkerClick(place)
-                    true
-                }
-            ) {
-                ImageMarker(imageBitmap = bitmap)
-            }
         }
     }
 }
