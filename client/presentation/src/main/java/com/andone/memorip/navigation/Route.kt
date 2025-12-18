@@ -11,3 +11,6 @@ data object User : NavKey
 
 @Serializable
 data object PlaceCreate : NavKey
+
+@Serializable
+data object SelectCategory: NavKey

@@ -11,6 +11,7 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.andone.memorip.presentation.home.home
+import com.andone.memorip.presentation.selectcategory.selectCategory
 
 @Composable
 fun MemoripNav(
@@ -44,6 +45,11 @@ fun MemoripNav(
                 modifier = modifier,
             )
             entry<User> { Text(text = "user") }
+
+            selectCategory(
+                onBackClick = navigator::popBackStack,
+                modifier = modifier
+            )
         },
     )
 }

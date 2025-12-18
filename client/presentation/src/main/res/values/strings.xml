@@ -10,6 +10,7 @@
     <string name="category_dialog_color_format">#%s</string>
     <string name="category_dialog_max_length_err_hint">6글자만 입력해주세요(# 제외)</string>
     <string name="category_dialog_valid_color_err_hint">0~9, A~F까지의 값만 입력해주세요</string>
+    <string name="category_dialog_empty_name_err_hint">이름을 입력해주세요</string>
 
     <!-- StaggeredGrid-->
     <string name="staggered_grid_image_content_description">장소 이미지</string>
@@ -33,6 +34,13 @@
     <string name="place_create_category">카테고리</string>
     <string name="place_create_location">위치</string>
     <string name="place_create_group">그룹</string>
+
+    <!-- SelectCategoryScreen -->
+    <string name="select_category_back_button_description">뒤로 가기 버튼</string>
+    <string name="select_category_title">카테고리 선택</string>
+    <string name="select_category_dialog_title">카테고리 생성</string>
+    <string name="select_category_confirm_button_description">카테고리 추가 확인 버튼</string>
+    <string name="select_category_create_category_button_description">카테고리 추가 버튼</string>
 
     <!-- MainBottomBar -->
     <string name="main_bottom_bar_home">홈</string>
