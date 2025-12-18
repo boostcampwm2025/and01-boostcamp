@@ -15,25 +15,32 @@ import com.andone.memorip.presentation.home.component.ImageCard
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.home.component.EmptyGroupPlaceholder
 
 @Composable
 fun GroupView(
     modifier: Modifier = Modifier,
-    name: String = stringResource(R.string.group_view_default_name),
+    name: String,
     images: List<String> = emptyList(),
-){
+    onAddClick: () -> Unit = {},
+) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXSmall)
     ) {
-        Text(text = name)
-        GroupLayout(
-            items = buildBento5x3Items(images),
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(MemoripTheme.colors.white)
-        ) { item ->
-            ImageCard(item = item)
+        Text(text = name.ifBlank { stringResource(R.string.group_view_default_name) })
+
+        if (images.isEmpty()) {
+            EmptyGroupPlaceholder(onClick = onAddClick)
+        } else {
+            GroupLayout(
+                items = buildBento5x3Items(images),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MemoripTheme.colors.white)
+            ) { item ->
+                ImageCard(item = item)
+            }
         }
     }
 }
@@ -44,7 +51,7 @@ private fun GroupViewPreview() {
     MemoripTheme {
         GroupView(
             name = "기본 그룹",
-            images = List(8) {""}
+            images = List(8) { "" }
         )
     }
 }

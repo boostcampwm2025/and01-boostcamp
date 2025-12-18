@@ -105,12 +105,16 @@ fun HomeScreenContents(
 private fun HomeScreenContentsPreview() {
     val groups = listOf(
         GroupUiModel(
-            name = "기본 그룹",
+            name = "강원도",
             images = List(size = 8) { "" }
         ),
         GroupUiModel(
             name = "부 산",
             images = List(size = 4) { "" }
+        ),
+        GroupUiModel(
+            name = "",
+            images = emptyList()
         ),
         GroupUiModel(
             name = "제주도",
@@ -119,7 +123,7 @@ private fun HomeScreenContentsPreview() {
         GroupUiModel(
             name = "대구 ",
             images = List(size = 1) { "" }
-        )
+        ),
     )
 
     MemoripTheme {
