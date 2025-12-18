@@ -16,7 +16,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -36,7 +35,7 @@ import com.andone.memorip.presentation.theme.MemoripPadding.PaddingMedium
 import com.andone.memorip.presentation.theme.MemoripPadding.PaddingXSmall
 import com.andone.memorip.presentation.theme.MemoripSpace.SpaceXSmall
 import com.andone.memorip.presentation.theme.MemoripTheme
-import com.andone.memorip.presentation.util.dummydata.DummyData.groups
+import com.andone.memorip.presentation.util.DummyData
 
 @Composable
 fun SelectGroupScreen(
@@ -44,7 +43,7 @@ fun SelectGroupScreen(
     modifier: Modifier = Modifier
 ) {
     var showDialog by remember { mutableStateOf(false) }
-    val groups = remember { groups }
+    val groups = remember { DummyData.groups }
 
     SelectGroupContent(
         groups = groups,

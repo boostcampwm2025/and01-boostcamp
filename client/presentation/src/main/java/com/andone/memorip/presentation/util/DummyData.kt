@@ -1,25 +1,14 @@
 package com.andone.memorip.presentation.util
 
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.ui.graphics.Color
 import com.andone.memorip.presentation.groupdetail.model.PlaceImageItem
 import com.andone.memorip.presentation.home.model.GroupUiModel
 import com.andone.memorip.presentation.placedetail.model.PlaceDetail
+import com.andone.memorip.presentation.selectcategory.model.Category
 import kotlinx.collections.immutable.persistentListOf
 
 object DummyData {
-
-    val randomImages = List(28) { index ->
-        val height = (100..400).random()
-        "https://picsum.photos/id/$index/200/$height"
-    }
-
-    val groups = randomImages
-        .chunked(7)
-        .mapIndexed { index, images ->
-            GroupUiModel(
-                name = index.toString(),
-                images = images
-            )
-        }
 
     val place = PlaceDetail(
         title = "제목",
@@ -45,4 +34,41 @@ object DummyData {
             height = randomHeight
         )
     }
+
+    val categories = mutableStateListOf(
+        Category(
+            id = 0L,
+            category = "맛집",
+            color = Color(0xFF000000)
+        ),
+        Category(
+            id = 1L,
+            category = "카페",
+            color = Color(0xFAA8F0F0)
+        ),
+        Category(
+            id = 2L,
+            category = "액티비티",
+            color = Color(0xFFCCDD66)
+        ),
+    )
+
+    val groups = mutableStateListOf(
+        GroupUiModel(
+            name = "기본 그룹",
+            images = List(size = 8) { "" }
+        ),
+        GroupUiModel(
+            name = "부 산",
+            images = List(size = 4) { "" }
+        ),
+        GroupUiModel(
+            name = "제주도",
+            images = List(size = 5) { "" }
+        ),
+        GroupUiModel(
+            name = "대구 ",
+            images = List(size = 1) { "" }
+        )
+    )
 }
