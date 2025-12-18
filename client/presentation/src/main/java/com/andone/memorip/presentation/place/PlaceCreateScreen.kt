@@ -4,9 +4,12 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -20,6 +23,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -29,6 +33,7 @@ import com.andone.memorip.presentation.component.MemoripInputBox
 import com.andone.memorip.presentation.place.PictureSetting.MAX_PICTURE_COUNT
 import com.andone.memorip.presentation.place.component.ImageCountButton
 import com.andone.memorip.presentation.place.component.SelectRow
+import com.andone.memorip.presentation.place.component.SelectedImageItem
 import com.andone.memorip.presentation.theme.MemoripHeight
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
@@ -99,16 +104,28 @@ fun PlaceCreateScreenContents(
                 .padding(MemoripPadding.PaddingXSmall),
             verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceSmall)
         ) {
-            ImageCountButton(
-                current = selectedImages.size,
-                max = MAX_PICTURE_COUNT,
-                onClick = {
-                    if (remain > 0) {
-                        imagePickerLauncher.launch(input = PickVisualMediaRequest(mediaType = ActivityResultContracts.PickVisualMedia.ImageOnly))
-                    }
-                },
-                modifier = Modifier.padding(vertical = MemoripPadding.PaddingXSmall)
-            )
+            Row(
+                modifier = Modifier.horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceSmall),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                selectedImages.forEach { uri ->
+                    SelectedImageItem(
+                        imageUri = uri,
+                        onRemoveClick = { selectedImages.remove(uri) }
+                    )
+                }
+                ImageCountButton(
+                    current = selectedImages.size,
+                    max = MAX_PICTURE_COUNT,
+                    onClick = {
+                        if (remain > 0) {
+                            imagePickerLauncher.launch(input = PickVisualMediaRequest(mediaType = ActivityResultContracts.PickVisualMedia.ImageOnly))
+                        }
+                    },
+                    modifier = Modifier.padding(vertical = MemoripPadding.PaddingXSmall)
+                )
+            }
 
             Text(
                 text = stringResource(R.string.place_create_content_title),

@@ -33,8 +33,7 @@ fun ImageCountButton(
                 color = MemoripTheme.colors.gray,
                 shape = MemoripTheme.shapes.roundedSmall
             )
-            .clickable(onClick = onClick)
-            .padding(vertical = MemoripPadding.PaddingXSmall),
+            .clickable(onClick = onClick),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
