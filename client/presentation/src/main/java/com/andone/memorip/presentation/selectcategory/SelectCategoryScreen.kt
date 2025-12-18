@@ -164,7 +164,7 @@ private fun SelectCategoryTopBar(
         },
         navigationIcon = {
             Icon(
-                imageVector = ImageVector.vectorResource(R.drawable.back_ic),
+                imageVector = ImageVector.vectorResource(R.drawable.ic_back),
                 contentDescription = stringResource(R.string.select_category_back_button_description)
             )
         },
