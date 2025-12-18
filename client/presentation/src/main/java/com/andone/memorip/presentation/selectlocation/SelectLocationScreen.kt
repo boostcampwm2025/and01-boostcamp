@@ -2,6 +2,8 @@ package com.andone.memorip.presentation.selectlocation
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -13,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -24,7 +27,9 @@ import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.selectlocation.SelectLocationScreenConstants.CAMERA_ANIMATION_DURATION
 import com.andone.memorip.presentation.selectlocation.SelectLocationScreenDimens.markerHeight
 import com.andone.memorip.presentation.selectlocation.SelectLocationScreenDimens.markerWidth
+import com.andone.memorip.presentation.selectlocation.component.LocationSelectionButton
 import com.andone.memorip.presentation.theme.LocalMemoripTypography
+import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraAnimation
@@ -103,6 +108,14 @@ private fun SelectLocationContent(
                 )
             }
         }
+
+        LocationSelectionButton(
+            onClick = {},
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .navigationBarsPadding()
+                .padding(bottom = MemoripPadding.PaddingMedium)
+        )
     }
 }
 

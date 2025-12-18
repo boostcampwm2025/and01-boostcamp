@@ -40,6 +40,7 @@
 
     <!-- SelectLocationScreen -->
     <string name="select_location_title">위치 선택</string>
+    <string name="select_location_button">이 위치로 결정</string>
 
     <!-- GroupDetailScreen-->
     <string name="groupdetail_tab_gallery">갤러리</string>
