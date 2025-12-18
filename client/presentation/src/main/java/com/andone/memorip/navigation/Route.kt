@@ -11,3 +11,5 @@ data object User : NavKey
 
 @Serializable
 data object SelectGroup: NavKey
+@Serializable
+data object SelectCategory: NavKey

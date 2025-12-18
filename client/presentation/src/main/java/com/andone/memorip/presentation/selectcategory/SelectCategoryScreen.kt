@@ -40,7 +40,10 @@ private object Constants {
 }
 
 @Composable
-fun SelectCategoryScreen() {
+fun SelectCategoryScreen(
+    onBackClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     val categories = remember{
         mutableStateListOf(
             Category(
@@ -75,7 +78,8 @@ fun SelectCategoryScreen() {
                 checkedSet.remove(id)
             }
         },
-        onConfirmClick = {}
+        onConfirmClick = onBackClick,
+        modifier = modifier
     )
 
     if (showDialog) {
@@ -103,8 +107,10 @@ private fun SelectCategoryContent(
     onShowDialog: () -> Unit,
     onCheckedChange: (id: Long, checked: Boolean) -> Unit,
     onConfirmClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Scaffold(
+        modifier = modifier,
         topBar = {
             SelectCategoryTopBar(
                 checkEnabled = checkedList.isNotEmpty(),
@@ -158,7 +164,7 @@ private fun SelectCategoryTopBar(
         },
         navigationIcon = {
             Icon(
-                imageVector = ImageVector.vectorResource(R.drawable.back_ic),
+                imageVector = ImageVector.vectorResource(R.drawable.ic_back),
                 contentDescription = stringResource(R.string.select_category_back_button_description)
             )
         },
@@ -189,6 +195,6 @@ private fun SelectCategoryTopBar(
 @Composable
 private fun SelectCategoryPrev() {
     MemoripTheme {
-        SelectCategoryScreen()
+        SelectCategoryScreen(onBackClick = {})
     }
 }
