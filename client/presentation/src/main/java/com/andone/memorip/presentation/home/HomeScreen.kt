@@ -26,6 +26,7 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 @Composable
 fun HomeScreen(
     onCreateGroupClick: () -> Unit,
+    onGroupClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     HomeScreenContents(

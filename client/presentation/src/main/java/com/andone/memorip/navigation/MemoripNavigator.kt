@@ -6,8 +6,8 @@ import androidx.compose.runtime.remember
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.rememberNavBackStack
+import com.andone.memorip.presentation.groupdetail.navigateToGroupDetail
 import kotlinx.collections.immutable.toImmutableList
-import okhttp3.Route
 
 @Stable
 class MemoripNavigator(
@@ -36,6 +36,8 @@ class MemoripNavigator(
     fun navigateToSelectCategory() = addStack(SelectCategory)
 
     fun navigateToSelectGroup() = addStack(SelectGroup)
+
+    fun navigateToGroupDetail(groupId: String) = backStack.navigateToGroupDetail(groupId)
 
     fun popBackStack() = backStack.removeLastOrNull()
 

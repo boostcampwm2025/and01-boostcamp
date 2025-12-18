@@ -38,4 +38,12 @@
     <string name="select_group_dialog_label">이름</string>
     <string name="select_group_dialog_hint">그룹 이름</string>
 
+    <!-- GroupDetailScreen-->
+    <string name="groupdetail_tab_gallery">갤러리</string>
+    <string name="groupdetail_tab_map">사진 지도</string>
+    <string name="groupdetail_map_placeholder">사진 지도 기능은 추후 구현 예정입니다</string>
+    <string name="groupdetail_back_button_content_description">뒤로 가기</string>
+    <string name="groupdetail_menu_button_content_description">메뉴</string>
+    <string name="groupdetail_search_button_content_description">검색</string>
+
 </resources>
