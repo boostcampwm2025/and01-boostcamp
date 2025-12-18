@@ -35,7 +35,7 @@ fun ImageMarker(
     imageBitmap: Bitmap,
     modifier: Modifier = Modifier
 ) {
-    val borderColor = MemoripTheme.colors.offWhite
+    val borderColor = MemoripTheme.colors.primaryContainer
 
     Box(
         modifier = modifier.size(
@@ -44,7 +44,6 @@ fun ImageMarker(
         ),
         contentAlignment = Alignment.TopCenter
     ) {
-        // Border 역할을 하는 바깥 Box
         Box(
             modifier = Modifier
                 .size(ImageMarkerDimen.ImageSize + MemoripPadding.PaddingXXSmall)
@@ -52,7 +51,6 @@ fun ImageMarker(
                 .background(borderColor),
             contentAlignment = Alignment.Center
         ) {
-            // 미리 로드된 Bitmap 사용
             Image(
                 bitmap = imageBitmap.asImageBitmap(),
                 contentDescription = null,
