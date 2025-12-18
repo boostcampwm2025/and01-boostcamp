@@ -45,21 +45,9 @@ class MemoripNavigator(
 
     fun navigateToGroupDetail(groupId: String) = backStack.navigateToGroupDetail(groupId)
 
-
-    fun navigateToRoute(route: NavKey) {
-        if (currentTab?.route == route) return
-
-        backStack.add(route)
-    }
     fun navigateToCreatePlace() = backStack.navigateToPlaceCreate()
 
     fun popBackStack() = backStack.removeLastOrNull()
-
-    private fun addStack(route: NavKey) {
-        if (currentTab?.route == route) return
-
-        backStack.add(route)
-    }
 }
 
 @Composable

@@ -15,9 +15,9 @@ import androidx.navigation3.ui.NavDisplay
 import com.andone.memorip.presentation.groupdetail.groupDetail
 import com.andone.memorip.presentation.home.home
 import com.andone.memorip.presentation.placecreate.placeCreate
+import com.andone.memorip.presentation.placedetail.placeDetail
 import com.andone.memorip.presentation.selectcategory.selectCategory
 import com.andone.memorip.presentation.selectgroup.selectGroup
-import com.andone.memorip.presentation.placedetail.placeDetail
 
 @Composable
 fun MemoripNav(
@@ -27,7 +27,7 @@ fun MemoripNav(
 ) {
     NavDisplay(
         backStack = navigator.backStack,
-        onBack = { navigator.popBackStack() },
+        onBack = navigator::popBackStack,
         entryDecorators = listOf(
             rememberSaveableStateHolderNavEntryDecorator(),
             rememberViewModelStoreNavEntryDecorator()
@@ -47,41 +47,25 @@ fun MemoripNav(
         entryProvider = entryProvider {
             home(
                 onCreateGroupClick = {},
-                onGroupClick = { groupId ->
-                    navigator.navigateToGroupDetail(groupId)
-                },
-                onCreatePlaceClick = {navigator.navigateToCreatePlace()},
+                onGroupClick = { groupId -> navigator.navigateToGroupDetail(groupId) },
+                onCreatePlaceClick = navigator::navigateToCreatePlace,
                 modifier = modifier.padding(paddingValues = innerPadding),
-            )
-
-            groupDetail(
-                onNavigateBack = { navigator.popBackStack() },
-//                onCreatePlaceClick = {navigator.navigateToCreatePlace()},
-//                onGroupClick = {},
-                modifier = modifier,
             )
 
             entry<User> { Text(text = "user") }
 
-            placeDetail(
-                onNavigateBack = {},
-                modifier = modifier
+            placeCreate(onBackClick = navigator::popBackStack)
+
+            selectGroup(onBackClick = navigator::popBackStack)
+
+            selectCategory(onBackClick = navigator::popBackStack)
+
+            groupDetail(
+                onNavigateBack = navigator::popBackStack,
+//                onCreatePlaceClick = {navigator.navigateToCreatePlace()},
             )
 
-            selectGroup(
-                onBackClick = { navigator.popBackStack() },
-                modifier = modifier
-            )
-
-            selectCategory(
-                onBackClick = navigator::popBackStack,
-                modifier = modifier
-            )
-
-            placeCreate(
-                onBackClick = navigator::popBackStack,
-                modifier = modifier
-            )
+            placeDetail(onNavigateBack = navigator::popBackStack)
         },
     )
 }
