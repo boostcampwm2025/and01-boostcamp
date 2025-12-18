@@ -22,6 +22,7 @@ import com.andone.memorip.presentation.component.GroupView
 import com.andone.memorip.presentation.home.model.GroupUiModel
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
+import com.andone.memorip.presentation.util.DummyData
 
 @Composable
 fun HomeScreen(
@@ -31,10 +32,11 @@ fun HomeScreen(
     modifier: Modifier = Modifier
 ) {
     HomeScreenContents(
+        groups = DummyData.groups,
         groups = emptyList(),
-        modifier = modifier,
         onCreateGroupClick = onCreateGroupClick,
         onCreatePlaceClick = onCreatePlaceClick,
+        modifier = modifier,
     )
 }
 
@@ -97,26 +99,8 @@ fun HomeScreenContents(
 @Composable
 @Preview(showBackground = true)
 private fun HomeScreenContentsPreview() {
-    val groups = listOf(
-        GroupUiModel(
-            name = "기본 그룹",
-            images = List(size = 8) { "" }
-        ),
-        GroupUiModel(
-            name = "부 산",
-            images = List(size = 4) { "" }
-        ),
-        GroupUiModel(
-            name = "제주도",
-            images = List(size = 5) { "" }
-        ),
-        GroupUiModel(
-            name = "대구 ",
-            images = List(size = 1) { "" }
-        )
-    )
-
     MemoripTheme {
+        HomeScreenContents(groups = DummyData.groups)
         HomeScreenContents(
             groups = groups,
             onCreateGroupClick = {},

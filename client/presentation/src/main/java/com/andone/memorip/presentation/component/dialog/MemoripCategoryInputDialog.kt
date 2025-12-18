@@ -100,7 +100,7 @@ fun MemoripCategoryInputDialog(
                         .size(LEADING_ICON_SIZE)
                         .background(
                             color = colorState.color,
-                            shape = MemoripTheme.shapes.defaultCorner
+                            shape = MemoripTheme.shapes.roundedSmall
                         )
                 )
             },

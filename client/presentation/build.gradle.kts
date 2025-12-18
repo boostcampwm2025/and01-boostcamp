@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.jetbrains.kotlin.serialization)
+    alias(libs.plugins.dagger.hilt.root)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -57,12 +59,18 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    // Hilt
+    implementation(libs.hilt.android)
+    implementation(libs.hilt.navigation.compose)
+    ksp(libs.hilt.compiler)
+
     // Navigation
     implementation(libs.bundles.navigation3)
 
     // Immutable
     implementation(libs.kotlinx.collections.immutable)
 
-    // coil
+    // Coil
     implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
 }
