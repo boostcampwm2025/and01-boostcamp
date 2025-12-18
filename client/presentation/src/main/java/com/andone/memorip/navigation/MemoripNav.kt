@@ -52,7 +52,7 @@ fun MemoripNav(
                 },
                 onCreatePlaceClick = {navigator.navigateToCreatePlace()},
                 onBackClick = {navigator.popBackStack()},
-                modifier = modifier,
+                modifier = modifier.padding(paddingValues = innerPadding),
             )
 
             groupDetail(

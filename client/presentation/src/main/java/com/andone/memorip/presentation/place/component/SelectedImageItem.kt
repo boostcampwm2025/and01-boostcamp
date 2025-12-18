@@ -40,7 +40,7 @@ fun SelectedImageItem(
                 .border(
                     width = MemoripBorderWidth.Thin,
                     color = MemoripTheme.colors.gray,
-                    shape = MemoripTheme.shapes.defaultCorner
+                    shape = MemoripTheme.shapes.roundedSmall
                 )
         ) {
             AsyncImage(
@@ -51,7 +51,7 @@ fun SelectedImageItem(
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxSize()
-                    .clip(MemoripTheme.shapes.defaultCorner)
+                    .clip(MemoripTheme.shapes.roundedSmall)
             )
         }
 

@@ -14,13 +14,11 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.mutableStateSetOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -31,11 +29,10 @@ import com.andone.memorip.presentation.selectcategory.Constants.MAX_SELECTABLE_C
 import com.andone.memorip.presentation.selectcategory.component.CategoryItem
 import com.andone.memorip.presentation.selectcategory.model.Category
 import com.andone.memorip.presentation.theme.LocalMemoripColors
+import com.andone.memorip.presentation.theme.LocalMemoripTypography
 import com.andone.memorip.presentation.theme.MemoripPadding.PaddingMedium
 import com.andone.memorip.presentation.theme.MemoripTheme
-import com.andone.memorip.presentation.util.dummydata.DummyData
 import com.andone.memorip.presentation.util.dummydata.DummyData.categories
-import org.andone.memorip.presentation.theme.LocalMemoripTypography
 
 private object Constants {
     val MAX_SELECTABLE_COUNT = 3

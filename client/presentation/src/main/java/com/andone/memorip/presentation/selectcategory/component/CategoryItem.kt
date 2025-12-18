@@ -42,7 +42,7 @@ fun CategoryItem(
         Box(
             modifier = Modifier
                 .size(width = CATEGORY_ITEM_WIDTH, height = IconSizeMedium)
-                .background(color = category.color, shape = MemoripTheme.shapes.defaultCorner)
+                .background(color = category.color, shape = MemoripTheme.shapes.roundedSmall)
         )
         Text(
             text = category.category,

@@ -33,7 +33,6 @@ fun HomeScreen(
 ) {
     HomeScreenContents(
         groups = DummyData.groups,
-        groups = emptyList(),
         onCreateGroupClick = onCreateGroupClick,
         onCreatePlaceClick = onCreatePlaceClick,
         modifier = modifier,
@@ -100,11 +99,10 @@ fun HomeScreenContents(
 @Preview(showBackground = true)
 private fun HomeScreenContentsPreview() {
     MemoripTheme {
-        HomeScreenContents(groups = DummyData.groups)
         HomeScreenContents(
-            groups = groups,
+            groups = DummyData.groups,
             onCreateGroupClick = {},
-            onCreatePlaceClick = {}
+            onCreatePlaceClick = {},
         )
     }
 }

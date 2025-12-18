@@ -40,11 +40,11 @@ fun MemoripInputBox(
             .border(
                 width = MemoripBorderWidth.Thin,
                 color = MemoripTheme.colors.primary,
-                shape = MemoripTheme.shapes.defaultCorner
+                shape = MemoripTheme.shapes.roundedSmall
             )
             .background(
                 color = MemoripTheme.colors.offWhite,
-                shape = MemoripTheme.shapes.defaultCorner
+                shape = MemoripTheme.shapes.roundedSmall
             )
             .padding(start = MemoripPadding.PaddingSmall)
     ) {

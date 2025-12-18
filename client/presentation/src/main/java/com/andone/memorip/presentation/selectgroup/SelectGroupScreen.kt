@@ -31,12 +31,12 @@ import com.andone.memorip.presentation.component.GroupView
 import com.andone.memorip.presentation.component.dialog.MemoripInputDialog
 import com.andone.memorip.presentation.home.model.GroupUiModel
 import com.andone.memorip.presentation.theme.LocalMemoripColors
+import com.andone.memorip.presentation.theme.LocalMemoripTypography
 import com.andone.memorip.presentation.theme.MemoripPadding.PaddingMedium
 import com.andone.memorip.presentation.theme.MemoripPadding.PaddingXSmall
 import com.andone.memorip.presentation.theme.MemoripSpace.SpaceXSmall
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.dummydata.DummyData.groups
-import org.andone.memorip.presentation.theme.LocalMemoripTypography
 
 @Composable
 fun SelectGroupScreen(
