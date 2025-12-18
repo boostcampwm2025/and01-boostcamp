@@ -97,9 +97,7 @@ fun PlaceCreateScreenContents(
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MemoripTheme.colors.offWhite
-                )
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MemoripTheme.colors.offWhite)
             )
         }
     ) { innerPadding ->

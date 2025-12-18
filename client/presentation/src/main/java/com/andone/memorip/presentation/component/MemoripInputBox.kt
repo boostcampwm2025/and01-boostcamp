@@ -49,9 +49,7 @@ fun MemoripInputBox(
             )
             .padding(start = MemoripPadding.PaddingSmall)
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = label,
                 style = MemoripTheme.typography.label1
