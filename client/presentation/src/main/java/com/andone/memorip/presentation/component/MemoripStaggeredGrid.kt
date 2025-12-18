@@ -1,6 +1,5 @@
 package com.andone.memorip.presentation.component
 
-import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,7 +11,6 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,6 +25,7 @@ import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.groupdetail.model.PlaceImageItem
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
+import com.andone.memorip.presentation.util.DummyData
 
 private object StaggeredGridDimens {
     val STAGGERED_GRID_MIN_CELL_WIDTH = 160.dp
@@ -85,31 +84,11 @@ private fun StaggeredImageItem(
     }
 }
 
-/**
- * 랜덤 높이 이미지 count 개 생성.
- * picsum 사이트에서 200x랜덤height로 crop해서 가져옴.
- * todo: 백엔드에서 받아온 이미지로 변경
- */
-fun generateRandomImageUrls(count: Int): List<PlaceImageItem> {
-    return (1..count).map { id ->
-        val randomHeight = (50..400).random()
-        val fixedWidth = 200
-
-        PlaceImageItem(
-            id = id,
-            url = "https://picsum.photos/id/$id/$fixedWidth/$randomHeight",
-            width = fixedWidth,
-            height = randomHeight
-        )
-    }
-}
-
 @Preview(showBackground = true)
 @Composable
 private fun MemoripStaggeredGridPreview() {
     MemoripTheme {
-        val dummyImages = remember { generateRandomImageUrls(count = 30) }
-        MemoripStaggeredGrid(images = dummyImages)
+        MemoripStaggeredGrid(images = DummyData.dummyImages)
     }
 }
 

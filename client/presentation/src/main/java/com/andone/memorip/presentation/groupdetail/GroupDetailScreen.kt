@@ -22,6 +22,7 @@ import com.andone.memorip.presentation.groupdetail.component.GroupDetailAppBar
 import com.andone.memorip.presentation.groupdetail.component.MapTab
 import com.andone.memorip.presentation.groupdetail.model.PlaceImageItem
 import com.andone.memorip.presentation.theme.MemoripTheme
+import com.andone.memorip.presentation.util.DummyData
 import kotlinx.coroutines.launch
 
 @Composable
@@ -76,6 +77,7 @@ fun GroupDetailScreenContent(
     val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
+        modifier = modifier,
         topBar = {
             GroupDetailAppBar(
                 title = groupName,
@@ -84,7 +86,6 @@ fun GroupDetailScreenContent(
                 onSearchClick = onSearchClick
             )
         },
-        modifier = modifier
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -128,22 +129,9 @@ fun GroupDetailScreenContent(
 @Composable
 private fun GroupDetailScreenContentGalleryPreview() {
     MemoripTheme {
-        val dummyImages = remember {
-            List(30) { index ->
-                val randomHeight = (150..400).random()
-                val fixedWidth = 200
-                PlaceImageItem(
-                    id = index,
-                    url = "https://picsum.photos/id/${index + 1}/$fixedWidth/$randomHeight",
-                    width = fixedWidth,
-                    height = randomHeight
-                )
-            }
-        }
-
         GroupDetailScreenContent(
             groupName = "Group1",
-            images = dummyImages,
+            images = DummyData.dummyImages,
             onBackClick = {},
             onSearchClick = {},
             onMenuClick = {},
@@ -156,22 +144,9 @@ private fun GroupDetailScreenContentGalleryPreview() {
 @Composable
 private fun GroupDetailScreenContentMapPreview() {
     MemoripTheme {
-        val dummyImages = remember {
-            List(30) { index ->
-                val randomHeight = (150..400).random()
-                val fixedWidth = 200
-                PlaceImageItem(
-                    id = index,
-                    url = "https://picsum.photos/id/${index + 1}/$fixedWidth/$randomHeight",
-                    width = fixedWidth,
-                    height = randomHeight
-                )
-            }
-        }
-
         GroupDetailScreenContent(
             groupName = "Group1",
-            images = dummyImages,
+            images = DummyData.dummyImages,
             onBackClick = {},
             onSearchClick = {},
             onMenuClick = {},
