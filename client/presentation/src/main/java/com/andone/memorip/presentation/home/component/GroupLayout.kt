@@ -47,34 +47,39 @@ fun GroupLayout(
         measurables.forEachIndexed { index, measurable ->
             val item = items[index]
 
+            var bestCol = -1
+            var bestBaseRow = Int.MAX_VALUE
+
             for (c in 0..columns - item.colSpan) {
-
-                val baseRow = (c until c + item.colSpan)
-                    .maxOf { columnHeights[it] }
-
+                val baseRow = (c until c + item.colSpan).maxOf { columnHeights[it] }
                 if (baseRow + item.rowSpan > rows) continue
 
+                if (baseRow < bestBaseRow) {
+                    bestBaseRow = baseRow
+                    bestCol = c
+                }
+            }
+
+            if (bestCol != -1) {
                 val width = cellWidth * item.colSpan
                 val height = cellHeight * item.rowSpan
 
                 val placeable = measurable.measure(
                     constraints.copy(
-                        minWidth = width,
-                        maxWidth = width,
-                        minHeight = height,
-                        maxHeight = height
+                        minWidth = width, maxWidth = width,
+                        minHeight = height, maxHeight = height
                     )
                 )
 
-                for (cc in c until c + item.colSpan) {
-                    columnHeights[cc] = baseRow + item.rowSpan
+                for (cc in bestCol until bestCol + item.colSpan) {
+                    columnHeights[cc] = bestBaseRow + item.rowSpan
                 }
 
                 placedItems += Placed(
                     placeable = placeable,
-                    row = baseRow,
-                    col = c)
-                break
+                    row = bestBaseRow,
+                    col = bestCol
+                )
             }
         }
 
