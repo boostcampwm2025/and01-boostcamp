@@ -10,6 +10,7 @@ import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDe
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import com.andone.memorip.presentation.groupdetail.groupDetail
 import com.andone.memorip.presentation.home.home
 import com.andone.memorip.presentation.selectcategory.selectCategory
 import com.andone.memorip.presentation.selectgroup.selectGroup
@@ -41,13 +42,22 @@ fun MemoripNav(
         entryProvider = entryProvider {
             home(
                 onCreateGroupClick = {},
-                onCreatePlaceClick = {navigator.navigateToCreatePlace()},
-                onBackClick = {navigator.popBackStack()},
+                onCreatePlaceClick = { navigator.navigateToCreatePlace() },
+                onBackClick = { navigator.popBackStack() },
                 modifier = modifier,
+                onGroupClick = {},
             )
             entry<User> { Text(text = "user") }
 
             selectGroup(
+                onBackClick = { navigator.popBackStack() },
+//                onGroupClick = { groupId ->
+//                    navigator.navigateToRoute(GroupDetail(groupId))
+//                },
+                modifier = modifier
+            )
+
+            groupDetail(
                 onBackClick = { navigator.popBackStack() },
                 modifier = modifier
             )

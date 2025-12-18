@@ -17,3 +17,6 @@ data object PlaceCreate : NavKey
 
 @Serializable
 data object SelectCategory: NavKey
+
+@Serializable
+data class GroupDetail(val groupId: String) : NavKey

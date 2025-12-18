@@ -112,7 +112,7 @@ private fun SelectGroupContent(
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_add),
-                    contentDescription = stringResource(R.string.home_add_contentDescription)
+                    contentDescription = stringResource(R.string.home_add_content_description)
                 )
             }
         },
