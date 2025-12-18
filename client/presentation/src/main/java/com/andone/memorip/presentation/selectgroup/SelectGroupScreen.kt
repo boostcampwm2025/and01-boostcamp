@@ -35,6 +35,7 @@ import com.andone.memorip.presentation.theme.MemoripPadding.PaddingMedium
 import com.andone.memorip.presentation.theme.MemoripPadding.PaddingXSmall
 import com.andone.memorip.presentation.theme.MemoripSpace.SpaceXSmall
 import com.andone.memorip.presentation.theme.MemoripTheme
+import com.andone.memorip.presentation.util.dummydata.DummyData.groups
 import org.andone.memorip.presentation.theme.LocalMemoripTypography
 
 @Composable
@@ -43,26 +44,7 @@ fun SelectGroupScreen(
     modifier: Modifier = Modifier
 ) {
     var showDialog by remember { mutableStateOf(false) }
-    val groups = remember {
-        mutableStateListOf(
-            GroupUiModel(
-                name = "기본 그룹",
-                images = List(size = 8) { "" }
-            ),
-            GroupUiModel(
-                name = "부 산",
-                images = List(size = 4) { "" }
-            ),
-            GroupUiModel(
-                name = "제주도",
-                images = List(size = 5) { "" }
-            ),
-            GroupUiModel(
-                name = "대구 ",
-                images = List(size = 1) { "" }
-            )
-        )
-    }
+    val groups = remember { groups }
 
     SelectGroupContent(
         groups = groups,

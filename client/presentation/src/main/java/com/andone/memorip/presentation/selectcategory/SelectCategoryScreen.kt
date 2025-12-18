@@ -33,6 +33,8 @@ import com.andone.memorip.presentation.selectcategory.model.Category
 import com.andone.memorip.presentation.theme.LocalMemoripColors
 import com.andone.memorip.presentation.theme.MemoripPadding.PaddingMedium
 import com.andone.memorip.presentation.theme.MemoripTheme
+import com.andone.memorip.presentation.util.dummydata.DummyData
+import com.andone.memorip.presentation.util.dummydata.DummyData.categories
 import org.andone.memorip.presentation.theme.LocalMemoripTypography
 
 private object Constants {
@@ -44,25 +46,7 @@ fun SelectCategoryScreen(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val categories = remember{
-        mutableStateListOf(
-            Category(
-                id = 0L,
-                category = "맛집",
-                color = Color(0xFF000000)
-            ),
-            Category(
-                id = 1L,
-                category = "카페",
-                color = Color(0xFAA8F0F0)
-            ),
-            Category(
-                id = 2L,
-                category = "액티비티",
-                color = Color(0xFFCCDD66)
-            ),
-        )
-    }
+    val categories = remember{ categories }
     val checkedSet = remember{ mutableStateSetOf<Long>() }
     var showDialog by remember{ mutableStateOf(false) }
 
