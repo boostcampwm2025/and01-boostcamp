@@ -1,4 +1,4 @@
-package com.andone.memorip.presentation.place.component
+package com.andone.memorip.presentation.placecreate.component
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -21,7 +21,6 @@ import com.andone.memorip.presentation.theme.MemoripBorderWidth
 import com.andone.memorip.presentation.theme.MemoripIconSize
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.R
-import com.andone.memorip.presentation.theme.MemoripPadding
 
 private object MemoripOffset {
     val DeleteIcon = DpOffset(1.dp, (-1).dp)

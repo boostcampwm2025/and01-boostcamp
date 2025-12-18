@@ -1,4 +1,4 @@
-package com.andone.memorip.presentation.place
+package com.andone.memorip.presentation.placecreate
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -30,10 +30,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.MemoripInputBox
-import com.andone.memorip.presentation.place.PictureSetting.MAX_PICTURE_COUNT
-import com.andone.memorip.presentation.place.component.ImageCountButton
-import com.andone.memorip.presentation.place.component.SelectRow
-import com.andone.memorip.presentation.place.component.SelectedImageItem
+import com.andone.memorip.presentation.placecreate.PictureSetting.MAX_PICTURE_COUNT
+import com.andone.memorip.presentation.placecreate.component.ImageCountButton
+import com.andone.memorip.presentation.placecreate.component.SelectRow
+import com.andone.memorip.presentation.placecreate.component.SelectedImageItem
 import com.andone.memorip.presentation.theme.MemoripHeight
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace

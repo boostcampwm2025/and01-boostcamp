@@ -1,4 +1,4 @@
-package com.andone.memorip.presentation.place
+package com.andone.memorip.presentation.placecreate
 
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.EntryProviderScope

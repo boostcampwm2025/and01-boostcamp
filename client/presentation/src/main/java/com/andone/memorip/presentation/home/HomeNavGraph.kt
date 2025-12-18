@@ -4,8 +4,6 @@ import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import com.andone.memorip.navigation.Home
-import com.andone.memorip.navigation.PlaceCreate
-import com.andone.memorip.presentation.place.PlaceCreateScreen
 
 fun EntryProviderScope<NavKey>.home(
     onCreateGroupClick: () -> Unit,
