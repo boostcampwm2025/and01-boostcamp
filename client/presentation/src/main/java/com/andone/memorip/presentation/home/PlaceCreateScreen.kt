@@ -1,5 +1,9 @@
 package com.andone.memorip.presentation.home
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -18,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -26,6 +31,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.MemoripInputBox
+import com.andone.memorip.presentation.home.PictureSetting.MAX_PICTURE_COUNT
 import com.andone.memorip.presentation.home.component.ImageCountButton
 import com.andone.memorip.presentation.home.component.SelectRow
 import com.andone.memorip.presentation.theme.MemoripHeight
@@ -33,6 +39,10 @@ import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 import org.andone.memorip.presentation.theme.MemoripTypography
+
+private object PictureSetting{
+    val MAX_PICTURE_COUNT = 10
+}
 
 @Composable
 fun PlaceCreateScreen(
@@ -50,6 +60,18 @@ fun PlaceCreateScreenContents(
 ) {
     var title by remember { mutableStateOf("") }
     var content by remember { mutableStateOf("") }
+    val selectedImages = remember { mutableStateListOf<Uri>() }
+
+    val imagePickerLauncher =
+        rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.PickMultipleVisualMedia(
+                maxItems = MAX_PICTURE_COUNT
+            )
+        ) { uris ->
+            if (uris.isNotEmpty()) {
+                selectedImages.addAll(uris)
+            }
+        }
 
     Scaffold(
         modifier = modifier,
@@ -79,14 +101,21 @@ fun PlaceCreateScreenContents(
         }
     ) { innerPadding ->
         Column(
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier
+                .padding(innerPadding)
                 .padding(MemoripPadding.PaddingXSmall),
             verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceSmall)
         ) {
             ImageCountButton(
-                current = 0,
-                max = 10,
-                onClick = {},
+                current = selectedImages.size,
+                max = MAX_PICTURE_COUNT,
+                onClick = {
+                    imagePickerLauncher.launch(
+                        PickVisualMediaRequest(
+                            ActivityResultContracts.PickVisualMedia.ImageOnly
+                        )
+                    )
+                },
                 modifier = Modifier.padding(vertical = MemoripPadding.PaddingXSmall)
             )
             Text(
@@ -136,7 +165,7 @@ fun PlaceCreateScreenContents(
 
 @Preview
 @Composable
-private fun PlaceCreateScreenContentsPreview(){
+private fun PlaceCreateScreenContentsPreview() {
     MemoripTheme {
         PlaceCreateScreenContents()
     }
