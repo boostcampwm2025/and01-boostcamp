@@ -76,4 +76,16 @@ object DummyData {
             images = images
         )
     }
+
+    val imageItems = (30..80).map { id ->
+        val randomHeight = (50..400).random()
+        val fixedWidth = 200
+
+        ImageItem(
+            id = id,
+            url = "https://picsum.photos/id/$id/$fixedWidth/$randomHeight",
+            width = fixedWidth,
+            height = randomHeight
+        )
+    }
 }

@@ -26,6 +26,7 @@ import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.model.ImageItem
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
+import com.andone.memorip.presentation.util.DummyData
 
 private object StaggeredGridDimens {
     val STAGGERED_GRID_MIN_CELL_WIDTH = 160.dp
@@ -84,31 +85,11 @@ private fun StaggeredImageItem(
     }
 }
 
-/**
- * 랜덤 높이 이미지 count 개 생성.
- * picsum 사이트에서 200x랜덤height로 crop해서 가져옴.
- * todo: 백엔드에서 받아온 이미지로 변경
- */
-fun generateRandomImageUrls(count: Int): List<ImageItem> {
-    return (1..count).map { id ->
-        val randomHeight = (50..400).random()
-        val fixedWidth = 200
-
-        ImageItem(
-            id = id,
-            url = "https://picsum.photos/id/$id/$fixedWidth/$randomHeight",
-            width = fixedWidth,
-            height = randomHeight
-        )
-    }
-}
-
 @Preview(showBackground = true)
 @Composable
 private fun MemoripStaggeredGridPreview() {
     MemoripTheme {
-        val dummyImages = remember { generateRandomImageUrls(count = 30) }
-        MemoripStaggeredGrid(images = dummyImages)
+        MemoripStaggeredGrid(images = DummyData.imageItems)
     }
 }
 
