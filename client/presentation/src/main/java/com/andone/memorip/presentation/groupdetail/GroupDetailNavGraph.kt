@@ -2,16 +2,21 @@ package com.andone.memorip.presentation.groupdetail
 
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.EntryProviderScope
+import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import com.andone.memorip.navigation.GroupDetail
 
+fun NavBackStack<NavKey>.navigateToGroupDetail(groupId: String) {
+    add(GroupDetail(groupId))
+}
+
 fun EntryProviderScope<NavKey>.groupDetail(
-    onBackClick: () -> Unit,
+    onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    entry<GroupDetail> { backStackEntry ->
+    entry<GroupDetail> { route ->
         GroupDetailScreen(
-            onBackClick = onBackClick,
+            onBackClick = onNavigateBack,
             modifier = modifier
         )
     }
