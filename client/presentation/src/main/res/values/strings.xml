@@ -38,6 +38,9 @@
     <string name="select_group_dialog_label">이름</string>
     <string name="select_group_dialog_hint">그룹 이름</string>
 
+    <!-- SelectLocationScreen -->
+    <string name="select_location_title">위치 선택</string>
+
     <!-- GroupDetailScreen-->
     <string name="groupdetail_tab_gallery">갤러리</string>
     <string name="groupdetail_tab_map">사진 지도</string>
