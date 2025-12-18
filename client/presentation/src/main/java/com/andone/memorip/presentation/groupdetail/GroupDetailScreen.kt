@@ -77,7 +77,6 @@ fun GroupDetailScreenContent(
 
     var selectedTabIndex by remember { mutableIntStateOf(initialPage) }
     
-    // 마커용 이미지 미리 로드
     val markerImages = remember { mutableStateMapOf<String, Bitmap>() }
 
     LaunchedEffect(places) {
@@ -137,7 +136,6 @@ fun GroupDetailScreenContent(
                 }
             }
 
-            // 선택된 탭에 따라 조건부 렌더링
             when (selectedTabIndex) {
                 0 -> GalleryTab(
                     places = places,

@@ -35,8 +35,11 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
 
 private object PlaceImagesBottomSheetDimens {
-    const val ImageAspectRatio = 1f
     val ImageGridMinSize = 100.dp
+}
+
+private object PlaceImagesBottomSheetConstants {
+    const val ImageAspectRatio = 1f
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -126,7 +129,7 @@ private fun PlaceImageItemCard(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .aspectRatio(PlaceImagesBottomSheetDimens.ImageAspectRatio)
+            .aspectRatio(PlaceImagesBottomSheetConstants.ImageAspectRatio)
             .clip(MemoripTheme.shapes.roundedSmall)
             .background(MemoripTheme.colors.offWhite)
     ) {
