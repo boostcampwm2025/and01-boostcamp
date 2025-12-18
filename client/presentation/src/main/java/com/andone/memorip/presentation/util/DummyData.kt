@@ -7,6 +7,15 @@ import kotlin.random.Random
 object DummyData {
     private const val IMAGES_PER_PLACE = 50
     
+    val placeImages: List<ImageItem> = List(12) { index ->
+        ImageItem(
+            id = index + 1,
+            url = "https://picsum.photos/seed/${index + 1}/800/800",
+            width = 800,
+            height = 800
+        )
+    }
+    
     val places: List<Place> = listOf(
         Triple(37.498095, 127.027610, "브런치 카페"),
         Triple(37.512900, 127.058500, "예쁜 공원"),
