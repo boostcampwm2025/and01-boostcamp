@@ -1,4 +1,4 @@
-package org.andone.memorip.presentation.theme
+package com.andone.memorip.presentation.theme
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
@@ -23,15 +23,29 @@ val NotoSansKR = FontFamily(
 
 @Immutable
 data class MemoripTypography(
+    val headlineLarge: TextStyle,
     val headline1: TextStyle,
     val headline2: TextStyle,
+    val bodyLarge: TextStyle,
+    val bodySmall: TextStyle,
+    val title1: TextStyle,
+    val title2: TextStyle,
     val body1: TextStyle,
     val body2: TextStyle,
+    val caption1: TextStyle,
     val hint1: TextStyle,
-    val label1: TextStyle
+    val labelLarge: TextStyle,
+    val label1: TextStyle,
+    val number1: TextStyle,
 )
 
 internal val memoripTypography = MemoripTypography(
+    headlineLarge = TextStyle(
+        fontFamily = NotoSansKR,
+        fontWeight = FontWeight.Normal,
+        fontSize = 32.sp,
+        lineHeight = 40.sp
+    ),
     headline1 = TextStyle(
         fontFamily = NotoSansKR,
         fontWeight = FontWeight.Normal,
@@ -43,6 +57,18 @@ internal val memoripTypography = MemoripTypography(
         fontWeight = FontWeight.Bold,
         fontSize = 24.sp,
         lineHeight = 32.sp
+    ),
+    bodyLarge = TextStyle(
+        fontFamily = NotoSansKR,
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp,
+        lineHeight = 24.sp
+    ),
+    bodySmall = TextStyle(
+        fontFamily = NotoSansKR,
+        fontWeight = FontWeight.Normal,
+        fontSize = 12.sp,
+        lineHeight = 16.sp
     ),
     body1 = TextStyle(
         fontFamily = NotoSansKR,
@@ -62,11 +88,42 @@ internal val memoripTypography = MemoripTypography(
         fontSize = 12.sp,
         lineHeight = 16.sp
     ),
+    labelLarge = TextStyle(
+        fontFamily = NotoSansKR,
+        fontWeight = FontWeight.Normal,
+        fontSize = 14.sp,
+        lineHeight = 20.sp
+    ),
     label1 = TextStyle(
         fontFamily = NotoSansKR,
         fontWeight = FontWeight.Bold,
         fontSize = 14.sp,
         lineHeight = 20.sp
+    ),
+    title1 = TextStyle(
+        fontFamily = NotoSansKR,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 18.sp,
+        lineHeight = 24.sp
+    ),
+
+    title2 = TextStyle(
+        fontFamily = NotoSansKR,
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp,
+        lineHeight = 22.sp
+    ),
+    caption1 = TextStyle(
+        fontFamily = NotoSansKR,
+        fontWeight = FontWeight.Normal,
+        fontSize = 12.sp,
+        lineHeight = 16.sp
+    ),
+    number1 = TextStyle(
+        fontFamily = NotoSansKR,
+        fontWeight = FontWeight.Medium,
+        fontSize = 13.sp,
+        lineHeight = 18.sp
     ),
 )
 

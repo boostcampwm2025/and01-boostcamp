@@ -22,16 +22,20 @@ import com.andone.memorip.presentation.component.GroupView
 import com.andone.memorip.presentation.home.model.GroupUiModel
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
+import com.andone.memorip.presentation.util.DummyData
 
 @Composable
 fun HomeScreen(
     onCreateGroupClick: () -> Unit,
     onGroupClick: (String) -> Unit,
+    onCreatePlaceClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     HomeScreenContents(
-        groups = emptyList(),
-        modifier = modifier
+        groups = DummyData.groups,
+        onCreateGroupClick = onCreateGroupClick,
+        onCreatePlaceClick = onCreatePlaceClick,
+        modifier = modifier,
     )
 }
 
@@ -39,7 +43,9 @@ fun HomeScreen(
 @Composable
 fun HomeScreenContents(
     groups: List<GroupUiModel>,
-    modifier: Modifier = Modifier
+    onCreateGroupClick: () -> Unit,
+    onCreatePlaceClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Scaffold(
         modifier = modifier,
@@ -50,7 +56,7 @@ fun HomeScreenContents(
                     IconButton(onClick = {}) {
                         Icon(
                             painter = painterResource(R.drawable.ic_search),
-                            contentDescription = stringResource(R.string.home_search_contentDescription)
+                            contentDescription = stringResource(R.string.home_search_content_description)
                         )
                     }
                 },
@@ -61,13 +67,13 @@ fun HomeScreenContents(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = {},
+                onClick = onCreatePlaceClick,
                 containerColor = MemoripTheme.colors.primaryContainer,
                 contentColor = MemoripTheme.colors.black
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_add),
-                    contentDescription = stringResource(R.string.home_add_contentDescription)
+                    contentDescription = stringResource(R.string.home_add_content_description)
                 )
             }
         },
@@ -92,26 +98,11 @@ fun HomeScreenContents(
 @Composable
 @Preview(showBackground = true)
 private fun HomeScreenContentsPreview() {
-    val groups = listOf(
-        GroupUiModel(
-            name = "기본 그룹",
-            images = List(size = 8) { "" }
-        ),
-        GroupUiModel(
-            name = "부 산",
-            images = List(size = 4) { "" }
-        ),
-        GroupUiModel(
-            name = "제주도",
-            images = List(size = 5) { "" }
-        ),
-        GroupUiModel(
-            name = "대구 ",
-            images = List(size = 1) { "" }
-        )
-    )
-
     MemoripTheme {
-        HomeScreenContents(groups = groups)
+        HomeScreenContents(
+            groups = DummyData.groups,
+            onCreateGroupClick = {},
+            onCreatePlaceClick = {},
+        )
     }
 }
