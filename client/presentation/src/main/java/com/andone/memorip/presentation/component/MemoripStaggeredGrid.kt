@@ -1,6 +1,5 @@
 package com.andone.memorip.presentation.component
 
-import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,7 +23,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.andone.memorip.presentation.R
-import com.andone.memorip.presentation.groupdetail.model.PlaceImageItem
+import com.andone.memorip.presentation.model.ImageItem
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 
@@ -35,7 +34,7 @@ private object StaggeredGridDimens {
 
 @Composable
 fun MemoripStaggeredGrid(
-    images: List<PlaceImageItem>,
+    images: List<ImageItem>,
     modifier: Modifier = Modifier
 ) {
     LazyVerticalStaggeredGrid(
@@ -90,12 +89,12 @@ private fun StaggeredImageItem(
  * picsum 사이트에서 200x랜덤height로 crop해서 가져옴.
  * todo: 백엔드에서 받아온 이미지로 변경
  */
-fun generateRandomImageUrls(count: Int): List<PlaceImageItem> {
+fun generateRandomImageUrls(count: Int): List<ImageItem> {
     return (1..count).map { id ->
         val randomHeight = (50..400).random()
         val fixedWidth = 200
 
-        PlaceImageItem(
+        ImageItem(
             id = id,
             url = "https://picsum.photos/id/$id/$fixedWidth/$randomHeight",
             width = fixedWidth,
