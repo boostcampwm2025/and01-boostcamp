@@ -1,4 +1,4 @@
-package com.andone.memorip.presentation.place.component
+package com.andone.memorip.presentation.placecreate.component
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.R
@@ -33,8 +32,7 @@ fun ImageCountButton(
                 color = MemoripTheme.colors.gray,
                 shape = MemoripTheme.shapes.roundedSmall
             )
-            .clickable(onClick = onClick)
-            .padding(vertical = MemoripPadding.PaddingXSmall),
+            .clickable(onClick = onClick),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
