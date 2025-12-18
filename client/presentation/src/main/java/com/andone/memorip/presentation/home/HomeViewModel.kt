@@ -16,6 +16,11 @@ class HomeViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState
 
+    init {
+        // 테스트 더미 데이터
+        _uiState.update { it.copy(groups = DummyData.groups) }
+    }
+
     fun onAction(intent: HomeAction) {
         when (intent) {
             is HomeAction.OnGroupAdd -> {
