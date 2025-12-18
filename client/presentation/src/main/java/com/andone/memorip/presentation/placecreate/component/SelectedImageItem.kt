@@ -1,4 +1,4 @@
-package com.andone.memorip.presentation.place.component
+package com.andone.memorip.presentation.placecreate.component
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
