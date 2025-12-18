@@ -99,19 +99,26 @@ object DummyData {
     val groups = mutableStateListOf(
         GroupUiModel(
             name = "기본 그룹",
-            images = List(size = 8) { "" }
+            images = createRandomImageUrls(8, "group1")
         ),
         GroupUiModel(
             name = "부 산",
-            images = List(size = 4) { "" }
+            images = createRandomImageUrls(4, "busan")
         ),
         GroupUiModel(
             name = "제주도",
-            images = List(size = 5) { "" }
+            images = createRandomImageUrls(5, "jeju")
         ),
         GroupUiModel(
             name = "대구 ",
-            images = List(size = 1) { "" }
+            images = createRandomImageUrls(1, "daegu")
         )
     )
+
+    private fun createRandomImageUrls(count: Int, seedKey: String): List<String> {
+        return List(count) { index ->
+            val height = Random.nextInt(200, 400)
+            "https://picsum.photos/seed/${seedKey}_$index/200/$height"
+        }
+    }
 }
