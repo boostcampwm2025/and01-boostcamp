@@ -3,8 +3,6 @@ package com.andone.memorip.presentation.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -16,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -62,7 +61,7 @@ fun MemoripInputBox(
                 enabled = value.isNotEmpty()
             ) {
                 Icon(
-                    imageVector = Icons.Filled.Close,
+                    painter = painterResource(R.drawable.ic_close),
                     contentDescription = stringResource(R.string.place_create_clear),
                     tint = if (value.isNotEmpty()) {
                         MemoripTheme.colors.black

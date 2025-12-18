@@ -2,20 +2,19 @@ package com.andone.memorip.presentation.place.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ChevronRight
-import androidx.compose.material.icons.filled.Tag
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.theme.MemoripIconSize
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
+import com.andone.memorip.presentation.R
 
 @Composable
 fun SelectRow(
@@ -23,7 +22,7 @@ fun SelectRow(
     value: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    leadingIcon: ImageVector? = null
+    leadingIcon: Painter? = null
 ) {
     Row(
         modifier = modifier
@@ -31,10 +30,10 @@ fun SelectRow(
             .clickable(onClick = onClick),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        
-        if (leadingIcon != null) {
+
+        leadingIcon?.let {
             Icon(
-                imageVector = leadingIcon,
+                painter = it,
                 contentDescription = null,
                 tint = MemoripTheme.colors.primary,
                 modifier = Modifier
@@ -60,7 +59,7 @@ fun SelectRow(
         Spacer(modifier = Modifier.weight(1f))
 
         Icon(
-            imageVector = Icons.Filled.ChevronRight,
+            painter = painterResource(R.drawable.ic_chevron_forward),
             contentDescription = null,
             tint = MemoripTheme.colors.gray
         )
@@ -73,7 +72,7 @@ private fun SelectRowPreview(){
     SelectRow(
         label = "카테고리",
         value = "맛집",
-        leadingIcon = Icons.Filled.Tag,
+        leadingIcon = painterResource(R.drawable.ic_tag),
         onClick = { }
     )
 }
