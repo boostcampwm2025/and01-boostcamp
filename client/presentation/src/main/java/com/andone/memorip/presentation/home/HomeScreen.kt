@@ -27,11 +27,14 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 @Composable
 fun HomeScreen(
     onCreateGroupClick: () -> Unit,
+    onCreatePlaceClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     HomeScreenContents(
         groups = emptyList(),
-        modifier = modifier
+        modifier = modifier,
+        onCreateGroupClick = onCreateGroupClick,
+        onCreatePlaceClick = onCreatePlaceClick,
     )
 }
 
@@ -39,7 +42,9 @@ fun HomeScreen(
 @Composable
 fun HomeScreenContents(
     groups: List<GroupUiModel>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onCreateGroupClick: () -> Unit,
+    onCreatePlaceClick: () -> Unit,
 ) {
     Scaffold(
         modifier = modifier,
@@ -61,7 +66,7 @@ fun HomeScreenContents(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = {},
+                onClick = onCreatePlaceClick,
                 containerColor = MemoripTheme.colors.primaryContainer,
                 contentColor = MemoripTheme.colors.black
             ) {
@@ -112,6 +117,10 @@ private fun HomeScreenContentsPreview() {
     )
 
     MemoripTheme {
-        HomeScreenContents(groups = groups)
+        HomeScreenContents(
+            groups = groups,
+            onCreateGroupClick = {},
+            onCreatePlaceClick = {}
+        )
     }
 }

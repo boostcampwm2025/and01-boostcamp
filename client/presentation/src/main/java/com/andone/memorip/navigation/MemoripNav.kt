@@ -39,7 +39,9 @@ fun MemoripNav(
         entryProvider = entryProvider {
             home(
                 onCreateGroupClick = {},
-                modifier = modifier
+                onCreatePlaceClick = {navigator.navigateToCreatePlace()},
+                onBackClick = {navigator.popBackStack()},
+                modifier = modifier,
             )
             entry<User> { Text(text = "user") }
         },

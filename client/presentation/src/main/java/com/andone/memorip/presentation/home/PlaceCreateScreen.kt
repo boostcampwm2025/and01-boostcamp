@@ -41,22 +41,25 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 import org.andone.memorip.presentation.theme.MemoripTypography
 
 private object PictureSetting{
-    val MAX_PICTURE_COUNT = 10
+    const val MAX_PICTURE_COUNT = 10
 }
 
 @Composable
 fun PlaceCreateScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onBackClick: () -> Unit,
 ) {
     PlaceCreateScreenContents(
-        modifier = modifier
+        modifier = modifier,
+        onBackClick = onBackClick
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlaceCreateScreenContents(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onBackClick: () -> Unit,
 ) {
     var title by remember { mutableStateOf("") }
     var content by remember { mutableStateOf("") }
@@ -79,7 +82,7 @@ fun PlaceCreateScreenContents(
             CenterAlignedTopAppBar(
                 title = { Text(text = stringResource(R.string.place_create_title)) },
                 navigationIcon = {
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = onBackClick) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = stringResource(R.string.place_create_back_content_description)
@@ -167,6 +170,8 @@ fun PlaceCreateScreenContents(
 @Composable
 private fun PlaceCreateScreenContentsPreview() {
     MemoripTheme {
-        PlaceCreateScreenContents()
+        PlaceCreateScreenContents(
+            onBackClick = {}
+        )
     }
 }

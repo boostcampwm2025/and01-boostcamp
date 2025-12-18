@@ -32,6 +32,10 @@ class MemoripNavigator(
         backStack.add(tab.route)
     }
 
+    fun navigateToCreatePlace(){
+        backStack.add(PlaceCreate)
+    }
+
     fun popBackStack() = backStack.removeLastOrNull()
 }
 
