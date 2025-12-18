@@ -63,5 +63,6 @@
 
     <!-- GroupView-->
     <string name="group_view_default_name">기본 그룹</string>
+    <string name="group_view_add_place">장소를 추가해주세요</string>
 
 </resources>
