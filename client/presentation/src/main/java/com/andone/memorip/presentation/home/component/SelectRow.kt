@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.andone.memorip.presentation.theme.MemoripIconSize
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -28,8 +29,7 @@ fun SelectRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick)
-            .padding(horizontal = MemoripPadding.PaddingMedium, vertical = MemoripPadding.PaddingSmall),
+            .clickable(onClick = onClick),
         verticalAlignment = Alignment.CenterVertically
     ) {
         
@@ -38,13 +38,15 @@ fun SelectRow(
                 imageVector = leadingIcon,
                 contentDescription = null,
                 tint = MemoripTheme.colors.primary,
-                modifier = Modifier.padding(end = MemoripPadding.PaddingXSmall)
+                modifier = Modifier
+                    .size(MemoripIconSize.IconSizeLarge)
+                    .padding(end = MemoripPadding.PaddingXSmall)
             )
         }
 
         Text(
             text = label,
-            style = MemoripTheme.typography.body2,
+            style = MemoripTheme.typography.title2,
             color = MemoripTheme.colors.black
         )
 
@@ -52,7 +54,7 @@ fun SelectRow(
 
         Text(
             text = value,
-            style = MemoripTheme.typography.body2,
+            style = MemoripTheme.typography.title2,
             color = MemoripTheme.colors.primary
         )
 

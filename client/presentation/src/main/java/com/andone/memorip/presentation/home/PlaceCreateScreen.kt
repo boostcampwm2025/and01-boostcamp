@@ -6,6 +6,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.outlined.Folder
+import androidx.compose.material.icons.outlined.Place
+import androidx.compose.material.icons.outlined.Tag
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -24,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.MemoripInputBox
 import com.andone.memorip.presentation.home.component.ImageCountButton
+import com.andone.memorip.presentation.home.component.SelectRow
 import com.andone.memorip.presentation.theme.MemoripHeight
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
@@ -77,7 +81,7 @@ fun PlaceCreateScreenContents(
         Column(
             modifier = Modifier.padding(innerPadding)
                 .padding(MemoripPadding.PaddingXSmall),
-            verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXSmall)
+            verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceSmall)
         ) {
             ImageCountButton(
                 current = 0,
@@ -107,6 +111,24 @@ fun PlaceCreateScreenContents(
                 placeholder = stringResource(R.string.place_create_content_input),
                 onValueChange = { content = it },
                 onClear = { content = "" }
+            )
+            SelectRow(
+                label = stringResource(R.string.place_create_category),
+                value = "",
+                leadingIcon = Icons.Outlined.Tag,
+                onClick = { }
+            )
+            SelectRow(
+                label = stringResource(R.string.place_create_location),
+                value = "",
+                leadingIcon = Icons.Outlined.Place,
+                onClick = { }
+            )
+            SelectRow(
+                label = stringResource(R.string.place_create_group),
+                value = "",
+                leadingIcon = Icons.Outlined.Folder,
+                onClick = { }
             )
         }
     }
