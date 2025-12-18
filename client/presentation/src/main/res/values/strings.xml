@@ -61,4 +61,7 @@
     <string name="groupdetail_menu_button_content_description">메뉴</string>
     <string name="groupdetail_search_button_content_description">검색</string>
 
+    <!-- GroupView-->
+    <string name="group_view_default_name">기본 그룹</string>
+
 </resources>
