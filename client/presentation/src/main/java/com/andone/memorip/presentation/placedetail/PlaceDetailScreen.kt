@@ -233,8 +233,10 @@ private fun PlaceImagesSection(
 @Preview(showBackground = true)
 @Composable
 private fun PlaceDetailScreenPreview() {
-    PlaceDetailScreen(
-        place = DummyData.place,
-        onAction = {}
-    )
+    MemoripTheme {
+        PlaceDetailScreen(
+            place = DummyData.place,
+            onAction = {}
+        )
+    }
 }
