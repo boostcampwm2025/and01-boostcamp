@@ -50,7 +50,7 @@ fun HomeScreenContents(
                     IconButton(onClick = {}) {
                         Icon(
                             painter = painterResource(R.drawable.ic_search),
-                            contentDescription = stringResource(R.string.home_search_contentDescription)
+                            contentDescription = stringResource(R.string.home_search_content_description)
                         )
                     }
                 },
@@ -67,7 +67,7 @@ fun HomeScreenContents(
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_add),
-                    contentDescription = stringResource(R.string.home_add_contentDescription)
+                    contentDescription = stringResource(R.string.home_add_content_description)
                 )
             }
         },

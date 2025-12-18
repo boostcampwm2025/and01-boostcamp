@@ -11,10 +11,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.theme.MemoripTheme
 
 @Composable
 fun PlaceCreateScreen(
@@ -39,7 +42,7 @@ fun PlaceCreateScreenContents(
                     IconButton(onClick = {}) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "뒤로가기"
+                            contentDescription = stringResource(R.string.place_create_back_content_description)
                         )
                     }
                 },
@@ -47,10 +50,13 @@ fun PlaceCreateScreenContents(
                     IconButton(onClick = {}, enabled = false) {
                         Icon(
                             imageVector = Icons.Filled.Check,
-                            contentDescription = "확인"
+                            contentDescription = stringResource(R.string.place_create_check_content_description)
                         )
                     }
-                }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MemoripTheme.colors.offWhite
+                )
             )
         }
     ) { innerPadding ->
@@ -59,5 +65,13 @@ fun PlaceCreateScreenContents(
         ) {
 
         }
+    }
+}
+
+@Preview
+@Composable
+private fun PlaceCreateScreenContentsPreview(){
+    MemoripTheme {
+        PlaceCreateScreenContents()
     }
 }
