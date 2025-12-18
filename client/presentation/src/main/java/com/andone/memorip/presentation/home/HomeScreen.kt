@@ -30,6 +30,7 @@ import com.andone.memorip.presentation.util.DummyData
 @Composable
 fun HomeScreen(
     onGroupClick: (String) -> Unit,
+    onAddClick: () -> Unit,
     onCreateGroupClick: () -> Unit,
     onCreatePlaceClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -40,6 +41,7 @@ fun HomeScreen(
     HomeScreenContents(
         groups = uiState.groups,
         onGroupClick = onGroupClick,
+        onAddClick = onAddClick,
         onCreateGroupClick = onCreateGroupClick,
         onCreatePlaceClick = onCreatePlaceClick,
         modifier = modifier,
@@ -51,6 +53,7 @@ fun HomeScreen(
 fun HomeScreenContents(
     groups: List<GroupUiModel>,
     onGroupClick: (String) -> Unit,
+    onAddClick: () -> Unit,
     onCreateGroupClick: () -> Unit,
     onCreatePlaceClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -97,7 +100,7 @@ fun HomeScreenContents(
                 GroupView(
                     name = group.name,
                     onGroupClick = { onGroupClick("") },
-                    onAddClick = {},
+                    onAddClick = onAddClick,
                     images = group.images
                 )
             }
@@ -112,6 +115,7 @@ private fun HomeScreenContentsPreview() {
         HomeScreenContents(
             groups = DummyData.groups,
             onGroupClick = {},
+            onAddClick = {},
             onCreateGroupClick = {},
             onCreatePlaceClick = {},
         )

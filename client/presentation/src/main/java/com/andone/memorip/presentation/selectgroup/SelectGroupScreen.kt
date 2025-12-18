@@ -48,10 +48,15 @@ fun SelectGroupScreen(
         groups = groups,
         onFABClick = { showDialog = true },
         onGroupClick = {
-            /** TODO GROUP 선택 시 이전 화면으로 이동 및 데이터 전달 */
+            /* TODO GROUP 선택 시 이전 화면으로 이동 및 데이터 전달 */
             // 우선 popBackStack
             onBackClick()
             Log.d("UI TEST", "group ui model : $it")
+        },
+        onAddClick = {
+            /* TODO 새로 추가한 GROUP 선택 시 이전 화면으로 이동 및 데이터 전달 */
+            // 우선 popBackStack
+            onBackClick()
         },
         onBackClick = onBackClick,
         modifier = modifier
@@ -81,6 +86,7 @@ private fun SelectGroupContent(
     groups: List<GroupUiModel>,
     onFABClick: () -> Unit,
     onGroupClick: (GroupUiModel) -> Unit,
+    onAddClick: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -109,7 +115,7 @@ private fun SelectGroupContent(
                 GroupView(
                     name = group.name,
                     onGroupClick = { onGroupClick(group) },
-                    onAddClick = {},
+                    onAddClick = onAddClick,
                     images = group.images,
                 )
             }
@@ -123,7 +129,7 @@ private fun SelectGroupTopBar(onBackClick: () -> Unit) {
     TopAppBar(
         title = {
             Text(
-                text = stringResource(R.string.select_category_title),
+                text = stringResource(R.string.select_group_title),
                 style = LocalMemoripTypography.current.headline2
             )
         },

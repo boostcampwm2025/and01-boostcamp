@@ -7,6 +7,7 @@ import com.andone.memorip.navigation.Home
 
 fun EntryProviderScope<NavKey>.home(
     onGroupClick: (String) -> Unit,
+    onAddClick: () -> Unit,
     onCreateGroupClick: () -> Unit,
     onCreatePlaceClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -14,6 +15,7 @@ fun EntryProviderScope<NavKey>.home(
     entry<Home> {
         HomeScreen(
             onGroupClick = onGroupClick,
+            onAddClick = onAddClick,
             onCreateGroupClick = onCreateGroupClick,
             onCreatePlaceClick = onCreatePlaceClick,
             modifier = modifier
