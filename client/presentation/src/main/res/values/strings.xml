@@ -33,6 +33,7 @@
     <string name="place_create_category">카테고리</string>
     <string name="place_create_location">위치</string>
     <string name="place_create_group">그룹</string>
+    <string name="place_delete_image">사진 삭제</string>
 
     <!-- MainBottomBar -->
     <string name="main_bottom_bar_home">홈</string>
