@@ -147,7 +147,7 @@ private fun SelectGroupTopBar(onBackClick: () -> Unit) {
         navigationIcon = {
             IconButton(onClick = onBackClick) {
                 Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.back_ic),
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_back),
                     contentDescription = stringResource(R.string.select_group_back_button_description)
                 )
             }
