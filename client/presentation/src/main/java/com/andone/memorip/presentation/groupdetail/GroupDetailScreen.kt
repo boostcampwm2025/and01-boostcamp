@@ -26,6 +26,37 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun GroupDetailScreen(
+    onBackClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    // 임시 더미 데이터 생성
+    // todo: 실제 groupId를 가져와서 그룹 정보를 가져와야 함
+    val groupName = "Group1"
+    val dummyImages = remember {
+        List(30) { index ->
+            val randomHeight = (150..400).random()
+            val fixedWidth = 200
+            PlaceImageItem(
+                id = index,
+                url = "https://picsum.photos/id/${index + 1}/$fixedWidth/$randomHeight",
+                width = fixedWidth,
+                height = randomHeight
+            )
+        }
+    }
+
+    GroupDetailScreenContent(
+        groupName = groupName,
+        images = dummyImages,
+        onBackClick = onBackClick,
+        onSearchClick = { /* TODO: 검색 기능 구현 */ },
+        onMenuClick = { /* TODO: 메뉴 기능 구현 */ },
+        modifier = modifier
+    )
+}
+
+@Composable
+fun GroupDetailScreenContent(
     groupName: String,
     images: List<PlaceImageItem>,
     onBackClick: () -> Unit,
@@ -95,7 +126,7 @@ fun GroupDetailScreen(
 
 @Preview(name = "Gallery Tab Selected")
 @Composable
-private fun GroupDetailScreenGalleryPreview() {
+private fun GroupDetailScreenContentGalleryPreview() {
     MemoripTheme {
         val dummyImages = remember {
             List(30) { index ->
@@ -110,7 +141,7 @@ private fun GroupDetailScreenGalleryPreview() {
             }
         }
 
-        GroupDetailScreen(
+        GroupDetailScreenContent(
             groupName = "Group1",
             images = dummyImages,
             onBackClick = {},
@@ -123,7 +154,7 @@ private fun GroupDetailScreenGalleryPreview() {
 
 @Preview(name = "Map Tab Selected")
 @Composable
-private fun GroupDetailScreenMapPreview() {
+private fun GroupDetailScreenContentMapPreview() {
     MemoripTheme {
         val dummyImages = remember {
             List(30) { index ->
@@ -138,7 +169,7 @@ private fun GroupDetailScreenMapPreview() {
             }
         }
 
-        GroupDetailScreen(
+        GroupDetailScreenContent(
             groupName = "Group1",
             images = dummyImages,
             onBackClick = {},
