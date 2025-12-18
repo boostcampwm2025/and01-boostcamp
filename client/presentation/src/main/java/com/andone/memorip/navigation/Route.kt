@@ -10,6 +10,9 @@ data object Home : NavKey
 data object User : NavKey
 
 @Serializable
+data object SelectGroup: NavKey
+
+@Serializable
 data object PlaceCreate : NavKey
 
 @Serializable
