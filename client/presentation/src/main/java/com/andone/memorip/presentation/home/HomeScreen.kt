@@ -27,6 +27,7 @@ import com.andone.memorip.presentation.util.DummyData
 @Composable
 fun HomeScreen(
     onCreateGroupClick: () -> Unit,
+    onGroupClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     HomeScreenContents(

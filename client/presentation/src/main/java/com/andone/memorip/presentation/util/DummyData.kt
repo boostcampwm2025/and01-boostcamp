@@ -34,4 +34,15 @@ object DummyData {
         groupName = "크리스마스",
         content = "test content, test content, test content, test content\n test content, test content1\n test content, test content2\n test content, test content3\n test content, test content4\n test content, test content5\n test content, test content6\n test content, test content7\n test content, test content8\n test content, test content9\n test content, test content10\n test content, test content11\n test content, test content12\n test content, test content13\n test content, test content14\n test content, test content15"
     )
+
+    val dummyImages = List(30) { index ->
+        val randomHeight = (150..400).random()
+        val fixedWidth = 200
+        PlaceImageItem(
+            id = index,
+            url = "https://picsum.photos/id/${index + 1}/$fixedWidth/$randomHeight",
+            width = fixedWidth,
+            height = randomHeight
+        )
+    }
 }

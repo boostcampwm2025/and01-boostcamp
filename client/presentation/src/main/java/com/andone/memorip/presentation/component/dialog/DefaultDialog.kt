@@ -35,6 +35,7 @@ internal fun DefaultDialog(
     onCancelClick: () -> Unit,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
+    confirmEnabled: Boolean = true,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Dialog(onDismissRequest = onDismissRequest) {
@@ -71,7 +72,10 @@ internal fun DefaultDialog(
                             style = MemoripTheme.typography.label1
                         )
                     }
-                    TextButton(onClick = onConfirmClick) {
+                    TextButton(
+                        onClick = onConfirmClick,
+                        enabled = confirmEnabled
+                    ) {
                         Text(
                             text = stringResource(R.string.dialog_confirm_message),
                             color = MemoripTheme.colors.primary,

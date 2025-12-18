@@ -36,6 +36,7 @@ fun MemoripInputDialog(
         onCancelClick = onCancelClick,
         onDismissRequest = onDismissRequest,
         modifier = modifier,
+        confirmEnabled = value.isNotEmpty(),
     ) {
         TextField(
             value = value,
