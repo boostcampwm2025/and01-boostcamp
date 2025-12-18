@@ -127,7 +127,7 @@ private fun PlaceImageItemCard(
         modifier = modifier
             .fillMaxWidth()
             .aspectRatio(PlaceImagesBottomSheetDimens.ImageAspectRatio)
-            .clip(MemoripTheme.shapes.defaultCorner)
+            .clip(MemoripTheme.shapes.roundedSmall)
             .background(MemoripTheme.colors.offWhite)
     ) {
         AsyncImage(
