@@ -60,6 +60,7 @@ fun SelectCategoryScreen(
             }
         },
         onConfirmClick = onBackClick,
+        onBackClick = onBackClick,
         modifier = modifier
     )
 
@@ -88,6 +89,7 @@ private fun SelectCategoryContent(
     onShowDialog: () -> Unit,
     onCheckedChange: (id: Long, checked: Boolean) -> Unit,
     onConfirmClick: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -95,7 +97,8 @@ private fun SelectCategoryContent(
         topBar = {
             SelectCategoryTopBar(
                 checkEnabled = checkedList.isNotEmpty(),
-                onConfirmClick = onConfirmClick
+                onConfirmClick = onConfirmClick,
+                onBackClick = onBackClick
             )
         },
         floatingActionButton = {
@@ -134,7 +137,8 @@ private fun SelectCategoryContent(
 @Composable
 private fun SelectCategoryTopBar(
     checkEnabled: Boolean,
-    onConfirmClick: () -> Unit
+    onConfirmClick: () -> Unit,
+    onBackClick: () -> Unit
 ) {
     TopAppBar(
         title = {
@@ -144,10 +148,12 @@ private fun SelectCategoryTopBar(
             )
         },
         navigationIcon = {
-            Icon(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_back),
-                contentDescription = stringResource(R.string.select_category_back_button_description)
-            )
+            IconButton(onClick = onBackClick) {
+                Icon(
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_back),
+                    contentDescription = stringResource(R.string.select_group_back_button_description)
+                )
+            }
         },
         actions = {
             IconButton(
