@@ -29,8 +29,8 @@ import com.andone.memorip.presentation.util.DummyData
 
 @Composable
 fun HomeScreen(
-    onCreateGroupClick: () -> Unit,
     onGroupClick: (String) -> Unit,
+    onCreateGroupClick: () -> Unit,
     onCreatePlaceClick: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel(),
@@ -39,6 +39,7 @@ fun HomeScreen(
 
     HomeScreenContents(
         groups = uiState.groups,
+        onGroupClick = onGroupClick,
         onCreateGroupClick = onCreateGroupClick,
         onCreatePlaceClick = onCreatePlaceClick,
         modifier = modifier,
@@ -49,6 +50,7 @@ fun HomeScreen(
 @Composable
 fun HomeScreenContents(
     groups: List<GroupUiModel>,
+    onGroupClick: (String) -> Unit,
     onCreateGroupClick: () -> Unit,
     onCreatePlaceClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -94,7 +96,9 @@ fun HomeScreenContents(
             items(items = groups) { group ->
                 GroupView(
                     name = group.name,
-                    images = group.images,
+                    onGroupClick = { onGroupClick("") },
+                    onAddClick = {},
+                    images = group.images
                 )
             }
         }
@@ -104,32 +108,10 @@ fun HomeScreenContents(
 @Composable
 @Preview(showBackground = true)
 private fun HomeScreenContentsPreview() {
-    val groups = listOf(
-        GroupUiModel(
-            name = "강원도",
-            images = List(size = 8) { "" }
-        ),
-        GroupUiModel(
-            name = "부 산",
-            images = List(size = 4) { "" }
-        ),
-        GroupUiModel(
-            name = "",
-            images = emptyList()
-        ),
-        GroupUiModel(
-            name = "제주도",
-            images = List(size = 5) { "" }
-        ),
-        GroupUiModel(
-            name = "대구 ",
-            images = List(size = 1) { "" }
-        ),
-    )
-
     MemoripTheme {
         HomeScreenContents(
             groups = DummyData.groups,
+            onGroupClick = {},
             onCreateGroupClick = {},
             onCreatePlaceClick = {},
         )

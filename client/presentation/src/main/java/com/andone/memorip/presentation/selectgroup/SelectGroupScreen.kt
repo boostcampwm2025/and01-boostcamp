@@ -107,8 +107,10 @@ private fun SelectGroupContent(
             items(items = groups) { group ->
                 GroupView(
                     name = group.name,
+                    onGroupClick = {},
+                    onAddClick = {},
+                    modifier = Modifier.clickable { onGroupClick(group) },
                     images = group.images,
-                    modifier = Modifier.clickable { onGroupClick(group) }
                 )
             }
         }
