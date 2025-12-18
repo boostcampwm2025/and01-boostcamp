@@ -11,7 +11,6 @@ fun EntryProviderScope<NavKey>.home(
     onCreateGroupClick: () -> Unit,
     onGroupClick: (String) -> Unit,
     onCreatePlaceClick: () -> Unit,
-    onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     entry<Home> {
@@ -19,12 +18,7 @@ fun EntryProviderScope<NavKey>.home(
             onCreateGroupClick = onCreateGroupClick,
             onGroupClick = onGroupClick,
             onCreatePlaceClick = onCreatePlaceClick,
-            modifier
-        )
-    }
-    entry<PlaceCreate> {
-        PlaceCreateScreen(
-            onBackClick = onBackClick
+            modifier = modifier
         )
     }
 }
