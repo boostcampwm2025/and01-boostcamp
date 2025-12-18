@@ -5,12 +5,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.tooling.preview.Preview
-import com.andone.memorip.presentation.home.model.GroupItem
 import com.andone.memorip.presentation.home.component.BentoGridSpec.COLUMNS
 import com.andone.memorip.presentation.home.component.BentoGridSpec.RATIO
 import com.andone.memorip.presentation.home.component.BentoGridSpec.ROWS
+import com.andone.memorip.presentation.home.model.GroupItem
 import com.andone.memorip.presentation.home.model.Placed
 import com.andone.memorip.presentation.theme.MemoripTheme
 
