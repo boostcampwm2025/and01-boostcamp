@@ -54,7 +54,12 @@ fun MemoripNav(
 
             entry<User> { Text(text = "user") }
 
-            placeCreate(onBackClick = navigator::popBackStack)
+            placeCreate(
+                onCategoryClick = navigator::navigateToSelectCategory,
+                onLocationClick = navigator::navigateToSelectGroup,
+                onGroupClick = navigator::navigateToSelectGroup,
+                onBackClick = navigator::popBackStack
+            )
 
             selectGroup(onBackClick = navigator::popBackStack)
 

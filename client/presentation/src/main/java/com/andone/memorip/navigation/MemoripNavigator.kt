@@ -36,16 +36,17 @@ class MemoripNavigator(
         backStack.clear()
         backStack.add(tab.route)
     }
-
-    fun navigateToPlaceDetail(placeId: Int) = backStack.navigateToPlaceDetail(placeId)
+    fun navigateToCreatePlace() = backStack.navigateToPlaceCreate()
 
     fun navigateToSelectCategory() = backStack.navigateToSelectCategory()
+
+//    fun navigateToSelectLocation() = backStack.navigateToSelectLocation()
 
     fun navigateToSelectGroup() = backStack.navigateToSelectGroup()
 
     fun navigateToGroupDetail(groupId: String) = backStack.navigateToGroupDetail(groupId)
 
-    fun navigateToCreatePlace() = backStack.navigateToPlaceCreate()
+    fun navigateToPlaceDetail(placeId: Int) = backStack.navigateToPlaceDetail(placeId)
 
     fun popBackStack() = backStack.removeLastOrNull()
 }

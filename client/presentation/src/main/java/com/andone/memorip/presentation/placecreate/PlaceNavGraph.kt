@@ -11,11 +11,17 @@ fun NavBackStack<NavKey>.navigateToPlaceCreate() {
 }
 
 fun EntryProviderScope<NavKey>.placeCreate(
+    onCategoryClick: () -> Unit,
+    onLocationClick: () -> Unit,
+    onGroupClick: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     entry<PlaceCreate> {
         PlaceCreateScreen(
+            onCategoryClick = onCategoryClick,
+            onLocationClick = onLocationClick,
+            onGroupClick = onGroupClick,
             onBackClick = onBackClick,
             modifier = modifier
         )

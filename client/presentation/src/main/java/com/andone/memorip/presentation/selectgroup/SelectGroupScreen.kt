@@ -1,7 +1,6 @@
 package com.andone.memorip.presentation.selectgroup
 
 import android.util.Log
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -50,6 +49,8 @@ fun SelectGroupScreen(
         onFABClick = { showDialog = true },
         onGroupClick = {
             /** TODO GROUP 선택 시 이전 화면으로 이동 및 데이터 전달 */
+            // 우선 popBackStack
+            onBackClick()
             Log.d("UI TEST", "group ui model : $it")
         },
         onBackClick = onBackClick,
@@ -107,9 +108,8 @@ private fun SelectGroupContent(
             items(items = groups) { group ->
                 GroupView(
                     name = group.name,
-                    onGroupClick = {},
+                    onGroupClick = { onGroupClick(group) },
                     onAddClick = {},
-                    modifier = Modifier.clickable { onGroupClick(group) },
                     images = group.images,
                 )
             }
