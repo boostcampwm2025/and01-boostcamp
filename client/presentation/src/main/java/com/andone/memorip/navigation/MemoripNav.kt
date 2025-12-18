@@ -62,6 +62,7 @@ fun MemoripNav(
 
             groupDetail(
                 onNavigateBack = navigator::popBackStack,
+                onImageClick = navigator::navigateToPlaceDetail
 //                onCreatePlaceClick = {navigator.navigateToCreatePlace()},
             )
 

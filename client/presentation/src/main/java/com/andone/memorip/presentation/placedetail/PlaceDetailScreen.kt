@@ -31,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -204,8 +205,8 @@ private fun PlaceImagesSection(
                     .clip(MemoripTheme.shapes.roundedMedium)
                     .aspectRatio(IMAGE_ASPECT_RATIO)
                     .background(MemoripTheme.colors.offWhite),
-                placeholder = painterResource(R.drawable.ic_launcher_background),
-                error = painterResource(R.drawable.ic_launcher_background),
+                placeholder = ColorPainter(MemoripTheme.colors.offWhite),
+                error = ColorPainter(MemoripTheme.colors.offWhite),
                 contentScale = ContentScale.Crop
             )
         }

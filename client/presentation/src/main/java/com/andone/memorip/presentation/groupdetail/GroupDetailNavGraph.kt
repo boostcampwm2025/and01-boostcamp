@@ -12,11 +12,13 @@ fun NavBackStack<NavKey>.navigateToGroupDetail(groupId: String) {
 
 fun EntryProviderScope<NavKey>.groupDetail(
     onNavigateBack: () -> Unit,
+    onImageClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     entry<GroupDetail> { route ->
         GroupDetailScreen(
             onBackClick = onNavigateBack,
+            onImageClick = onImageClick,
             modifier = modifier
         )
     }

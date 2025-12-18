@@ -28,6 +28,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun GroupDetailScreen(
     onBackClick: () -> Unit,
+    onImageClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     // 임시 더미 데이터 생성
@@ -50,6 +51,7 @@ fun GroupDetailScreen(
         groupName = groupName,
         images = dummyImages,
         onBackClick = onBackClick,
+        onImageClick = onImageClick,
         onSearchClick = { /* TODO: 검색 기능 구현 */ },
         onMenuClick = { /* TODO: 메뉴 기능 구현 */ },
         modifier = modifier
@@ -61,6 +63,7 @@ fun GroupDetailScreenContent(
     groupName: String,
     images: List<PlaceImageItem>,
     onBackClick: () -> Unit,
+    onImageClick: (Int) -> Unit,
     onSearchClick: () -> Unit,
     onMenuClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -116,8 +119,10 @@ fun GroupDetailScreenContent(
                 when (page) {
                     0 -> GalleryTab(
                         images = images,
+                        onImageClick = onImageClick,
                         modifier = Modifier.fillMaxSize()
                     )
+
                     1 -> MapTab(modifier = Modifier.fillMaxSize())
                 }
             }
@@ -133,6 +138,7 @@ private fun GroupDetailScreenContentGalleryPreview() {
             groupName = "Group1",
             images = DummyData.dummyImages,
             onBackClick = {},
+            onImageClick = {},
             onSearchClick = {},
             onMenuClick = {},
             initialPage = 0
@@ -148,6 +154,7 @@ private fun GroupDetailScreenContentMapPreview() {
             groupName = "Group1",
             images = DummyData.dummyImages,
             onBackClick = {},
+            onImageClick = {},
             onSearchClick = {},
             onMenuClick = {},
             initialPage = 1
