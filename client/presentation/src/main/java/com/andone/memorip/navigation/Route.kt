@@ -19,6 +19,9 @@ data object SelectGroup : NavKey
 data object SelectCategory : NavKey
 
 @Serializable
+data object SelectLocation : NavKey
+
+@Serializable
 data class GroupDetail(val groupId: String) : NavKey
 
 @Serializable

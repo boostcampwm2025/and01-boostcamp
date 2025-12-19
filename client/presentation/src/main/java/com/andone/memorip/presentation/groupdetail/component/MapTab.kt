@@ -17,8 +17,7 @@ import com.andone.memorip.presentation.component.ErrorFullScreen
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
-import com.naver.maps.geometry.LatLng
-import com.naver.maps.geometry.LatLngBounds
+import com.andone.memorip.presentation.util.calculateBounds
 import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.compose.CameraPositionState
 import com.naver.maps.map.compose.ExperimentalNaverMapApi
@@ -114,18 +113,6 @@ private fun AdjustCameraToPlaces(
             cameraPositionState.move(cameraUpdate)
         }
     }
-}
-
-private fun calculateBounds(places: List<Place>): LatLngBounds {
-    val minLat = places.minOf { it.latitude }
-    val maxLat = places.maxOf { it.latitude }
-    val minLng = places.minOf { it.longitude }
-    val maxLng = places.maxOf { it.longitude }
-
-    return LatLngBounds(
-        LatLng(minLat, minLng),
-        LatLng(maxLat, maxLng)
-    )
 }
 
 @Preview(name = "Map Tab - Normal", showBackground = true)

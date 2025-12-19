@@ -28,7 +28,6 @@ import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.GroupView
 import com.andone.memorip.presentation.component.dialog.MemoripInputDialog
 import com.andone.memorip.presentation.home.model.GroupUiModel
-import com.andone.memorip.presentation.theme.LocalMemoripColors
 import com.andone.memorip.presentation.theme.LocalMemoripTypography
 import com.andone.memorip.presentation.theme.MemoripPadding.PaddingMedium
 import com.andone.memorip.presentation.theme.MemoripPadding.PaddingXSmall
@@ -142,9 +141,9 @@ private fun SelectGroupTopBar(onBackClick: () -> Unit) {
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = LocalMemoripColors.current.offWhite,
-            navigationIconContentColor = LocalMemoripColors.current.black,
-            titleContentColor = LocalMemoripColors.current.black
+            containerColor = MemoripTheme.colors.offWhite,
+            navigationIconContentColor = MemoripTheme.colors.black,
+            titleContentColor = MemoripTheme.colors.black
         )
     )
 }

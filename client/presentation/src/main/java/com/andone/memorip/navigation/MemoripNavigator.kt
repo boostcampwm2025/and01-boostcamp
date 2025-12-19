@@ -11,6 +11,7 @@ import com.andone.memorip.presentation.placecreate.navigateToPlaceCreate
 import com.andone.memorip.presentation.placedetail.navigateToPlaceDetail
 import com.andone.memorip.presentation.selectcategory.navigateToSelectCategory
 import com.andone.memorip.presentation.selectgroup.navigateToSelectGroup
+import com.andone.memorip.presentation.selectlocation.navigateToSelectLocation
 import kotlinx.collections.immutable.toImmutableList
 
 @Stable
@@ -37,12 +38,13 @@ class MemoripNavigator(
         backStack.add(tab.route)
     }
 
-    fun navigateToSelectCategory() = backStack.navigateToSelectCategory()
     fun navigateToPlaceCreate() = backStack.navigateToPlaceCreate()
 
-//    fun navigateToSelectLocation() = backStack.navigateToSelectLocation()
+    fun navigateToSelectCategory() = backStack.navigateToSelectCategory()
 
     fun navigateToSelectGroup() = backStack.navigateToSelectGroup()
+
+    fun navigateToSelectLocation() = backStack.navigateToSelectLocation()
 
     fun navigateToGroupDetail(groupId: String) = backStack.navigateToGroupDetail(groupId)
 
