@@ -31,20 +31,21 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import com.andone.memorip.navigation.PlaceDetailRoute
+import com.andone.memorip.navigation.PlaceDetail
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.placedetail.PlaceDetailScreenConstants.IMAGE_ASPECT_RATIO
 import com.andone.memorip.presentation.placedetail.component.ImageDialog
 import com.andone.memorip.presentation.placedetail.component.PlaceDetailInfoSection
-import com.andone.memorip.presentation.placedetail.model.PlaceDetail
 import com.andone.memorip.presentation.placedetail.model.PlaceDetailAction
 import com.andone.memorip.presentation.placedetail.model.PlaceDetailEvent
+import com.andone.memorip.presentation.placedetail.model.PlaceUiModel
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -58,7 +59,7 @@ private object PlaceDetailScreenConstants {
 
 @Composable
 fun PlaceDetailScreen(
-    route: PlaceDetailRoute,
+    route: PlaceDetail,
     onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PlaceDetailViewModel = PlaceDetailViewModel(route) // TODO: hiltViewModel() 적용
@@ -80,7 +81,7 @@ fun PlaceDetailScreen(
 
 @Composable
 private fun PlaceDetailScreen(
-    place: PlaceDetail,
+    place: PlaceUiModel,
     onAction: (PlaceDetailAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -204,8 +205,8 @@ private fun PlaceImagesSection(
                     .clip(MemoripTheme.shapes.roundedMedium)
                     .aspectRatio(IMAGE_ASPECT_RATIO)
                     .background(MemoripTheme.colors.offWhite),
-                placeholder = painterResource(R.drawable.ic_launcher_background),
-                error = painterResource(R.drawable.ic_launcher_background),
+                placeholder = ColorPainter(MemoripTheme.colors.offWhite),
+                error = ColorPainter(MemoripTheme.colors.offWhite),
                 contentScale = ContentScale.Crop
             )
         }

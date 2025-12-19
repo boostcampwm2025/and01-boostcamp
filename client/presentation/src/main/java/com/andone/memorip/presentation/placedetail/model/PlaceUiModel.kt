@@ -3,7 +3,7 @@ package com.andone.memorip.presentation.placedetail.model
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
-data class PlaceDetail(
+data class PlaceUiModel(
     val title: String = "",
     val category: String = "",
     val locationName: String = "",

@@ -6,15 +6,17 @@ import androidx.navigation3.runtime.NavKey
 import com.andone.memorip.navigation.Home
 
 fun EntryProviderScope<NavKey>.home(
-    onCreateGroupClick: () -> Unit,
     onGroupClick: (String) -> Unit,
+    onAddClick: () -> Unit,
+    onCreateGroupClick: () -> Unit,
     onCreatePlaceClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     entry<Home> {
         HomeScreen(
-            onCreateGroupClick = onCreateGroupClick,
             onGroupClick = onGroupClick,
+            onAddClick = onAddClick,
+            onCreateGroupClick = onCreateGroupClick,
             onCreatePlaceClick = onCreatePlaceClick,
             modifier = modifier
         )

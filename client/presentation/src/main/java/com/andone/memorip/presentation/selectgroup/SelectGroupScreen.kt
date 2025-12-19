@@ -1,7 +1,6 @@
 package com.andone.memorip.presentation.selectgroup
 
 import android.util.Log
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,7 +15,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -36,7 +34,7 @@ import com.andone.memorip.presentation.theme.MemoripPadding.PaddingMedium
 import com.andone.memorip.presentation.theme.MemoripPadding.PaddingXSmall
 import com.andone.memorip.presentation.theme.MemoripSpace.SpaceXSmall
 import com.andone.memorip.presentation.theme.MemoripTheme
-import com.andone.memorip.presentation.util.dummydata.DummyData.groups
+import com.andone.memorip.presentation.util.DummyData
 
 @Composable
 fun SelectGroupScreen(
@@ -44,14 +42,21 @@ fun SelectGroupScreen(
     modifier: Modifier = Modifier
 ) {
     var showDialog by remember { mutableStateOf(false) }
-    val groups = remember { groups }
+    val groups = remember { DummyData.groups }
 
     SelectGroupContent(
         groups = groups,
         onFABClick = { showDialog = true },
         onGroupClick = {
-            /** TODO GROUP 선택 시 이전 화면으로 이동 및 데이터 전달 */
+            /* TODO GROUP 선택 시 이전 화면으로 이동 및 데이터 전달 */
+            // 우선 popBackStack
+            onBackClick()
             Log.d("UI TEST", "group ui model : $it")
+        },
+        onAddClick = {
+            /* TODO 새로 추가한 GROUP 선택 시 이전 화면으로 이동 및 데이터 전달 */
+            // 우선 popBackStack
+            onBackClick()
         },
         onBackClick = onBackClick,
         modifier = modifier
@@ -81,6 +86,7 @@ private fun SelectGroupContent(
     groups: List<GroupUiModel>,
     onFABClick: () -> Unit,
     onGroupClick: (GroupUiModel) -> Unit,
+    onAddClick: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -108,8 +114,9 @@ private fun SelectGroupContent(
             items(items = groups) { group ->
                 GroupView(
                     name = group.name,
+                    onGroupClick = { onGroupClick(group) },
+                    onAddClick = onAddClick,
                     images = group.images,
-                    modifier = Modifier.clickable { onGroupClick(group) }
                 )
             }
         }
@@ -122,7 +129,7 @@ private fun SelectGroupTopBar(onBackClick: () -> Unit) {
     TopAppBar(
         title = {
             Text(
-                text = stringResource(R.string.select_category_title),
+                text = stringResource(R.string.select_group_title),
                 style = LocalMemoripTypography.current.headline2
             )
         },

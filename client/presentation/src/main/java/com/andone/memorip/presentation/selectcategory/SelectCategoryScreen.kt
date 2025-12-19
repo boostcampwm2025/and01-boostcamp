@@ -32,7 +32,7 @@ import com.andone.memorip.presentation.theme.LocalMemoripColors
 import com.andone.memorip.presentation.theme.LocalMemoripTypography
 import com.andone.memorip.presentation.theme.MemoripPadding.PaddingMedium
 import com.andone.memorip.presentation.theme.MemoripTheme
-import com.andone.memorip.presentation.util.dummydata.DummyData.categories
+import com.andone.memorip.presentation.util.DummyData
 
 private object Constants {
     val MAX_SELECTABLE_COUNT = 3
@@ -43,9 +43,9 @@ fun SelectCategoryScreen(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val categories = remember{ categories }
-    val checkedSet = remember{ mutableStateSetOf<Long>() }
-    var showDialog by remember{ mutableStateOf(false) }
+    val categories = remember { DummyData.categories }
+    val checkedSet = remember { mutableStateSetOf<Long>() }
+    var showDialog by remember { mutableStateOf(false) }
 
     SelectCategoryContent(
         categories = categories,
@@ -60,6 +60,7 @@ fun SelectCategoryScreen(
             }
         },
         onConfirmClick = onBackClick,
+        onBackClick = onBackClick,
         modifier = modifier
     )
 
@@ -69,7 +70,7 @@ fun SelectCategoryScreen(
             onConfirmClick = { category, color ->
                 val newCategory = Category(
                     id = (categories.maxOfOrNull { it.id } ?: -2L) + 1L,
-                    category =  category,
+                    category = category,
                     color = color
                 )
                 categories.add(newCategory)
@@ -88,6 +89,7 @@ private fun SelectCategoryContent(
     onShowDialog: () -> Unit,
     onCheckedChange: (id: Long, checked: Boolean) -> Unit,
     onConfirmClick: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -95,7 +97,8 @@ private fun SelectCategoryContent(
         topBar = {
             SelectCategoryTopBar(
                 checkEnabled = checkedList.isNotEmpty(),
-                onConfirmClick = onConfirmClick
+                onConfirmClick = onConfirmClick,
+                onBackClick = onBackClick
             )
         },
         floatingActionButton = {
@@ -134,7 +137,8 @@ private fun SelectCategoryContent(
 @Composable
 private fun SelectCategoryTopBar(
     checkEnabled: Boolean,
-    onConfirmClick: () -> Unit
+    onConfirmClick: () -> Unit,
+    onBackClick: () -> Unit
 ) {
     TopAppBar(
         title = {
@@ -144,10 +148,12 @@ private fun SelectCategoryTopBar(
             )
         },
         navigationIcon = {
-            Icon(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_back),
-                contentDescription = stringResource(R.string.select_category_back_button_description)
-            )
+            IconButton(onClick = onBackClick) {
+                Icon(
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_back),
+                    contentDescription = stringResource(R.string.select_group_back_button_description)
+                )
+            }
         },
         actions = {
             IconButton(

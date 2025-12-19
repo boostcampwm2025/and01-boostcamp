@@ -1,6 +1,6 @@
 package com.andone.memorip.presentation.placedetail.model
 
 data class PlaceDetailUiState(
-    val place: PlaceDetail = PlaceDetail(),
+    val place: PlaceUiModel = PlaceUiModel(),
     val isLoading: Boolean = true
 )

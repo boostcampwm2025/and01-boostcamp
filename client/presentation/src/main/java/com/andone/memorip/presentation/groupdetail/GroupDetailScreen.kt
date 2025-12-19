@@ -28,7 +28,6 @@ import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.groupdetail.component.GalleryTab
 import com.andone.memorip.presentation.groupdetail.component.GroupDetailAppBar
 import com.andone.memorip.presentation.groupdetail.component.MapTab
-import com.andone.memorip.presentation.model.ImageItem
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
@@ -45,6 +44,7 @@ private object MarkerImageConstants {
 @Composable
 fun GroupDetailScreen(
     onBackClick: () -> Unit,
+    onImageClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val groupName = "Group1"
@@ -53,6 +53,7 @@ fun GroupDetailScreen(
         groupName = groupName,
         places = DummyData.places,
         onBackClick = onBackClick,
+        onImageClick = onImageClick,
         onSearchClick = { /* TODO: 검색 기능 구현 */ },
         onMenuClick = { /* TODO: 메뉴 기능 구현 */ },
         modifier = modifier
@@ -64,6 +65,7 @@ fun GroupDetailScreenContent(
     groupName: String,
     places: List<Place>,
     onBackClick: () -> Unit,
+    onImageClick: (Int) -> Unit,
     onSearchClick: () -> Unit,
     onMenuClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -76,7 +78,7 @@ fun GroupDetailScreenContent(
     )
 
     var selectedTabIndex by remember { mutableIntStateOf(initialPage) }
-    
+
     val markerImages = remember { mutableStateMapOf<String, Bitmap>() }
 
     LaunchedEffect(places) {
@@ -139,8 +141,10 @@ fun GroupDetailScreenContent(
             when (selectedTabIndex) {
                 0 -> GalleryTab(
                     places = places,
+                    onImageClick = onImageClick,
                     modifier = Modifier.fillMaxSize()
                 )
+
                 1 -> MapTab(
                     places = places,
                     markerImages = markerImages,
@@ -159,6 +163,7 @@ private fun GroupDetailScreenContentGalleryPreview() {
             groupName = "Group1",
             places = DummyData.places,
             onBackClick = {},
+            onImageClick = {},
             onSearchClick = {},
             onMenuClick = {},
             initialPage = 0
@@ -174,6 +179,7 @@ private fun GroupDetailScreenContentMapPreview() {
             groupName = "Group1",
             places = DummyData.places,
             onBackClick = {},
+            onImageClick = {},
             onSearchClick = {},
             onMenuClick = {},
             initialPage = 1

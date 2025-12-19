@@ -1,6 +1,7 @@
 package com.andone.memorip.presentation.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
@@ -11,18 +12,15 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.model.ImageItem
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -36,6 +34,7 @@ private object StaggeredGridDimens {
 @Composable
 fun MemoripStaggeredGrid(
     images: List<ImageItem>,
+    onImageClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyVerticalStaggeredGrid(
@@ -50,7 +49,8 @@ fun MemoripStaggeredGrid(
             ) { image ->
                 StaggeredImageItem(
                     imageUrl = image.url,
-                    aspectRatio = image.aspectRatio
+                    aspectRatio = image.aspectRatio,
+                    onImageClick = { onImageClick(image.id) }
                 )
             }
         }
@@ -61,13 +61,18 @@ fun MemoripStaggeredGrid(
 private fun StaggeredImageItem(
     imageUrl: String,
     aspectRatio: Float,
+    onImageClick: () -> Unit,
     modifier: Modifier = Modifier,
     cornerRadius: Dp = StaggeredGridDimens.STAGGERED_GRID_IMAGE_CORNER_RADIUS,
     contentDescription: String? = null
 ) {
-    val description = contentDescription ?: stringResource(R.string.staggered_grid_image_content_description)
     Box(
         modifier = modifier
+            .clickable(
+                interactionSource = null,
+                indication = null,
+                onClick = onImageClick
+            )
             .fillMaxWidth()
             .aspectRatio(aspectRatio)
             .clip(RoundedCornerShape(cornerRadius))
@@ -89,7 +94,10 @@ private fun StaggeredImageItem(
 @Composable
 private fun MemoripStaggeredGridPreview() {
     MemoripTheme {
-        MemoripStaggeredGrid(images = DummyData.imageItems)
+        MemoripStaggeredGrid(
+            images = DummyData.imageItems,
+            onImageClick = {}
+        )
     }
 }
 
@@ -99,7 +107,8 @@ private fun StaggeredImageItemPreview() {
     MemoripTheme {
         StaggeredImageItem(
             imageUrl = "https://picsum.photos/id/1/200/300",
-            aspectRatio = 1f
+            aspectRatio = 1f,
+            onImageClick = {}
         )
     }
 }

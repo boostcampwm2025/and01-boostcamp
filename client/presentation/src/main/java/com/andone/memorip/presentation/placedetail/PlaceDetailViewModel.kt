@@ -3,7 +3,7 @@ package com.andone.memorip.presentation.placedetail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.andone.memorip.navigation.PlaceDetailRoute
+import com.andone.memorip.navigation.PlaceDetail
 import com.andone.memorip.presentation.placedetail.model.PlaceDetailAction
 import com.andone.memorip.presentation.placedetail.model.PlaceDetailEvent
 import com.andone.memorip.presentation.placedetail.model.PlaceDetailUiState
@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class PlaceDetailViewModel(
-    route: PlaceDetailRoute
+    route: PlaceDetail
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(PlaceDetailUiState())
@@ -27,7 +27,7 @@ class PlaceDetailViewModel(
     val uiEvent = _uiEvent.receiveAsFlow()
 
     init {
-        loadPlaceDetail(route.id)
+        loadPlaceDetail(route.placeId)
     }
 
     fun onAction(action: PlaceDetailAction) {
@@ -36,7 +36,7 @@ class PlaceDetailViewModel(
         }
     }
 
-    fun loadPlaceDetail(id: Long) {
+    fun loadPlaceDetail(id: Int) {
         // 장소 상세 불러오기 api 추가될 예정
         // 우선 더미데이터 사용
         viewModelScope.launch {

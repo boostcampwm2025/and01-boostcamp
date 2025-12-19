@@ -13,6 +13,7 @@ import com.andone.memorip.presentation.util.DummyData
 @Composable
 fun GalleryTab(
     places: List<Place>,
+    onImageClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val thumbnailImages = remember(places) {
@@ -20,6 +21,7 @@ fun GalleryTab(
     }
     MemoripStaggeredGrid(
         images = thumbnailImages,
+        onImageClick = onImageClick,
         modifier = modifier
     )
 }
@@ -30,6 +32,7 @@ private fun GalleryTabPreview() {
     MemoripTheme {
         GalleryTab(
             places = DummyData.places,
+            onImageClick = {},
             modifier = Modifier.fillMaxSize()
         )
     }

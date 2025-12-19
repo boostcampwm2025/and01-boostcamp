@@ -6,8 +6,11 @@ import androidx.compose.runtime.remember
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.rememberNavBackStack
-import com.andone.memorip.presentation.placedetail.navigateToPlaceDetail
 import com.andone.memorip.presentation.groupdetail.navigateToGroupDetail
+import com.andone.memorip.presentation.placecreate.navigateToPlaceCreate
+import com.andone.memorip.presentation.placedetail.navigateToPlaceDetail
+import com.andone.memorip.presentation.selectcategory.navigateToSelectCategory
+import com.andone.memorip.presentation.selectgroup.navigateToSelectGroup
 import kotlinx.collections.immutable.toImmutableList
 
 @Stable
@@ -34,31 +37,18 @@ class MemoripNavigator(
         backStack.add(tab.route)
     }
 
-    fun navigateToPlaceDetail(id: Long) = backStack.navigateToPlaceDetail(id)
+    fun navigateToSelectCategory() = backStack.navigateToSelectCategory()
+    fun navigateToPlaceCreate() = backStack.navigateToPlaceCreate()
 
-    fun navigateToSelectCategory() = addStack(SelectCategory)
+//    fun navigateToSelectLocation() = backStack.navigateToSelectLocation()
 
-    fun navigateToSelectGroup() = addStack(SelectGroup)
+    fun navigateToSelectGroup() = backStack.navigateToSelectGroup()
 
     fun navigateToGroupDetail(groupId: String) = backStack.navigateToGroupDetail(groupId)
 
-    fun navigateToCreatePlace(){
-        backStack.add(PlaceCreate)
-    }
-
-    fun navigateToRoute(route: NavKey) {
-        if (currentTab?.route == route) return
-
-        backStack.add(route)
-    }
+    fun navigateToPlaceDetail(placeId: Int) = backStack.navigateToPlaceDetail(placeId)
 
     fun popBackStack() = backStack.removeLastOrNull()
-
-    private fun addStack(route: NavKey) {
-        if (currentTab?.route == route) return
-
-        backStack.add(route)
-    }
 }
 
 @Composable

@@ -45,10 +45,16 @@ private object PictureSetting {
 
 @Composable
 fun PlaceCreateScreen(
+    onCategoryClick: () -> Unit,
+    onLocationClick: () -> Unit,
+    onGroupClick: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     PlaceCreateScreenContents(
+        onCategoryClick = onCategoryClick,
+        onLocationClick = onLocationClick,
+        onGroupClick = onGroupClick,
         onBackClick = onBackClick,
         modifier = modifier,
     )
@@ -57,6 +63,9 @@ fun PlaceCreateScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlaceCreateScreenContents(
+    onCategoryClick: () -> Unit,
+    onLocationClick: () -> Unit,
+    onGroupClick: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -156,19 +165,19 @@ fun PlaceCreateScreenContents(
                 label = stringResource(R.string.place_create_category),
                 value = "",
                 leadingIcon = painterResource(R.drawable.ic_tag),
-                onClick = { }
+                onClick = onCategoryClick
             )
             SelectRow(
                 label = stringResource(R.string.place_create_location),
                 value = "",
                 leadingIcon = painterResource(R.drawable.ic_location_on),
-                onClick = { }
+                onClick = onLocationClick
             )
             SelectRow(
                 label = stringResource(R.string.place_create_group),
                 value = "",
                 leadingIcon = painterResource(R.drawable.ic_folder),
-                onClick = { }
+                onClick = onGroupClick
             )
         }
     }
@@ -179,6 +188,9 @@ fun PlaceCreateScreenContents(
 private fun PlaceCreateScreenContentsPreview() {
     MemoripTheme {
         PlaceCreateScreenContents(
+            onCategoryClick = {},
+            onLocationClick = {},
+            onGroupClick = {},
             onBackClick = {}
         )
     }
