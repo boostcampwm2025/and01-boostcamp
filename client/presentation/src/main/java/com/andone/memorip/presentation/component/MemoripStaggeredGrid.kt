@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,7 +23,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.andone.memorip.presentation.R
-import com.andone.memorip.presentation.groupdetail.model.PlaceImageItem
+import com.andone.memorip.presentation.model.ImageItem
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
@@ -34,7 +35,7 @@ private object StaggeredGridDimens {
 
 @Composable
 fun MemoripStaggeredGrid(
-    images: List<PlaceImageItem>,
+    images: List<ImageItem>,
     modifier: Modifier = Modifier
 ) {
     LazyVerticalStaggeredGrid(
@@ -88,7 +89,7 @@ private fun StaggeredImageItem(
 @Composable
 private fun MemoripStaggeredGridPreview() {
     MemoripTheme {
-        MemoripStaggeredGrid(images = DummyData.dummyImages)
+        MemoripStaggeredGrid(images = DummyData.imageItems)
     }
 }
 

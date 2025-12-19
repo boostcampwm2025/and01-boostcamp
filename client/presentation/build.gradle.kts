@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
@@ -16,6 +18,9 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        // Naver Map Key 주입
+        manifestPlaceholders["NAVER_MAP_NCP_KEY_ID"] = getLocalProperty("NAVER_MAP_NCP_KEY_ID")
     }
 
     buildTypes {
@@ -73,4 +78,17 @@ dependencies {
     // Coil
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
+
+    // Naver Map
+    implementation(libs.naver.map.sdk)
+    implementation(libs.naver.map.compose)
+    implementation(libs.naver.map.location)
+}
+
+fun getLocalProperty(propertyKey: String): String {
+    val properties = gradleLocalProperties(rootDir, providers)
+    return properties.getProperty(propertyKey) ?: run {
+        println("Warning: $propertyKey not found in local.properties")
+        ""
+    }
 }
