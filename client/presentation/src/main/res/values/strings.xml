@@ -27,6 +27,10 @@
     <string name="select_category_confirm_button_description">카테고리 추가 확인 버튼</string>
     <string name="select_category_create_category_button_description">카테고리 추가 버튼</string>
 
+    <!-- GroupView-->
+    <string name="group_view_default_name">기본 그룹</string>
+    <string name="group_view_add_place">장소를 추가해주세요</string>
+
     <!-- SelectGroupScreen -->
     <string name="select_group_back_button_description">뒤로 가기 버튼</string>
     <string name="select_group_title">그룹 선택</string>
@@ -41,6 +45,7 @@
     <string name="groupdetail_back_button_content_description">뒤로 가기</string>
     <string name="groupdetail_menu_button_content_description">메뉴</string>
     <string name="groupdetail_search_button_content_description">검색</string>
+
     <!-- PlaceCreateScreen -->
     <string name="place_create_title">Place 추가</string>
     <string name="place_create_back_content_description">뒤로가기</string>
