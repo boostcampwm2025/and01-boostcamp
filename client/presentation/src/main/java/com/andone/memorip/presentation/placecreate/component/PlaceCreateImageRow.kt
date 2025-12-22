@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.placecreate.component
 
+import android.net.Uri
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -9,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import coil3.Uri
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -43,12 +43,21 @@ fun PlaceCreateImageRow(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
-private fun PlaceCreateImageRow(){
+private fun PlaceCreateImageRowPreview() {
+    val previewUris = listOf(
+        Uri.parse("content://preview/image1"),
+        Uri.parse("content://preview/image2"),
+        Uri.parse("content://preview/image3")
+    )
+
     MemoripTheme {
         PlaceCreateImageRow(
-
+            selectedImages = previewUris,
+            maxCount = 10,
+            onRemoveImage = {},
+            onAddImageClick = {}
         )
     }
 }

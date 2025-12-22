@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.placecreate.component
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,30 +21,32 @@ fun PlaceCreateContentSection(
     onTitleChange: (String) -> Unit,
     onContentChange: (String) -> Unit
 ) {
-    Text(
-        text = stringResource(R.string.place_create_content_title),
-        style = MemoripTheme.typography.title1
-    )
-    MemoripInputBox(
-        label = stringResource(R.string.place_create_content_title),
-        value = title,
-        placeholder = stringResource(R.string.place_create_title_input),
-        onValueChange = onTitleChange,
-        onClear = { onTitleChange("") },
-        height = MemoripHeight.TextBoxDefault
-    )
+    Column {
+        Text(
+            text = stringResource(R.string.place_create_content_title),
+            style = MemoripTheme.typography.title1
+        )
+        MemoripInputBox(
+            label = stringResource(R.string.place_create_content_title),
+            value = title,
+            placeholder = stringResource(R.string.place_create_title_input),
+            onValueChange = onTitleChange,
+            onClear = { onTitleChange("") },
+            height = MemoripHeight.TextBoxDefault
+        )
 
-    Text(
-        text = stringResource(R.string.place_create_content),
-        style = MemoripTheme.typography.title1
-    )
-    MemoripInputBox(
-        label = stringResource(R.string.place_create_content),
-        value = content,
-        placeholder = stringResource(R.string.place_create_content_input),
-        onValueChange = onContentChange,
-        onClear = { onContentChange("") }
-    )
+        Text(
+            text = stringResource(R.string.place_create_content),
+            style = MemoripTheme.typography.title1
+        )
+        MemoripInputBox(
+            label = stringResource(R.string.place_create_content),
+            value = content,
+            placeholder = stringResource(R.string.place_create_content_input),
+            onValueChange = onContentChange,
+            onClear = { onContentChange("") }
+        )
+    }
 }
 
 @Preview
