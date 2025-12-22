@@ -32,6 +32,7 @@ import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.MemoripInputBox
 import com.andone.memorip.presentation.placecreate.PictureSetting.MAX_PICTURE_COUNT
 import com.andone.memorip.presentation.placecreate.component.ImageCountButton
+import com.andone.memorip.presentation.placecreate.component.PlaceCreateTopBar
 import com.andone.memorip.presentation.placecreate.component.SelectRow
 import com.andone.memorip.presentation.placecreate.component.SelectedImageItem
 import com.andone.memorip.presentation.theme.MemoripHeight
@@ -85,25 +86,10 @@ fun PlaceCreateScreenContents(
     Scaffold(
         modifier = modifier,
         topBar = {
-            CenterAlignedTopAppBar(
-                title = { Text(text = stringResource(R.string.place_create_title)) },
-                navigationIcon = {
-                    IconButton(onClick = onBackClick) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_outline_arrow_back),
-                            contentDescription = stringResource(R.string.place_create_back_content_description)
-                        )
-                    }
-                },
-                actions = {
-                    IconButton(onClick = {}, enabled = false) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_check),
-                            contentDescription = stringResource(R.string.place_create_check_content_description)
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = MemoripTheme.colors.primaryContainer)
+            PlaceCreateTopBar(
+                onBackClick = onBackClick,
+                onConfirmClick = { },
+                confirmEnabled = false
             )
         }
     ) { innerPadding ->
