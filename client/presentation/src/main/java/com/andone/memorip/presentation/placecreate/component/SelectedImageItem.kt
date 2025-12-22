@@ -22,7 +22,7 @@ import com.andone.memorip.presentation.theme.MemoripIconSize
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.R
 
-private object MemoripOffset {
+private object IconOffset {
     val DeleteIcon = DpOffset(1.dp, (-1).dp)
 }
 
@@ -61,8 +61,8 @@ fun SelectedImageItem(
                 .align(Alignment.TopEnd)
                 .size(size = MemoripIconSize.IconSizeMedium)
                 .offset(
-                    x = MemoripOffset.DeleteIcon.x,
-                    y = MemoripOffset.DeleteIcon.y
+                    x = IconOffset.DeleteIcon.x,
+                    y = IconOffset.DeleteIcon.y
                 )
         ) {
             Icon(

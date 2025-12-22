@@ -34,7 +34,10 @@ fun GroupView(
         ),
         verticalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXSmall)
     ) {
-        Text(text = name.ifBlank { stringResource(R.string.group_view_default_name) })
+        Text(
+            text = name.ifBlank { stringResource(R.string.group_view_default_name) },
+            style = MemoripTheme.typography.title1
+        )
 
         if (images.isEmpty()) {
             EmptyGroupPlaceholder(onClick = onAddClick)
