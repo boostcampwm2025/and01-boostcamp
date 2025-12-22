@@ -13,6 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
+import androidx.core.net.toUri
 
 @Composable
 fun PlaceCreateImageRow(
@@ -23,7 +24,7 @@ fun PlaceCreateImageRow(
     modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = modifier.horizontalScroll(rememberScrollState()),
+        modifier = modifier.horizontalScroll(state = rememberScrollState()),
         horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceSmall),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -47,9 +48,9 @@ fun PlaceCreateImageRow(
 @Composable
 private fun PlaceCreateImageRowPreview() {
     val previewUris = listOf(
-        Uri.parse("content://preview/image1"),
-        Uri.parse("content://preview/image2"),
-        Uri.parse("content://preview/image3")
+        "content://preview/image1".toUri(),
+        "content://preview/image2".toUri(),
+        "content://preview/image3".toUri()
     )
 
     MemoripTheme {

@@ -56,8 +56,8 @@ fun PlaceCreateScreenContents(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var title by remember { mutableStateOf("") }
-    var content by remember { mutableStateOf("") }
+    var title by remember { mutableStateOf(value = "") }
+    var content by remember { mutableStateOf(value = "") }
     val selectedImages = remember { mutableStateListOf<Uri>() }
     val remain = MAX_PICTURE_COUNT - selectedImages.size
 
@@ -81,14 +81,14 @@ fun PlaceCreateScreenContents(
     ) { innerPadding ->
         Column(
             modifier = Modifier
-                .padding(innerPadding)
-                .padding(MemoripPadding.PaddingXSmall),
+                .padding(paddingValues = innerPadding)
+                .padding(all = MemoripPadding.PaddingXSmall),
             verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceSmall)
         ) {
             PlaceCreateImageRow(
                 selectedImages = selectedImages,
                 maxCount = MAX_PICTURE_COUNT,
-                onRemoveImage = { selectedImages.remove(it) },
+                onRemoveImage = { selectedImages.remove(element = it) },
                 onAddImageClick = {
                     if (remain > 0) {
                         imagePickerLauncher.launch(

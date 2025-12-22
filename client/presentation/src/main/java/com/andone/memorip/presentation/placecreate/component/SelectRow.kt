@@ -60,7 +60,7 @@ fun SelectRow(
             color = MemoripTheme.colors.primary
         )
 
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.weight(weight = 1f))
 
         Icon(
             painter = painterResource(R.drawable.ic_chevron_forward),

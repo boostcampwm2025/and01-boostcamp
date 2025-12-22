@@ -52,8 +52,8 @@ fun PlaceCreateContentSection(
 @Preview
 @Composable
 private fun PlaceCreateContentSectionPreview(){
-    var title by remember { mutableStateOf("") }
-    var content by remember { mutableStateOf("") }
+    var title by remember { mutableStateOf(value = "") }
+    var content by remember { mutableStateOf(value = "") }
 
     MemoripTheme {
         PlaceCreateContentSection(

@@ -41,7 +41,7 @@ fun ImageCountButton(
             contentDescription = stringResource(R.string.place_create_add_image_content_description),
         )
 
-        Spacer(modifier = Modifier.height(MemoripSpace.SpaceXXSmall))
+        Spacer(modifier = Modifier.height(height = MemoripSpace.SpaceXXSmall))
 
         Text(text = stringResource(
             R.string.place_create_image_count_format,
