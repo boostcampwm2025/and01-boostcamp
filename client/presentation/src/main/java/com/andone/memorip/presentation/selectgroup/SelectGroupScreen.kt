@@ -9,6 +9,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -17,40 +18,60 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.GroupView
 import com.andone.memorip.presentation.component.dialog.MemoripInputDialog
 import com.andone.memorip.presentation.home.model.GroupUiModel
 import com.andone.memorip.presentation.selectgroup.component.SelectGroupTopBar
+import com.andone.memorip.presentation.selectgroup.model.SelectGroupAction
+import com.andone.memorip.presentation.selectgroup.model.SelectGroupEvent
 import com.andone.memorip.presentation.theme.MemoripPadding.PaddingMedium
 import com.andone.memorip.presentation.theme.MemoripPadding.PaddingXSmall
 import com.andone.memorip.presentation.theme.MemoripSpace.SpaceXSmall
 import com.andone.memorip.presentation.theme.MemoripTheme
-import com.andone.memorip.presentation.util.DummyData
 
 @Composable
 fun SelectGroupScreen(
     onBackClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: SelectGroupViewModel = hiltViewModel()
 ) {
     var showDialog by remember { mutableStateOf(false) }
-    val groups = remember { DummyData.groups }
+
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.event.collect { event ->
+            when (event) {
+                SelectGroupEvent.onNavigateBack -> {
+                    onBackClick()
+                }
+
+                is SelectGroupEvent.onNavigateAddPlace -> {
+                    /** TODO 그룹 추가 화면으로 이동하되 데이터를 들고 이동하기 */
+                    Log.d("UI TEST", "add group after : ${event.group }")
+                }
+
+                SelectGroupEvent.onShowDialog -> {
+                    showDialog = true
+                }
+
+                SelectGroupEvent.onDismissDialog -> {
+                    showDialog = false
+                }
+
+                SelectGroupEvent.onShowSnackbar -> {
+                    /** TODO Snackbar 보여주기 */
+                }
+            }
+        }
+    }
 
     SelectGroupContent(
-        groups = groups,
-        onFABClick = { showDialog = true },
-        onGroupClick = {
-            /* TODO GROUP 선택 시 이전 화면으로 이동 및 데이터 전달 */
-            // 우선 popBackStack
-            onBackClick()
-            Log.d("UI TEST", "group ui model : $it")
-        },
-        onAddClick = {
-            /* TODO 새로 추가한 GROUP 선택 시 이전 화면으로 이동 및 데이터 전달 */
-            // 우선 popBackStack
-            onBackClick()
-        },
-        onBackClick = onBackClick,
+        groups = uiState.groups,
+        onAction = viewModel::onAction,
         modifier = modifier
     )
 
@@ -62,11 +83,10 @@ fun SelectGroupScreen(
                     name = it,
                     images = emptyList()
                 )
-                groups.add(newGroup)
-                showDialog = false
+                viewModel.onAction(SelectGroupAction.onConfirmDialogClick(newGroup))
             },
-            onCancelClick = { showDialog = false },
-            onDismissRequest = { showDialog = false },
+            onCancelClick = { viewModel.onAction(SelectGroupAction.onDismissDialogClick) },
+            onDismissRequest = { viewModel.onAction(SelectGroupAction.onDismissDialogClick) },
             hint = stringResource(R.string.select_group_dialog_hint),
             label = stringResource(R.string.select_group_dialog_label)
         )
@@ -76,17 +96,14 @@ fun SelectGroupScreen(
 @Composable
 private fun SelectGroupContent(
     groups: List<GroupUiModel>,
-    onFABClick: () -> Unit,
-    onGroupClick: (GroupUiModel) -> Unit,
-    onAddClick: () -> Unit,
-    onBackClick: () -> Unit,
+    onAction: (SelectGroupAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
-        topBar = { SelectGroupTopBar(onBackClick = onBackClick) },
+        topBar = { SelectGroupTopBar(onBackClick = { onAction(SelectGroupAction.onBackClick) }) },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = onFABClick,
+                onClick = { onAction(SelectGroupAction.onFABClick) },
                 containerColor = MemoripTheme.colors.primaryContainer,
                 contentColor = MemoripTheme.colors.black
             ) {
@@ -106,8 +123,8 @@ private fun SelectGroupContent(
             items(items = groups) { group ->
                 GroupView(
                     name = group.name,
-                    onGroupClick = { onGroupClick(group) },
-                    onAddClick = onAddClick,
+                    onGroupClick = { onAction(SelectGroupAction.onGroupClick(group)) },
+                    onAddClick = { onAction(SelectGroupAction.onAddGroupClick) },
                     images = group.images,
                 )
             }
