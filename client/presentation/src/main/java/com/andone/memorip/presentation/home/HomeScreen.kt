@@ -22,6 +22,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.GroupView
+import com.andone.memorip.presentation.home.component.HomeTopBar
 import com.andone.memorip.presentation.home.model.GroupUiModel
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -60,22 +61,7 @@ fun HomeScreenContents(
 ) {
     Scaffold(
         modifier = modifier,
-        topBar = {
-            TopAppBar(
-                title = {},
-                navigationIcon = {
-                    IconButton(onClick = {}) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_search),
-                            contentDescription = stringResource(R.string.home_search_content_description)
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MemoripTheme.colors.primaryContainer
-                )
-            )
-        },
+        topBar = { HomeTopBar(onSearchClick = { }) },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = onCreatePlaceClick,
