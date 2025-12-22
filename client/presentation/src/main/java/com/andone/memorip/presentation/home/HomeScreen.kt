@@ -94,7 +94,7 @@ fun HomeScreenContents(
             modifier = Modifier
                 .padding(paddingValues = innerPadding)
                 .padding(horizontal = MemoripPadding.PaddingXSmall),
-            verticalArrangement = Arrangement.spacedBy(space = MemoripPadding.PaddingXXXSmall)
+            verticalArrangement = Arrangement.spacedBy(space = MemoripPadding.PaddingXSmall)
         ) {
             items(items = groups) { group ->
                 GroupView(

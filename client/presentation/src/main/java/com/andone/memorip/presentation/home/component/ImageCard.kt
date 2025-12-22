@@ -32,7 +32,7 @@ fun ImageCard(
                 .fillMaxSize()
                 .padding(MemoripPadding.PaddingXXXSmall)
                 .clip(memoripShapes.roundedSmall)
-                .background(MemoripTheme.colors.offWhite),
+                .background(MemoripTheme.colors.outline),
             contentAlignment = Alignment.Center
         ) {
             AsyncImage(

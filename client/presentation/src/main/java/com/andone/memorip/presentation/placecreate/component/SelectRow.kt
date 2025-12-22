@@ -50,7 +50,6 @@ fun SelectRow(
         Text(
             text = label,
             style = MemoripTheme.typography.title2,
-            color = MemoripTheme.colors.black
         )
 
         Spacer(modifier = Modifier.width(width = MemoripSpace.SpaceMedium))
