@@ -36,10 +36,9 @@ fun GroupView(
     ) {
         Text(
             text = name.ifBlank { stringResource(R.string.group_view_default_name) },
-            modifier = Modifier.padding(start = MemoripSpace.SpaceXXSmall),
+            modifier = Modifier.padding(all = MemoripSpace.SpaceXXSmall),
             style = MemoripTheme.typography.title1
         )
-
         if (images.isEmpty()) {
             EmptyGroupPlaceholder(onClick = onAddClick)
         } else {
