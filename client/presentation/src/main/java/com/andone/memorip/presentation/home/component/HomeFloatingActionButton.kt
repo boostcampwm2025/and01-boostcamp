@@ -10,9 +10,7 @@ import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.theme.MemoripTheme
 
 @Composable
-fun HomeFloatingActionButton(
-    onClick: () -> Unit
-) {
+fun HomeFloatingActionButton(onClick: () -> Unit) {
     FloatingActionButton(
         onClick = onClick,
         containerColor = MemoripTheme.colors.primaryContainer,

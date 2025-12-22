@@ -21,9 +21,7 @@ fun PlaceCreateTopBar(
     confirmEnabled: Boolean = false
 ) {
     CenterAlignedTopAppBar(
-        title = {
-            Text(text = stringResource(R.string.place_create_title))
-        },
+        title = { Text(text = stringResource(R.string.place_create_title)) },
         navigationIcon = {
             IconButton(onClick = onBackClick) {
                 Icon(
@@ -47,9 +45,7 @@ fun PlaceCreateTopBar(
                 )
             }
         },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MemoripTheme.colors.primaryContainer
-        )
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = MemoripTheme.colors.primaryContainer)
     )
 }
 

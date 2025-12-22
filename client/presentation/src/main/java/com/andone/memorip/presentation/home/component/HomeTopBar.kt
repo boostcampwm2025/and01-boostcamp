@@ -14,9 +14,7 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeTopBar(
-    onSearchClick: () -> Unit
-) {
+fun HomeTopBar(onSearchClick: () -> Unit) {
     TopAppBar(
         title = {},
         navigationIcon = {
@@ -29,9 +27,7 @@ fun HomeTopBar(
                 )
             }
         },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MemoripTheme.colors.primaryContainer
-        )
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = MemoripTheme.colors.primaryContainer)
     )
 }
 
