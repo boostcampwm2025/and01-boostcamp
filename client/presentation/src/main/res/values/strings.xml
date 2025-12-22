@@ -26,6 +26,7 @@
     <string name="select_category_dialog_title">카테고리 생성</string>
     <string name="select_category_confirm_button_description">카테고리 추가 확인 버튼</string>
     <string name="select_category_create_category_button_description">카테고리 추가 버튼</string>
+    <string name="select_category_max_category_over_err_message">카테고리는 최대 3개까지 선택 가능합니다.</string>
 
     <!-- GroupView-->
     <string name="group_view_default_name">기본 그룹</string>
