@@ -36,7 +36,7 @@ class SelectGroupViewModel @Inject constructor(): ViewModel() {
             onAddGroupClick -> _event.trySend(SelectGroupEvent.onShowDialog)
             onBackClick -> _event.trySend(SelectGroupEvent.onNavigateBack)
             is onConfirmDialogClick -> onAddGroup(action.newGroup)
-            onDismissDialogClick -> _event.trySend(SelectGroupEvent.onDismissDialog)
+            onCancelDialogClick -> _event.trySend(SelectGroupEvent.onDismissDialog)
         }
     }
 

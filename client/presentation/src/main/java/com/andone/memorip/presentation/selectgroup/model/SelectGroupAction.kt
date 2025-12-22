@@ -8,5 +8,5 @@ sealed interface SelectGroupAction {
     data object onAddGroupClick: SelectGroupAction
     data object onBackClick: SelectGroupAction
     data class onConfirmDialogClick(val newGroup: GroupUiModel): SelectGroupAction
-    data object onDismissDialogClick: SelectGroupAction
+    data object onCancelDialogClick: SelectGroupAction
 }
