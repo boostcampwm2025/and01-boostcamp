@@ -83,10 +83,10 @@ fun SelectGroupScreen(
                     name = it,
                     images = emptyList()
                 )
-                viewModel.onAction(SelectGroupAction.onConfirmDialogClick(newGroup))
+                viewModel.onAction(action = SelectGroupAction.onConfirmDialogClick(newGroup))
             },
-            onCancelClick = { viewModel.onAction(SelectGroupAction.onCancelDialogClick) },
-            onDismissRequest = { viewModel.onAction(SelectGroupAction.onCancelDialogClick) },
+            onCancelClick = { viewModel.onAction(action = SelectGroupAction.onCancelDialogClick) },
+            onDismissRequest = { viewModel.onAction(action = SelectGroupAction.onCancelDialogClick) },
             hint = stringResource(R.string.select_group_dialog_hint),
             label = stringResource(R.string.select_group_dialog_label)
         )
