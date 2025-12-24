@@ -12,15 +12,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.graphics.drawable.toBitmap
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.ImageLoader
 import coil.request.ImageRequest
 import coil.request.SuccessResult
@@ -28,9 +28,14 @@ import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.groupdetail.component.GalleryTab
 import com.andone.memorip.presentation.groupdetail.component.GroupDetailAppBar
 import com.andone.memorip.presentation.groupdetail.component.MapTab
+import com.andone.memorip.presentation.groupdetail.component.PlaceImagesBottomSheet
+import com.andone.memorip.presentation.groupdetail.model.GroupDetailAction
+import com.andone.memorip.presentation.groupdetail.model.GroupDetailEvent
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.theme.MemoripTheme
-import com.andone.memorip.presentation.util.DummyData
+import com.andone.memorip.presentation.util.DummyData.places
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -45,31 +50,49 @@ private object MarkerImageConstants {
 fun GroupDetailScreen(
     onBackClick: () -> Unit,
     onImageClick: (Int) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: GroupDetailViewModel = hiltViewModel()
 ) {
-    val groupName = "Group1"
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.event.collect { event: GroupDetailEvent ->
+            when (event) {
+                GroupDetailEvent.onNavigateBack -> {
+                    onBackClick()
+                }
+
+                is GroupDetailEvent.onNavigatePlaceDetail -> {
+                    onImageClick(event.id.toInt())
+                }
+            }
+        }
+    }
 
     GroupDetailScreenContent(
-        groupName = groupName,
-        places = DummyData.places,
-        onBackClick = onBackClick,
-        onImageClick = onImageClick,
-        onSearchClick = { /* TODO: 검색 기능 구현 */ },
-        onMenuClick = { /* TODO: 메뉴 기능 구현 */ },
+        groupName = uiState.groupName,
+        places = uiState.places,
+        currentPage = uiState.currentTab,
+        onAction = viewModel::onAction,
         modifier = modifier
     )
+
+    if (uiState.selectedPlace != null) {
+        PlaceImagesBottomSheet(
+            placeName = uiState.selectedPlace!!.name,
+            images = uiState.selectedPlace!!.images,
+            onDismiss = { viewModel.onAction(GroupDetailAction.onDismissBottomSheetClick) }
+        )
+    }
 }
 
 @Composable
 fun GroupDetailScreenContent(
     groupName: String,
-    places: List<Place>,
-    onBackClick: () -> Unit,
-    onImageClick: (Int) -> Unit,
-    onSearchClick: () -> Unit,
-    onMenuClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    initialPage: Int = 0
+    places: ImmutableList<Place>,
+    currentPage: Int,
+    onAction: (GroupDetailAction) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     val tabs = listOf(
@@ -77,10 +100,9 @@ fun GroupDetailScreenContent(
         stringResource(R.string.groupdetail_tab_map)
     )
 
-    var selectedTabIndex by remember { mutableIntStateOf(initialPage) }
-
     val markerImages = remember { mutableStateMapOf<String, Bitmap>() }
 
+    /** 이미지 링크가 들어오면 삭제될 로직 */
     LaunchedEffect(places) {
         places.forEach { place ->
             val imageUrl = place.thumbnailImage.url
@@ -113,9 +135,9 @@ fun GroupDetailScreenContent(
         topBar = {
             GroupDetailAppBar(
                 title = groupName,
-                onBackClick = onBackClick,
-                onMenuClick = onMenuClick,
-                onSearchClick = onSearchClick
+                onBackClick = { onAction(GroupDetailAction.onBackClick) },
+                onMenuClick = { onAction(GroupDetailAction.onMenuClick) },
+                onSearchClick = { onAction(GroupDetailAction.onSearchClick) }
             )
         },
         modifier = modifier
@@ -126,28 +148,30 @@ fun GroupDetailScreenContent(
                 .padding(innerPadding)
         ) {
             PrimaryTabRow(
-                selectedTabIndex = selectedTabIndex,
+                selectedTabIndex = currentPage,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 tabs.forEachIndexed { index, title ->
                     Tab(
-                        selected = selectedTabIndex == index,
-                        onClick = { selectedTabIndex = index },
+                        selected = currentPage == index,
+                        onClick = { onAction(GroupDetailAction.onTabClick(currentTab = index)) },
                         text = { Text(text = title) }
                     )
                 }
             }
 
-            when (selectedTabIndex) {
+            when (currentPage) {
                 0 -> GalleryTab(
                     places = places,
-                    onImageClick = onImageClick,
+                    onImageClick = { id -> onAction(GroupDetailAction.onPlaceClick(id = id.toLong())) },
                     modifier = Modifier.fillMaxSize()
                 )
 
                 1 -> MapTab(
                     places = places,
                     markerImages = markerImages,
+                    onShowBottomSheet = { place -> onAction(GroupDetailAction.onPictureClick(place = place)) },
+                    onDismissBottomSheet = { onAction(GroupDetailAction.onDismissBottomSheetClick) },
                     modifier = Modifier.fillMaxSize()
                 )
             }
@@ -161,12 +185,9 @@ private fun GroupDetailScreenContentGalleryPreview() {
     MemoripTheme {
         GroupDetailScreenContent(
             groupName = "Group1",
-            places = DummyData.places,
-            onBackClick = {},
-            onImageClick = {},
-            onSearchClick = {},
-            onMenuClick = {},
-            initialPage = 0
+            places = places.toImmutableList(),
+            currentPage = 0,
+            onAction = {}
         )
     }
 }
@@ -177,12 +198,9 @@ private fun GroupDetailScreenContentMapPreview() {
     MemoripTheme {
         GroupDetailScreenContent(
             groupName = "Group1",
-            places = DummyData.places,
-            onBackClick = {},
-            onImageClick = {},
-            onSearchClick = {},
-            onMenuClick = {},
-            initialPage = 1
+            places = places.toImmutableList(),
+            onAction = { },
+            currentPage = 1
         )
     }
 }
