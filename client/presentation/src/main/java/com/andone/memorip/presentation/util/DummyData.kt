@@ -78,6 +78,7 @@ object DummyData {
         )
     }
 
+    val groupName = "Group1"
     val categories = mutableStateListOf(
         Category(
             id = 0L,
