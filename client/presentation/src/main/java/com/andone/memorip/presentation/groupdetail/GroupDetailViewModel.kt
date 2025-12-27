@@ -18,11 +18,10 @@ import javax.inject.Inject
 @HiltViewModel
 class GroupDetailViewModel @Inject constructor() : ViewModel() {
 
-    private val _uiState: MutableStateFlow<GroupDetailUiState> =
-        MutableStateFlow(GroupDetailUiState())
+    private val _uiState = MutableStateFlow(GroupDetailUiState())
     val uiState = _uiState.asStateFlow()
 
-    private val _event: Channel<GroupDetailEvent> = Channel(BUFFERED)
+    private val _event = Channel<GroupDetailEvent>(BUFFERED)
     val event = _event.receiveAsFlow()
 
     init {
