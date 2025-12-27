@@ -54,7 +54,7 @@ class SelectGroupViewModel @Inject constructor() : ViewModel() {
             }
 
             is OnDialogConfirmClick -> {
-                onAddGroup(newGroup = action.newGroup)
+                addGroup(newGroup = action.newGroup)
             }
 
             OnDialogCancelClick -> {
@@ -63,7 +63,7 @@ class SelectGroupViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    private fun onAddGroup(newGroup: GroupUiModel) {
+    private fun addGroup(newGroup: GroupUiModel) {
         val newGroups = uiState.value.groups + newGroup
         _uiState.value = uiState.value.copy(groups = newGroups.toImmutableList())
         _event.trySend(element = SelectGroupEvent.DismissDialog)
