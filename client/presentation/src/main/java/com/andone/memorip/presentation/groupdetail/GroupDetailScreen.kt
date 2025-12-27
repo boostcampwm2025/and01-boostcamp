@@ -58,11 +58,11 @@ fun GroupDetailScreen(
     LaunchedEffect(Unit) {
         viewModel.event.collect { event: GroupDetailEvent ->
             when (event) {
-                GroupDetailEvent.onNavigateBack -> {
+                GroupDetailEvent.NavigateBack -> {
                     onBackClick()
                 }
 
-                is GroupDetailEvent.onNavigatePlaceDetail -> {
+                is GroupDetailEvent.NavigatePlaceDetail -> {
                     onImageClick(event.id.toInt())
                 }
             }
@@ -81,7 +81,7 @@ fun GroupDetailScreen(
         PlaceImagesBottomSheet(
             placeName = uiState.selectedPlace!!.name,
             images = uiState.selectedPlace!!.images,
-            onDismiss = { viewModel.onAction(GroupDetailAction.onDismissBottomSheetClick) }
+            onDismiss = { viewModel.onAction(GroupDetailAction.OnDismissBottomSheetClick) }
         )
     }
 }
@@ -135,9 +135,9 @@ fun GroupDetailScreenContent(
         topBar = {
             GroupDetailAppBar(
                 title = groupName,
-                onBackClick = { onAction(GroupDetailAction.onBackClick) },
-                onMenuClick = { onAction(GroupDetailAction.onMenuClick) },
-                onSearchClick = { onAction(GroupDetailAction.onSearchClick) }
+                onBackClick = { onAction(GroupDetailAction.OnBackClick) },
+                onMenuClick = { onAction(GroupDetailAction.OnMenuClick) },
+                onSearchClick = { onAction(GroupDetailAction.OnSearchClick) }
             )
         },
         modifier = modifier
@@ -154,7 +154,7 @@ fun GroupDetailScreenContent(
                 tabs.forEachIndexed { index, title ->
                     Tab(
                         selected = currentPage == index,
-                        onClick = { onAction(GroupDetailAction.onTabClick(currentTab = index)) },
+                        onClick = { onAction(GroupDetailAction.OnTabClick(currentTab = index)) },
                         text = { Text(text = title) }
                     )
                 }
@@ -163,15 +163,15 @@ fun GroupDetailScreenContent(
             when (currentPage) {
                 0 -> GalleryTab(
                     places = places,
-                    onImageClick = { id -> onAction(GroupDetailAction.onPlaceClick(id = id.toLong())) },
+                    onImageClick = { id -> onAction(GroupDetailAction.OnPlaceClick(id = id.toLong())) },
                     modifier = Modifier.fillMaxSize()
                 )
 
                 1 -> MapTab(
                     places = places,
                     markerImages = markerImages,
-                    onShowBottomSheet = { place -> onAction(GroupDetailAction.onPictureClick(place = place)) },
-                    onDismissBottomSheet = { onAction(GroupDetailAction.onDismissBottomSheetClick) },
+                    onShowBottomSheet = { place -> onAction(GroupDetailAction.OnPictureClick(place = place)) },
+                    onDismissBottomSheet = { onAction(GroupDetailAction.OnDismissBottomSheetClick) },
                     modifier = Modifier.fillMaxSize()
                 )
             }

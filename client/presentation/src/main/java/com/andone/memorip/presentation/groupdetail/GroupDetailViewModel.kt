@@ -34,31 +34,31 @@ class GroupDetailViewModel @Inject constructor() : ViewModel() {
 
     fun onAction(action: GroupDetailAction) {
         when (action) {
-            GroupDetailAction.onMenuClick -> {
+            GroupDetailAction.OnMenuClick -> {
                 _uiState.value = _uiState.value.copy(expanded = true)
             }
 
-            GroupDetailAction.onBackClick -> {
-                _event.trySend(element = GroupDetailEvent.onNavigateBack)
+            GroupDetailAction.OnBackClick -> {
+                _event.trySend(element = GroupDetailEvent.NavigateBack)
             }
 
-            is GroupDetailAction.onPictureClick -> {
+            is GroupDetailAction.OnPictureClick -> {
                 _uiState.value = _uiState.value.copy(selectedPlace = action.place)
             }
 
-            GroupDetailAction.onDismissBottomSheetClick -> {
+            GroupDetailAction.OnDismissBottomSheetClick -> {
                 _uiState.value = _uiState.value.copy(selectedPlace = null)
             }
 
-            is GroupDetailAction.onPlaceClick -> {
-                _event.trySend(element = GroupDetailEvent.onNavigatePlaceDetail(id = action.id))
+            is GroupDetailAction.OnPlaceClick -> {
+                _event.trySend(element = GroupDetailEvent.NavigatePlaceDetail(id = action.id))
             }
 
-            GroupDetailAction.onSearchClick -> {
+            GroupDetailAction.OnSearchClick -> {
                 /** Search 버튼 눌렀을 때의 event 처리 */
             }
 
-            is GroupDetailAction.onTabClick -> {
+            is GroupDetailAction.OnTabClick -> {
                 _uiState.value = _uiState.value.copy(currentTab = action.currentTab)
             }
         }
