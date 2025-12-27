@@ -9,7 +9,6 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,6 +30,7 @@ import com.andone.memorip.presentation.theme.MemoripPadding.PaddingMedium
 import com.andone.memorip.presentation.theme.MemoripPadding.PaddingXSmall
 import com.andone.memorip.presentation.theme.MemoripSpace.SpaceXSmall
 import com.andone.memorip.presentation.theme.MemoripTheme
+import com.andone.memorip.presentation.util.collectWithLifecycle
 
 @Composable
 fun SelectGroupScreen(
@@ -38,33 +38,31 @@ fun SelectGroupScreen(
     modifier: Modifier = Modifier,
     viewModel: SelectGroupViewModel = hiltViewModel()
 ) {
-    var showDialog by remember { mutableStateOf(false) }
-
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(Unit) {
-        viewModel.event.collect { event ->
-            when (event) {
-                SelectGroupEvent.NavigateBack -> {
-                    onBackClick()
-                }
+    var showDialog by remember { mutableStateOf(false) }
 
-                is SelectGroupEvent.NavigatePlaceAdd -> {
-                    /** TODO 그룹 추가 화면으로 이동하되 데이터를 들고 이동하기 */
-                    Log.d("UI TEST", "add group after : ${event.group }")
-                }
+    viewModel.event.collectWithLifecycle { event ->
+        when (event) {
+            SelectGroupEvent.NavigateBack -> {
+                onBackClick()
+            }
 
-                SelectGroupEvent.ShowDialog -> {
-                    showDialog = true
-                }
+            is SelectGroupEvent.NavigatePlaceAdd -> {
+                /** TODO 그룹 추가 화면으로 이동하되 데이터를 들고 이동하기 */
+                Log.d("UI TEST", "add group after : ${event.group}")
+            }
 
-                SelectGroupEvent.DismissDialog -> {
-                    showDialog = false
-                }
+            SelectGroupEvent.ShowDialog -> {
+                showDialog = true
+            }
 
-                SelectGroupEvent.ShowSnackBar -> {
-                    /** TODO Snackbar 보여주기 */
-                }
+            SelectGroupEvent.DismissDialog -> {
+                showDialog = false
+            }
+
+            SelectGroupEvent.ShowSnackBar -> {
+                /** TODO Snackbar 보여주기 */
             }
         }
     }
