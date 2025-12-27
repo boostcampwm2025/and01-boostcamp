@@ -34,6 +34,7 @@ import com.andone.memorip.presentation.groupdetail.model.GroupDetailEvent
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData.places
+import com.andone.memorip.presentation.util.collectWithLifecycle
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Dispatchers
@@ -55,16 +56,14 @@ fun GroupDetailScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(Unit) {
-        viewModel.event.collect { event: GroupDetailEvent ->
-            when (event) {
-                GroupDetailEvent.NavigateBack -> {
-                    onBackClick()
-                }
+    viewModel.event.collectWithLifecycle { event ->
+        when (event) {
+            GroupDetailEvent.NavigateBack -> {
+                onBackClick()
+            }
 
-                is GroupDetailEvent.NavigatePlaceDetail -> {
-                    onImageClick(event.id.toInt())
-                }
+            is GroupDetailEvent.NavigatePlaceDetail -> {
+                onImageClick(event.id.toInt())
             }
         }
     }
