@@ -7,16 +7,12 @@ import com.andone.memorip.navigation.PlaceList
 
 fun EntryProviderScope<NavKey>.placeList(
     onGroupClick: (String) -> Unit,
-    onAddClick: () -> Unit,
-    onCreateGroupClick: () -> Unit,
     onCreatePlaceClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     entry<PlaceList> {
         PlaceListScreen(
             onGroupClick = onGroupClick,
-            onAddClick = onAddClick,
-            onCreateGroupClick = onCreateGroupClick,
             onCreatePlaceClick = onCreatePlaceClick,
             modifier = modifier
         )
