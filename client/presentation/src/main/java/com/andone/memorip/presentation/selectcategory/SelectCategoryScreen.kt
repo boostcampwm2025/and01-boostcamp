@@ -8,7 +8,6 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,6 +30,7 @@ import com.andone.memorip.presentation.selectcategory.model.SelectCategoryEvent
 import com.andone.memorip.presentation.selectcategory.model.toErrorMessage
 import com.andone.memorip.presentation.theme.MemoripPadding.PaddingMedium
 import com.andone.memorip.presentation.theme.MemoripTheme
+import com.andone.memorip.presentation.util.collectWithLifecycle
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 
@@ -41,35 +41,33 @@ fun SelectCategoryScreen(
     viewModel: SelectCategoryViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    var showDialog by remember { mutableStateOf(false) }
-
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(Unit) {
-        viewModel.event.collect { event ->
-            when (event) {
-                SelectCategoryEvent.NavigateBack -> {
-                    onBackClick()
-                }
+    var showDialog by remember { mutableStateOf(false) }
 
-                is SelectCategoryEvent.NavigateAddPlace -> {
-                    Log.d("UI TEST", "navigation add place ${event.categories}")
-                }
+    viewModel.event.collectWithLifecycle { event ->
+        when (event) {
+            SelectCategoryEvent.NavigateBack -> {
+                onBackClick()
+            }
 
-                SelectCategoryEvent.ShowDialog -> {
-                    showDialog = true
-                }
+            is SelectCategoryEvent.NavigateAddPlace -> {
+                Log.d("UI TEST", "navigation add place ${event.categories}")
+            }
 
-                SelectCategoryEvent.DismissDialog -> {
-                    showDialog = false
-                }
+            SelectCategoryEvent.ShowDialog -> {
+                showDialog = true
+            }
 
-                is SelectCategoryEvent.ShowSnackBar -> {
-                    Log.d(
-                        "UI TEST",
-                        "show snackbar : ${event.message.toErrorMessage(context = context)}"
-                    )
-                }
+            SelectCategoryEvent.DismissDialog -> {
+                showDialog = false
+            }
+
+            is SelectCategoryEvent.ShowSnackBar -> {
+                Log.d(
+                    "UI TEST",
+                    "show snackbar : ${event.message.toErrorMessage(context = context)}"
+                )
             }
         }
     }
