@@ -3,12 +3,12 @@ package com.andone.memorip.presentation.selectgroup
 import androidx.lifecycle.ViewModel
 import com.andone.memorip.presentation.placelist.model.GroupUiModel
 import com.andone.memorip.presentation.selectgroup.model.SelectGroupAction
-import com.andone.memorip.presentation.selectgroup.model.SelectGroupAction.onAddGroupClick
-import com.andone.memorip.presentation.selectgroup.model.SelectGroupAction.onBackClick
-import com.andone.memorip.presentation.selectgroup.model.SelectGroupAction.onCancelDialogClick
-import com.andone.memorip.presentation.selectgroup.model.SelectGroupAction.onConfirmDialogClick
-import com.andone.memorip.presentation.selectgroup.model.SelectGroupAction.onFABClick
-import com.andone.memorip.presentation.selectgroup.model.SelectGroupAction.onGroupClick
+import com.andone.memorip.presentation.selectgroup.model.SelectGroupAction.OnAddGroupClick
+import com.andone.memorip.presentation.selectgroup.model.SelectGroupAction.OnBackClick
+import com.andone.memorip.presentation.selectgroup.model.SelectGroupAction.OnDialogCancelClick
+import com.andone.memorip.presentation.selectgroup.model.SelectGroupAction.OnDialogConfirmClick
+import com.andone.memorip.presentation.selectgroup.model.SelectGroupAction.OnFABClick
+import com.andone.memorip.presentation.selectgroup.model.SelectGroupAction.OnGroupClick
 import com.andone.memorip.presentation.selectgroup.model.SelectGroupEvent
 import com.andone.memorip.presentation.selectgroup.model.SelectGroupUiState
 import com.andone.memorip.presentation.util.DummyData.groups
@@ -37,18 +37,18 @@ class SelectGroupViewModel @Inject constructor() : ViewModel() {
 
     fun onAction(action: SelectGroupAction) {
         when (action) {
-            onFABClick -> _event.trySend(element = SelectGroupEvent.onShowDialog)
-            is onGroupClick -> _event.trySend(element = SelectGroupEvent.onNavigateAddPlace(group = action.group))
-            onAddGroupClick -> _event.trySend(element = SelectGroupEvent.onShowDialog)
-            onBackClick -> _event.trySend(element = SelectGroupEvent.onNavigateBack)
-            is onConfirmDialogClick -> onAddGroup(newGroup = action.newGroup)
-            onCancelDialogClick -> _event.trySend(element = SelectGroupEvent.onDismissDialog)
+            OnFABClick -> _event.trySend(element = SelectGroupEvent.ShowDialog)
+            is OnGroupClick -> _event.trySend(element = SelectGroupEvent.NavigatePlaceAdd(group = action.group))
+            OnAddGroupClick -> _event.trySend(element = SelectGroupEvent.ShowDialog)
+            OnBackClick -> _event.trySend(element = SelectGroupEvent.NavigateBack)
+            is OnDialogConfirmClick -> onAddGroup(newGroup = action.newGroup)
+            OnDialogCancelClick -> _event.trySend(element = SelectGroupEvent.DismissDialog)
         }
     }
 
     private fun onAddGroup(newGroup: GroupUiModel) {
         val newGroups = uiState.value.groups + newGroup
         _uiState.value = uiState.value.copy(groups = newGroups.toImmutableList())
-        _event.trySend(element = SelectGroupEvent.onDismissDialog)
+        _event.trySend(element = SelectGroupEvent.DismissDialog)
     }
 }

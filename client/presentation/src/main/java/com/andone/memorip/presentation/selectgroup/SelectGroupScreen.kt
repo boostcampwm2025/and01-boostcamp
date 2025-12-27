@@ -45,24 +45,24 @@ fun SelectGroupScreen(
     LaunchedEffect(Unit) {
         viewModel.event.collect { event ->
             when (event) {
-                SelectGroupEvent.onNavigateBack -> {
+                SelectGroupEvent.NavigateBack -> {
                     onBackClick()
                 }
 
-                is SelectGroupEvent.onNavigateAddPlace -> {
+                is SelectGroupEvent.NavigatePlaceAdd -> {
                     /** TODO 그룹 추가 화면으로 이동하되 데이터를 들고 이동하기 */
                     Log.d("UI TEST", "add group after : ${event.group }")
                 }
 
-                SelectGroupEvent.onShowDialog -> {
+                SelectGroupEvent.ShowDialog -> {
                     showDialog = true
                 }
 
-                SelectGroupEvent.onDismissDialog -> {
+                SelectGroupEvent.DismissDialog -> {
                     showDialog = false
                 }
 
-                SelectGroupEvent.onShowSnackbar -> {
+                SelectGroupEvent.ShowSnackBar -> {
                     /** TODO Snackbar 보여주기 */
                 }
             }
@@ -83,10 +83,10 @@ fun SelectGroupScreen(
                     name = it,
                     images = emptyList()
                 )
-                viewModel.onAction(action = SelectGroupAction.onConfirmDialogClick(newGroup))
+                viewModel.onAction(action = SelectGroupAction.OnDialogConfirmClick(newGroup))
             },
-            onCancelClick = { viewModel.onAction(action = SelectGroupAction.onCancelDialogClick) },
-            onDismissRequest = { viewModel.onAction(action = SelectGroupAction.onCancelDialogClick) },
+            onCancelClick = { viewModel.onAction(action = SelectGroupAction.OnDialogCancelClick) },
+            onDismissRequest = { viewModel.onAction(action = SelectGroupAction.OnDialogCancelClick) },
             hint = stringResource(R.string.select_group_dialog_hint),
             label = stringResource(R.string.select_group_dialog_label)
         )
@@ -100,10 +100,10 @@ private fun SelectGroupContent(
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
-        topBar = { SelectGroupTopBar(onBackClick = { onAction(SelectGroupAction.onBackClick) }) },
+        topBar = { SelectGroupTopBar(onBackClick = { onAction(SelectGroupAction.OnBackClick) }) },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { onAction(SelectGroupAction.onFABClick) },
+                onClick = { onAction(SelectGroupAction.OnFABClick) },
                 containerColor = MemoripTheme.colors.primaryContainer,
                 contentColor = MemoripTheme.colors.black
             ) {
@@ -123,8 +123,8 @@ private fun SelectGroupContent(
             items(items = groups) { group ->
                 GroupView(
                     name = group.name,
-                    onGroupClick = { onAction(SelectGroupAction.onGroupClick(group)) },
-                    onAddClick = { onAction(SelectGroupAction.onAddGroupClick) },
+                    onGroupClick = { onAction(SelectGroupAction.OnGroupClick(group)) },
+                    onAddClick = { onAction(SelectGroupAction.OnAddGroupClick) },
                     images = group.images,
                 )
             }

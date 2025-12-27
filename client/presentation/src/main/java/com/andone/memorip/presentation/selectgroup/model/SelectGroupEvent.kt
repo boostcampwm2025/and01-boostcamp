@@ -2,10 +2,15 @@ package com.andone.memorip.presentation.selectgroup.model
 
 import com.andone.memorip.presentation.placelist.model.GroupUiModel
 
-interface SelectGroupEvent {
-    data object onNavigateBack: SelectGroupEvent
-    data class onNavigateAddPlace(val group: GroupUiModel): SelectGroupEvent
-    data object onShowDialog: SelectGroupEvent
-    data object onDismissDialog: SelectGroupEvent
-    data object onShowSnackbar: SelectGroupEvent
+sealed interface SelectGroupEvent {
+
+    data object NavigateBack : SelectGroupEvent
+
+    data class NavigatePlaceAdd(val group: GroupUiModel) : SelectGroupEvent
+
+    data object ShowDialog : SelectGroupEvent
+
+    data object DismissDialog : SelectGroupEvent
+
+    data object ShowSnackBar : SelectGroupEvent
 }
