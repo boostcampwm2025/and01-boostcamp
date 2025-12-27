@@ -24,25 +24,42 @@ import javax.inject.Inject
 @HiltViewModel
 class SelectGroupViewModel @Inject constructor() : ViewModel() {
 
-    private val _uiState: MutableStateFlow<SelectGroupUiState> =
-        MutableStateFlow(SelectGroupUiState())
+    private val _uiState = MutableStateFlow(SelectGroupUiState())
     val uiState = _uiState.asStateFlow()
 
-    private val _event: Channel<SelectGroupEvent> = Channel(capacity = BUFFERED)
+    private val _event = Channel<SelectGroupEvent>(capacity = BUFFERED)
     val event = _event.receiveAsFlow()
 
     init {
+        // 더미데이터
         _uiState.value = SelectGroupUiState(groups = groups.toImmutableList())
     }
 
     fun onAction(action: SelectGroupAction) {
         when (action) {
-            OnFABClick -> _event.trySend(element = SelectGroupEvent.ShowDialog)
-            is OnGroupClick -> _event.trySend(element = SelectGroupEvent.NavigatePlaceAdd(group = action.group))
-            OnAddGroupClick -> _event.trySend(element = SelectGroupEvent.ShowDialog)
-            OnBackClick -> _event.trySend(element = SelectGroupEvent.NavigateBack)
-            is OnDialogConfirmClick -> onAddGroup(newGroup = action.newGroup)
-            OnDialogCancelClick -> _event.trySend(element = SelectGroupEvent.DismissDialog)
+            OnFABClick -> {
+                _event.trySend(element = SelectGroupEvent.ShowDialog)
+            }
+
+            is OnGroupClick -> {
+                _event.trySend(element = SelectGroupEvent.NavigatePlaceAdd(group = action.group))
+            }
+
+            OnAddGroupClick -> {
+                _event.trySend(element = SelectGroupEvent.ShowDialog)
+            }
+
+            OnBackClick -> {
+                _event.trySend(element = SelectGroupEvent.NavigateBack)
+            }
+
+            is OnDialogConfirmClick -> {
+                onAddGroup(newGroup = action.newGroup)
+            }
+
+            OnDialogCancelClick -> {
+                _event.trySend(element = SelectGroupEvent.DismissDialog)
+            }
         }
     }
 
