@@ -12,22 +12,25 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.selectlocation.SelectLocationScreenConstants.CAMERA_ANIMATION_DURATION
 import com.andone.memorip.presentation.selectlocation.SelectLocationScreenDimens.markerHeight
 import com.andone.memorip.presentation.selectlocation.SelectLocationScreenDimens.markerWidth
 import com.andone.memorip.presentation.selectlocation.component.LocationSelectionButton
+import com.andone.memorip.presentation.selectlocation.model.SelectLocationAction
+import com.andone.memorip.presentation.selectlocation.model.SelectLocationEvent
 import com.andone.memorip.presentation.theme.LocalMemoripTypography
 import com.andone.memorip.presentation.theme.MemoripTheme
+import com.andone.memorip.presentation.util.collectWithLifecycle
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraAnimation
 import com.naver.maps.map.CameraUpdate
@@ -50,11 +53,24 @@ private object SelectLocationScreenConstants {
 @Composable
 fun SelectLocationScreen(
     onBackClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: SelectLocationViewModel = hiltViewModel()
 ) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    viewModel.event.collectWithLifecycle { event ->
+        when (event) {
+            is SelectLocationEvent.SelectLocation -> {
+
+            }
+
+            SelectLocationEvent.NavigateBack -> onBackClick()
+        }
+    }
 
     SelectLocationContent(
-        onBackClick = onBackClick,
+        location = uiState.location,
+        onAction = viewModel::onAction,
         modifier = modifier
     )
 }
@@ -62,19 +78,25 @@ fun SelectLocationScreen(
 @OptIn(ExperimentalNaverMapApi::class)
 @Composable
 private fun SelectLocationContent(
-    onBackClick: () -> Unit,
-    modifier: Modifier = Modifier
+    location: LatLng?,
+    onAction: (SelectLocationAction) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val cameraPositionState = rememberCameraPositionState()
-    var selectedLocation by remember { mutableStateOf<LatLng?>(null) }
 
     Scaffold(
         modifier = modifier,
         topBar = {
-            SelectLocationTopBar(onBackClick = onBackClick)
+            SelectLocationTopBar(onBackClick = { onAction(SelectLocationAction.OnBackClick) })
         },
         floatingActionButton = {
-            LocationSelectionButton(onClick = {})
+            LocationSelectionButton(
+                onClick = {
+                    location?.let {
+                        onAction(SelectLocationAction.OnSelectLocationClick(it))
+                    }
+                }
+            )
         },
         floatingActionButtonPosition = FabPosition.Center,
     ) { innerPadding ->
@@ -91,7 +113,7 @@ private fun SelectLocationContent(
                 )
             },
             onMapClick = { _, latLng ->
-                selectedLocation = latLng
+                onAction(SelectLocationAction.OnSelectLocationClick(latLng))
                 cameraPositionState.move(
                     update = CameraUpdate
                         .scrollTo(latLng)
@@ -99,13 +121,13 @@ private fun SelectLocationContent(
                 )
             }
         ) {
-            selectedLocation?.let { location ->
+            location?.let { location ->
                 Marker(
                     state = MarkerState(position = location),
                     width = markerWidth,
                     height = markerHeight,
                     onClick = {
-                        selectedLocation = null
+                        onAction(SelectLocationAction.OnSelectLocationClick(null))
                         true
                     }
                 )
