@@ -20,20 +20,20 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import javax.inject.Inject
 
 private object Constants {
-    val MAX_SELECTABLE_COUNT = 3
+    const val MAX_SELECTABLE_COUNT = 3
 }
 
 @HiltViewModel
 class SelectCategoryViewModel @Inject constructor() : ViewModel() {
 
-    private val _uiState: MutableStateFlow<SelectCategoryUiState> =
-        MutableStateFlow(SelectCategoryUiState())
+    private val _uiState = MutableStateFlow(SelectCategoryUiState())
     val uiState = _uiState.asStateFlow()
 
-    private val _event: Channel<SelectCategoryEvent> = Channel(capacity = BUFFERED)
+    private val _event = Channel<SelectCategoryEvent>(capacity = BUFFERED)
     val event = _event.receiveAsFlow()
 
     init {
+        // 더미데이터 사용
         _uiState.value = SelectCategoryUiState(categories = categories.toImmutableList())
     }
 
