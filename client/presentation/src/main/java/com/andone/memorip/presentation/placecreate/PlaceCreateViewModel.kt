@@ -37,6 +37,22 @@ class PlaceCreateViewModel @Inject constructor() : ViewModel() {
                 _uiState.update { it.copy(screenState = PlaceCreateScreenState.SELECT_GROUP) }
             }
 
+            is PlaceCreateAction.OnTitleChange -> {
+                _uiState.update { it.copy(title = action.title) }
+            }
+
+            is PlaceCreateAction.OnContentChange -> {
+                _uiState.update { it.copy(content = action.content) }
+            }
+
+            is PlaceCreateAction.OnAddImages -> {
+                _uiState.update { it.copy(images = it.images + action.images) }
+            }
+
+            is PlaceCreateAction.OnRemoveImages -> {
+                _uiState.update { it.copy(images = it.images - action.imageUri) }
+            }
+
             PlaceCreateAction.OnBackClick -> {
                 _event.trySend(PlaceCreateEvent.NavigateBack)
             }

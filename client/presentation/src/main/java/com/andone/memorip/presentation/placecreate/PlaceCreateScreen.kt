@@ -1,6 +1,5 @@
 package com.andone.memorip.presentation.placecreate
 
-import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -19,25 +18,27 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.MemoripInputBox
 import com.andone.memorip.presentation.placecreate.PictureSetting.MAX_PICTURE_COUNT
 import com.andone.memorip.presentation.placecreate.component.ImageCountButton
 import com.andone.memorip.presentation.placecreate.component.SelectRow
 import com.andone.memorip.presentation.placecreate.component.SelectedImageItem
+import com.andone.memorip.presentation.placecreate.model.PlaceCreateAction
+import com.andone.memorip.presentation.placecreate.model.PlaceCreateEvent
+import com.andone.memorip.presentation.placecreate.model.PlaceCreateUiState
 import com.andone.memorip.presentation.theme.MemoripHeight
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
+import com.andone.memorip.presentation.util.collectWithLifecycle
 
 private object PictureSetting {
     const val MAX_PICTURE_COUNT = 10
@@ -50,12 +51,19 @@ fun PlaceCreateScreen(
     onGroupClick: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
+    viewModel: PlaceCreateViewModel = hiltViewModel()
 ) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    viewModel.event.collectWithLifecycle { event ->
+        when (event) {
+            PlaceCreateEvent.NavigateBack -> onBackClick()
+        }
+    }
+
     PlaceCreateScreenContents(
-        onCategoryClick = onCategoryClick,
-        onLocationClick = onLocationClick,
-        onGroupClick = onGroupClick,
-        onBackClick = onBackClick,
+        uiState = uiState,
+        onAction = viewModel::onAction,
         modifier = modifier,
     )
 }
@@ -63,22 +71,17 @@ fun PlaceCreateScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlaceCreateScreenContents(
-    onCategoryClick: () -> Unit,
-    onLocationClick: () -> Unit,
-    onGroupClick: () -> Unit,
-    onBackClick: () -> Unit,
-    modifier: Modifier = Modifier,
+    uiState: PlaceCreateUiState,
+    onAction: (PlaceCreateAction) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    var title by remember { mutableStateOf("") }
-    var content by remember { mutableStateOf("") }
-    val selectedImages = remember { mutableStateListOf<Uri>() }
-    val remain = MAX_PICTURE_COUNT - selectedImages.size
+    val remain = MAX_PICTURE_COUNT - uiState.images.size
 
     val imagePickerLauncher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.PickMultipleVisualMedia()) { uris ->
-            val canAdd = MAX_PICTURE_COUNT - selectedImages.size
+            val canAdd = MAX_PICTURE_COUNT - uiState.images.size
             if (uris.isNotEmpty()) {
-                selectedImages.addAll(elements = uris.take(n = canAdd))
+                onAction(PlaceCreateAction.OnAddImages(uris.take(canAdd)))
             }
         }
 
@@ -88,7 +91,7 @@ fun PlaceCreateScreenContents(
             CenterAlignedTopAppBar(
                 title = { Text(text = stringResource(R.string.place_create_title)) },
                 navigationIcon = {
-                    IconButton(onClick = onBackClick) {
+                    IconButton(onClick = { onAction(PlaceCreateAction.OnBackClick) }) {
                         Icon(
                             painter = painterResource(R.drawable.ic_outline_arrow_back),
                             contentDescription = stringResource(R.string.place_create_back_content_description)
@@ -118,14 +121,14 @@ fun PlaceCreateScreenContents(
                 horizontalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceSmall),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                selectedImages.forEach { uri ->
+                uiState.images.forEach { uri ->
                     SelectedImageItem(
                         imageUri = uri,
-                        onRemoveClick = { selectedImages.remove(uri) }
+                        onRemoveClick = { onAction(PlaceCreateAction.OnRemoveImages(uri)) }
                     )
                 }
                 ImageCountButton(
-                    current = selectedImages.size,
+                    current = uiState.images.size,
                     max = MAX_PICTURE_COUNT,
                     onClick = {
                         if (remain > 0) {
@@ -142,10 +145,10 @@ fun PlaceCreateScreenContents(
             )
             MemoripInputBox(
                 label = stringResource(R.string.place_create_content_title),
-                value = title,
+                value = uiState.title,
                 placeholder = stringResource(R.string.place_create_title_input),
-                onValueChange = { title = it },
-                onClear = { title = "" },
+                onValueChange = { onAction(PlaceCreateAction.OnTitleChange(it)) },
+                onClear = { onAction(PlaceCreateAction.OnTitleChange("")) },
                 height = MemoripHeight.TextBoxDefault
             )
 
@@ -155,29 +158,29 @@ fun PlaceCreateScreenContents(
             )
             MemoripInputBox(
                 label = stringResource(R.string.place_create_content),
-                value = content,
+                value = uiState.content,
                 placeholder = stringResource(R.string.place_create_content_input),
-                onValueChange = { content = it },
-                onClear = { content = "" }
+                onValueChange = { onAction(PlaceCreateAction.OnContentChange(it)) },
+                onClear = { onAction(PlaceCreateAction.OnContentChange("")) }
             )
 
             SelectRow(
                 label = stringResource(R.string.place_create_category),
                 value = "",
                 leadingIcon = painterResource(R.drawable.ic_tag),
-                onClick = onCategoryClick
+                onClick = { onAction(PlaceCreateAction.OnCategoryClick) }
             )
             SelectRow(
                 label = stringResource(R.string.place_create_location),
                 value = "",
                 leadingIcon = painterResource(R.drawable.ic_location_on),
-                onClick = onLocationClick
+                onClick = { onAction(PlaceCreateAction.OnLocationClick) }
             )
             SelectRow(
                 label = stringResource(R.string.place_create_group),
                 value = "",
                 leadingIcon = painterResource(R.drawable.ic_folder),
-                onClick = onGroupClick
+                onClick = { onAction(PlaceCreateAction.OnGroupClick) }
             )
         }
     }
@@ -188,10 +191,8 @@ fun PlaceCreateScreenContents(
 private fun PlaceCreateScreenContentsPreview() {
     MemoripTheme {
         PlaceCreateScreenContents(
-            onCategoryClick = {},
-            onLocationClick = {},
-            onGroupClick = {},
-            onBackClick = {}
+            uiState = PlaceCreateUiState(),
+            onAction = {}
         )
     }
 }
