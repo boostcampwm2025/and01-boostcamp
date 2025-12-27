@@ -1,4 +1,4 @@
-package com.andone.memorip.presentation.home
+package com.andone.memorip.presentation.placelist
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.WindowInsets
@@ -22,23 +22,23 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.GroupView
-import com.andone.memorip.presentation.home.model.GroupUiModel
+import com.andone.memorip.presentation.placelist.model.GroupUiModel
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
 
 @Composable
-fun HomeScreen(
+fun PlaceListScreen(
     onGroupClick: (String) -> Unit,
     onAddClick: () -> Unit,
     onCreateGroupClick: () -> Unit,
     onCreatePlaceClick: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: HomeViewModel = hiltViewModel(),
+    viewModel: PlaceListViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    HomeScreenContents(
+    PlaceListScreenContents(
         groups = uiState.groups,
         onGroupClick = onGroupClick,
         onAddClick = onAddClick,
@@ -50,7 +50,7 @@ fun HomeScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreenContents(
+fun PlaceListScreenContents(
     groups: List<GroupUiModel>,
     onGroupClick: (String) -> Unit,
     onAddClick: () -> Unit,
@@ -67,7 +67,7 @@ fun HomeScreenContents(
                     IconButton(onClick = {}) {
                         Icon(
                             painter = painterResource(R.drawable.ic_search),
-                            contentDescription = stringResource(R.string.home_search_content_description)
+                            contentDescription = stringResource(R.string.place_list_search_content_description)
                         )
                     }
                 },
@@ -84,7 +84,7 @@ fun HomeScreenContents(
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_add),
-                    contentDescription = stringResource(R.string.home_add_content_description)
+                    contentDescription = stringResource(R.string.place_list_add_content_description)
                 )
             }
         },
@@ -110,9 +110,9 @@ fun HomeScreenContents(
 
 @Composable
 @Preview(showBackground = true)
-private fun HomeScreenContentsPreview() {
+private fun PlaceListScreenContentsPreview() {
     MemoripTheme {
-        HomeScreenContents(
+        PlaceListScreenContents(
             groups = DummyData.groups,
             onGroupClick = {},
             onAddClick = {},

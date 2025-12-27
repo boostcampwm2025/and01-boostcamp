@@ -1,9 +1,9 @@
-package com.andone.memorip.presentation.home
+package com.andone.memorip.presentation.placelist
 
 import androidx.lifecycle.ViewModel
-import com.andone.memorip.presentation.home.model.GroupUiModel
-import com.andone.memorip.presentation.home.model.HomeAction
-import com.andone.memorip.presentation.home.model.HomeUiState
+import com.andone.memorip.presentation.placelist.model.GroupUiModel
+import com.andone.memorip.presentation.placelist.model.PlaceListAction
+import com.andone.memorip.presentation.placelist.model.PlaceListUiState
 import com.andone.memorip.presentation.util.DummyData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,28 +12,28 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor() : ViewModel() {
+class PlaceListViewModel @Inject constructor() : ViewModel() {
 
-    private val _uiState = MutableStateFlow(HomeUiState())
-    val uiState: StateFlow<HomeUiState> = _uiState
+    private val _uiState = MutableStateFlow(PlaceListUiState())
+    val uiState: StateFlow<PlaceListUiState> = _uiState
 
     init {
         // 테스트 더미 데이터
         _uiState.update { it.copy(groups = DummyData.groups) }
     }
 
-    fun onAction(intent: HomeAction) {
+    fun onAction(intent: PlaceListAction) {
         when (intent) {
-            is HomeAction.OnGroupAdd -> {
+            is PlaceListAction.OnGroupAdd -> {
                 reduceAddGroup(name = intent.name)
             }
 
-            is HomeAction.OnGroupUpdate -> {
+            is PlaceListAction.OnGroupUpdate -> {
                 reduceUpdateGroup(group = intent.group)
             }
 
-            is HomeAction.OnGroupsSet -> {
-                _uiState.value = HomeUiState(groups = intent.groups)
+            is PlaceListAction.OnGroupsSet -> {
+                _uiState.value = PlaceListUiState(groups = intent.groups)
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.andone.memorip.presentation.home.component
+package com.andone.memorip.presentation.placelist.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -15,7 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.AsyncImage
 import com.andone.memorip.presentation.R
-import com.andone.memorip.presentation.home.model.GroupItem
+import com.andone.memorip.presentation.placelist.model.GroupItem
 import com.andone.memorip.presentation.theme.MemoripAlpha
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -50,7 +50,7 @@ fun ImageCard(
                 ) {
                     Text(
                         text = stringResource(
-                            R.string.home_overflow_count,
+                            R.string.place_list_overflow_count,
                             item.overNumber
                         ),
                         color = MemoripTheme.colors.white

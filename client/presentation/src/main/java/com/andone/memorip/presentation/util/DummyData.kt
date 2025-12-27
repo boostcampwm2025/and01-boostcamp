@@ -2,7 +2,7 @@ package com.andone.memorip.presentation.util
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.graphics.Color
-import com.andone.memorip.presentation.home.model.GroupUiModel
+import com.andone.memorip.presentation.placelist.model.GroupUiModel
 import com.andone.memorip.presentation.model.ImageItem
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.placedetail.model.PlaceUiModel

@@ -1,6 +1,6 @@
 package com.andone.memorip.presentation.selectgroup.model
 
-import com.andone.memorip.presentation.home.model.GroupUiModel
+import com.andone.memorip.presentation.placelist.model.GroupUiModel
 
 sealed interface SelectGroupAction {
     data object onFABClick: SelectGroupAction

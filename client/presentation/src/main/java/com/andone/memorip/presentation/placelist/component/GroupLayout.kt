@@ -1,4 +1,4 @@
-package com.andone.memorip.presentation.home.component
+package com.andone.memorip.presentation.placelist.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -6,11 +6,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.tooling.preview.Preview
-import com.andone.memorip.presentation.home.component.BentoGridSpec.COLUMNS
-import com.andone.memorip.presentation.home.component.BentoGridSpec.RATIO
-import com.andone.memorip.presentation.home.component.BentoGridSpec.ROWS
-import com.andone.memorip.presentation.home.model.GroupItem
-import com.andone.memorip.presentation.home.model.Placed
+import com.andone.memorip.presentation.placelist.component.BentoGridSpec.COLUMNS
+import com.andone.memorip.presentation.placelist.component.BentoGridSpec.RATIO
+import com.andone.memorip.presentation.placelist.component.BentoGridSpec.ROWS
+import com.andone.memorip.presentation.placelist.model.GroupItem
+import com.andone.memorip.presentation.placelist.model.Place
 import com.andone.memorip.presentation.theme.MemoripTheme
 
 private object BentoGridSpec {
@@ -41,7 +41,7 @@ fun GroupLayout(
 
         val columnHeights = IntArray(columns)
 
-        val placedItems = mutableListOf<Placed>()
+        val placedItems = mutableListOf<Place>()
 
         measurables.forEachIndexed { index, measurable ->
             val item = items[index]
@@ -74,7 +74,7 @@ fun GroupLayout(
                     columnHeights[cc] = bestBaseRow + item.rowSpan
                 }
 
-                placedItems += Placed(
+                placedItems += Place(
                     placeable = placeable,
                     row = bestBaseRow,
                     col = bestCol

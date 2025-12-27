@@ -1,4 +1,4 @@
-package com.andone.memorip.presentation.home.component
+package com.andone.memorip.presentation.placelist.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -17,7 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.R
-import com.andone.memorip.presentation.home.component.CardSpec.RATIO
+import com.andone.memorip.presentation.placelist.component.CardSpec.RATIO
 import com.andone.memorip.presentation.theme.LocalMemoripTypography
 import com.andone.memorip.presentation.theme.MemoripBorderWidth
 import com.andone.memorip.presentation.theme.MemoripSpace
