@@ -3,16 +3,22 @@ package com.andone.memorip.presentation.selectcategory.model
 import androidx.compose.ui.graphics.Color
 
 sealed interface SelectCategoryAction {
-    data class onCategoryItemClick(
+
+    data class OnCategoryItemClick(
         val category: Category,
         val checked: Boolean
-    ): SelectCategoryAction
-    data object onFABClick: SelectCategoryAction
-    data object onBackClick: SelectCategoryAction
-    data object onConfirmClick: SelectCategoryAction
-    data class onConfirmDialogClick(
+    ) : SelectCategoryAction
+
+    data object OnFABClick : SelectCategoryAction
+
+    data object OnBackClick : SelectCategoryAction
+
+    data object OnConfirmClick : SelectCategoryAction
+
+    data class OnDialogConfirmClick(
         val category: String,
         val color: Color
-    ): SelectCategoryAction
-    data object onCancelDialogClick: SelectCategoryAction
+    ) : SelectCategoryAction
+
+    data object OnDialogCancelClick : SelectCategoryAction
 }

@@ -48,24 +48,27 @@ fun SelectCategoryScreen(
     LaunchedEffect(Unit) {
         viewModel.event.collect { event ->
             when (event) {
-                SelectCategoryEvent.onNavigateBack -> {
+                SelectCategoryEvent.NavigateBack -> {
                     onBackClick()
                 }
 
-                is SelectCategoryEvent.onNavigateAddPlace -> {
+                is SelectCategoryEvent.NavigateAddPlace -> {
                     Log.d("UI TEST", "navigation add place ${event.categories}")
                 }
 
-                SelectCategoryEvent.onShowDialog -> {
+                SelectCategoryEvent.ShowDialog -> {
                     showDialog = true
                 }
 
-                SelectCategoryEvent.onDismissDialog -> {
+                SelectCategoryEvent.DismissDialog -> {
                     showDialog = false
                 }
 
-                is SelectCategoryEvent.onShowSnackbar -> {
-                    Log.d("UI TEST","show snackbar : ${event.message.toErrorMessage(context = context)}")
+                is SelectCategoryEvent.ShowSnackBar -> {
+                    Log.d(
+                        "UI TEST",
+                        "show snackbar : ${event.message.toErrorMessage(context = context)}"
+                    )
                 }
             }
         }
@@ -83,14 +86,14 @@ fun SelectCategoryScreen(
             title = stringResource(R.string.select_category_dialog_title),
             onConfirmClick = { category, color ->
                 viewModel.onAction(
-                    action = SelectCategoryAction.onConfirmDialogClick(
+                    action = SelectCategoryAction.OnDialogConfirmClick(
                         category = category,
                         color = color
                     )
                 )
             },
-            onCancelClick = { viewModel.onAction(SelectCategoryAction.onCancelDialogClick) },
-            onDismissRequest = { viewModel.onAction(SelectCategoryAction.onCancelDialogClick) }
+            onCancelClick = { viewModel.onAction(SelectCategoryAction.OnDialogCancelClick) },
+            onDismissRequest = { viewModel.onAction(SelectCategoryAction.OnDialogCancelClick) }
         )
     }
 }
@@ -107,13 +110,13 @@ private fun SelectCategoryContent(
         topBar = {
             SelectCategoryTopBar(
                 checkEnabled = checkedList.isNotEmpty(),
-                onConfirmClick = { onAction(SelectCategoryAction.onConfirmClick) },
-                onBackClick = { onAction(SelectCategoryAction.onBackClick) }
+                onConfirmClick = { onAction(SelectCategoryAction.OnConfirmClick) },
+                onBackClick = { onAction(SelectCategoryAction.OnBackClick) }
             )
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { onAction(SelectCategoryAction.onFABClick) },
+                onClick = { onAction(SelectCategoryAction.OnFABClick) },
                 containerColor = MemoripTheme.colors.primaryContainer,
                 contentColor = MemoripTheme.colors.black
             ) {
@@ -138,7 +141,7 @@ private fun SelectCategoryContent(
                     checked = category.id in checkedList,
                     onCheckedChange = { checked ->
                         onAction(
-                            SelectCategoryAction.onCategoryItemClick(
+                            SelectCategoryAction.OnCategoryItemClick(
                                 category = category,
                                 checked = checked
                             )

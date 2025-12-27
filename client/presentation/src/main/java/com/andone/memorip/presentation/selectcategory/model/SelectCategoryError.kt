@@ -3,8 +3,8 @@ package com.andone.memorip.presentation.selectcategory.model
 import android.content.Context
 import com.andone.memorip.presentation.R
 
-sealed class SelectCategoryError {
-    data object MaxCategoryOverError : SelectCategoryError()
+sealed interface SelectCategoryError {
+    data object MaxCategoryOverError : SelectCategoryError
 }
 
 fun SelectCategoryError.toErrorMessage(context: Context): String {

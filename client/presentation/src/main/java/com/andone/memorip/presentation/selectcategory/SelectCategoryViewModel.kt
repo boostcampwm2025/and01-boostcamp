@@ -39,35 +39,35 @@ class SelectCategoryViewModel @Inject constructor() : ViewModel() {
 
     fun onAction(action: SelectCategoryAction) {
         when (action) {
-            SelectCategoryAction.onBackClick -> {
-                _event.trySend(element = SelectCategoryEvent.onNavigateBack)
+            SelectCategoryAction.OnBackClick -> {
+                _event.trySend(element = SelectCategoryEvent.NavigateBack)
             }
 
-            is SelectCategoryAction.onConfirmClick -> {
+            is SelectCategoryAction.OnConfirmClick -> {
                 _event.trySend(
-                    element = SelectCategoryEvent.onNavigateAddPlace(
+                    element = SelectCategoryEvent.NavigateAddPlace(
                         categories = uiState.value.categories.filter { it.id in uiState.value.checkedSet }
                     )
                 )
             }
 
-            SelectCategoryAction.onCancelDialogClick -> {
-                _event.trySend(element = SelectCategoryEvent.onDismissDialog)
+            SelectCategoryAction.OnDialogCancelClick -> {
+                _event.trySend(element = SelectCategoryEvent.DismissDialog)
             }
 
-            is SelectCategoryAction.onCategoryItemClick -> {
+            is SelectCategoryAction.OnCategoryItemClick -> {
                 updateChecked(category = action.category)
             }
 
-            is SelectCategoryAction.onConfirmDialogClick -> {
+            is SelectCategoryAction.OnDialogConfirmClick -> {
                 addCategory(
                     category = action.category,
                     color = action.color
                 )
             }
 
-            SelectCategoryAction.onFABClick -> {
-                _event.trySend(element = SelectCategoryEvent.onShowDialog)
+            SelectCategoryAction.OnFABClick -> {
+                _event.trySend(element = SelectCategoryEvent.ShowDialog)
             }
         }
     }
@@ -82,7 +82,7 @@ class SelectCategoryViewModel @Inject constructor() : ViewModel() {
 
         val categories = uiState.value.categories + newCategory
         _uiState.value = uiState.value.copy(categories = categories.toImmutableList())
-        _event.trySend(SelectCategoryEvent.onDismissDialog)
+        _event.trySend(SelectCategoryEvent.DismissDialog)
     }
 
     private fun updateChecked(category: Category) {
@@ -91,7 +91,7 @@ class SelectCategoryViewModel @Inject constructor() : ViewModel() {
         } else {
             if (uiState.value.checkedSet.size >= MAX_SELECTABLE_COUNT) {
                 _event.trySend(
-                    element = SelectCategoryEvent.onShowSnackbar(message = SelectCategoryError.MaxCategoryOverError)
+                    element = SelectCategoryEvent.ShowSnackBar(message = SelectCategoryError.MaxCategoryOverError)
                 )
                 return
             }
