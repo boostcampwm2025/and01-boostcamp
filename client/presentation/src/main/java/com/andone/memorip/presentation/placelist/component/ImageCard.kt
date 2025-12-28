@@ -30,9 +30,9 @@ fun ImageCard(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(MemoripPadding.PaddingXXXSmall)
-                .clip(memoripShapes.roundedSmall)
-                .background(MemoripTheme.colors.offWhite),
+                .padding(all = MemoripPadding.PaddingXXXSmall)
+                .clip(shape = memoripShapes.roundedSmall)
+                .background(color = MemoripTheme.colors.outline),
             contentAlignment = Alignment.Center
         ) {
             AsyncImage(
@@ -45,7 +45,7 @@ fun ImageCard(
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(MemoripTheme.colors.black.copy(alpha = MemoripAlpha.IMAGE_PLACEHOLDER)),
+                        .background(color = MemoripTheme.colors.black.copy(alpha = MemoripAlpha.IMAGE_PLACEHOLDER)),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(

@@ -22,8 +22,8 @@ import com.andone.memorip.presentation.theme.MemoripIconSize
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.R
 
-private object MemoripOffset {
-    val DeleteIcon = DpOffset(1.dp, (-1).dp)
+private object IconOffset {
+    val DeleteIcon = DpOffset(x = 1.dp, y = (-1).dp)
 }
 
 
@@ -44,14 +44,14 @@ fun SelectedImageItem(
                 )
         ) {
             AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(imageUri)
+                model = ImageRequest.Builder(context = LocalContext.current)
+                    .data(data = imageUri)
                     .build(),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxSize()
-                    .clip(MemoripTheme.shapes.roundedSmall)
+                    .clip(shape = MemoripTheme.shapes.roundedSmall)
             )
         }
 
@@ -61,8 +61,8 @@ fun SelectedImageItem(
                 .align(Alignment.TopEnd)
                 .size(size = MemoripIconSize.IconSizeMedium)
                 .offset(
-                    x = MemoripOffset.DeleteIcon.x,
-                    y = MemoripOffset.DeleteIcon.y
+                    x = IconOffset.DeleteIcon.x,
+                    y = IconOffset.DeleteIcon.y
                 )
         ) {
             Icon(

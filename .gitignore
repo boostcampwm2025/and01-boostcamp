@@ -13,6 +13,7 @@ client/captures
 .externalNativeBuild
 .cxx
 local.properties
+client/app/release/
 
 HELP.md
 build/

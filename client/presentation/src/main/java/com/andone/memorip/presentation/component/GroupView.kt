@@ -1,10 +1,9 @@
 package com.andone.memorip.presentation.component
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -32,10 +31,12 @@ fun GroupView(
             indication = null,
             onClick = onGroupClick
         ),
-        verticalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXSmall)
     ) {
-        Text(text = name.ifBlank { stringResource(R.string.group_view_default_name) })
-
+        Text(
+            text = name.ifBlank { stringResource(R.string.group_view_default_name) },
+            modifier = Modifier.padding(all = MemoripSpace.SpaceXXSmall),
+            style = MemoripTheme.typography.title1
+        )
         if (images.isEmpty()) {
             EmptyGroupPlaceholder(onClick = onAddClick)
         } else {
@@ -43,7 +44,6 @@ fun GroupView(
                 items = buildBento5x3Items(images),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(MemoripTheme.colors.white)
             ) { item ->
                 ImageCard(item = item)
             }

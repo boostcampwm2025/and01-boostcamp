@@ -1,7 +1,9 @@
 package com.andone.memorip.presentation.placelist.model
 
+import androidx.compose.runtime.Immutable
 import java.util.UUID
 
+@Immutable
 data class GroupUiModel(
     val id: UUID = UUID.randomUUID(),
     val name: String,

@@ -6,21 +6,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.GroupView
 import com.andone.memorip.presentation.placelist.model.GroupUiModel
 import com.andone.memorip.presentation.placelist.model.PlaceListAction
@@ -71,41 +63,15 @@ fun PlaceListScreenContents(
 ) {
     Scaffold(
         modifier = modifier,
-        topBar = {
-            TopAppBar(
-                title = {},
-                navigationIcon = {
-                    IconButton(onClick = {}) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_search),
-                            contentDescription = stringResource(R.string.place_list_search_content_description)
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MemoripTheme.colors.primaryContainer
-                )
-            )
-        },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = { onAction(PlaceListAction.OnFABClick) },
-                containerColor = MemoripTheme.colors.primaryContainer,
-                contentColor = MemoripTheme.colors.black
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_add),
-                    contentDescription = stringResource(R.string.place_list_add_content_description)
-                )
-            }
-        },
+        topBar = { HomeTopBar(onSearchClick = { }) },
+        floatingActionButton = { HomeFloatingActionButton(onClick = { onAction(PlaceListAction.OnFABClick) }) },
         contentWindowInsets = WindowInsets(),
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier
                 .padding(paddingValues = innerPadding)
                 .padding(horizontal = MemoripPadding.PaddingXSmall),
-            verticalArrangement = Arrangement.spacedBy(space = MemoripPadding.PaddingXXXSmall)
+            verticalArrangement = Arrangement.spacedBy(space = MemoripPadding.PaddingXSmall)
         ) {
             items(items = groups) { group ->
                 GroupView(
