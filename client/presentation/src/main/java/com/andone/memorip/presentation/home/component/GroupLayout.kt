@@ -39,7 +39,7 @@ fun GroupLayout(
         val cellWidth = totalWidth / columns
         val cellHeight = totalHeight / rows
 
-        val columnHeights = IntArray(columns)
+        val columnHeights = IntArray(size = columns)
 
         val placedItems = mutableListOf<Placed>()
 
@@ -64,7 +64,7 @@ fun GroupLayout(
                 val height = cellHeight * item.rowSpan
 
                 val placeable = measurable.measure(
-                    constraints.copy(
+                    constraints = constraints.copy(
                         minWidth = width, maxWidth = width,
                         minHeight = height, maxHeight = height
                     )
@@ -112,7 +112,7 @@ private fun GroupLayoutPreview() {
             items = items,
             modifier = Modifier
                 .fillMaxWidth()
-                .background(MemoripTheme.colors.white)
+                .background(color = MemoripTheme.colors.white)
         ) { item ->
             ImageCard(item = item)
         }
