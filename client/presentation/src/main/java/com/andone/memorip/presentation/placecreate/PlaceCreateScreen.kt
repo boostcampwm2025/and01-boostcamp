@@ -58,6 +58,9 @@ fun PlaceCreateScreen(
     viewModel.event.collectWithLifecycle { event ->
         when (event) {
             PlaceCreateEvent.NavigateBack -> onBackClick()
+            PlaceCreateEvent.NavigateToCategory -> onCategoryClick()
+            PlaceCreateEvent.NavigateToLocation -> onLocationClick()
+            PlaceCreateEvent.NavigateToGroup -> onGroupClick()
         }
     }
 

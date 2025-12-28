@@ -3,7 +3,6 @@ package com.andone.memorip.presentation.placecreate
 import androidx.lifecycle.ViewModel
 import com.andone.memorip.presentation.placecreate.model.PlaceCreateAction
 import com.andone.memorip.presentation.placecreate.model.PlaceCreateEvent
-import com.andone.memorip.presentation.placecreate.model.PlaceCreateScreenState
 import com.andone.memorip.presentation.placecreate.model.PlaceCreateUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -26,15 +25,15 @@ class PlaceCreateViewModel @Inject constructor() : ViewModel() {
     fun onAction(action: PlaceCreateAction) {
         when (action) {
             PlaceCreateAction.OnCategoryClick -> {
-                _uiState.update { it.copy(screenState = PlaceCreateScreenState.SELECT_CATEGORY) }
+                _event.trySend(PlaceCreateEvent.NavigateToCategory)
             }
 
             PlaceCreateAction.OnLocationClick -> {
-                _uiState.update { it.copy(screenState = PlaceCreateScreenState.SELECT_LOCATION) }
+                _event.trySend(PlaceCreateEvent.NavigateToLocation)
             }
 
             PlaceCreateAction.OnGroupClick -> {
-                _uiState.update { it.copy(screenState = PlaceCreateScreenState.SELECT_GROUP) }
+                _event.trySend(PlaceCreateEvent.NavigateToGroup)
             }
 
             is PlaceCreateAction.OnTitleChange -> {
