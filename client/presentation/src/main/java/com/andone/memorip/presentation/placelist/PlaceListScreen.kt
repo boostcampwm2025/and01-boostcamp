@@ -14,6 +14,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.presentation.component.GroupView
+import com.andone.memorip.presentation.placelist.component.PlaceListFloatingActionButton
+import com.andone.memorip.presentation.placelist.component.PlaceListTopBar
 import com.andone.memorip.presentation.placelist.model.GroupUiModel
 import com.andone.memorip.presentation.placelist.model.PlaceListAction
 import com.andone.memorip.presentation.placelist.model.PlaceListEvent
@@ -63,8 +65,8 @@ fun PlaceListScreenContents(
 ) {
     Scaffold(
         modifier = modifier,
-        topBar = { HomeTopBar(onSearchClick = { }) },
-        floatingActionButton = { HomeFloatingActionButton(onClick = { onAction(PlaceListAction.OnFABClick) }) },
+        topBar = { PlaceListTopBar(onSearchClick = { }) },
+        floatingActionButton = { PlaceListFloatingActionButton(onClick = { onAction(PlaceListAction.OnFABClick) }) },
         contentWindowInsets = WindowInsets(),
     ) { innerPadding ->
         LazyColumn(
