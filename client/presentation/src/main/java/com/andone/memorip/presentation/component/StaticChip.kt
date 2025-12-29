@@ -17,15 +17,15 @@ import com.andone.memorip.presentation.theme.MemoripBorderWidth
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
 
-private object StaticTagDimen {
-    val staticChipRaidus: Dp = 50.dp
+private object StaticChipDimen {
+    val RADIUS: Dp = 50.dp
 }
 
 @Immutable
 data class StaticChipColors(
     val backgroundColor: Color,
     val textColor: Color,
-    val borderColor: Color?
+    val borderColor: Color? = null
 ) {
     companion object {
         val Default: StaticChipColors
@@ -42,7 +42,7 @@ data class StaticChipColors(
 fun StaticChip(
     chipName: String,
     modifier: Modifier = Modifier,
-    radius: Dp = StaticTagDimen.staticChipRaidus,
+    radius: Dp = StaticChipDimen.RADIUS,
     colors: StaticChipColors = StaticChipColors.Default
 ) {
     val borderModifier = if (colors.borderColor != null) {
