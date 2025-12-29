@@ -1,4 +1,4 @@
-package com.andone.memorip.presentation.home.component
+package com.andone.memorip.presentation.placelist.component
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -14,16 +14,14 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeTopBar(onSearchClick: () -> Unit) {
+fun PlaceListTopBar(onSearchClick: () -> Unit) {
     TopAppBar(
         title = {},
         navigationIcon = {
             IconButton(onClick = onSearchClick) {
                 Icon(
                     painter = painterResource(R.drawable.ic_search),
-                    contentDescription = stringResource(
-                        R.string.home_search_content_description
-                    )
+                    contentDescription = stringResource(R.string.place_list_search_content_description)
                 )
             }
         },
@@ -33,8 +31,8 @@ fun HomeTopBar(onSearchClick: () -> Unit) {
 
 @Preview
 @Composable
-private fun HomeTopBarPreview(){
+private fun HomeTopBarPreview() {
     MemoripTheme {
-        HomeTopBar(onSearchClick = {})
+        PlaceListTopBar(onSearchClick = {})
     }
 }

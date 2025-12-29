@@ -1,4 +1,4 @@
-package com.andone.memorip.presentation.home
+package com.andone.memorip.presentation.placelist
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.WindowInsets
@@ -14,48 +14,59 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.presentation.component.GroupView
-import com.andone.memorip.presentation.home.component.HomeFloatingActionButton
-import com.andone.memorip.presentation.home.component.HomeTopBar
-import com.andone.memorip.presentation.home.model.GroupUiModel
+import com.andone.memorip.presentation.placelist.component.PlaceListFloatingActionButton
+import com.andone.memorip.presentation.placelist.component.PlaceListTopBar
+import com.andone.memorip.presentation.placelist.model.GroupUiModel
+import com.andone.memorip.presentation.placelist.model.PlaceListAction
+import com.andone.memorip.presentation.placelist.model.PlaceListEvent
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
+import com.andone.memorip.presentation.util.collectWithLifecycle
 
 @Composable
-fun HomeScreen(
+fun PlaceListScreen(
     onGroupClick: (String) -> Unit,
-    onAddClick: () -> Unit,
-    onCreateGroupClick: () -> Unit,
     onCreatePlaceClick: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: HomeViewModel = hiltViewModel(),
+    viewModel: PlaceListViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    HomeScreenContents(
+    viewModel.event.collectWithLifecycle { event ->
+        when (event) {
+            is PlaceListEvent.NavigateToGroupDetail -> {
+                onGroupClick(event.groupId)
+            }
+
+            is PlaceListEvent.NavigateToPlaceCreate -> {
+                onCreatePlaceClick()
+            }
+
+            PlaceListEvent.ShowSnackBar -> {
+                // TODO: 설정 필요
+            }
+        }
+    }
+
+    PlaceListScreenContents(
         groups = uiState.groups,
-        onGroupClick = onGroupClick,
-        onAddClick = onAddClick,
-        onCreateGroupClick = onCreateGroupClick,
-        onCreatePlaceClick = onCreatePlaceClick,
+        onAction = viewModel::onAction,
         modifier = modifier,
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreenContents(
+fun PlaceListScreenContents(
     groups: List<GroupUiModel>,
-    onGroupClick: (String) -> Unit,
-    onAddClick: () -> Unit,
-    onCreateGroupClick: () -> Unit,
-    onCreatePlaceClick: () -> Unit,
+    onAction: (PlaceListAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
         modifier = modifier,
-        topBar = { HomeTopBar(onSearchClick = { }) },
-        floatingActionButton = { HomeFloatingActionButton(onClick = onCreatePlaceClick) },
+        topBar = { PlaceListTopBar(onSearchClick = { }) },
+        floatingActionButton = { PlaceListFloatingActionButton(onClick = { onAction(PlaceListAction.OnFABClick) }) },
         contentWindowInsets = WindowInsets(),
     ) { innerPadding ->
         LazyColumn(
@@ -67,8 +78,8 @@ fun HomeScreenContents(
             items(items = groups) { group ->
                 GroupView(
                     name = group.name,
-                    onGroupClick = { onGroupClick("") },
-                    onAddClick = onAddClick,
+                    onGroupClick = { onAction(PlaceListAction.OnGroupClick("")) },
+                    onAddClick = { onAction(PlaceListAction.OnGroupClick("")) },
                     images = group.images
                 )
             }
@@ -78,14 +89,11 @@ fun HomeScreenContents(
 
 @Composable
 @Preview(showBackground = true)
-private fun HomeScreenContentsPreview() {
+private fun PlaceListScreenContentsPreview() {
     MemoripTheme {
-        HomeScreenContents(
+        PlaceListScreenContents(
             groups = DummyData.groups,
-            onGroupClick = {},
-            onAddClick = {},
-            onCreateGroupClick = {},
-            onCreatePlaceClick = {},
+            onAction = {}
         )
     }
 }
