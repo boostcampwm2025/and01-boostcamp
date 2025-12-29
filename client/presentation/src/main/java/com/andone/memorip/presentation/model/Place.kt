@@ -1,6 +1,9 @@
 package com.andone.memorip.presentation.model
 
 import androidx.compose.runtime.Immutable
+import com.andone.memorip.presentation.selectcategory.model.Category
+import java.time.Duration
+import java.time.LocalDateTime
 
 @Immutable
 data class Place(
@@ -8,6 +11,16 @@ data class Place(
     val name: String,
     val latitude: Double,
     val longitude: Double,
+    val address: String,
+    val startTime: LocalDateTime,
+    val endTime: LocalDateTime,
+    val categories: List<Category>,
     val thumbnailImage: ImageItem,
     val images: List<ImageItem>
-)
+) {
+    val durationMinutes: Long
+        get() = Duration.between(startTime, endTime).toMinutes()
+
+    val isMultiDay: Boolean
+        get() = startTime.toLocalDate() != endTime.toLocalDate()
+}
