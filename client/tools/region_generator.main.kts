@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import java.util.Properties
 
-val PROJECT_ROOT = File(requireNotNull(System.getProperty("user.dir"))).canonicalFile
+val PROJECT_ROOT = File(requireNotNull(System.getProperty("user.dir"))).canonicalFile.parentFile
 
 fun loadLocalProperty(key: String): String {
     val props = Properties()
@@ -87,10 +87,13 @@ val result = mutableMapOf<String, MutableList<String>>()
 val sidoMap = mutableMapOf<String, String>()
 
 // 1. 시도 수집
-allItems.filter { it.isSido() }.forEach {
-    result[it.name] = mutableListOf()
-    sidoMap[it.code.substring(0, 2)] = it.name
-}
+allItems
+    .filter { it.isSido() }
+    .sortedBy { it.code }
+    .forEach {
+        result[it.name] = mutableListOf()
+        sidoMap[it.code.substring(0, 2)] = it.name
+    }
 
 // 2. 시·군 정리
 val sigunguBySido = mutableMapOf<String, MutableSet<String>>()
