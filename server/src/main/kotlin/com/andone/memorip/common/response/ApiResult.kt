@@ -8,6 +8,13 @@ data class ApiResult<T>(
     val pagination: PaginationInfo? = null,
     val error: ErrorDetail? = null
 ) {
+    data class PaginationInfo(
+        val currentPage: Int,      // 현재 페이지 번호
+        val totalPages: Int,       // 전체 페이지 수
+        val totalCount: Long,      // 전체 데이터 개수
+        val hasNext: Boolean       // 다음 페이지 존재 여부
+    )
+
     data class ErrorDetail(
         val code: String,
         val message: String,
@@ -26,10 +33,3 @@ data class ApiResult<T>(
             ApiResult<T>(error = ErrorDetail(code, message, fields))
     }
 }
-
-data class PaginationInfo(
-    val current_page: Int,      // 현재 페이지 번호
-    val total_pages: Int,       // 전체 페이지 수
-    val total_count: Long,      // 전체 데이터 개수
-    val has_next: Boolean       // 다음 페이지 존재 여부
-)
