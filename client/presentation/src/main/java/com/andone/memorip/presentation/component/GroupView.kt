@@ -10,9 +10,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.R
-import com.andone.memorip.presentation.placelist.component.EmptyGroupPlaceholder
-import com.andone.memorip.presentation.placelist.component.GroupLayout
-import com.andone.memorip.presentation.placelist.component.ImageCard
+import com.andone.memorip.presentation.grouplist.component.EmptyGroupPlaceholder
+import com.andone.memorip.presentation.grouplist.component.GroupLayout
+import com.andone.memorip.presentation.grouplist.component.ImageCard
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.buildBento5x3Items

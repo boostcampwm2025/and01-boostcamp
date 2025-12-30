@@ -1,4 +1,4 @@
-package com.andone.memorip.presentation.placelist
+package com.andone.memorip.presentation.grouplist
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.WindowInsets
@@ -14,42 +14,42 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.presentation.component.GroupView
-import com.andone.memorip.presentation.placelist.component.PlaceListFloatingActionButton
-import com.andone.memorip.presentation.placelist.component.PlaceListTopBar
-import com.andone.memorip.presentation.placelist.model.GroupUiModel
-import com.andone.memorip.presentation.placelist.model.PlaceListAction
-import com.andone.memorip.presentation.placelist.model.PlaceListEvent
+import com.andone.memorip.presentation.grouplist.component.GroupListFloatingActionButton
+import com.andone.memorip.presentation.grouplist.component.GroupListTopBar
+import com.andone.memorip.presentation.grouplist.model.GroupUiModel
+import com.andone.memorip.presentation.grouplist.model.GroupListAction
+import com.andone.memorip.presentation.grouplist.model.GroupListEvent
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
 import com.andone.memorip.presentation.util.collectWithLifecycle
 
 @Composable
-fun PlaceListScreen(
+fun GroupListScreen(
     onGroupClick: (String) -> Unit,
     onCreatePlaceClick: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: PlaceListViewModel = hiltViewModel(),
+    viewModel: GroupListViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     viewModel.event.collectWithLifecycle { event ->
         when (event) {
-            is PlaceListEvent.NavigateToGroupDetail -> {
+            is GroupListEvent.NavigateToGroupDetail -> {
                 onGroupClick(event.groupId)
             }
 
-            is PlaceListEvent.NavigateToPlaceCreate -> {
+            is GroupListEvent.NavigateToPlaceCreate -> {
                 onCreatePlaceClick()
             }
 
-            PlaceListEvent.ShowSnackBar -> {
+            GroupListEvent.ShowSnackBar -> {
                 // TODO: 설정 필요
             }
         }
     }
 
-    PlaceListScreenContents(
+    GroupListScreenContents(
         groups = uiState.groups,
         onAction = viewModel::onAction,
         modifier = modifier,
@@ -58,15 +58,15 @@ fun PlaceListScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PlaceListScreenContents(
+fun GroupListScreenContents(
     groups: List<GroupUiModel>,
-    onAction: (PlaceListAction) -> Unit,
+    onAction: (GroupListAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
         modifier = modifier,
-        topBar = { PlaceListTopBar(onSearchClick = { }) },
-        floatingActionButton = { PlaceListFloatingActionButton(onClick = { onAction(PlaceListAction.OnFABClick) }) },
+        topBar = { GroupListTopBar(onSearchClick = { }) },
+        floatingActionButton = { GroupListFloatingActionButton(onClick = { onAction(GroupListAction.OnFABClick) }) },
         contentWindowInsets = WindowInsets(),
     ) { innerPadding ->
         LazyColumn(
@@ -78,8 +78,8 @@ fun PlaceListScreenContents(
             items(items = groups) { group ->
                 GroupView(
                     name = group.name,
-                    onGroupClick = { onAction(PlaceListAction.OnGroupClick("")) },
-                    onAddClick = { onAction(PlaceListAction.OnGroupClick("")) },
+                    onGroupClick = { onAction(GroupListAction.OnGroupClick("")) },
+                    onAddClick = { onAction(GroupListAction.OnGroupClick("")) },
                     images = group.images
                 )
             }
@@ -89,9 +89,9 @@ fun PlaceListScreenContents(
 
 @Composable
 @Preview(showBackground = true)
-private fun PlaceListScreenContentsPreview() {
+private fun GroupListScreenContentsPreview() {
     MemoripTheme {
-        PlaceListScreenContents(
+        GroupListScreenContents(
             groups = DummyData.groups,
             onAction = {}
         )

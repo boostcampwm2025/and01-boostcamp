@@ -15,7 +15,7 @@
     <!-- StaggeredGrid-->
     <string name="staggered_grid_image_content_description">장소 이미지</string>
 
-    <!-- PlaceListScreen -->
+    <!-- GroupListScreen -->
     <string name="place_list_search_content_description">Search</string>
     <string name="place_list_add_content_description">Add</string>
     <string name="place_list_overflow_count">+%1$d</string>

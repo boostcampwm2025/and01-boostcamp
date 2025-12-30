@@ -1,17 +1,17 @@
-package com.andone.memorip.presentation.placelist
+package com.andone.memorip.presentation.grouplist
 
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
-import com.andone.memorip.navigation.PlaceList
+import com.andone.memorip.navigation.GroupList
 
-fun EntryProviderScope<NavKey>.placeList(
+fun EntryProviderScope<NavKey>.groupList(
     onGroupClick: (String) -> Unit,
     onCreatePlaceClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    entry<PlaceList> {
-        PlaceListScreen(
+    entry<GroupList> {
+        GroupListScreen(
             onGroupClick = onGroupClick,
             onCreatePlaceClick = onCreatePlaceClick,
             modifier = modifier
