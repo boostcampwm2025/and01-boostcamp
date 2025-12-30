@@ -84,4 +84,9 @@
     <string name="errorfullscreen_error_default_message">잠시 후 다시 시도해주세요.</string>
     <string name="errorfullscreen_error_map_message">지도를 불러올 수 없습니다.</string>
 
+    <!-- SearchBar -->
+    <string name="search_bar_placeholder">검색어를 입력하세요.</string>
+    <string name="search_bar_go_back_content_description">뒤로 가기</string>
+    <string name="search_bar_close_content_description">검색어 삭제</string>
+
 </resources>
