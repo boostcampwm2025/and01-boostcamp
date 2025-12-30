@@ -44,6 +44,9 @@ private object PlaceTimeCardDimen {
     val EXPANDED_IMAGE_HEIGHT = 160.dp
     val CARD_ELEVATION = 2.dp
     val IMAGE_CORNER_RADIUS = 8.dp
+}
+
+private object PlaceTimeCardConstants {
     const val EXPANDED_LAYOUT_THRESHOLD_MINUTES = 90
 }
 
@@ -53,7 +56,7 @@ fun PlaceTimeCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    if (place.durationMinutes < PlaceTimeCardDimen.EXPANDED_LAYOUT_THRESHOLD_MINUTES) {
+    if (place.durationMinutes < PlaceTimeCardConstants.EXPANDED_LAYOUT_THRESHOLD_MINUTES) {
         CompactPlaceTimeCard(
             place = place,
             onClick = onClick,
