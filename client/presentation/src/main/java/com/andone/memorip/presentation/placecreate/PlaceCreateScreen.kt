@@ -1,6 +1,5 @@
 package com.andone.memorip.presentation.placecreate
 
-import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -11,20 +10,22 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.presentation.placecreate.PictureSetting.MAX_PICTURE_COUNT
 import com.andone.memorip.presentation.placecreate.component.PlaceCreateContentSection
 import com.andone.memorip.presentation.placecreate.component.PlaceCreateImageRow
 import com.andone.memorip.presentation.placecreate.component.PlaceCreateSelectSection
 import com.andone.memorip.presentation.placecreate.component.PlaceCreateTopBar
+import com.andone.memorip.presentation.placecreate.model.PlaceCreateAction
+import com.andone.memorip.presentation.placecreate.model.PlaceCreateEvent
+import com.andone.memorip.presentation.placecreate.model.PlaceCreateUiState
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
+import com.andone.memorip.presentation.util.collectWithLifecycle
 
 private object PictureSetting {
     const val MAX_PICTURE_COUNT = 10
@@ -37,12 +38,22 @@ fun PlaceCreateScreen(
     onGroupClick: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
+    viewModel: PlaceCreateViewModel = hiltViewModel()
 ) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    viewModel.event.collectWithLifecycle { event ->
+        when (event) {
+            PlaceCreateEvent.NavigateBack -> onBackClick()
+            PlaceCreateEvent.NavigateToCategory -> onCategoryClick()
+            PlaceCreateEvent.NavigateToLocation -> onLocationClick()
+            PlaceCreateEvent.NavigateToGroup -> onGroupClick()
+        }
+    }
+
     PlaceCreateScreenContents(
-        onCategoryClick = onCategoryClick,
-        onLocationClick = onLocationClick,
-        onGroupClick = onGroupClick,
-        onBackClick = onBackClick,
+        uiState = uiState,
+        onAction = viewModel::onAction,
         modifier = modifier,
     )
 }
@@ -50,22 +61,17 @@ fun PlaceCreateScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlaceCreateScreenContents(
-    onCategoryClick: () -> Unit,
-    onLocationClick: () -> Unit,
-    onGroupClick: () -> Unit,
-    onBackClick: () -> Unit,
-    modifier: Modifier = Modifier,
+    uiState: PlaceCreateUiState,
+    onAction: (PlaceCreateAction) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    var title by remember { mutableStateOf(value = "") }
-    var content by remember { mutableStateOf(value = "") }
-    val selectedImages = remember { mutableStateListOf<Uri>() }
-    val remain = MAX_PICTURE_COUNT - selectedImages.size
+    val remain = MAX_PICTURE_COUNT - uiState.images.size
 
     val imagePickerLauncher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.PickMultipleVisualMedia()) { uris ->
-            val canAdd = MAX_PICTURE_COUNT - selectedImages.size
+            val canAdd = MAX_PICTURE_COUNT - uiState.images.size
             if (uris.isNotEmpty()) {
-                selectedImages.addAll(elements = uris.take(n = canAdd))
+                onAction(PlaceCreateAction.OnAddImages(uris.take(canAdd)))
             }
         }
 
@@ -73,7 +79,7 @@ fun PlaceCreateScreenContents(
         modifier = modifier,
         topBar = {
             PlaceCreateTopBar(
-                onBackClick = onBackClick,
+                onBackClick = { onAction(PlaceCreateAction.OnBackClick) },
                 onConfirmClick = { },
                 confirmEnabled = false
             )
@@ -81,14 +87,14 @@ fun PlaceCreateScreenContents(
     ) { innerPadding ->
         Column(
             modifier = Modifier
-                .padding(paddingValues = innerPadding)
-                .padding(all = MemoripPadding.PaddingXSmall),
+                .padding(innerPadding)
+                .padding(MemoripPadding.PaddingXSmall),
             verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceSmall)
         ) {
             PlaceCreateImageRow(
-                selectedImages = selectedImages,
+                selectedImages = uiState.images,
                 maxCount = MAX_PICTURE_COUNT,
-                onRemoveImage = { selectedImages.remove(element = it) },
+                onRemoveImage = { uri -> onAction(PlaceCreateAction.OnRemoveImages(uri)) },
                 onAddImageClick = {
                     if (remain > 0) {
                         imagePickerLauncher.launch(
@@ -101,16 +107,16 @@ fun PlaceCreateScreenContents(
             )
 
             PlaceCreateContentSection(
-                title = title,
-                content = content,
-                onTitleChange = { title = it },
-                onContentChange = { content = it }
+                title = uiState.title,
+                content = uiState.content,
+                onTitleChange = { onAction(PlaceCreateAction.OnTitleChange(it)) },
+                onContentChange = { onAction(PlaceCreateAction.OnContentChange("")) }
             )
 
             PlaceCreateSelectSection(
-                onCategoryClick = onCategoryClick,
-                onLocationClick = onLocationClick,
-                onGroupClick = onGroupClick
+                onCategoryClick = { onAction(PlaceCreateAction.OnCategoryClick) },
+                onLocationClick = { onAction(PlaceCreateAction.OnLocationClick) },
+                onGroupClick = { onAction(PlaceCreateAction.OnGroupClick) }
             )
         }
     }
@@ -121,10 +127,8 @@ fun PlaceCreateScreenContents(
 private fun PlaceCreateScreenContentsPreview() {
     MemoripTheme {
         PlaceCreateScreenContents(
-            onCategoryClick = {},
-            onLocationClick = {},
-            onGroupClick = {},
-            onBackClick = {}
+            uiState = PlaceCreateUiState(),
+            onAction = {}
         )
     }
 }

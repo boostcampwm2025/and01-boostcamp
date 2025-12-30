@@ -16,13 +16,8 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,7 +28,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -43,6 +37,7 @@ import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.placedetail.PlaceDetailScreenConstants.IMAGE_ASPECT_RATIO
 import com.andone.memorip.presentation.placedetail.component.ImageDialog
 import com.andone.memorip.presentation.placedetail.component.PlaceDetailInfoSection
+import com.andone.memorip.presentation.placedetail.component.PlaceDetailTopBar
 import com.andone.memorip.presentation.placedetail.model.PlaceDetailAction
 import com.andone.memorip.presentation.placedetail.model.PlaceDetailEvent
 import com.andone.memorip.presentation.placedetail.model.PlaceUiModel
@@ -66,7 +61,7 @@ fun PlaceDetailScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    viewModel.uiEvent.collectWithLifecycle { event ->
+    viewModel.event.collectWithLifecycle { event ->
         when (event) {
             PlaceDetailEvent.NavigateBack -> onNavigateBack()
         }
@@ -94,7 +89,7 @@ private fun PlaceDetailScreen(
     Scaffold(
         modifier = modifier,
         topBar = {
-            PlaceDetailTopBar(onNavigationIconClick = { onAction(PlaceDetailAction.OnNavigateBack) })
+            PlaceDetailTopBar(onNavigationIconClick = { onAction(PlaceDetailAction.OnBackClick) })
         }
     ) { innerPadding ->
         Column(
@@ -155,27 +150,6 @@ private fun PlaceDetailScreen(
             modifier = Modifier.fillMaxSize()
         )
     }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun PlaceDetailTopBar(
-    onNavigationIconClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    TopAppBar(
-        title = {},
-        modifier = modifier,
-        navigationIcon = {
-            IconButton(onClick = onNavigationIconClick) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_outline_arrow_back),
-                    contentDescription = null
-                )
-            }
-        },
-        colors = TopAppBarDefaults.topAppBarColors(containerColor = MemoripTheme.colors.offWhite)
-    )
 }
 
 @Composable

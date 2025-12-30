@@ -23,8 +23,8 @@ class PlaceDetailViewModel(
     private val _uiState = MutableStateFlow(PlaceDetailUiState())
     val uiState = _uiState.asStateFlow()
 
-    private val _uiEvent = Channel<PlaceDetailEvent>(BUFFERED)
-    val uiEvent = _uiEvent.receiveAsFlow()
+    private val _event = Channel<PlaceDetailEvent>(BUFFERED)
+    val event = _event.receiveAsFlow()
 
     init {
         loadPlaceDetail(route.placeId)
@@ -32,7 +32,7 @@ class PlaceDetailViewModel(
 
     fun onAction(action: PlaceDetailAction) {
         when (action) {
-            PlaceDetailAction.OnNavigateBack -> _uiEvent.trySend(PlaceDetailEvent.NavigateBack)
+            PlaceDetailAction.OnBackClick -> _event.trySend(PlaceDetailEvent.NavigateBack)
         }
     }
 

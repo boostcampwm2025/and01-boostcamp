@@ -5,59 +5,71 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.GroupView
 import com.andone.memorip.presentation.component.dialog.MemoripInputDialog
-import com.andone.memorip.presentation.home.model.GroupUiModel
-import com.andone.memorip.presentation.theme.LocalMemoripTypography
+import com.andone.memorip.presentation.placelist.model.GroupUiModel
+import com.andone.memorip.presentation.selectgroup.component.SelectGroupTopBar
+import com.andone.memorip.presentation.selectgroup.model.SelectGroupAction
+import com.andone.memorip.presentation.selectgroup.model.SelectGroupEvent
 import com.andone.memorip.presentation.theme.MemoripPadding.PaddingMedium
 import com.andone.memorip.presentation.theme.MemoripPadding.PaddingXSmall
 import com.andone.memorip.presentation.theme.MemoripSpace.SpaceXSmall
 import com.andone.memorip.presentation.theme.MemoripTheme
-import com.andone.memorip.presentation.util.DummyData
+import com.andone.memorip.presentation.util.collectWithLifecycle
 
 @Composable
 fun SelectGroupScreen(
     onBackClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: SelectGroupViewModel = hiltViewModel()
 ) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
     var showDialog by remember { mutableStateOf(false) }
-    val groups = remember { DummyData.groups }
+
+    viewModel.event.collectWithLifecycle { event ->
+        when (event) {
+            SelectGroupEvent.NavigateBack -> {
+                onBackClick()
+            }
+
+            is SelectGroupEvent.NavigatePlaceAdd -> {
+                /** TODO 그룹 추가 화면으로 이동하되 데이터를 들고 이동하기 */
+                Log.d("UI TEST", "add group after : ${event.group}")
+            }
+
+            SelectGroupEvent.ShowDialog -> {
+                showDialog = true
+            }
+
+            SelectGroupEvent.DismissDialog -> {
+                showDialog = false
+            }
+
+            SelectGroupEvent.ShowSnackBar -> {
+                /** TODO Snackbar 보여주기 */
+            }
+        }
+    }
 
     SelectGroupContent(
-        groups = groups,
-        onFABClick = { showDialog = true },
-        onGroupClick = {
-            /* TODO GROUP 선택 시 이전 화면으로 이동 및 데이터 전달 */
-            // 우선 popBackStack
-            onBackClick()
-            Log.d("UI TEST", "group ui model : $it")
-        },
-        onAddClick = {
-            /* TODO 새로 추가한 GROUP 선택 시 이전 화면으로 이동 및 데이터 전달 */
-            // 우선 popBackStack
-            onBackClick()
-        },
-        onBackClick = onBackClick,
+        groups = uiState.groups,
+        onAction = viewModel::onAction,
         modifier = modifier
     )
 
@@ -69,11 +81,10 @@ fun SelectGroupScreen(
                     name = it,
                     images = emptyList()
                 )
-                groups.add(newGroup)
-                showDialog = false
+                viewModel.onAction(action = SelectGroupAction.OnDialogConfirmClick(newGroup))
             },
-            onCancelClick = { showDialog = false },
-            onDismissRequest = { showDialog = false },
+            onCancelClick = { viewModel.onAction(action = SelectGroupAction.OnDialogCancelClick) },
+            onDismissRequest = { viewModel.onAction(action = SelectGroupAction.OnDialogCancelClick) },
             hint = stringResource(R.string.select_group_dialog_hint),
             label = stringResource(R.string.select_group_dialog_label)
         )
@@ -83,23 +94,20 @@ fun SelectGroupScreen(
 @Composable
 private fun SelectGroupContent(
     groups: List<GroupUiModel>,
-    onFABClick: () -> Unit,
-    onGroupClick: (GroupUiModel) -> Unit,
-    onAddClick: () -> Unit,
-    onBackClick: () -> Unit,
+    onAction: (SelectGroupAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
-        topBar = { SelectGroupTopBar(onBackClick = onBackClick) },
+        topBar = { SelectGroupTopBar(onBackClick = { onAction(SelectGroupAction.OnBackClick) }) },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = onFABClick,
+                onClick = { onAction(SelectGroupAction.OnFABClick) },
                 containerColor = MemoripTheme.colors.primaryContainer,
                 contentColor = MemoripTheme.colors.black
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_add),
-                    contentDescription = stringResource(R.string.home_add_content_description)
+                    contentDescription = stringResource(R.string.place_list_add_content_description)
                 )
             }
         },
@@ -113,39 +121,13 @@ private fun SelectGroupContent(
             items(items = groups) { group ->
                 GroupView(
                     name = group.name,
-                    onGroupClick = { onGroupClick(group) },
-                    onAddClick = onAddClick,
+                    onGroupClick = { onAction(SelectGroupAction.OnGroupClick(group)) },
+                    onAddClick = { onAction(SelectGroupAction.OnAddGroupClick) },
                     images = group.images,
                 )
             }
         }
     }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun SelectGroupTopBar(onBackClick: () -> Unit) {
-    TopAppBar(
-        title = {
-            Text(
-                text = stringResource(R.string.select_group_title),
-                style = LocalMemoripTypography.current.headline2
-            )
-        },
-        navigationIcon = {
-            IconButton(onClick = onBackClick) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_back),
-                    contentDescription = stringResource(R.string.select_group_back_button_description)
-                )
-            }
-        },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MemoripTheme.colors.offWhite,
-            navigationIconContentColor = MemoripTheme.colors.black,
-            titleContentColor = MemoripTheme.colors.black
-        )
-    )
 }
 
 @Preview
