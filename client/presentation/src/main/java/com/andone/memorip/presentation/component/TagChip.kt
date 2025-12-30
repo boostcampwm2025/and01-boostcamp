@@ -11,64 +11,64 @@ import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.selectcategory.model.Category
 import com.andone.memorip.presentation.theme.MemoripTheme
 
-private object CategoryChipDimen {
+private object TagChipDimen {
     val RADIUS: Dp = 50.dp
     const val BACKGROUND_COLOR_ALPHA: Float = 0.1f
 }
 
 @Composable
-fun CategoryChip(
-    category: Category,
+fun TagChip(
+    tag: Category,
     modifier: Modifier = Modifier,
 ) {
     StaticChip(
-        chipName = category.category,
+        chipName = tag.category,
         modifier = modifier,
-        radius = CategoryChipDimen.RADIUS,
+        radius = TagChipDimen.RADIUS,
         colors = StaticChipColors(
-            backgroundColor = category.color.copy(alpha = CategoryChipDimen.BACKGROUND_COLOR_ALPHA),
-            textColor = category.color
+            backgroundColor = tag.color.copy(alpha = TagChipDimen.BACKGROUND_COLOR_ALPHA),
+            textColor = tag.color
         )
     )
 }
 
 @Preview(showBackground = true)
 @Composable
-fun CategoryChipPreview() {
+fun TagChipPreview() {
     MemoripTheme {
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            CategoryChip(
-                category = Category(
+            TagChip(
+                tag = Category(
                     id = 1L,
                     category = "맛집",
                     color = Color(0xFFE53935)
                 )
             )
-            CategoryChip(
-                category = Category(
+            TagChip(
+                tag = Category(
                     id = 2L,
                     category = "카페",
                     color = Color(0xFF8D6E63)
                 )
             )
-            CategoryChip(
-                category = Category(
+            TagChip(
+                tag = Category(
                     id = 3L,
                     category = "관광지",
                     color = Color(0xFF1E88E5)
                 )
             )
-            CategoryChip(
-                category = Category(
+            TagChip(
+                tag = Category(
                     id = 4L,
                     category = "숙소",
                     color = Color(0xFF43A047)
                 )
             )
-            CategoryChip(
-                category = Category(
+            TagChip(
+                tag = Category(
                     id = 5L,
                     category = "쇼핑",
                     color = Color(0xFF9C27B0)

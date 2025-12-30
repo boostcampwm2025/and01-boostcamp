@@ -25,8 +25,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.R
-import com.andone.memorip.presentation.component.CategoryChip
 import com.andone.memorip.presentation.component.MemoripImage
+import com.andone.memorip.presentation.component.TagChip
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.selectcategory.model.Category
 import com.andone.memorip.presentation.theme.MemoripIconSize
@@ -102,7 +102,7 @@ private fun CompactPlaceTimeCard(
                     maxLines = 1,
                     style = MemoripTheme.typography.headline2
                 )
-                CategoryChipRow(categories = place.categories.toImmutableList())
+                TagChipRow(tags = place.categories.toImmutableList())
                 PlaceLocationText(address = place.address)
                 PlaceTimeText(
                     startDateTime = place.startDateTime,
@@ -148,7 +148,7 @@ private fun ExpandedPlaceTimeCard(
                     maxLines = 1,
                     style = MemoripTheme.typography.headline2,
                 )
-                CategoryChipRow(categories = place.categories.toImmutableList())
+                TagChipRow(tags = place.categories.toImmutableList())
                 Row(horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceSmall)) {
                     PlaceLocationText(address = place.address)
                     PlaceTimeText(
@@ -162,16 +162,16 @@ private fun ExpandedPlaceTimeCard(
 }
 
 @Composable
-private fun CategoryChipRow(
-    categories: ImmutableList<Category>,
+private fun TagChipRow(
+    tags: ImmutableList<Category>,
     modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXSmall)
     ) {
-        categories.forEach { category ->
-            CategoryChip(category = category)
+        tags.forEach { tag ->
+            TagChip(tag = tag)
         }
     }
 }
@@ -219,9 +219,9 @@ private fun PlaceTimeText(
 
 @Preview(showBackground = true)
 @Composable
-private fun CategoryChipRowPreview() {
+private fun TagChipRowPreview() {
     MemoripTheme {
-        CategoryChipRow(categories = DummyData.categories.toImmutableList())
+        TagChipRow(tags = DummyData.categories.toImmutableList())
     }
 }
 
