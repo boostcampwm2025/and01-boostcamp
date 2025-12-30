@@ -247,7 +247,7 @@ private fun PlaceTimeTextPreview() {
 @Preview(showBackground = true)
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun PlaceTimeCardPreview() {
+private fun PlaceTimeCardPreview() {
     MemoripTheme {
         Column(
             modifier = Modifier

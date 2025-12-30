@@ -67,8 +67,8 @@ internal val darkMemoripColors = MemoripColors(
     gray = DarkGray,
     outline = DarkOutline,
     error = DarkRed,
-    black = White,
-    white = Black,
+    black = Black,
+    white = White,
 )
 
 internal val lightMaterialScheme = lightColorScheme(
