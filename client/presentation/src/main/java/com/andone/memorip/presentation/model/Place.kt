@@ -12,15 +12,15 @@ data class Place(
     val latitude: Double,
     val longitude: Double,
     val address: String,
-    val startTime: LocalDateTime,
-    val endTime: LocalDateTime,
+    val startDateTime: LocalDateTime,
+    val endDateTime: LocalDateTime,
     val categories: List<Category>,
     val thumbnailImage: ImageItem,
     val images: List<ImageItem>
 ) {
     val durationMinutes: Long
-        get() = Duration.between(startTime, endTime).toMinutes()
+        get() = Duration.between(startDateTime, endDateTime).toMinutes()
 
     val isMultiDay: Boolean
-        get() = startTime.toLocalDate() != endTime.toLocalDate()
+        get() = startDateTime.toLocalDate() != endDateTime.toLocalDate()
 }
