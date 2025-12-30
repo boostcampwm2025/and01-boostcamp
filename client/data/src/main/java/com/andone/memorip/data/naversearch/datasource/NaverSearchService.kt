@@ -4,7 +4,7 @@ import com.andone.memorip.domain.model.LocationResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface NaverService {
+interface NaverSearchService {
     @GET("v1/search/local.json")
     suspend fun searchLocations(
         @Query("query") query: String,

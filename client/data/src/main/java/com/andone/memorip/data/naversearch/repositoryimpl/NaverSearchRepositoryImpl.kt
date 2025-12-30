@@ -1,12 +1,12 @@
 package com.andone.memorip.data.naversearch.repositoryimpl
 
-import com.andone.memorip.data.naversearch.datasource.NaverService
+import com.andone.memorip.data.naversearch.datasource.NaverSearchService
 import com.andone.memorip.domain.model.Location
 import com.andone.memorip.domain.repository.NaverSearchRepository
 import javax.inject.Inject
 
 class NaverSearchRepositoryImpl @Inject constructor(
-    private val searchApiService: NaverService
+    private val searchApiService: NaverSearchService
 ) : NaverSearchRepository {
 
     override suspend fun searchLocations(query: String): Result<List<Location>> {

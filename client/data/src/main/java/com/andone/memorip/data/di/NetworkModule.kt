@@ -1,7 +1,7 @@
 package com.andone.memorip.data.di
 
 import com.andone.memorip.data.BuildConfig
-import com.andone.memorip.data.naversearch.datasource.NaverService
+import com.andone.memorip.data.naversearch.datasource.NaverSearchService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -46,7 +46,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideNaverService(retrofit: Retrofit): NaverService {
-        return retrofit.create(NaverService::class.java)
+    fun provideNaverService(retrofit: Retrofit): NaverSearchService {
+        return retrofit.create(NaverSearchService::class.java)
     }
 }
