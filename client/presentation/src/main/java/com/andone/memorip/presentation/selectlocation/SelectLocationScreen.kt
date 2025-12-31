@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
@@ -24,7 +23,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemKey
 import com.andone.memorip.presentation.component.MemoripSearchBarInputField
+import com.andone.memorip.presentation.model.LocationUiModel
 import com.andone.memorip.presentation.selectlocation.SelectLocationScreenConstants.CAMERA_ANIMATION_DURATION
 import com.andone.memorip.presentation.selectlocation.SelectLocationScreenDimens.markerHeight
 import com.andone.memorip.presentation.selectlocation.SelectLocationScreenDimens.markerWidth
@@ -63,6 +66,7 @@ fun SelectLocationScreen(
     viewModel: SelectLocationViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val locations = viewModel.locationsPagingFlow.collectAsLazyPagingItems()
 
     viewModel.event.collectWithLifecycle { event ->
         when (event) {
@@ -76,6 +80,7 @@ fun SelectLocationScreen(
 
     SelectLocationContent(
         uiState = uiState,
+        locations = locations,
         onAction = viewModel::onAction,
         modifier = modifier
     )
@@ -85,6 +90,7 @@ fun SelectLocationScreen(
 @Composable
 private fun SelectLocationContent(
     uiState: SelectLocationUiState,
+    locations: LazyPagingItems<LocationUiModel>,
     onAction: (SelectLocationAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -121,15 +127,25 @@ private fun SelectLocationContent(
             windowInsets = WindowInsets()
         ) {
             LazyColumn(modifier = Modifier.fillMaxSize()) {
-                items(uiState.locations) { location ->
-                    LocationItem(
-                        location = location,
-                        onClick = {
-                            selectLocation(latLng = LatLng(location.latitude, location.longitude))
-                            searchBarExpanded = false
-                        },
-                        modifier = Modifier.fillMaxWidth()
-                    )
+                items(
+                    count = locations.itemCount,
+                    key = locations.itemKey { it.id }
+                ) { index ->
+                    locations[index]?.let { location ->
+                        LocationItem(
+                            location = location,
+                            onClick = {
+                                selectLocation(
+                                    latLng = LatLng(
+                                        location.latitude,
+                                        location.longitude
+                                    )
+                                )
+                                searchBarExpanded = false
+                            },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
                 }
             }
         }
