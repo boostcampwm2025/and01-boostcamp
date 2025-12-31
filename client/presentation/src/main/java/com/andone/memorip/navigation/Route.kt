@@ -26,3 +26,5 @@ data class GroupDetail(val groupId: String) : NavKey
 
 @Serializable
 data class PlaceDetail(val placeId: Int = 0) : NavKey
+
+@Serializable data object PlaceList : NavKey
