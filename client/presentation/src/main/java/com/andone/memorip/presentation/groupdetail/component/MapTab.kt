@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.R
-import com.andone.memorip.presentation.component.ErrorFullScreen
+import com.andone.memorip.presentation.component.ErrorScreen
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
@@ -57,11 +57,12 @@ fun MapTab(
 
     Box(modifier = modifier) {
         if (mapLoadError) {
-            ErrorFullScreen(
+            ErrorScreen(
                 onRetry = {
                     mapLoadError = false
                     mapLoaded = false
                 },
+                modifier = Modifier.fillMaxSize(),
                 message = stringResource(R.string.errorfullscreen_error_map_message)
             )
         } else {
@@ -127,8 +128,9 @@ private fun MapTabPreview() {
 @Composable
 private fun MapTabErrorPreview() {
     MemoripTheme {
-        ErrorFullScreen(
+        ErrorScreen(
             onRetry = {},
+            modifier = Modifier.fillMaxSize()
         )
     }
 }

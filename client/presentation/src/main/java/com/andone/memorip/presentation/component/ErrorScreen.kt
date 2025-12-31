@@ -5,9 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -16,26 +14,25 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.R
-import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 
 @Composable
-fun ErrorFullScreen(
+fun ErrorScreen(
     onRetry: () -> Unit,
     modifier: Modifier = Modifier,
-    message: String = stringResource(R.string.errorfullscreen_error_default_message),
+    message: String? = null,
     retryButtonText: String = stringResource(R.string.errorfullscreen_retry_button),
 ) {
+    val textMessage = message ?: stringResource(R.string.errorfullscreen_error_default_message)
+
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(MemoripPadding.PaddingLarge),
+        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = message,
+            text = textMessage,
             color = MemoripTheme.colors.gray,
             textAlign = TextAlign.Center
         )
@@ -52,19 +49,22 @@ fun ErrorFullScreen(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
-private fun ErrorFullScreenPreview() {
+private fun ErrorScreenPreview() {
     MemoripTheme {
-        ErrorFullScreen(onRetry = {})
+        ErrorScreen(
+            onRetry = {},
+            modifier = Modifier.fillMaxSize()
+        )
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
-private fun ErrorFullScreenCustomPreview() {
+private fun ErrorScreenCustomPreview() {
     MemoripTheme {
-        ErrorFullScreen(
+        ErrorScreen(
             onRetry = {},
             message = "서버 연결에 실패했습니다\n잠시 후 다시 시도해주세요",
             retryButtonText = "새로고침",
