@@ -1,7 +1,7 @@
 package com.andone.memorip.data.di
 
-import com.andone.memorip.data.naversearch.repositoryimpl.NaverSearchRepositoryImpl
-import com.andone.memorip.domain.repository.NaverSearchRepository
+import com.andone.memorip.data.kakaosearch.repositoryimpl.KakaoSearchRepositoryImpl
+import com.andone.memorip.domain.repository.KakaoSearchRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -14,7 +14,7 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindNaverSearchRepository(
-        impl: NaverSearchRepositoryImpl
-    ): NaverSearchRepository
+    abstract fun bindKaKaoSearchRepository(
+        impl: KakaoSearchRepositoryImpl
+    ): KakaoSearchRepository
 }
