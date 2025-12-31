@@ -1,4 +1,4 @@
-package com.andone.memorip.presentation.placelist.model
+package com.andone.memorip.presentation.grouplist.model
 
 import androidx.compose.runtime.Immutable
 import java.util.UUID

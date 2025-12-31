@@ -10,10 +10,10 @@ enum class MainBottomBarRoute(
     @param:StringRes val titleTextId: Int,
     val route: NavKey
 ) {
-    PLACE_LIST(
+    GROUP_LIST(
         R.drawable.ic_home,
         R.string.main_bottom_bar_place_list,
-        PlaceList
+        GroupList
     ),
     USER(
         R.drawable.ic_account_circle,

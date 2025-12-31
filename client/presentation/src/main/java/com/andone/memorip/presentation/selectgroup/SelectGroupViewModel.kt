@@ -1,7 +1,7 @@
 package com.andone.memorip.presentation.selectgroup
 
 import androidx.lifecycle.ViewModel
-import com.andone.memorip.presentation.placelist.model.GroupUiModel
+import com.andone.memorip.presentation.grouplist.model.GroupUiModel
 import com.andone.memorip.presentation.selectgroup.model.SelectGroupAction
 import com.andone.memorip.presentation.selectgroup.model.SelectGroupAction.OnAddGroupClick
 import com.andone.memorip.presentation.selectgroup.model.SelectGroupAction.OnBackClick

@@ -1,5 +1,7 @@
 package com.andone.memorip.presentation.placelist.model
 
+import com.andone.memorip.presentation.model.Place
+
 data class PlaceListUiState(
-    val groups: List<GroupUiModel> = listOf(GroupUiModel.default())
+    val places: List<Place> = emptyList()
 )

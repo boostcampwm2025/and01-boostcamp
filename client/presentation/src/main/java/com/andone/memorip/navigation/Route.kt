@@ -4,7 +4,7 @@ import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object PlaceList : NavKey
+data object GroupList : NavKey
 
 @Serializable
 data object User : NavKey

@@ -1,4 +1,4 @@
-package com.andone.memorip.presentation.placelist.component
+package com.andone.memorip.presentation.grouplist.component
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -14,7 +14,7 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PlaceListTopBar(onSearchClick: () -> Unit) {
+fun GroupListTopBar(onSearchClick: () -> Unit) {
     TopAppBar(
         title = {},
         navigationIcon = {
@@ -31,8 +31,8 @@ fun PlaceListTopBar(onSearchClick: () -> Unit) {
 
 @Preview
 @Composable
-private fun HomeTopBarPreview() {
+private fun GroupListTopBarPreview() {
     MemoripTheme {
-        PlaceListTopBar(onSearchClick = {})
+        GroupListTopBar(onSearchClick = {})
     }
 }
