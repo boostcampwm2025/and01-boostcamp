@@ -31,11 +31,6 @@ fun LocationItem(
             style = MemoripTheme.typography.bodyLarge
         )
         Text(
-            text = location.description,
-            color = MemoripTheme.colors.gray,
-            style = MemoripTheme.typography.bodySmall
-        )
-        Text(
             text = location.roadAddress,
             color = MemoripTheme.colors.gray,
             style = MemoripTheme.typography.bodySmall
@@ -49,9 +44,9 @@ fun LocationItem(
 fun LocationItemPreview() {
     LocationItem(
         location = LocationUiModel(
+            id = "",
             name = "국밥집",
             category = "음식",
-            description = "국밥이 참 맛있는 집",
             address = "서울시 이쪽구 저쪽동",
             roadAddress = "서울시 이쪽로 저쪽번지",
             latitude = 0.0,
