@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
@@ -19,13 +18,16 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.itemKey
+import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.component.MemoripPagingList
+import com.andone.memorip.presentation.component.EmptyText
 import com.andone.memorip.presentation.component.MemoripSearchBarInputField
 import com.andone.memorip.presentation.model.LocationUiModel
 import com.andone.memorip.presentation.selectlocation.SelectLocationScreenConstants.CAMERA_ANIMATION_DURATION
@@ -126,28 +128,29 @@ private fun SelectLocationContent(
             colors = SearchBarDefaults.colors(containerColor = MemoripTheme.colors.white),
             windowInsets = WindowInsets()
         ) {
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
-                items(
-                    count = locations.itemCount,
-                    key = locations.itemKey { it.id }
-                ) { index ->
-                    locations[index]?.let { location ->
-                        LocationItem(
-                            location = location,
-                            onClick = {
-                                selectLocation(
-                                    latLng = LatLng(
-                                        location.latitude,
-                                        location.longitude
-                                    )
-                                )
-                                searchBarExpanded = false
-                            },
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    }
+            MemoripPagingList(
+                pagingItems = locations,
+                itemKey = { it.id },
+                modifier = Modifier.fillMaxSize(),
+                emptyContent = {
+                    EmptyText(
+                        text = stringResource(R.string.search_bar_empty_result),
+                        modifier = Modifier.fillMaxSize()
+                    )
+                },
+                itemContent = { location ->
+                    LocationItem(
+                        location = location,
+                        onClick = {
+                            selectLocation(
+                                LatLng(location.latitude, location.longitude)
+                            )
+                            searchBarExpanded = false
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 }
-            }
+            )
         }
 
         Box(modifier = Modifier.fillMaxSize()) {

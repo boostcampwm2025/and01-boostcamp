@@ -3,7 +3,6 @@ package com.andone.memorip.data.kakaosearch.datasource
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.andone.memorip.domain.model.response.KakaoLocation
-import kotlinx.coroutines.delay
 
 class KakaoSearchPagingSource(
     val apiService: KakaoSearchService,
@@ -15,8 +14,6 @@ class KakaoSearchPagingSource(
         val size = params.loadSize
 
         return try {
-            delay(5000)
-
             val result = apiService.searchLocations(
                 query = query,
                 page = page,

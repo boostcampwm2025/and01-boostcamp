@@ -88,5 +88,6 @@
     <string name="search_bar_placeholder">검색어를 입력하세요.</string>
     <string name="search_bar_go_back_content_description">뒤로 가기</string>
     <string name="search_bar_close_content_description">검색어 삭제</string>
+    <string name="search_bar_empty_result">검색 결과가 없습니다.</string>
 
 </resources>
