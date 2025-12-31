@@ -5,6 +5,9 @@ on:
     branches:
       - main
       - build/47-server-deploy-setting  # TODO: 테스트 완료 후 main 만 남길 예정.
+    paths:
+      - 'server/**'
+      - '.github/workflows/deploy.yml'
   workflow_dispatch:
 
 jobs:
