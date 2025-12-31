@@ -62,6 +62,12 @@ dependencies {
     // Retrofit
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
+
+    // Interceptor
+    implementation(libs.logging.interceptor)
+
+    // Paging
+    implementation(libs.androidx.paging.common)
 }
 
 fun getLocalProperty(propertyKey: String): String {

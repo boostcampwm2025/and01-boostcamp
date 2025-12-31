@@ -83,6 +83,9 @@ dependencies {
     implementation(libs.naver.map.sdk)
     implementation(libs.naver.map.compose)
     implementation(libs.naver.map.location)
+
+    // Paging
+    implementation(libs.androidx.paging.compose)
 }
 
 fun getLocalProperty(propertyKey: String): String {
