@@ -1,7 +1,6 @@
 package com.andone.memorip.presentation.model
 
 import androidx.compose.runtime.Immutable
-import com.andone.memorip.presentation.selectcategory.model.Category
 import java.time.Duration
 import java.time.LocalDateTime
 

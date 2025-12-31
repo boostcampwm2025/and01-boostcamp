@@ -6,7 +6,7 @@ import com.andone.memorip.presentation.placelist.model.GroupUiModel
 import com.andone.memorip.presentation.model.ImageItem
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.placedetail.model.PlaceUiModel
-import com.andone.memorip.presentation.selectcategory.model.Category
+import com.andone.memorip.presentation.model.Category
 import kotlinx.collections.immutable.persistentListOf
 import java.time.LocalDateTime
 import kotlin.random.Random

@@ -28,7 +28,7 @@ import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.MemoripImage
 import com.andone.memorip.presentation.component.TagChip
 import com.andone.memorip.presentation.model.Place
-import com.andone.memorip.presentation.selectcategory.model.Category
+import com.andone.memorip.presentation.model.Category
 import com.andone.memorip.presentation.theme.MemoripIconSize
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace

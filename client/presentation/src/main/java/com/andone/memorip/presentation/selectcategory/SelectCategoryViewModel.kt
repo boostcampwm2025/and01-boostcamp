@@ -3,7 +3,7 @@ package com.andone.memorip.presentation.selectcategory
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import com.andone.memorip.presentation.selectcategory.Constants.MAX_SELECTABLE_COUNT
-import com.andone.memorip.presentation.selectcategory.model.Category
+import com.andone.memorip.presentation.model.Category
 import com.andone.memorip.presentation.selectcategory.model.SelectCategoryAction
 import com.andone.memorip.presentation.selectcategory.model.SelectCategoryError
 import com.andone.memorip.presentation.selectcategory.model.SelectCategoryEvent
