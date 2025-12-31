@@ -89,4 +89,7 @@
     <string name="search_bar_go_back_content_description">뒤로 가기</string>
     <string name="search_bar_close_content_description">검색어 삭제</string>
 
+    <!-- PlaceList -->
+    <string name="place_list_search">검색</string>
+
 </resources>

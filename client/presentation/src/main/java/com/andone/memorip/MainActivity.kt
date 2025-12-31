@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.andone.memorip.navigation.rememberMemoripNavigator
+import com.andone.memorip.presentation.placelist.PlaceListScreenContents
 import com.andone.memorip.presentation.theme.MemoripTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -15,8 +16,12 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MemoripTheme {
-                val navigator = rememberMemoripNavigator()
-                MemoripApp(navigator)
+//                val navigator = rememberMemoripNavigator()
+//                MemoripApp(navigator)
+                PlaceListScreenContents(
+                    places = emptyList(),
+                    onAction = {},
+                )
             }
         }
     }
