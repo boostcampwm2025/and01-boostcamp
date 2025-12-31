@@ -15,6 +15,7 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 private object TagChipDimen {
     val RADIUS: Dp = 50.dp
     const val BACKGROUND_COLOR_ALPHA: Float = 0.5f
+    const val COLOR_LUMINANCE_THRESHOLD: Float = 0.5f
 }
 
 @Composable
@@ -22,7 +23,11 @@ fun TagChip(
     tag: Category,
     modifier: Modifier = Modifier,
 ) {
-    val textColor = if (tag.color.luminance() > 0.5f) MemoripTheme.colors.black else MemoripTheme.colors.white
+    val textColor = if (tag.color.luminance() > TagChipDimen.COLOR_LUMINANCE_THRESHOLD) {
+        MemoripTheme.colors.black
+    } else {
+        MemoripTheme.colors.white
+    }
 
     StaticChip(
         chipName = tag.category,
