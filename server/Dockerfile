@@ -8,7 +8,7 @@ COPY build.gradle.kts .
 COPY settings.gradle.kts .
 
 RUN chmod +x gradlew
-RUN ./gradlew dependencies --no-daemon --quiet
+RUN ./gradlew dependencies --no-daemon > /dev/null 2>&1
 
 COPY src src
 RUN ./gradlew bootJar --no-daemon --quiet
