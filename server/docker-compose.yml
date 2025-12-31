@@ -1,6 +1,6 @@
 services:
   backend:
-    image: andone/memorip-backend:latest  # Docker Hub 이미지 사용
+    image: hjunng/memorip-backend:latest  # Docker Hub 이미지 사용
     container_name: memorip-backend
     restart: unless-stopped
     labels:

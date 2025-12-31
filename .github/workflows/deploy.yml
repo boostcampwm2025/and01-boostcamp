@@ -55,10 +55,31 @@ jobs:
             ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << 'EOF'
             cd ~/memorip
             
+            echo "최신 이미지 가져오는 중..."
             docker compose pull backend
+            
+            echo "기존 컨테이너 중지 및 제거 중..."
+            docker compose stop backend
+            docker compose rm -f backend
+            
+            echo "새 컨테이너 시작 중..."
             docker compose up -d --no-deps backend
             
-            echo "배포 완료"
+            echo "Health check 대기 중..."
+            
+            # Health check 대기 (최대 60초)
+            for i in {1..12}; do
+              if docker compose ps backend | grep -q "healthy"; then
+                echo "배포 성공!"
+                exit 0
+              fi
+              echo "대기 중... ($i/12)"
+              sleep 5
+            done
+            
+            echo "경고: Health check가 통과하지 못했습니다. 로그를 확인하세요:"
+            docker compose logs backend --tail=30
+            exit 1
           EOF
 
       - name: Cleanup
