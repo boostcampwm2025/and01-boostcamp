@@ -1,6 +1,7 @@
 package com.andone.memorip.presentation.placelist.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,12 +17,17 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.theme.memoripShapes
 
 @Composable
-fun PhotoItem(place: Place) {
+fun PhotoItem(
+    place: Place,
+    onClick: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .aspectRatio(place.thumbnailImage.aspectRatio)
             .background(color = MemoripTheme.colors.primaryContainer)
+            .clickable(onClick = { onClick(place.id) })
     ) {
         AsyncImage(
             model = place.thumbnailImage.url.takeIf { it.isNotBlank() },
@@ -34,10 +40,11 @@ fun PhotoItem(place: Place) {
 
 @Preview
 @Composable
-private fun PhotoItemPreview(){
+private fun PhotoItemPreview() {
     MemoripTheme {
         PhotoItem(
-            place = Place.empty()
+            place = Place.empty(),
+            onClick = {},
         )
     }
 }

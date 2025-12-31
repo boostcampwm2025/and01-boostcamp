@@ -6,7 +6,7 @@ import androidx.navigation3.runtime.NavKey
 import com.andone.memorip.navigation.PlaceList
 
 fun EntryProviderScope<NavKey>.placeList(
-    onPlaceClick: (String) -> Unit,
+    onPlaceClick: (Int) -> Unit,
     onCreatePlaceClick: () -> Unit,
     modifier: Modifier = Modifier
 ){

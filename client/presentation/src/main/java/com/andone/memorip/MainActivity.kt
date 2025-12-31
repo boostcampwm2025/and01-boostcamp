@@ -16,12 +16,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MemoripTheme {
-//                val navigator = rememberMemoripNavigator()
-//                MemoripApp(navigator)
-                PlaceListScreenContents(
-                    places = emptyList(),
-                    onAction = {},
-                )
+                val navigator = rememberMemoripNavigator()
+                MemoripApp(navigator)
             }
         }
     }

@@ -70,6 +70,7 @@
     <!-- MainBottomBar -->
     <string name="main_bottom_bar_place_list">장소</string>
     <string name="main_bottom_bar_user">마이페이지</string>
+    <string name="main_bottom_bar_group">그룹</string>
 
     <!-- PlaceDetail -->
     <string name="place_detail_image_content_description">장소 이미지</string>
