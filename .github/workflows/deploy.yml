@@ -26,7 +26,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: ./server
           platforms: linux/amd64
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/memorip-backend:latest
@@ -44,7 +44,7 @@ jobs:
         run: |
           scp -i ~/.ssh/deploy_key \
             -o StrictHostKeyChecking=no \
-            docker-compose.yml \
+            server/docker-compose.yml \
             ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:~/memorip/
 
       - name: Deploy on server
