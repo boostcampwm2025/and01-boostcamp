@@ -1,6 +1,5 @@
 package com.andone.memorip.presentation.placelist.component
 
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -24,6 +23,9 @@ fun PlaceListTopBar(
             )
         },
         scrollBehavior = scrollBehavior,
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MemoripTheme.colors.offWhite,
+        )
     )
 }
 

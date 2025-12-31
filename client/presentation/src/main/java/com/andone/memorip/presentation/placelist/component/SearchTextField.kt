@@ -47,7 +47,7 @@ fun SearchTextField(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .background(
-                        color = MemoripTheme.colors.offWhite,
+                        color = MemoripTheme.colors.primaryContainer,
                         shape = memoripShapes.roundedXLarge
                     )
                     .padding(horizontal = MemoripPadding.PaddingSmall)
