@@ -58,8 +58,7 @@ jobs:
             docker compose pull backend
             docker compose up -d --no-deps backend
             
-            echo "배포가 완료되었습니다. 로그를 확인합니다..."
-            docker compose logs --tail=50 backend
+            echo "배포 완료"
           EOF
 
       - name: Cleanup
@@ -70,5 +69,4 @@ jobs:
       - name: Deployment notification
         if: success()
         run: |
-          echo "배포 완료!"
-          echo "🌐 확인: http://${{ secrets.SSH_HOST }}:8080"
+          echo "배포 프로세스 완료!"

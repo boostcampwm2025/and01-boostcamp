@@ -8,10 +8,10 @@ COPY build.gradle.kts .
 COPY settings.gradle.kts .
 
 RUN chmod +x gradlew
-RUN ./gradlew dependencies --no-daemon
+RUN ./gradlew dependencies --no-daemon --quiet
 
 COPY src src
-RUN ./gradlew bootJar --no-daemon
+RUN ./gradlew bootJar --no-daemon --quiet
 
 # 실행
 FROM eclipse-temurin:17-jre
