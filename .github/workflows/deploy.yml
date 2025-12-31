@@ -74,6 +74,9 @@ jobs:
             for i in {1..12}; do
               if docker compose ps backend | grep -q "healthy"; then
                 echo "배포 성공!"
+                echo ""
+                echo "=== Compose 서비스 상태 ==="
+                docker compose ps
                 exit 0
               fi
               echo "대기 중... ($i/12)"
