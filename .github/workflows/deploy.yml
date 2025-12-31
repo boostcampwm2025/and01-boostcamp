@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - build/47-server-deploy-setting  # TODO: 테스트 완료 후 main 만 남길 예정.
+      - dev  # TODO: 백엔드 v1.0 이후, main 만 남길 예정.
     paths:
       - 'server/**'
       - '.github/workflows/deploy.yml'
@@ -92,8 +92,3 @@ jobs:
         if: always()
         run: |
           rm -f ~/.ssh/deploy_key
-
-      - name: Deployment notification
-        if: success()
-        run: |
-          echo "배포 프로세스 완료!"
