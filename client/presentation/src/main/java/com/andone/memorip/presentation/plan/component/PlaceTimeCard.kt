@@ -11,33 +11,25 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.MemoripImage
-import com.andone.memorip.presentation.component.TagChip
+import com.andone.memorip.presentation.component.PlaceLocationText
+import com.andone.memorip.presentation.component.PlaceTimeText
+import com.andone.memorip.presentation.component.TagChipRow
 import com.andone.memorip.presentation.model.Place
-import com.andone.memorip.presentation.model.Category
-import com.andone.memorip.presentation.theme.MemoripIconSize
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
-import com.andone.memorip.presentation.util.formatTimeRange
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
-import java.time.LocalDateTime
 
 private object PlaceTimeCardDimen {
     val COMPACT_IMAGE_SIZE = 80.dp
@@ -161,89 +153,6 @@ private fun ExpandedPlaceTimeCard(
                 }
             }
         }
-    }
-}
-
-@Composable
-private fun TagChipRow(
-    tags: ImmutableList<Category>,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXSmall)
-    ) {
-        tags.forEach { tag ->
-            TagChip(tag = tag)
-        }
-    }
-}
-
-@Composable
-private fun PlaceLocationText(
-    address: String,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXXSmall),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            painter = painterResource(R.drawable.ic_location_on),
-            contentDescription = stringResource(R.string.plan_location_content_description),
-            modifier = Modifier.size(MemoripIconSize.IconSizeSmall),
-            tint = MemoripTheme.colors.secondary
-        )
-        Text(
-            text = address,
-            color = MemoripTheme.colors.black,
-            style = MemoripTheme.typography.bodySmall,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
-    }
-}
-
-@Composable
-private fun PlaceTimeText(
-    startDateTime: LocalDateTime,
-    endDateTime: LocalDateTime,
-    modifier: Modifier = Modifier
-) {
-    Text(
-        text = formatTimeRange(startDateTime, endDateTime),
-        color = MemoripTheme.colors.gray,
-        overflow = TextOverflow.Ellipsis,
-        maxLines = 1,
-        style = MemoripTheme.typography.bodySmall,
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun TagChipRowPreview() {
-    MemoripTheme {
-        TagChipRow(tags = DummyData.categories.toImmutableList())
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun PlaceLocationTextPreview() {
-    MemoripTheme {
-        PlaceLocationText(address = "서울특별시 강남구")
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun PlaceTimeTextPreview() {
-    MemoripTheme {
-        PlaceTimeText(
-            startDateTime = LocalDateTime.now(),
-            endDateTime = LocalDateTime.now().plusHours(1)
-        )
     }
 }
 
