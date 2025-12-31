@@ -1,10 +1,13 @@
 package com.andone.memorip.presentation.placelist.component
 
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.LargeTopAppBar
-import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
+import com.andone.memorip.presentation.theme.MemoripTheme
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -13,8 +16,26 @@ fun PlaceListTopBar(
     query: String,
     onQueryChange: (String) -> Unit,
 ) {
-    LargeTopAppBar(
-        title = { },
-        scrollBehavior = scrollBehavior
+    TopAppBar(
+        title = {
+            SearchTextField(
+                value = query,
+                onValueChange = onQueryChange
+            )
+        },
+        scrollBehavior = scrollBehavior,
     )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(showBackground = true)
+@Composable
+private fun PlaceListTopBarPreview() {
+    MemoripTheme {
+        PlaceListTopBar(
+            scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
+            query = "검색",
+            onQueryChange = {}
+        )
+    }
 }

@@ -27,7 +27,7 @@ fun PlaceListScreen(
     onCreatePlaceClick: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PlaceListViewModel = hiltViewModel(),
-){
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     viewModel.event.collectWithLifecycle { event -> }
@@ -46,11 +46,17 @@ fun PlaceListScreenContents(
     onAction: (PlaceListEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = {  }
+        topBar = {
+            PlaceListTopBar(
+                scrollBehavior = scrollBehavior,
+                query = "",
+                onQueryChange = {}
+            )
+        }
     ) { padding ->
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
@@ -68,7 +74,7 @@ fun PlaceListScreenContents(
 
 @Preview
 @Composable
-private fun PlaceListScreenContentsPreview(){
+private fun PlaceListScreenContentsPreview() {
     MemoripTheme {
         PlaceListScreenContents(
             places = emptyList(),
