@@ -3,7 +3,8 @@ name: Deploy to Server
 on:
   push:
     branches:
-      - dev  # TODO: 테스트 완료 후 main으로 변경
+      - main
+      - build/47-server-deploy-setting  # TODO: 테스트 완료 후 main 만 남길 예정.
   workflow_dispatch:
 
 jobs:
