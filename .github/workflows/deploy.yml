@@ -3,7 +3,7 @@ name: Deploy to Server
 on:
   push:
     branches:
-      - main
+      - dev  # TODO: 테스트 완료 후 main으로 변경
   workflow_dispatch:
 
 jobs:
