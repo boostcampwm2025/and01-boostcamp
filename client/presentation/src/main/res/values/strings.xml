@@ -23,9 +23,9 @@
     <string name="staggered_grid_image_content_description">장소 이미지</string>
 
     <!-- GroupListScreen -->
-    <string name="place_list_search_content_description">Search</string>
-    <string name="place_list_add_content_description">Add</string>
-    <string name="place_list_overflow_count">+%1$d</string>
+    <string name="group_list_search_content_description">Search</string>
+    <string name="group_list_add_content_description">Add</string>
+    <string name="group_list_overflow_count">+%1$d</string>
 
     <!-- SelectCategoryScreen -->
     <string name="select_category_back_button_description">뒤로 가기 버튼</string>
