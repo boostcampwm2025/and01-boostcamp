@@ -2,14 +2,16 @@ package com.andone.memorip.data.di
 
 import com.andone.memorip.data.BuildConfig
 import com.andone.memorip.data.kakaosearch.datasource.KakaoSearchService
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -17,6 +19,14 @@ import javax.inject.Singleton
 object NetworkModule {
 
     private const val BASE_URL = BuildConfig.KAKAO_BASE_URL
+
+    val json = Json {
+        ignoreUnknownKeys = true
+        coerceInputValues = true
+        encodeDefaults = true
+    }
+
+    private val contentType = "application/json".toMediaType()
 
     @Provides
     @Singleton
@@ -42,7 +52,7 @@ object NetworkModule {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(json.asConverterFactory(contentType))
             .build()
     }
 
