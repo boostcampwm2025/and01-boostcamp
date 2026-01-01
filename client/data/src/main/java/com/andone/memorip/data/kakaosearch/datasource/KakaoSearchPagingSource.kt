@@ -21,9 +21,9 @@ class KakaoSearchPagingSource(
             )
 
             LoadResult.Page(
-                data = result.documents,
+                data = result.locations,
                 prevKey = if (page == KAKAO_START_PAGE_INDEX) null else page - 1,
-                nextKey = if (result.meta.is_end) null else page + 1
+                nextKey = if (result.meta.isEnd) null else page + 1
             )
         } catch (e: Exception) {
             LoadResult.Error(e)

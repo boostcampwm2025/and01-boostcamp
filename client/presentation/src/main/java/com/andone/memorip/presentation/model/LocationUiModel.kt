@@ -17,11 +17,11 @@ data class LocationUiModel(
 fun KakaoLocation.toUiModel(): LocationUiModel {
     return LocationUiModel(
         id = id,
-        name = place_name,
-        category = category_name,
-        address = address_name,
-        roadAddress = road_address_name,
-        latitude = y.toDouble(),
-        longitude = x.toDouble(),
+        name = title,
+        category = category,
+        address = address,
+        roadAddress = roadAddress,
+        latitude = latitude.toDouble(),
+        longitude = longitude.toDouble(),
     )
 }
