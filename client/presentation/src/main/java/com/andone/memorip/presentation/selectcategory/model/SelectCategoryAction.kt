@@ -1,6 +1,7 @@
 package com.andone.memorip.presentation.selectcategory.model
 
 import androidx.compose.ui.graphics.Color
+import com.andone.memorip.presentation.model.Category
 
 sealed interface SelectCategoryAction {
 

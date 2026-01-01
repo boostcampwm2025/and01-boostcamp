@@ -21,7 +21,7 @@ fun GroupListTopBar(onSearchClick: () -> Unit) {
             IconButton(onClick = onSearchClick) {
                 Icon(
                     painter = painterResource(R.drawable.ic_search),
-                    contentDescription = stringResource(R.string.place_list_search_content_description)
+                    contentDescription = stringResource(R.string.group_list_search_content_description)
                 )
             }
         },

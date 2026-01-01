@@ -27,7 +27,7 @@ data class ApiResult<T>(
         fun <T> success(data: T, pagination: PaginationInfo) = 
             ApiResult(data = data, pagination = pagination)
         
-        fun success() = ApiResult(data = Unit)
+        fun success() = ApiResult<Unit>()
         
         fun <T> error(code: String, message: String, fields: List<String>? = null) = 
             ApiResult<T>(error = ErrorDetail(code, message, fields))

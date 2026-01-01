@@ -18,7 +18,7 @@ fun AddFloatingActionButton(onClick: () -> Unit) {
     ) {
         Icon(
             painter = painterResource(R.drawable.ic_add),
-            contentDescription = stringResource(R.string.place_list_add_content_description)
+            contentDescription = stringResource(R.string.group_list_add_content_description)
         )
     }
 }

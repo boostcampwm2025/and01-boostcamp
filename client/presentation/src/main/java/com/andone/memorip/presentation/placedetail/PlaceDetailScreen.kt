@@ -26,14 +26,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.painter.ColorPainter
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.AsyncImage
 import com.andone.memorip.navigation.PlaceDetail
 import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.component.MemoripImage
 import com.andone.memorip.presentation.placedetail.PlaceDetailScreenConstants.IMAGE_ASPECT_RATIO
 import com.andone.memorip.presentation.placedetail.component.ImageDialog
 import com.andone.memorip.presentation.placedetail.component.PlaceDetailInfoSection
@@ -166,8 +164,8 @@ private fun PlaceImagesSection(
         ) { pageIndex ->
             val imageUrl = imageUrls[pageIndex]
 
-            AsyncImage(
-                model = imageUrl,
+            MemoripImage(
+                imageUrl = imageUrl,
                 contentDescription = stringResource(R.string.place_detail_image_content_description),
                 modifier = Modifier
                     .clickable(
@@ -179,9 +177,6 @@ private fun PlaceImagesSection(
                     .clip(MemoripTheme.shapes.roundedMedium)
                     .aspectRatio(IMAGE_ASPECT_RATIO)
                     .background(MemoripTheme.colors.offWhite),
-                placeholder = ColorPainter(MemoripTheme.colors.offWhite),
-                error = ColorPainter(MemoripTheme.colors.offWhite),
-                contentScale = ContentScale.Crop
             )
         }
 
