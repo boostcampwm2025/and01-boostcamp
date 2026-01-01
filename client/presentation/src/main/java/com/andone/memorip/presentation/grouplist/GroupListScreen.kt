@@ -26,7 +26,7 @@ import com.andone.memorip.presentation.util.collectWithLifecycle
 
 @Composable
 fun GroupListScreen(
-    onGroupClick: (String) -> Unit,
+    onGroupClick: (Int) -> Unit,
     onCreatePlaceClick: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: GroupListViewModel = hiltViewModel(),
