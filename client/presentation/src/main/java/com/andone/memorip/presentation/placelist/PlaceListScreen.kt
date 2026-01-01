@@ -1,12 +1,10 @@
 package com.andone.memorip.presentation.placelist
 
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
-import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
-import androidx.compose.foundation.lazy.staggeredgrid.items
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
@@ -16,16 +14,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.presentation.grouplist.component.AddFloatingActionButton
-import com.andone.memorip.presentation.placelist.component.PhotoItem
 import com.andone.memorip.presentation.placelist.component.PlaceListTopBar
 import com.andone.memorip.presentation.placelist.model.PlaceListAction
 import com.andone.memorip.presentation.placelist.model.PlaceListEvent
 import com.andone.memorip.presentation.placelist.model.PlaceListUiState
-import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
 import com.andone.memorip.presentation.util.collectWithLifecycle
@@ -34,12 +29,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.pointer.pointerInput
-
-
-private object StaggeredGridDimens {
-    val STAGGERED_GRID_MIN_CELL_WIDTH = 160.dp
-}
-
+import com.andone.memorip.presentation.component.MemoripStaggeredGrid
 
 @Composable
 fun PlaceListScreen(
@@ -93,6 +83,10 @@ fun PlaceListScreenContents(
         }
     }
 
+    val thumbnailImages = remember(key1 = state.places) {
+        state.places.map { it.thumbnailImage }
+    }
+
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -105,22 +99,15 @@ fun PlaceListScreenContents(
         floatingActionButton = { AddFloatingActionButton(onClick = { onAction(PlaceListAction.OnFABClick) }) },
         contentWindowInsets = WindowInsets(),
     ) { padding ->
-        LazyVerticalStaggeredGrid(
-            columns = StaggeredGridCells.Adaptive(minSize = StaggeredGridDimens.STAGGERED_GRID_MIN_CELL_WIDTH),
-            modifier = Modifier
-                .fillMaxSize()
-                .nestedScroll(clearFocusOnScroll)
-                .pointerInput(Unit) { detectTapGestures { focusManager.clearFocus() } },
-            contentPadding = padding,
-            horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXXSmall),
-            verticalItemSpacing = MemoripSpace.SpaceXXSmall
-        ) {
-            items(items = state.places) { place ->
-                PhotoItem(
-                    place = place,
-                    onClick = { onAction(PlaceListAction.OnPlaceClick(id=it)) },
-                )
-            }
+        Box(modifier = Modifier.padding(paddingValues = padding)) {
+            MemoripStaggeredGrid(
+                images = thumbnailImages,
+                onImageClick = { onAction(PlaceListAction.OnPlaceClick(id = it)) },
+                modifier = Modifier
+                    .fillMaxSize()
+                    .nestedScroll(connection = clearFocusOnScroll)
+                    .pointerInput(key1 = Unit) { detectTapGestures { focusManager.clearFocus() } },
+            )
         }
     }
 }
