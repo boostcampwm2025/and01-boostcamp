@@ -29,6 +29,10 @@ data class Place(
             name = "",
             latitude = 0.0,
             longitude = 0.0,
+            address = "",
+            startDateTime = LocalDateTime.now(),
+            endDateTime = LocalDateTime.now(),
+            categories = emptyList(),
             thumbnailImage = ImageItem.empty(),
             images = emptyList()
         )
