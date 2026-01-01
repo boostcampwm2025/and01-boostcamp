@@ -1,6 +1,13 @@
 <resources>
     <string name="app_name">Memorip</string>
 
+    <!-- Time Format -->
+    <string name="time_am">오전</string>
+    <string name="time_pm">오후</string>
+    <string name="date_time_format">%1$d월 %2$d일 %3$s %4$d:%5$02d</string>
+    <string name="time_format">%1$s %2$d:%3$02d</string>
+    <string name="range_format">%1$s - %2$s</string>
+
     <!-- Dialog -->
     <string name="dialog_cancel_message">취소</string>
     <string name="dialog_confirm_message">확인</string>
@@ -83,5 +90,8 @@
     <string name="errorfullscreen_retry_button">다시 시도</string>
     <string name="errorfullscreen_error_default_message">잠시 후 다시 시도해주세요.</string>
     <string name="errorfullscreen_error_map_message">지도를 불러올 수 없습니다.</string>
+
+    <!-- PlanScreen -->
+    <string name="plan_location_content_description">위치</string>
 
 </resources>

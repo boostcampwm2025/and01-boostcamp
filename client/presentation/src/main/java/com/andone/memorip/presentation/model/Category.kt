@@ -1,4 +1,4 @@
-package com.andone.memorip.presentation.selectcategory.model
+package com.andone.memorip.presentation.model
 
 import androidx.compose.ui.graphics.Color
 

@@ -1,5 +1,7 @@
 package com.andone.memorip.presentation.selectcategory.model
 
+import com.andone.memorip.presentation.model.Category
+
 sealed interface SelectCategoryEvent {
 
     data object NavigateBack : SelectCategoryEvent

@@ -10,11 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import coil.compose.AsyncImage
 import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.component.MemoripImage
 import com.andone.memorip.presentation.placelist.model.GroupItem
 import com.andone.memorip.presentation.theme.MemoripAlpha
 import com.andone.memorip.presentation.theme.MemoripPadding
@@ -35,10 +34,9 @@ fun ImageCard(
                 .background(color = MemoripTheme.colors.outline),
             contentAlignment = Alignment.Center
         ) {
-            AsyncImage(
-                model = item.imageUrl,
+            MemoripImage(
+                imageUrl = item.imageUrl,
                 contentDescription = null,
-                contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
             )
             if (item.overNumber > 0) {

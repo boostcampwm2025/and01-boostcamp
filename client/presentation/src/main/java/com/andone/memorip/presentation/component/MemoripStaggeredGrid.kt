@@ -15,12 +15,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import com.andone.memorip.presentation.model.ImageItem
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -79,12 +77,10 @@ private fun StaggeredImageItem(
             .background(MemoripTheme.colors.gray),
         contentAlignment = Alignment.Center
     ) {
-        AsyncImage(
-            model = imageUrl,
+        MemoripImage(
+            imageUrl = imageUrl,
             contentDescription = contentDescription,
             modifier = Modifier.fillMaxWidth(),
-            placeholder = ColorPainter(MemoripTheme.colors.offWhite),
-            error = ColorPainter(MemoripTheme.colors.offWhite),
             contentScale = ContentScale.FillWidth
         )
     }

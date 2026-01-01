@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.selectcategory.model
 
+import com.andone.memorip.presentation.model.Category
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.toImmutableList
