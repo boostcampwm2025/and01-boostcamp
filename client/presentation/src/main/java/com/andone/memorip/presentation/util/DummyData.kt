@@ -6,8 +6,9 @@ import com.andone.memorip.presentation.grouplist.model.GroupUiModel
 import com.andone.memorip.presentation.model.ImageItem
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.placedetail.model.PlaceUiModel
-import com.andone.memorip.presentation.selectcategory.model.Category
+import com.andone.memorip.presentation.model.Category
 import kotlinx.collections.immutable.persistentListOf
+import java.time.LocalDateTime
 import kotlin.random.Random
 
 object DummyData {
@@ -35,32 +36,137 @@ object DummyData {
         )
     }
 
-    val places: List<Place> = listOf(
-        Triple(37.498095, 127.027610, "브런치 카페"),
-        Triple(37.512900, 127.058500, "예쁜 공원"),
-        Triple(37.517305, 127.047502, "야경 맛집"),
-        Triple(37.505228, 127.050324, "루프탑 바"),
-        Triple(37.508547, 127.062835, "숨은 카페"),
-        Triple(37.495592, 127.028747, "감성 서점")
-    ).mapIndexed { placeIndex, (lat, lng, placeName) ->
-        val images = List(50) { imageIndex ->
+    val categories = mutableStateListOf(
+        Category(
+            id = 0L,
+            category = "맛집",
+            color = Color(0xFF000000)
+        ),
+        Category(
+            id = 1L,
+            category = "카페",
+            color = Color(0xFAA8F0F0)
+        ),
+        Category(
+            id = 2L,
+            category = "액티비티",
+            color = Color(0xFFCCDD66)
+        ),
+    )
+
+    val places: List<Place> by lazy {
+        buildList {
+            add(
+                createPlace(
+                    1,
+                    "브런치 카페",
+                    37.498095,
+                    127.027610,
+                    "강남구, 서울",
+                    LocalDateTime.of(2025, 12, 1, 9, 0),
+                    LocalDateTime.of(2025, 12, 1, 9, 30),
+                    0
+                )
+            )
+            add(
+                createPlace(
+                    2,
+                    "예쁜 공원",
+                    37.512900,
+                    127.058500,
+                    "성동구, 서울",
+                    LocalDateTime.of(2025, 12, 1, 10, 0),
+                    LocalDateTime.of(2025, 12, 1, 14, 0),
+                    1
+                )
+            )
+            add(
+                createPlace(
+                    3,
+                    "야경 맛집",
+                    37.517305,
+                    127.047502,
+                    "성수동, 서울",
+                    LocalDateTime.of(2025, 12, 1, 18, 0),
+                    LocalDateTime.of(2025, 12, 1, 20, 0),
+                    2
+                )
+            )
+            add(
+                createPlace(
+                    4,
+                    "루프탑 바",
+                    37.505228,
+                    127.050324,
+                    "왕십리, 서울",
+                    LocalDateTime.of(2025, 12, 1, 20, 30),
+                    LocalDateTime.of(2025, 12, 1, 23, 0),
+                    0
+                )
+            )
+            add(
+                createPlace(
+                    5,
+                    "숨은 카페",
+                    37.508547,
+                    127.062835,
+                    "성수동, 서울",
+                    LocalDateTime.of(2025, 12, 1, 14, 0),
+                    LocalDateTime.of(2025, 12, 1, 16, 0),
+                    1
+                )
+            )
+            add(
+                createPlace(
+                    6,
+                    "감성 서점",
+                    37.495592,
+                    127.028747,
+                    "강남구, 서울",
+                    LocalDateTime.of(2025, 12, 1, 13, 0),
+                    LocalDateTime.of(2025, 12, 1, 15, 30),
+                    2
+                )
+            )
+        }
+    }
+
+    private fun createPlaceImages(placeId: Int, count: Int = 50): List<ImageItem> {
+        return List(count) { imageIndex ->
             val photoId = Random.nextInt(30, 81)
             val randomHeight = Random.nextInt(150, 400)
             val fixedWidth = 200
 
             ImageItem(
-                id = placeIndex * 50 + imageIndex,
+                id = placeId * count + imageIndex,
                 url = "https://picsum.photos/id/$photoId/$fixedWidth/$randomHeight",
                 width = fixedWidth,
                 height = randomHeight
             )
         }
+    }
 
-        Place(
-            id = placeIndex,
-            name = placeName,
-            latitude = lat,
-            longitude = lng,
+    private fun createPlace(
+        id: Int,
+        name: String,
+        latitude: Double,
+        longitude: Double,
+        address: String,
+        startDateTime: LocalDateTime,
+        endDateTime: LocalDateTime,
+        categoryIndex: Int
+    ): Place {
+        val images = createPlaceImages(id)
+
+        return Place(
+            id = id,
+            name = name,
+            latitude = latitude,
+            longitude = longitude,
+            address = address,
+            startDateTime = startDateTime,
+            endDateTime = endDateTime,
+            categories = categories,
             thumbnailImage = images.first(),
             images = images
         )
@@ -79,23 +185,6 @@ object DummyData {
     }
 
     val groupName = "Group1"
-    val categories = mutableStateListOf(
-        Category(
-            id = 0L,
-            category = "맛집",
-            color = Color(0xFF000000)
-        ),
-        Category(
-            id = 1L,
-            category = "카페",
-            color = Color(0xFAA8F0F0)
-        ),
-        Category(
-            id = 2L,
-            category = "액티비티",
-            color = Color(0xFFCCDD66)
-        ),
-    )
 
     val groups = mutableStateListOf(
         GroupUiModel(

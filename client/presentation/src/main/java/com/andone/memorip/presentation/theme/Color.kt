@@ -15,7 +15,7 @@ val Outline = Color(0xFF7A5A4A)
 val Gray = Color(0xFF808080)
 val Red = Color(0xFFB23A2E)
 
-val Black = Color(0xFF000000)
+val Black = Color(0xFF222222)
 val White = Color(0xFFFFFFFF)
 
 // Dark 테마용 색상

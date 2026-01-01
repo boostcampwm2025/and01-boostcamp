@@ -35,6 +35,7 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+        isCoreLibraryDesugaringEnabled = true
     }
     kotlinOptions {
         jvmTarget = "11"
@@ -84,6 +85,9 @@ dependencies {
     implementation(libs.naver.map.compose)
     implementation(libs.naver.map.location)
 
+    // Java 8+ API desugaring (java.time 라이브러리 지원)
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
+    
     // Paging
     implementation(libs.androidx.paging.compose)
 }
