@@ -26,8 +26,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.andone.memorip.presentation.R
-import com.andone.memorip.presentation.component.MemoripPagingList
 import com.andone.memorip.presentation.component.EmptyText
+import com.andone.memorip.presentation.component.MemoripPagingList
 import com.andone.memorip.presentation.component.MemoripSearchBarInputField
 import com.andone.memorip.presentation.model.LocationUiModel
 import com.andone.memorip.presentation.selectlocation.SelectLocationScreenConstants.CAMERA_ANIMATION_DURATION
@@ -129,9 +129,16 @@ private fun SelectLocationContent(
             windowInsets = WindowInsets()
         ) {
             MemoripPagingList(
+                query = uiState.query,
                 pagingItems = locations,
                 itemKey = { it.id },
                 modifier = Modifier.fillMaxSize(),
+                initialContent = {
+                    EmptyText(
+                        text = stringResource(R.string.search_bar_placeholder),
+                        modifier = Modifier.fillMaxSize()
+                    )
+                },
                 emptyContent = {
                     EmptyText(
                         text = stringResource(R.string.search_bar_empty_result),
