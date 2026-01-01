@@ -35,7 +35,7 @@ class GroupListViewModel @Inject constructor() : ViewModel() {
             }
 
             is GroupListAction.OnGroupClick -> {
-                _event.trySend(GroupListEvent.NavigateToGroupDetail(action.groupId))
+                _event.trySend(GroupListEvent.NavigateToGroupDetail(groupId = action.groupId))
             }
         }
     }

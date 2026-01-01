@@ -77,6 +77,7 @@
     <!-- MainBottomBar -->
     <string name="main_bottom_bar_place_list">장소</string>
     <string name="main_bottom_bar_user">마이페이지</string>
+    <string name="main_bottom_bar_group">그룹</string>
 
     <!-- PlaceDetail -->
     <string name="place_detail_image_content_description">장소 이미지</string>
@@ -91,12 +92,15 @@
     <string name="errorfullscreen_error_default_message">잠시 후 다시 시도해주세요.</string>
     <string name="errorfullscreen_error_map_message">지도를 불러올 수 없습니다.</string>
 
-    <!-- PlanScreen -->
-    <string name="plan_location_content_description">위치</string>
-
     <!-- SearchBar -->
     <string name="search_bar_placeholder">검색어를 입력하세요.</string>
     <string name="search_bar_go_back_content_description">뒤로 가기</string>
     <string name="search_bar_close_content_description">검색어 삭제</string>
+
+    <!-- PlaceList -->
+    <string name="place_list_search">검색</string>
+
+    <!-- PlanScreen -->
+    <string name="plan_location_content_description">위치</string>
 
 </resources>

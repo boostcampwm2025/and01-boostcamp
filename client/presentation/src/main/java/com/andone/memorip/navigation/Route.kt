@@ -22,7 +22,9 @@ data object SelectCategory : NavKey
 data object SelectLocation : NavKey
 
 @Serializable
-data class GroupDetail(val groupId: String) : NavKey
+data class GroupDetail(val groupId: Int) : NavKey
 
 @Serializable
 data class PlaceDetail(val placeId: Int = 0) : NavKey
+
+@Serializable data object PlaceList : NavKey

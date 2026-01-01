@@ -14,7 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.presentation.component.GroupView
-import com.andone.memorip.presentation.grouplist.component.GroupListFloatingActionButton
+import com.andone.memorip.presentation.grouplist.component.AddFloatingActionButton
 import com.andone.memorip.presentation.grouplist.component.GroupListTopBar
 import com.andone.memorip.presentation.grouplist.model.GroupUiModel
 import com.andone.memorip.presentation.grouplist.model.GroupListAction
@@ -26,7 +26,7 @@ import com.andone.memorip.presentation.util.collectWithLifecycle
 
 @Composable
 fun GroupListScreen(
-    onGroupClick: (String) -> Unit,
+    onGroupClick: (Int) -> Unit,
     onCreatePlaceClick: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: GroupListViewModel = hiltViewModel(),
@@ -66,7 +66,7 @@ fun GroupListScreenContents(
     Scaffold(
         modifier = modifier,
         topBar = { GroupListTopBar(onSearchClick = { }) },
-        floatingActionButton = { GroupListFloatingActionButton(onClick = { onAction(GroupListAction.OnFABClick) }) },
+        floatingActionButton = { AddFloatingActionButton(onClick = { onAction(GroupListAction.OnFABClick) }) },
         contentWindowInsets = WindowInsets(),
     ) { innerPadding ->
         LazyColumn(
@@ -78,8 +78,8 @@ fun GroupListScreenContents(
             items(items = groups) { group ->
                 GroupView(
                     name = group.name,
-                    onGroupClick = { onAction(GroupListAction.OnGroupClick("")) },
-                    onAddClick = { onAction(GroupListAction.OnGroupClick("")) },
+                    onGroupClick = { onAction(GroupListAction.OnGroupClick(groupId = 0)) },
+                    onAddClick = { onAction(GroupListAction.OnGroupClick(groupId = 0)) },
                     images = group.images
                 )
             }
