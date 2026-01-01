@@ -19,7 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.selectcategory.component.CategoryItemDimens.CATEGORY_ITEM_WIDTH
-import com.andone.memorip.presentation.selectcategory.model.Category
+import com.andone.memorip.presentation.model.Category
 import com.andone.memorip.presentation.theme.MemoripIconSize.IconSizeMedium
 import com.andone.memorip.presentation.theme.MemoripPadding.PaddingXSmall
 import com.andone.memorip.presentation.theme.MemoripTheme

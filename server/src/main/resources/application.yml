@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: memorip
+
+  # Database
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/memorip}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:password}
+    driver-class-name: org.postgresql.Driver
+
+  # JPA/Hibernate
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  # Jackson (JSON null 필드 제외)
+  jackson:
+    default-property-inclusion: non_null
