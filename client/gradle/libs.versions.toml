@@ -28,7 +28,8 @@ naverMap = "3.23.0"
 naverMapCompose = "1.9.0"
 naverMapLocation = "21.0.2"
 retrofit = "3.0.0"
-converterGson = "3.0.0"
+retrofitKotlinx = "1.0.0"
+serializationJson = "1.9.0"
 paging = "3.3.6"
 coroutines = "1.10.2"
 
@@ -70,7 +71,8 @@ naver-map-compose = { group = "io.github.fornewid", name = "naver-map-compose", 
 naver-map-location = { group = "io.github.fornewid", name = "naver-map-location", version.ref = "naverMapLocation" }
 
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
-converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
+retrofit-kotlinx = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "retrofitKotlinx" }
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serializationJson" }
 
 logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "loggingInterceptor" }
 
