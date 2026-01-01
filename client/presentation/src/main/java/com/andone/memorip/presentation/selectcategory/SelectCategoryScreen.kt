@@ -24,7 +24,7 @@ import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.dialog.MemoripCategoryInputDialog
 import com.andone.memorip.presentation.selectcategory.component.CategoryItem
 import com.andone.memorip.presentation.selectcategory.component.SelectCategoryTopBar
-import com.andone.memorip.presentation.selectcategory.model.Category
+import com.andone.memorip.presentation.model.Category
 import com.andone.memorip.presentation.selectcategory.model.SelectCategoryAction
 import com.andone.memorip.presentation.selectcategory.model.SelectCategoryEvent
 import com.andone.memorip.presentation.selectcategory.model.toErrorMessage
