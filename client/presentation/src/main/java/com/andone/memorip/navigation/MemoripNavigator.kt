@@ -55,7 +55,7 @@ class MemoripNavigator(
 
 @Composable
 fun rememberMemoripNavigator(
-    backStack: NavBackStack<NavKey> = rememberNavBackStack(MainBottomBarRoute.PLACE_LIST.route)
+    backStack: NavBackStack<NavKey> = rememberNavBackStack(MainBottomBarRoute.GROUP_LIST.route)
 ): MemoripNavigator = remember(backStack) {
     MemoripNavigator(backStack)
 }

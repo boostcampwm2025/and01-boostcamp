@@ -1,6 +1,6 @@
 package com.andone.memorip.presentation.selectgroup.model
 
-import com.andone.memorip.presentation.placelist.model.GroupUiModel
+import com.andone.memorip.presentation.grouplist.model.GroupUiModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 

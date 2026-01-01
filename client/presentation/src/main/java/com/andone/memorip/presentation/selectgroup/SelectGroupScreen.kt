@@ -22,7 +22,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.GroupView
 import com.andone.memorip.presentation.component.dialog.MemoripInputDialog
-import com.andone.memorip.presentation.placelist.model.GroupUiModel
+import com.andone.memorip.presentation.grouplist.model.GroupUiModel
 import com.andone.memorip.presentation.selectgroup.component.SelectGroupTopBar
 import com.andone.memorip.presentation.selectgroup.model.SelectGroupAction
 import com.andone.memorip.presentation.selectgroup.model.SelectGroupEvent
@@ -107,7 +107,7 @@ private fun SelectGroupContent(
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_add),
-                    contentDescription = stringResource(R.string.place_list_add_content_description)
+                    contentDescription = stringResource(R.string.group_list_add_content_description)
                 )
             }
         },

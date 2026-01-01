@@ -1,4 +1,4 @@
-package com.andone.memorip.presentation.placelist.component
+package com.andone.memorip.presentation.grouplist.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -6,11 +6,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.tooling.preview.Preview
-import com.andone.memorip.presentation.placelist.component.BentoGridSpec.COLUMNS
-import com.andone.memorip.presentation.placelist.component.BentoGridSpec.RATIO
-import com.andone.memorip.presentation.placelist.component.BentoGridSpec.ROWS
-import com.andone.memorip.presentation.placelist.model.GroupItem
-import com.andone.memorip.presentation.placelist.model.Place
+import com.andone.memorip.presentation.grouplist.component.BentoGridSpec.COLUMNS
+import com.andone.memorip.presentation.grouplist.component.BentoGridSpec.RATIO
+import com.andone.memorip.presentation.grouplist.component.BentoGridSpec.ROWS
+import com.andone.memorip.presentation.grouplist.model.GroupItem
+import com.andone.memorip.presentation.grouplist.model.Place
 import com.andone.memorip.presentation.theme.MemoripTheme
 
 private object BentoGridSpec {
