@@ -22,7 +22,8 @@ object MemoripSpace {
 }
 
 object MemoripIconSize {
-    val IconSizeSmall = 18.dp
+    val IconSizeXSmall = 12.dp
+    val IconSizeSmall = 16.dp
     val IconSizeMedium = 24.dp
     val IconSizeLarge = 36.dp
     val IconButton = 84.dp

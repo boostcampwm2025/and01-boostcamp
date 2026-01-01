@@ -29,12 +29,12 @@ data class Place(
             name = "",
             latitude = 0.0,
             longitude = 0.0,
-            thumbnailImage = ImageItem.empty(),
-            images = emptyList(),
             address = "",
             startDateTime = LocalDateTime.now(),
             endDateTime = LocalDateTime.now(),
-            categories = emptyList()
+            categories = emptyList(),
+            thumbnailImage = ImageItem.empty(),
+            images = emptyList()
         )
     }
 }
