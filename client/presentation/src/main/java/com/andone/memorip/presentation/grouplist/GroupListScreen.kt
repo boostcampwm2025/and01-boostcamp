@@ -78,8 +78,8 @@ fun GroupListScreenContents(
             items(items = groups) { group ->
                 GroupView(
                     name = group.name,
-                    onGroupClick = { onAction(GroupListAction.OnGroupClick("")) },
-                    onAddClick = { onAction(GroupListAction.OnGroupClick("")) },
+                    onGroupClick = { onAction(GroupListAction.OnGroupClick(groupId = 0)) },
+                    onAddClick = { onAction(GroupListAction.OnGroupClick(groupId = 0)) },
                     images = group.images
                 )
             }
