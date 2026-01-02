@@ -73,7 +73,16 @@ class Place protected constructor(
     )
     private val images: MutableList<PlaceImage> = mutableListOf()
 
+    @OneToMany(
+        mappedBy = "place",
+        cascade = [CascadeType.ALL],
+        orphanRemoval = true
+    )
+    private val placeTags: MutableList<PlaceTag> = mutableListOf()
+
     fun getImages(): List<PlaceImage> = images.toList()
+
+    fun getPlaceTags(): List<PlaceTag> = placeTags.toList()
 
     private fun addImage(url: String, id: UUID? = null): PlaceImage {
         val newImage = PlaceImage.create(id = id, place = this, url = url)

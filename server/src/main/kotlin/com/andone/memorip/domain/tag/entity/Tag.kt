@@ -1,18 +1,21 @@
 package com.andone.memorip.domain.tag.entity
 
-import com.andone.memorip.common.entity.BaseEntity
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.Table
+import com.andone.memorip.common.entity.BaseTimeSyncEntity
+import com.andone.memorip.domain.place.entity.PlaceTag
+import jakarta.persistence.*
+import org.hibernate.annotations.SQLDelete
+import org.hibernate.annotations.SQLRestriction
 import java.util.UUID
 
 @Entity
 @Table(name = "tags")
+@SQLDelete(sql = "UPDATE tags SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
+@SQLRestriction("deleted_at IS NULL")
 class Tag protected constructor(
     id: UUID? = null,
     name: String,
     colorHex: String
-) : BaseEntity() {
+) : BaseTimeSyncEntity() {
     
     init {
         this.id = id
@@ -25,6 +28,15 @@ class Tag protected constructor(
     @Column(name = "color_hex", nullable = false, length = 9)
     var colorHex: String = colorHex
         internal set
+    
+    @OneToMany(
+        mappedBy = "tag",
+        cascade = [CascadeType.ALL],
+        orphanRemoval = true
+    )
+    private val placeTags: MutableList<PlaceTag> = mutableListOf()
+
+    fun getPlaceTags(): List<PlaceTag> = placeTags.toList()
     
     fun updateName(name: String) {
         require(name.isNotBlank()) { "태그명은 필수입니다" }

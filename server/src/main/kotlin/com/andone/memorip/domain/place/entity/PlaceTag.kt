@@ -1,38 +1,43 @@
 package com.andone.memorip.domain.place.entity
 
-import com.andone.memorip.common.entity.BaseEntity
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.Table
+import com.andone.memorip.common.entity.BaseTimeSyncEntity
+import com.andone.memorip.domain.tag.entity.Tag
+import jakarta.persistence.*
+import org.hibernate.annotations.SQLDelete
+import org.hibernate.annotations.SQLRestriction
 import java.util.UUID
 
 @Entity
 @Table(name = "place_tags")
+@SQLDelete(sql = "UPDATE place_tags SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
+@SQLRestriction("deleted_at IS NULL")
 class PlaceTag protected constructor(
     id: UUID? = null,
-    placeId: UUID,
-    tagId: UUID
-) : BaseEntity() {
+    place: Place,
+    tag: Tag
+) : BaseTimeSyncEntity() {
     
     init {
         this.id = id
     }
     
-    @Column(name = "place_id", nullable = false, columnDefinition = "UUID")
-    var placeId: UUID = placeId
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "place_id", nullable = false)
+    var place: Place = place
         internal set
     
-    @Column(name = "tag_id", nullable = false, columnDefinition = "UUID")
-    var tagId: UUID = tagId
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tag_id", nullable = false)
+    var tag: Tag = tag
         internal set
     
     companion object {
         fun create(
             id: UUID? = null,
-            placeId: UUID,
-            tagId: UUID
+            place: Place,
+            tag: Tag
         ): PlaceTag {
-            return PlaceTag(id, placeId, tagId)
+            return PlaceTag(id, place, tag)
         }
     }
 }
