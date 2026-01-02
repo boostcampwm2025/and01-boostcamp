@@ -1,6 +1,7 @@
 package com.andone.memorip.domain.place.entity
 
 import com.andone.memorip.common.entity.BaseTimeSyncEntity
+import com.andone.memorip.common.util.UuidV7Generator
 import jakarta.persistence.*
 import org.hibernate.annotations.SQLDelete
 import org.hibernate.annotations.SQLRestriction
@@ -73,6 +74,7 @@ class Place protected constructor(
     )
     private val images: MutableList<PlaceImage> = mutableListOf()
 
+    // 양방향 연관관계 설정: Place의 태그 컬렉션
     @OneToMany(
         mappedBy = "place",
         cascade = [CascadeType.ALL],
@@ -157,7 +159,8 @@ class Place protected constructor(
                 require(startAt.isBefore(endAt)) { "시작일은 종료일보다 이전이어야 합니다" }
             }
 
-            return Place(id, groupId, writerId, title, latitude, longitude, address).apply {
+            val generatedId = id ?: UuidV7Generator.generate()
+            return Place(generatedId, groupId, writerId, title, latitude, longitude, address).apply {
                 this.content = content
                 this.parentPlaceId = parentPlaceId
                 this.startAt = startAt

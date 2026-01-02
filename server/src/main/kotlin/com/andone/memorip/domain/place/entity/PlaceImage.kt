@@ -1,6 +1,7 @@
 package com.andone.memorip.domain.place.entity
 
 import com.andone.memorip.common.entity.BaseTimeEntity
+import com.andone.memorip.common.util.UuidV7Generator
 import jakarta.persistence.*
 import org.hibernate.annotations.SQLDelete
 import org.hibernate.annotations.SQLRestriction
@@ -37,7 +38,9 @@ class PlaceImage protected constructor(
         ): PlaceImage {
             require(url.isNotBlank()) { "이미지 URL은 필수입니다" }
             require(url.length <= 512) { "이미지 URL은 512자 이하여야 합니다" }
-            return PlaceImage(id, place, url)
+            
+            val generatedId = id ?: UuidV7Generator.generate()
+            return PlaceImage(generatedId, place, url)
         }
     }
 }

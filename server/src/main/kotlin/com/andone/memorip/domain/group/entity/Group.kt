@@ -1,6 +1,7 @@
 package com.andone.memorip.domain.group.entity
 
 import com.andone.memorip.common.entity.BaseTimeSyncEntity
+import com.andone.memorip.common.util.UuidV7Generator
 import com.andone.memorip.domain.user.entity.User
 import jakarta.persistence.*
 import org.hibernate.annotations.SQLDelete
@@ -60,7 +61,9 @@ class Group protected constructor(
         ): Group {
             require(title.isNotBlank()) { "제목은 필수입니다" }
             require(title.length <= 50) { "제목은 50자 이하여야 합니다" }
-            return Group(id, owner, title, visibility)
+            
+            val generatedId = id ?: UuidV7Generator.generate()
+            return Group(generatedId, owner, title, visibility)
         }
     }
 }

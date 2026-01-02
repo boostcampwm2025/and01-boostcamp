@@ -1,6 +1,7 @@
 package com.andone.memorip.domain.tag.entity
 
 import com.andone.memorip.common.entity.BaseTimeSyncEntity
+import com.andone.memorip.common.util.UuidV7Generator
 import com.andone.memorip.domain.place.entity.PlaceTag
 import jakarta.persistence.*
 import org.hibernate.annotations.SQLDelete
@@ -29,6 +30,7 @@ class Tag protected constructor(
     var colorHex: String = colorHex
         internal set
     
+    // 양방향 연관관계 설정: Tag가 사용된 PlaceTag 컬렉션
     @OneToMany(
         mappedBy = "tag",
         cascade = [CascadeType.ALL],
@@ -62,7 +64,9 @@ class Tag protected constructor(
             require(colorHex.matches(Regex("^#[0-9A-Fa-f]{6}([0-9A-Fa-f]{2})?\$"))) {
                 "올바른 HEX 색상 코드가 아닙니다"
             }
-            return Tag(id, name, colorHex)
+            
+            val generatedId = id ?: UuidV7Generator.generate()
+            return Tag(generatedId, name, colorHex)
         }
     }
 }

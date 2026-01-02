@@ -1,6 +1,7 @@
 package com.andone.memorip.domain.user.entity
 
 import com.andone.memorip.common.entity.BaseTimeSyncEntity
+import com.andone.memorip.common.util.UuidV7Generator
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Table
@@ -36,8 +37,9 @@ class User protected constructor(
             nickname: String,
             profileImage: String? = null
         ): User {
+            val generatedId = id ?: UuidV7Generator.generate()
             return User(
-                id = id,
+                id = generatedId,
                 nickname = nickname,
                 profileImage = profileImage
             )

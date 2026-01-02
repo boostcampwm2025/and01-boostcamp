@@ -1,6 +1,7 @@
 package com.andone.memorip.domain.place.entity
 
 import com.andone.memorip.common.entity.BaseTimeSyncEntity
+import com.andone.memorip.common.util.UuidV7Generator
 import com.andone.memorip.domain.tag.entity.Tag
 import jakarta.persistence.*
 import org.hibernate.annotations.SQLDelete
@@ -37,7 +38,8 @@ class PlaceTag protected constructor(
             place: Place,
             tag: Tag
         ): PlaceTag {
-            return PlaceTag(id, place, tag)
+            val generatedId = id ?: UuidV7Generator.generate()
+            return PlaceTag(generatedId, place, tag)
         }
     }
 }
