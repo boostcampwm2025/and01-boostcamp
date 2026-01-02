@@ -31,6 +31,9 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     runtimeOnly("org.postgresql:postgresql")
 
+	// UUID v7
+	implementation("com.github.f4b6a3:uuid-creator:6.1.1")
+
 	// Swagger/OpenAPI
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.0")
 	
