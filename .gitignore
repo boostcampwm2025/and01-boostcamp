@@ -10,6 +10,7 @@ client/.idea/assetWizardSettings.xml
 .DS_Store
 client/build
 client/captures
+client/app/google-services
 .externalNativeBuild
 .cxx
 local.properties
