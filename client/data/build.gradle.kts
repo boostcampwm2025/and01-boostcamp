@@ -1,6 +1,10 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.dagger.hilt.root)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -12,6 +16,14 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        // Naver Search
+        val naverOpenApi = getLocalProperty("NAVER_OPEN_API")
+        val naverClientId = getLocalProperty("NAVER_SEARCH_CLIENT_ID")
+        val naverClientSecret = getLocalProperty("NAVER_SEARCH_CLIENT_SECRET")
+        buildConfigField("String", "NAVER_OPEN_API", "\"$naverOpenApi\"")
+        buildConfigField("String", "NAVER_SEARCH_CLIENT_ID", "\"$naverClientId\"")
+        buildConfigField("String", "NAVER_SEARCH_CLIENT_SECRET", "\"$naverClientSecret\"")
     }
 
     buildTypes {
@@ -30,6 +42,9 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 dependencies {
@@ -41,4 +56,20 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // Hilt
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+
+    // Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+}
+
+fun getLocalProperty(propertyKey: String): String {
+    val properties = gradleLocalProperties(rootDir, providers)
+    return properties.getProperty(propertyKey) ?: run {
+        println("Warning: $propertyKey not found in local.properties")
+        ""
+    }
 }

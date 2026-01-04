@@ -1,36 +1,42 @@
 package com.andone.memorip.presentation.selectlocation
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SearchBar
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
-import com.andone.memorip.presentation.R
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.andone.memorip.presentation.component.MemoripSearchBarInputField
 import com.andone.memorip.presentation.selectlocation.SelectLocationScreenConstants.CAMERA_ANIMATION_DURATION
 import com.andone.memorip.presentation.selectlocation.SelectLocationScreenDimens.markerHeight
 import com.andone.memorip.presentation.selectlocation.SelectLocationScreenDimens.markerWidth
+import com.andone.memorip.presentation.selectlocation.component.LocationItem
 import com.andone.memorip.presentation.selectlocation.component.LocationSelectionButton
-import com.andone.memorip.presentation.theme.LocalMemoripTypography
+import com.andone.memorip.presentation.selectlocation.component.SelectLocationTopBar
+import com.andone.memorip.presentation.selectlocation.model.SelectLocationAction
+import com.andone.memorip.presentation.selectlocation.model.SelectLocationEvent
+import com.andone.memorip.presentation.selectlocation.model.SelectLocationUiState
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
+import com.andone.memorip.presentation.util.collectWithLifecycle
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraAnimation
 import com.naver.maps.map.CameraUpdate
@@ -53,100 +59,118 @@ private object SelectLocationScreenConstants {
 @Composable
 fun SelectLocationScreen(
     onBackClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: SelectLocationViewModel = hiltViewModel()
 ) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    viewModel.event.collectWithLifecycle { event ->
+        when (event) {
+            is SelectLocationEvent.SelectLocation -> {
+
+            }
+
+            SelectLocationEvent.NavigateBack -> onBackClick()
+        }
+    }
 
     SelectLocationContent(
-        onBackClick = onBackClick,
+        uiState = uiState,
+        onAction = viewModel::onAction,
         modifier = modifier
     )
 }
 
-@OptIn(ExperimentalNaverMapApi::class)
+@OptIn(ExperimentalNaverMapApi::class, ExperimentalMaterial3Api::class)
 @Composable
 private fun SelectLocationContent(
-    onBackClick: () -> Unit,
+    uiState: SelectLocationUiState,
+    onAction: (SelectLocationAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val cameraPositionState = rememberCameraPositionState()
-    var selectedLocation by remember { mutableStateOf<LatLng?>(null) }
+    var searchBarExpanded by rememberSaveable { mutableStateOf(false) }
 
-    Box(modifier = modifier) {
-        SelectLocationTopBar(
-            onBackClick = onBackClick,
-            modifier = Modifier.zIndex(1f)
+    fun selectLocation(latLng: LatLng) {
+        onAction(SelectLocationAction.OnSelectLocationClick(latLng))
+        cameraPositionState.move(
+            CameraUpdate
+                .scrollTo(latLng)
+                .animate(CameraAnimation.Fly, CAMERA_ANIMATION_DURATION)
         )
+    }
 
-        NaverMap(
-            modifier = Modifier.fillMaxSize(),
-            cameraPositionState = cameraPositionState,
-            uiSettings = remember {
-                MapUiSettings(
-                    isCompassEnabled = true,
-                    isZoomControlEnabled = true,
-                    isLocationButtonEnabled = true
+    Scaffold(
+        modifier = modifier,
+        topBar = { SelectLocationTopBar(onBackClick = { onAction(SelectLocationAction.OnBackClick) }) }
+    ) { innerPadding ->
+        SearchBar(
+            inputField = {
+                MemoripSearchBarInputField(
+                    query = uiState.query,
+                    expanded = searchBarExpanded,
+                    onQueryChange = { onAction(SelectLocationAction.OnQueryChange(it)) },
+                    onExpandedChange = { searchBarExpanded = it },
+                    modifier = Modifier.fillMaxWidth()
                 )
             },
-            onMapClick = { _, latLng ->
-                selectedLocation = latLng
-                cameraPositionState.move(
-                    update = CameraUpdate
-                        .scrollTo(latLng)
-                        .animate(CameraAnimation.Fly, CAMERA_ANIMATION_DURATION)
-                )
-            }
+            expanded = searchBarExpanded,
+            onExpandedChange = { searchBarExpanded = it },
+            modifier = Modifier.padding(top = innerPadding.calculateTopPadding()),
+            colors = SearchBarDefaults.colors(containerColor = MemoripTheme.colors.white),
+            windowInsets = WindowInsets()
         ) {
-            selectedLocation?.let { location ->
-                Marker(
-                    state = MarkerState(position = location),
-                    width = markerWidth,
-                    height = markerHeight,
-                    onClick = {
-                        selectedLocation = null
-                        true
-                    }
-                )
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
+                items(uiState.locations) { location ->
+                    LocationItem(
+                        location = location,
+                        onClick = {
+                            selectLocation(latLng = LatLng(location.latitude, location.longitude))
+                            searchBarExpanded = false
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
             }
         }
 
-        LocationSelectionButton(
-            onClick = {},
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .navigationBarsPadding()
-                .padding(bottom = MemoripPadding.PaddingMedium)
-        )
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun SelectLocationTopBar(
-    onBackClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    TopAppBar(
-        title = {
-            Text(
-                text = stringResource(R.string.select_location_title),
-                style = LocalMemoripTypography.current.headline2
-            )
-        },
-        modifier = modifier,
-        navigationIcon = {
-            IconButton(onClick = onBackClick) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_back),
-                    contentDescription = stringResource(R.string.select_group_back_button_description)
-                )
+        Box(modifier = Modifier.fillMaxSize()) {
+            NaverMap(
+                modifier = Modifier.fillMaxSize(),
+                cameraPositionState = cameraPositionState,
+                uiSettings = remember {
+                    MapUiSettings(
+                        isCompassEnabled = true,
+                        isZoomControlEnabled = true,
+                        isLocationButtonEnabled = true
+                    )
+                },
+                onMapClick = { _, latLng -> selectLocation(latLng = latLng) }
+            ) {
+                uiState.location?.let { location ->
+                    Marker(
+                        state = MarkerState(position = location),
+                        width = markerWidth,
+                        height = markerHeight,
+                        onClick = {
+                            onAction(SelectLocationAction.OnSelectLocationClick(null))
+                            true
+                        }
+                    )
+                }
             }
-        },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MemoripTheme.colors.offWhite,
-            navigationIconContentColor = MemoripTheme.colors.black,
-            titleContentColor = MemoripTheme.colors.black
-        )
-    )
+
+            LocationSelectionButton(
+                onClick = {
+                    uiState.location?.let { onAction(SelectLocationAction.OnSelectLocationClick(it)) }
+                },
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .navigationBarsPadding()
+                    .padding(bottom = MemoripPadding.PaddingMedium)
+            )
+        }
+    }
 }
 
 @Preview(showBackground = true)

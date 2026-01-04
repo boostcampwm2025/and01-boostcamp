@@ -33,9 +33,10 @@ import kotlinx.coroutines.delay
 fun MapTab(
     places: List<Place>,
     markerImages: Map<String, Bitmap>,
+    onShowBottomSheet: (Place) -> Unit,
+    onDismissBottomSheet: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var selectedPlace by remember { mutableStateOf<Place?>(null) }
     val cameraPositionState = rememberCameraPositionState()
     var mapLoadError by remember { mutableStateOf(false) }
     var mapLoaded by remember { mutableStateOf(false) }
@@ -81,19 +82,12 @@ fun MapTab(
                     )
                 },
                 onMapLoaded = { mapLoaded = true },
-                onMapClick = { _, _ -> selectedPlace = null }
+                onMapClick = { _, _ -> onDismissBottomSheet() }
             ) {
                 PlaceImageMarkers(
                     places = places,
                     markerImages = markerImages,
-                    onMarkerClick = { selectedPlace = it }
-                )
-            }
-            selectedPlace?.let { place ->
-                PlaceImagesBottomSheet(
-                    placeName = place.name,
-                    images = place.images,
-                    onDismiss = { selectedPlace = null }
+                    onMarkerClick = { onShowBottomSheet(it) }
                 )
             }
         }
@@ -122,6 +116,8 @@ private fun MapTabPreview() {
         MapTab(
             places = DummyData.places,
             markerImages = emptyMap(),
+            onShowBottomSheet = {},
+            onDismissBottomSheet = {},
             modifier = Modifier.fillMaxSize()
         )
     }

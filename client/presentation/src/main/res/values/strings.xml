@@ -1,6 +1,13 @@
 <resources>
     <string name="app_name">Memorip</string>
 
+    <!-- Time Format -->
+    <string name="time_am">오전</string>
+    <string name="time_pm">오후</string>
+    <string name="date_time_format">%1$d월 %2$d일 %3$s %4$d:%5$02d</string>
+    <string name="time_format">%1$s %2$d:%3$02d</string>
+    <string name="range_format">%1$s - %2$s</string>
+
     <!-- Dialog -->
     <string name="dialog_cancel_message">취소</string>
     <string name="dialog_confirm_message">확인</string>
@@ -15,10 +22,10 @@
     <!-- StaggeredGrid-->
     <string name="staggered_grid_image_content_description">장소 이미지</string>
 
-    <!-- HomeScreen -->
-    <string name="home_search_content_description">Search</string>
-    <string name="home_add_content_description">Add</string>
-    <string name="home_overflow_count">+%1$d</string>
+    <!-- GroupListScreen -->
+    <string name="group_list_search_content_description">Search</string>
+    <string name="group_list_add_content_description">Add</string>
+    <string name="group_list_overflow_count">+%1$d</string>
 
     <!-- SelectCategoryScreen -->
     <string name="select_category_back_button_description">뒤로 가기 버튼</string>
@@ -26,6 +33,7 @@
     <string name="select_category_dialog_title">카테고리 생성</string>
     <string name="select_category_confirm_button_description">카테고리 추가 확인 버튼</string>
     <string name="select_category_create_category_button_description">카테고리 추가 버튼</string>
+    <string name="select_category_max_category_over_err_message">카테고리는 최대 3개까지 선택 가능합니다.</string>
 
     <!-- GroupView-->
     <string name="group_view_default_name">기본 그룹</string>
@@ -67,8 +75,9 @@
     <string name="place_delete_image">사진 삭제</string>
 
     <!-- MainBottomBar -->
-    <string name="main_bottom_bar_home">홈</string>
+    <string name="main_bottom_bar_place_list">장소</string>
     <string name="main_bottom_bar_user">마이페이지</string>
+    <string name="main_bottom_bar_group">그룹</string>
 
     <!-- PlaceDetail -->
     <string name="place_detail_image_content_description">장소 이미지</string>
@@ -82,5 +91,16 @@
     <string name="errorfullscreen_retry_button">다시 시도</string>
     <string name="errorfullscreen_error_default_message">잠시 후 다시 시도해주세요.</string>
     <string name="errorfullscreen_error_map_message">지도를 불러올 수 없습니다.</string>
+
+    <!-- SearchBar -->
+    <string name="search_bar_placeholder">검색어를 입력하세요.</string>
+    <string name="search_bar_go_back_content_description">뒤로 가기</string>
+    <string name="search_bar_close_content_description">검색어 삭제</string>
+
+    <!-- PlaceList -->
+    <string name="place_list_search">검색</string>
+
+    <!-- PlanScreen -->
+    <string name="plan_location_content_description">위치</string>
 
 </resources>

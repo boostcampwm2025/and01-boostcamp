@@ -9,17 +9,24 @@ import androidx.compose.ui.graphics.Color
 val Primary = Color(0xFF9A5936)
 val PrimaryContainer = Color(0xFFCDAC9B)
 val Secondary = Color(0xFF36699A)
-val White = Color(0xFFFFFFFF)
 val OffWhite = Color(0xFFF5EDE8)
 val OnOffWhite = Color(0xFF2E2520)
-val Gray = Color(0xFF808080)
-val Black = Color(0xFF000000)
 val Outline = Color(0xFF7A5A4A)
+val Gray = Color(0xFF808080)
 val Red = Color(0xFFB23A2E)
 
+val Black = Color(0xFF222222)
+val White = Color(0xFFFFFFFF)
+
 // Dark 테마용 색상
-val DarkOffWhite = Color(0xFF3A3330)
+val DarkPrimary = Color(0xFFD6A184)
+val DarkPrimaryContainer = Color(0xFF5A3A2A)
+val DarkSecondary = Color(0xFF8BB0D6)
+val DarkOffWhite = Color(0xFF2E2520)
 val DarkOnOffWhite = Color(0xFFF5EDE8)
+val DarkOutline = Color(0xFF9C8578)
+val DarkGray = Color(0xFFA9A9A9)
+val DarkRed = Color(0xFFE06B60)
 
 @Immutable
 data class MemoripColors(
@@ -27,41 +34,41 @@ data class MemoripColors(
     val primaryContainer: Color,
     val secondary: Color,
     val background: Color,
-    val white: Color,
     val offWhite: Color,
     val onOffWhite: Color,
     val gray: Color,
-    val black: Color,
     val outline: Color,
-    val error: Color
+    val error: Color,
+    val black: Color,
+    val white: Color,
 )
 
 internal val lightMemoripColors = MemoripColors(
     primary = Primary,
     primaryContainer = PrimaryContainer,
     secondary = Secondary,
-    background = White,
-    white = White,
+    background = OffWhite,
     offWhite = OffWhite,
     onOffWhite = OnOffWhite,
     gray = Gray,
-    black = Black,
     outline = Outline,
-    error = Red
+    error = Red,
+    black = Black,
+    white = White,
 )
 
 internal val darkMemoripColors = MemoripColors(
-    primary = Primary,
-    primaryContainer = PrimaryContainer,
-    secondary = Secondary,
-    background = White,
-    white = White,
+    primary = DarkPrimary,
+    primaryContainer = DarkPrimaryContainer,
+    secondary = DarkSecondary,
+    background = DarkOffWhite,
     offWhite = DarkOffWhite,
     onOffWhite = DarkOnOffWhite,
-    gray = Gray,
+    gray = DarkGray,
+    outline = DarkOutline,
+    error = DarkRed,
     black = Black,
-    outline = Outline,
-    error = Red
+    white = White,
 )
 
 internal val lightMaterialScheme = lightColorScheme(

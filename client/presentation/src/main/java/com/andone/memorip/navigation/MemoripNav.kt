@@ -13,9 +13,10 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.andone.memorip.presentation.groupdetail.groupDetail
-import com.andone.memorip.presentation.home.home
 import com.andone.memorip.presentation.placecreate.placeCreate
 import com.andone.memorip.presentation.placedetail.placeDetail
+import com.andone.memorip.presentation.grouplist.groupList
+import com.andone.memorip.presentation.placelist.placeList
 import com.andone.memorip.presentation.selectcategory.selectCategory
 import com.andone.memorip.presentation.selectgroup.selectGroup
 import com.andone.memorip.presentation.selectlocation.selectLocation
@@ -46,10 +47,14 @@ fun MemoripNav(
                     slideOutHorizontally(targetOffsetX = { it })
         },
         entryProvider = entryProvider {
-            home(
+            placeList(
+                onPlaceClick = navigator::navigateToPlaceDetail,
+                onCreatePlaceClick = navigator::navigateToPlaceCreate,
+                modifier = modifier.padding(paddingValues = innerPadding)
+            )
+
+            groupList(
                 onGroupClick = { groupId -> navigator.navigateToGroupDetail(groupId) },
-                onAddClick = navigator::navigateToPlaceCreate,
-                onCreateGroupClick = {},
                 onCreatePlaceClick = navigator::navigateToPlaceCreate,
                 modifier = modifier.padding(paddingValues = innerPadding),
             )

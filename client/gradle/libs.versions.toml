@@ -26,6 +26,10 @@ ksp = "2.2.21-2.0.4"
 naverMap = "3.23.0"
 naverMapCompose = "1.9.0"
 naverMapLocation = "21.0.2"
+desugarJdkLibs = "2.1.5"
+retrofit = "3.0.0"
+retrofit_kotlinx = "1.0.0"
+converterGson = "3.0.0"
 firebase = "34.7.0"
 firebaseCrashlytics = "3.0.6"
 googleServices = "4.4.4"
@@ -65,6 +69,10 @@ naver-map-location = { group = "io.github.fornewid", name = "naver-map-location"
 firebase = { module = "com.google.firebase:firebase-bom", version.ref = "firebase" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+desugar-jdk-libs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugarJdkLibs" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+retrofit-kotlinx = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "retrofit_kotlinx" }
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

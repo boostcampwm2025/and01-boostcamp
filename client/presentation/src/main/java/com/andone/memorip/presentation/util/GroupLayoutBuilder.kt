@@ -1,7 +1,7 @@
 package com.andone.memorip.presentation.util
 
-import com.andone.memorip.presentation.home.model.GroupItem
-import com.andone.memorip.presentation.home.model.LayoutBlock
+import com.andone.memorip.presentation.grouplist.model.GroupItem
+import com.andone.memorip.presentation.grouplist.model.LayoutBlock
 import com.andone.memorip.presentation.util.BENTO5x3.VISIBLE
 
 private object BENTO5x3 {
