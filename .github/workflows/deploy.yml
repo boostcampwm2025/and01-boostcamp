@@ -1,0 +1,94 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - main
+      - dev  # TODO: 백엔드 v1.0 이후, main 만 남길 예정.
+    paths:
+      - 'server/**'
+      - '.github/workflows/deploy.yml'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Build
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./server
+          platforms: linux/amd64
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/memorip-backend:latest
+          cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/memorip-backend:buildcache
+          cache-to: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/memorip-backend:buildcache,mode=max
+
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Copy docker-compose.yml to server
+        run: |
+          scp -i ~/.ssh/deploy_key \
+            -o StrictHostKeyChecking=no \
+            server/docker-compose.yml \
+            ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:~/memorip/
+
+      - name: Deploy on server
+        run: |
+          ssh -i ~/.ssh/deploy_key \
+            -o StrictHostKeyChecking=no \
+            ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << 'EOF'
+            cd ~/memorip
+            
+            echo "최신 이미지 가져오는 중..."
+            docker compose pull backend
+            
+            echo "기존 컨테이너 중지 및 제거 중..."
+            docker compose stop backend
+            docker compose rm -f backend
+            
+            echo "새 컨테이너 시작 중..."
+            docker compose up -d --no-deps backend
+            
+            echo "Health check 대기 중..."
+            
+            # Health check 대기 (최대 60초)
+            for i in {1..12}; do
+              if docker compose ps backend | grep -q "healthy"; then
+                echo "배포 성공!"
+                echo ""
+                echo "=== Compose 서비스 상태 ==="
+                docker compose ps
+                exit 0
+              fi
+              echo "대기 중... ($i/12)"
+              sleep 5
+            done
+            
+            echo "경고: Health check가 통과하지 못했습니다. 로그를 확인하세요:"
+            docker compose logs backend --tail=30
+            exit 1
+          EOF
+
+      - name: Cleanup
+        if: always()
+        run: |
+          rm -f ~/.ssh/deploy_key

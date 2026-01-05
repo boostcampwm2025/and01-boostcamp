@@ -24,11 +24,15 @@ dependencies {
 	// Web & Validation
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
+	implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
     // JPA, PostgreSQL
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     runtimeOnly("org.postgresql:postgresql")
+
+	// UUID v7
+	implementation("com.github.f4b6a3:uuid-creator:6.1.1")
 
 	// Swagger/OpenAPI
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.0")
@@ -37,6 +41,10 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+	// Naver, Storage
+	implementation("software.amazon.awssdk:s3:2.25.60")
+	implementation("software.amazon.awssdk:auth:2.25.60")
 }
 
 kotlin {

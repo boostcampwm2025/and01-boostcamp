@@ -10,10 +10,10 @@ import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.theme.MemoripTheme
 
 @Composable
-fun GroupListFloatingActionButton(onClick: () -> Unit) {
+fun AddFloatingActionButton(onClick: () -> Unit) {
     FloatingActionButton(
         onClick = onClick,
-        containerColor = MemoripTheme.colors.primaryContainer,
+        containerColor = MemoripTheme.colors.primary,
         contentColor = MemoripTheme.colors.black
     ) {
         Icon(
@@ -27,6 +27,6 @@ fun GroupListFloatingActionButton(onClick: () -> Unit) {
 @Composable
 private fun GroupListFloatingActionButtonPreview() {
     MemoripTheme {
-        GroupListFloatingActionButton(onClick = {})
+        AddFloatingActionButton(onClick = {})
     }
 }

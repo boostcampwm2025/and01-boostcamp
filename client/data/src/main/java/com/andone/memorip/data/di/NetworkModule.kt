@@ -22,7 +22,7 @@ object NetworkModule {
 
     val json = Json {
         ignoreUnknownKeys = true
-        coerceInputValues = true
+        coerceInputValues = false
         encodeDefaults = true
     }
 

@@ -137,9 +137,16 @@ private fun SelectLocationContent(
             windowInsets = WindowInsets()
         ) {
             MemoripPagingList(
+                query = uiState.query,
                 pagingItems = locations,
                 itemKey = { it.id },
                 modifier = Modifier.fillMaxSize(),
+                initialContent = {
+                    EmptyText(
+                        text = stringResource(R.string.search_bar_placeholder),
+                        modifier = Modifier.fillMaxSize()
+                    )
+                },
                 emptyContent = {
                     EmptyText(
                         text = stringResource(R.string.search_bar_empty_result),

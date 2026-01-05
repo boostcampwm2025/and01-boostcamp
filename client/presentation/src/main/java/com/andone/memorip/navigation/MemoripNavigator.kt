@@ -37,7 +37,7 @@ class MemoripNavigator(
 
     fun navigateToPlaceCreate() = backStack.navigateToPlaceCreate()
 
-    fun navigateToGroupDetail(groupId: String) = backStack.navigateToGroupDetail(groupId)
+    fun navigateToGroupDetail(groupId: Int) = backStack.navigateToGroupDetail(groupId)
 
     fun navigateToPlaceDetail(placeId: Int) = backStack.navigateToPlaceDetail(placeId)
 
@@ -46,7 +46,7 @@ class MemoripNavigator(
 
 @Composable
 fun rememberMemoripNavigator(
-    backStack: NavBackStack<NavKey> = rememberNavBackStack(MainBottomBarRoute.GROUP_LIST.route)
+    backStack: NavBackStack<NavKey> = rememberNavBackStack(MainBottomBarRoute.PLACE_LIST.route)
 ): MemoripNavigator = remember(backStack) {
     MemoripNavigator(backStack)
 }

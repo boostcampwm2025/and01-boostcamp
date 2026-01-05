@@ -1,4 +1,4 @@
-package com.andone.memorip.presentation.placelist.component
+package com.andone.memorip.presentation.grouplist.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -14,7 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.MemoripImage
-import com.andone.memorip.presentation.placelist.model.GroupItem
+import com.andone.memorip.presentation.grouplist.model.GroupItem
 import com.andone.memorip.presentation.theme.MemoripAlpha
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme

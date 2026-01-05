@@ -16,6 +16,7 @@ import com.andone.memorip.presentation.groupdetail.groupDetail
 import com.andone.memorip.presentation.grouplist.groupList
 import com.andone.memorip.presentation.placecreate.placeCreate
 import com.andone.memorip.presentation.placedetail.placeDetail
+import com.andone.memorip.presentation.placelist.placeList
 
 @Composable
 fun MemoripNav(
@@ -43,6 +44,12 @@ fun MemoripNav(
                     slideOutHorizontally(targetOffsetX = { it })
         },
         entryProvider = entryProvider {
+            placeList(
+                onPlaceClick = navigator::navigateToPlaceDetail,
+                onCreatePlaceClick = navigator::navigateToPlaceCreate,
+                modifier = modifier.padding(paddingValues = innerPadding)
+            )
+
             groupList(
                 onGroupClick = { groupId -> navigator.navigateToGroupDetail(groupId) },
                 onCreatePlaceClick = navigator::navigateToPlaceCreate,
