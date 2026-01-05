@@ -1,8 +1,8 @@
-package com.andone.memorip.domain.s3.service
+package com.andone.memorip.infra.storage
 
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import software.amazon.awssdk.services.s3.S3Client
-import org.springframework.beans.factory.annotation.Value
 
 @Service
 class S3HealthCheckService(

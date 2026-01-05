@@ -1,6 +1,5 @@
-package com.andone.memorip.domain.s3.controller
+package com.andone.memorip.infra.storage
 
-import com.andone.memorip.domain.s3.service.S3HealthCheckService
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
