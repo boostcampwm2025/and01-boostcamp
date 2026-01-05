@@ -71,7 +71,7 @@ fun PlaceCreateScreenContents(
         rememberLauncherForActivityResult(contract = ActivityResultContracts.PickMultipleVisualMedia()) { uris ->
             val canAdd = MAX_PICTURE_COUNT - uiState.images.size
             if (uris.isNotEmpty()) {
-                onAction(PlaceCreateAction.OnAddImages(uris.take(canAdd)))
+                onAction(PlaceCreateAction.OnImagesAdd(uris.take(canAdd)))
             }
         }
 
@@ -80,8 +80,8 @@ fun PlaceCreateScreenContents(
         topBar = {
             PlaceCreateTopBar(
                 onBackClick = { onAction(PlaceCreateAction.OnBackClick) },
-                onConfirmClick = { },
-                confirmEnabled = false
+                onConfirmClick = { onAction(PlaceCreateAction.OnPlaceCreate) },
+                confirmEnabled = uiState.title.isNotBlank() && uiState.content.isNotBlank()
             )
         }
     ) { innerPadding ->
@@ -94,7 +94,7 @@ fun PlaceCreateScreenContents(
             PlaceCreateImageRow(
                 selectedImages = uiState.images,
                 maxCount = MAX_PICTURE_COUNT,
-                onRemoveImage = { uri -> onAction(PlaceCreateAction.OnRemoveImages(uri)) },
+                onRemoveImage = { uri -> onAction(PlaceCreateAction.OnImagesRemove(uri)) },
                 onAddImageClick = {
                     if (remain > 0) {
                         imagePickerLauncher.launch(
@@ -110,13 +110,17 @@ fun PlaceCreateScreenContents(
                 title = uiState.title,
                 content = uiState.content,
                 onTitleChange = { onAction(PlaceCreateAction.OnTitleChange(it)) },
-                onContentChange = { onAction(PlaceCreateAction.OnContentChange("")) }
+                onContentChange = { onAction(PlaceCreateAction.OnContentChange(it)) }
             )
 
             PlaceCreateSelectSection(
+                category = uiState.category,
+                location = uiState.location,
+                group = uiState.group,
                 onCategoryClick = { onAction(PlaceCreateAction.OnCategoryClick) },
                 onLocationClick = { onAction(PlaceCreateAction.OnLocationClick) },
-                onGroupClick = { onAction(PlaceCreateAction.OnGroupClick) }
+                onGroupClick = { onAction(PlaceCreateAction.OnGroupClick) },
+                modifier = Modifier.padding(bottom = MemoripPadding.PaddingMedium)
             )
         }
     }
