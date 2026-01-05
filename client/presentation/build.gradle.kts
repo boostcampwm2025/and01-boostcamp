@@ -65,6 +65,11 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    // Firebase Analytics & Crashlytics
+    implementation(platform(libs.firebase))
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.analytics)
+
     // Hilt
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
