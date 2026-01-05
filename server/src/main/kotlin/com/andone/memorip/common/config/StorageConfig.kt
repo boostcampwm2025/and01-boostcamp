@@ -11,7 +11,7 @@ import software.amazon.awssdk.services.s3.S3Configuration
 import java.net.URI
 
 @Configuration
-class NaverObjectStorageConfig {
+class StorageConfig {
 
     @Bean
     fun s3Client(
