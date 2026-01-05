@@ -1,6 +1,5 @@
 package com.andone.memorip.presentation.selectgroup
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -34,6 +33,7 @@ import com.andone.memorip.presentation.util.collectWithLifecycle
 
 @Composable
 fun SelectGroupScreen(
+    onGroupSelect: (GroupUiModel) -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: SelectGroupViewModel = hiltViewModel()
@@ -122,7 +122,7 @@ private fun SelectGroupContent(
                 GroupView(
                     name = group.name,
                     onGroupClick = { onAction(SelectGroupAction.OnGroupClick(group)) },
-                    onAddClick = { onAction(SelectGroupAction.OnAddGroupClick) },
+                    onAddClick = { },
                     images = group.images,
                 )
             }
@@ -134,6 +134,9 @@ private fun SelectGroupContent(
 @Composable
 private fun SelectGroupScreenPrev() {
     MemoripTheme {
-        SelectGroupScreen(onBackClick = {})
+        SelectGroupScreen(
+            onGroupSelect = {},
+            onBackClick = {}
+        )
     }
 }

@@ -13,12 +13,9 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.andone.memorip.presentation.groupdetail.groupDetail
+import com.andone.memorip.presentation.grouplist.groupList
 import com.andone.memorip.presentation.placecreate.placeCreate
 import com.andone.memorip.presentation.placedetail.placeDetail
-import com.andone.memorip.presentation.grouplist.groupList
-import com.andone.memorip.presentation.selectcategory.selectCategory
-import com.andone.memorip.presentation.selectgroup.selectGroup
-import com.andone.memorip.presentation.selectlocation.selectLocation
 
 @Composable
 fun MemoripNav(
@@ -54,18 +51,7 @@ fun MemoripNav(
 
             entry<User> { Text(text = "user") }
 
-            placeCreate(
-                onCategoryClick = navigator::navigateToSelectCategory,
-                onLocationClick = navigator::navigateToSelectLocation,
-                onGroupClick = navigator::navigateToSelectGroup,
-                onBackClick = navigator::popBackStack
-            )
-
-            selectGroup(onBackClick = navigator::popBackStack)
-
-            selectCategory(onBackClick = navigator::popBackStack)
-
-            selectLocation(onBackClick = navigator::popBackStack)
+            placeCreate(onBackClick = navigator::popBackStack)
 
             groupDetail(
                 onNavigateBack = navigator::popBackStack,
