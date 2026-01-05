@@ -35,6 +35,8 @@ services:
       POSTGRES_DB: ${DB_NAME:?DB_NAME is required}
       POSTGRES_USER: ${DB_USER:?DB_USER is required}
       POSTGRES_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD is required}
+      TZ: Asia/Seoul
+      PGTZ: Asia/Seoul
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:

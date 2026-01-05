@@ -1,9 +1,9 @@
 package com.andone.memorip.domain.user.entity
 
-import com.andone.memorip.common.entity.BaseEntity
+import com.andone.memorip.common.entity.BaseTimeSyncEntity
+import com.andone.memorip.common.util.UuidV7Generator
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
-import jakarta.persistence.Id
 import jakarta.persistence.Table
 import org.hibernate.annotations.SQLDelete
 import org.hibernate.annotations.SQLRestriction
@@ -13,29 +13,33 @@ import java.util.UUID
 @Table(name = "users")
 @SQLDelete(sql = "UPDATE users SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
 @SQLRestriction("deleted_at IS NULL")
-class User private constructor(
-    @Id
-    @Column(name = "id", columnDefinition = "UUID", nullable = false, updatable = false)
-    val id: UUID,
+class User protected constructor(
+    id: UUID? = null,
     nickname: String,
     profileImage: String?
-) : BaseEntity() {
+) : BaseTimeSyncEntity() {
+    
+    init {
+        this.id = id
+    }
+    
     @Column(nullable = false, length = 30)
     var nickname: String = nickname
-        private set
+        internal set
 
     @Column(name = "profile_image", nullable = true, length = 512)
     var profileImage: String? = null
-        private set
+        internal set
 
     companion object {
         fun create(
-            id: UUID = UUID.randomUUID(),
+            id: UUID? = null,
             nickname: String,
             profileImage: String? = null
         ): User {
+            val generatedId = id ?: UuidV7Generator.generate()
             return User(
-                id = id,
+                id = generatedId,
                 nickname = nickname,
                 profileImage = profileImage
             )
