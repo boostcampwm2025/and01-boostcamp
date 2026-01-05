@@ -1,52 +1,64 @@
 package com.andone.memorip.data.di
 
 import com.andone.memorip.data.BuildConfig
-import com.andone.memorip.data.naversearch.datasource.NaverSearchService
+import com.andone.memorip.data.kakaosearch.datasource.KakaoSearchService
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    private const val BASE_URL = BuildConfig.NAVER_OPEN_API
+    private const val BASE_URL = BuildConfig.KAKAO_BASE_URL
+
+    val json = Json {
+        ignoreUnknownKeys = true
+        coerceInputValues = false
+        encodeDefaults = true
+    }
+
+    private val contentType = "application/json".toMediaType()
 
     @Provides
     @Singleton
-    fun provideNaverOkHttpClient(): OkHttpClient {
+    fun provideKakaoOkHttpClient(): OkHttpClient {
+        val logger = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
         return OkHttpClient
             .Builder()
             .addInterceptor { chain ->
-                val newRequest = chain
-                    .request()
-                    .newBuilder()
-                    .addHeader("X-Naver-Client-Id", BuildConfig.NAVER_SEARCH_CLIENT_ID)
-                    .addHeader("X-Naver-Client-Secret", BuildConfig.NAVER_SEARCH_CLIENT_SECRET)
+                val newRequest = chain.request().newBuilder()
+                    .addHeader("Authorization", "KakaoAK ${BuildConfig.KAKAO_REST_API_KEY}")
                     .build()
                 chain.proceed(newRequest)
             }
+            .addInterceptor(logger)
             .build()
     }
 
     @Provides
     @Singleton
-    fun provideNaverRetrofit(okHttpClient: OkHttpClient): Retrofit {
+    fun provideKakaoRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(json.asConverterFactory(contentType))
             .build()
     }
 
     @Provides
     @Singleton
-    fun provideNaverService(retrofit: Retrofit): NaverSearchService {
-        return retrofit.create(NaverSearchService::class.java)
+    fun provideKakaoSearchService(retrofit: Retrofit): KakaoSearchService {
+        return retrofit.create(KakaoSearchService::class.java)
     }
 }

@@ -1,30 +1,27 @@
 package com.andone.memorip.presentation.model
 
 import androidx.compose.runtime.Immutable
-import com.andone.memorip.domain.model.Location
+import com.andone.memorip.domain.model.response.KakaoLocation
 
 @Immutable
 data class LocationUiModel(
+    val id: String,
     val name: String,
     val category: String,
-    val description: String,
     val address: String,
     val roadAddress: String,
     val latitude: Double,
     val longitude: Double,
 )
 
-fun Location.toUiModel(): LocationUiModel {
-    val latitude = mapy / 10000000.0
-    val longitude = mapx / 10000000.0
-
+fun KakaoLocation.toUiModel(): LocationUiModel {
     return LocationUiModel(
-        name = title.replace(Regex("<.*?>"), ""),
+        id = id,
+        name = title,
         category = category,
-        description = description,
         address = address,
         roadAddress = roadAddress,
-        latitude = latitude,
-        longitude = longitude,
+        latitude = latitude.toDouble(),
+        longitude = longitude.toDouble(),
     )
 }

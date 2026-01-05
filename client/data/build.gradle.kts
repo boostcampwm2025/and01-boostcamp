@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.dagger.hilt.root)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.jetbrains.kotlin.serialization)
 }
 
 android {
@@ -17,13 +18,11 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
 
-        // Naver Search
-        val naverOpenApi = getLocalProperty("NAVER_OPEN_API")
-        val naverClientId = getLocalProperty("NAVER_SEARCH_CLIENT_ID")
-        val naverClientSecret = getLocalProperty("NAVER_SEARCH_CLIENT_SECRET")
-        buildConfigField("String", "NAVER_OPEN_API", "\"$naverOpenApi\"")
-        buildConfigField("String", "NAVER_SEARCH_CLIENT_ID", "\"$naverClientId\"")
-        buildConfigField("String", "NAVER_SEARCH_CLIENT_SECRET", "\"$naverClientSecret\"")
+        // Kakao Search
+        val kakaoBaseUrl = getLocalProperty("KAKAO_BASE_URL")
+        val kakaoRestApiKey = getLocalProperty("KAKAO_REST_API_KEY")
+        buildConfigField("String", "KAKAO_BASE_URL", "\"$kakaoBaseUrl\"")
+        buildConfigField("String", "KAKAO_REST_API_KEY", "\"$kakaoRestApiKey\"")
     }
 
     buildTypes {
@@ -63,7 +62,16 @@ dependencies {
 
     // Retrofit
     implementation(libs.retrofit)
-    implementation(libs.converter.gson)
+    implementation(libs.retrofit.kotlinx)
+
+    // Serialization
+    implementation(libs.kotlinx.serialization.json)
+
+    // Interceptor
+    implementation(libs.logging.interceptor)
+
+    // Paging
+    implementation(libs.androidx.paging.common)
 }
 
 fun getLocalProperty(propertyKey: String): String {
