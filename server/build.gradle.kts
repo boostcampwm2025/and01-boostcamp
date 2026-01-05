@@ -47,8 +47,9 @@ dependencies {
 	implementation("software.amazon.awssdk:auth:2.25.60")
 	
 	// Dotenv
-    implementation(platform("me.paulschwarz:spring-dotenv-bom:5.1.0"))
-    developmentOnly("me.paulschwarz:springboot4-dotenv")
+    val dotenvVersion = "5.1.0"
+    implementation(platform("me.paulschwarz:spring-dotenv-bom:$dotenvVersion"))
+    developmentOnly("me.paulschwarz:springboot4-dotenv:$dotenvVersion")
 }
 
 kotlin {
