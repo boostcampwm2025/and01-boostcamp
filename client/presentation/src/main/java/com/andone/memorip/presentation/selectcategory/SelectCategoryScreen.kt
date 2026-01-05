@@ -25,7 +25,6 @@ import com.andone.memorip.presentation.component.dialog.MemoripCategoryInputDial
 import com.andone.memorip.presentation.model.Category
 import com.andone.memorip.presentation.selectcategory.component.CategoryItem
 import com.andone.memorip.presentation.selectcategory.component.SelectCategoryTopBar
-import com.andone.memorip.presentation.model.Category
 import com.andone.memorip.presentation.selectcategory.model.SelectCategoryAction
 import com.andone.memorip.presentation.selectcategory.model.SelectCategoryEvent
 import com.andone.memorip.presentation.selectcategory.model.toErrorMessage
@@ -53,8 +52,8 @@ fun SelectCategoryScreen(
                 onBackClick()
             }
 
-            is SelectCategoryEvent.NavigateAddPlace -> {
-                Log.d("UI TEST", "navigation add place ${event.categories}")
+            is SelectCategoryEvent.SelectCategory -> {
+                onCategorySelect(event.categories)
             }
 
             SelectCategoryEvent.ShowDialog -> {

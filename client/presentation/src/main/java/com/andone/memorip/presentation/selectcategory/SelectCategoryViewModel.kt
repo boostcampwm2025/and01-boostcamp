@@ -45,8 +45,8 @@ class SelectCategoryViewModel @Inject constructor() : ViewModel() {
 
             is SelectCategoryAction.OnConfirmClick -> {
                 _event.trySend(
-                    element = SelectCategoryEvent.NavigateAddPlace(
-                        categories = uiState.value.categories.filter { it.id in uiState.value.checkedSet }
+                    element = SelectCategoryEvent.SelectCategory(
+                        categories = _uiState.value.categories.filter { it.id in _uiState.value.checkedSet }
                     )
                 )
             }
@@ -73,32 +73,32 @@ class SelectCategoryViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun addCategory(category: String, color: Color) {
-        val maxId = uiState.value.categories.maxOfOrNull { it.id } ?: -2L
+        val maxId = _uiState.value.categories.maxOfOrNull { it.id } ?: -2L
         val newCategory = Category(
             id = maxId + 1L,
             category = category,
             color = color
         )
 
-        val categories = uiState.value.categories + newCategory
-        _uiState.value = uiState.value.copy(categories = categories.toImmutableList())
+        val categories = _uiState.value.categories + newCategory
+        _uiState.value = _uiState.value.copy(categories = categories.toImmutableList())
         _event.trySend(SelectCategoryEvent.DismissDialog)
     }
 
     private fun updateChecked(category: Category) {
-        val checkedSet = if (category.id in uiState.value.checkedSet) {
-            uiState.value.checkedSet - category.id
+        val checkedSet = if (category.id in _uiState.value.checkedSet) {
+            _uiState.value.checkedSet - category.id
         } else {
-            if (uiState.value.checkedSet.size >= MAX_SELECTABLE_COUNT) {
+            if (_uiState.value.checkedSet.size >= MAX_SELECTABLE_COUNT) {
                 _event.trySend(
                     element = SelectCategoryEvent.ShowSnackBar(message = SelectCategoryError.MaxCategoryOverError)
                 )
                 return
             }
 
-            uiState.value.checkedSet + category.id
+            _uiState.value.checkedSet + category.id
         }
 
-        _uiState.value = uiState.value.copy(checkedSet = checkedSet.toImmutableSet())
+        _uiState.value = _uiState.value.copy(checkedSet = checkedSet.toImmutableSet())
     }
 }

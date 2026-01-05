@@ -48,9 +48,8 @@ fun SelectGroupScreen(
                 onBackClick()
             }
 
-            is SelectGroupEvent.NavigatePlaceAdd -> {
-                /** TODO 그룹 추가 화면으로 이동하되 데이터를 들고 이동하기 */
-                Log.d("UI TEST", "add group after : ${event.group}")
+            is SelectGroupEvent.SelectGroup -> {
+                onGroupSelect(event.group)
             }
 
             SelectGroupEvent.ShowDialog -> {
