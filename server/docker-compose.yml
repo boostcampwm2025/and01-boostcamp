@@ -7,10 +7,8 @@ services:
       - "autoheal=true"
     ports:
       - "8080:8080"
-    environment:
-      DB_URL: jdbc:postgresql://db:5432/${DB_NAME:?DB_NAME is required}
-      DB_USER: ${DB_USER:?DB_USER is required}
-      DB_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD is required}
+    env_file:
+      - .env
     depends_on:
       db:
         condition: service_healthy
