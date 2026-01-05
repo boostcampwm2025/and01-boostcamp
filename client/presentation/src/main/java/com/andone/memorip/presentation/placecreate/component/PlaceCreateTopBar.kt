@@ -17,8 +17,8 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 @Composable
 fun PlaceCreateTopBar(
     onBackClick: () -> Unit,
-    onConfirmClick: () -> Unit = {},
-    confirmEnabled: Boolean = false
+    onConfirmClick: () -> Unit,
+    confirmEnabled: Boolean
 ) {
     CenterAlignedTopAppBar(
         title = { Text(text = stringResource(R.string.place_create_title)) },
@@ -26,9 +26,7 @@ fun PlaceCreateTopBar(
             IconButton(onClick = onBackClick) {
                 Icon(
                     painter = painterResource(R.drawable.ic_outline_arrow_back),
-                    contentDescription = stringResource(
-                        R.string.place_create_back_content_description
-                    )
+                    contentDescription = stringResource(R.string.place_create_back_content_description)
                 )
             }
         },
@@ -39,9 +37,7 @@ fun PlaceCreateTopBar(
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_check),
-                    contentDescription = stringResource(
-                        R.string.place_create_check_content_description
-                    )
+                    contentDescription = stringResource(R.string.place_create_check_content_description)
                 )
             }
         },
@@ -51,11 +47,12 @@ fun PlaceCreateTopBar(
 
 @Preview
 @Composable
-private fun PlaceCreateTopBarPreview(){
+private fun PlaceCreateTopBarPreview() {
     MemoripTheme {
         PlaceCreateTopBar(
             onBackClick = {},
-            onConfirmClick = {}
+            onConfirmClick = {},
+            confirmEnabled = true
         )
     }
 }
