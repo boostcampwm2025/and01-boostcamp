@@ -1,7 +1,7 @@
-package com.andone.memorip.infra.storage
+package com.andone.memorip.domain.place.controller
 
 import com.andone.memorip.common.response.ApiResult
-import org.springframework.web.bind.annotation.GetMapping
+import com.andone.memorip.domain.place.service.PlaceImageService
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestPart
@@ -9,23 +9,17 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
 
 @RestController
-@RequestMapping("/api/s3")
-class StorageController(
-    private val service: StorageService
+@RequestMapping("/api/places/images")
+class PlaceImageController(
+    private val placeImageService: PlaceImageService
 ) {
 
-    @GetMapping("/health")
-    fun health(): String {
-        service.check()
-        return "OK"
-    }
-
-    @PostMapping("/upload/place")
-    fun uploadPlaceImage(
+    @PostMapping
+    fun upload(
         @RequestPart file: MultipartFile
     ): ApiResult<String> {
         return ApiResult.success(
-            data = service.upload(file, dir = "place")
+            placeImageService.upload(file)
         )
     }
 }
