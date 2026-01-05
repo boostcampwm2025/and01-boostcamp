@@ -45,6 +45,16 @@ class GlobalExceptionHandler {
             .body(ApiResult.error(code.name, code.message))
     }
 
+    @ExceptionHandler(IllegalArgumentException::class)
+    fun handleIllegalArgumentException(
+        e: IllegalArgumentException
+    ): ResponseEntity<ApiResult<Nothing>> {
+        val code = CommonExceptionCode.INVALID_PARAMETER
+        return ResponseEntity.status(code.status)
+            .body(ApiResult.error(code.name, e.message ?: code.message))
+    }
+
+
     @ExceptionHandler(Exception::class)
     fun handleException(e: Exception): ResponseEntity<ApiResult<Nothing>> {
         logger.error("예상치 못한 예외 발생", e)

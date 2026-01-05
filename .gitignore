@@ -15,12 +15,14 @@ client/app/google-services
 .cxx
 local.properties
 client/app/release/
+client/app/google-services.json
 
 HELP.md
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+server/.env
 
 ### STS ###
 .apt_generated
