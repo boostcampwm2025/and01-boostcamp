@@ -76,10 +76,11 @@ private fun BottomBarPreview() {
         MainBottomBar(
             visible = true,
             tabs = persistentListOf(
+                MainBottomBarRoute.PLACE_LIST,
                 MainBottomBarRoute.GROUP_LIST,
                 MainBottomBarRoute.USER
             ),
-            currentTab = MainBottomBarRoute.GROUP_LIST,
+            currentTab = MainBottomBarRoute.PLACE_LIST,
             onTabSelected = {}
         )
     }

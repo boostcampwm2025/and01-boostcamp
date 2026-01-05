@@ -22,4 +22,19 @@ data class Place(
 
     val isMultiDay: Boolean
         get() = startDateTime.toLocalDate() != endDateTime.toLocalDate()
+
+    companion object {
+        fun empty(): Place = Place(
+            id = 0,
+            name = "",
+            latitude = 0.0,
+            longitude = 0.0,
+            address = "",
+            startDateTime = LocalDateTime.now(),
+            endDateTime = LocalDateTime.now(),
+            categories = emptyList(),
+            thumbnailImage = ImageItem.empty(),
+            images = emptyList()
+        )
+    }
 }

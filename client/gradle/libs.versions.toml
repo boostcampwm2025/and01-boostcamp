@@ -33,6 +33,10 @@ retrofitKotlinx = "1.0.0"
 serializationJson = "1.9.0"
 paging = "3.3.6"
 coroutines = "1.10.2"
+firebase = "34.7.0"
+firebaseCrashlytics = "3.0.6"
+googleServices = "4.4.4"
+
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -71,6 +75,10 @@ naver-map-sdk = { group = "com.naver.maps", name = "map-sdk", version.ref = "nav
 naver-map-compose = { group = "io.github.fornewid", name = "naver-map-compose", version.ref = "naverMapCompose" }
 naver-map-location = { group = "io.github.fornewid", name = "naver-map-location", version.ref = "naverMapLocation" }
 
+firebase = { module = "com.google.firebase:firebase-bom", version.ref = "firebase" }
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+
 desugar-jdk-libs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugarJdkLibs" }
 
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
@@ -91,6 +99,8 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 jetbrains-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinSerialization" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlytics" }
+google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 
 [bundles]
 navigation3 = ["androidx-navigation3-runtime", "androidx-navigation3-ui", "androidx-lifecycle-viewmodel-navigation3", "kotlinx-serialization-core", "androidx-material3-adaptive-navigation3"]

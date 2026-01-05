@@ -11,4 +11,13 @@ data class ImageItem(
 ) {
     val aspectRatio: Float
         get() = width.toFloat() / height.toFloat()
+
+    companion object {
+        fun empty(): ImageItem = ImageItem(
+            id = 0,
+            url = "",
+            width = 1,
+            height = 1
+        )
+    }
 }
