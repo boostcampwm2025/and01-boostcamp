@@ -22,7 +22,7 @@ class StorageService(
         dir: String
     ): String {
 
-        require(!file.isEmpty) { "빈 파일입니다" }
+        require(value = !file.isEmpty) { "빈 파일입니다" }
 
         val extension = file.originalFilename
             ?.substringAfterLast('.', "")

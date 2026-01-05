@@ -25,7 +25,7 @@ class StorageController(
         @RequestPart file: MultipartFile
     ): ApiResult<String> {
         return ApiResult.success(
-            service.upload(file, "place")
+            data = service.upload(file, dir = "place")
         )
     }
 }
