@@ -1,6 +1,7 @@
 package com.andone.memorip.domain.place.controller
 
 import com.andone.memorip.common.response.ApiResult
+import com.andone.memorip.domain.place.dto.UploadPlaceImageResponse
 import com.andone.memorip.domain.place.service.PlaceImageService
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -17,9 +18,11 @@ class PlaceImageController(
     @PostMapping
     fun upload(
         @RequestPart file: MultipartFile
-    ): ApiResult<String> {
+    ): ApiResult<UploadPlaceImageResponse> {
         return ApiResult.success(
-            placeImageService.upload(file)
+            UploadPlaceImageResponse(
+                url = placeImageService.upload(file)
+            )
         )
     }
 }

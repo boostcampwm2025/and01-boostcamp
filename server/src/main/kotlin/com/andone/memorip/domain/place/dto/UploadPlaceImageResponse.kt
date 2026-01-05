@@ -1,4 +1,5 @@
 package com.andone.memorip.domain.place.dto
 
-class UploadPlaceImageResponse {
-}
+data class UploadPlaceImageResponse(
+    val url: String
+)
