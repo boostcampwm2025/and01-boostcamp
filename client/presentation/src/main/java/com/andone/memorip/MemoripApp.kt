@@ -42,7 +42,7 @@ fun MemoripApp(
                 onTabSelected = navigator::navigateToTab
             )
         },
-        snackbarHost = { SnackbarHost(snackbarHostState) },
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         contentWindowInsets = WindowInsets()
     ) { innerPadding ->
         MemoripNav(
