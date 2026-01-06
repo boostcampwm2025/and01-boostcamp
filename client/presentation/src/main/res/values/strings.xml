@@ -75,6 +75,8 @@
     <string name="place_delete_image">사진 삭제</string>
     <string name="place_create_location_placeholder">사용자 지정</string>
     <string name="place_create_join_to_string_comma">", "</string>
+    <string name="place_create_snack_bar_input_message">사진, 제목, 위치, 그룹을 입력해주세요.</string>
+    <string name="place_create_open_to_everyone">모두에게 공개하기</string>
 
     <!-- MainBottomBar -->
     <string name="main_bottom_bar_place_list">장소</string>
