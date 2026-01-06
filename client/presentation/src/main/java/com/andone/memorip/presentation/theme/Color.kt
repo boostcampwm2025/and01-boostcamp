@@ -12,7 +12,7 @@ val Secondary = Color(0xFF36699A)
 val OffWhite = Color(0xFFF5EDE8)
 val OnOffWhite = Color(0xFF2E2520)
 val Outline = Color(0xFF7A5A4A)
-val Gray = Color(0xFF808080)
+val Gray = Color(0xFF73777C)
 val Red = Color(0xFFB23A2E)
 
 val Black = Color(0xFF222222)
