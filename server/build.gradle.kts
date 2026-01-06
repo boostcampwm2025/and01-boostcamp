@@ -45,6 +45,11 @@ dependencies {
 	// Naver, Storage
 	implementation("software.amazon.awssdk:s3:2.25.60")
 	implementation("software.amazon.awssdk:auth:2.25.60")
+	
+	// Dotenv
+    val dotenvVersion = "5.1.0"
+    implementation(platform("me.paulschwarz:spring-dotenv-bom:$dotenvVersion"))
+    developmentOnly("me.paulschwarz:springboot4-dotenv:$dotenvVersion")
 }
 
 kotlin {
