@@ -21,8 +21,10 @@ android {
         // Kakao Search
         val kakaoBaseUrl = getLocalProperty("KAKAO_BASE_URL")
         val kakaoRestApiKey = getLocalProperty("KAKAO_REST_API_KEY")
+        val baseUrl = getLocalProperty("BASE_URL")
         buildConfigField("String", "KAKAO_BASE_URL", "\"$kakaoBaseUrl\"")
         buildConfigField("String", "KAKAO_REST_API_KEY", "\"$kakaoRestApiKey\"")
+        buildConfigField("String", "BASE_URL", "\"$baseUrl\"")
     }
 
     buildTypes {
