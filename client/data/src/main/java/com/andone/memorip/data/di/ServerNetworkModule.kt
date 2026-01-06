@@ -12,7 +12,16 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import javax.inject.Qualifier
 import javax.inject.Singleton
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class ServerRetrofit
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class ServerOkHttp
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -26,6 +35,7 @@ object ServerNetworkModule {
 
     @Provides
     @Singleton
+    @ServerOkHttp
     fun provideOkHttpClient(): OkHttpClient {
         val logger = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
@@ -38,9 +48,8 @@ object ServerNetworkModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(
-        okHttpClient: OkHttpClient
-    ): Retrofit {
+    @ServerRetrofit
+    fun provideRetrofit(@ServerOkHttp okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient)
@@ -50,9 +59,7 @@ object ServerNetworkModule {
 
     @Provides
     @Singleton
-    fun providePlaceService(
-        retrofit: Retrofit
-    ): PlaceService {
+    fun providePlaceService(@ServerRetrofit retrofit: Retrofit): PlaceService {
         return retrofit.create(PlaceService::class.java)
     }
 }
