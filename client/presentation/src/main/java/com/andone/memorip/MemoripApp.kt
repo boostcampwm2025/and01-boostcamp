@@ -12,7 +12,6 @@ import com.andone.memorip.navigation.MemoripNavigator
 import com.andone.memorip.presentation.component.MainBottomBar
 import com.andone.memorip.presentation.component.MemoripSnackbar
 import com.andone.memorip.presentation.common.SnackBarManager
-import com.andone.memorip.presentation.snackbartest.SnackbarTestScreen
 
 @Composable
 fun MemoripApp(
