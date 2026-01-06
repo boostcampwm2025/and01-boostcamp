@@ -54,6 +54,12 @@ class GlobalExceptionHandler {
             .body(ApiResult.error(code.name, e.message ?: code.message))
     }
 
+    @ExceptionHandler(NoSuchElementException::class)
+    fun handleNoSuchElementException(e: NoSuchElementException): ResponseEntity<ApiResult<Nothing>> {
+        val code = CommonExceptionCode.PLACE_NOT_FOUND
+        return ResponseEntity.status(code.status)
+            .body(ApiResult.error(code.name, e.message ?: code.message))
+    }
 
     @ExceptionHandler(Exception::class)
     fun handleException(e: Exception): ResponseEntity<ApiResult<Nothing>> {
