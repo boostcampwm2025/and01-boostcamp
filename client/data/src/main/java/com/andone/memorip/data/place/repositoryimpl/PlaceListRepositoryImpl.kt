@@ -10,9 +10,7 @@ import com.andone.memorip.domain.model.PlaceListItem
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class PlaceListRepositoryImpl @Inject constructor(
-    private val placeService: PlaceService
-) : PlaceListRepository {
+class PlaceListRepositoryImpl @Inject constructor(private val placeService: PlaceService) : PlaceListRepository {
 
     override fun getPlaceList(): Flow<PagingData<PlaceListItem>> =
         Pager(

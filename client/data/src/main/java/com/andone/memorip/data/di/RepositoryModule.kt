@@ -16,13 +16,9 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindKaKaoSearchRepository(
-        impl: KakaoSearchRepositoryImpl
-    ): KakaoSearchRepository
+    abstract fun bindKaKaoSearchRepository(impl: KakaoSearchRepositoryImpl): KakaoSearchRepository
 
     @Binds
     @Singleton
-    abstract fun bindPlaceListRepository(
-        impl: PlaceListRepositoryImpl
-    ): PlaceListRepository
+    abstract fun bindPlaceListRepository(impl: PlaceListRepositoryImpl): PlaceListRepository
 }

@@ -11,9 +11,7 @@ class PlaceListPagingSource(
     private val sort: List<String>? = null
 ) : PagingSource<Int, PlaceListItem>() {
 
-    override suspend fun load(
-        params: LoadParams<Int>
-    ): LoadResult<Int, PlaceListItem> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PlaceListItem> {
 
         val page = params.key ?: 0
 
@@ -30,8 +28,7 @@ class PlaceListPagingSource(
                 )
             }
 
-            val items = response.data.orEmpty()
-                .map { it.toDomain() }
+            val items = response.data.orEmpty().map { it.toDomain() }
 
             val hasNext = response.pagination?.hasNext ?: false
 

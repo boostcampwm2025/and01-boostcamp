@@ -12,9 +12,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/places")
-class PlaceController(
-    private val placeService: PlaceService
-) {
+class PlaceController(private val placeService: PlaceService) {
 
     @GetMapping
     fun getPlaceList(
