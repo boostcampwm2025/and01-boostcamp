@@ -1,6 +1,5 @@
-package com.andone.memorip.domain.place.dto
+package com.andone.memorip.domain.place.dto.response
 
-import java.time.LocalDateTime
 import java.util.UUID
 
 data class PlaceListItemResponse(

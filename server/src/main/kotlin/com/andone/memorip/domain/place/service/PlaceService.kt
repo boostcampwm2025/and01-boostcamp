@@ -1,20 +1,17 @@
 package com.andone.memorip.domain.place.service
 
 import com.andone.memorip.common.response.ApiResult
-import com.andone.memorip.domain.place.dto.PlaceListItemResponse
+import com.andone.memorip.domain.place.dto.PlaceListResult
+import com.andone.memorip.domain.place.dto.response.PlaceListItemResponse
 import com.andone.memorip.domain.place.repository.PlaceRepository
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
-import java.util.UUID
 
 @Service
 class PlaceService(
     private val placeRepository: PlaceRepository
 ) {
-    fun getPlaceList(
-        pageable: Pageable
-    ): ApiResult<List<PlaceListItemResponse>> {
-
+    fun getPlaceList(pageable: Pageable): PlaceListResult {
         val page = placeRepository.findAll(pageable)
 
         val content = page.content.map { place ->
@@ -35,6 +32,6 @@ class PlaceService(
             hasNext = page.hasNext()
         )
 
-        return ApiResult.success(content, pagination)
+        return PlaceListResult(content, pagination)
     }
 }
