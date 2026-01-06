@@ -1,4 +1,4 @@
-package com.andone.memorip.data.place.repository
+package com.andone.memorip.data.place.repositoryimpl
 
 import com.andone.memorip.domain.repository.PlaceListRepository
 

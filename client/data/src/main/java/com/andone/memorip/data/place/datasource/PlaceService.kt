@@ -1,7 +1,7 @@
 package com.andone.memorip.data.place.datasource
 
 import com.andone.memorip.data.common.ApiResult
-import com.andone.memorip.domain.model.PlaceListItem
+import com.andone.memorip.data.place.model.PlaceListItemResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -12,5 +12,5 @@ interface PlaceService {
         @Query("page") page: Int,
         @Query("size") size: Int,
         @Query("sort") sort: List<String>? = null
-    ): ApiResult<List<PlaceListItem>>
+    ): ApiResult<List<PlaceListItemResponse>>
 }

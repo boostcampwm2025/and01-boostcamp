@@ -1,8 +1,5 @@
 package com.andone.memorip.domain.model
 
-import kotlinx.serialization.Serializable
-
-@Serializable
 data class PlaceListItem(
     val id: String,
     val title: String,
