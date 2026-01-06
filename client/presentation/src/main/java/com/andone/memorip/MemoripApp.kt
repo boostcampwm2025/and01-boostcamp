@@ -11,12 +11,12 @@ import androidx.compose.runtime.remember
 import com.andone.memorip.navigation.MemoripNav
 import com.andone.memorip.navigation.MemoripNavigator
 import com.andone.memorip.presentation.component.MainBottomBar
-import com.andone.memorip.presentation.common.SnackbarManager
+import com.andone.memorip.presentation.common.SnackBarManager
 
 @Composable
 fun MemoripApp(
     navigator: MemoripNavigator,
-    snackbarManager: SnackbarManager
+    snackbarManager: SnackBarManager
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
