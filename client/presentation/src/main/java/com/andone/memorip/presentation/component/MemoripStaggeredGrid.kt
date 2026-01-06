@@ -32,7 +32,7 @@ private object StaggeredGridDimens {
 @Composable
 fun MemoripStaggeredGrid(
     images: List<ImageItem>,
-    onImageClick: (Int) -> Unit,
+    onImageClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyVerticalStaggeredGrid(

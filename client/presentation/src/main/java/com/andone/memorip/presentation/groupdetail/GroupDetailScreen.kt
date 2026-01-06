@@ -50,7 +50,7 @@ private object MarkerImageConstants {
 @Composable
 fun GroupDetailScreen(
     onBackClick: () -> Unit,
-    onImageClick: (Int) -> Unit,
+    onImageClick: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: GroupDetailViewModel = hiltViewModel()
 ) {
@@ -63,7 +63,7 @@ fun GroupDetailScreen(
             }
 
             is GroupDetailEvent.NavigatePlaceDetail -> {
-                onImageClick(event.id.toInt())
+                onImageClick(event.id)
             }
         }
     }
@@ -162,7 +162,7 @@ fun GroupDetailScreenContent(
             when (currentPage) {
                 0 -> GalleryTab(
                     places = places,
-                    onImageClick = { id -> onAction(GroupDetailAction.OnPlaceClick(id = id.toLong())) },
+                    onImageClick = { id -> onAction(GroupDetailAction.OnPlaceClick(id = id)) },
                     modifier = Modifier.fillMaxSize()
                 )
 

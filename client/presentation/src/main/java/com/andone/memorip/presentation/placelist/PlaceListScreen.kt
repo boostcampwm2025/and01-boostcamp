@@ -33,7 +33,7 @@ import com.andone.memorip.presentation.component.MemoripStaggeredGrid
 
 @Composable
 fun PlaceListScreen(
-    onPlaceClick: (Int) -> Unit,
+    onPlaceClick: (String) -> Unit,
     onCreatePlaceClick: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PlaceListViewModel = hiltViewModel(),

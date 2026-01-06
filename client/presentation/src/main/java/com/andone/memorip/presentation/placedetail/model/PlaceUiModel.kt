@@ -4,6 +4,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 data class PlaceUiModel(
+    val id: String = "",
     val title: String = "",
     val category: String = "",
     val locationName: String = "",

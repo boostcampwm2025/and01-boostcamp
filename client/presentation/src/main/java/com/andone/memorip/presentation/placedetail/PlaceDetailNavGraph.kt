@@ -6,8 +6,8 @@ import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import com.andone.memorip.navigation.PlaceDetail
 
-fun NavBackStack<NavKey>.navigateToPlaceDetail(placeId: Int) {
-    add(PlaceDetail(placeId))
+fun NavBackStack<NavKey>.navigateToPlaceDetail(placeId: String) {
+    add(element = PlaceDetail(placeId = placeId))
 }
 
 fun EntryProviderScope<NavKey>.placeDetail(

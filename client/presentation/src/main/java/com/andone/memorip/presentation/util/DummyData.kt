@@ -2,20 +2,28 @@ package com.andone.memorip.presentation.util
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.graphics.Color
+import com.andone.memorip.domain.model.Tag
 import com.andone.memorip.presentation.grouplist.model.GroupUiModel
+import com.andone.memorip.presentation.model.Category
 import com.andone.memorip.presentation.model.ImageItem
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.placedetail.model.PlaceUiModel
-import com.andone.memorip.presentation.model.Category
 import kotlinx.collections.immutable.persistentListOf
 import java.time.LocalDateTime
+import java.util.UUID
 import kotlin.random.Random
 
 object DummyData {
 
     val place = PlaceUiModel(
         title = "제목",
-        category = "맛집",
+        tags = persistentListOf(
+            Tag(
+                id = UUID.randomUUID().toString(),
+                name = "맛집",
+                color = Color.Gray.value.toHexString()
+            )
+        ),
         locationName = "서울시 종로구",
         imageUrls = persistentListOf(
             "https://picsum.photos/200/50",
@@ -29,7 +37,7 @@ object DummyData {
 
     val placeImages: List<ImageItem> = List(12) { index ->
         ImageItem(
-            id = index + 1,
+            id = (index + 1).toString(),
             url = "https://picsum.photos/seed/${index + 1}/800/800",
             width = 800,
             height = 800
@@ -138,7 +146,7 @@ object DummyData {
             val fixedWidth = 200
 
             ImageItem(
-                id = placeId * count + imageIndex,
+                id = (placeId * count + imageIndex).toString(),
                 url = "https://picsum.photos/id/$photoId/$fixedWidth/$randomHeight",
                 width = fixedWidth,
                 height = randomHeight
@@ -159,7 +167,7 @@ object DummyData {
         val images = createPlaceImages(id)
 
         return Place(
-            id = id,
+            id = id.toString(),
             name = name,
             latitude = latitude,
             longitude = longitude,
@@ -177,7 +185,7 @@ object DummyData {
         val fixedWidth = 200
 
         ImageItem(
-            id = id,
+            id = id.toString(),
             url = "https://picsum.photos/id/$id/$fixedWidth/$randomHeight",
             width = fixedWidth,
             height = randomHeight

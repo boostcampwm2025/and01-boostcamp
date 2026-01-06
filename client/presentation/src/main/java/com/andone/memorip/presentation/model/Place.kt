@@ -3,10 +3,11 @@ package com.andone.memorip.presentation.model
 import androidx.compose.runtime.Immutable
 import java.time.Duration
 import java.time.LocalDateTime
+import java.util.UUID
 
 @Immutable
 data class Place(
-    val id: Int,
+    val id: String,
     val name: String,
     val latitude: Double,
     val longitude: Double,
@@ -25,7 +26,7 @@ data class Place(
 
     companion object {
         fun empty(): Place = Place(
-            id = 0,
+            id = UUID.randomUUID().toString(),
             name = "",
             latitude = 0.0,
             longitude = 0.0,
