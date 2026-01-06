@@ -1,8 +1,8 @@
 package com.andone.memorip.data.di
 
 import com.andone.memorip.data.kakaosearch.repositoryimpl.KakaoSearchRepositoryImpl
-import com.andone.memorip.data.repository.PlaceListRepository
-import com.andone.memorip.data.repository.PlaceListRepositoryImpl
+import com.andone.memorip.domain.repository.PlaceListRepository
+import com.andone.memorip.data.place.repository.PlaceListRepositoryImpl
 import com.andone.memorip.domain.repository.KakaoSearchRepository
 import dagger.Binds
 import dagger.Module
