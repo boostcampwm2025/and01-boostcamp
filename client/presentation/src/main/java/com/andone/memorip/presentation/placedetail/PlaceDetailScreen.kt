@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.navigation.PlaceDetail
 import com.andone.memorip.presentation.R
@@ -55,13 +56,18 @@ fun PlaceDetailScreen(
     route: PlaceDetail,
     onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: PlaceDetailViewModel = PlaceDetailViewModel(route) // TODO: hiltViewModel() 적용
+    viewModel: PlaceDetailViewModel = hiltViewModel<PlaceDetailViewModel, PlaceDetailViewModel.Factory>(
+        creationCallback = { factory ->
+            factory.create(route)
+        }
+    ) // TODO: hiltViewModel() 적용
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     viewModel.event.collectWithLifecycle { event ->
         when (event) {
             PlaceDetailEvent.NavigateBack -> onNavigateBack()
+            is PlaceDetailEvent.ShowSnackBar -> { /** Snackbar 보여주기 */ }
         }
     }
 
@@ -104,7 +110,7 @@ private fun PlaceDetailScreen(
             Spacer(modifier = Modifier.height(MemoripSpace.SpaceMedium))
             Column(verticalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXXSmall)) {
                 Text(
-                    text = place.category,
+                    text = place.tags[0].name,
                     style = MemoripTheme.typography.labelLarge
                 )
                 PlaceDetailInfoSection(
