@@ -119,8 +119,10 @@ fun PlaceCreateScreenContents(
             PlaceCreateContentSection(
                 title = uiState.title,
                 content = uiState.content,
+                isPublic = uiState.isPublic,
                 onTitleChange = { onAction(PlaceCreateAction.OnTitleChange(it)) },
-                onContentChange = { onAction(PlaceCreateAction.OnContentChange(it)) }
+                onContentChange = { onAction(PlaceCreateAction.OnContentChange(it)) },
+                onCheckedChange = { onAction(PlaceCreateAction.OnPublicChange) }
             )
 
             PlaceCreateSelectSection(

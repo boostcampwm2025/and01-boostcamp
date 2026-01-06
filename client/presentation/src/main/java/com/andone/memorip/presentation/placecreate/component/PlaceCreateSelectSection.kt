@@ -43,16 +43,16 @@ fun PlaceCreateSelectSection(
             modifier = Modifier.weight(1f)
         )
         SelectRow(
-            label = stringResource(R.string.place_create_tag),
-            value = categoryValue,
-            leadingIcon = painterResource(R.drawable.ic_tag),
-            onClick = onCategoryClick
-        )
-        SelectRow(
             label = stringResource(R.string.place_create_group),
             value = groupValue,
             leadingIcon = painterResource(R.drawable.ic_folder),
             onClick = onGroupClick
+        )
+        SelectRow(
+            label = stringResource(R.string.place_create_tag),
+            value = categoryValue,
+            leadingIcon = painterResource(R.drawable.ic_tag),
+            onClick = onCategoryClick
         )
     }
 }

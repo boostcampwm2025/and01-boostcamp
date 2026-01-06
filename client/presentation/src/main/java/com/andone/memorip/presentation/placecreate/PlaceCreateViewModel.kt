@@ -46,6 +46,10 @@ class PlaceCreateViewModel @Inject constructor() : ViewModel() {
                 _uiState.update { it.copy(content = action.content) }
             }
 
+            PlaceCreateAction.OnPublicChange -> {
+                _uiState.update { it.copy(isPublic = !_uiState.value.isPublic) }
+            }
+
             is PlaceCreateAction.OnImagesAdd -> {
                 _uiState.update { it.copy(images = it.images + action.images) }
             }
