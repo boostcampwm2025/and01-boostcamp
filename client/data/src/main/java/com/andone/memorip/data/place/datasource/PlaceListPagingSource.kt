@@ -42,9 +42,7 @@ class PlaceListPagingSource(
         }
     }
 
-    override fun getRefreshKey(
-        state: PagingState<Int, PlaceListItem>
-    ): Int? {
+    override fun getRefreshKey(state: PagingState<Int, PlaceListItem>): Int? {
         return state.anchorPosition?.let { anchor ->
             state.closestPageToPosition(anchor)?.prevKey?.plus(1)
                 ?: state.closestPageToPosition(anchor)?.nextKey?.minus(1)
