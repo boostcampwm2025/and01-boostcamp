@@ -2,6 +2,7 @@ package com.andone.memorip.data.di
 
 import com.andone.memorip.data.BuildConfig
 import com.andone.memorip.data.kakaosearch.datasource.KakaoSearchService
+import com.andone.memorip.data.place.datasource.PlaceService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -12,13 +13,23 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import javax.inject.Qualifier
 import javax.inject.Singleton
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class KakaoClient
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class ServerClient
 
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    private const val BASE_URL = BuildConfig.KAKAO_BASE_URL
+    private const val KAKAO_BASE_URL = BuildConfig.KAKAO_BASE_URL
+    private const val BASE_URL = BuildConfig.BASE_URL
 
     val json = Json {
         ignoreUnknownKeys = true
@@ -30,6 +41,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
+    @KakaoClient
     fun provideKakaoOkHttpClient(): OkHttpClient {
         val logger = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
@@ -48,7 +60,30 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideKakaoRetrofit(okHttpClient: OkHttpClient): Retrofit {
+    @ServerClient
+    fun provideOkHttpClient(): OkHttpClient {
+        val logger = HttpLoggingInterceptor().apply{ level = HttpLoggingInterceptor.Level.BODY }
+        return OkHttpClient
+            .Builder()
+            .addInterceptor(interceptor = logger)
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    @KakaoClient
+    fun provideKakaoRetrofit(@KakaoClient okHttpClient: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(KAKAO_BASE_URL)
+            .client(okHttpClient)
+            .addConverterFactory(json.asConverterFactory(contentType))
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    @ServerClient
+    fun provideRetrofit(@ServerClient okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient)
@@ -58,7 +93,13 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideKakaoSearchService(retrofit: Retrofit): KakaoSearchService {
+    fun provideKakaoSearchService(@KakaoClient retrofit: Retrofit): KakaoSearchService {
         return retrofit.create(KakaoSearchService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun providePlaceService(@ServerClient retrofit: Retrofit): PlaceService {
+        return retrofit.create(PlaceService::class.java)
     }
 }
