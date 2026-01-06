@@ -24,8 +24,6 @@ class PlaceService(
                 latitude = place.latitude,
                 longitude = place.longitude,
                 address = place.address.fullAddress,
-                startAt = place.startAt,
-                endAt = place.endAt,
                 imageUrl = place.getImages().firstOrNull()?.url
             )
         }

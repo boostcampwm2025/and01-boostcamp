@@ -9,7 +9,5 @@ data class PlaceListItemResponse(
     val latitude: Double,
     val longitude: Double,
     val address: String,
-    val startAt: LocalDateTime?,
-    val endAt: LocalDateTime?,
     val imageUrl: String?
 )
