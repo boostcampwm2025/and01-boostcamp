@@ -58,6 +58,10 @@ class PlaceCreateViewModel @Inject constructor() : ViewModel() {
                 createPlace()
             }
 
+            PlaceCreateAction.OnSnackBarShow -> {
+                _event.trySend(PlaceCreateEvent.ShowSnackBar)
+            }
+
             PlaceCreateAction.OnBackClick -> {
                 _event.trySend(PlaceCreateEvent.NavigateBack)
             }

@@ -18,7 +18,7 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 fun PlaceCreateTopBar(
     onBackClick: () -> Unit,
     onConfirmClick: () -> Unit,
-    confirmEnabled: Boolean
+    confirmEnabled: Boolean = true
 ) {
     CenterAlignedTopAppBar(
         title = { Text(text = stringResource(R.string.place_create_title)) },

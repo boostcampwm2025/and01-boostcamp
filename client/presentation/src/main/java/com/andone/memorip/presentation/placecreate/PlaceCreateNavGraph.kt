@@ -7,7 +7,6 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -38,7 +37,7 @@ fun EntryProviderScope<NavKey>.placeCreate(
     entry<PlaceCreate> {
         val viewModel = viewModel<PlaceCreateViewModel>()
 
-        var currentStep by remember { mutableStateOf(PlaceCreateStep.PlaceCreate) }
+        var currentStep by rememberSaveable { mutableStateOf(PlaceCreateStep.PlaceCreate) }
 
         BackHandler(enabled = currentStep != PlaceCreateStep.PlaceCreate) {
             currentStep = PlaceCreateStep.PlaceCreate
@@ -60,6 +59,7 @@ fun EntryProviderScope<NavKey>.placeCreate(
                         onCategoryClick = { currentStep = PlaceCreateStep.SelectCategory },
                         onLocationClick = { currentStep = PlaceCreateStep.SelectLocation },
                         onGroupClick = { currentStep = PlaceCreateStep.SelectGroup },
+                        onSnackBarShow = {},
                         onBackClick = onBackClick,
                         modifier = modifier,
                         viewModel = viewModel

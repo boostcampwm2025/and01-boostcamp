@@ -20,5 +20,7 @@ sealed interface PlaceCreateAction {
 
     data object OnPlaceCreate : PlaceCreateAction
 
+    data object OnSnackBarShow : PlaceCreateAction
+
     data object OnBackClick : PlaceCreateAction
 }

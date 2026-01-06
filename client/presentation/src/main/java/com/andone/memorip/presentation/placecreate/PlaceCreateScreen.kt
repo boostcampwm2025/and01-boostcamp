@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.placecreate.PictureSetting.MAX_PICTURE_COUNT
 import com.andone.memorip.presentation.placecreate.component.PlaceCreateContentSection
 import com.andone.memorip.presentation.placecreate.component.PlaceCreateImageRow
@@ -36,6 +37,7 @@ fun PlaceCreateScreen(
     onCategoryClick: () -> Unit,
     onLocationClick: () -> Unit,
     onGroupClick: () -> Unit,
+    onSnackBarShow: (Int) -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PlaceCreateViewModel = hiltViewModel()
@@ -48,6 +50,7 @@ fun PlaceCreateScreen(
             PlaceCreateEvent.NavigateToCategory -> onCategoryClick()
             PlaceCreateEvent.NavigateToLocation -> onLocationClick()
             PlaceCreateEvent.NavigateToGroup -> onGroupClick()
+            PlaceCreateEvent.ShowSnackBar -> onSnackBarShow(R.string.place_create_snack_bar_input_message)
         }
     }
 
@@ -65,7 +68,9 @@ fun PlaceCreateScreenContents(
     onAction: (PlaceCreateAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val remain = MAX_PICTURE_COUNT - uiState.images.size
+    val placeCreateEnable =
+        uiState.images.isNotEmpty() && uiState.title.isNotBlank() && uiState.location != null && uiState.group != null
+    val remainImageCount = MAX_PICTURE_COUNT - uiState.images.size
 
     val imagePickerLauncher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.PickMultipleVisualMedia()) { uris ->
@@ -80,8 +85,13 @@ fun PlaceCreateScreenContents(
         topBar = {
             PlaceCreateTopBar(
                 onBackClick = { onAction(PlaceCreateAction.OnBackClick) },
-                onConfirmClick = { onAction(PlaceCreateAction.OnPlaceCreate) },
-                confirmEnabled = uiState.title.isNotBlank() && uiState.content.isNotBlank()
+                onConfirmClick = {
+                    if (placeCreateEnable) {
+                        onAction(PlaceCreateAction.OnPlaceCreate)
+                    } else {
+                        onAction(PlaceCreateAction.OnSnackBarShow)
+                    }
+                }
             )
         }
     ) { innerPadding ->
@@ -96,7 +106,7 @@ fun PlaceCreateScreenContents(
                 maxCount = MAX_PICTURE_COUNT,
                 onRemoveImage = { uri -> onAction(PlaceCreateAction.OnImagesRemove(uri)) },
                 onAddImageClick = {
-                    if (remain > 0) {
+                    if (remainImageCount > 0) {
                         imagePickerLauncher.launch(
                             input = PickVisualMediaRequest(
                                 mediaType = ActivityResultContracts.PickVisualMedia.ImageOnly
