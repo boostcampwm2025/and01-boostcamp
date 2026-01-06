@@ -12,7 +12,17 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import javax.inject.Qualifier
 import javax.inject.Singleton
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class KakaoRetrofit
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class KakaoOkHttp
+
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -30,6 +40,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
+    @KakaoOkHttp
     fun provideKakaoOkHttpClient(): OkHttpClient {
         val logger = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
@@ -48,7 +59,8 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideKakaoRetrofit(okHttpClient: OkHttpClient): Retrofit {
+    @KakaoRetrofit
+    fun provideKakaoRetrofit(@KakaoOkHttp okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient)
@@ -58,7 +70,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideKakaoSearchService(retrofit: Retrofit): KakaoSearchService {
+    fun provideKakaoSearchService(@KakaoRetrofit retrofit: Retrofit): KakaoSearchService {
         return retrofit.create(KakaoSearchService::class.java)
     }
 }

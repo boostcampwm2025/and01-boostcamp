@@ -29,7 +29,11 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.andone.memorip.presentation.component.MemoripStaggeredGrid
+import com.andone.memorip.presentation.placelist.model.ListPlaceItems
+import com.andone.memorip.presentation.placelist.model.PagingPlaceItems
+import com.andone.memorip.presentation.placelist.model.PlaceItems
 
 @Composable
 fun PlaceListScreen(
@@ -39,6 +43,8 @@ fun PlaceListScreen(
     viewModel: PlaceListViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    val pagingItems = viewModel.placesPagingFlow.collectAsLazyPagingItems()
 
     viewModel.event.collectWithLifecycle { event ->
         when (event) {
@@ -56,6 +62,7 @@ fun PlaceListScreen(
 
     PlaceListScreenContents(
         state = uiState,
+        places = PagingPlaceItems(pagingItems),
         onAction = viewModel::onAction,
         modifier = modifier
     )
@@ -65,6 +72,7 @@ fun PlaceListScreen(
 @Composable
 fun PlaceListScreenContents(
     state: PlaceListUiState,
+    places: PlaceItems,
     onAction: (PlaceListAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -83,10 +91,6 @@ fun PlaceListScreenContents(
         }
     }
 
-    val thumbnailImages = remember(key1 = state.places) {
-        state.places.map { it.thumbnailImage }
-    }
-
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -101,7 +105,7 @@ fun PlaceListScreenContents(
     ) { padding ->
         Box(modifier = Modifier.padding(paddingValues = padding)) {
             MemoripStaggeredGrid(
-                images = thumbnailImages,
+                places = places,
                 onImageClick = { onAction(PlaceListAction.OnPlaceClick(id = it)) },
                 modifier = Modifier
                     .fillMaxSize()
@@ -117,7 +121,8 @@ fun PlaceListScreenContents(
 private fun PlaceListScreenContentsPreview() {
     MemoripTheme {
         PlaceListScreenContents(
-            state = PlaceListUiState().copy(places = DummyData.places),
+            state = PlaceListUiState(),
+            places = ListPlaceItems(items = DummyData.places),
             onAction = {},
         )
     }
