@@ -1,6 +1,7 @@
 package com.andone.memorip.presentation.model
 
 import androidx.compose.runtime.Immutable
+import com.andone.memorip.domain.model.PlaceListItem
 import java.time.Duration
 import java.time.LocalDateTime
 

@@ -29,6 +29,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.andone.memorip.presentation.component.MemoripStaggeredGrid
 
 @Composable
@@ -39,6 +40,9 @@ fun PlaceListScreen(
     viewModel: PlaceListViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    val pagingItems =
+        viewModel.placesPagingFlow.collectAsLazyPagingItems()
 
     viewModel.event.collectWithLifecycle { event ->
         when (event) {
