@@ -6,7 +6,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.grouplist.model.GroupUiModel
 import com.andone.memorip.presentation.model.Category
@@ -44,7 +43,7 @@ fun PlaceCreateSelectSection(
             modifier = Modifier.weight(1f)
         )
         SelectRow(
-            label = stringResource(R.string.place_create_category),
+            label = stringResource(R.string.place_create_tag),
             value = categoryValue,
             leadingIcon = painterResource(R.drawable.ic_tag),
             onClick = onCategoryClick

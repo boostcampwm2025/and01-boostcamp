@@ -69,7 +69,7 @@
     <string name="place_create_clear">지우기</string>
     <string name="place_create_content_input">내용을 입력해주세요</string>
     <string name="place_create_title_input">제목을 입력해주세요</string>
-    <string name="place_create_category">카테고리</string>
+    <string name="place_create_tag">태그</string>
     <string name="place_create_location">위치</string>
     <string name="place_create_group">그룹</string>
     <string name="place_delete_image">사진 삭제</string>

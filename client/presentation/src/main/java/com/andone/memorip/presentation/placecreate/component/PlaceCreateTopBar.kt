@@ -25,7 +25,7 @@ fun PlaceCreateTopBar(
         navigationIcon = {
             IconButton(onClick = onBackClick) {
                 Icon(
-                    painter = painterResource(R.drawable.ic_outline_arrow_back),
+                    painter = painterResource(R.drawable.ic_arrow_back),
                     contentDescription = stringResource(R.string.place_create_back_content_description)
                 )
             }
