@@ -4,6 +4,7 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
@@ -31,10 +32,13 @@ private object TagFilterDimen {
 @Composable
 fun TagFilter(
     tags: ImmutableList<Category>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onAddTagClick: () -> Unit = {}
 ) {
     Row(
-        modifier = modifier.horizontalScroll(state = rememberScrollState()),
+        modifier = modifier
+            .fillMaxWidth()
+            .horizontalScroll(state = rememberScrollState()),
         horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXSmall)
     ) {
         tags.forEach { tag -> TagChip(tag = tag) }
@@ -43,7 +47,7 @@ fun TagFilter(
             colors = StaticChipColors.Default,
             textStyle = MemoripTheme.typography.labelExtBold,
             elevation = ELEVATION,
-            onClick = {}
+            onClick = onAddTagClick
         )
     }
 }
@@ -52,9 +56,7 @@ fun TagFilter(
 @Composable
 private fun TagFilterPreview() {
     MemoripTheme {
-        Box(
-            modifier = Modifier.padding(vertical = 16.dp)
-        ) {
+        Box(modifier = Modifier.padding(vertical = 16.dp)) {
             TagFilter(tags = DummyData.categories.toImmutableList())
         }
     }

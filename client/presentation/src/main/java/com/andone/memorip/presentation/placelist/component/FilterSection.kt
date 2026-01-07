@@ -1,2 +1,51 @@
 package com.andone.memorip.presentation.placelist.component
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import com.andone.memorip.presentation.model.Category
+import com.andone.memorip.presentation.theme.MemoripSpace
+import com.andone.memorip.presentation.theme.MemoripTheme
+import com.andone.memorip.presentation.util.DummyData
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
+
+@Composable
+fun FilterSection(
+    onChangeRegionClick: () -> Unit,
+    onAddTagClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    tags: ImmutableList<Category> = persistentListOf(),
+    region1: String? = null,
+    region2: String? = null,
+) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXSmall)
+    ) {
+        LocationFilter(
+            region1 = region1,
+            region2 = region2,
+            onChipClick = {}
+        )
+        TagFilter(
+            tags = tags,
+            onAddTagClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun FilterSectionPreview() {
+    MemoripTheme {
+        FilterSection(
+            tags = DummyData.categories.toImmutableList(),
+            onChangeRegionClick = {},
+            onAddTagClick = {},
+        )
+    }
+}
