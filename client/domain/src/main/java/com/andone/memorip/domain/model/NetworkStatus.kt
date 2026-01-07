@@ -26,4 +26,3 @@ sealed interface NetworkStatus {
      */
     data object Lost : NetworkStatus
 }
-
