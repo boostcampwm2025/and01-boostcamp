@@ -1,11 +1,10 @@
 package com.andone.memorip.presentation.model
 
 import androidx.compose.runtime.Immutable
-import java.util.UUID
 
 @Immutable
 data class ImageItem(
-    val id: String,
+    val id: Int,
     val url: String,
     val width: Int,
     val height: Int
@@ -15,7 +14,7 @@ data class ImageItem(
 
     companion object {
         fun empty(): ImageItem = ImageItem(
-            id = UUID.randomUUID().toString(),
+            id = 0,
             url = "",
             width = 1,
             height = 1
