@@ -37,7 +37,7 @@ object DummyData {
 
     val placeImages: List<ImageItem> = List(12) { index ->
         ImageItem(
-            id = (index + 1).toString(),
+            id = index + 1,
             url = "https://picsum.photos/seed/${index + 1}/800/800",
             width = 800,
             height = 800
@@ -66,7 +66,7 @@ object DummyData {
         buildList {
             add(
                 createPlace(
-                    1,
+                    "",
                     "브런치 카페",
                     37.498095,
                     127.027610,
@@ -78,7 +78,7 @@ object DummyData {
             )
             add(
                 createPlace(
-                    2,
+                    "",
                     "예쁜 공원",
                     37.512900,
                     127.058500,
@@ -90,7 +90,7 @@ object DummyData {
             )
             add(
                 createPlace(
-                    3,
+                    "",
                     "야경 맛집",
                     37.517305,
                     127.047502,
@@ -102,7 +102,7 @@ object DummyData {
             )
             add(
                 createPlace(
-                    4,
+                    "",
                     "루프탑 바",
                     37.505228,
                     127.050324,
@@ -114,7 +114,7 @@ object DummyData {
             )
             add(
                 createPlace(
-                    5,
+                    "",
                     "숨은 카페",
                     37.508547,
                     127.062835,
@@ -126,7 +126,7 @@ object DummyData {
             )
             add(
                 createPlace(
-                    6,
+                    "",
                     "감성 서점",
                     37.495592,
                     127.028747,
@@ -139,14 +139,14 @@ object DummyData {
         }
     }
 
-    private fun createPlaceImages(placeId: Int, count: Int = 50): List<ImageItem> {
+    private fun createPlaceImages(placeId: String, count: Int = 50): List<ImageItem> {
         return List(count) { imageIndex ->
             val photoId = Random.nextInt(30, 81)
             val randomHeight = Random.nextInt(150, 400)
             val fixedWidth = 200
 
             ImageItem(
-                id = (placeId * count + imageIndex).toString(),
+                id = count + imageIndex,
                 url = "https://picsum.photos/id/$photoId/$fixedWidth/$randomHeight",
                 width = fixedWidth,
                 height = randomHeight
@@ -155,7 +155,7 @@ object DummyData {
     }
 
     private fun createPlace(
-        id: Int,
+        id: String,
         name: String,
         latitude: Double,
         longitude: Double,
@@ -167,7 +167,7 @@ object DummyData {
         val images = createPlaceImages(id)
 
         return Place(
-            id = id.toString(),
+            id = id,
             name = name,
             latitude = latitude,
             longitude = longitude,
@@ -185,7 +185,7 @@ object DummyData {
         val fixedWidth = 200
 
         ImageItem(
-            id = id.toString(),
+            id = id,
             url = "https://picsum.photos/id/$id/$fixedWidth/$randomHeight",
             width = fixedWidth,
             height = randomHeight

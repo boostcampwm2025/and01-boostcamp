@@ -43,7 +43,7 @@ data class Place(
 
 fun PlaceListItem.toUiModel(): Place =
     Place(
-        id = id.toInt(),
+        id = id,
         name = title,
         latitude = latitude,
         longitude = longitude,
