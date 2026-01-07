@@ -1,6 +1,7 @@
 package com.andone.memorip.presentation.model
 
 import androidx.compose.runtime.Immutable
+import com.andone.memorip.domain.model.PlaceListItem
 import java.time.Duration
 import java.time.LocalDateTime
 import java.util.UUID
@@ -39,3 +40,22 @@ data class Place(
         )
     }
 }
+
+fun PlaceListItem.toUiModel(): Place =
+    Place(
+        id = id.toInt(),
+        name = title,
+        latitude = latitude,
+        longitude = longitude,
+        address = address,
+        startDateTime = LocalDateTime.now(),
+        endDateTime = LocalDateTime.now(),
+        categories = emptyList(),
+        thumbnailImage = ImageItem(
+            id = 0,
+            url = imageUrl,
+            width = 1,
+            height = 1
+        ),
+        images = emptyList()
+    )

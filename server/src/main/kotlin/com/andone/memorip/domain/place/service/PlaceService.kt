@@ -1,12 +1,13 @@
 package com.andone.memorip.domain.place.service
 
 import com.andone.memorip.domain.group.repository.GroupRepository
-import com.andone.memorip.domain.place.controller.CreatePlaceRequestDto
 import com.andone.memorip.domain.place.dto.PlaceDetailResponse
-import com.andone.memorip.domain.place.entity.Address
-import com.andone.memorip.domain.place.entity.Place
 import com.andone.memorip.domain.place.repository.PlaceRepository
+import com.andone.memorip.common.response.ApiResult
+import com.andone.memorip.domain.place.dto.PlaceListResult
+import com.andone.memorip.domain.place.dto.response.PlaceListItemResponse
 import org.springframework.stereotype.Service
+import org.springframework.data.domain.Pageable
 import java.util.UUID
 
 @Service
@@ -30,24 +31,27 @@ class PlaceService(
         )
     }
 
-    fun createPlace(requestDto: CreatePlaceRequestDto): Place {
-        val address = Address.create(
-            region1Depth = requestDto.region1Depth,
-            region2Depth = requestDto.region2Depth,
-            region3Depth = requestDto.region3Depth,
-            fullAddress = "${requestDto.region1Depth} ${requestDto.region2Depth} ${requestDto.region3Depth}"
+    fun getPlaceList(pageable: Pageable): PlaceListResult {
+        val page = placeRepository.findAll(pageable)
+
+        val content = page.content.map { place ->
+            PlaceListItemResponse(
+                id = place.id!!,
+                title = place.title,
+                latitude = place.latitude,
+                longitude = place.longitude,
+                address = place.address.fullAddress,
+                imageUrl = place.getImages().firstOrNull()?.url
+            )
+        }
+
+        val pagination = ApiResult.PaginationInfo(
+            currentPage = page.number + 1,
+            totalPages = page.totalPages,
+            totalCount = page.totalElements,
+            hasNext = page.hasNext()
         )
-        val newPlace = Place.create(
-            id = UUID.randomUUID(),
-            groupId = UUID.randomUUID(),
-            writerId = requestDto.writerId,
-            title = requestDto.title,
-            content = requestDto.content,
-            latitude = requestDto.latitude,
-            longitude = requestDto.longitude,
-            address = address
-        )
-        val result = placeRepository.save(newPlace)
-        return result
+
+        return PlaceListResult(content, pagination)
     }
 }

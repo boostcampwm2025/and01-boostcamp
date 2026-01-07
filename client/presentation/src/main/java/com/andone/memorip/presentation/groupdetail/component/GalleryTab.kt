@@ -2,11 +2,11 @@ package com.andone.memorip.presentation.groupdetail.component
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.component.MemoripStaggeredGrid
 import com.andone.memorip.presentation.model.Place
+import com.andone.memorip.presentation.placelist.model.ListPlaceItems
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
 
@@ -16,11 +16,8 @@ fun GalleryTab(
     onImageClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val thumbnailImages = remember(places) {
-        places.map { it.thumbnailImage }
-    }
     MemoripStaggeredGrid(
-        images = thumbnailImages,
+        places = ListPlaceItems(items = places),
         onImageClick = onImageClick,
         modifier = modifier
     )

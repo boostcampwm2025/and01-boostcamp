@@ -1,7 +1,7 @@
 package com.andone.memorip.data.di
 
 import com.andone.memorip.data.BuildConfig
-import com.andone.memorip.data.kakaosearch.datasource.KakaoSearchService
+import com.andone.memorip.data.place.datasource.PlaceService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -17,60 +17,49 @@ import javax.inject.Singleton
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
-annotation class KakaoRetrofit
+annotation class ServerRetrofit
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
-annotation class KakaoOkHttp
-
+annotation class ServerOkHttp
 
 @Module
 @InstallIn(SingletonComponent::class)
-object NetworkModule {
+object ServerNetworkModule {
 
-    private const val BASE_URL = BuildConfig.KAKAO_BASE_URL
+    private const val BASE_URL = BuildConfig.SERVER_BASE_URL
 
-    val json = Json {
+    private val json = Json {
         ignoreUnknownKeys = true
-        coerceInputValues = false
-        encodeDefaults = true
     }
-
-    private val contentType = "application/json".toMediaType()
 
     @Provides
     @Singleton
-    @KakaoOkHttp
-    fun provideKakaoOkHttpClient(): OkHttpClient {
+    @ServerOkHttp
+    fun provideOkHttpClient(): OkHttpClient {
         val logger = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
-        return OkHttpClient
-            .Builder()
-            .addInterceptor { chain ->
-                val newRequest = chain.request().newBuilder()
-                    .addHeader("Authorization", "KakaoAK ${BuildConfig.KAKAO_REST_API_KEY}")
-                    .build()
-                chain.proceed(newRequest)
-            }
+
+        return OkHttpClient.Builder()
             .addInterceptor(logger)
             .build()
     }
 
     @Provides
     @Singleton
-    @KakaoRetrofit
-    fun provideKakaoRetrofit(@KakaoOkHttp okHttpClient: OkHttpClient): Retrofit {
+    @ServerRetrofit
+    fun provideRetrofit(@ServerOkHttp okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient)
-            .addConverterFactory(json.asConverterFactory(contentType))
+            .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .build()
     }
 
     @Provides
     @Singleton
-    fun provideKakaoSearchService(@KakaoRetrofit retrofit: Retrofit): KakaoSearchService {
-        return retrofit.create(KakaoSearchService::class.java)
+    fun providePlaceService(@ServerRetrofit retrofit: Retrofit): PlaceService {
+        return retrofit.create(PlaceService::class.java)
     }
 }
