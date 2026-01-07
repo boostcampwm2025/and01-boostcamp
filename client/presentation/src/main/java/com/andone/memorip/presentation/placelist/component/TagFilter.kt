@@ -2,12 +2,16 @@ package com.andone.memorip.presentation.placelist.component
 
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.component.StaticChip
 import com.andone.memorip.presentation.component.StaticChipColors
 import com.andone.memorip.presentation.component.TagChip
@@ -18,6 +22,11 @@ import com.andone.memorip.presentation.util.DummyData
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.placelist.component.TagFilterDimen.ELEVATION
+
+private object TagFilterDimen {
+    val ELEVATION: Dp = 4.dp
+}
 
 @Composable
 fun TagFilter(
@@ -33,15 +42,20 @@ fun TagFilter(
             chipName = stringResource(R.string.place_list_add_tag),
             colors = StaticChipColors.Default,
             textStyle = MemoripTheme.typography.labelExtBold,
+            elevation = ELEVATION,
             onClick = {}
         )
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun TagFilterPreview() {
     MemoripTheme {
-        TagFilter(tags = DummyData.categories.toImmutableList())
+        Box(
+            modifier = Modifier.padding(vertical = 16.dp)
+        ) {
+            TagFilter(tags = DummyData.categories.toImmutableList())
+        }
     }
 }
