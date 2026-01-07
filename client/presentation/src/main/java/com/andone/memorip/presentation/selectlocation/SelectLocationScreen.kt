@@ -129,7 +129,6 @@ private fun SelectLocationContent(
             windowInsets = WindowInsets()
         ) {
             MemoripPagingList(
-                query = uiState.query,
                 pagingItems = locations,
                 itemKey = { it.id },
                 modifier = Modifier.fillMaxSize(),
