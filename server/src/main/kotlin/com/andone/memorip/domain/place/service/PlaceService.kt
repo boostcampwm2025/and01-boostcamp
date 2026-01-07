@@ -8,9 +8,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
 @Service
-class PlaceService(
-    private val placeRepository: PlaceRepository
-) {
+class PlaceService(private val placeRepository: PlaceRepository) {
     fun getPlaceList(pageable: Pageable): PlaceListResult {
         val page = placeRepository.findAll(pageable)
 
