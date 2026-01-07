@@ -16,6 +16,6 @@ interface PlaceService {
         @Query("sort") sort: List<String>? = null
     ): ApiResult<List<PlaceListItemResponse>>
 
-    @GET("/place/{placeId}")
+    @GET("/api/places/{placeId}")
     suspend fun getPlaceDetail(@Path("placeId") placeId: String): ApiResult<PlaceDetailResponse>
 }
