@@ -1,5 +1,6 @@
 package com.andone.memorip.data.place.datasource
 
+import android.util.Log
 import com.andone.memorip.domain.model.PlaceListItem
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
@@ -12,7 +13,6 @@ class PlaceListPagingSource(
 ) : PagingSource<Int, PlaceListItem>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PlaceListItem> {
-
         val page = params.key ?: 0
 
         return try {
@@ -38,6 +38,7 @@ class PlaceListPagingSource(
                 nextKey = if (hasNext) page + 1 else null
             )
         } catch (e: Exception) {
+            Log.d("에러 발생", "$e")
             LoadResult.Error(e)
         }
     }

@@ -4,7 +4,7 @@ sealed interface PlaceListAction {
 
     data object OnFABClick : PlaceListAction
 
-    data class OnPlaceClick(val id: Int) : PlaceListAction
+    data class OnPlaceClick(val id: String) : PlaceListAction
 
     data class OnQueryChange(val query: String) : PlaceListAction
 }
