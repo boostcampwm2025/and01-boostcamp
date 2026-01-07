@@ -1,11 +1,11 @@
 package com.andone.memorip.data.util
 
-import com.andone.memorip.domain.model.BaseResponse
+import com.andone.memorip.data.common.ApiResult
 
-suspend fun <T> apiCall(call: suspend () -> BaseResponse<T>): Result<T> {
+suspend fun <T> apiCall(call: suspend () -> ApiResult<T>): Result<T> {
     return try {
         val response = call()
-        Result.success(value = response.data)
+        Result.success(value = response.data!!)
     } catch (e: Exception) {
         Result.failure(e)
     }
