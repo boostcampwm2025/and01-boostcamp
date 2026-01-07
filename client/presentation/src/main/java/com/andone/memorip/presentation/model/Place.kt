@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 
 @Immutable
 data class Place(
-    val id: Int,
+    val id: String,
     val name: String,
     val latitude: Double,
     val longitude: Double,
@@ -26,7 +26,7 @@ data class Place(
 
     companion object {
         fun empty(): Place = Place(
-            id = 0,
+            id = "",
             name = "",
             latitude = 0.0,
             longitude = 0.0,
@@ -42,7 +42,7 @@ data class Place(
 
 fun PlaceListItem.toUiModel(): Place =
     Place(
-        id = id.toInt(),
+        id = id,
         name = title,
         latitude = latitude,
         longitude = longitude,

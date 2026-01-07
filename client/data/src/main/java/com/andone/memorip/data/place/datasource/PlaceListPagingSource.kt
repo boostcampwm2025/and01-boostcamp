@@ -15,12 +15,19 @@ class PlaceListPagingSource(
 
         val page = params.key ?: 0
 
+        android.util.Log.d("PlaceListPagingSource", "load 진입 page=$page")
+
         return try {
+
+            android.util.Log.d("PlaceListPagingSource", "load 진입2 page=$page")
+
             val response = service.getPlaces(
                 page = page,
                 size = pageSize,
                 sort = sort
             )
+
+            android.util.Log.d("PlaceListPagingSource", "load 진입 page=$page")
 
             if (response.error != null) {
                 return LoadResult.Error(
@@ -38,6 +45,7 @@ class PlaceListPagingSource(
                 nextKey = if (hasNext) page + 1 else null
             )
         } catch (e: Exception) {
+            android.util.Log.d("에러발생", "$e")
             LoadResult.Error(e)
         }
     }

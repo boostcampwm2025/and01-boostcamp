@@ -36,7 +36,7 @@ class PlaceDetailViewModel(
         }
     }
 
-    fun loadPlaceDetail(id: Int) {
+    fun loadPlaceDetail(id: String) {
         // 장소 상세 불러오기 api 추가될 예정
         // 우선 더미데이터 사용
         viewModelScope.launch {
