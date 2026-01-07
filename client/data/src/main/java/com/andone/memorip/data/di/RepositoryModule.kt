@@ -16,9 +16,7 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindKaKaoSearchRepository(
-        impl: KakaoSearchRepositoryImpl
-    ): KakaoSearchRepository
+    abstract fun bindKaKaoSearchRepository(impl: KakaoSearchRepositoryImpl): KakaoSearchRepository
 
     @Binds
     @Singleton
