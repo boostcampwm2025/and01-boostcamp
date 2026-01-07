@@ -9,7 +9,7 @@ data class PlaceDetailUiState(
 )
 
 fun PlaceDetailResponse.toUiModel(): PlaceUiModel = PlaceUiModel(
-    id = this.id,
+    id = this.placeId,
     title = this.title,
     tags = this.tags.toImmutableList(),
     locationName = this.address.fullAddress,
