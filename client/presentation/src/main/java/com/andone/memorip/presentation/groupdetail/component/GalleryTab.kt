@@ -13,7 +13,7 @@ import com.andone.memorip.presentation.util.DummyData
 @Composable
 fun GalleryTab(
     places: List<Place>,
-    onImageClick: (Int) -> Unit,
+    onImageClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     MemoripStaggeredGrid(

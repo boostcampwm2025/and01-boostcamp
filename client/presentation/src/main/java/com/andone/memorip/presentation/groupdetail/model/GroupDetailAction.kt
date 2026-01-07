@@ -4,7 +4,7 @@ import com.andone.memorip.presentation.model.Place
 
 sealed interface GroupDetailAction {
 
-    data class OnPlaceClick(val id: Long) : GroupDetailAction
+    data class OnPlaceClick(val id: String) : GroupDetailAction
 
     data class OnTabClick(val currentTab: Int) : GroupDetailAction
 

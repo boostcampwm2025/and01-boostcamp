@@ -12,7 +12,6 @@ class PlaceListPagingSource(
 ) : PagingSource<Int, PlaceListItem>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PlaceListItem> {
-
         val page = params.key ?: 0
 
         return try {
