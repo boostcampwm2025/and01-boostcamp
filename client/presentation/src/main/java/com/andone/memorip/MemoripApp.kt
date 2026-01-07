@@ -1,8 +1,12 @@
 package com.andone.memorip
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
@@ -11,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -60,11 +65,17 @@ fun MemoripApp(
         },
         contentWindowInsets = WindowInsets()
     ) { innerPadding ->
-        Column {
-            NetworkStatusBanner(networkStatus)
+        Box(
+            modifier = Modifier.fillMaxSize()
+        ) {
             MemoripNav(
                 navigator = navigator,
                 innerPadding = innerPadding,
+            )
+            NetworkStatusBanner(
+                status = networkStatus,
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
             )
         }
     }
