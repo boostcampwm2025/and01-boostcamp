@@ -7,7 +7,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PlaceDetailResponse(
-    val id: String,
     val placeId: String,
     val writerId: String,
     val title: String,
