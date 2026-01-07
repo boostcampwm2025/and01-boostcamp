@@ -60,7 +60,7 @@ fun PlaceDetailScreen(
         creationCallback = { factory ->
             factory.create(route)
         }
-    ) // TODO: hiltViewModel() 적용
+    )
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -109,10 +109,12 @@ private fun PlaceDetailScreen(
 
             Spacer(modifier = Modifier.height(MemoripSpace.SpaceMedium))
             Column(verticalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXXSmall)) {
-                Text(
-                    text = place.tags[0].name,
-                    style = MemoripTheme.typography.labelLarge
-                )
+                if (place.tags.isNotEmpty()) {
+                    Text(
+                        text = place.tags[0].name,
+                        style = MemoripTheme.typography.labelLarge
+                    )
+                }
                 PlaceDetailInfoSection(
                     infoString = place.locationName,
                     iconRes = R.drawable.ic_location_on
