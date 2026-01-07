@@ -5,9 +5,7 @@ import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 
 @Service
-class PlaceImageService(
-    private val storageService: StorageService
-) {
+class PlaceImageService(private val storageService: StorageService) {
     private val MAX_FILE_SIZE = 5 * 1024 * 1024
 
     fun upload(file: MultipartFile): String {

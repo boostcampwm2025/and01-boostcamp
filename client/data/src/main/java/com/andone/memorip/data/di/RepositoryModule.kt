@@ -1,6 +1,8 @@
 package com.andone.memorip.data.di
 
 import com.andone.memorip.data.kakaosearch.repositoryimpl.KakaoSearchRepositoryImpl
+import com.andone.memorip.domain.repository.PlaceListRepository
+import com.andone.memorip.data.place.repositoryimpl.PlaceListRepositoryImpl
 import com.andone.memorip.domain.repository.KakaoSearchRepository
 import dagger.Binds
 import dagger.Module
@@ -14,7 +16,9 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindKaKaoSearchRepository(
-        impl: KakaoSearchRepositoryImpl
-    ): KakaoSearchRepository
+    abstract fun bindKaKaoSearchRepository(impl: KakaoSearchRepositoryImpl): KakaoSearchRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindPlaceListRepository(impl: PlaceListRepositoryImpl): PlaceListRepository
 }

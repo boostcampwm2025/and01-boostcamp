@@ -23,6 +23,10 @@ android {
         val kakaoRestApiKey = getLocalProperty("KAKAO_REST_API_KEY")
         buildConfigField("String", "KAKAO_BASE_URL", "\"$kakaoBaseUrl\"")
         buildConfigField("String", "KAKAO_REST_API_KEY", "\"$kakaoRestApiKey\"")
+
+        // Server
+        val serverBaseUrl = getLocalProperty("SERVER_BASE_URL")
+        buildConfigField("String", "SERVER_BASE_URL", "\"$serverBaseUrl\"")
     }
 
     buildTypes {
