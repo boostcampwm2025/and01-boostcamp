@@ -1,4 +1,4 @@
-package com.andone.memorip.presentation.common
+package com.andone.memorip.presentation.util
 
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.runtime.Stable
