@@ -1,7 +1,8 @@
 package com.andone.memorip.presentation.placelist
 
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -31,9 +32,13 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.andone.memorip.presentation.component.MemoripStaggeredGrid
+import com.andone.memorip.presentation.placelist.component.FilterSection
 import com.andone.memorip.presentation.placelist.model.ListPlaceItems
 import com.andone.memorip.presentation.placelist.model.PagingPlaceItems
 import com.andone.memorip.presentation.placelist.model.PlaceItems
+import com.andone.memorip.presentation.theme.MemoripPadding
+import com.andone.memorip.presentation.theme.MemoripSpace
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun PlaceListScreen(
@@ -103,7 +108,16 @@ fun PlaceListScreenContents(
         floatingActionButton = { AddFloatingActionButton(onClick = { onAction(PlaceListAction.OnFABClick) }) },
         contentWindowInsets = WindowInsets(),
     ) { padding ->
-        Box(modifier = Modifier.padding(paddingValues = padding)) {
+        Column(
+            modifier = Modifier.padding(paddingValues = padding),
+            verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceMedium)
+        ) {
+            FilterSection(
+                onChangeRegionClick = {},
+                onAddTagClick = {},
+                modifier = Modifier.padding(horizontal = MemoripPadding.PaddingMedium),
+                tags = DummyData.categories.toImmutableList()
+            )
             MemoripStaggeredGrid(
                 places = places,
                 onImageClick = { onAction(PlaceListAction.OnPlaceClick(id = it)) },

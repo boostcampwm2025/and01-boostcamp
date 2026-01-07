@@ -44,7 +44,10 @@ fun TagFilter(
         tags.forEach { tag -> TagChip(tag = tag) }
         StaticChip(
             chipName = stringResource(R.string.place_list_add_tag),
-            colors = StaticChipColors.Default,
+            colors = StaticChipColors.Default.copy(
+                backgroundColor = MemoripTheme.colors.primary,
+                textColor = MemoripTheme.colors.black
+            ),
             textStyle = MemoripTheme.typography.labelExtBold,
             elevation = ELEVATION,
             onClick = onAddTagClick
