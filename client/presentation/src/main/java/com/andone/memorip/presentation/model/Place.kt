@@ -27,7 +27,7 @@ data class Place(
 
     companion object {
         fun empty(): Place = Place(
-            id = UUID.randomUUID().toString(),
+            id = "",
             name = "",
             latitude = 0.0,
             longitude = 0.0,
