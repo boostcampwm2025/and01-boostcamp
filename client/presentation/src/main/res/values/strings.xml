@@ -100,6 +100,7 @@
 
     <!-- PlaceList -->
     <string name="place_list_search">검색</string>
+    <string name="place_list_add_tag">+태그</string>
 
     <!-- PlanScreen -->
     <string name="plan_location_content_description">위치</string>
