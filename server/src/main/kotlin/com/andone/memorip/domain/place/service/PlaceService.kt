@@ -28,7 +28,7 @@ class PlaceService(
     @Transactional(readOnly = true)
     fun getPlaceById(placeId: UUID): PlaceDetailResponse {
         val place = placeRepository.findByIdOrNull(placeId) ?: throw BusinessException(code = CommonExceptionCode.PLACE_NOT_FOUND)
-        val group = groupRepository.findByIdOrNull(place.groupId) ?: throw BusinessException(code = CommonExceptionCode.PLACE_NOT_FOUND)
+        val group = groupRepository.findByIdOrNull(place.groupId) ?: throw BusinessException(code = CommonExceptionCode.GROUP_NOT_FOUND)
         val tags = placeTagRepository.findAllById(listOf(placeId)).map { it.toTagResponse() }
         val images = placeImageRepository.findAllById(listOf(placeId)).map{ it.url }
 
