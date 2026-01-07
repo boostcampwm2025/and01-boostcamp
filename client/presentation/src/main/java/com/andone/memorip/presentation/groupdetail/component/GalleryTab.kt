@@ -6,7 +6,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.component.MemoripStaggeredGrid
 import com.andone.memorip.presentation.model.Place
-import com.andone.memorip.presentation.placelist.model.ListPlaceItems
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
 
@@ -17,7 +16,7 @@ fun GalleryTab(
     modifier: Modifier = Modifier
 ) {
     MemoripStaggeredGrid(
-        places = ListPlaceItems(items = places),
+        places = places,
         onImageClick = onImageClick,
         modifier = modifier
     )
