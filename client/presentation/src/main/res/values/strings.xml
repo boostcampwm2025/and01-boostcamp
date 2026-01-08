@@ -122,4 +122,14 @@
     <string name="network_status_weak_signal">네트워크 연결 신호가 약합니다</string>
     <string name="network_status_connected">네트워크가 연결되었습니다</string>
 
+    <!-- SnackBar Messages -->
+    <string name="snackbar_network_error">네트워크 연결을 확인해주세요</string>
+    <string name="snackbar_validation_error">입력값을 확인해주세요</string>
+    <string name="snackbar_not_found_error">찾으시는 화면을 표시할 수 없습니다.</string>
+    <string name="snackbar_data_load_failed">데이터를 불러오지 못했습니다</string>
+    <string name="snackbar_data_save_failed">데이터를 저장하지 못했습니다</string>
+    <string name="snackbar_image_upload_failed">이미지 업로드에 실패했습니다</string>
+    <string name="snackbar_unknown_error">오류가 발생했습니다. 다시 시도해주세요</string>
+    <string name="snackbar_success">성공적으로 완료되었습니다</string>
+
 </resources>
