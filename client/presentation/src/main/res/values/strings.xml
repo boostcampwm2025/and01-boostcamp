@@ -117,4 +117,9 @@
     <!-- PlanScreen -->
     <string name="plan_location_content_description">위치</string>
 
+    <!-- NetworkStatusBanner -->
+    <string name="network_status_disconnected">네트워크 연결이 끊어졌습니다</string>
+    <string name="network_status_weak_signal">네트워크 연결 신호가 약합니다</string>
+    <string name="network_status_connected">네트워크가 연결되었습니다</string>
+
 </resources>
