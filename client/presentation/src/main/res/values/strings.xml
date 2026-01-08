@@ -19,6 +19,9 @@
     <string name="category_dialog_valid_color_err_hint">0~9, A~F까지의 값만 입력해주세요</string>
     <string name="category_dialog_empty_name_err_hint">이름을 입력해주세요</string>
 
+    <!-- Loading Indicator -->
+    <string name="loading_indicator_message">로딩 중...</string>
+
     <!-- StaggeredGrid-->
     <string name="staggered_grid_image_content_description">장소 이미지</string>
 

@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.placedetail
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -19,6 +20,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,6 +34,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.navigation.PlaceDetail
 import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.component.LoadingIndicator
 import com.andone.memorip.presentation.component.MemoripImage
 import com.andone.memorip.presentation.component.TagChipRow
 import com.andone.memorip.presentation.placedetail.PlaceDetailScreenConstants.IMAGE_ASPECT_RATIO
@@ -77,6 +80,10 @@ fun PlaceDetailScreen(
         onAction = viewModel::onAction,
         modifier = modifier
     )
+
+    if(uiState.isLoading) {
+        LoadingIndicator()
+    }
 }
 
 @Composable
