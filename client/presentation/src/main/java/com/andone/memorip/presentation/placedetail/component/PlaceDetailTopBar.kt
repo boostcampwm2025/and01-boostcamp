@@ -23,7 +23,7 @@ fun PlaceDetailTopBar(
         navigationIcon = {
             IconButton(onClick = onNavigationIconClick) {
                 Icon(
-                    painter = painterResource(R.drawable.ic_outline_arrow_back),
+                    painter = painterResource(R.drawable.ic_arrow_back),
                     contentDescription = null
                 )
             }

@@ -2,12 +2,13 @@ package com.andone.memorip.presentation.util
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import com.andone.memorip.domain.model.Tag
 import com.andone.memorip.presentation.grouplist.model.GroupUiModel
-import com.andone.memorip.presentation.model.TagUiModel
 import com.andone.memorip.presentation.model.ImageItem
 import com.andone.memorip.presentation.model.Place
-import com.andone.memorip.presentation.model.toTagUiModel
+import com.andone.memorip.presentation.model.TagUiModel
+import com.andone.memorip.presentation.model.toUiModel
 import com.andone.memorip.presentation.placedetail.model.PlaceUiModel
 import kotlinx.collections.immutable.persistentListOf
 import java.time.LocalDateTime
@@ -22,8 +23,8 @@ object DummyData {
             Tag(
                 id = UUID.randomUUID().toString(),
                 name = "맛집",
-                color = Color.Gray.value.toHexString()
-            ).toTagUiModel()
+                color = "#${Integer.toHexString(Color.Gray.toArgb())}"
+            ).toUiModel()
         ),
         locationName = "서울시 종로구",
         imageUrls = persistentListOf(

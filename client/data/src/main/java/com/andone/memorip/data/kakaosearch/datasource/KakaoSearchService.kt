@@ -1,6 +1,6 @@
 package com.andone.memorip.data.kakaosearch.datasource
 
-import com.andone.memorip.domain.model.response.KakaoSearchResponse
+import com.andone.memorip.data.kakaosearch.model.KakaoSearchLocation
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -10,5 +10,5 @@ interface KakaoSearchService {
         @Query("query") query: String,
         @Query("page") page: Int,
         @Query("size") size: Int,
-    ): KakaoSearchResponse
+    ): KakaoSearchLocation
 }
