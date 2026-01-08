@@ -3,10 +3,10 @@ package com.andone.memorip.presentation.util
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.graphics.Color
 import com.andone.memorip.presentation.grouplist.model.GroupUiModel
+import com.andone.memorip.presentation.model.Category
 import com.andone.memorip.presentation.model.ImageItem
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.placedetail.model.PlaceUiModel
-import com.andone.memorip.presentation.model.Category
 import kotlinx.collections.immutable.persistentListOf
 import java.time.LocalDateTime
 import kotlin.random.Random
@@ -38,20 +38,30 @@ object DummyData {
 
     val categories = mutableStateListOf(
         Category(
-            id = 0L,
+            id = "1",
             category = "맛집",
-            color = Color(0xFF000000)
+            color = Color(0xFFE53935)
         ),
         Category(
-            id = 1L,
+            id = "2",
             category = "카페",
-            color = Color(0xFAA8F0F0)
+            color = Color(0xFF8D6E63)
         ),
         Category(
-            id = 2L,
-            category = "액티비티",
-            color = Color(0xFFCCDD66)
+            id = "3",
+            category = "관광지",
+            color = Color(0xFF1E88E5)
         ),
+        Category(
+            id = "4",
+            category = "숙소",
+            color = Color(0xFF43A047)
+        ),
+        Category(
+            id = "5",
+            category = "쇼핑",
+            color = Color(0xFF9C27B0)
+        )
     )
 
     val places: List<Place> by lazy {

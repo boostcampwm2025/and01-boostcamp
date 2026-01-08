@@ -2,8 +2,8 @@ package com.andone.memorip.presentation.selectcategory
 
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
-import com.andone.memorip.presentation.selectcategory.Constants.MAX_SELECTABLE_COUNT
 import com.andone.memorip.presentation.model.Category
+import com.andone.memorip.presentation.selectcategory.Constants.MAX_SELECTABLE_COUNT
 import com.andone.memorip.presentation.selectcategory.model.SelectCategoryAction
 import com.andone.memorip.presentation.selectcategory.model.SelectCategoryError
 import com.andone.memorip.presentation.selectcategory.model.SelectCategoryEvent
@@ -17,6 +17,7 @@ import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import java.util.UUID
 import javax.inject.Inject
 
 private object Constants {
@@ -75,7 +76,7 @@ class SelectCategoryViewModel @Inject constructor() : ViewModel() {
     private fun addCategory(category: String, color: Color) {
         val maxId = _uiState.value.categories.maxOfOrNull { it.id } ?: -2L
         val newCategory = Category(
-            id = maxId + 1L,
+            id = UUID.randomUUID().toString(),
             category = category,
             color = color
         )

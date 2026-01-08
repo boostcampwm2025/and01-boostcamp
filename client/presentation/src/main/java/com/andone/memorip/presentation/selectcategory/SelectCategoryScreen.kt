@@ -100,7 +100,7 @@ fun SelectCategoryScreen(
 @Composable
 private fun SelectCategoryContent(
     categories: ImmutableList<Category>,
-    checkedList: ImmutableSet<Long>,
+    checkedList: ImmutableSet<String>,
     onAction: (SelectCategoryAction) -> Unit,
     modifier: Modifier = Modifier
 ) {

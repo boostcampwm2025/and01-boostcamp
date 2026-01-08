@@ -8,5 +8,5 @@ import kotlinx.collections.immutable.toImmutableSet
 
 data class SelectCategoryUiState(
     val categories: ImmutableList<Category> = emptyList<Category>().toImmutableList(),
-    val checkedSet: ImmutableSet<Long> = emptySet<Long>().toImmutableSet()
+    val checkedSet: ImmutableSet<String> = emptySet<String>().toImmutableSet()
 )
