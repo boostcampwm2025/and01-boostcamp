@@ -20,7 +20,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -71,7 +70,7 @@ fun PlaceDetailScreen(
     viewModel.event.collectWithLifecycle { event ->
         when (event) {
             PlaceDetailEvent.NavigateBack -> onNavigateBack()
-            is PlaceDetailEvent.ShowSnackBar -> { /** Snackbar 보여주기 */ }
+            else -> {}
         }
     }
 
@@ -81,7 +80,7 @@ fun PlaceDetailScreen(
         modifier = modifier
     )
 
-    if(uiState.isLoading) {
+    if (uiState.isLoading) {
         LoadingIndicator()
     }
 }
