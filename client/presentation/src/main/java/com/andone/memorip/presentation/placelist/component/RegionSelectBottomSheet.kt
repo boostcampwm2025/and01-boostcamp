@@ -2,11 +2,9 @@ package com.andone.memorip.presentation.placelist.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,7 +18,6 @@ import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.theme.MemoripPadding
-import com.andone.memorip.presentation.theme.MemoripShadow
 import com.andone.memorip.presentation.theme.memoripShapes
 import com.andone.memorip.presentation.util.DummyData
 
@@ -63,7 +60,11 @@ fun RegionSelectBottomSheet(
             modifier = Modifier.fillMaxWidth(),
             shape = memoripShapes.roundedXSmall,
         ) {
-            Text(text = stringResource(R.string.place_list_bottom_sheet_confirm))
+            Text(
+                text = stringResource(R.string.place_list_bottom_sheet_confirm),
+                color = MemoripTheme.colors.onOffWhite,
+                style = MemoripTheme.typography.title1
+            )
         }
     }
 }

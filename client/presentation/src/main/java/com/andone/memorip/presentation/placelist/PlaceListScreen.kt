@@ -14,8 +14,10 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -45,6 +47,7 @@ import com.andone.memorip.presentation.component.MemoripStaggeredGrid
 import com.andone.memorip.presentation.placelist.MemoripMotion.AnimationDuration
 import com.andone.memorip.presentation.placelist.MemoripMotion.ScrollThreshold
 import com.andone.memorip.presentation.placelist.component.FilterSection
+import com.andone.memorip.presentation.placelist.component.RegionSelectBottomSheet
 import com.andone.memorip.presentation.placelist.model.ListPlaceItems
 import com.andone.memorip.presentation.placelist.model.PagingPlaceItems
 import com.andone.memorip.presentation.placelist.model.PlaceItems
@@ -101,6 +104,8 @@ fun PlaceListScreenContents(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val focusManager = LocalFocusManager.current
 
+    var showRegionBottomSheet by remember { mutableStateOf(false) }
+
     var isFilterVisible by remember { mutableStateOf(true) }
 
     val clearFocusOnScroll = remember {
@@ -123,6 +128,20 @@ fun PlaceListScreenContents(
         }
     }
 
+    if (showRegionBottomSheet) {
+        ModalBottomSheet(
+            onDismissRequest = { showRegionBottomSheet = false },
+            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+        ) {
+            RegionSelectBottomSheet(
+                onConfirmClick = {
+                    showRegionBottomSheet = false
+                }
+            )
+        }
+    }
+
+
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -143,7 +162,7 @@ fun PlaceListScreenContents(
             ) {
                 Column {
                     FilterSection(
-                        onChangeRegionClick = {},
+                        onChangeRegionClick = { showRegionBottomSheet = true },
                         onAddTagClick = {},
                         modifier = Modifier
                             .padding(horizontal = MemoripPadding.PaddingMedium),

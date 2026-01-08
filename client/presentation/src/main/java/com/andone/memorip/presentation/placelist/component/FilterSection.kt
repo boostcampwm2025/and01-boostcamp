@@ -25,7 +25,7 @@ fun FilterSection(
 ) {
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXSmall)
+        verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceSmall)
     ) {
         RegionFilter(
             modifier = Modifier.clickable(onClick = onChangeRegionClick),
