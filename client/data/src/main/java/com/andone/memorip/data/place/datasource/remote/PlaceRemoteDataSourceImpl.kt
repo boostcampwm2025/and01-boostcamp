@@ -39,34 +39,16 @@ class PlaceRemoteDataSourceImpl @Inject constructor(
                 )
             }
         ).flow
-
+    
     override suspend fun uploadImage(file: File): Result<PlaceImageUploadResponse> {
-        return try {
-            val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
-            val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
+        val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+        val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
 
-            val result = placeService.uploadImage(body)
-            if (result.data != null) {
-                Result.success(result.data)
-            } else {
-                Result.failure(Exception(result.error?.message ?: "알 수 없는 오류"))
-            }
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
+        return apiCall { placeService.uploadImage(body) }
     }
 
     override suspend fun createPlace(place: PlaceCreateRequest): Result<PlaceCreateResponse> {
-        return try {
-            val result = placeService.createPlace(place)
-            if (result.data != null) {
-                Result.success(result.data)
-            } else {
-                Result.failure(Exception(result.error?.message ?: "알 수 없는 오류"))
-            }
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
+        return apiCall { placeService.createPlace(place) }
     }
 
     companion object {

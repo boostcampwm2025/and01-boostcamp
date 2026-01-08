@@ -25,7 +25,9 @@ interface PlaceService {
     ): ApiResult<List<PlaceListItemResponse>>
 
     @GET("/api/places/{placeId}")
-    suspend fun getPlaceDetail(@Path("placeId") placeId: String): ApiResult<PlaceDetailResponse>
+    suspend fun getPlaceDetail(
+        @Path("placeId") placeId: String
+    ): ApiResult<PlaceDetailResponse>
 
     @Multipart
     @POST("/api/places/images")
