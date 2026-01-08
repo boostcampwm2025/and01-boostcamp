@@ -1,6 +1,7 @@
 package com.andone.memorip.presentation.placelist.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -58,12 +59,12 @@ fun RegionFilter(
         Spacer(modifier = Modifier.weight(weight = 1f))
         StaticChip(
             chipName = stringResource(R.string.place_list_region_change),
+            modifier = Modifier.clickable(onClick = onChipClick),
             colors = StaticChipColors.Default.copy(
                 backgroundColor = MemoripTheme.colors.primary,
                 textColor = MemoripTheme.colors.black
             ),
             textStyle = MemoripTheme.typography.labelExtBold,
-            onClick = onChipClick
         )
     }
 }

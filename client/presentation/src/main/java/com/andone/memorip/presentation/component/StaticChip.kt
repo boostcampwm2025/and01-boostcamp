@@ -48,7 +48,6 @@ fun StaticChip(
     colors: StaticChipColors = StaticChipColors.Default,
     textStyle: TextStyle = MemoripTheme.typography.label1,
     elevation: Dp = 0.dp,
-    onClick: () -> Unit = {}
 ) {
     val borderModifier = if (colors.borderColor != null) {
         modifier.border(
@@ -61,9 +60,7 @@ fun StaticChip(
     }
 
     Surface(
-        modifier = modifier
-            .then(other = borderModifier)
-            .clickable(onClick = onClick),
+        modifier = modifier.then(other = borderModifier),
         shape = RoundedCornerShape(size = radius),
         color = colors.backgroundColor,
         shadowElevation  = elevation

@@ -1,20 +1,28 @@
 package com.andone.memorip.presentation.placelist.component
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.andone.memorip.presentation.placelist.model.RegionChipModel
+import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 
 @Composable
 fun RegionSelectBottomSheet(
-    parentRegions: List<String>,
+    parentRegions: List<RegionChipModel>,
     modifier: Modifier = Modifier,
-    childRegions: List<String> = emptyList(),
-    selectedRegions: List<List<String>> = emptyList(),
-    onConfirmClick: () -> Unit = {}
+    childRegions: List<RegionChipModel> = emptyList(),
+    selectedRegions: List<Map<Int, RegionChipModel>> = emptyList(),
+    onConfirmClick: () -> Unit = {},
+    onRegionClick: (id : String) -> Unit = {},
+    onSelectedRegionClick: (id : String) -> Unit = {}
 ) {
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceMedium)
+    ) {
 
     }
 }

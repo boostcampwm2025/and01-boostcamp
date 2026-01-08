@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.placelist.component
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -44,13 +45,13 @@ fun TagFilter(
         tags.forEach { tag -> TagChip(tag = tag) }
         StaticChip(
             chipName = stringResource(R.string.place_list_add_tag),
+            modifier = Modifier.clickable(onClick = onAddTagClick),
             colors = StaticChipColors.Default.copy(
                 backgroundColor = MemoripTheme.colors.primary,
                 textColor = MemoripTheme.colors.black
             ),
             textStyle = MemoripTheme.typography.labelExtBold,
             elevation = ELEVATION,
-            onClick = onAddTagClick
         )
     }
 }
