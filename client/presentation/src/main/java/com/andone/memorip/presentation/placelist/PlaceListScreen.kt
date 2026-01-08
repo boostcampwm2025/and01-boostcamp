@@ -145,8 +145,7 @@ fun PlaceListScreenContents(
                     FilterSection(
                         onChangeRegionClick = {},
                         onAddTagClick = {},
-                        modifier = Modifier
-                            .padding(horizontal = MemoripPadding.PaddingMedium),
+                        modifier = Modifier.padding(horizontal = MemoripPadding.PaddingMedium),
                         tags = DummyData.categories.toImmutableList()
                     )
                     Spacer(modifier = Modifier.padding(vertical = MemoripPadding.PaddingXSmall))
