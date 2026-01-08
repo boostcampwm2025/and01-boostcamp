@@ -40,7 +40,7 @@ class PlaceDetailViewModel @AssistedInject constructor(
                 )
             }
             .onFailure {
-                _event.trySend(element = PlaceDetailEvent.ShowSnackBar(error = PlaceDetailErrorType.NetworkError))
+                _event.trySend(element = PlaceDetailEvent.ShowError(error = it))
             }
     }.stateIn(
         scope = viewModelScope,

@@ -71,7 +71,13 @@ fun PlaceDetailScreen(
     viewModel.event.collectWithLifecycle { event ->
         when (event) {
             PlaceDetailEvent.NavigateBack -> onNavigateBack()
-            is PlaceDetailEvent.ShowSnackBar -> { /** Snackbar 보여주기 */ }
+            is PlaceDetailEvent.ShowError -> {
+                Log.d("Place Detail Screen", "snack bar event : ${event.error}")
+                onNavigateBack()
+            }
+            is PlaceDetailEvent.ShowMessage -> {
+                Log.d("Place Detail Screen", "snack bar message: ${event.message}")
+            }
         }
     }
 

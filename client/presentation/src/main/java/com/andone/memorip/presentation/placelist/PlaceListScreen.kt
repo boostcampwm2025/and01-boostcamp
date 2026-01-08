@@ -100,7 +100,8 @@ fun PlaceListScreenContents(
                 onQueryChange = { onAction(PlaceListAction.OnQueryChange(query = it)) }
             )
         },
-        floatingActionButton = { AddFloatingActionButton(onClick = { onAction(PlaceListAction.OnFABClick) }) },
+//        floatingActionButton = { AddFloatingActionButton(onClick = { onAction(PlaceListAction.OnFABClick) }) },
+        floatingActionButton = { AddFloatingActionButton(onClick = { onAction(PlaceListAction.OnPlaceClick("3b9e6d14-1f7a-4c92-9a3e-5c8f2d0a1b70")) }) },
         contentWindowInsets = WindowInsets(),
     ) { padding ->
         Box(modifier = Modifier.padding(paddingValues = padding)) {
