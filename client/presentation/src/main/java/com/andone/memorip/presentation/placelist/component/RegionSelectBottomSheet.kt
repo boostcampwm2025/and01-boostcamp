@@ -22,19 +22,17 @@ import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripShadow
 import com.andone.memorip.presentation.theme.memoripShapes
+import com.andone.memorip.presentation.util.DummyData
 
 @Composable
 fun RegionSelectBottomSheet(
     modifier: Modifier = Modifier,
-    regionMap: Map<Int, List<RegionChipModel>> = emptyMap(),
-    regionLevel: Int = 0,
+    currentRegionList: List<RegionChipModel> = emptyList(),
     selectedRegionState: SelectedRegionState = SelectedRegionState(),
     onConfirmClick: () -> Unit = {},
     onRegionChipClick: (id : String) -> Unit = {},
     onRegionTextClick: (id : String) -> Unit = {}
 ) {
-    val currentRegionList = regionMap[regionLevel]
-
     Column(
         modifier = modifier.padding(horizontal = MemoripPadding.PaddingMedium),
         verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceMedium)
@@ -47,7 +45,15 @@ fun RegionSelectBottomSheet(
 
         RegionPathRow(
             selectedRegionState = selectedRegionState,
-            onRegionTextClick = onRegionTextClick
+            onRegionTextClick = onRegionTextClick,
+            isUnderline = true
+        )
+
+        HorizontalDivider()
+
+        RegionChipListSection(
+            regionList = currentRegionList,
+            onChipClick = onRegionChipClick
         )
 
         HorizontalDivider()
@@ -66,6 +72,9 @@ fun RegionSelectBottomSheet(
 @Composable
 private fun RegionSelectBottomSheetPreview(){
     MemoripTheme {
-        RegionSelectBottomSheet(onConfirmClick = {})
+        RegionSelectBottomSheet(
+            currentRegionList = DummyData.regions,
+            selectedRegionState = DummyData.regionState
+        )
     }
 }

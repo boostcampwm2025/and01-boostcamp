@@ -11,6 +11,7 @@ import com.andone.memorip.presentation.component.StaticChipColors
 import com.andone.memorip.presentation.placelist.model.RegionChipModel
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
+import com.andone.memorip.presentation.util.DummyData
 
 @Composable
 fun RegionChipListSection(
@@ -20,8 +21,8 @@ fun RegionChipListSection(
 ) {
     FlowRow(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXSmall),
-        verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXSmall)
+        horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceSmall),
+        verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceSmall)
     ) {
         regionList.forEach { region ->
             StaticChip(
@@ -43,16 +44,7 @@ fun RegionChipListSection(
 private fun RegionChipListSectionPreview() {
     MemoripTheme {
         RegionChipListSection(
-            regionList = listOf(
-                RegionChipModel(id = "1", name = "서울", isSelected = true),
-                RegionChipModel(id = "2", name = "경기"),
-                RegionChipModel(id = "3", name = "인천"),
-                RegionChipModel(id = "4", name = "강원"),
-                RegionChipModel(id = "5", name = "충청북도"),
-                RegionChipModel(id = "6", name = "충청남도"),
-                RegionChipModel(id = "7", name = "전라북도"),
-                RegionChipModel(id = "8", name = "전라남도", isSelected = true)
-            ),
+            regionList = DummyData.regions,
             onChipClick = {}
         )
     }

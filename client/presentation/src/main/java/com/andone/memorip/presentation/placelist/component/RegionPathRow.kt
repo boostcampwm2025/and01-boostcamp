@@ -19,6 +19,7 @@ import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.placelist.model.SelectedRegionState
+import com.andone.memorip.presentation.util.DummyData
 
 @Composable
 fun RegionPathRow(
@@ -86,16 +87,7 @@ fun RegionPathRow(
 private fun BottomSheetHeaderPreview() {
     MemoripTheme {
         RegionPathRow(
-            selectedRegionState = SelectedRegionState(
-                parents = listOf(
-                    RegionChipModel(id = "seoul", name = "서울", level = 0),
-                    RegionChipModel(id = "gangnam", name = "강남구", level = 1)
-                ),
-                children = listOf(
-                    RegionChipModel(id = "yeoksam", name = "역삼동", level = 2),
-                    RegionChipModel(id = "samseong", name = "삼성동", level = 2)
-                )
-            ),
+            selectedRegionState = DummyData.regionState,
             isUnderline = true
         )
     }

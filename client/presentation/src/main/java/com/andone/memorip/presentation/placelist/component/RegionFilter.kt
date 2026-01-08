@@ -21,6 +21,7 @@ import com.andone.memorip.presentation.theme.MemoripShadow
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.theme.memoripShapes
+import com.andone.memorip.presentation.util.DummyData
 
 @Composable
 fun RegionFilter(
@@ -60,27 +61,7 @@ private fun LocationFilterPreview() {
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            RegionFilter(
-                selectedRegionState = SelectedRegionState(
-                    parents = listOf(
-                        RegionChipModel(id = "seoul", name = "서울", level = 0),
-                        RegionChipModel(id = "gangnam", name = "강남구", level = 1)
-                    ),
-                    children = listOf(
-                        RegionChipModel(id = "yeoksam", name = "역삼동", level = 2),
-                        RegionChipModel(id = "samseong", name = "삼성동", level = 2)
-                    )
-                ),
-            )
-            RegionFilter(
-                selectedRegionState = SelectedRegionState(
-                    parents = listOf(
-                        RegionChipModel(id = "seoul", name = "서울", level = 0),
-                        RegionChipModel(id = "gangnam", name = "강남구", level = 1)
-                    ),
-                    children = listOf()
-                ),
-            )
+            RegionFilter(selectedRegionState = DummyData.regionState)
             RegionFilter()
         }
     }

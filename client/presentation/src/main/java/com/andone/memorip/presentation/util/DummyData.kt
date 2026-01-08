@@ -7,6 +7,8 @@ import com.andone.memorip.presentation.model.ImageItem
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.placedetail.model.PlaceUiModel
 import com.andone.memorip.presentation.model.Category
+import com.andone.memorip.presentation.placelist.model.RegionChipModel
+import com.andone.memorip.presentation.placelist.model.SelectedRegionState
 import kotlinx.collections.immutable.persistentListOf
 import java.time.LocalDateTime
 import kotlin.random.Random
@@ -52,6 +54,37 @@ object DummyData {
             category = "액티비티",
             color = Color(0xFFCCDD66)
         ),
+    )
+
+    val regions: List<RegionChipModel> = listOf(
+        RegionChipModel(id = "1", name = "서울", isSelected = true),
+        RegionChipModel(id = "2", name = "경기"),
+        RegionChipModel(id = "3", name = "인천"),
+        RegionChipModel(id = "4", name = "강원"),
+        RegionChipModel(id = "5", name = "충청북도"),
+        RegionChipModel(id = "6", name = "충청남도"),
+        RegionChipModel(id = "7", name = "전라북도"),
+        RegionChipModel(id = "8", name = "전라남도", isSelected = true),
+        RegionChipModel(id = "9", name = "경상북도"),
+        RegionChipModel(id = "10", name = "경상남도"),
+        RegionChipModel(id = "11", name = "대전"),
+        RegionChipModel(id = "12", name = "세종"),
+        RegionChipModel(id = "13", name = "대구"),
+        RegionChipModel(id = "14", name = "부산"),
+        RegionChipModel(id = "15", name = "울산"),
+        RegionChipModel(id = "16", name = "광주"),
+        RegionChipModel(id = "17", name = "제주특별자치도")
+    )
+
+    val regionState: SelectedRegionState = SelectedRegionState(
+        parents = listOf(
+            RegionChipModel(id = "seoul", name = "서울", level = 0),
+            RegionChipModel(id = "gangnam", name = "강남구", level = 1)
+        ),
+        children = listOf(
+            RegionChipModel(id = "yeoksam", name = "역삼동", level = 2),
+            RegionChipModel(id = "samseong", name = "삼성동", level = 2)
+        )
     )
 
     val places: List<Place> by lazy {
