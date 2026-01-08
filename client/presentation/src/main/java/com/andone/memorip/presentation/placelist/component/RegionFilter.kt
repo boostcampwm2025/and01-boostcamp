@@ -23,16 +23,16 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.theme.memoripShapes
 
 @Composable
-fun LocationFilter(
+fun RegionFilter(
     modifier: Modifier = Modifier,
-    region1: String? = null,
-    region2: String? = null,
+    parentRegion: String? = null,
+    childRegion: String? = null,
     onChipClick: () -> Unit = {}
 ) {
     val regionText = when {
-        region1.isNullOrBlank() -> { stringResource(R.string.place_list_region_default) }
-        region2.isNullOrBlank() -> { region1 }
-        else -> { stringResource(R.string.place_list_region_hierarchy, region1, region2) }
+        parentRegion.isNullOrBlank() -> { stringResource(R.string.place_list_region_default) }
+        childRegion.isNullOrBlank() -> { parentRegion }
+        else -> { stringResource(R.string.place_list_region_hierarchy, parentRegion, childRegion) }
     }
 
     Row(
@@ -75,12 +75,12 @@ private fun LocationFilterPreview() {
         Column(
             verticalArrangement = Arrangement.spacedBy(space = 5.dp)
         ) {
-            LocationFilter(
-                region1 = "서울",
-                region2 = "강남"
+            RegionFilter(
+                parentRegion = "서울",
+                childRegion = "강남"
             )
-            LocationFilter(region1 = "서울")
-            LocationFilter()
+            RegionFilter(parentRegion = "서울")
+            RegionFilter()
         }
     }
 }
