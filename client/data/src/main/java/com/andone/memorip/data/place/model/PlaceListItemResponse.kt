@@ -10,7 +10,7 @@ data class PlaceListItemResponse(
     val latitude: Double,
     val longitude: Double,
     val address: String,
-    val imageUrl: String
+    val imageUrl: String? = null
 )
 
 fun PlaceListItemResponse.toDomain(): PlaceListItem =
@@ -20,6 +20,6 @@ fun PlaceListItemResponse.toDomain(): PlaceListItem =
         latitude = latitude,
         longitude = longitude,
         address = address,
-        imageUrl = imageUrl
+        imageUrl = imageUrl ?: ""
     )
 

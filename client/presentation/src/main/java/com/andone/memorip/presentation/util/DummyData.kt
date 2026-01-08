@@ -6,22 +6,33 @@ import androidx.compose.ui.graphics.Color
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.compose.ui.graphics.toArgb
+import com.andone.memorip.domain.model.Tag
 import com.andone.memorip.presentation.grouplist.model.GroupUiModel
 import com.andone.memorip.presentation.model.Category
 import com.andone.memorip.presentation.model.ImageItem
 import com.andone.memorip.presentation.model.LocationUiModel
 import com.andone.memorip.presentation.model.Place
+import com.andone.memorip.presentation.model.TagUiModel
+import com.andone.memorip.presentation.model.toUiModel
 import com.andone.memorip.presentation.placedetail.model.PlaceUiModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.flowOf
 import java.time.LocalDateTime
+import java.util.UUID
 import kotlin.random.Random
 
 object DummyData {
 
     val place = PlaceUiModel(
         title = "제목",
-        category = "맛집",
+        tags = persistentListOf(
+            Tag(
+                id = UUID.randomUUID().toString(),
+                name = "맛집",
+                color = "#${Integer.toHexString(Color.Gray.toArgb())}"
+            ).toUiModel()
+        ),
         locationName = "서울시 종로구",
         imageUrls = persistentListOf(
             "https://picsum.photos/200/50",
@@ -43,19 +54,19 @@ object DummyData {
     }
 
     val categories = mutableStateListOf(
-        Category(
-            id = 0L,
-            category = "맛집",
+        TagUiModel(
+            id = UUID.randomUUID().toString(),
+            name = "맛집",
             color = Color(0xFF000000)
         ),
-        Category(
-            id = 1L,
-            category = "카페",
+        TagUiModel(
+            id = UUID.randomUUID().toString(),
+            name = "카페",
             color = Color(0xFAA8F0F0)
         ),
-        Category(
-            id = 2L,
-            category = "액티비티",
+        TagUiModel(
+            id = UUID.randomUUID().toString(),
+            name = "액티비티",
             color = Color(0xFFCCDD66)
         ),
     )
@@ -64,7 +75,7 @@ object DummyData {
         buildList {
             add(
                 createPlace(
-                    1,
+                    "0",
                     "브런치 카페",
                     37.498095,
                     127.027610,
@@ -76,7 +87,7 @@ object DummyData {
             )
             add(
                 createPlace(
-                    2,
+                    "1",
                     "예쁜 공원",
                     37.512900,
                     127.058500,
@@ -88,7 +99,7 @@ object DummyData {
             )
             add(
                 createPlace(
-                    3,
+                    "2",
                     "야경 맛집",
                     37.517305,
                     127.047502,
@@ -100,7 +111,7 @@ object DummyData {
             )
             add(
                 createPlace(
-                    4,
+                    "3",
                     "루프탑 바",
                     37.505228,
                     127.050324,
@@ -112,7 +123,7 @@ object DummyData {
             )
             add(
                 createPlace(
-                    5,
+                    "4",
                     "숨은 카페",
                     37.508547,
                     127.062835,
@@ -124,7 +135,7 @@ object DummyData {
             )
             add(
                 createPlace(
-                    6,
+                    "5",
                     "감성 서점",
                     37.495592,
                     127.028747,
@@ -137,14 +148,14 @@ object DummyData {
         }
     }
 
-    private fun createPlaceImages(placeId: Int, count: Int = 50): List<ImageItem> {
+    private fun createPlaceImages(placeId: String, count: Int = 50): List<ImageItem> {
         return List(count) { imageIndex ->
             val photoId = Random.nextInt(30, 81)
             val randomHeight = Random.nextInt(150, 400)
             val fixedWidth = 200
 
             ImageItem(
-                id = placeId * count + imageIndex,
+                id = count + imageIndex,
                 url = "https://picsum.photos/id/$photoId/$fixedWidth/$randomHeight",
                 width = fixedWidth,
                 height = randomHeight
@@ -153,7 +164,7 @@ object DummyData {
     }
 
     private fun createPlace(
-        id: Int,
+        id: String,
         name: String,
         latitude: Double,
         longitude: Double,

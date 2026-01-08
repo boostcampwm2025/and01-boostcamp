@@ -11,7 +11,7 @@ enum class CommonExceptionCode(
     override val status: HttpStatus,
     override val message: String
 ) : ApiResponseCode {
-    
+
     // 공통에러
     INVALID_PARAMETER(HttpStatus.BAD_REQUEST, "잘못된 파라미터입니다."),
     INVALID_INPUT(HttpStatus.BAD_REQUEST, "필수 필드가 누락되었습니다."),
@@ -22,5 +22,5 @@ enum class CommonExceptionCode(
     PLACE_NOT_FOUND(HttpStatus.NOT_FOUND, "장소를 찾을 수 없습니다."),
     GROUP_NOT_FOUND(HttpStatus.NOT_FOUND, "그룹을 찾을 수 없습니다."),
     INVALID_INVITE_CODE(HttpStatus.BAD_REQUEST, "잘못된 참여코드이거나 만료되었습니다."),
-    CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "카테고리를 찾을 수 없습니다."),
+    TAG_NOT_FOUND(HttpStatus.NOT_FOUND, "태그를 찾을 수 없습니다.")
 }

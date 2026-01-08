@@ -22,9 +22,9 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.dialog.MemoripCategoryInputDialog
+import com.andone.memorip.presentation.model.TagUiModel
 import com.andone.memorip.presentation.selectcategory.component.CategoryItem
 import com.andone.memorip.presentation.selectcategory.component.SelectCategoryTopBar
-import com.andone.memorip.presentation.model.Category
 import com.andone.memorip.presentation.selectcategory.model.SelectCategoryAction
 import com.andone.memorip.presentation.selectcategory.model.SelectCategoryEvent
 import com.andone.memorip.presentation.selectcategory.model.toErrorMessage
@@ -36,6 +36,7 @@ import kotlinx.collections.immutable.ImmutableSet
 
 @Composable
 fun SelectCategoryScreen(
+    onCategorySelect: (List<TagUiModel>) -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: SelectCategoryViewModel = hiltViewModel()
@@ -51,8 +52,8 @@ fun SelectCategoryScreen(
                 onBackClick()
             }
 
-            is SelectCategoryEvent.NavigateAddPlace -> {
-                Log.d("UI TEST", "navigation add place ${event.categories}")
+            is SelectCategoryEvent.SelectCategory -> {
+                onCategorySelect(event.categories)
             }
 
             SelectCategoryEvent.ShowDialog -> {
@@ -98,8 +99,8 @@ fun SelectCategoryScreen(
 
 @Composable
 private fun SelectCategoryContent(
-    categories: ImmutableList<Category>,
-    checkedList: ImmutableSet<Long>,
+    categories: ImmutableList<TagUiModel>,
+    checkedList: ImmutableSet<String>,
     onAction: (SelectCategoryAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -135,12 +136,12 @@ private fun SelectCategoryContent(
                 key = { it.id }
             ) { category ->
                 CategoryItem(
-                    category = category,
+                    tagUiModel = category,
                     checked = category.id in checkedList,
                     onCheckedChange = { checked ->
                         onAction(
                             SelectCategoryAction.OnCategoryItemClick(
-                                category = category,
+                                tagUiModel = category,
                                 checked = checked
                             )
                         )
@@ -155,6 +156,9 @@ private fun SelectCategoryContent(
 @Composable
 private fun SelectCategoryPrev() {
     MemoripTheme {
-        SelectCategoryScreen(onBackClick = {})
+        SelectCategoryScreen(
+            onCategorySelect = {},
+            onBackClick = {}
+        )
     }
 }

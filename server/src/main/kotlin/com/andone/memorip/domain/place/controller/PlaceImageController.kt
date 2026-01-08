@@ -21,7 +21,7 @@ class PlaceImageController(
     ): ApiResult<UploadPlaceImageResponse> {
         return ApiResult.success(
             UploadPlaceImageResponse(
-                url = placeImageService.upload(file)
+                imageUrl = placeImageService.upload(file)
             )
         )
     }

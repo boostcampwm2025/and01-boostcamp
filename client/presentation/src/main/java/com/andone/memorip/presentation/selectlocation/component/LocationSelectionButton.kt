@@ -17,11 +17,13 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 @Composable
 fun LocationSelectionButton(
     onClick: () -> Unit,
+    enabled: Boolean,
     modifier: Modifier = Modifier
 ) {
     Button(
         onClick = onClick,
         modifier = modifier,
+        enabled = enabled,
         colors = ButtonDefaults.buttonColors(
             containerColor = MemoripTheme.colors.primary,
             contentColor = MemoripTheme.colors.white
@@ -44,6 +46,9 @@ fun LocationSelectionButton(
 @Composable
 fun LocationSelectionButtonPreview() {
     MemoripTheme {
-        LocationSelectionButton(onClick = {})
+        LocationSelectionButton(
+            onClick = {},
+            enabled = true
+        )
     }
 }
