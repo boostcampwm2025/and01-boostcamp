@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.component.StaticChip
 import com.andone.memorip.presentation.component.StaticChipColors
@@ -24,11 +23,7 @@ import com.andone.memorip.presentation.util.DummyData
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import com.andone.memorip.presentation.R
-import com.andone.memorip.presentation.placelist.component.TagFilterDimen.ELEVATION
-
-private object TagFilterDimen {
-    val ELEVATION: Dp = 4.dp
-}
+import com.andone.memorip.presentation.theme.MemoripShadow
 
 @Composable
 fun TagFilter(
@@ -51,7 +46,7 @@ fun TagFilter(
                 textColor = MemoripTheme.colors.black
             ),
             textStyle = MemoripTheme.typography.labelExtBold,
-            elevation = ELEVATION,
+            elevation = MemoripShadow.Medium,
         )
     }
 }

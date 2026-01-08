@@ -2,28 +2,42 @@ package com.andone.memorip.presentation.placelist.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.placelist.model.RegionChipModel
+import com.andone.memorip.presentation.placelist.model.SelectedRegionState
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
+import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.theme.MemoripPadding
 
 @Composable
 fun RegionSelectBottomSheet(
-    parentRegions: List<RegionChipModel>,
     modifier: Modifier = Modifier,
+    parentRegions: List<RegionChipModel> = emptyList(),
     childRegions: List<RegionChipModel> = emptyList(),
-    selectedRegions: List<Map<Int, RegionChipModel>> = emptyList(),
+    selectedRegionState: SelectedRegionState = SelectedRegionState(),
     onConfirmClick: () -> Unit = {},
-    onRegionClick: (id : String) -> Unit = {},
-    onSelectedRegionClick: (id : String) -> Unit = {}
+    onRegionChipClick: (id : String) -> Unit = {},
+    onRegionTextClick: (id : String) -> Unit = {}
 ) {
     Column(
-        modifier = modifier,
+        modifier = modifier.padding(horizontal = MemoripPadding.PaddingMedium),
         verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceMedium)
     ) {
-
+        Text(
+            text = stringResource(R.string.place_list_bottom_sheet_title),
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            style = MemoripTheme.typography.title1
+        )
+        RegionPathRow(onRegionTextClick = onRegionTextClick)
+        HorizontalDivider()
     }
 }
 

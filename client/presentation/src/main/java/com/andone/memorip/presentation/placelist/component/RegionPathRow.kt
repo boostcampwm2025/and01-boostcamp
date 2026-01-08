@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.placelist.model.RegionChipModel
 import com.andone.memorip.presentation.theme.MemoripSpace
@@ -20,36 +21,46 @@ import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.placelist.model.SelectedRegionState
 
 @Composable
-fun BottomSheetHeader(
-    onChipClick: (id: String) -> Unit,
+fun RegionPathRow(
     modifier: Modifier = Modifier,
+    onRegionTextClick: (id: String) -> Unit = {},
     selectedRegionState: SelectedRegionState = SelectedRegionState(),
+    isUnderline: Boolean = false,
 ) {
+    val decoration = if (isUnderline) TextDecoration.Underline else TextDecoration.None
+
+    val regionTextStyle = MemoripTheme.typography.label1.copy(textDecoration = decoration)
+
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .horizontalScroll(rememberScrollState()),
+        modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXSmall),
         verticalAlignment = Alignment.CenterVertically
     ) {
         if (selectedRegionState.parents.isEmpty() && selectedRegionState.children.isEmpty()) {
-            Text(text = stringResource(R.string.place_list_region_default))
+            Text(
+                text = stringResource(R.string.place_list_region_default),
+                style = MemoripTheme.typography.label1,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
         } else {
             selectedRegionState.parents.forEachIndexed { index, region ->
                 Text(
                     text = region.name,
-                    style = MemoripTheme.typography.label1.copy(
-                        textDecoration = TextDecoration.Underline
-                    ),
-                    modifier = Modifier.clickable {
-                        onChipClick(region.id)
-                    }
+                    modifier = Modifier.clickable { onRegionTextClick(region.id) },
+                    style = regionTextStyle,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
 
-                Text(
-                    text = stringResource(R.string.place_list_region_divider),
-                    style = MemoripTheme.typography.label1
-                )
+                if (selectedRegionState.parents.lastIndex != index || selectedRegionState.children.isNotEmpty()) {
+                    Text(
+                        text = stringResource(R.string.place_list_region_divider),
+                        style = MemoripTheme.typography.label1,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
             }
 
             val childrenText = selectedRegionState.children
@@ -57,14 +68,14 @@ fun BottomSheetHeader(
 
             Text(
                 text = childrenText,
-                style = MemoripTheme.typography.label1.copy(
-                    textDecoration = TextDecoration.Underline
-                ),
                 modifier = Modifier.clickable {
                     selectedRegionState.children.firstOrNull()?.let {
-                        onChipClick(it.id)
+                        onRegionTextClick(it.id)
                     }
-                }
+                },
+                style = regionTextStyle,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
             )
         }
     }
@@ -74,8 +85,7 @@ fun BottomSheetHeader(
 @Composable
 private fun BottomSheetHeaderPreview() {
     MemoripTheme {
-        BottomSheetHeader(
-            onChipClick = {},
+        RegionPathRow(
             selectedRegionState = SelectedRegionState(
                 parents = listOf(
                     RegionChipModel(id = "seoul", name = "서울", level = 0),
@@ -85,7 +95,8 @@ private fun BottomSheetHeaderPreview() {
                     RegionChipModel(id = "yeoksam", name = "역삼동", level = 2),
                     RegionChipModel(id = "samseong", name = "삼성동", level = 2)
                 )
-            )
+            ),
+            isUnderline = true
         )
     }
 }
