@@ -2,7 +2,11 @@ package com.andone.memorip.presentation.placelist.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,17 +20,21 @@ import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.theme.MemoripPadding
+import com.andone.memorip.presentation.theme.MemoripShadow
+import com.andone.memorip.presentation.theme.memoripShapes
 
 @Composable
 fun RegionSelectBottomSheet(
     modifier: Modifier = Modifier,
-    parentRegions: List<RegionChipModel> = emptyList(),
-    childRegions: List<RegionChipModel> = emptyList(),
+    regionMap: Map<Int, List<RegionChipModel>> = emptyMap(),
+    regionLevel: Int = 0,
     selectedRegionState: SelectedRegionState = SelectedRegionState(),
     onConfirmClick: () -> Unit = {},
     onRegionChipClick: (id : String) -> Unit = {},
     onRegionTextClick: (id : String) -> Unit = {}
 ) {
+    val currentRegionList = regionMap[regionLevel]
+
     Column(
         modifier = modifier.padding(horizontal = MemoripPadding.PaddingMedium),
         verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceMedium)
@@ -36,8 +44,21 @@ fun RegionSelectBottomSheet(
             modifier = Modifier.align(Alignment.CenterHorizontally),
             style = MemoripTheme.typography.title1
         )
-        RegionPathRow(onRegionTextClick = onRegionTextClick)
+
+        RegionPathRow(
+            selectedRegionState = selectedRegionState,
+            onRegionTextClick = onRegionTextClick
+        )
+
         HorizontalDivider()
+
+        Button(
+            onClick = onConfirmClick,
+            modifier = Modifier.fillMaxWidth(),
+            shape = memoripShapes.roundedXSmall,
+        ) {
+            Text(text = stringResource(R.string.place_list_bottom_sheet_confirm))
+        }
     }
 }
 
@@ -45,10 +66,6 @@ fun RegionSelectBottomSheet(
 @Composable
 private fun RegionSelectBottomSheetPreview(){
     MemoripTheme {
-        RegionSelectBottomSheet(
-            parentRegions = emptyList(),
-            childRegions = emptyList(),
-            onConfirmClick = {}
-        )
+        RegionSelectBottomSheet(onConfirmClick = {})
     }
 }

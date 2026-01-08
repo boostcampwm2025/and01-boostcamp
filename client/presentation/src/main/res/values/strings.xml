@@ -107,6 +107,7 @@
     <string name="place_list_region_hierarchy">%1$s &gt; %2$s</string>
     <string name="place_list_region_divider">&gt;</string>
     <string name="place_list_bottom_sheet_title">지역 선택</string>
+    <string name="place_list_bottom_sheet_confirm">확인</string>
 
 
     <!-- PlanScreen -->
