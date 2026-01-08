@@ -2,7 +2,10 @@ package com.andone.memorip.domain.place.service
 
 import com.andone.memorip.common.response.ApiResult
 import com.andone.memorip.domain.place.dto.PlaceListResult
+import com.andone.memorip.domain.place.dto.request.PlaceCreateRequest
+import com.andone.memorip.domain.place.dto.response.PlaceCreateResponse
 import com.andone.memorip.domain.place.dto.response.PlaceListItemResponse
+import com.andone.memorip.domain.place.entity.Place
 import com.andone.memorip.domain.place.repository.PlaceRepository
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
@@ -31,5 +34,22 @@ class PlaceService(private val placeRepository: PlaceRepository) {
         )
 
         return PlaceListResult(content, pagination)
+    }
+
+    fun createPlace(request: PlaceCreateRequest): PlaceCreateResponse {
+        val place = Place.create(
+            groupId = request.groupId,
+            writerId = request.writerId,
+            title = request.title,
+            content = request.content,
+            tag = request.tag ?: emptyList(),
+            latitude = request.latitude,
+            longitude = request.longitude,
+            address = request.address,
+            imageUrls = request.imageUrls
+        )
+
+        val savedPlace = placeRepository.save(place)
+        return PlaceCreateResponse(savedPlace.id!!)
     }
 }
