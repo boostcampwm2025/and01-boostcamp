@@ -3,7 +3,7 @@ package com.andone.memorip.presentation.selectcategory
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import com.andone.memorip.presentation.selectcategory.Constants.MAX_SELECTABLE_COUNT
-import com.andone.memorip.presentation.model.Category
+import com.andone.memorip.presentation.model.TagUiModel
 import com.andone.memorip.presentation.selectcategory.model.SelectCategoryAction
 import com.andone.memorip.presentation.selectcategory.model.SelectCategoryError
 import com.andone.memorip.presentation.selectcategory.model.SelectCategoryEvent
@@ -17,6 +17,7 @@ import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import java.util.UUID
 import javax.inject.Inject
 
 private object Constants {
@@ -56,7 +57,7 @@ class SelectCategoryViewModel @Inject constructor() : ViewModel() {
             }
 
             is SelectCategoryAction.OnCategoryItemClick -> {
-                updateChecked(category = action.category)
+                updateChecked(tagUiModel = action.tagUiModel)
             }
 
             is SelectCategoryAction.OnDialogConfirmClick -> {
@@ -73,21 +74,20 @@ class SelectCategoryViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun addCategory(category: String, color: Color) {
-        val maxId = uiState.value.categories.maxOfOrNull { it.id } ?: -2L
-        val newCategory = Category(
-            id = maxId + 1L,
-            category = category,
+        val newTagUiModel = TagUiModel(
+            id = UUID.randomUUID().toString(),
+            name = category,
             color = color
         )
 
-        val categories = uiState.value.categories + newCategory
+        val categories = uiState.value.categories + newTagUiModel
         _uiState.value = uiState.value.copy(categories = categories.toImmutableList())
         _event.trySend(SelectCategoryEvent.DismissDialog)
     }
 
-    private fun updateChecked(category: Category) {
-        val checkedSet = if (category.id in uiState.value.checkedSet) {
-            uiState.value.checkedSet - category.id
+    private fun updateChecked(tagUiModel: TagUiModel) {
+        val checkedSet = if (tagUiModel.id in uiState.value.checkedSet) {
+            uiState.value.checkedSet - tagUiModel.id
         } else {
             if (uiState.value.checkedSet.size >= MAX_SELECTABLE_COUNT) {
                 _event.trySend(
@@ -96,7 +96,7 @@ class SelectCategoryViewModel @Inject constructor() : ViewModel() {
                 return
             }
 
-            uiState.value.checkedSet + category.id
+            uiState.value.checkedSet + tagUiModel.id
         }
 
         _uiState.value = uiState.value.copy(checkedSet = checkedSet.toImmutableSet())

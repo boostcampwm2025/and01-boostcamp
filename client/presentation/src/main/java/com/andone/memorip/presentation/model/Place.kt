@@ -4,7 +4,6 @@ import androidx.compose.runtime.Immutable
 import com.andone.memorip.domain.model.PlaceListItem
 import java.time.Duration
 import java.time.LocalDateTime
-import java.util.UUID
 
 @Immutable
 data class Place(
@@ -15,7 +14,7 @@ data class Place(
     val address: String,
     val startDateTime: LocalDateTime,
     val endDateTime: LocalDateTime,
-    val categories: List<Category>,
+    val categories: List<TagUiModel>,
     val thumbnailImage: ImageItem,
     val images: List<ImageItem>
 ) {

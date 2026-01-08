@@ -13,7 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.R
-import com.andone.memorip.presentation.model.Category
+import com.andone.memorip.presentation.model.TagUiModel
 import com.andone.memorip.presentation.theme.MemoripIconSize
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -25,7 +25,7 @@ import java.time.LocalDateTime
 
 @Composable
 fun TagChipRow(
-    tags: ImmutableList<Category>,
+    tags: ImmutableList<TagUiModel>,
     modifier: Modifier = Modifier
 ) {
     Row(
