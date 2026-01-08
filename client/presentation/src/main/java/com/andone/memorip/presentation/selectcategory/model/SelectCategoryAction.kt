@@ -1,12 +1,12 @@
 package com.andone.memorip.presentation.selectcategory.model
 
 import androidx.compose.ui.graphics.Color
-import com.andone.memorip.presentation.model.Category
+import com.andone.memorip.presentation.model.TagUiModel
 
 sealed interface SelectCategoryAction {
 
     data class OnCategoryItemClick(
-        val category: Category,
+        val tagUiModel: TagUiModel,
         val checked: Boolean
     ) : SelectCategoryAction
 

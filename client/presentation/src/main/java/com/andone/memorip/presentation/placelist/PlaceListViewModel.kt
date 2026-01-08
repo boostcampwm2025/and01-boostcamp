@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import androidx.paging.map
-import com.andone.memorip.domain.repository.PlaceListRepository
+import com.andone.memorip.domain.repository.PlaceRepository
 import com.andone.memorip.presentation.model.toUiModel
 import com.andone.memorip.presentation.placelist.model.PlaceListAction
 import com.andone.memorip.presentation.placelist.model.PlaceListEvent
@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
-class PlaceListViewModel @Inject constructor(repository: PlaceListRepository) : ViewModel() {
+class PlaceListViewModel @Inject constructor(repository: PlaceRepository) : ViewModel() {
 
     private val _uiState = MutableStateFlow(value = PlaceListUiState())
     val uiState = _uiState.asStateFlow()

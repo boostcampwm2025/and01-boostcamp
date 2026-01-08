@@ -14,7 +14,7 @@ data class Place(
     val address: String,
     val startDateTime: LocalDateTime,
     val endDateTime: LocalDateTime,
-    val categories: List<Category>,
+    val categories: List<TagUiModel>,
     val thumbnailImage: ImageItem,
     val images: List<ImageItem>
 ) {

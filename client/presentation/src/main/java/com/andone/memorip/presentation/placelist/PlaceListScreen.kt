@@ -1,7 +1,15 @@
 package com.andone.memorip.presentation.placelist
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -10,6 +18,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalFocusManager
@@ -25,15 +35,27 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
 import com.andone.memorip.presentation.util.collectWithLifecycle
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.andone.memorip.presentation.component.MemoripStaggeredGrid
+import com.andone.memorip.presentation.placelist.MemoripMotion.AnimationDuration
+import com.andone.memorip.presentation.placelist.MemoripMotion.ScrollThreshold
+import com.andone.memorip.presentation.placelist.component.FilterSection
 import com.andone.memorip.presentation.placelist.model.ListPlaceItems
 import com.andone.memorip.presentation.placelist.model.PagingPlaceItems
 import com.andone.memorip.presentation.placelist.model.PlaceItems
+import com.andone.memorip.presentation.theme.MemoripPadding
+import com.andone.memorip.presentation.theme.MemoripSpace
+import kotlinx.collections.immutable.toImmutableList
+
+private object MemoripMotion {
+    const val ScrollThreshold = 10
+    const val AnimationDuration = 300
+}
 
 @Composable
 fun PlaceListScreen(
@@ -79,6 +101,8 @@ fun PlaceListScreenContents(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val focusManager = LocalFocusManager.current
 
+    var isFilterVisible by remember { mutableStateOf(true) }
+
     val clearFocusOnScroll = remember {
         object : NestedScrollConnection {
             override fun onPreScroll(
@@ -86,6 +110,14 @@ fun PlaceListScreenContents(
                 source: NestedScrollSource
             ): Offset {
                 focusManager.clearFocus()
+
+                val delta = available.y
+                if (delta < -ScrollThreshold) {
+                    isFilterVisible = false
+                } else if (delta > ScrollThreshold) {
+                    isFilterVisible = true
+                }
+
                 return Offset.Zero
             }
         }
@@ -103,7 +135,24 @@ fun PlaceListScreenContents(
         floatingActionButton = { AddFloatingActionButton(onClick = { onAction(PlaceListAction.OnFABClick) }) },
         contentWindowInsets = WindowInsets(),
     ) { padding ->
-        Box(modifier = Modifier.padding(paddingValues = padding)) {
+        Column(modifier = Modifier.padding(paddingValues = padding)) {
+            AnimatedVisibility(
+                visible = isFilterVisible,
+                enter = expandVertically(animationSpec = tween(durationMillis = AnimationDuration)) + fadeIn(),
+                exit = shrinkVertically(animationSpec = tween(durationMillis = AnimationDuration)) + fadeOut()
+            ) {
+                Column {
+                    FilterSection(
+                        onChangeRegionClick = {},
+                        onAddTagClick = {},
+                        modifier = Modifier
+                            .padding(horizontal = MemoripPadding.PaddingMedium),
+                        tags = DummyData.categories.toImmutableList()
+                    )
+                    Spacer(modifier = Modifier.padding(vertical = MemoripPadding.PaddingXSmall))
+                }
+            }
+
             MemoripStaggeredGrid(
                 places = places,
                 onImageClick = { onAction(PlaceListAction.OnPlaceClick(id = it)) },

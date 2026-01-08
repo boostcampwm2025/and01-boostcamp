@@ -84,7 +84,6 @@ private fun StaggeredImageItem(
             imageUrl = imageUrl,
             contentDescription = contentDescription,
             modifier = Modifier.fillMaxWidth(),
-            contentScale = ContentScale.FillWidth
         )
     }
 }
