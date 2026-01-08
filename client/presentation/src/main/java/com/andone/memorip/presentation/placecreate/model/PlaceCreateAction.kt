@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.placecreate.model
 
+import android.content.Context
 import android.net.Uri
 
 sealed interface PlaceCreateAction {
@@ -20,9 +21,9 @@ sealed interface PlaceCreateAction {
 
     data class OnImagesRemove(val imageUri: Uri) : PlaceCreateAction
 
-    data object OnPlaceCreate : PlaceCreateAction
+    data class OnPlaceCreate(val context: Context) : PlaceCreateAction
 
-    data object OnSnackBarShow : PlaceCreateAction
+    data class OnSnackBarShow(val message: String) : PlaceCreateAction
 
     data object OnBackClick : PlaceCreateAction
 }

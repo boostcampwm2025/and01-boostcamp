@@ -34,6 +34,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PlaceCreateViewModel @Inject constructor(
     private val placeListRepository: PlaceListRepository,
+    private val snackBarManager: SnackBarManager
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(PlaceCreateUiState())
     val uiState = _uiState.asStateFlow()
@@ -75,12 +76,12 @@ class PlaceCreateViewModel @Inject constructor(
                 _uiState.update { it.copy(images = it.images - action.imageUri) }
             }
 
-            PlaceCreateAction.OnPlaceCreate -> {
-                createPlace()
+            is PlaceCreateAction.OnPlaceCreate -> {
+                createPlace(action.context)
             }
 
-            PlaceCreateAction.OnSnackBarShow -> {
-                _event.trySend(PlaceCreateEvent.ShowSnackBar)
+            is PlaceCreateAction.OnSnackBarShow -> {
+                snackBarManager.show(SnackBarRequest(message = action.message))
             }
 
             PlaceCreateAction.OnBackClick -> {
@@ -101,7 +102,36 @@ class PlaceCreateViewModel @Inject constructor(
         _uiState.update { it.copy(group = group) }
     }
 
-    fun createPlace() {
+    private fun createPlace(context: Context) {
+        val uiStateValue = _uiState.value
+        if (uiStateValue.group == null || uiStateValue.location == null || uiStateValue.images.isEmpty()) return
+
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
+
+            val imageUrls = uploadImages(context, uiStateValue.images)
+
+            placeListRepository.createPlace(
+                PlaceCreateRequest(
+                    groupId = uiStateValue.group.id,
+                    writerId = UUID.randomUUID(),
+                    title = uiStateValue.title,
+                    content = uiStateValue.content,
+                    tag = uiStateValue.category.map { it.id },
+                    latitude = uiStateValue.location.latitude,
+                    longitude = uiStateValue.location.longitude,
+                    address = Address.from(uiStateValue.location.address),
+                    imageUrls = imageUrls
+                )
+            ).onSuccess { data ->
+                onAction(PlaceCreateAction.OnBackClick)
+            }.onFailure { exception ->
+                onAction(PlaceCreateAction.OnSnackBarShow(exception.message ?: "알 수 없는 오류"))
+            }
+
+            _uiState.update { it.copy(isLoading = false) }
+        }
+    }
 
     private suspend fun uploadImages(context: Context, uris: List<Uri>): List<String> =
         coroutineScope {
