@@ -22,10 +22,9 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.dialog.MemoripCategoryInputDialog
-import com.andone.memorip.presentation.model.Category
+import com.andone.memorip.presentation.model.TagUiModel
 import com.andone.memorip.presentation.selectcategory.component.CategoryItem
 import com.andone.memorip.presentation.selectcategory.component.SelectCategoryTopBar
-import com.andone.memorip.presentation.model.TagUiModel
 import com.andone.memorip.presentation.selectcategory.model.SelectCategoryAction
 import com.andone.memorip.presentation.selectcategory.model.SelectCategoryEvent
 import com.andone.memorip.presentation.selectcategory.model.toErrorMessage
@@ -37,7 +36,7 @@ import kotlinx.collections.immutable.ImmutableSet
 
 @Composable
 fun SelectCategoryScreen(
-    onCategorySelect: (List<Category>) -> Unit,
+    onCategorySelect: (List<TagUiModel>) -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: SelectCategoryViewModel = hiltViewModel()

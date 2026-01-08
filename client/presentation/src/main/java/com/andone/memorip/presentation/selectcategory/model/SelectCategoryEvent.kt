@@ -6,7 +6,7 @@ sealed interface SelectCategoryEvent {
 
     data object NavigateBack : SelectCategoryEvent
 
-    data class SelectCategory(val categories: List<TagUiModel>) : SelctCategoryEvent
+    data class SelectCategory(val categories: List<TagUiModel>) : SelectCategoryEvent
 
     data object ShowDialog : SelectCategoryEvent
 

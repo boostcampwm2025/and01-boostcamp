@@ -2,8 +2,8 @@ package com.andone.memorip.presentation.selectcategory
 
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
-import com.andone.memorip.presentation.selectcategory.Constants.MAX_SELECTABLE_COUNT
 import com.andone.memorip.presentation.model.TagUiModel
+import com.andone.memorip.presentation.selectcategory.Constants.MAX_SELECTABLE_COUNT
 import com.andone.memorip.presentation.selectcategory.model.SelectCategoryAction
 import com.andone.memorip.presentation.selectcategory.model.SelectCategoryError
 import com.andone.memorip.presentation.selectcategory.model.SelectCategoryEvent
@@ -57,7 +57,7 @@ class SelectCategoryViewModel @Inject constructor() : ViewModel() {
             }
 
             is SelectCategoryAction.OnCategoryItemClick -> {
-                updateChecked(tagUiModel = action.tagUiModel)
+                updateChecked(tag = action.tagUiModel)
             }
 
             is SelectCategoryAction.OnDialogConfirmClick -> {
@@ -74,46 +74,27 @@ class SelectCategoryViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun addCategory(category: String, color: Color) {
-        val maxId = _uiState.value.categories.maxOfOrNull { it.id } ?: -2L
-        val newCategory = Category(
-            id = maxId + 1L,
-            category = category,
-            color = color
-        )
-
-        val categories = _uiState.value.categories + newCategory
-        _uiState.value = _uiState.value.copy(categories = categories.toImmutableList())
-        _event.trySend(SelectCategoryEvent.DismissDialog)
-    }
-
-    private fun updateChecked(category: Category) {
-        val checkedSet = if (category.id in _uiState.value.checkedSet) {
-            _uiState.value.checkedSet - category.id
-        val newTagUiModel = TagUiModel(
+        val newTag = TagUiModel(
             id = UUID.randomUUID().toString(),
             name = category,
             color = color
         )
 
-        val categories = uiState.value.categories + newTagUiModel
-        _uiState.value = uiState.value.copy(categories = categories.toImmutableList())
+        val categories = _uiState.value.categories + newTag
+        _uiState.value = _uiState.value.copy(categories = categories.toImmutableList())
         _event.trySend(SelectCategoryEvent.DismissDialog)
     }
 
-    private fun updateChecked(tagUiModel: TagUiModel) {
-        val checkedSet = if (tagUiModel.id in uiState.value.checkedSet) {
-            uiState.value.checkedSet - tagUiModel.id
+    private fun updateChecked(tag: TagUiModel) {
+        val checkedSet = if (tag.id in _uiState.value.checkedSet) {
+            _uiState.value.checkedSet - tag.id
         } else {
             if (_uiState.value.checkedSet.size >= MAX_SELECTABLE_COUNT) {
-                _event.trySend(
-                    element = SelectCategoryEvent.ShowSnackBar(message = SelectCategoryError.MaxCategoryOverError)
-                )
+                _event.trySend(element = SelectCategoryEvent.ShowSnackBar(message = SelectCategoryError.MaxCategoryOverError))
                 return
             }
-
-            _uiState.value.checkedSet + tagUiModel.id
+            _uiState.value.checkedSet + tag.id
         }
-
         _uiState.value = _uiState.value.copy(checkedSet = checkedSet.toImmutableSet())
     }
 }
