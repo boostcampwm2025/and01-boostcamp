@@ -72,10 +72,14 @@
     <string name="place_create_clear">지우기</string>
     <string name="place_create_content_input">내용을 입력해주세요</string>
     <string name="place_create_title_input">제목을 입력해주세요</string>
-    <string name="place_create_category">카테고리</string>
+    <string name="place_create_tag">태그</string>
     <string name="place_create_location">위치</string>
     <string name="place_create_group">그룹</string>
     <string name="place_delete_image">사진 삭제</string>
+    <string name="place_create_location_placeholder">사용자 지정</string>
+    <string name="place_create_join_to_string_comma">", "</string>
+    <string name="place_create_snack_bar_input_message">사진, 제목, 위치, 그룹을 입력해주세요.</string>
+    <string name="place_create_open_to_everyone">모두에게 공개하기</string>
 
     <!-- MainBottomBar -->
     <string name="main_bottom_bar_place_list">장소</string>
@@ -103,8 +107,19 @@
 
     <!-- PlaceList -->
     <string name="place_list_search">검색</string>
+    <string name="place_list_add_tag">+태그</string>
+    <string name="place_list_region">지역 :</string>
+    <string name="place_list_region_change">변경</string>
+    <string name="place_list_region_default">전체</string>
+    <string name="place_list_region_hierarchy">%1$s &gt; %2$s</string>
+
 
     <!-- PlanScreen -->
     <string name="plan_location_content_description">위치</string>
+
+    <!-- NetworkStatusBanner -->
+    <string name="network_status_disconnected">네트워크 연결이 끊어졌습니다</string>
+    <string name="network_status_weak_signal">네트워크 연결 신호가 약합니다</string>
+    <string name="network_status_connected">네트워크가 연결되었습니다</string>
 
 </resources>
