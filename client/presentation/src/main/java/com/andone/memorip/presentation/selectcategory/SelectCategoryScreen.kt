@@ -24,7 +24,7 @@ import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.dialog.MemoripCategoryInputDialog
 import com.andone.memorip.presentation.selectcategory.component.CategoryItem
 import com.andone.memorip.presentation.selectcategory.component.SelectCategoryTopBar
-import com.andone.memorip.presentation.model.Category
+import com.andone.memorip.presentation.model.TagUiModel
 import com.andone.memorip.presentation.selectcategory.model.SelectCategoryAction
 import com.andone.memorip.presentation.selectcategory.model.SelectCategoryEvent
 import com.andone.memorip.presentation.selectcategory.model.toErrorMessage
@@ -98,8 +98,8 @@ fun SelectCategoryScreen(
 
 @Composable
 private fun SelectCategoryContent(
-    categories: ImmutableList<Category>,
-    checkedList: ImmutableSet<Long>,
+    categories: ImmutableList<TagUiModel>,
+    checkedList: ImmutableSet<String>,
     onAction: (SelectCategoryAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -135,12 +135,12 @@ private fun SelectCategoryContent(
                 key = { it.id }
             ) { category ->
                 CategoryItem(
-                    category = category,
+                    tagUiModel = category,
                     checked = category.id in checkedList,
                     onCheckedChange = { checked ->
                         onAction(
                             SelectCategoryAction.OnCategoryItemClick(
-                                category = category,
+                                tagUiModel = category,
                                 checked = checked
                             )
                         )
