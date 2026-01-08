@@ -3,13 +3,12 @@ package com.andone.memorip.presentation.util
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.compose.ui.graphics.toArgb
 import com.andone.memorip.domain.model.Tag
 import com.andone.memorip.presentation.grouplist.model.GroupUiModel
-import com.andone.memorip.presentation.model.Category
 import com.andone.memorip.presentation.model.ImageItem
 import com.andone.memorip.presentation.model.LocationUiModel
 import com.andone.memorip.presentation.model.Place

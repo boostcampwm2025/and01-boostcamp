@@ -7,7 +7,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -19,9 +18,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
@@ -42,29 +41,17 @@ import com.andone.memorip.presentation.component.MemoripPagingList
 import com.andone.memorip.presentation.component.StaggeredImageItem
 import com.andone.memorip.presentation.grouplist.component.AddFloatingActionButton
 import com.andone.memorip.presentation.model.Place
+import com.andone.memorip.presentation.placelist.MemoripMotion.AnimationDuration
+import com.andone.memorip.presentation.placelist.MemoripMotion.ScrollThreshold
+import com.andone.memorip.presentation.placelist.component.FilterSection
 import com.andone.memorip.presentation.placelist.component.PlaceListTopBar
 import com.andone.memorip.presentation.placelist.model.PlaceListAction
 import com.andone.memorip.presentation.placelist.model.PlaceListEvent
 import com.andone.memorip.presentation.placelist.model.PlaceListUiState
+import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
 import com.andone.memorip.presentation.util.collectWithLifecycle
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.NestedScrollSource
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.paging.compose.collectAsLazyPagingItems
-import com.andone.memorip.presentation.component.MemoripStaggeredGrid
-import com.andone.memorip.presentation.placelist.MemoripMotion.AnimationDuration
-import com.andone.memorip.presentation.placelist.MemoripMotion.ScrollThreshold
-import com.andone.memorip.presentation.placelist.component.FilterSection
-import com.andone.memorip.presentation.placelist.model.ListPlaceItems
-import com.andone.memorip.presentation.placelist.model.PagingPlaceItems
-import com.andone.memorip.presentation.placelist.model.PlaceItems
-import com.andone.memorip.presentation.theme.MemoripPadding
-import com.andone.memorip.presentation.theme.MemoripSpace
 import kotlinx.collections.immutable.toImmutableList
 
 private object StaggeredGridDimens {
@@ -78,7 +65,7 @@ private object MemoripMotion {
 
 @Composable
 fun PlaceListScreen(
-    onPlaceClick: (Int) -> Unit,
+    onPlaceClick: (String) -> Unit,
     onCreatePlaceClick: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PlaceListViewModel = hiltViewModel(),
@@ -154,7 +141,7 @@ fun PlaceListScreenContents(
         floatingActionButton = { AddFloatingActionButton(onClick = { onAction(PlaceListAction.OnFABClick) }) },
         contentWindowInsets = WindowInsets(),
     ) { innerPadding ->
-        Column(modifier = Modifier.padding(paddingValues = padding)) {
+        Column(modifier = Modifier.padding(paddingValues = innerPadding)) {
             AnimatedVisibility(
                 visible = isFilterVisible,
                 enter = expandVertically(animationSpec = tween(durationMillis = AnimationDuration)) + fadeIn(),
@@ -176,7 +163,6 @@ fun PlaceListScreenContents(
                 itemKey = { it.id },
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(innerPadding)
                     .nestedScroll(connection = clearFocusOnScroll)
                     .pointerInput(key1 = Unit) { detectTapGestures { focusManager.clearFocus() } },
                 staggeredCells = StaggeredGridCells.Adaptive(StaggeredGridDimens.STAGGERED_GRID_MIN_CELL_WIDTH),
