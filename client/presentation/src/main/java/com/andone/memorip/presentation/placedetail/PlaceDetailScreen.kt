@@ -33,6 +33,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.navigation.PlaceDetail
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.MemoripImage
+import com.andone.memorip.presentation.component.TagChipRow
 import com.andone.memorip.presentation.placedetail.PlaceDetailScreenConstants.IMAGE_ASPECT_RATIO
 import com.andone.memorip.presentation.placedetail.component.ImageDialog
 import com.andone.memorip.presentation.placedetail.component.PlaceDetailInfoSection
@@ -109,12 +110,7 @@ private fun PlaceDetailScreen(
 
             Spacer(modifier = Modifier.height(MemoripSpace.SpaceMedium))
             Column(verticalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXXSmall)) {
-                if (place.tags.isNotEmpty()) {
-                    Text(
-                        text = place.tags[0].name,
-                        style = MemoripTheme.typography.labelLarge
-                    )
-                }
+                TagChipRow(tags = place.tags)
                 PlaceDetailInfoSection(
                     infoString = place.locationName,
                     iconRes = R.drawable.ic_location_on
