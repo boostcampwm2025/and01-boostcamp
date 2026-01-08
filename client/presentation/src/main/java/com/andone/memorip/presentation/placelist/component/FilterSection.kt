@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.andone.memorip.presentation.model.Category
+import com.andone.memorip.presentation.model.TagUiModel
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
@@ -18,7 +18,7 @@ fun FilterSection(
     onChangeRegionClick: () -> Unit,
     onAddTagClick: () -> Unit,
     modifier: Modifier = Modifier,
-    tags: ImmutableList<Category> = persistentListOf(),
+    tags: ImmutableList<TagUiModel> = persistentListOf(),
     parentRegion: String? = null,
     childRegion: String? = null,
 ) {

@@ -31,6 +31,7 @@ import com.andone.memorip.presentation.component.MemoripPagingList
 import com.andone.memorip.presentation.component.MemoripSearchBarInputField
 import com.andone.memorip.presentation.model.LocationUiModel
 import com.andone.memorip.presentation.selectlocation.SelectLocationScreenConstants.CAMERA_ANIMATION_DURATION
+import com.andone.memorip.presentation.selectlocation.SelectLocationScreenConstants.CAMERA_POSITION_ZOOM
 import com.andone.memorip.presentation.selectlocation.SelectLocationScreenDimens.markerHeight
 import com.andone.memorip.presentation.selectlocation.SelectLocationScreenDimens.markerWidth
 import com.andone.memorip.presentation.selectlocation.component.LocationItem
@@ -44,6 +45,7 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.collectWithLifecycle
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraAnimation
+import com.naver.maps.map.CameraPosition
 import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.compose.ExperimentalNaverMapApi
 import com.naver.maps.map.compose.MapUiSettings
@@ -59,10 +61,12 @@ private object SelectLocationScreenDimens {
 
 private object SelectLocationScreenConstants {
     const val CAMERA_ANIMATION_DURATION = 1000L
+    const val CAMERA_POSITION_ZOOM = 16.0
 }
 
 @Composable
 fun SelectLocationScreen(
+    onLocationSelect: (LocationUiModel) -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: SelectLocationViewModel = hiltViewModel()
@@ -72,9 +76,7 @@ fun SelectLocationScreen(
 
     viewModel.event.collectWithLifecycle { event ->
         when (event) {
-            is SelectLocationEvent.SelectLocation -> {
-
-            }
+            is SelectLocationEvent.SelectLocation -> onLocationSelect(event.location)
 
             SelectLocationEvent.NavigateBack -> onBackClick()
         }
@@ -96,11 +98,17 @@ private fun SelectLocationContent(
     onAction: (SelectLocationAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val cameraPositionState = rememberCameraPositionState()
+    val cameraPositionState = uiState.location?.let {
+        rememberCameraPositionState {
+            position = CameraPosition(LatLng(it.latitude, it.longitude), CAMERA_POSITION_ZOOM)
+        }
+    } ?: run {
+        rememberCameraPositionState()
+    }
+
     var searchBarExpanded by rememberSaveable { mutableStateOf(false) }
 
-    fun selectLocation(latLng: LatLng) {
-        onAction(SelectLocationAction.OnSelectLocationClick(latLng))
+    fun cameraPositionMove(latLng: LatLng) {
         cameraPositionState.move(
             CameraUpdate
                 .scrollTo(latLng)
@@ -149,9 +157,8 @@ private fun SelectLocationContent(
                     LocationItem(
                         location = location,
                         onClick = {
-                            selectLocation(
-                                LatLng(location.latitude, location.longitude)
-                            )
+                            onAction(SelectLocationAction.OnLocationClick(location))
+                            cameraPositionMove(LatLng(location.latitude, location.longitude))
                             searchBarExpanded = false
                         },
                         modifier = Modifier.fillMaxWidth()
@@ -171,15 +178,20 @@ private fun SelectLocationContent(
                         isLocationButtonEnabled = true
                     )
                 },
-                onMapClick = { _, latLng -> selectLocation(latLng = latLng) }
+                onMapClick = { _, latLng ->
+                    onAction(SelectLocationAction.OnMapClick(latLng))
+                    cameraPositionMove(latLng)
+                }
             ) {
                 uiState.location?.let { location ->
                     Marker(
-                        state = MarkerState(position = location),
+                        state = MarkerState(
+                            position = LatLng(location.latitude, location.longitude)
+                        ),
                         width = markerWidth,
                         height = markerHeight,
                         onClick = {
-                            onAction(SelectLocationAction.OnSelectLocationClick(null))
+                            onAction(SelectLocationAction.OnLocationClick(null))
                             true
                         }
                     )
@@ -188,8 +200,9 @@ private fun SelectLocationContent(
 
             LocationSelectionButton(
                 onClick = {
-                    uiState.location?.let { onAction(SelectLocationAction.OnSelectLocationClick(it)) }
+                    uiState.location?.let { onAction(SelectLocationAction.OnLocationSelect(it)) }
                 },
+                enabled = uiState.location != null,
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .navigationBarsPadding()
@@ -203,6 +216,9 @@ private fun SelectLocationContent(
 @Composable
 private fun SelectLocationScreenPreview() {
     MemoripTheme {
-        SelectLocationScreen(onBackClick = {})
+        SelectLocationScreen(
+            onLocationSelect = {},
+            onBackClick = {}
+        )
     }
 }

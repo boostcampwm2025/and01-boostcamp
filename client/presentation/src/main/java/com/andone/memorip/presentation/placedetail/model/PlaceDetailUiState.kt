@@ -1,7 +1,7 @@
 package com.andone.memorip.presentation.placedetail.model
 
 import com.andone.memorip.domain.model.response.PlaceDetailResponse
-import com.andone.memorip.presentation.model.toTagUiModel
+import com.andone.memorip.presentation.model.toUiModel
 import kotlinx.collections.immutable.toImmutableList
 
 data class PlaceDetailUiState(
@@ -12,7 +12,7 @@ data class PlaceDetailUiState(
 fun PlaceDetailResponse.toUiModel(): PlaceUiModel = PlaceUiModel(
     id = this.placeId,
     title = this.title,
-    tags = this.tags.map { it.toTagUiModel() }.toImmutableList(),
+    tags = this.tags.map { it.toUiModel() }.toImmutableList(),
     locationName = this.address.fullAddress,
     imageUrls = this.images.toImmutableList(),
     groupName = this.group.title,
