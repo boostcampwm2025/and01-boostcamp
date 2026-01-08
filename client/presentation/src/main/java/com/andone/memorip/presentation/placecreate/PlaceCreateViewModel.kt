@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.andone.memorip.domain.model.request.Address
 import com.andone.memorip.domain.model.request.PlaceCreateRequest
-import com.andone.memorip.domain.repository.PlaceListRepository
+import com.andone.memorip.domain.repository.PlaceRepository
 import com.andone.memorip.presentation.grouplist.model.GroupUiModel
 import com.andone.memorip.presentation.model.LocationUiModel
 import com.andone.memorip.presentation.model.TagUiModel
@@ -33,7 +33,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PlaceCreateViewModel @Inject constructor(
-    private val placeListRepository: PlaceListRepository,
+    private val placeRepository: PlaceRepository,
     private val snackBarManager: SnackBarManager
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(PlaceCreateUiState())
@@ -111,10 +111,10 @@ class PlaceCreateViewModel @Inject constructor(
 
             val imageUrls = uploadImages(context, uiStateValue.images)
 
-            placeListRepository.createPlace(
+            placeRepository.createPlace(
                 PlaceCreateRequest(
-                    groupId = uiStateValue.group.id,
-                    writerId = UUID.randomUUID(),
+                    writerId = "019b8be0-1fad-71e9-9da0-bc03ada63862", // TODO: 실제 유저 ID로 변경 필요
+                    groupId = uiStateValue.group.id.toString(),
                     title = uiStateValue.title,
                     content = uiStateValue.content,
                     tag = uiStateValue.category.map { it.id },
@@ -139,7 +139,7 @@ class PlaceCreateViewModel @Inject constructor(
                 async {
                     val file = uriToFile(context, uri)
                     if (file != null) {
-                        placeListRepository.uploadImage(file)
+                        placeRepository.uploadImage(file)
                             .map { it.imageUrl }
                             .getOrNull()
                     } else {
