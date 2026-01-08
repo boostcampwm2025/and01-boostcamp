@@ -9,8 +9,8 @@ data class Group(
     val title: String,
     val visibility: Visibility,
     val createdAt: String,
-    val deleted: Boolean,
     val updatedAt: String,
+    val deleted: String? = null,
 )
 
 enum class Visibility {
