@@ -1,15 +1,16 @@
-package com.andone.memorip.data.place.repositoryimpl
+package com.andone.memorip.data.place.datasource.remote
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.andone.memorip.data.place.datasource.PlaceListPagingSource
 import com.andone.memorip.data.place.datasource.PlaceService
+import com.andone.memorip.data.util.apiCall
 import com.andone.memorip.domain.model.PlaceListItem
 import com.andone.memorip.domain.model.request.PlaceCreateRequest
 import com.andone.memorip.domain.model.response.PlaceCreateResponse
+import com.andone.memorip.domain.model.response.PlaceDetailResponse
 import com.andone.memorip.domain.model.response.PlaceImageUploadResponse
-import com.andone.memorip.domain.repository.PlaceListRepository
 import kotlinx.coroutines.flow.Flow
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -17,9 +18,12 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import javax.inject.Inject
 
-class PlaceListRepositoryImpl @Inject constructor(
+class PlaceRemoteDataSourceImpl @Inject constructor(
     private val placeService: PlaceService
-) : PlaceListRepository {
+) : PlaceRemoteDataSource {
+    override suspend fun getPlaceDetail(placeId: String): Result<PlaceDetailResponse> {
+        return apiCall { placeService.getPlaceDetail(placeId = placeId) }
+    }
 
     override fun getPlaceList(): Flow<PagingData<PlaceListItem>> =
         Pager(

@@ -19,6 +19,9 @@
     <string name="category_dialog_valid_color_err_hint">0~9, A~F까지의 값만 입력해주세요</string>
     <string name="category_dialog_empty_name_err_hint">이름을 입력해주세요</string>
 
+    <!-- Loading Indicator -->
+    <string name="loading_indicator_message">로딩 중...</string>
+
     <!-- StaggeredGrid-->
     <string name="staggered_grid_image_content_description">장소 이미지</string>
 
@@ -104,8 +107,19 @@
 
     <!-- PlaceList -->
     <string name="place_list_search">검색</string>
+    <string name="place_list_add_tag">+태그</string>
+    <string name="place_list_region">지역 :</string>
+    <string name="place_list_region_change">변경</string>
+    <string name="place_list_region_default">전체</string>
+    <string name="place_list_region_hierarchy">%1$s &gt; %2$s</string>
+
 
     <!-- PlanScreen -->
     <string name="plan_location_content_description">위치</string>
+
+    <!-- NetworkStatusBanner -->
+    <string name="network_status_disconnected">네트워크 연결이 끊어졌습니다</string>
+    <string name="network_status_weak_signal">네트워크 연결 신호가 약합니다</string>
+    <string name="network_status_connected">네트워크가 연결되었습니다</string>
 
 </resources>

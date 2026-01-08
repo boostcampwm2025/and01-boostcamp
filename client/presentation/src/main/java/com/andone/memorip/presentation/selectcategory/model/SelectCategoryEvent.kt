@@ -1,12 +1,12 @@
 package com.andone.memorip.presentation.selectcategory.model
 
-import com.andone.memorip.presentation.model.Category
+import com.andone.memorip.presentation.model.TagUiModel
 
 sealed interface SelectCategoryEvent {
 
     data object NavigateBack : SelectCategoryEvent
 
-    data class SelectCategory(val categories: List<Category>) : SelectCategoryEvent
+    data class SelectCategory(val categories: List<TagUiModel>) : SelectCategoryEvent
 
     data object ShowDialog : SelectCategoryEvent
 

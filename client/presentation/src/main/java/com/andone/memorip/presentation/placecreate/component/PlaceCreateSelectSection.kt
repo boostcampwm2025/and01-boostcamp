@@ -8,15 +8,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.grouplist.model.GroupUiModel
-import com.andone.memorip.presentation.model.Category
 import com.andone.memorip.presentation.model.LocationUiModel
+import com.andone.memorip.presentation.model.TagUiModel
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.naver.maps.map.compose.ExperimentalNaverMapApi
 
 @OptIn(ExperimentalNaverMapApi::class)
 @Composable
 fun PlaceCreateSelectSection(
-    category: List<Category>,
+    category: List<TagUiModel>,
     location: LocationUiModel?,
     group: GroupUiModel?,
     onCategoryClick: () -> Unit,
@@ -25,7 +25,7 @@ fun PlaceCreateSelectSection(
     modifier: Modifier = Modifier
 ) {
     val categoryValue =
-        category.joinToString(stringResource(R.string.place_create_join_to_string_comma)) { it.category }
+        category.joinToString(stringResource(R.string.place_create_join_to_string_comma)) { it.name }
     val locationValue =
         location?.name?.ifEmpty { stringResource(R.string.place_create_location_placeholder) }
     val groupValue = group?.name

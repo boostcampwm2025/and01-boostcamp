@@ -2,20 +2,30 @@ package com.andone.memorip.presentation.util
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import com.andone.memorip.domain.model.Tag
 import com.andone.memorip.presentation.grouplist.model.GroupUiModel
-import com.andone.memorip.presentation.model.Category
 import com.andone.memorip.presentation.model.ImageItem
 import com.andone.memorip.presentation.model.Place
+import com.andone.memorip.presentation.model.TagUiModel
+import com.andone.memorip.presentation.model.toUiModel
 import com.andone.memorip.presentation.placedetail.model.PlaceUiModel
 import kotlinx.collections.immutable.persistentListOf
 import java.time.LocalDateTime
+import java.util.UUID
 import kotlin.random.Random
 
 object DummyData {
 
     val place = PlaceUiModel(
         title = "제목",
-        category = "맛집",
+        tags = persistentListOf(
+            Tag(
+                id = UUID.randomUUID().toString(),
+                name = "맛집",
+                color = "#${Integer.toHexString(Color.Gray.toArgb())}"
+            ).toUiModel()
+        ),
         locationName = "서울시 종로구",
         imageUrls = persistentListOf(
             "https://picsum.photos/200/50",
@@ -37,31 +47,21 @@ object DummyData {
     }
 
     val categories = mutableStateListOf(
-        Category(
-            id = "1",
-            category = "맛집",
-            color = Color(0xFFE53935)
+        TagUiModel(
+            id = UUID.randomUUID().toString(),
+            name = "맛집",
+            color = Color(0xFF000000)
         ),
-        Category(
-            id = "2",
-            category = "카페",
-            color = Color(0xFF8D6E63)
+        TagUiModel(
+            id = UUID.randomUUID().toString(),
+            name = "카페",
+            color = Color(0xFAA8F0F0)
         ),
-        Category(
-            id = "3",
-            category = "관광지",
-            color = Color(0xFF1E88E5)
+        TagUiModel(
+            id = UUID.randomUUID().toString(),
+            name = "액티비티",
+            color = Color(0xFFCCDD66)
         ),
-        Category(
-            id = "4",
-            category = "숙소",
-            color = Color(0xFF43A047)
-        ),
-        Category(
-            id = "5",
-            category = "쇼핑",
-            color = Color(0xFF9C27B0)
-        )
     )
 
     val places: List<Place> by lazy {

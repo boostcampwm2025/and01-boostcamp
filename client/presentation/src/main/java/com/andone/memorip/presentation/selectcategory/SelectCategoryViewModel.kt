@@ -2,7 +2,7 @@ package com.andone.memorip.presentation.selectcategory
 
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
-import com.andone.memorip.presentation.model.Category
+import com.andone.memorip.presentation.model.TagUiModel
 import com.andone.memorip.presentation.selectcategory.Constants.MAX_SELECTABLE_COUNT
 import com.andone.memorip.presentation.selectcategory.model.SelectCategoryAction
 import com.andone.memorip.presentation.selectcategory.model.SelectCategoryError
@@ -57,7 +57,7 @@ class SelectCategoryViewModel @Inject constructor() : ViewModel() {
             }
 
             is SelectCategoryAction.OnCategoryItemClick -> {
-                updateChecked(category = action.category)
+                updateChecked(tag = action.tagUiModel)
             }
 
             is SelectCategoryAction.OnDialogConfirmClick -> {
@@ -74,32 +74,27 @@ class SelectCategoryViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun addCategory(category: String, color: Color) {
-        val maxId = _uiState.value.categories.maxOfOrNull { it.id } ?: -2L
-        val newCategory = Category(
+        val newTag = TagUiModel(
             id = UUID.randomUUID().toString(),
-            category = category,
+            name = category,
             color = color
         )
 
-        val categories = _uiState.value.categories + newCategory
+        val categories = _uiState.value.categories + newTag
         _uiState.value = _uiState.value.copy(categories = categories.toImmutableList())
         _event.trySend(SelectCategoryEvent.DismissDialog)
     }
 
-    private fun updateChecked(category: Category) {
-        val checkedSet = if (category.id in _uiState.value.checkedSet) {
-            _uiState.value.checkedSet - category.id
+    private fun updateChecked(tag: TagUiModel) {
+        val checkedSet = if (tag.id in _uiState.value.checkedSet) {
+            _uiState.value.checkedSet - tag.id
         } else {
             if (_uiState.value.checkedSet.size >= MAX_SELECTABLE_COUNT) {
-                _event.trySend(
-                    element = SelectCategoryEvent.ShowSnackBar(message = SelectCategoryError.MaxCategoryOverError)
-                )
+                _event.trySend(element = SelectCategoryEvent.ShowSnackBar(message = SelectCategoryError.MaxCategoryOverError))
                 return
             }
-
-            _uiState.value.checkedSet + category.id
+            _uiState.value.checkedSet + tag.id
         }
-
         _uiState.value = _uiState.value.copy(checkedSet = checkedSet.toImmutableSet())
     }
 }

@@ -8,8 +8,8 @@ import com.andone.memorip.domain.model.request.Address
 import com.andone.memorip.domain.model.request.PlaceCreateRequest
 import com.andone.memorip.domain.repository.PlaceListRepository
 import com.andone.memorip.presentation.grouplist.model.GroupUiModel
-import com.andone.memorip.presentation.model.Category
 import com.andone.memorip.presentation.model.LocationUiModel
+import com.andone.memorip.presentation.model.TagUiModel
 import com.andone.memorip.presentation.placecreate.model.PlaceCreateAction
 import com.andone.memorip.presentation.placecreate.model.PlaceCreateEvent
 import com.andone.memorip.presentation.placecreate.model.PlaceCreateUiState
@@ -90,7 +90,7 @@ class PlaceCreateViewModel @Inject constructor(
         }
     }
 
-    fun updateCategory(category: List<Category>) {
+    fun updateCategory(category: List<TagUiModel>) {
         _uiState.update { it.copy(category = category) }
     }
 

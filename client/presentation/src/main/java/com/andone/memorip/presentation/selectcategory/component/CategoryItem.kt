@@ -17,7 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.andone.memorip.presentation.model.Category
+import com.andone.memorip.presentation.model.TagUiModel
 import com.andone.memorip.presentation.selectcategory.component.CategoryItemDimens.CATEGORY_ITEM_WIDTH
 import com.andone.memorip.presentation.theme.MemoripIconSize.IconSizeMedium
 import com.andone.memorip.presentation.theme.MemoripPadding.PaddingXSmall
@@ -30,7 +30,7 @@ private object CategoryItemDimens {
 
 @Composable
 fun CategoryItem(
-    category: Category,
+    tagUiModel: TagUiModel,
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier
@@ -42,10 +42,10 @@ fun CategoryItem(
         Box(
             modifier = Modifier
                 .size(width = CATEGORY_ITEM_WIDTH, height = IconSizeMedium)
-                .background(color = category.color, shape = MemoripTheme.shapes.roundedSmall)
+                .background(color = tagUiModel.color, shape = MemoripTheme.shapes.roundedSmall)
         )
         Text(
-            text = category.category,
+            text = tagUiModel.name,
             modifier = Modifier
                 .weight(1f)
                 .padding(start = PaddingXSmall),
@@ -70,7 +70,7 @@ private fun CategoryItemPrev() {
     MemoripTheme {
         var checked by remember { mutableStateOf(false) }
         CategoryItem(
-            category = DummyData.categories.first(),
+            tagUiModel = DummyData.categories.first(),
             checked = checked,
             onCheckedChange = { checked = it }
         )

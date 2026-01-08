@@ -8,7 +8,7 @@ import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.andone.memorip.presentation.model.Category
+import com.andone.memorip.presentation.model.TagUiModel
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
 
@@ -20,7 +20,7 @@ private object TagChipDimen {
 
 @Composable
 fun TagChip(
-    tag: Category,
+    tag: TagUiModel,
     modifier: Modifier = Modifier,
 ) {
     val textColor = if (tag.color.luminance() > TagChipDimen.COLOR_LUMINANCE_THRESHOLD) {
@@ -30,7 +30,7 @@ fun TagChip(
     }
 
     StaticChip(
-        chipName = tag.category,
+        chipName = tag.name,
         modifier = modifier,
         radius = TagChipDimen.RADIUS,
         colors = StaticChipColors(
