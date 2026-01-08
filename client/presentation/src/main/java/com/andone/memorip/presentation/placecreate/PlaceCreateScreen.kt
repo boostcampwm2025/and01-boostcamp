@@ -37,7 +37,6 @@ fun PlaceCreateScreen(
     onCategoryClick: () -> Unit,
     onLocationClick: () -> Unit,
     onGroupClick: () -> Unit,
-    onSnackBarShow: (Int) -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PlaceCreateViewModel = hiltViewModel()
@@ -50,7 +49,6 @@ fun PlaceCreateScreen(
             PlaceCreateEvent.NavigateToCategory -> onCategoryClick()
             PlaceCreateEvent.NavigateToLocation -> onLocationClick()
             PlaceCreateEvent.NavigateToGroup -> onGroupClick()
-            PlaceCreateEvent.ShowSnackBar -> onSnackBarShow(R.string.place_create_snack_bar_input_message)
         }
     }
 

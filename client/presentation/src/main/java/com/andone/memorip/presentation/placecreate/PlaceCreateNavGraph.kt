@@ -10,7 +10,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
@@ -35,7 +35,7 @@ fun EntryProviderScope<NavKey>.placeCreate(
     modifier: Modifier = Modifier
 ) {
     entry<PlaceCreate> {
-        val viewModel = viewModel<PlaceCreateViewModel>()
+        val viewModel = hiltViewModel<PlaceCreateViewModel>()
 
         var currentStep by rememberSaveable { mutableStateOf(PlaceCreateStep.PlaceCreate) }
 
@@ -59,7 +59,6 @@ fun EntryProviderScope<NavKey>.placeCreate(
                         onCategoryClick = { currentStep = PlaceCreateStep.SelectCategory },
                         onLocationClick = { currentStep = PlaceCreateStep.SelectLocation },
                         onGroupClick = { currentStep = PlaceCreateStep.SelectGroup },
-                        onSnackBarShow = {},
                         onBackClick = onBackClick,
                         modifier = modifier,
                         viewModel = viewModel
