@@ -70,7 +70,6 @@ fun PlaceDetailScreen(
     viewModel.event.collectWithLifecycle { event ->
         when (event) {
             PlaceDetailEvent.NavigateBack -> onNavigateBack()
-            else -> {}
         }
     }
 
