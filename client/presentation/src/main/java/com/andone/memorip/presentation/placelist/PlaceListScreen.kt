@@ -134,6 +134,8 @@ fun PlaceListScreenContents(
             sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
         ) {
             RegionSelectBottomSheet(
+                currentRegionList = state.currentRegionList,
+                selectedRegionState = state.selectedRegionState,
                 onConfirmClick = {
                     showRegionBottomSheet = false
                 }
