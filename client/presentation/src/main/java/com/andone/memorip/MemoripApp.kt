@@ -2,6 +2,7 @@ package com.andone.memorip
 
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
@@ -11,7 +12,7 @@ import com.andone.memorip.navigation.MemoripNav
 import com.andone.memorip.navigation.MemoripNavigator
 import com.andone.memorip.presentation.component.MainBottomBar
 import com.andone.memorip.presentation.component.MemoripSnackbar
-import com.andone.memorip.presentation.util.SnackBarManager
+import com.andone.memorip.presentation.util.snackbar.SnackBarManager
 
 @Composable
 fun MemoripApp(
@@ -21,14 +22,14 @@ fun MemoripApp(
     val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(Unit) {
-        snackbarManager.message.collect { msg ->
+        snackbarManager.message.collect { event ->
             val result = snackbarHostState.showSnackbar(
-                message = msg.message,
-                actionLabel = msg.actionLabel,
-                duration = msg.duration
+                message = event.message,
+                actionLabel = event.action?.label,
+                duration = SnackbarDuration.Short
             )
             if (result == SnackbarResult.ActionPerformed) {
-                msg.onAction?.invoke()
+                event.action?.onAction?.invoke()
             }
         }
     }
