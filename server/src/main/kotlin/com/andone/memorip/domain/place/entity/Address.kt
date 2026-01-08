@@ -17,9 +17,20 @@ class Address(
     @Column(name = "full_address", nullable = false, length = 255)
     var fullAddress: String // 전체 주소
 ) {
-//    init {
-//        require(region1Depth.isNotBlank()) { "시/도 정보는 필수입니다" }
-//        require(fullAddress.isNotBlank()) { "전체 주소는 필수입니다" }
-//    }
-//    protected constructor() : this("", null, null, "")
+    companion object {
+        fun from(fullAddress: String): Address {
+            val parts = fullAddress.trim().split("\\s+".toRegex())
+
+            val depth1 = parts.getOrElse(0) { "" }
+            val depth2 = parts.getOrNull(1)
+            val depth3 = parts.getOrNull(2)
+
+            return Address(
+                region1Depth = depth1,
+                region2Depth = depth2,
+                region3Depth = depth3,
+                fullAddress = fullAddress
+            )
+        }
+    }
 }
