@@ -2,20 +2,29 @@ package com.andone.memorip.presentation.util
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.graphics.Color
+import com.andone.memorip.domain.model.Tag
 import com.andone.memorip.presentation.grouplist.model.GroupUiModel
+import com.andone.memorip.presentation.model.TagUiModel
 import com.andone.memorip.presentation.model.ImageItem
 import com.andone.memorip.presentation.model.Place
+import com.andone.memorip.presentation.model.toTagUiModel
 import com.andone.memorip.presentation.placedetail.model.PlaceUiModel
-import com.andone.memorip.presentation.model.Category
 import kotlinx.collections.immutable.persistentListOf
 import java.time.LocalDateTime
+import java.util.UUID
 import kotlin.random.Random
 
 object DummyData {
 
     val place = PlaceUiModel(
         title = "제목",
-        category = "맛집",
+        tags = persistentListOf(
+            Tag(
+                id = UUID.randomUUID().toString(),
+                name = "맛집",
+                color = Color.Gray.value.toHexString()
+            ).toTagUiModel()
+        ),
         locationName = "서울시 종로구",
         imageUrls = persistentListOf(
             "https://picsum.photos/200/50",
@@ -37,19 +46,19 @@ object DummyData {
     }
 
     val categories = mutableStateListOf(
-        Category(
-            id = 0L,
-            category = "맛집",
+        TagUiModel(
+            id = UUID.randomUUID().toString(),
+            name = "맛집",
             color = Color(0xFF000000)
         ),
-        Category(
-            id = 1L,
-            category = "카페",
+        TagUiModel(
+            id = UUID.randomUUID().toString(),
+            name = "카페",
             color = Color(0xFAA8F0F0)
         ),
-        Category(
-            id = 2L,
-            category = "액티비티",
+        TagUiModel(
+            id = UUID.randomUUID().toString(),
+            name = "액티비티",
             color = Color(0xFFCCDD66)
         ),
     )
