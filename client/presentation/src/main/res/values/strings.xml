@@ -105,6 +105,7 @@
     <string name="place_list_region_change">변경</string>
     <string name="place_list_region_default">전체</string>
     <string name="place_list_region_hierarchy">%1$s &gt; %2$s</string>
+    <string name="place_list_region_divider">&gt;</string>
 
 
     <!-- PlanScreen -->
