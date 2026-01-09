@@ -6,10 +6,11 @@ import androidx.lifecycle.viewModelScope
 import com.andone.memorip.domain.repository.PlaceRepository
 import com.andone.memorip.navigation.PlaceDetail
 import com.andone.memorip.presentation.placedetail.model.PlaceDetailAction
-import com.andone.memorip.presentation.placedetail.model.PlaceDetailErrorType
 import com.andone.memorip.presentation.placedetail.model.PlaceDetailEvent
 import com.andone.memorip.presentation.placedetail.model.PlaceDetailUiState
 import com.andone.memorip.presentation.placedetail.model.toUiModel
+import com.andone.memorip.presentation.util.snackbar.SnackBarEvent
+import com.andone.memorip.presentation.util.snackbar.SnackBarManager
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -24,7 +25,8 @@ import kotlinx.coroutines.flow.stateIn
 @HiltViewModel(assistedFactory = PlaceDetailViewModel.Factory::class)
 class PlaceDetailViewModel @AssistedInject constructor(
     @Assisted route: PlaceDetail,
-    private val placeRepository: PlaceRepository
+    private val placeRepository: PlaceRepository,
+    private val snackBarManager: SnackBarManager
 ) : ViewModel() {
 
     private val placeId = route.placeId
@@ -40,7 +42,7 @@ class PlaceDetailViewModel @AssistedInject constructor(
                 )
             }
             .onFailure {
-                _event.trySend(element = PlaceDetailEvent.ShowSnackBar(error = PlaceDetailErrorType.NetworkError))
+                snackBarManager.show(event = SnackBarEvent.NETWORK_ERROR)
             }
     }.stateIn(
         scope = viewModelScope,
