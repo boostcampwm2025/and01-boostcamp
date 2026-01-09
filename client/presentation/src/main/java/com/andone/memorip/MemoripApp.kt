@@ -31,9 +31,9 @@ fun MemoripApp(
     snackbarManager: SnackBarManager,
     networkViewModel: NetworkViewModel = hiltViewModel()
 ) {
-    val snackbarHostState = remember { SnackbarHostState() }
-    val networkStatus by networkViewModel.networkStatus.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val networkStatus by networkViewModel.networkStatus.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     @SuppressLint("LocalContextGetResourceValueCall")
     snackbarManager.message.collectWithLifecycle { event ->
