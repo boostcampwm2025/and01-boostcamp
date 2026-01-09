@@ -13,8 +13,8 @@ import com.andone.memorip.presentation.model.TagUiModel
 import com.andone.memorip.presentation.placecreate.model.PlaceCreateAction
 import com.andone.memorip.presentation.placecreate.model.PlaceCreateEvent
 import com.andone.memorip.presentation.placecreate.model.PlaceCreateUiState
-import com.andone.memorip.presentation.util.SnackBarManager
-import com.andone.memorip.presentation.util.SnackBarRequest
+import com.andone.memorip.presentation.util.snackbar.SnackBarEvent
+import com.andone.memorip.presentation.util.snackbar.SnackBarManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -28,7 +28,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
-import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -81,7 +80,7 @@ class PlaceCreateViewModel @Inject constructor(
             }
 
             is PlaceCreateAction.OnSnackBarShow -> {
-                snackBarManager.show(SnackBarRequest(message = action.message))
+                snackBarManager.show(SnackBarEvent.NETWORK_ERROR)
             }
 
             PlaceCreateAction.OnBackClick -> {
@@ -126,7 +125,7 @@ class PlaceCreateViewModel @Inject constructor(
             ).onSuccess { data ->
                 onAction(PlaceCreateAction.OnBackClick)
             }.onFailure { exception ->
-                onAction(PlaceCreateAction.OnSnackBarShow(exception.message ?: "알 수 없는 오류"))
+                snackBarManager.show(SnackBarEvent.DATA_SAVE_FAILED)
             }
 
             _uiState.update { it.copy(isLoading = false) }
