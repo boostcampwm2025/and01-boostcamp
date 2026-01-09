@@ -18,7 +18,7 @@ import com.andone.memorip.navigation.MainBottomBarRoute
 import com.andone.memorip.presentation.component.MainBottomBarDimens.DURATION_MILLIS
 import com.andone.memorip.presentation.theme.MemoripTheme
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 
 private object MainBottomBarDimens {
     const val DURATION_MILLIS = 500
@@ -75,11 +75,7 @@ private fun BottomBarPreview() {
     MemoripTheme {
         MainBottomBar(
             visible = true,
-            tabs = persistentListOf(
-                MainBottomBarRoute.PLACE_LIST,
-                MainBottomBarRoute.GROUP_LIST,
-                MainBottomBarRoute.USER
-            ),
+            tabs = MainBottomBarRoute.entries.toImmutableList(),
             currentTab = MainBottomBarRoute.PLACE_LIST,
             onTabSelected = {}
         )
