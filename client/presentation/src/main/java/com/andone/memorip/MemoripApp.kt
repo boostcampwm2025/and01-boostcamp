@@ -23,6 +23,7 @@ import com.andone.memorip.presentation.component.MemoripSnackbar
 import com.andone.memorip.presentation.util.snackbar.SnackBarManager
 import com.andone.memorip.presentation.component.NetworkStatusBanner
 import com.andone.memorip.presentation.observer.NetworkViewModel
+import com.andone.memorip.presentation.util.collectWithLifecycle
 
 @Composable
 fun MemoripApp(
@@ -34,15 +35,13 @@ fun MemoripApp(
     val networkStatus by networkViewModel.networkStatus.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
-    LaunchedEffect(Unit) {
-        snackbarManager.message.collect { event ->
-            val result = snackbarHostState.showSnackbar(
-                message = context.getString(event.messageResId),
-                duration = SnackbarDuration.Short
-            )
-            if (result == SnackbarResult.ActionPerformed) {
-                event.action?.onAction?.invoke()
-            }
+    snackbarManager.message.collectWithLifecycle { event ->
+        val result = snackbarHostState.showSnackbar(
+            message = context.getString(event.messageResId),
+            duration = SnackbarDuration.Short
+        )
+        if (result == SnackbarResult.ActionPerformed) {
+            event.action?.onAction?.invoke()
         }
     }
 
