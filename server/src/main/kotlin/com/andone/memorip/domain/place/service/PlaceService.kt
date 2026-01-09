@@ -82,7 +82,6 @@ class PlaceService(
             writerId = request.writerId,
             title = request.title,
             content = request.content,
-            tag = request.tag ?: emptyList(),
             latitude = request.latitude,
             longitude = request.longitude,
             address = request.address,
