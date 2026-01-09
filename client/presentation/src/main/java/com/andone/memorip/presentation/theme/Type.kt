@@ -34,6 +34,7 @@ data class MemoripTypography(
     val body2: TextStyle,
     val caption1: TextStyle,
     val hint1: TextStyle,
+    val labelExtBold: TextStyle,
     val label1: TextStyle,
     val number1: TextStyle,
     val labelLarge: TextStyle,
@@ -94,6 +95,12 @@ internal val memoripTypography = MemoripTypography(
         fontSize = 14.sp,
         lineHeight = 20.sp
     ),
+    labelExtBold = TextStyle(
+        fontFamily = NotoSansKR,
+        fontWeight = FontWeight.ExtraBold,
+        fontSize = 14.sp,
+        lineHeight = 20.sp
+    ),
     label1 = TextStyle(
         fontFamily = NotoSansKR,
         fontWeight = FontWeight.Bold,
@@ -108,7 +115,7 @@ internal val memoripTypography = MemoripTypography(
     ),
     title2 = TextStyle(
         fontFamily = NotoSansKR,
-        fontWeight = FontWeight.Normal,
+        fontWeight = FontWeight.SemiBold,
         fontSize = 16.sp,
         lineHeight = 22.sp
     ),

@@ -1,5 +1,6 @@
 package com.andone.memorip.domain.model
 
+import com.andone.memorip.domain.model.request.Address
 import kotlinx.serialization.Serializable
 
 @Serializable

@@ -10,8 +10,8 @@ data class TagUiModel(
     val color: Color
 )
 
-fun Tag.toTagUiModel(): TagUiModel = TagUiModel(
-    id = this.id,
-    name = this.name,
-    color = Color(this.color.toColorInt())
+fun Tag.toUiModel(): TagUiModel = TagUiModel(
+    id = id,
+    name = name,
+    color = Color(color.toColorInt())
 )

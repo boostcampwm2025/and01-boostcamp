@@ -2,12 +2,13 @@ package com.andone.memorip.presentation.util
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import com.andone.memorip.domain.model.Tag
 import com.andone.memorip.presentation.grouplist.model.GroupUiModel
-import com.andone.memorip.presentation.model.TagUiModel
 import com.andone.memorip.presentation.model.ImageItem
 import com.andone.memorip.presentation.model.Place
-import com.andone.memorip.presentation.model.toTagUiModel
+import com.andone.memorip.presentation.model.TagUiModel
+import com.andone.memorip.presentation.model.toUiModel
 import com.andone.memorip.presentation.placedetail.model.PlaceUiModel
 import kotlinx.collections.immutable.persistentListOf
 import java.time.LocalDateTime
@@ -22,8 +23,8 @@ object DummyData {
             Tag(
                 id = UUID.randomUUID().toString(),
                 name = "맛집",
-                color = Color.Gray.value.toHexString()
-            ).toTagUiModel()
+                color = "#${Integer.toHexString(Color.Gray.toArgb())}"
+            ).toUiModel()
         ),
         locationName = "서울시 종로구",
         imageUrls = persistentListOf(
@@ -67,7 +68,7 @@ object DummyData {
         buildList {
             add(
                 createPlace(
-                    "",
+                    "0",
                     "브런치 카페",
                     37.498095,
                     127.027610,
@@ -79,7 +80,7 @@ object DummyData {
             )
             add(
                 createPlace(
-                    "",
+                    "1",
                     "예쁜 공원",
                     37.512900,
                     127.058500,
@@ -91,7 +92,7 @@ object DummyData {
             )
             add(
                 createPlace(
-                    "",
+                    "2",
                     "야경 맛집",
                     37.517305,
                     127.047502,
@@ -103,7 +104,7 @@ object DummyData {
             )
             add(
                 createPlace(
-                    "",
+                    "3",
                     "루프탑 바",
                     37.505228,
                     127.050324,
@@ -115,7 +116,7 @@ object DummyData {
             )
             add(
                 createPlace(
-                    "",
+                    "4",
                     "숨은 카페",
                     37.508547,
                     127.062835,
@@ -127,7 +128,7 @@ object DummyData {
             )
             add(
                 createPlace(
-                    "",
+                    "5",
                     "감성 서점",
                     37.495592,
                     127.028747,

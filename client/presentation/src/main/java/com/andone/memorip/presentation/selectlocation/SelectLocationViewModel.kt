@@ -65,11 +65,26 @@ class SelectLocationViewModel @Inject constructor(
     fun onAction(action: SelectLocationAction) {
         when (action) {
             is SelectLocationAction.OnQueryChange -> {
-                changeQuery(action.query)
+                changeQuery(query = action.query)
             }
 
-            is SelectLocationAction.OnSelectLocationClick -> {
+            is SelectLocationAction.OnLocationClick -> {
                 _uiState.update { it.copy(location = action.location) }
+            }
+
+            is SelectLocationAction.OnMapClick -> {
+                _uiState.update {
+                    it.copy(
+                        location = LocationUiModel(
+                            latitude = action.location.latitude,
+                            longitude = action.location.longitude
+                        )
+                    )
+                }
+            }
+
+            is SelectLocationAction.OnLocationSelect -> {
+                _event.trySend(SelectLocationEvent.SelectLocation(action.location))
             }
 
             SelectLocationAction.OnBackClick -> {
