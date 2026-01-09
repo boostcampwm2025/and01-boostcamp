@@ -1,8 +1,8 @@
 package com.andone.memorip.domain.model.response
 
-import com.andone.memorip.domain.model.Address
 import com.andone.memorip.domain.model.Group
 import com.andone.memorip.domain.model.Tag
+import com.andone.memorip.domain.model.request.Address
 import kotlinx.serialization.Serializable
 
 @Serializable
