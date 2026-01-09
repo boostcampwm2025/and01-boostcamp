@@ -1,5 +1,6 @@
 package com.andone.memorip
 
+import android.R.attr.duration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.navigation.MemoripNav
@@ -31,12 +33,12 @@ fun MemoripApp(
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val networkStatus by networkViewModel.networkStatus.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(context) {
         snackbarManager.message.collect { event ->
             val result = snackbarHostState.showSnackbar(
-                message = event.message,
-                actionLabel = event.action?.label,
+                message = context.getString(event.messageResId),
                 duration = SnackbarDuration.Short
             )
             if (result == SnackbarResult.ActionPerformed) {
