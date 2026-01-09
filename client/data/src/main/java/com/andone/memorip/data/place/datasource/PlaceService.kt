@@ -35,7 +35,7 @@ interface PlaceService {
         @Part file: MultipartBody.Part
     ): ApiResult<PlaceImageUploadResponse>
 
-    @POST("/api/places/create")
+    @POST("/api/places")
     suspend fun createPlace(
         @Body place: PlaceCreateRequest
     ): ApiResult<PlaceCreateResponse>
