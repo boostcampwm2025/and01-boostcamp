@@ -77,8 +77,10 @@ class PlaceService(
     }
 
     fun createPlace(request: PlaceCreateRequest): PlaceCreateResponse {
+
+        val groupId = UUID.fromString("cac95ac7-9913-4ef5-9187-3da56c0d4894")
         val place = Place.create(
-            groupId = request.groupId,
+            groupId = groupId,
             writerId = request.writerId,
             title = request.title,
             content = request.content,
