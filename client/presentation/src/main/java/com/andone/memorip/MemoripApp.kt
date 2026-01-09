@@ -1,5 +1,6 @@
 package com.andone.memorip
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,20 +9,21 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.navigation.MemoripNav
 import com.andone.memorip.navigation.MemoripNavigator
 import com.andone.memorip.presentation.component.MainBottomBar
 import com.andone.memorip.presentation.component.MemoripSnackbar
-import com.andone.memorip.presentation.util.snackbar.SnackBarManager
 import com.andone.memorip.presentation.component.NetworkStatusBanner
 import com.andone.memorip.presentation.observer.NetworkViewModel
+import com.andone.memorip.presentation.util.collectWithLifecycle
+import com.andone.memorip.presentation.util.snackbar.SnackBarManager
 
 @Composable
 fun MemoripApp(
@@ -29,19 +31,18 @@ fun MemoripApp(
     snackbarManager: SnackBarManager,
     networkViewModel: NetworkViewModel = hiltViewModel()
 ) {
-    val snackbarHostState = remember { SnackbarHostState() }
+    val context = LocalContext.current
     val networkStatus by networkViewModel.networkStatus.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
 
-    LaunchedEffect(Unit) {
-        snackbarManager.message.collect { event ->
-            val result = snackbarHostState.showSnackbar(
-                message = event.message,
-                actionLabel = event.action?.label,
-                duration = SnackbarDuration.Short
-            )
-            if (result == SnackbarResult.ActionPerformed) {
-                event.action?.onAction?.invoke()
-            }
+    @SuppressLint("LocalContextGetResourceValueCall")
+    snackbarManager.message.collectWithLifecycle { event ->
+        val result = snackbarHostState.showSnackbar(
+            message = context.getString(event.messageResId),
+            duration = SnackbarDuration.Short
+        )
+        if (result == SnackbarResult.ActionPerformed) {
+            event.action?.onAction?.invoke()
         }
     }
 
@@ -59,17 +60,14 @@ fun MemoripApp(
         },
         contentWindowInsets = WindowInsets()
     ) { innerPadding ->
-        Box(
-            modifier = Modifier.fillMaxSize()
-        ) {
+        Box(modifier = Modifier.fillMaxSize()) {
             MemoripNav(
                 navigator = navigator,
                 innerPadding = innerPadding,
             )
             NetworkStatusBanner(
                 status = networkStatus,
-                modifier = Modifier
-                    .align(Alignment.TopCenter)
+                modifier = Modifier.align(Alignment.TopCenter)
             )
         }
     }

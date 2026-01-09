@@ -18,7 +18,6 @@ class Place protected constructor(
     writerId: UUID,
     title: String,
     content: String? = null,
-    tag: List<String> = emptyList(),
     latitude: Double,
     longitude: Double,
     address: Address,
@@ -47,10 +46,6 @@ class Place protected constructor(
 
     @Column(columnDefinition = "TEXT")
     var content: String? = content
-        internal set
-
-    @Column(name = "tag", columnDefinition = "TEXT")
-    var tag: List<String> = tag
         internal set
 
     @Column(nullable = false)
@@ -120,10 +115,6 @@ class Place protected constructor(
         this.content = content
     }
 
-    fun updateTag(newTag: List<String>) {
-        this.tag = newTag
-    }
-
     private fun updateLocation(latitude: Double, longitude: Double) {
         require(latitude in -90.0..90.0) { "위도는 -90 ~ 90 범위여야 합니다" }
         require(longitude in -180.0..180.0) { "경도는 -180 ~ 180 범위여야 합니다" }
@@ -162,7 +153,6 @@ class Place protected constructor(
             longitude: Double,
             address: Address,
             content: String? = null,
-            tag: List<String> = emptyList(),
             imageUrls: List<String>,
             parentPlaceId: UUID? = null,
             startAt: LocalDateTime? = null,
@@ -184,7 +174,6 @@ class Place protected constructor(
                 writerId,
                 title,
                 content,
-                tag,
                 latitude,
                 longitude,
                 address,
