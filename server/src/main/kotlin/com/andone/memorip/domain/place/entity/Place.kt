@@ -49,9 +49,9 @@ class Place protected constructor(
     var content: String? = content
         internal set
 
-    @Column(name = "tag", columnDefinition = "TEXT")
-    var tag: List<String> = tag
-        internal set
+//    @Column(name = "tag", columnDefinition = "TEXT")
+//    var tag: List<String> = tag
+//        internal set
 
     @Column(nullable = false)
     var latitude: Double = latitude
@@ -120,9 +120,9 @@ class Place protected constructor(
         this.content = content
     }
 
-    fun updateTag(newTag: List<String>) {
-        this.tag = newTag
-    }
+//    fun updateTag(newTag: List<String>) {
+//        this.tag = newTag
+//    }
 
     private fun updateLocation(latitude: Double, longitude: Double) {
         require(latitude in -90.0..90.0) { "위도는 -90 ~ 90 범위여야 합니다" }
