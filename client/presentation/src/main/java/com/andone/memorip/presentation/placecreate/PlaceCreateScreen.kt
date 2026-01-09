@@ -15,11 +15,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.LoadingIndicatorScreen
 import com.andone.memorip.presentation.placecreate.PictureSetting.MAX_PICTURE_COUNT
 import com.andone.memorip.presentation.placecreate.component.PlaceCreateContentSection
@@ -77,7 +75,6 @@ fun PlaceCreateScreenContents(
     val placeCreateEnable =
         uiState.images.isNotEmpty() && uiState.title.isNotBlank() && uiState.location != null && uiState.group != null
     val remainImageCount = MAX_PICTURE_COUNT - uiState.images.size
-    val placeCreateSnackBarMessage = stringResource(R.string.place_create_snack_bar_input_message)
 
     val imagePickerLauncher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.PickMultipleVisualMedia()) { uris ->
@@ -92,13 +89,8 @@ fun PlaceCreateScreenContents(
             topBar = {
                 PlaceCreateTopBar(
                     onBackClick = { onAction(PlaceCreateAction.OnBackClick) },
-                    onConfirmClick = {
-                        if (placeCreateEnable) {
-                            onAction(PlaceCreateAction.OnPlaceCreate(context))
-                        } else {
-                            onAction(PlaceCreateAction.OnSnackBarShow(placeCreateSnackBarMessage))
-                        }
-                    }
+                    onConfirmClick = { onAction(PlaceCreateAction.OnPlaceCreate(context)) },
+                    confirmEnabled = placeCreateEnable
                 )
             }
         ) { innerPadding ->
