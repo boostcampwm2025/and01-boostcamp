@@ -1,18 +1,16 @@
 package com.andone.memorip.presentation.component
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.model.TagUiModel
 import com.andone.memorip.presentation.theme.MemoripTheme
-import java.util.UUID
+import com.andone.memorip.presentation.util.DummyData
 
 private object TagChipDimen {
     val RADIUS: Dp = 50.dp
@@ -47,62 +45,9 @@ fun TagChip(
 private fun TagChipPreview() {
     MemoripTheme {
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            TagChip(
-                tag = TagUiModel(
-                    id = UUID.randomUUID().toString(),
-                    name = "맛집",
-                    color = Color(0xFFE53935)
-                )
-            )
-            TagChip(
-                tag = TagUiModel(
-                    id = UUID.randomUUID().toString(),
-                    name = "카페",
-                    color = Color(0xFF8D6E63)
-                )
-            )
-            TagChip(
-                tag = TagUiModel(
-                    id = UUID.randomUUID().toString(),
-                    name = "관광지",
-                    color = Color(0xFF1E88E5)
-                )
-            )
-            TagChip(
-                tag = TagUiModel(
-                    id = UUID.randomUUID().toString(),
-                    name = "숙소",
-                    color = Color(0xFF43A047)
-                )
-            )
-            TagChip(
-                tag = TagUiModel(
-                    id = UUID.randomUUID().toString(),
-                    name = "쇼핑",
-                    color = Color(0xFF9C27B0)
-                )
-            )
-            TagChip(
-                tag = TagUiModel(
-                    id = UUID.randomUUID().toString(),
-                    name = "밝은색",
-                    color = Color(0xFFFFEB3B)
-                )
-            )
-            TagChip(
-                tag = TagUiModel(
-                    id = UUID.randomUUID().toString(),
-                    name = "검은색",
-                    color = Color(0xFF222222)
-                )
-            )
-            TagChip(
-                tag = TagUiModel(
-                    id = UUID.randomUUID().toString(),
-                    name = "흰색",
-                    color = Color(0xFFFFFFFF)
-                )
-            )
+            DummyData.categories.forEach {
+                TagChip(it)
+            }
         }
     }
 }

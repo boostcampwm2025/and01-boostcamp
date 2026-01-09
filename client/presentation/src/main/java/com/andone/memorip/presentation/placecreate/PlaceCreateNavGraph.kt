@@ -59,7 +59,6 @@ fun EntryProviderScope<NavKey>.placeCreate(
                         onCategoryClick = { currentStep = PlaceCreateStep.SelectCategory },
                         onLocationClick = { currentStep = PlaceCreateStep.SelectLocation },
                         onGroupClick = { currentStep = PlaceCreateStep.SelectGroup },
-                        onSnackBarShow = {},
                         onBackClick = onBackClick,
                         modifier = modifier,
                         viewModel = viewModel

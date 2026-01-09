@@ -17,11 +17,14 @@ class Place protected constructor(
     groupId: UUID,
     writerId: UUID,
     title: String,
+    content: String? = null,
+    tag: List<String> = emptyList(),
     latitude: Double,
     longitude: Double,
-    address: Address
+    address: Address,
+    imageUrls: List<String>
 ) : BaseTimeSyncEntity() {
-    
+
     init {
         this.id = id
     }
@@ -29,7 +32,7 @@ class Place protected constructor(
     @Column(name = "group_id", nullable = false, columnDefinition = "UUID")
     var groupId: UUID = groupId
         internal set
-    
+
     @Column(name = "parent_place_id", columnDefinition = "UUID")
     var parentPlaceId: UUID? = null
         internal set
@@ -37,19 +40,23 @@ class Place protected constructor(
     @Column(name = "writer_id", nullable = false, columnDefinition = "UUID")
     var writerId: UUID = writerId
         internal set
-    
+
     @Column(nullable = false, length = 30)
     var title: String = title
         internal set
-    
+
     @Column(columnDefinition = "TEXT")
-    var content: String? = null
+    var content: String? = content
         internal set
-    
+
+    @Column(name = "tag", columnDefinition = "TEXT")
+    var tag: List<String> = tag
+        internal set
+
     @Column(nullable = false)
     var latitude: Double = latitude
         internal set
-    
+
     @Column(nullable = false)
     var longitude: Double = longitude
         internal set
@@ -57,15 +64,15 @@ class Place protected constructor(
     @Embedded
     var address: Address = address
         internal set
-    
+
     @Column(name = "start_at", columnDefinition = "TIMESTAMPTZ")
     var startAt: LocalDateTime? = null
         internal set
-    
+
     @Column(name = "end_at", columnDefinition = "TIMESTAMPTZ")
     var endAt: LocalDateTime? = null
         internal set
-    
+
     // 양방향 연관관계 설정: Place의 이미지 컬렉션
     @OneToMany(
         mappedBy = "place",
@@ -74,7 +81,12 @@ class Place protected constructor(
     )
     private val images: MutableList<PlaceImage> = mutableListOf()
 
-    // 양방향 연관관계 설정: Place의 태그 컬렉션
+    init {
+        imageUrls.forEach { url ->
+            this.addImage(url)
+        }
+    }
+
     @OneToMany(
         mappedBy = "place",
         cascade = [CascadeType.ALL],
@@ -86,7 +98,7 @@ class Place protected constructor(
 
     fun getPlaceTags(): List<PlaceTag> = placeTags.toList()
 
-    private fun addImage(url: String, id: UUID? = null): PlaceImage {
+    fun addImage(url: String, id: UUID? = null): PlaceImage {
         val newImage = PlaceImage.create(id = id, place = this, url = url)
         images.add(newImage)
         return newImage
@@ -106,6 +118,10 @@ class Place protected constructor(
 
     fun updateContent(content: String?) {
         this.content = content
+    }
+
+    fun updateTag(newTag: List<String>) {
+        this.tag = newTag
     }
 
     private fun updateLocation(latitude: Double, longitude: Double) {
@@ -146,6 +162,8 @@ class Place protected constructor(
             longitude: Double,
             address: Address,
             content: String? = null,
+            tag: List<String> = emptyList(),
+            imageUrls: List<String>,
             parentPlaceId: UUID? = null,
             startAt: LocalDateTime? = null,
             endAt: LocalDateTime? = null
@@ -160,7 +178,18 @@ class Place protected constructor(
             }
 
             val generatedId = id ?: UuidV7Generator.generate()
-            return Place(generatedId, groupId, writerId, title, latitude, longitude, address).apply {
+            return Place(
+                generatedId,
+                groupId,
+                writerId,
+                title,
+                content,
+                tag,
+                latitude,
+                longitude,
+                address,
+                imageUrls
+            ).apply {
                 this.content = content
                 this.parentPlaceId = parentPlaceId
                 this.startAt = startAt

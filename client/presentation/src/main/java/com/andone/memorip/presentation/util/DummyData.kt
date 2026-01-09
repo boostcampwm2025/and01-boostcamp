@@ -68,7 +68,7 @@ object DummyData {
         buildList {
             add(
                 createPlace(
-                    "",
+                    "0",
                     "브런치 카페",
                     37.498095,
                     127.027610,
@@ -80,7 +80,7 @@ object DummyData {
             )
             add(
                 createPlace(
-                    "",
+                    "1",
                     "예쁜 공원",
                     37.512900,
                     127.058500,
@@ -92,7 +92,7 @@ object DummyData {
             )
             add(
                 createPlace(
-                    "",
+                    "2",
                     "야경 맛집",
                     37.517305,
                     127.047502,
@@ -104,7 +104,7 @@ object DummyData {
             )
             add(
                 createPlace(
-                    "",
+                    "3",
                     "루프탑 바",
                     37.505228,
                     127.050324,
@@ -116,7 +116,7 @@ object DummyData {
             )
             add(
                 createPlace(
-                    "",
+                    "4",
                     "숨은 카페",
                     37.508547,
                     127.062835,
@@ -128,7 +128,7 @@ object DummyData {
             )
             add(
                 createPlace(
-                    "",
+                    "5",
                     "감성 서점",
                     37.495592,
                     127.028747,

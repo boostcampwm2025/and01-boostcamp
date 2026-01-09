@@ -13,5 +13,5 @@ data class PlaceCreateUiState(
     val location: LocationUiModel? = null,
     val group: GroupUiModel? = null,
     val isPublic: Boolean = false,
-    val isLoading: Boolean = true
+    val isLoading: Boolean = false
 )

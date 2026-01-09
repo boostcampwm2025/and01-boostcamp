@@ -2,19 +2,22 @@ package com.andone.memorip.domain.place.service
 
 import com.andone.memorip.common.exception.BusinessException
 import com.andone.memorip.common.exception.CommonExceptionCode
+import com.andone.memorip.common.response.ApiResult
 import com.andone.memorip.domain.group.repository.GroupRepository
 import com.andone.memorip.domain.place.dto.PlaceDetailResponse
-import com.andone.memorip.domain.place.repository.PlaceRepository
-import com.andone.memorip.common.response.ApiResult
 import com.andone.memorip.domain.place.dto.PlaceListResult
+import com.andone.memorip.domain.place.dto.request.PlaceCreateRequest
+import com.andone.memorip.domain.place.dto.response.PlaceCreateResponse
 import com.andone.memorip.domain.place.dto.response.PlaceListItemResponse
 import com.andone.memorip.domain.place.dto.toGroupResponse
 import com.andone.memorip.domain.place.dto.toTagResponse
+import com.andone.memorip.domain.place.entity.Place
 import com.andone.memorip.domain.place.repository.PlaceImageRepository
+import com.andone.memorip.domain.place.repository.PlaceRepository
 import com.andone.memorip.domain.place.repository.PlaceTagRepository
-import org.springframework.stereotype.Service
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
+import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.UUID
 
@@ -27,13 +30,16 @@ class PlaceService(
 ) {
     @Transactional(readOnly = true)
     fun getPlaceById(placeId: UUID): PlaceDetailResponse {
-        val place = placeRepository.findByIdOrNull(placeId) ?: throw BusinessException(code = CommonExceptionCode.PLACE_NOT_FOUND)
-        val group = groupRepository.findByIdOrNull(place.groupId) ?: throw BusinessException(code = CommonExceptionCode.GROUP_NOT_FOUND)
+        val place = placeRepository.findByIdOrNull(placeId)
+            ?: throw BusinessException(code = CommonExceptionCode.PLACE_NOT_FOUND)
+        val group = groupRepository.findByIdOrNull(place.groupId)
+            ?: throw BusinessException(code = CommonExceptionCode.GROUP_NOT_FOUND)
         val tags = placeTagRepository.findAllByPlaceId(id = placeId).map { it.toTagResponse() }
-        val images = placeImageRepository.findAllByPlaceId(id = placeId).map{ it.url }
+        val images = placeImageRepository.findAllByPlaceId(id = placeId).map { it.url }
 
         return PlaceDetailResponse(
-            placeId = place.id ?: throw BusinessException(code = CommonExceptionCode.PLACE_NOT_FOUND),
+            placeId = place.id
+                ?: throw BusinessException(code = CommonExceptionCode.PLACE_NOT_FOUND),
             writerId = place.writerId,
             title = place.title,
             tags = tags,
@@ -68,5 +74,22 @@ class PlaceService(
         )
 
         return PlaceListResult(content, pagination)
+    }
+
+    fun createPlace(request: PlaceCreateRequest): PlaceCreateResponse {
+        val place = Place.create(
+            groupId = request.groupId,
+            writerId = request.writerId,
+            title = request.title,
+            content = request.content,
+            tag = request.tag ?: emptyList(),
+            latitude = request.latitude,
+            longitude = request.longitude,
+            address = request.address,
+            imageUrls = request.imageUrls
+        )
+
+        val savedPlace = placeRepository.save(place)
+        return PlaceCreateResponse(savedPlace.id!!)
     }
 }
