@@ -42,7 +42,9 @@ class PlaceDetailViewModel @AssistedInject constructor(
                 )
             }
             .onFailure {
+                emit(value = PlaceDetailUiState(isLoading = false))
                 snackBarManager.show(event = SnackBarEvent.NETWORK_ERROR)
+                _event.trySend(PlaceDetailEvent.NavigateBack)
             }
     }.stateIn(
         scope = viewModelScope,

@@ -28,8 +28,8 @@ class SnackBarManager @Inject constructor() {
         val currentTime = System.currentTimeMillis()
         val timeDifference = currentTime - lastEventTime
 
-        return last.message == event.message &&
-            last.action?.label == event.action?.label &&
+        return last.messageResId == event.messageResId &&
+            last.action?.labelResId == event.action?.labelResId &&
             timeDifference < DUPLICATE_PREVENTION_INTERVAL_MS
     }
 

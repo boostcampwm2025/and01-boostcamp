@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service
 import software.amazon.awssdk.services.s3.S3Client
 import org.springframework.web.multipart.MultipartFile
 import software.amazon.awssdk.core.sync.RequestBody
+import software.amazon.awssdk.services.s3.model.ObjectCannedACL
 import software.amazon.awssdk.services.s3.model.PutObjectRequest
 import java.util.UUID
 
@@ -37,6 +38,7 @@ class StorageService(
                 .key(key)
                 .contentType(file.contentType)
                 .contentLength(file.size)
+                .acl(ObjectCannedACL.PUBLIC_READ)
                 .build(),
             RequestBody.fromInputStream(file.inputStream, file.size)
         )
