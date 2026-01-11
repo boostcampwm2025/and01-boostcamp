@@ -10,7 +10,8 @@ import com.andone.memorip.presentation.model.toUiModel
 import com.andone.memorip.presentation.placelist.model.PlaceListAction
 import com.andone.memorip.presentation.placelist.model.PlaceListEvent
 import com.andone.memorip.presentation.placelist.model.PlaceListUiState
-import com.andone.memorip.presentation.placelist.model.RegionChipModel
+import com.andone.memorip.presentation.placelist.model.RegionUiModel
+import com.andone.memorip.presentation.placelist.model.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
@@ -30,17 +31,7 @@ class PlaceListViewModel @Inject constructor(repository: PlaceListRepository) : 
     private val _event = Channel<PlaceListEvent>(capacity = BUFFERED)
     val event = _event.receiveAsFlow()
 
-    private lateinit var rootRegions: List<Region>
-    private var regionPath: List<Region> = emptyList()
-
-    init {
-        rootRegions = repository.loadRegions()
-        regionPath = emptyList()
-
-        _uiState.update {
-            it.copy(currentRegionList = rootRegions.toChipModels(level = 0))
-        }
-    }
+    private val regionTree = repository.loadRegions().map { it.toUiModel() }
 
     val placesPagingFlow =
         repository.getPlaceList()
@@ -62,37 +53,6 @@ class PlaceListViewModel @Inject constructor(repository: PlaceListRepository) : 
             is PlaceListAction.OnQueryChange -> {
                 _uiState.update { it.copy(query = action.query) }
             }
-        }
-    }
-
-    private fun List<Region>.toChipModels(level: Int): List<RegionChipModel> =
-        map { region ->
-            RegionChipModel(
-                name = region.name,
-                level = level
-            )
-        }
-
-    private fun currentRegions(): List<Region> = regionPath.lastOrNull()?.subRegions ?: rootRegions
-
-    private fun onRegionSelected(region: Region) {
-        regionPath = regionPath + region
-        val level = regionPath.size
-
-        _uiState.update {
-            it.copy(currentRegionList = region.subRegions.toChipModels(level))
-        }
-    }
-
-    private fun onRegionBack() {
-        if (regionPath.isEmpty()) return
-
-        regionPath = regionPath.dropLast(1)
-        val level = regionPath.size
-        val regions = currentRegions()
-
-        _uiState.update {
-            it.copy(currentRegionList = regions.toChipModels(level))
         }
     }
 }

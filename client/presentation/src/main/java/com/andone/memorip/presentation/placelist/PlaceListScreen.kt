@@ -7,7 +7,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -20,7 +19,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -52,7 +50,6 @@ import com.andone.memorip.presentation.placelist.model.ListPlaceItems
 import com.andone.memorip.presentation.placelist.model.PagingPlaceItems
 import com.andone.memorip.presentation.placelist.model.PlaceItems
 import com.andone.memorip.presentation.theme.MemoripPadding
-import com.andone.memorip.presentation.theme.MemoripSpace
 import kotlinx.collections.immutable.toImmutableList
 
 private object MemoripMotion {

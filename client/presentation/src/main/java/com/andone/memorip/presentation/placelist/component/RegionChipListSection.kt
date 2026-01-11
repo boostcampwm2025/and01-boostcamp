@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.component.StaticChip
 import com.andone.memorip.presentation.component.StaticChipColors
-import com.andone.memorip.presentation.placelist.model.RegionChipModel
+import com.andone.memorip.presentation.placelist.model.RegionUiModel
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
@@ -16,7 +16,7 @@ import com.andone.memorip.presentation.util.DummyData
 @Composable
 fun RegionChipListSection(
     modifier: Modifier = Modifier,
-    regionList: List<RegionChipModel> = emptyList(),
+    regionList: List<RegionUiModel> = emptyList(),
     onChipClick: (id: String) -> Unit = {}
 ) {
     FlowRow(

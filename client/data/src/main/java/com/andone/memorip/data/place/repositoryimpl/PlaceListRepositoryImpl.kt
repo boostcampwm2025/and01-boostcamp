@@ -50,14 +50,28 @@ class PlaceListRepositoryImpl @Inject constructor(
         return parseRegionNode(rootElement)
     }
 
-    private fun parseRegionNode(element: JsonElement): List<Region> {
+    private fun parseRegionNode(
+        element: JsonElement,
+        parent: Region? = null,
+        level: Int = 0
+    ): List<Region> {
+
         return when (element) {
 
             is JsonObject -> {
                 element.map { (key, value) ->
-                    Region(
+                    val region = Region(
                         name = key,
-                        subRegions = parseRegionNode(value)
+                        parent = parent,
+                        level = level
+                    )
+
+                    region.copy(
+                        subRegions = parseRegionNode(
+                            element = value,
+                            parent = region,
+                            level = level + 1
+                        )
                     )
                 }
             }
@@ -65,11 +79,22 @@ class PlaceListRepositoryImpl @Inject constructor(
             is JsonArray -> {
                 element.mapNotNull { item ->
                     when (item) {
+
                         is JsonPrimitive ->
-                            if (item.isString) Region(name = item.content) else null
+                            if (item.isString) {
+                                Region(
+                                    name = item.content,
+                                    parent = parent,
+                                    level = level
+                                )
+                            } else null
 
                         is JsonObject ->
-                            parseRegionNode(item).firstOrNull()
+                            parseRegionNode(
+                                element = item,
+                                parent = parent,
+                                level = level
+                            ).firstOrNull()
 
                         else -> null
                     }
@@ -78,13 +103,15 @@ class PlaceListRepositoryImpl @Inject constructor(
 
             is JsonPrimitive -> {
                 if (element.isString) {
-                    listOf(Region(name = element.content))
-                } else {
-                    emptyList()
-                }
+                    listOf(
+                        Region(
+                            name = element.content,
+                            parent = parent,
+                            level = level
+                        )
+                    )
+                } else emptyList()
             }
-
-            else -> emptyList()
         }
     }
 

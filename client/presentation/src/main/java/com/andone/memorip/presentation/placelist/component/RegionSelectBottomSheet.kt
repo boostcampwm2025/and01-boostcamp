@@ -12,7 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.andone.memorip.presentation.placelist.model.RegionChipModel
+import com.andone.memorip.presentation.placelist.model.RegionUiModel
 import com.andone.memorip.presentation.placelist.model.SelectedRegionState
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -24,7 +24,7 @@ import com.andone.memorip.presentation.util.DummyData
 @Composable
 fun RegionSelectBottomSheet(
     modifier: Modifier = Modifier,
-    currentRegionList: List<RegionChipModel> = emptyList(),
+    currentRegionList: List<RegionUiModel> = emptyList(),
     selectedRegionState: SelectedRegionState = SelectedRegionState(),
     onConfirmClick: () -> Unit = {},
     onRegionChipClick: (id : String) -> Unit = {},
