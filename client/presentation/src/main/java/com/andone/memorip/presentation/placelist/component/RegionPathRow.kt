@@ -34,7 +34,7 @@ fun RegionPathRow(
         horizontalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXSmall),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        if (selectedRegionState.parents.isEmpty() && selectedRegionState.children.isEmpty()) {
+        if (selectedRegionState.parents.isEmpty() && selectedRegionState.child.isEmpty()) {
             Text(
                 text = stringResource(R.string.place_list_region_default),
                 style = MemoripTheme.typography.label1,
@@ -51,7 +51,7 @@ fun RegionPathRow(
                     overflow = TextOverflow.Ellipsis
                 )
 
-                if (selectedRegionState.parents.lastIndex != index || selectedRegionState.children.isNotEmpty()) {
+                if (selectedRegionState.parents.lastIndex != index || selectedRegionState.child.isNotEmpty()) {
                     Text(
                         text = stringResource(R.string.place_list_region_divider),
                         style = MemoripTheme.typography.label1,
@@ -61,13 +61,13 @@ fun RegionPathRow(
                 }
             }
 
-            val childrenText = selectedRegionState.children
+            val childrenText = selectedRegionState.child
                 .joinToString(", ") { it.name }
 
             Text(
                 text = childrenText,
                 modifier = Modifier.clickable {
-                    selectedRegionState.children.firstOrNull()?.let {
+                    selectedRegionState.child.firstOrNull()?.let {
                         onRegionTextClick(it.id)
                     }
                 },
