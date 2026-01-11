@@ -24,14 +24,9 @@ import javax.inject.Inject
 @HiltViewModel
 class PlaceListViewModel @Inject constructor(repository: PlaceListRepository) : ViewModel() {
 
-    private val regionTree = repository.loadRegions().map { it.toUiModel() }
-    private var currentLevel = 0
+    private val rootRegions = repository.loadRegions().map { it.toUiModel() }
 
-    private val _uiState = MutableStateFlow(
-        value = PlaceListUiState(
-            currentRegionList = regionTree.first().child
-        )
-    )
+    private val _uiState = MutableStateFlow(value = PlaceListUiState(rootRegions = rootRegions))
     val uiState = _uiState.asStateFlow()
 
     private val _event = Channel<PlaceListEvent>(capacity = BUFFERED)
@@ -60,97 +55,27 @@ class PlaceListViewModel @Inject constructor(repository: PlaceListRepository) : 
         }
     }
 
-    private fun updateSelectedState(region: RegionUiModel) {
-        val selectedChild = _uiState.value.selectedRegionState.child
+    private fun onRegionClicked(region: RegionUiModel) {
+        _uiState.update { state ->
+            val parents = state.selectedRegionState.parents
 
-        when {
+            val nextParents = when {
+                region.level < parents.size ->
+                    parents.take(region.level) + region
 
-            region.level == currentLevel -> {
-                if (selectedChild.isNotEmpty()) {
-                    _uiState.update {
-                        it.copy(
-                            selectedRegionState = it.selectedRegionState.copy(
-                                child = it.selectedRegionState.child + region
-                            )
-                        )
-                    }
-                } else {
-                    val last = _uiState.value.selectedRegionState.parents.last()
-                    val rest = _uiState.value.selectedRegionState.parents.dropLast(n = 1)
-                    _uiState.update {
-                        it.copy(
-                            selectedRegionState = it.selectedRegionState.copy(
-                                parents = rest,
-                                child = listOf(last)
-                            )
-                        )
-                    }
-                }
+                region.level == parents.size ->
+                    parents.dropLast(1) + region
+
+                else ->
+                    parents + region
             }
 
-            region.level > currentLevel -> {
-                _uiState.update {
-                    it.copy(
-                        currentRegionList = region.child,
-                        selectedRegionState = it.selectedRegionState.copy(
-                            parents = it.selectedRegionState.parents + region
-                        )
-                    )
-                }
-                currentLevel++
-            }
-
-            else -> {
-                val diff = currentLevel - region.level
-                val rest = _uiState.value.selectedRegionState.parents.dropLast(n = diff - 1)
-                _uiState.update {
-                    it.copy(
-                        selectedRegionState = it.selectedRegionState.copy(
-                            parents = rest,
-                            child = emptyList()
-                        )
-                    )
-                }
-            }
-
-        }
-
-    }
-
-    private fun updateLevel(region: RegionUiModel) {
-        var current = _uiState.value.currentRegionList.first()
-
-        when {
-            region.level > currentLevel -> {
-                while (current.level + 1 < region.level) {
-                    current = current.child.first()
-                }
-                _uiState.update {
-                    it.copy(
-                        currentRegionList = current.child
-                    )
-                }
-                currentLevel = current.level + 1
-            }
-
-            region.level < currentLevel -> {
-                while (current.level + 1 > region.level){
-                    if (current.parent == null) {
-                        _uiState.update { it.copy(
-                            currentRegionList = regionTree.first().child
-                        ) }
-                        currentLevel = 0
-                    } else{
-                        current = current.parent
-                    }
-                }
-                _uiState.update { it.copy(
-                    currentRegionList = current.child
-                ) }
-                currentLevel = current.level + 1
-            }
-
-            else -> {}
+            state.copy(
+                selectedRegionState = state.selectedRegionState.copy(
+                    parents = nextParents,
+                    child = emptyList()
+                )
+            )
         }
     }
 }
