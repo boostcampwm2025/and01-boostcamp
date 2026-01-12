@@ -13,7 +13,7 @@ import java.util.UUID
 @SQLDelete(sql = "UPDATE places SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
 @SQLRestriction("deleted_at IS NULL")
 class Place protected constructor(
-    id: UUID? = null,
+    id: UUID,
     groupId: UUID,
     writerId: UUID,
     title: String,

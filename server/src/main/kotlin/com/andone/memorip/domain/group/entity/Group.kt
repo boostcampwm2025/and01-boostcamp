@@ -23,7 +23,7 @@ enum class GroupType {
 @SQLDelete(sql = "UPDATE groups SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
 @SQLRestriction("deleted_at IS NULL")
 class Group protected constructor(
-    id: UUID? = null,
+    id: UUID,
     owner: User,
     title: String,
     visibility: Visibility = Visibility.PRIVATE,
