@@ -163,7 +163,8 @@ fun PlaceListScreenContents(
                         onChangeRegionClick = { showRegionBottomSheet = true },
                         onAddTagClick = {},
                         modifier = Modifier.padding(horizontal = MemoripPadding.PaddingMedium),
-                        tags = DummyData.categories.toImmutableList()
+                        tags = DummyData.categories.toImmutableList(),
+                        selectedRegionState = state.selectedRegionState
                     )
                     Spacer(modifier = Modifier.padding(vertical = MemoripPadding.PaddingXSmall))
                 }
