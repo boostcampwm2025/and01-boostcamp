@@ -4,12 +4,12 @@ import com.andone.memorip.common.exception.BusinessException
 import com.andone.memorip.common.exception.CommonExceptionCode
 import com.andone.memorip.common.response.ApiResult
 import com.andone.memorip.domain.group.repository.GroupRepository
+import com.andone.memorip.domain.group.dto.response.toGroupResponse
 import com.andone.memorip.domain.place.dto.PlaceDetailResponse
 import com.andone.memorip.domain.place.dto.PlaceListResult
 import com.andone.memorip.domain.place.dto.request.PlaceCreateRequest
 import com.andone.memorip.domain.place.dto.response.PlaceCreateResponse
 import com.andone.memorip.domain.place.dto.response.PlaceListItemResponse
-import com.andone.memorip.domain.place.dto.toGroupResponse
 import com.andone.memorip.domain.place.dto.toTagResponse
 import com.andone.memorip.domain.place.entity.Place
 import com.andone.memorip.domain.place.repository.PlaceImageRepository
@@ -38,8 +38,7 @@ class PlaceService(
         val images = placeImageRepository.findAllByPlaceId(id = placeId).map { it.url }
 
         return PlaceDetailResponse(
-            placeId = place.id
-                ?: throw BusinessException(code = CommonExceptionCode.PLACE_NOT_FOUND),
+            placeId = place.id,
             writerId = place.writerId,
             title = place.title,
             tags = tags,
@@ -57,7 +56,7 @@ class PlaceService(
 
         val content = page.content.map { place ->
             PlaceListItemResponse(
-                id = place.id!!,
+                id = place.id,
                 title = place.title,
                 latitude = place.latitude,
                 longitude = place.longitude,
@@ -91,6 +90,6 @@ class PlaceService(
         )
 
         val savedPlace = placeRepository.save(place)
-        return PlaceCreateResponse(savedPlace.id!!)
+        return PlaceCreateResponse(savedPlace.id)
     }
 }
