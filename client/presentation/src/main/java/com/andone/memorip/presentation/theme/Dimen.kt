@@ -10,6 +10,7 @@ object MemoripPadding {
     val PaddingMedium = 16.dp
     val PaddingLarge = 20.dp
     val PaddingXLarge = 24.dp
+    val PaddingXXXLarge = 32.dp
 }
 
 object MemoripSpace {
