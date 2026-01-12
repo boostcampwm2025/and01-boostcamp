@@ -10,7 +10,6 @@ import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.model.TagUiModel
 import com.andone.memorip.presentation.model.toUiModel
 import com.andone.memorip.presentation.placedetail.model.PlaceUiModel
-import com.andone.memorip.presentation.model.Category
 import com.andone.memorip.presentation.placelist.model.RegionUiModel
 import com.andone.memorip.presentation.placelist.model.SelectedRegionState
 import kotlinx.collections.immutable.persistentListOf

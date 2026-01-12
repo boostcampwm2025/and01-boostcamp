@@ -3,6 +3,7 @@ package com.andone.memorip.data.place.repositoryimpl
 import androidx.paging.PagingData
 import com.andone.memorip.data.place.datasource.remote.PlaceRemoteDataSource
 import com.andone.memorip.domain.model.PlaceListItem
+import com.andone.memorip.domain.model.Region
 import com.andone.memorip.domain.model.request.PlaceCreateRequest
 import com.andone.memorip.domain.model.response.PlaceCreateResponse
 import com.andone.memorip.domain.model.response.PlaceDetailResponse
@@ -29,5 +30,9 @@ class PlaceRepositoryImpl @Inject constructor(
 
     override suspend fun createPlace(place: PlaceCreateRequest): Result<PlaceCreateResponse> {
         return placeRemoteDataSource.createPlace(place)
+    }
+
+    override fun loadRegions(): List<Region> {
+        return placeRemoteDataSource.loadRegions()
     }
 }
