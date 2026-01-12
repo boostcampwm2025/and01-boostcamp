@@ -6,7 +6,6 @@ import com.andone.memorip.common.response.ApiResult
 import com.andone.memorip.common.response.PagedResult
 import com.andone.memorip.domain.group.dto.request.GroupCreateRequest
 import com.andone.memorip.domain.group.dto.request.GroupUpdateRequest
-import com.andone.memorip.domain.group.dto.response.GroupListResult
 import com.andone.memorip.domain.group.dto.response.GroupResponse
 import com.andone.memorip.domain.group.dto.response.GroupWithPlacesResponse
 import com.andone.memorip.domain.group.dto.response.toGroupResponse
@@ -63,7 +62,7 @@ class GroupService(
     }
 
     @Transactional(readOnly = true)
-    fun getPublicGroups(pageable: Pageable): GroupListResult {
+    fun getPublicGroups(pageable: Pageable): PagedResult<GroupResponse> {
         val page = groupRepository.findAllByVisibility(Visibility.PUBLIC, pageable)
 
         val content = page.content.map { it.toGroupResponse() }
@@ -75,7 +74,7 @@ class GroupService(
             hasNext = page.hasNext()
         )
 
-        return GroupListResult(content, pagination)
+        return PagedResult(content, pagination)
     }
 
     @Transactional(readOnly = true)
