@@ -22,6 +22,7 @@ import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.TagChipRow
 import com.andone.memorip.presentation.model.TagUiModel
 import com.andone.memorip.presentation.theme.MemoripBorderWidth
+import com.andone.memorip.presentation.theme.MemoripElevation
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -44,7 +45,8 @@ fun TagCard(
         colors = CardDefaults.cardColors(
             containerColor = MemoripTheme.colors.white,
             contentColor = MemoripTheme.colors.black
-        )
+        ),
+        elevation = CardDefaults.elevatedCardElevation(defaultElevation = MemoripElevation.ElevationMedium)
     ) {
         Column(modifier = Modifier.padding(MemoripPadding.PaddingXLarge)) {
             Row(
