@@ -42,7 +42,6 @@ import com.andone.memorip.presentation.component.EmptyText
 import com.andone.memorip.presentation.component.MemoripPagingList
 import com.andone.memorip.presentation.component.StaggeredImageItem
 import com.andone.memorip.presentation.model.Place
-import com.andone.memorip.presentation.screen.grouplist.component.AddFloatingActionButton
 import com.andone.memorip.presentation.screen.placelist.MemoripMotion.AnimationDuration
 import com.andone.memorip.presentation.screen.placelist.MemoripMotion.ScrollThreshold
 import com.andone.memorip.presentation.screen.placelist.component.FilterSection
@@ -151,8 +150,7 @@ fun PlaceListScreenContents(
                     onQueryChange = { onAction(PlaceListAction.OnQueryChange(query = it)) }
                 )
             },
-            floatingActionButton = { AddFloatingActionButton(onClick = { onAction(PlaceListAction.OnFABClick) }) },
-            contentWindowInsets = WindowInsets(),
+            contentWindowInsets = WindowInsets()
         ) { padding ->
             Column(modifier = Modifier.padding(paddingValues = padding)) {
                 AnimatedVisibility(
