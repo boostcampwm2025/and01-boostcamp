@@ -29,7 +29,11 @@ fun ContentCard(
             width = MemoripBorderWidth.Thin,
             color = MemoripTheme.colors.gray
         ),
-        elevation = CardDefaults.elevatedCardElevation(defaultElevation = MemoripElevation.ElevationMedium)
+        elevation = CardDefaults.elevatedCardElevation(defaultElevation = MemoripElevation.ElevationMedium),
+        colors = CardDefaults.cardColors(
+            containerColor = MemoripTheme.colors.white,
+            contentColor = MemoripTheme.colors.black
+        )
     ) {
         Text(
             modifier = Modifier.padding(MemoripPadding.PaddingXLarge),
