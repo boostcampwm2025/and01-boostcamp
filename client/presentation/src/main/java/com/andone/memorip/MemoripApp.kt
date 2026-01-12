@@ -52,7 +52,8 @@ fun MemoripApp(
                 visible = navigator.isShowBottomBar,
                 tabs = navigator.mainBottomBars,
                 currentTab = navigator.currentTab,
-                onTabSelected = navigator::navigateToTab
+                onTabSelected = navigator::navigateToTab,
+                onFabClick = navigator::navigateToPlaceCreate
             )
         },
         snackbarHost = {
