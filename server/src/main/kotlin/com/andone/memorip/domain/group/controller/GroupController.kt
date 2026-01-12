@@ -46,7 +46,7 @@ class GroupController(
         description = """
             visibility가 PUBLIC인 그룹들을 조회합니다.
             
-            **페이지네이션 파라미터:**
+            페이지네이션 파라미터:
             - page: 페이지 번호 (0부터 시작, 기본값: 0)
             - size: 페이지 크기 (기본값: 20)
             - sort: 정렬 기준 (기본값: createdAt,desc)
@@ -75,7 +75,7 @@ class GroupController(
             현재 사용자가 생성한 그룹들을 조회합니다.
             각 그룹에 속한 모든 Place 정보도 함께 반환합니다. (owner 정보는 제외)
             
-            **페이지네이션 파라미터:**
+            페이지네이션 파라미터:
             - page: 페이지 번호 (0부터 시작, 기본값: 0)
             - size: 페이지 크기 (기본값: 20)
             - sort: 정렬 기준 (기본값: createdAt,desc)
@@ -106,9 +106,9 @@ class GroupController(
         description = """
             그룹 정보(제목, 공개 여부)를 수정합니다.
             
-            **권한:** 그룹 소유자만 수정할 수 있습니다.
+            권한: 그룹 소유자만 수정할 수 있습니다.
             
-            **수정 가능 항목:**
+            수정 가능 항목:
             - title: 그룹 제목 (1~50자)
             - visibility: 공개 여부 (PRIVATE, PUBLIC)
         """,
@@ -133,9 +133,9 @@ class GroupController(
         description = """
             그룹을 삭제합니다. (Soft Delete)
             
-            **권한:** 그룹 소유자만 삭제할 수 있습니다.
+            권한: 그룹 소유자만 삭제할 수 있습니다.
             
-            **주의:**
+            주의:
             - 삭제된 그룹은 복구할 수 없습니다
             - 그룹에 속한 Place들도 함께 삭제 처리됩니다
         """,
