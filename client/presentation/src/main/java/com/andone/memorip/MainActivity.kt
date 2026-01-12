@@ -6,7 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.andone.memorip.navigation.rememberMemoripNavigator
 import com.andone.memorip.presentation.theme.MemoripTheme
-import com.andone.memorip.presentation.util.SnackBarManager
+import com.andone.memorip.presentation.util.snackbar.SnackBarManager
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

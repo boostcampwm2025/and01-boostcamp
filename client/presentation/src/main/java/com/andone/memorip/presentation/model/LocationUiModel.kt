@@ -5,11 +5,11 @@ import com.andone.memorip.domain.model.response.KakaoLocation
 
 @Immutable
 data class LocationUiModel(
-    val id: String,
-    val name: String,
-    val category: String,
-    val address: String,
-    val roadAddress: String,
+    val id: String = "",
+    val name: String = "",
+    val category: String = "",
+    val address: String = "",
+    val roadAddress: String = "",
     val latitude: Double,
     val longitude: Double,
 )

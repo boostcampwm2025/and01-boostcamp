@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.component.StaticChip
 import com.andone.memorip.presentation.component.StaticChipColors
 import com.andone.memorip.presentation.component.TagChip
-import com.andone.memorip.presentation.model.Category
+import com.andone.memorip.presentation.model.TagUiModel
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
@@ -27,7 +27,7 @@ import com.andone.memorip.presentation.theme.MemoripShadow
 
 @Composable
 fun TagFilter(
-    tags: ImmutableList<Category>,
+    tags: ImmutableList<TagUiModel>,
     modifier: Modifier = Modifier,
     onAddTagClick: () -> Unit = {}
 ) {

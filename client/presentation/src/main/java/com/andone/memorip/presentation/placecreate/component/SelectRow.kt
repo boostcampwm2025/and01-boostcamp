@@ -15,18 +15,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.theme.MemoripIconSize
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
-import com.andone.memorip.presentation.R
 
 @Composable
 fun SelectRow(
     label: String,
-    value: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    value: String? = null,
     leadingIcon: Painter? = null
 ) {
     Row(
@@ -54,11 +54,13 @@ fun SelectRow(
 
         Spacer(modifier = Modifier.width(width = MemoripSpace.SpaceMedium))
 
-        Text(
-            text = value,
-            style = MemoripTheme.typography.title2,
-            color = MemoripTheme.colors.primary
-        )
+        value?.let {
+            Text(
+                text = it,
+                style = MemoripTheme.typography.title2,
+                color = MemoripTheme.colors.primary
+            )
+        }
 
         Spacer(modifier = Modifier.weight(weight = 1f))
 
@@ -72,7 +74,7 @@ fun SelectRow(
 
 @Preview
 @Composable
-private fun SelectRowPreview(){
+private fun SelectRowPreview() {
     SelectRow(
         label = "카테고리",
         value = "맛집",

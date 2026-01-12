@@ -2,6 +2,7 @@ package com.andone.memorip.data.kakaosearch.datasource
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.andone.memorip.data.kakaosearch.model.toDomain
 import com.andone.memorip.domain.model.response.KakaoLocation
 
 class KakaoSearchPagingSource(
@@ -21,7 +22,7 @@ class KakaoSearchPagingSource(
             )
 
             LoadResult.Page(
-                data = result.locations,
+                data = result.locations.map { it.toDomain() },
                 prevKey = if (page == KAKAO_START_PAGE_INDEX) null else page - 1,
                 nextKey = if (result.meta.isEnd) null else page + 1
             )

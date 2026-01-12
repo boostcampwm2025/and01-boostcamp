@@ -42,7 +42,7 @@ class SelectGroupViewModel @Inject constructor() : ViewModel() {
             }
 
             is OnGroupClick -> {
-                _event.trySend(element = SelectGroupEvent.NavigatePlaceAdd(group = action.group))
+                _event.trySend(element = SelectGroupEvent.SelectGroup(group = action.group))
             }
 
             OnAddGroupClick -> {

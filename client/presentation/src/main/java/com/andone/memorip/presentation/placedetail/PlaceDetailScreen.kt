@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.placedetail
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -28,10 +29,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.navigation.PlaceDetail
 import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.component.LoadingIndicator
 import com.andone.memorip.presentation.component.MemoripImage
+import com.andone.memorip.presentation.component.TagChipRow
 import com.andone.memorip.presentation.placedetail.PlaceDetailScreenConstants.IMAGE_ASPECT_RATIO
 import com.andone.memorip.presentation.placedetail.component.ImageDialog
 import com.andone.memorip.presentation.placedetail.component.PlaceDetailInfoSection
@@ -55,7 +59,11 @@ fun PlaceDetailScreen(
     route: PlaceDetail,
     onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: PlaceDetailViewModel = PlaceDetailViewModel(route) // TODO: hiltViewModel() 적용
+    viewModel: PlaceDetailViewModel = hiltViewModel<PlaceDetailViewModel, PlaceDetailViewModel.Factory>(
+        creationCallback = { factory ->
+            factory.create(route)
+        }
+    )
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -70,6 +78,10 @@ fun PlaceDetailScreen(
         onAction = viewModel::onAction,
         modifier = modifier
     )
+
+    if (uiState.isLoading) {
+        LoadingIndicator()
+    }
 }
 
 @Composable
@@ -103,10 +115,7 @@ private fun PlaceDetailScreen(
 
             Spacer(modifier = Modifier.height(MemoripSpace.SpaceMedium))
             Column(verticalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXXSmall)) {
-                Text(
-                    text = place.category,
-                    style = MemoripTheme.typography.labelLarge
-                )
+                TagChipRow(tags = place.tags)
                 PlaceDetailInfoSection(
                     infoString = place.locationName,
                     iconRes = R.drawable.ic_location_on
