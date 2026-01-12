@@ -62,7 +62,6 @@ fun RegionSelectBottomSheet(
         ) {
             Text(
                 text = stringResource(R.string.place_list_bottom_sheet_confirm),
-                color = MemoripTheme.colors.onOffWhite,
                 style = MemoripTheme.typography.title1
             )
         }

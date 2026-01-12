@@ -42,14 +42,9 @@ fun LocationMapPreview(
 ) {
     Box(
         modifier = modifier
-            .clip(MemoripTheme.shapes.roundedSmall)
+            .clip(shape = MemoripTheme.shapes.roundedSmall)
             .clickable(onClick = onLocationClick)
-            .background(MemoripTheme.colors.gray)
-            .border(
-                width = MemoripBorderWidth.Thin,
-                color = MemoripTheme.colors.primary,
-                shape = MemoripTheme.shapes.roundedSmall
-            )
+            .background(color = MemoripTheme.colors.gray)
     ) {
         location?.let {
             val cameraPositionState = rememberCameraPositionState {

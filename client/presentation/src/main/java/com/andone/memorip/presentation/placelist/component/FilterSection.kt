@@ -21,8 +21,6 @@ fun FilterSection(
     onAddTagClick: () -> Unit,
     modifier: Modifier = Modifier,
     tags: ImmutableList<TagUiModel> = persistentListOf(),
-    parentRegion: String? = null,
-    childRegion: String? = null,
     selectedRegionState: SelectedRegionState = SelectedRegionState(),
 ) {
     Column(

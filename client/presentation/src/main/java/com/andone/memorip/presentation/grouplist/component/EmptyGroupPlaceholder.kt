@@ -35,7 +35,7 @@ fun EmptyGroupPlaceholder(onClick: () -> Unit) {
             .fillMaxWidth()
             .aspectRatio(ratio = RATIO)
             .background(
-                color = MemoripTheme.colors.offWhite,
+                color = MemoripTheme.colors.primaryContainer,
                 shape = memoripShapes.roundedSmall
             )
             .border(

@@ -40,7 +40,6 @@ fun SelectRow(
             Icon(
                 painter = it,
                 contentDescription = null,
-                tint = MemoripTheme.colors.primary,
                 modifier = Modifier
                     .size(MemoripIconSize.IconSizeLarge)
                     .padding(end = MemoripPadding.PaddingXSmall)
@@ -49,7 +48,7 @@ fun SelectRow(
 
         Text(
             text = label,
-            style = MemoripTheme.typography.title2,
+            style = MemoripTheme.typography.bodyLarge,
         )
 
         Spacer(modifier = Modifier.width(width = MemoripSpace.SpaceMedium))
@@ -58,7 +57,6 @@ fun SelectRow(
             Text(
                 text = it,
                 style = MemoripTheme.typography.title2,
-                color = MemoripTheme.colors.primary
             )
         }
 

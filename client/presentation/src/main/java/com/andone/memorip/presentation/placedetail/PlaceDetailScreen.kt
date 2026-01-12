@@ -185,7 +185,7 @@ private fun PlaceImagesSection(
                     .fillMaxWidth()
                     .clip(MemoripTheme.shapes.roundedMedium)
                     .aspectRatio(IMAGE_ASPECT_RATIO)
-                    .background(MemoripTheme.colors.offWhite),
+                    .background(MemoripTheme.colors.primaryContainer),
             )
         }
 

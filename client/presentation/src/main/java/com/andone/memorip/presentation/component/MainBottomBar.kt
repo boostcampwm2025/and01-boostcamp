@@ -44,7 +44,7 @@ fun MainBottomBar(
             animationSpec = tween(durationMillis = DURATION_MILLIS)
         )
     ) {
-        NavigationBar(containerColor = MemoripTheme.colors.offWhite) {
+        NavigationBar(containerColor = MemoripTheme.colors.primaryContainer) {
             tabs.forEach { tab ->
                 NavigationBarItem(
                     selected = tab == currentTab,

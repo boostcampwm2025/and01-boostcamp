@@ -41,7 +41,7 @@ fun PlaceCreateTopBar(
                 )
             }
         },
-        colors = TopAppBarDefaults.topAppBarColors(containerColor = MemoripTheme.colors.primaryContainer)
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = MemoripTheme.colors.background)
     )
 }
 

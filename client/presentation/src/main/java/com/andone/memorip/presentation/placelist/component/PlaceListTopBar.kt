@@ -5,6 +5,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.theme.MemoripTheme
 
@@ -24,7 +25,8 @@ fun PlaceListTopBar(
         },
         scrollBehavior = scrollBehavior,
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MemoripTheme.colors.offWhite,
+            containerColor = MemoripTheme.colors.background,
+            scrolledContainerColor = MemoripTheme.colors.background,
         )
     )
 }

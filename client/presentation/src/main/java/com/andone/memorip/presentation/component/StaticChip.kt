@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,16 +34,16 @@ data class StaticChipColors(
         val Default: StaticChipColors
             @Composable
             get() = StaticChipColors(
-                backgroundColor = MemoripTheme.colors.offWhite,
-                textColor = MemoripTheme.colors.onOffWhite,
+                backgroundColor = MemoripTheme.colors.primaryContainer,
+                textColor = MaterialTheme.colorScheme.onSurface,
                 borderColor = null
             )
 
         val Selected: StaticChipColors
             @Composable
             get() = StaticChipColors(
-                backgroundColor = MemoripTheme.colors.primary,
-                textColor = MemoripTheme.colors.onOffWhite,
+                backgroundColor = MemoripTheme.colors.primaryContainer,
+                textColor = MaterialTheme.colorScheme.onSurface,
                 borderColor = MemoripTheme.colors.outline
             )
     }
