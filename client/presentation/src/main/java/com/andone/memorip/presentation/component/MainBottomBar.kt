@@ -5,6 +5,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
@@ -44,7 +45,7 @@ fun MainBottomBar(
             animationSpec = tween(durationMillis = DURATION_MILLIS)
         )
     ) {
-        NavigationBar(containerColor = MemoripTheme.colors.primaryContainer) {
+        NavigationBar(containerColor = MemoripTheme.colors.background) {
             tabs.forEach { tab ->
                 NavigationBarItem(
                     selected = tab == currentTab,
@@ -57,8 +58,8 @@ fun MainBottomBar(
                     },
                     label = { Text(text = stringResource(tab.titleTextId)) },
                     colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = MemoripTheme.colors.black,
-                        selectedTextColor = MemoripTheme.colors.black,
+                        selectedIconColor = MaterialTheme.colorScheme.onSurface,
+                        selectedTextColor = MaterialTheme.colorScheme.onSurface,
                         indicatorColor = MemoripTheme.colors.primaryContainer,
                         unselectedIconColor = MemoripTheme.colors.gray,
                         unselectedTextColor = MemoripTheme.colors.gray
