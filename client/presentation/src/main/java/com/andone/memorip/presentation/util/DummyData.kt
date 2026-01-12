@@ -8,13 +8,13 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.andone.memorip.domain.model.Tag
-import com.andone.memorip.presentation.grouplist.model.GroupUiModel
+import com.andone.memorip.presentation.screen.grouplist.model.GroupUiModel
 import com.andone.memorip.presentation.model.ImageItem
 import com.andone.memorip.presentation.model.LocationUiModel
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.model.TagUiModel
 import com.andone.memorip.presentation.model.toUiModel
-import com.andone.memorip.presentation.placedetail.model.PlaceUiModel
+import com.andone.memorip.presentation.screen.placedetail.model.PlaceUiModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.flowOf
 import java.time.LocalDateTime

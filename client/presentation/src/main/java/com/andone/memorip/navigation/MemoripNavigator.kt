@@ -6,9 +6,9 @@ import androidx.compose.runtime.remember
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.rememberNavBackStack
-import com.andone.memorip.presentation.groupdetail.navigateToGroupDetail
-import com.andone.memorip.presentation.placecreate.navigateToPlaceCreate
-import com.andone.memorip.presentation.placedetail.navigateToPlaceDetail
+import com.andone.memorip.presentation.screen.groupdetail.navigateToGroupDetail
+import com.andone.memorip.presentation.screen.placecreate.navigateToPlaceCreate
+import com.andone.memorip.presentation.screen.placedetail.navigateToPlaceDetail
 import kotlinx.collections.immutable.toImmutableList
 
 @Stable

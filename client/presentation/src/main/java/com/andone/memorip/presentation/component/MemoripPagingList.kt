@@ -12,7 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemKey
-import com.andone.memorip.presentation.selectlocation.component.LocationItem
+import com.andone.memorip.presentation.screen.selectlocation.component.LocationItem
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.util.DummyData
 import com.andone.memorip.presentation.util.handleAppendState
