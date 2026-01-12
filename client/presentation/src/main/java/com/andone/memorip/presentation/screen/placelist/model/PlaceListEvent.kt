@@ -7,4 +7,6 @@ sealed interface PlaceListEvent {
     data class NavigatePlaceDetail(val id: String) : PlaceListEvent
 
     data object ShowSnackBar : PlaceListEvent
+
+    data object RefreshPagingData: PlaceListEvent
 }

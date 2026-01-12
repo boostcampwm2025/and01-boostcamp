@@ -35,8 +35,8 @@ class PlaceListViewModel @Inject constructor(repository: PlaceRepository) : View
             }
             .cachedIn(viewModelScope)
 
-    fun onAction(action: PlaceListAction){
-        when(action){
+    fun onAction(action: PlaceListAction) {
+        when (action) {
             PlaceListAction.OnFABClick -> {
                 _event.trySend(element = PlaceListEvent.NavigateToPlaceCreate)
             }
@@ -47,6 +47,10 @@ class PlaceListViewModel @Inject constructor(repository: PlaceRepository) : View
 
             is PlaceListAction.OnQueryChange -> {
                 _uiState.update { it.copy(query = action.query) }
+            }
+
+            PlaceListAction.OnPullToRefresh -> {
+                PlaceListEvent.RefreshPagingData
             }
         }
     }

@@ -41,8 +41,8 @@ import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.EmptyText
 import com.andone.memorip.presentation.component.MemoripPagingList
 import com.andone.memorip.presentation.component.StaggeredImageItem
-import com.andone.memorip.presentation.screen.grouplist.component.AddFloatingActionButton
 import com.andone.memorip.presentation.model.Place
+import com.andone.memorip.presentation.screen.grouplist.component.AddFloatingActionButton
 import com.andone.memorip.presentation.screen.placelist.MemoripMotion.AnimationDuration
 import com.andone.memorip.presentation.screen.placelist.MemoripMotion.ScrollThreshold
 import com.andone.memorip.presentation.screen.placelist.component.FilterSection
@@ -89,6 +89,10 @@ fun PlaceListScreen(
             PlaceListEvent.ShowSnackBar -> {
 
             }
+
+            PlaceListEvent.RefreshPagingData -> {
+                placesPagingItems.refresh()
+            }
         }
     }
 
@@ -96,7 +100,6 @@ fun PlaceListScreen(
         state = uiState,
         placePagingItems = placesPagingItems,
         onAction = viewModel::onAction,
-        onRefresh = { placesPagingItems.refresh() },
         modifier = modifier
     )
 }
@@ -107,7 +110,6 @@ fun PlaceListScreenContents(
     state: PlaceListUiState,
     placePagingItems: LazyPagingItems<Place>,
     onAction: (PlaceListAction) -> Unit,
-    onRefresh: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val focusManager = LocalFocusManager.current
@@ -137,7 +139,7 @@ fun PlaceListScreenContents(
 
     PullToRefreshBox(
         isRefreshing = isRefreshing,
-        onRefresh = onRefresh,
+        onRefresh = { onAction(PlaceListAction.OnPullToRefresh) },
         modifier = Modifier.fillMaxSize()
     ) {
         Scaffold(
@@ -205,7 +207,6 @@ private fun PlaceListScreenContentsPreview() {
             state = PlaceListUiState(),
             placePagingItems = DummyData.getPlacePagingItems(),
             onAction = {},
-            onRefresh = {}
         )
     }
 }
