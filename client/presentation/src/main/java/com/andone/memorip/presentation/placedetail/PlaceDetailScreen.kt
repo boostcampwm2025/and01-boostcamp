@@ -32,7 +32,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.navigation.PlaceDetail
 import com.andone.memorip.presentation.R
-import com.andone.memorip.presentation.component.LoadingIndicator
+import com.andone.memorip.presentation.component.LoadingIndicatorScreen
 import com.andone.memorip.presentation.component.MemoripImage
 import com.andone.memorip.presentation.component.TagChipRow
 import com.andone.memorip.presentation.placedetail.PlaceDetailScreenConstants.IMAGE_ASPECT_RATIO
@@ -79,7 +79,7 @@ fun PlaceDetailScreen(
     )
 
     if (uiState.isLoading) {
-        LoadingIndicator()
+        LoadingIndicatorScreen()
     }
 }
 
