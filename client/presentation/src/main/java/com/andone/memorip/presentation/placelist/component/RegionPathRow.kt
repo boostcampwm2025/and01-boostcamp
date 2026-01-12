@@ -45,7 +45,7 @@ fun RegionPathRow(
             selectedRegionState.parents.forEachIndexed { index, region ->
                 Text(
                     text = region.name,
-                    modifier = Modifier.clickable { onRegionTextClick(region.id) },
+                    modifier = Modifier.clickable(enabled = isUnderline) { onRegionTextClick(region.id) },
                     style = regionTextStyle,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis

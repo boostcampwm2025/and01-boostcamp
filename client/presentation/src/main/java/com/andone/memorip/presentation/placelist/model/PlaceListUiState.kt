@@ -6,22 +6,39 @@ data class PlaceListUiState(
     val selectedRegionState: SelectedRegionState = SelectedRegionState(),
 ) {
     val currentRegionList: List<RegionUiModel>
-        get() = when {
-            selectedRegionState.parents.isEmpty() ->
-                rootRegions
+        get() {
+            val baseList = when {
+                selectedRegionState.parents.isEmpty() ->
+                    rootRegions
 
-            selectedRegionState.parents.last().child.isNotEmpty() ->
-                selectedRegionState.parents.last().child
+                selectedRegionState.parents.last().child.isNotEmpty() ->
+                    selectedRegionState.parents.last().child
 
-            else ->
-                selectedRegionState.parents
-                    .dropLast(1)
-                    .lastOrNull()
-                    ?.child
-                    ?: rootRegions
+                else ->
+                    selectedRegionState.parents
+                        .dropLast(n = 1)
+                        .lastOrNull()
+                        ?.child
+                        ?: rootRegions
+            }
+
+            val selectedIds = selectedRegionState.selectedIds()
+
+            return baseList.map { region ->
+                region.copy(isSelected = region.id in selectedIds)
+            }
         }
 
     val currentLevel: Int
-        get() = selectedRegionState.parents.size
+        get() = if (selectedRegionState.child.isNotEmpty()) {
+            selectedRegionState.parents.size + 1
+        } else {
+            selectedRegionState.parents.size
+        }
+
+    private fun SelectedRegionState.selectedIds(): Set<String> =
+        parents.map { it.id }.toSet() +
+                child.map { it.id }.toSet()
+
 }
 

@@ -8,8 +8,10 @@ import com.andone.memorip.domain.repository.PlaceListRepository
 import com.andone.memorip.presentation.model.toUiModel
 import com.andone.memorip.presentation.placelist.model.PlaceListAction
 import com.andone.memorip.presentation.placelist.model.PlaceListEvent
+import com.andone.memorip.presentation.placelist.model.PlaceListEvent.*
 import com.andone.memorip.presentation.placelist.model.PlaceListUiState
 import com.andone.memorip.presentation.placelist.model.RegionUiModel
+import com.andone.memorip.presentation.placelist.model.SelectedRegionState
 import com.andone.memorip.presentation.placelist.model.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -42,15 +44,19 @@ class PlaceListViewModel @Inject constructor(repository: PlaceListRepository) : 
     fun onAction(action: PlaceListAction) {
         when (action) {
             PlaceListAction.OnFABClick -> {
-                _event.trySend(element = PlaceListEvent.NavigateToPlaceCreate)
+                _event.trySend(element = NavigateToPlaceCreate)
             }
 
             is PlaceListAction.OnPlaceClick -> {
-                _event.trySend(element = PlaceListEvent.NavigatePlaceDetail(id = action.id))
+                _event.trySend(element = NavigatePlaceDetail(id = action.id))
             }
 
             is PlaceListAction.OnQueryChange -> {
                 _uiState.update { it.copy(query = action.query) }
+            }
+
+            is PlaceListAction.OnRegionChipClick -> {
+                onRegionClicked(region = action.region)
             }
         }
     }
@@ -58,24 +64,58 @@ class PlaceListViewModel @Inject constructor(repository: PlaceListRepository) : 
     private fun onRegionClicked(region: RegionUiModel) {
         _uiState.update { state ->
             val parents = state.selectedRegionState.parents
+            val child = state.selectedRegionState.child
 
-            val nextParents = when {
-                region.level < parents.size ->
-                    parents.take(region.level) + region
+            val nextState = when {
+                region.level < state.currentLevel -> {
+                    SelectedRegionState(
+                        parents = parents.take(n = region.level) + region,
+                        child = emptySet()
+                    )
+                }
 
-                region.level == parents.size ->
-                    parents.dropLast(1) + region
+                region.level == state.currentLevel -> {
+                    val isChildEmpty = child.isEmpty()
+                    val isAlreadySelected = parents.any { it.id == region.id } ||
+                            child.any { it.id == region.id }
 
-                else ->
-                    parents + region
+                    val nextChild =
+                        if (isAlreadySelected) {
+                            child.filterNot { it.id == region.id }.toSet()
+                        } else {
+                            if (isChildEmpty) {
+                                setOf(parents.last()) + region
+                            } else {
+                                child + region
+                            }
+                        }
+
+                    val nextParents =
+                        if (isAlreadySelected) {
+                            parents.filterNot { it.level == region.level }
+                        } else {
+                            if (isChildEmpty) {
+                                parents.filterNot { it.level == region.level }
+                            } else {
+                                parents
+                            }
+                        }
+
+                    state.selectedRegionState.copy(
+                        parents = nextParents,
+                        child = nextChild
+                    )
+                }
+
+                else -> {
+                    SelectedRegionState(
+                        parents = parents + region,
+                        child = emptySet()
+                    )
+                }
             }
 
-            state.copy(
-                selectedRegionState = state.selectedRegionState.copy(
-                    parents = nextParents,
-                    child = emptyList()
-                )
-            )
+            state.copy(selectedRegionState = nextState)
         }
     }
 }

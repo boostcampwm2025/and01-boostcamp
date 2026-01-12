@@ -6,8 +6,8 @@ import java.util.UUID
 data class RegionUiModel(
     val id: String = UUID.randomUUID().toString(),
     val name: String,
-    val parent: RegionUiModel?,
-    val child: List<RegionUiModel>,
+    val parent: RegionUiModel? = null,
+    val child: List<RegionUiModel> = emptyList(),
     val level: Int = 0,
     val isSelected: Boolean = false,
 )

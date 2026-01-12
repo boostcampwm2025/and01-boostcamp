@@ -133,9 +133,8 @@ fun PlaceListScreenContents(
             RegionSelectBottomSheet(
                 currentRegionList = state.currentRegionList,
                 selectedRegionState = state.selectedRegionState,
-                onConfirmClick = {
-                    showRegionBottomSheet = false
-                }
+                onConfirmClick = { showRegionBottomSheet = false },
+                onRegionChipClick = { onAction(PlaceListAction.OnRegionChipClick(region = it)) }
             )
         }
     }
@@ -163,8 +162,7 @@ fun PlaceListScreenContents(
                     FilterSection(
                         onChangeRegionClick = { showRegionBottomSheet = true },
                         onAddTagClick = {},
-                        modifier = Modifier
-                            .padding(horizontal = MemoripPadding.PaddingMedium),
+                        modifier = Modifier.padding(horizontal = MemoripPadding.PaddingMedium),
                         tags = DummyData.categories.toImmutableList()
                     )
                     Spacer(modifier = Modifier.padding(vertical = MemoripPadding.PaddingXSmall))

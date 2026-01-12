@@ -7,4 +7,6 @@ sealed interface PlaceListAction {
     data class OnPlaceClick(val id: String) : PlaceListAction
 
     data class OnQueryChange(val query: String) : PlaceListAction
+
+    data class OnRegionChipClick(val region: RegionUiModel) : PlaceListAction
 }

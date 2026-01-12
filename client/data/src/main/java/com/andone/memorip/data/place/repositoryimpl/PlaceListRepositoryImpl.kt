@@ -53,7 +53,7 @@ class PlaceListRepositoryImpl @Inject constructor(
     private fun parseRegionNode(
         element: JsonElement,
         parent: Region? = null,
-        level: Int = 0
+        level: Int = 1
     ): List<Region> {
 
         return when (element) {

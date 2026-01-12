@@ -56,7 +56,7 @@ object DummyData {
         ),
     )
 
-    val regions: List<RegionUiModel> = listOf(
+    val regions: Set<RegionUiModel> = setOf(
         RegionUiModel(id = "1", name = "서울", isSelected = true),
         RegionUiModel(id = "2", name = "경기"),
         RegionUiModel(id = "3", name = "인천"),
@@ -81,7 +81,7 @@ object DummyData {
             RegionUiModel(id = "seoul", name = "서울", level = 0),
             RegionUiModel(id = "gangnam", name = "강남구", level = 1)
         ),
-        child = listOf(
+        child = setOf(
             RegionUiModel(id = "yeoksam", name = "역삼동", level = 2),
             RegionUiModel(id = "samseong", name = "삼성동", level = 2)
         )

@@ -27,7 +27,7 @@ fun RegionSelectBottomSheet(
     currentRegionList: List<RegionUiModel> = emptyList(),
     selectedRegionState: SelectedRegionState = SelectedRegionState(),
     onConfirmClick: () -> Unit = {},
-    onRegionChipClick: (id : String) -> Unit = {},
+    onRegionChipClick: (regionUiModel: RegionUiModel) -> Unit = {},
     onRegionTextClick: (id : String) -> Unit = {}
 ) {
     Column(
@@ -74,7 +74,7 @@ fun RegionSelectBottomSheet(
 private fun RegionSelectBottomSheetPreview(){
     MemoripTheme {
         RegionSelectBottomSheet(
-            currentRegionList = DummyData.regions,
+            currentRegionList = DummyData.regions.toList(),
             selectedRegionState = DummyData.regionState
         )
     }

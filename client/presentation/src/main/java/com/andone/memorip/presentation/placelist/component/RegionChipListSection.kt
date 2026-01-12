@@ -17,7 +17,7 @@ import com.andone.memorip.presentation.util.DummyData
 fun RegionChipListSection(
     modifier: Modifier = Modifier,
     regionList: List<RegionUiModel> = emptyList(),
-    onChipClick: (id: String) -> Unit = {}
+    onChipClick: (regionUiModel: RegionUiModel) -> Unit = {}
 ) {
     FlowRow(
         modifier = modifier,
@@ -27,7 +27,7 @@ fun RegionChipListSection(
         regionList.forEach { region ->
             StaticChip(
                 chipName = region.name,
-                modifier = Modifier.clickable(onClick = { onChipClick(region.id) }),
+                modifier = Modifier.clickable(onClick = { onChipClick(region) }),
                 colors =
                     if (region.isSelected) {
                         StaticChipColors.Selected
@@ -44,7 +44,7 @@ fun RegionChipListSection(
 private fun RegionChipListSectionPreview() {
     MemoripTheme {
         RegionChipListSection(
-            regionList = DummyData.regions,
+            regionList = DummyData.regions.toList(),
             onChipClick = {}
         )
     }
