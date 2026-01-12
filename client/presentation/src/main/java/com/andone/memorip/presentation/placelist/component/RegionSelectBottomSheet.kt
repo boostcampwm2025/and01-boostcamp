@@ -28,7 +28,6 @@ fun RegionSelectBottomSheet(
     selectedRegionState: SelectedRegionState = SelectedRegionState(),
     onConfirmClick: () -> Unit = {},
     onRegionChipClick: (regionUiModel: RegionUiModel) -> Unit = {},
-    onRegionTextClick: (id : String) -> Unit = {}
 ) {
     Column(
         modifier = modifier.padding(horizontal = MemoripPadding.PaddingMedium),
@@ -42,7 +41,6 @@ fun RegionSelectBottomSheet(
 
         RegionPathRow(
             selectedRegionState = selectedRegionState,
-            onRegionTextClick = onRegionTextClick,
             isUnderline = true
         )
 

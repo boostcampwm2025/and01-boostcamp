@@ -1,6 +1,5 @@
 package com.andone.memorip.presentation.placelist.component
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,7 +20,6 @@ import com.andone.memorip.presentation.util.DummyData
 @Composable
 fun RegionPathRow(
     modifier: Modifier = Modifier,
-    onRegionTextClick: (id: String) -> Unit = {},
     selectedRegionState: SelectedRegionState = SelectedRegionState(),
     isUnderline: Boolean = false,
 ) {
@@ -45,7 +43,6 @@ fun RegionPathRow(
             selectedRegionState.parents.forEachIndexed { index, region ->
                 Text(
                     text = region.name,
-                    modifier = Modifier.clickable(enabled = isUnderline) { onRegionTextClick(region.id) },
                     style = regionTextStyle,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -66,11 +63,6 @@ fun RegionPathRow(
 
             Text(
                 text = childrenText,
-                modifier = Modifier.clickable {
-                    selectedRegionState.child.firstOrNull()?.let {
-                        onRegionTextClick(it.id)
-                    }
-                },
                 style = regionTextStyle,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,

@@ -44,7 +44,7 @@ data class StaticChipColors(
             get() = StaticChipColors(
                 backgroundColor = MemoripTheme.colors.primaryContainer,
                 textColor = MaterialTheme.colorScheme.onSurface,
-                borderColor = MemoripTheme.colors.outline
+                borderColor = MemoripTheme.colors.primary
             )
     }
 }
