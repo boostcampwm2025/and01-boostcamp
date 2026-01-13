@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,8 +19,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.andone.memorip.presentation.placelist.model.ListPlaceItems
-import com.andone.memorip.presentation.placelist.model.PlaceItems
+import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
@@ -31,7 +31,7 @@ private object StaggeredGridDimens {
 
 @Composable
 fun MemoripStaggeredGrid(
-    places: PlaceItems,
+    places: List<Place>,
     onImageClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -41,14 +41,8 @@ fun MemoripStaggeredGrid(
         horizontalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXXSmall),
         modifier = modifier.fillMaxSize(),
     ) {
-        items(
-            count = places.itemCount,
-            key = { index -> places[index]?.id ?: index }
-        ) { index ->
-            val place = places[index] ?: return@items
-
+        items(places) { place ->
             val image = place.thumbnailImage
-
             StaggeredImageItem(
                 imageUrl = image.url,
                 aspectRatio = image.aspectRatio,
@@ -59,7 +53,7 @@ fun MemoripStaggeredGrid(
 }
 
 @Composable
-private fun StaggeredImageItem(
+fun StaggeredImageItem(
     imageUrl: String,
     aspectRatio: Float,
     onImageClick: () -> Unit,
@@ -93,7 +87,7 @@ private fun StaggeredImageItem(
 private fun MemoripStaggeredGridPreview() {
     MemoripTheme {
         MemoripStaggeredGrid(
-            places = ListPlaceItems(items = DummyData.places),
+            places = DummyData.places,
             onImageClick = {}
         )
     }
