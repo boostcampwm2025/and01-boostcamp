@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.andone.memorip.navigation.PlaceDetail
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.LoadingIndicatorScreen
@@ -54,11 +55,11 @@ import com.andone.memorip.presentation.placedetail.component.ContentCard
 import com.andone.memorip.presentation.placedetail.component.ContrastAwareText
 import com.andone.memorip.presentation.placedetail.component.LocationCard
 import com.andone.memorip.presentation.placedetail.component.TagCard
+import com.andone.memorip.presentation.screen.placedetail.PlaceDetailViewModel
 import com.andone.memorip.presentation.screen.placedetail.component.ImageDialog
 import com.andone.memorip.presentation.screen.placedetail.component.PlaceDetailInfoSection
 import com.andone.memorip.presentation.screen.placedetail.component.PlaceDetailTopBar
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceDetailAction
-import com.andone.memorip.presentation.screen.placedetail.PlaceDetailViewModel
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceDetailEvent
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceUiModel
 import com.andone.memorip.presentation.theme.MemoripPadding
@@ -67,6 +68,7 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
 import com.andone.memorip.presentation.util.collectWithLifecycle
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 private object PlaceDetailScreenConstants {
     const val IMAGE_ASPECT_RATIO = 1.5f
@@ -92,7 +94,14 @@ fun PlaceDetailScreen(
     }
 
     PlaceDetailScreen(
-        place = uiState.place,
+        place = uiState.place.copy(
+            imageUrls = persistentListOf(
+                "https://picsum.photos/200/50",
+                "https://picsum.photos/200/100",
+                "https://picsum.photos/200/200",
+                "https://picsum.photos/200/400"
+            )
+        ),
         onAction = viewModel::onAction,
         modifier = modifier
     )
@@ -227,20 +236,20 @@ private fun PlaceDetailContent(
                 .fillMaxWidth()
                 .height(height = with(receiver = density) { headerHeightPx.toDp() })
                 .clipToBounds()
-                .clickable {
-                    place.imageUrls.firstOrNull()?.let { image -> onImageClick(image) }
-                },
+                .clickable { place.imageUrls.firstOrNull()?.let { image -> onImageClick(image) } },
             contentAlignment = Alignment.BottomStart
         ) {
             HorizontalPager(state = pagerState) { idx ->
                 AsyncImage(
-                    model = coil.request.ImageRequest.Builder(context)
-                        .data(place.imageUrls[idx])
-                        .allowHardware(false)
+                    model = ImageRequest.Builder(context)
+                        .data(data = place.imageUrls[idx])
+                        .allowHardware(enable = false)
                         .build(),
                     contentDescription = stringResource(R.string.place_detail_image_content_description),
                     contentScale = ContentScale.Crop,
-                    onSuccess = { result -> bitmap = (result.result.drawable as BitmapDrawable).bitmap }
+                    onSuccess = { result ->
+                        bitmap = (result.result.drawable as BitmapDrawable).bitmap
+                    }
                 )
             }
 
