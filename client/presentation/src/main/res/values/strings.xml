@@ -85,6 +85,7 @@
     <string name="main_bottom_bar_place_list">장소</string>
     <string name="main_bottom_bar_user">마이페이지</string>
     <string name="main_bottom_bar_group">그룹</string>
+    <string name="main_bottom_center_button_content_description">추가</string>
 
     <!-- PlaceDetail -->
     <string name="place_detail_image_content_description">장소 이미지</string>
@@ -112,6 +113,7 @@
     <string name="place_list_region_change">변경</string>
     <string name="place_list_region_default">전체</string>
     <string name="place_list_region_hierarchy">%1$s &gt; %2$s</string>
+    <string name="place_list_empty">장소가 없습니다.</string>
     <string name="place_list_region_divider">&gt;</string>
     <string name="place_list_bottom_sheet_title">지역 선택</string>
     <string name="place_list_bottom_sheet_confirm">확인</string>
