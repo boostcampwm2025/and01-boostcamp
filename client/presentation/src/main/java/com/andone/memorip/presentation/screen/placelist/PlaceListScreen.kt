@@ -14,8 +14,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -46,6 +48,7 @@ import com.andone.memorip.presentation.screen.placelist.MemoripMotion.AnimationD
 import com.andone.memorip.presentation.screen.placelist.MemoripMotion.ScrollThreshold
 import com.andone.memorip.presentation.screen.placelist.component.FilterSection
 import com.andone.memorip.presentation.screen.placelist.component.PlaceListTopBar
+import com.andone.memorip.presentation.screen.placelist.component.RegionSelectBottomSheet
 import com.andone.memorip.presentation.screen.placelist.model.PlaceListAction
 import com.andone.memorip.presentation.screen.placelist.model.PlaceListEvent
 import com.andone.memorip.presentation.screen.placelist.model.PlaceListUiState
@@ -115,6 +118,8 @@ fun PlaceListScreenContents(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val isRefreshing = placePagingItems.loadState.refresh is LoadState.Loading
 
+    var showRegionBottomSheet by remember { mutableStateOf(false) }
+
     var isFilterVisible by remember { mutableStateOf(true) }
     val clearFocusOnScroll = remember {
         object : NestedScrollConnection {
@@ -133,6 +138,20 @@ fun PlaceListScreenContents(
 
                 return Offset.Zero
             }
+        }
+    }
+
+    if (showRegionBottomSheet) {
+        ModalBottomSheet(
+            onDismissRequest = { showRegionBottomSheet = false },
+            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+        ) {
+            RegionSelectBottomSheet(
+                currentRegionList = state.currentRegionList,
+                selectedRegionState = state.selectedRegionState,
+                onConfirmClick = { showRegionBottomSheet = false },
+                onRegionChipClick = { onAction(PlaceListAction.OnRegionChipClick(region = it)) }
+            )
         }
     }
 
@@ -160,10 +179,11 @@ fun PlaceListScreenContents(
                 ) {
                     Column {
                         FilterSection(
-                            onChangeRegionClick = {},
+                            onChangeRegionClick = { showRegionBottomSheet = true },
                             onAddTagClick = {},
                             modifier = Modifier.padding(horizontal = MemoripPadding.PaddingMedium),
-                            tags = DummyData.categories.toImmutableList()
+                            tags = DummyData.categories.toImmutableList(),
+                            selectedRegionState = state.selectedRegionState
                         )
                         Spacer(modifier = Modifier.padding(vertical = MemoripPadding.PaddingXSmall))
                     }

@@ -37,6 +37,14 @@ data class StaticChipColors(
                 textColor = MemoripTheme.colors.onOffWhite,
                 borderColor = null
             )
+
+        val Selected: StaticChipColors
+            @Composable
+            get() = StaticChipColors(
+                backgroundColor = MemoripTheme.colors.primary,
+                textColor = MemoripTheme.colors.onOffWhite,
+                borderColor = MemoripTheme.colors.outline
+            )
     }
 }
 
