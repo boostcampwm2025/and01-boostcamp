@@ -3,8 +3,8 @@ package com.andone.memorip.domain.group.controller
 import com.andone.memorip.common.response.ApiResult
 import com.andone.memorip.domain.group.dto.request.GroupCreateRequest
 import com.andone.memorip.domain.group.dto.request.GroupUpdateRequest
+import com.andone.memorip.domain.group.dto.response.GroupListResponse
 import com.andone.memorip.domain.group.dto.response.GroupResponse
-import com.andone.memorip.domain.group.dto.response.GroupWithPlacesResponse
 import com.andone.memorip.domain.group.service.GroupService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -45,11 +45,18 @@ class GroupController(
         summary = "공개 그룹 조회",
         description = """
             visibility가 PUBLIC인 그룹들을 조회합니다.
+            각 그룹의 기본 정보와 함께 소유자 정보, 관련된 Place 대표 이미지(최대 7개)와 Place 개수를 반환합니다.
             
             페이지네이션 파라미터:
             - page: 페이지 번호 (0부터 시작, 기본값: 0)
             - size: 페이지 크기 (기본값: 20)
-            - sort: 정렬 기준 (기본값: createdAt,desc)
+            - sort: 정렬 기준 (기본값: id, desc)
+            
+            응답 포함 정보:
+            - 그룹 기본 정보 (id, title, visibility, type, createdAt, updatedAt)
+            - owner: 그룹 소유자 정보 (id, nickname, profileImage)
+            - relatedPlaceImages: 그룹에 속한 Place의 대표 이미지 URL 목록 (최대 7개, 생성 순서)
+            - placeCount: 그룹에 속한 Place 총 개수
         """,
         responses = [
             ApiResponse(responseCode = "200", description = "성공 - 공개 그룹 목록 조회 완료")
@@ -59,11 +66,11 @@ class GroupController(
         @PageableDefault(
             page = 0,
             size = 20,
-            sort = ["createdAt"],
+            sort = ["id"],
             direction = Sort.Direction.DESC
         )
         pageable: Pageable
-    ): ApiResult<List<GroupResponse>> {
+    ): ApiResult<List<GroupListResponse>> {
         val result = groupService.getPublicGroups(pageable)
         return ApiResult.success(result.content, result.pagination)
     }
@@ -73,34 +80,36 @@ class GroupController(
         summary = "내 그룹 조회",
         description = """
             현재 사용자가 생성한 그룹들을 조회합니다.
-            각 그룹에 속한 모든 Place 정보도 함께 반환합니다. (owner 정보는 제외)
+            각 그룹의 기본 정보와 함께 관련된 Place 대표 이미지(최대 7개)와 Place 개수를 반환합니다.
             
             페이지네이션 파라미터:
             - page: 페이지 번호 (0부터 시작, 기본값: 0)
             - size: 페이지 크기 (기본값: 20)
-            - sort: 정렬 기준 (기본값: createdAt,desc)
+            - sort: 정렬 기준 (기본값: id, desc)
             
-            **주의:** 각 그룹의 모든 Place를 포함하므로 응답 크기가 클 수 있습니다.
+            응답 포함 정보:
+            - 그룹 기본 정보 (id, title, visibility, type, createdAt, updatedAt)
+            - relatedPlaceImages: 그룹에 속한 Place의 대표 이미지 URL 목록 (최대 7개, 생성 순서)
+            - placeCount: 그룹에 속한 Place 총 개수
         """,
         responses = [
-            ApiResponse(responseCode = "200", description = "성공 - 내 그룹 목록 조회 완료"),
-            ApiResponse(responseCode = "404", description = "태그를 찾을 수 없습니다 (데이터 정합성 오류)")
+            ApiResponse(responseCode = "200", description = "성공 - 내 그룹 목록 조회 완료")
         ]
     )
     fun getMyGroups(
         @PageableDefault(
             page = 0,
             size = 20,
-            sort = ["createdAt"],
+            sort = ["id"],
             direction = Sort.Direction.DESC
         )
         pageable: Pageable
-    ): ApiResult<List<GroupWithPlacesResponse>> {
+    ): ApiResult<List<GroupListResponse>> {
         val result = groupService.getMyGroups(pageable)
         return ApiResult.success(result.content, result.pagination)
     }
 
-    @PutMapping("/groups/{groupId}")
+    @PatchMapping("/groups/{groupId}")
     @Operation(
         summary = "그룹 수정",
         description = """

@@ -2,7 +2,6 @@ package com.andone.memorip.domain.group.service
 
 import com.andone.memorip.common.exception.BusinessException
 import com.andone.memorip.common.exception.CommonExceptionCode
-import com.andone.memorip.common.response.ApiResult
 import com.andone.memorip.common.response.PagedResult
 import com.andone.memorip.common.util.toPaginationInfo
 import com.andone.memorip.domain.group.dto.request.GroupCreateRequest
@@ -14,7 +13,6 @@ import com.andone.memorip.domain.group.dto.response.toGroupResponse
 import com.andone.memorip.domain.group.entity.Group
 import com.andone.memorip.domain.group.entity.GroupType
 import com.andone.memorip.domain.group.repository.GroupRepository
-import com.andone.memorip.domain.place.repository.PlaceRepository
 import com.andone.memorip.domain.user.repository.UserRepository
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
@@ -25,8 +23,7 @@ import java.util.UUID
 @Service
 class GroupService(
     private val groupRepository: GroupRepository,
-    private val userRepository: UserRepository,
-    private val placeRepository: PlaceRepository
+    private val userRepository: UserRepository
 ) {
     /**
      * 임시 인증 함수 - 실제 인증 구현 전까지 사용
