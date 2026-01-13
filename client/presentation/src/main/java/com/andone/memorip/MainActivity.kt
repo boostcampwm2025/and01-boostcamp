@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.andone.memorip.navigation.rememberMemoripNavigator
+import com.andone.memorip.presentation.screen.login.LoginScreen
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.snackbar.SnackBarManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,10 +22,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             MemoripTheme {
                 val navigator = rememberMemoripNavigator()
-                MemoripApp(
-                    navigator = navigator,
-                    snackbarManager = snackbarManager
-                )
+//                MemoripApp(
+//                    navigator = navigator,
+//                    snackbarManager = snackbarManager
+//                )
+                LoginScreen()
             }
         }
     }

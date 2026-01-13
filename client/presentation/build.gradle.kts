@@ -97,6 +97,15 @@ dependencies {
     
     // Paging
     implementation(libs.androidx.paging.compose)
+
+    // Credential Manager core
+    implementation(libs.androidx.credentials)
+
+    // Google 계정 연동용 확장
+    implementation(libs.androidx.credentials.play.services.auth)
+
+    // Google Identity (ID Token 발급용)
+    implementation(libs.googleid)
 }
 
 fun getLocalProperty(propertyKey: String): String {

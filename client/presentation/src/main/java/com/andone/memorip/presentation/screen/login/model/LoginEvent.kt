@@ -1,4 +1,5 @@
 package com.andone.memorip.presentation.screen.login.model
 
-interface LoginEvent {
+sealed interface LoginEvent {
+    data object RequestGoogleLogin : LoginEvent
 }
