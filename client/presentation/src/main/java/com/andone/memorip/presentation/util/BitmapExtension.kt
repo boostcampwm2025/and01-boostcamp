@@ -2,9 +2,8 @@ package com.andone.memorip.presentation.util
 
 import android.graphics.Bitmap
 import android.graphics.Color
-import com.andone.memorip.presentation.placedetail.component.Constants.cropRate
 
-fun Bitmap.calculateLuminusAverage(): Double {
+fun Bitmap.calculateLuminanceAverage(): Double {
     var sum = 0.0
     val width = this.width
     val height = this.height

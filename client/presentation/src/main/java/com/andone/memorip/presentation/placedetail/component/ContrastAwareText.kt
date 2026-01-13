@@ -5,15 +5,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
-import com.andone.memorip.presentation.placedetail.component.Constants.cropRate
-import com.andone.memorip.presentation.placedetail.component.Constants.luminusThreshold
+import com.andone.memorip.presentation.placedetail.component.Constants.bottomCropRate
+import com.andone.memorip.presentation.placedetail.component.Constants.textColorLuminanceThreshold
 import com.andone.memorip.presentation.theme.MemoripTheme
-import com.andone.memorip.presentation.util.calculateLuminusAverage
+import com.andone.memorip.presentation.util.calculateLuminanceAverage
 import com.andone.memorip.presentation.util.cropBottomArea
 
 private object Constants {
-    val cropRate = 0.2f
-    val luminusThreshold = 128
+    val bottomCropRate = 0.2f
+    val textColorLuminanceThreshold = 128
 }
 
 @Composable
@@ -23,9 +23,9 @@ fun ContrastAwareText(
     style: TextStyle
 ) {
     val textColor = if (image != null) {
-        val luminusValue = image.cropBottomArea(ratio = cropRate)
-            .calculateLuminusAverage()
-        if (luminusValue > luminusThreshold) MemoripTheme.colors.black
+        val luminusValue = image.cropBottomArea(ratio = bottomCropRate)
+            .calculateLuminanceAverage()
+        if (luminusValue > textColorLuminanceThreshold) MemoripTheme.colors.black
         else MemoripTheme.colors.white
     } else {
         MemoripTheme.colors.white
