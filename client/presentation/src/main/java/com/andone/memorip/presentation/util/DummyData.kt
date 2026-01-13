@@ -1,16 +1,22 @@
 package com.andone.memorip.presentation.util
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.andone.memorip.domain.model.Tag
-import com.andone.memorip.presentation.grouplist.model.GroupUiModel
+import com.andone.memorip.presentation.screen.grouplist.model.GroupUiModel
 import com.andone.memorip.presentation.model.ImageItem
+import com.andone.memorip.presentation.model.LocationUiModel
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.model.TagUiModel
 import com.andone.memorip.presentation.model.toUiModel
-import com.andone.memorip.presentation.placedetail.model.PlaceUiModel
+import com.andone.memorip.presentation.screen.placedetail.model.PlaceUiModel
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.flow.flowOf
 import java.time.LocalDateTime
 import java.util.UUID
 import kotlin.random.Random
@@ -214,6 +220,66 @@ object DummyData {
             images = createRandomImageUrls(1, "daegu")
         )
     )
+
+    val locations: List<LocationUiModel> by lazy {
+        listOf(
+            LocationUiModel(
+                id = "1",
+                name = "스타벅스 강남R점",
+                category = "카페",
+                address = "서울특별시 강남구 역삼동 825-2",
+                roadAddress = "서울특별시 강남구 강남대로 390",
+                latitude = 37.4979,
+                longitude = 127.0276
+            ),
+            LocationUiModel(
+                id = "2",
+                name = "코엑스",
+                category = "복합문화공간",
+                address = "서울특별시 강남구 삼성동 159",
+                roadAddress = "서울특별시 강남구 영동대로 513",
+                latitude = 37.5118,
+                longitude = 127.0593
+            ),
+            LocationUiModel(
+                id = "3",
+                name = "남산서울타워",
+                category = "관광명소",
+                address = "서울특별시 용산구 용산동2가 산 1-3",
+                roadAddress = "서울특별시 용산구 남산공원길 105",
+                latitude = 37.5511,
+                longitude = 126.9882
+            ),
+            LocationUiModel(
+                id = "4",
+                name = "뚝섬한강공원",
+                category = "공원",
+                address = "서울특별시 광진구 자양동 427-6",
+                roadAddress = "서울특별시 광진구 강변북로 139",
+                latitude = 37.5294,
+                longitude = 127.0739
+            ),
+            LocationUiModel(
+                id = "5",
+                name = "롯데월드",
+                category = "테마파크",
+                address = "서울특별시 송파구 잠실동 40-1",
+                roadAddress = "서울특별시 송파구 올림픽로 240",
+                latitude = 37.5111,
+                longitude = 127.0981
+            )
+        )
+    }
+
+    @Composable
+    fun getPlacePagingItems(): LazyPagingItems<Place> {
+        return flowOf(PagingData.from(places)).collectAsLazyPagingItems()
+    }
+
+    @Composable
+    fun getLocationPagingItems(): LazyPagingItems<LocationUiModel> {
+        return flowOf(PagingData.from(locations)).collectAsLazyPagingItems()
+    }
 
     private fun createRandomImageUrls(count: Int, seedKey: String): List<String> {
         return List(count) { index ->
