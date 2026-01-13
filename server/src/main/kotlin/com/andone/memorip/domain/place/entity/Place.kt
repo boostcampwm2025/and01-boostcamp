@@ -60,6 +60,10 @@ class Place protected constructor(
     var address: Address = address
         internal set
 
+    @Column(name = "thumbnail_url", length = 512)
+    var thumbnailUrl: String? = null
+        internal set
+
     @Column(name = "start_at", columnDefinition = "TIMESTAMPTZ")
     var startAt: LocalDateTime? = null
         internal set
@@ -68,7 +72,6 @@ class Place protected constructor(
     var endAt: LocalDateTime? = null
         internal set
 
-    // 양방향 연관관계 설정: Place의 이미지 컬렉션
     @OneToMany(
         mappedBy = "place",
         cascade = [CascadeType.ALL],
@@ -96,6 +99,11 @@ class Place protected constructor(
     fun addImage(url: String, id: UUID? = null): PlaceImage {
         val newImage = PlaceImage.create(id = id, place = this, url = url)
         images.add(newImage)
+        
+        if (thumbnailUrl == null) {
+            thumbnailUrl = url
+        }
+        
         return newImage
     }
 
@@ -103,6 +111,19 @@ class Place protected constructor(
         // todo: object storage의 사진들 삭제, 추가 로직 넣어서 사용해야 함. -> service에서 할 듯?
         images.clear()
         newUrls.forEach { addImage(it) }
+        
+        // 이미지 업데이트 시 첫 번째 이미지를 대표 이미지로 설정
+        if (newUrls.isNotEmpty()) {
+            thumbnailUrl = newUrls.first()
+        } else {
+            thumbnailUrl = null
+        }
+    }
+
+    fun updateThumbnailUrl(url: String) {
+        require(url.isNotBlank()) { "대표 이미지 URL은 필수입니다" }
+        require(url.length <= 512) { "대표 이미지 URL은 512자 이하여야 합니다" }
+        this.thumbnailUrl = url
     }
 
     fun updateTitle(title: String) {
@@ -183,6 +204,10 @@ class Place protected constructor(
                 this.parentPlaceId = parentPlaceId
                 this.startAt = startAt
                 this.endAt = endAt
+                // 이미지가 있으면 첫 번째 이미지를 대표 이미지로 설정
+                if (imageUrls.isNotEmpty()) {
+                    this.thumbnailUrl = imageUrls.first()
+                }
             }
         }
     }
