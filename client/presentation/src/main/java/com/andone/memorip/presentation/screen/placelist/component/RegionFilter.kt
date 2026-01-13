@@ -15,6 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.placelist.component.RegionPathRow
 import com.andone.memorip.presentation.placelist.model.SelectedRegionState
 import com.andone.memorip.presentation.theme.MemoripShadow
 import com.andone.memorip.presentation.theme.MemoripSpace
