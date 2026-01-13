@@ -23,10 +23,7 @@ fun FilterSection(
     tags: ImmutableList<TagUiModel> = persistentListOf(),
     selectedRegionState: SelectedRegionState = SelectedRegionState(),
 ) {
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceSmall)
-    ) {
+    Column(modifier = modifier) {
         RegionFilter(
             modifier = Modifier.clickable(onClick = onChangeRegionClick),
             selectedRegionState = selectedRegionState,

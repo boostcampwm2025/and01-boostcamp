@@ -26,7 +26,7 @@ import com.andone.memorip.presentation.util.DummyData
 
 private object StaggeredGridDimens {
     val STAGGERED_GRID_MIN_CELL_WIDTH = 160.dp
-    val STAGGERED_GRID_IMAGE_CORNER_RADIUS = 4.dp
+    val STAGGERED_GRID_IMAGE_CORNER_RADIUS = 16.dp
 }
 
 @Composable

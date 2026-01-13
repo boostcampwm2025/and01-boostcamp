@@ -197,9 +197,10 @@ fun PlaceListScreenContents(
                     itemKey = { it.id },
                     modifier = Modifier
                         .fillMaxSize()
+                        .padding(horizontal = MemoripPadding.PaddingXSmall)
                         .nestedScroll(connection = clearFocusOnScroll)
                         .pointerInput(key1 = Unit) { detectTapGestures { focusManager.clearFocus() } },
-                    staggeredCells = StaggeredGridCells.Adaptive(StaggeredGridDimens.STAGGERED_GRID_MIN_CELL_WIDTH),
+                    staggeredCells = StaggeredGridCells.Adaptive(minSize = StaggeredGridDimens.STAGGERED_GRID_MIN_CELL_WIDTH),
                     emptyContent = {
                         EmptyText(
                             text = stringResource(R.string.place_list_empty),
