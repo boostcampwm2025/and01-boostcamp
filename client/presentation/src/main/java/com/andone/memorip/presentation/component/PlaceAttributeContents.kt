@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -50,11 +51,10 @@ fun PlaceLocationText(
             painter = painterResource(R.drawable.ic_location_on),
             contentDescription = stringResource(R.string.plan_location_content_description),
             modifier = Modifier.size(MemoripIconSize.IconSizeSmall),
-            tint = MemoripTheme.colors.secondary
         )
         Text(
             text = address,
-            color = MemoripTheme.colors.black,
+            color = MaterialTheme.colorScheme.onSurface,
             style = MemoripTheme.typography.bodySmall,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
