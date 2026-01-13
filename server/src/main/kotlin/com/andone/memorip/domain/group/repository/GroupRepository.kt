@@ -33,7 +33,7 @@ interface GroupRepository: JpaRepository<Group, UUID> {
                   AND p.deleted_at IS NULL
             ) pc ON true
             LEFT JOIN LATERAL (
-                SELECT STRING_AGG(p.thumbnail_url, ',' ORDER BY p.id ASC) as related_place_images
+                SELECT STRING_AGG(p.thumbnail_url, ',' ORDER BY p.created_at ASC) as related_place_images
                 FROM (
                     SELECT p.thumbnail_url, p.created_at
                     FROM places p
