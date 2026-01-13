@@ -98,7 +98,7 @@ internal val memoripTypography = MemoripTypography(
     labelExtBold = TextStyle(
         fontFamily = NotoSansKR,
         fontWeight = FontWeight.ExtraBold,
-        fontSize = 14.sp,
+        fontSize = 16.sp,
         lineHeight = 20.sp
     ),
     label1 = TextStyle(

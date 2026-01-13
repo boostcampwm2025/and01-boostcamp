@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -59,6 +61,11 @@ fun RegionSelectBottomSheet(
             onClick = onConfirmClick,
             modifier = Modifier.fillMaxWidth(),
             shape = memoripShapes.roundedXSmall,
+            colors = ButtonDefaults.buttonColors()
+                .copy(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onSurface
+                )
         ) {
             Text(
                 text = stringResource(R.string.place_list_bottom_sheet_confirm),
@@ -70,7 +77,7 @@ fun RegionSelectBottomSheet(
 
 @Preview(showBackground = true)
 @Composable
-private fun RegionSelectBottomSheetPreview(){
+private fun RegionSelectBottomSheetPreview() {
     MemoripTheme {
         RegionSelectBottomSheet(
             currentRegionList = DummyData.regions.toList(),

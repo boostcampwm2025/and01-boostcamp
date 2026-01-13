@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.component
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -57,22 +58,20 @@ fun StaticChip(
     colors: StaticChipColors = StaticChipColors.Default,
     textStyle: TextStyle = MemoripTheme.typography.label1,
     elevation: Dp = 0.dp,
+    onClick: () -> Unit = {}
 ) {
-    val borderModifier = if (colors.borderColor != null) {
-        modifier.border(
-            width = MemoripBorderWidth.Thin,
-            color = colors.borderColor,
-            shape = RoundedCornerShape(radius)
-        )
-    } else {
-        modifier
-    }
-
     Surface(
-        modifier = modifier.then(other = borderModifier),
-        shape = RoundedCornerShape(size = radius),
+        modifier = modifier,
+        shape = RoundedCornerShape(radius),
         color = colors.backgroundColor,
-        shadowElevation  = elevation
+        shadowElevation = elevation,
+        onClick = onClick,
+        border = colors.borderColor?.let {
+            BorderStroke(
+                width = MemoripBorderWidth.Thin,
+                color = it
+            )
+        }
     ) {
         Text(
             text = chipName,

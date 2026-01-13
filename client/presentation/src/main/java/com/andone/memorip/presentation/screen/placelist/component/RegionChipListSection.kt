@@ -27,13 +27,13 @@ fun RegionChipListSection(
         regionList.forEach { region ->
             StaticChip(
                 chipName = region.name,
-                modifier = Modifier.clickable(onClick = { onChipClick(region) }),
                 colors =
                     if (region.isSelected) {
                         StaticChipColors.Selected
                     } else {
                         StaticChipColors.Default
                     },
+                onClick = { onChipClick(region) }
             )
         }
     }
