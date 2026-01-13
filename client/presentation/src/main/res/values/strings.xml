@@ -108,7 +108,7 @@
 
     <!-- PlaceList -->
     <string name="place_list_search">검색</string>
-    <string name="place_list_add_tag">+태그</string>
+    <string name="place_list_add_tag">+</string>
     <string name="place_list_region">지역 :</string>
     <string name="place_list_region_change">변경</string>
     <string name="place_list_region_default">전체</string>

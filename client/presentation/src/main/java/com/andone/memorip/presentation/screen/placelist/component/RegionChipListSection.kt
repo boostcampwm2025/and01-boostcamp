@@ -22,18 +22,17 @@ fun RegionChipListSection(
     FlowRow(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceSmall),
-        verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceSmall)
     ) {
         regionList.forEach { region ->
             StaticChip(
                 chipName = region.name,
-                modifier = Modifier.clickable(onClick = { onChipClick(region) }),
                 colors =
                     if (region.isSelected) {
                         StaticChipColors.Selected
                     } else {
                         StaticChipColors.Default
                     },
+                onClick = { onChipClick(region) }
             )
         }
     }

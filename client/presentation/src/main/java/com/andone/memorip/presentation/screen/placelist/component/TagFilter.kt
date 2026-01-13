@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -40,13 +41,13 @@ fun TagFilter(
         tags.forEach { tag -> TagChip(tag = tag) }
         StaticChip(
             chipName = stringResource(R.string.place_list_add_tag),
-            modifier = Modifier.clickable(onClick = onAddTagClick),
             colors = StaticChipColors.Default.copy(
-                backgroundColor = MemoripTheme.colors.primary,
-                textColor = MemoripTheme.colors.black
+                backgroundColor = MemoripTheme.colors.primaryContainer,
+                textColor = MaterialTheme.colorScheme.onSurface
             ),
             textStyle = MemoripTheme.typography.labelExtBold,
             elevation = MemoripShadow.Medium,
+            onClick = onAddTagClick
         )
     }
 }

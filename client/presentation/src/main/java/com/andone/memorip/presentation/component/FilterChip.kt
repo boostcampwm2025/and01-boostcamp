@@ -21,7 +21,7 @@ fun FilterChip(
     Box(
         modifier = Modifier
             .background(
-                color = MemoripTheme.colors.offWhite,
+                color = MemoripTheme.colors.primaryContainer,
                 shape = memoripShapes.roundedLarge
             )
             .padding(

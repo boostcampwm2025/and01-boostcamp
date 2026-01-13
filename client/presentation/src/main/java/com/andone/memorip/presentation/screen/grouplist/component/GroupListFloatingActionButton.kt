@@ -2,6 +2,7 @@ package com.andone.memorip.presentation.screen.grouplist.component
 
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -14,7 +15,7 @@ fun AddFloatingActionButton(onClick: () -> Unit) {
     FloatingActionButton(
         onClick = onClick,
         containerColor = MemoripTheme.colors.primary,
-        contentColor = MemoripTheme.colors.black
+        contentColor = MaterialTheme.colorScheme.onSurface
     ) {
         Icon(
             painter = painterResource(R.drawable.ic_add),

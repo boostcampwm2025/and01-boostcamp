@@ -28,6 +28,6 @@ fun PlaceDetailTopBar(
                 )
             }
         },
-        colors = TopAppBarDefaults.topAppBarColors(containerColor = MemoripTheme.colors.offWhite)
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = MemoripTheme.colors.background)
     )
 }

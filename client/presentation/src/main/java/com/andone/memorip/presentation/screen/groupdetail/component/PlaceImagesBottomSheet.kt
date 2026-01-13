@@ -56,7 +56,7 @@ fun PlaceImagesBottomSheet(
         onDismissRequest = onDismiss,
         modifier = modifier,
         sheetState = sheetState,
-        containerColor = MemoripTheme.colors.offWhite,
+        containerColor = MemoripTheme.colors.primaryContainer,
     ) {
         PlaceImagesContent(
             placeName = placeName,
@@ -109,13 +109,13 @@ private fun PlaceImagesHeader(
     ) {
         Text(
             text = placeName,
-            color = MemoripTheme.colors.onOffWhite,
+            color = MemoripTheme.colors.primaryContainer,
             style = MemoripTheme.typography.body1,
         )
         
         Text(
             text = stringResource(R.string.placeimagebottomsheet_place_image_count, imageCount),
-            color = MemoripTheme.colors.onOffWhite.copy(alpha = MemoripAlpha.SECONDARY),
+            color = MemoripTheme.colors.primaryContainer.copy(alpha = MemoripAlpha.SECONDARY),
             style = MemoripTheme.typography.body2
         )
     }
@@ -131,7 +131,7 @@ private fun PlaceImageItemCard(
             .fillMaxWidth()
             .aspectRatio(PlaceImagesBottomSheetConstants.ImageAspectRatio)
             .clip(MemoripTheme.shapes.roundedSmall)
-            .background(MemoripTheme.colors.offWhite)
+            .background(MemoripTheme.colors.primaryContainer)
     ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
@@ -140,8 +140,8 @@ private fun PlaceImageItemCard(
                 .build(),
             contentDescription = null,
             modifier = Modifier.matchParentSize(),
-            placeholder = ColorPainter(MemoripTheme.colors.offWhite),
-            error = ColorPainter(MemoripTheme.colors.offWhite),
+            placeholder = ColorPainter(MemoripTheme.colors.primaryContainer),
+            error = ColorPainter(MemoripTheme.colors.primaryContainer),
             contentScale = ContentScale.Crop,
         )
     }

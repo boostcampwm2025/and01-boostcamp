@@ -6,12 +6,11 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 
-val Primary = Color(0xFF9A5936)
-val PrimaryContainer = Color(0xFFCDAC9B)
+val Primary = Color(0xFF66FF66)
+val PrimaryContainer = Color(0xFFFFFFFF)
+val BackGround = Color(0xFFECF1EC)
 val Secondary = Color(0xFF36699A)
-val OffWhite = Color(0xFFF5EDE8)
-val OnOffWhite = Color(0xFF2E2520)
-val Outline = Color(0xFF7A5A4A)
+val Outline = Color(0xFF00FF00)
 val Gray = Color(0xFF73777C)
 val Red = Color(0xFFB23A2E)
 val Green = Color(0xFF3A7F5D)
@@ -20,14 +19,11 @@ val Black = Color(0xFF222222)
 val White = Color(0xFFFFFFFF)
 
 // Dark 테마용 색상
-val DarkPrimary = Color(0xFFD6A184)
-val DarkPrimaryContainer = Color(0xFF5A3A2A)
+val DarkPrimary = Color(0xFF338033)
+val DarkPrimaryContainer = Color(0xFF424242)
+val DarkBackGround = Color(0xFF222222)
 val DarkSecondary = Color(0xFF8BB0D6)
-val DarkOffWhite = Color(0xFF2E2520)
-val DarkOnOffWhite = Color(0xFFF5EDE8)
-val DarkOutline = Color(0xFF9C8578)
-val DarkGray = Color(0xFFA9A9A9)
-val DarkRed = Color(0xFFE06B60)
+val DarkOutline = Color(0xFF004700)
 
 @Immutable
 data class MemoripColors(
@@ -35,8 +31,6 @@ data class MemoripColors(
     val primaryContainer: Color,
     val secondary: Color,
     val background: Color,
-    val offWhite: Color,
-    val onOffWhite: Color,
     val gray: Color,
     val outline: Color,
     val error: Color,
@@ -49,9 +43,7 @@ internal val lightMemoripColors = MemoripColors(
     primary = Primary,
     primaryContainer = PrimaryContainer,
     secondary = Secondary,
-    background = OffWhite,
-    offWhite = OffWhite,
-    onOffWhite = OnOffWhite,
+    background = BackGround,
     gray = Gray,
     outline = Outline,
     error = Red,
@@ -64,12 +56,10 @@ internal val darkMemoripColors = MemoripColors(
     primary = DarkPrimary,
     primaryContainer = DarkPrimaryContainer,
     secondary = DarkSecondary,
-    background = DarkOffWhite,
-    offWhite = DarkOffWhite,
-    onOffWhite = DarkOnOffWhite,
-    gray = DarkGray,
+    background = DarkBackGround,
+    gray = Gray,
     outline = DarkOutline,
-    error = DarkRed,
+    error = Red,
     green = Green,
     black = Black,
     white = White,

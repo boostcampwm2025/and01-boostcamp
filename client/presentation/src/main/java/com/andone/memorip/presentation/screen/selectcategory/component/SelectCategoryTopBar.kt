@@ -4,6 +4,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -42,10 +43,6 @@ fun SelectCategoryTopBar(
             IconButton(
                 onClick = onConfirmClick,
                 enabled = checkEnabled,
-                colors = IconButtonDefaults.iconButtonColors(
-                    contentColor = MemoripTheme.colors.primary,
-                    disabledContentColor = MemoripTheme.colors.outline
-                )
             ) {
                 Icon(
                     imageVector = ImageVector.vectorResource(R.drawable.ic_check),
@@ -54,9 +51,9 @@ fun SelectCategoryTopBar(
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = LocalMemoripColors.current.offWhite,
-            navigationIconContentColor = LocalMemoripColors.current.black,
-            titleContentColor = LocalMemoripColors.current.black
+            containerColor = LocalMemoripColors.current.background,
+            navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
+            titleContentColor = MaterialTheme.colorScheme.onSurface
         )
     )
 }

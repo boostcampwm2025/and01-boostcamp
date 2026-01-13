@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -30,7 +32,6 @@ fun RegionSelectBottomSheet(
     selectedRegionState: SelectedRegionState = SelectedRegionState(),
     onConfirmClick: () -> Unit = {},
     onRegionChipClick: (regionUiModel: RegionUiModel) -> Unit = {},
-    onRegionTextClick: (id : String) -> Unit = {}
 ) {
     Column(
         modifier = modifier.padding(horizontal = MemoripPadding.PaddingMedium),
@@ -44,7 +45,6 @@ fun RegionSelectBottomSheet(
 
         RegionPathRow(
             selectedRegionState = selectedRegionState,
-            onRegionTextClick = onRegionTextClick,
             isUnderline = true
         )
 
@@ -61,10 +61,14 @@ fun RegionSelectBottomSheet(
             onClick = onConfirmClick,
             modifier = Modifier.fillMaxWidth(),
             shape = memoripShapes.roundedXSmall,
+            colors = ButtonDefaults.buttonColors()
+                .copy(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onSurface
+                )
         ) {
             Text(
                 text = stringResource(R.string.place_list_bottom_sheet_confirm),
-                color = MemoripTheme.colors.onOffWhite,
                 style = MemoripTheme.typography.title1
             )
         }
@@ -73,7 +77,7 @@ fun RegionSelectBottomSheet(
 
 @Preview(showBackground = true)
 @Composable
-private fun RegionSelectBottomSheetPreview(){
+private fun RegionSelectBottomSheetPreview() {
     MemoripTheme {
         RegionSelectBottomSheet(
             currentRegionList = DummyData.regions.toList(),

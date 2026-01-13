@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
@@ -70,7 +71,7 @@ fun MainBottomBar(
             modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.BottomCenter
         ) {
-            NavigationBar(containerColor = MemoripTheme.colors.offWhite) {
+            NavigationBar(containerColor = MemoripTheme.colors.background) {
                 tabs.forEachIndexed { index, tab ->
                     if (index == tabs.size / 2) {
                         Spacer(modifier = Modifier.width(centerButtonSize))
@@ -87,8 +88,8 @@ fun MainBottomBar(
                         },
                         label = { Text(text = stringResource(tab.titleTextId)) },
                         colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = MemoripTheme.colors.black,
-                            selectedTextColor = MemoripTheme.colors.black,
+                            selectedIconColor = MaterialTheme.colorScheme.onSurface,
+                            selectedTextColor = MaterialTheme.colorScheme.onSurface,
                             indicatorColor = MemoripTheme.colors.primaryContainer,
                             unselectedIconColor = MemoripTheme.colors.gray,
                             unselectedTextColor = MemoripTheme.colors.gray
