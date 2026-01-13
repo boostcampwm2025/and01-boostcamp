@@ -61,7 +61,7 @@ class PlaceService(
                 latitude = place.latitude,
                 longitude = place.longitude,
                 address = place.address.fullAddress,
-                imageUrl = place.getImages().firstOrNull()?.url
+                imageUrl = place.thumbnailUrl
             )
         }
 

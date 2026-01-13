@@ -21,6 +21,7 @@ class Place protected constructor(
     latitude: Double,
     longitude: Double,
     address: Address,
+    thumbnailUrl: String,
     imageUrls: List<String>
 ) : BaseTimeSyncEntity() {
 
@@ -61,7 +62,7 @@ class Place protected constructor(
         internal set
 
     @Column(name = "thumbnail_url", length = 512)
-    var thumbnailUrl: String? = null
+    var thumbnailUrl: String = thumbnailUrl
         internal set
 
     @Column(name = "start_at", columnDefinition = "TIMESTAMPTZ")
@@ -113,11 +114,7 @@ class Place protected constructor(
         newUrls.forEach { addImage(it) }
         
         // 이미지 업데이트 시 첫 번째 이미지를 대표 이미지로 설정
-        if (newUrls.isNotEmpty()) {
-            thumbnailUrl = newUrls.first()
-        } else {
-            thumbnailUrl = null
-        }
+        thumbnailUrl = newUrls.firstOrNull() ?: ""
     }
 
     fun updateThumbnailUrl(url: String) {
@@ -190,21 +187,22 @@ class Place protected constructor(
 
             val generatedId = id ?: UuidV7Generator.generate()
             return Place(
-                generatedId,
-                groupId,
-                writerId,
-                title,
-                content,
-                latitude,
-                longitude,
-                address,
-                imageUrls
+                id = generatedId,
+                groupId = groupId,
+                writerId = writerId,
+                title = title,
+                content = content,
+                latitude = latitude,
+                longitude = longitude,
+                address = address,
+                thumbnailUrl = imageUrls.firstOrNull() ?: "",
+                imageUrls = imageUrls
             ).apply {
                 this.content = content
                 this.parentPlaceId = parentPlaceId
                 this.startAt = startAt
                 this.endAt = endAt
-                // 이미지가 있으면 첫 번째 이미지를 대표 이미지로 설정
+
                 if (imageUrls.isNotEmpty()) {
                     this.thumbnailUrl = imageUrls.first()
                 }
