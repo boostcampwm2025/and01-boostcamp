@@ -20,6 +20,7 @@ object MemoripSpace {
     val SpaceMedium = 16.dp
     val SpaceLarge = 20.dp
     val SpaceXLarge = 24.dp
+    val SpaceXXXLarge = 32.dp
 }
 
 object MemoripIconSize {
@@ -66,4 +67,8 @@ object MemoripAlpha {
     /* ---------- Divider / Border ---------- */
     const val DIVIDER = 0.12f
     const val BORDER = 0.2f
+}
+
+object MemoripElevation {
+    val ElevationMedium = 4.dp
 }
