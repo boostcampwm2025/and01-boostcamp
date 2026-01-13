@@ -94,14 +94,7 @@ fun PlaceDetailScreen(
     }
 
     PlaceDetailScreen(
-        place = uiState.place.copy(
-            imageUrls = persistentListOf(
-                "https://picsum.photos/200/50",
-                "https://picsum.photos/200/100",
-                "https://picsum.photos/200/200",
-                "https://picsum.photos/200/400"
-            )
-        ),
+        place = uiState.place,
         onAction = viewModel::onAction,
         modifier = modifier
     )
@@ -239,7 +232,11 @@ private fun PlaceDetailContent(
                 .clickable { place.imageUrls.firstOrNull()?.let { image -> onImageClick(image) } },
             contentAlignment = Alignment.BottomStart
         ) {
-            HorizontalPager(state = pagerState) { idx ->
+            HorizontalPager(
+                modifier = Modifier.fillMaxSize(),
+                state = pagerState,
+                key = { idx -> place.imageUrls[idx] }
+            ) { idx ->
                 AsyncImage(
                     model = ImageRequest.Builder(context)
                         .data(data = place.imageUrls[idx])
