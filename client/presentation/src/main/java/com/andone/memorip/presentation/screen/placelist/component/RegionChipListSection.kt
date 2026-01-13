@@ -22,7 +22,6 @@ fun RegionChipListSection(
     FlowRow(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceSmall),
-        verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceSmall)
     ) {
         regionList.forEach { region ->
             StaticChip(
