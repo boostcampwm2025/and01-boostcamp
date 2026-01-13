@@ -1,17 +1,20 @@
 package com.andone.memorip.presentation.placedetail
 
-import android.R.attr.contentDescription
+import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
@@ -19,9 +22,6 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.ListItemDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,11 +32,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
@@ -44,22 +49,24 @@ import com.andone.memorip.navigation.PlaceDetail
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.LoadingIndicatorScreen
 import com.andone.memorip.presentation.component.MemoripImage
-import com.andone.memorip.presentation.component.TagChipRow
 import com.andone.memorip.presentation.placedetail.PlaceDetailScreenConstants.IMAGE_ASPECT_RATIO
+import com.andone.memorip.presentation.placedetail.component.ContentCard
+import com.andone.memorip.presentation.placedetail.component.ContrastAwareText
 import com.andone.memorip.presentation.placedetail.component.ImageDialog
+import com.andone.memorip.presentation.placedetail.component.LocationCard
 import com.andone.memorip.presentation.placedetail.component.PlaceDetailInfoSection
 import com.andone.memorip.presentation.placedetail.component.PlaceDetailTopBar
+import com.andone.memorip.presentation.placedetail.component.TagCard
 import com.andone.memorip.presentation.placedetail.model.PlaceDetailAction
 import com.andone.memorip.presentation.placedetail.model.PlaceDetailEvent
 import com.andone.memorip.presentation.placedetail.model.PlaceUiModel
-import com.andone.memorip.presentation.theme.Black
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
-import com.andone.memorip.presentation.util.DummyData.place
 import com.andone.memorip.presentation.util.collectWithLifecycle
 import kotlinx.collections.immutable.ImmutableList
+import kotlin.math.roundToInt
 
 private object PlaceDetailScreenConstants {
     const val IMAGE_ASPECT_RATIO = 1.5f
@@ -101,8 +108,6 @@ private fun PlaceDetailScreen(
     onAction: (PlaceDetailAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var isScrolled by remember{ mutableStateOf(false) }
-
     var imageDialogExpanded by remember { mutableStateOf(false) }
     var selectedImageUrl by remember { mutableStateOf("") }
 
@@ -110,23 +115,20 @@ private fun PlaceDetailScreen(
         modifier = modifier,
         topBar = {
             PlaceDetailTopBar(onNavigationIconClick = { onAction(PlaceDetailAction.OnBackClick) })
-        }
+        },
+        contentWindowInsets = WindowInsets.navigationBars
     ) { innerPadding ->
-        if (isScrolled) {
-            PlaceDetailContent(
-                modifier = Modifier.padding(paddingValues = innerPadding),
-                onImageClick = { imageUrl ->
-                    selectedImageUrl = imageUrl
-                    imageDialogExpanded = true
-                }
-            )
-        } else {
-            PlaceSummaryContent(
-                imageUrl = place.imageUrls.first(),
-                title = place.title,
-                fullAddress = place.locationName
-            )
-        }
+        PlaceDetailContent(
+            place = place,
+            onImageClick = {
+                imageDialogExpanded = true
+                selectedImageUrl = it
+            },
+            innerPadding = innerPadding,
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = MemoripTheme.colors.white),
+        )
     }
 
     if (imageDialogExpanded) {
@@ -191,103 +193,106 @@ private fun PlaceImagesSection(
     }
 }
 
-@Composable
-private fun PlaceSummaryContent(
-    modifier: Modifier = Modifier,
-    imageUrl: String,
-    title: String,
-    fullAddress: String,
-) {
-    Box(
-        modifier = modifier,
-        contentAlignment = Alignment.BottomStart
-    ) {
-        AsyncImage(
-            modifier = Modifier.fillMaxSize(),
-            model = imageUrl,
-            contentDescription = stringResource(R.string.place_detail_image_content_description),
-        )
-
-        Column(
-            modifier = Modifier.padding(
-                start = MemoripPadding.PaddingXXXLarge,
-                bottom = MemoripPadding.PaddingXXXLarge
-            ),
-            verticalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXSmall)
-        ) {
-            Text(
-                text = title,
-                color = MemoripTheme.colors.white,
-                style = MemoripTheme.typography.headline2
-            )
-            Row(horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceMedium)) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_location_on),
-                    tint = MemoripTheme.colors.green,
-                    contentDescription = null
-                )
-                Text(
-                    text = fullAddress,
-                    color = MemoripTheme.colors.white,
-                    style = MemoripTheme.typography.label1
-                )
-            }
-        }
-    }
-}
+// pointerInput과 nestedScrollConnection 충돌
+// verticalScroll과 nestedScrollConnection 충돌 순서
 
 @Composable
 private fun PlaceDetailContent(
-    modifier: Modifier = Modifier,
-    onImageClick: (String) -> Unit
+    place: PlaceUiModel,
+    onImageClick: (String) -> Unit,
+    innerPadding: PaddingValues,
+    modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
+    val offsetY = remember { Animatable(initialValue = 0f) }
+
+    val density = LocalDensity.current
+    val maxHeaderHeight =
+        LocalWindowInfo.current.containerDpSize.height - innerPadding.calculateTopPadding() - innerPadding.calculateBottomPadding()
+    val minHeaderHeight = maxHeaderHeight * 0.3f
+    val maxHeaderPx = with(density) { maxHeaderHeight.toPx() }
+    val minHeaderPx = with(density) { minHeaderHeight.toPx() }
+    val headerHeightPx = remember(scrollState.value) {
+        (maxHeaderPx - scrollState.value).coerceIn(minHeaderPx, maxHeaderPx)
+    }
+
     val pagerState = rememberPagerState(pageCount = { place.imageUrls.size })
 
     Column(
         modifier = modifier
-            .verticalScroll(scrollState)
-            .padding(MemoripPadding.PaddingMedium)
+            .offset { IntOffset(0, offsetY.value.roundToInt()) }
+            .verticalScroll(state = scrollState)
+            .padding(paddingValues = innerPadding)
+            .padding(bottom = MemoripPadding.PaddingMedium),
+        verticalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXXXLarge)
     ) {
-        Text(
-            text = place.title,
-            style = MemoripTheme.typography.headlineLarge
-        )
-
-        Spacer(modifier = Modifier.height(MemoripSpace.SpaceMedium))
-        Column(verticalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXXSmall)) {
-            TagChipRow(tags = place.tags)
-            PlaceDetailInfoSection(
-                infoString = place.locationName,
-                iconRes = R.drawable.ic_location_on
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(height = with(receiver = density) { headerHeightPx.toDp() })
+                .clipToBounds()
+                .clickable {
+                    place.imageUrls.firstOrNull()?.let { image -> onImageClick(image) }
+                },
+            contentAlignment = Alignment.BottomStart
+        ) {
+            AsyncImage(
+                model = place.imageUrls.firstOrNull(),
+                contentDescription = stringResource(R.string.place_detail_image_content_description),
+                contentScale = ContentScale.Crop,
             )
+
+            Column(
+                modifier = Modifier.padding(
+                    start = MemoripPadding.PaddingXXXLarge,
+                    bottom = MemoripPadding.PaddingXXXLarge
+                ),
+                verticalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXSmall)
+            ) {
+                ContrastAwareText(
+                    text = place.title,
+                    style = MemoripTheme.typography.headline2
+                )
+                Row(horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceMedium)) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_location_on),
+                        tint = MemoripTheme.colors.green,
+                        contentDescription = null
+                    )
+                    ContrastAwareText(
+                        text = place.locationName,
+                        style = MemoripTheme.typography.label1
+                    )
+                }
+            }
         }
 
-        Spacer(modifier = Modifier.height(MemoripSpace.SpaceMedium))
-        PlaceImagesSection(
-            pagerState = pagerState,
-            imageUrls = place.imageUrls,
-            onImageClick = onImageClick
-        )
-
-        Spacer(modifier = Modifier.height(MemoripSpace.SpaceXSmall))
-        PlaceDetailInfoSection(
-            infoString = place.groupName,
-            iconRes = R.drawable.ic_folder,
-            modifier = Modifier.padding(start = MemoripPadding.PaddingXSmall)
-        )
-
-        Spacer(modifier = Modifier.height(MemoripSpace.SpaceMedium))
-        Text(
-            text = place.content,
-            style = MemoripTheme.typography.bodyLarge
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = MemoripPadding.PaddingMedium),
+            verticalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceMedium)
+        ) {
+            ContentCard(content = place.content)
+            LocationCard(
+                location = place.locationName,
+                title = place.title,
+                latitude = place.latitude,
+                longitude = place.longitude
+            )
+            TagCard(tags = place.tags)
+            PlaceDetailInfoSection(
+                infoString = place.groupName,
+                iconRes = R.drawable.ic_folder,
+                modifier = Modifier.padding(start = MemoripPadding.PaddingXSmall)
+            )
+        }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun PlaceDetailScreenPreview() {
+private fun PlaceDetailScreenPrev() {
     MemoripTheme {
         PlaceDetailScreen(
             place = DummyData.place,
@@ -298,13 +303,12 @@ private fun PlaceDetailScreenPreview() {
 
 @Preview(showBackground = true)
 @Composable
-private fun PlaceSummaryContentPreview() {
+private fun PlaceDetailContentPrev() {
     MemoripTheme {
-        PlaceSummaryContent(
-            modifier = Modifier.fillMaxSize(),
-            imageUrl = "https://picsum.photos/200/50",
-            title = "장소 타이틀",
-            fullAddress = "광명, 경기도"
+        PlaceDetailContent(
+            place = PlaceUiModel(),
+            innerPadding = PaddingValues(0.dp),
+            onImageClick = {},
         )
     }
 }
