@@ -23,9 +23,9 @@ fun ContrastAwareText(
     style: TextStyle
 ) {
     val textColor = if (image != null) {
-        val luminusValue = image.cropBottomArea(ratio = bottomCropRate)
+        val luminance = image.cropBottomArea(ratio = bottomCropRate)
             .calculateLuminanceAverage()
-        if (luminusValue > textColorLuminanceThreshold) MemoripTheme.colors.black
+        if (luminance > textColorLuminanceThreshold) MemoripTheme.colors.black
         else MemoripTheme.colors.white
     } else {
         MemoripTheme.colors.white
