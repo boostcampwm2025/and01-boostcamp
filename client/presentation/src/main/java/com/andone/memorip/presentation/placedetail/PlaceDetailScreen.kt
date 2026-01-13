@@ -204,8 +204,6 @@ private fun PlaceDetailContent(
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
-    val offsetY = remember { Animatable(initialValue = 0f) }
-
     val density = LocalDensity.current
     val maxHeaderHeight =
         LocalWindowInfo.current.containerDpSize.height - innerPadding.calculateTopPadding() - innerPadding.calculateBottomPadding()
@@ -220,7 +218,6 @@ private fun PlaceDetailContent(
 
     Column(
         modifier = modifier
-            .offset { IntOffset(0, offsetY.value.roundToInt()) }
             .verticalScroll(state = scrollState)
             .padding(paddingValues = innerPadding)
             .padding(bottom = MemoripPadding.PaddingMedium),
