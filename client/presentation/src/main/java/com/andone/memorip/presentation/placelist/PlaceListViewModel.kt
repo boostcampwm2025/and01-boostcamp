@@ -8,7 +8,6 @@ import com.andone.memorip.domain.repository.PlaceRepository
 import com.andone.memorip.presentation.model.toUiModel
 import com.andone.memorip.presentation.placelist.model.PlaceListAction
 import com.andone.memorip.presentation.placelist.model.PlaceListEvent
-import com.andone.memorip.presentation.placelist.model.PlaceListEvent.*
 import com.andone.memorip.presentation.placelist.model.PlaceListUiState
 import com.andone.memorip.presentation.placelist.model.RegionUiModel
 import com.andone.memorip.presentation.placelist.model.SelectedRegionState
@@ -26,13 +25,19 @@ import javax.inject.Inject
 @HiltViewModel
 class PlaceListViewModel @Inject constructor(repository: PlaceRepository) : ViewModel() {
 
-    private val rootRegions = repository.loadRegions().map { it.toUiModel() }
-
-    private val _uiState = MutableStateFlow(value = PlaceListUiState(rootRegions = rootRegions))
+    private val _uiState = MutableStateFlow(value = PlaceListUiState())
     val uiState = _uiState.asStateFlow()
 
     private val _event = Channel<PlaceListEvent>(capacity = BUFFERED)
     val event = _event.receiveAsFlow()
+
+    init {
+        val rootRegions = repository.loadRegions().map { it.toUiModel() }
+
+        _uiState.update {
+            it.copy(rootRegions = rootRegions)
+        }
+    }
 
     val placesPagingFlow =
         repository.getPlaceList()
@@ -44,11 +49,11 @@ class PlaceListViewModel @Inject constructor(repository: PlaceRepository) : View
     fun onAction(action: PlaceListAction) {
         when (action) {
             PlaceListAction.OnFABClick -> {
-                _event.trySend(element = NavigateToPlaceCreate)
+                _event.trySend(element = PlaceListEvent.NavigateToPlaceCreate)
             }
 
             is PlaceListAction.OnPlaceClick -> {
-                _event.trySend(element = NavigatePlaceDetail(id = action.id))
+                _event.trySend(element = PlaceListEvent.NavigatePlaceDetail(id = action.id))
             }
 
             is PlaceListAction.OnQueryChange -> {

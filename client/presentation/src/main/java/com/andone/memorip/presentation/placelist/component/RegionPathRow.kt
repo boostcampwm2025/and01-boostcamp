@@ -62,7 +62,7 @@ fun RegionPathRow(
             }
 
             val childrenText = selectedRegionState.child
-                .joinToString(", ") { it.name }
+                .joinToString(separator = stringResource(R.string.place_list_comma_separator)) { it.name }
 
             Text(
                 text = childrenText,
