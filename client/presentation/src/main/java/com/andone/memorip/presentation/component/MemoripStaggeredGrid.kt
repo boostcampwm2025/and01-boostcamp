@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.component
 
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -8,8 +9,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
@@ -17,10 +20,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -30,6 +38,7 @@ import com.andone.memorip.presentation.component.StaggeredGridDimens.OVERLAY_WID
 import com.andone.memorip.presentation.component.StaggeredGridDimens.STAGGERED_GRID_IMAGE_CORNER_RADIUS
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.theme.MemoripAlpha
+import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
@@ -38,7 +47,7 @@ private object StaggeredGridDimens {
     val STAGGERED_GRID_MIN_CELL_WIDTH = 160.dp
     val STAGGERED_GRID_IMAGE_CORNER_RADIUS = 16.dp
     val OVERLAY_WIDTH = 104.dp
-    val OVERLAY_HEIGHT = 44.dp
+    val OVERLAY_HEIGHT = 40.dp
 }
 
 @Composable
@@ -71,9 +80,11 @@ fun StaggeredImageItem(
     onImageClick: () -> Unit,
     modifier: Modifier = Modifier,
     cornerRadius: Dp = STAGGERED_GRID_IMAGE_CORNER_RADIUS,
-    contentDescription: String = "제주도 맛집",
-    location: String = "제주시 애월읍"
+    contentDescription: String? = null,
+    location: String? = null
 ) {
+    var isExpanded by remember { mutableStateOf(false) }
+
     Box(
         modifier = modifier
             .clickable(
@@ -96,20 +107,42 @@ fun StaggeredImageItem(
         Box(
             modifier = Modifier
                 .align(Alignment.BottomStart)
+                .then(
+                    if (isExpanded) {
+                        Modifier.fillMaxWidth()
+                    } else {
+                        Modifier.width(width = OVERLAY_WIDTH)
+                    }
+                )
+                .height(height = OVERLAY_HEIGHT)
                 .background(
                     color = MaterialTheme.colorScheme.surface.copy(alpha = MemoripAlpha.IMAGE_OVERLAY),
-                    shape = RoundedCornerShape(topEnd = STAGGERED_GRID_IMAGE_CORNER_RADIUS)
+                    shape = if (!isExpanded) {
+                        RoundedCornerShape(topEnd = STAGGERED_GRID_IMAGE_CORNER_RADIUS)
+                    } else {
+                        RectangleShape
+                    }
                 )
-                .size(width = OVERLAY_WIDTH, height = OVERLAY_HEIGHT),
-            contentAlignment = Alignment.Center
+                .clickable(
+                    interactionSource = null,
+                    indication = null,
+                    onClick = { isExpanded = !isExpanded }
+                ),
         ) {
-            Column {
-                Text(
-                    text = contentDescription,
-                    style = MemoripTheme.typography.label1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                PlaceLocationText(address = location)
+            Column(
+                modifier = Modifier.padding(horizontal = MemoripPadding.PaddingXSmall),
+                verticalArrangement = Arrangement.Center
+            ) {
+                if (contentDescription != null) {
+                    Text(
+                        text = contentDescription,
+                        style = MemoripTheme.typography.label1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+                if (!location.isNullOrBlank()) {
+                    PlaceLocationText(address = location)
+                }
             }
         }
     }

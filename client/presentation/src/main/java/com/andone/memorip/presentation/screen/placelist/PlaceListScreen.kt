@@ -212,7 +212,9 @@ fun PlaceListScreenContents(
                         StaggeredImageItem(
                             imageUrl = image.url,
                             aspectRatio = image.aspectRatio,
-                            onImageClick = { onAction(PlaceListAction.OnPlaceClick(id = place.id)) }
+                            onImageClick = { onAction(PlaceListAction.OnPlaceClick(id = place.id)) },
+                            contentDescription = place.name,
+                            location = place.address,
                         )
                     }
                 )
