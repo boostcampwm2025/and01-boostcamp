@@ -10,20 +10,17 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,7 +28,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -49,8 +45,6 @@ import coil.request.ImageRequest
 import com.andone.memorip.navigation.PlaceDetail
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.LoadingIndicatorScreen
-import com.andone.memorip.presentation.component.MemoripImage
-import com.andone.memorip.presentation.placedetail.PlaceDetailScreenConstants.IMAGE_ASPECT_RATIO
 import com.andone.memorip.presentation.placedetail.component.ContentCard
 import com.andone.memorip.presentation.placedetail.component.ContrastAwareText
 import com.andone.memorip.presentation.placedetail.component.LocationCard
@@ -67,12 +61,6 @@ import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
 import com.andone.memorip.presentation.util.collectWithLifecycle
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
-
-private object PlaceDetailScreenConstants {
-    const val IMAGE_ASPECT_RATIO = 1.5f
-}
 
 @Composable
 fun PlaceDetailScreen(
@@ -141,56 +129,6 @@ private fun PlaceDetailScreen(
                 selectedImageUrl = ""
             },
             modifier = Modifier.fillMaxSize()
-        )
-    }
-}
-
-@Composable
-private fun PlaceImagesSection(
-    pagerState: PagerState,
-    imageUrls: ImmutableList<String>,
-    onImageClick: (String) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Box(modifier = modifier) {
-        HorizontalPager(
-            state = pagerState,
-            modifier = Modifier.fillMaxWidth()
-        ) { pageIndex ->
-            val imageUrl = imageUrls[pageIndex]
-
-            MemoripImage(
-                imageUrl = imageUrl,
-                contentDescription = stringResource(R.string.place_detail_image_content_description),
-                modifier = Modifier
-                    .clickable(
-                        interactionSource = null,
-                        indication = null,
-                        onClick = { onImageClick(imageUrl) }
-                    )
-                    .fillMaxWidth()
-                    .clip(MemoripTheme.shapes.roundedMedium)
-                    .aspectRatio(IMAGE_ASPECT_RATIO)
-                    .background(MemoripTheme.colors.white),
-            )
-        }
-
-        Text(
-            text = stringResource(
-                R.string.place_detail_image_count,
-                pagerState.currentPage + 1,
-                imageUrls.size
-            ),
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(MemoripPadding.PaddingXSmall)
-                .clip(MemoripTheme.shapes.roundedXSmall)
-                .background(MemoripTheme.colors.background)
-                .padding(
-                    horizontal = MemoripPadding.PaddingMedium,
-                    vertical = MemoripPadding.PaddingXSmall
-                ),
-            style = MemoripTheme.typography.bodySmall
         )
     }
 }
