@@ -42,6 +42,12 @@ object MemoripBorderWidth {
     val Strong = 2.dp
 }
 
+object MemoripShadow {
+    val Small = 1.dp
+    val Medium = 4.dp
+    val Large = 8.dp
+}
+
 object MemoripAlpha {
     /* ---------- Disabled / Inactive ---------- */
     const val DISABLED = 0.38f

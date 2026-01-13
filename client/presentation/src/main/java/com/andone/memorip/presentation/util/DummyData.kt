@@ -1,16 +1,24 @@
 package com.andone.memorip.presentation.util
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.andone.memorip.domain.model.Tag
-import com.andone.memorip.presentation.grouplist.model.GroupUiModel
+import com.andone.memorip.presentation.screen.grouplist.model.GroupUiModel
 import com.andone.memorip.presentation.model.ImageItem
+import com.andone.memorip.presentation.model.LocationUiModel
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.model.TagUiModel
 import com.andone.memorip.presentation.model.toUiModel
-import com.andone.memorip.presentation.placedetail.model.PlaceUiModel
+import com.andone.memorip.presentation.screen.placedetail.model.PlaceUiModel
+import com.andone.memorip.presentation.placelist.model.RegionUiModel
+import com.andone.memorip.presentation.placelist.model.SelectedRegionState
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.flow.flowOf
 import java.time.LocalDateTime
 import java.util.UUID
 import kotlin.random.Random
@@ -62,6 +70,37 @@ object DummyData {
             name = "액티비티",
             color = Color(0xFFCCDD66)
         ),
+    )
+
+    val regions: Set<RegionUiModel> = setOf(
+        RegionUiModel(id = "1", name = "서울", isSelected = true),
+        RegionUiModel(id = "2", name = "경기"),
+        RegionUiModel(id = "3", name = "인천"),
+        RegionUiModel(id = "4", name = "강원"),
+        RegionUiModel(id = "5", name = "충청북도"),
+        RegionUiModel(id = "6", name = "충청남도"),
+        RegionUiModel(id = "7", name = "전라북도"),
+        RegionUiModel(id = "8", name = "전라남도", isSelected = true),
+        RegionUiModel(id = "9", name = "경상북도"),
+        RegionUiModel(id = "10", name = "경상남도"),
+        RegionUiModel(id = "11", name = "대전"),
+        RegionUiModel(id = "12", name = "세종"),
+        RegionUiModel(id = "13", name = "대구"),
+        RegionUiModel(id = "14", name = "부산"),
+        RegionUiModel(id = "15", name = "울산"),
+        RegionUiModel(id = "16", name = "광주"),
+        RegionUiModel(id = "17", name = "제주특별자치도")
+    )
+
+    val regionState: SelectedRegionState = SelectedRegionState(
+        parents = listOf(
+            RegionUiModel(id = "seoul", name = "서울", level = 0),
+            RegionUiModel(id = "gangnam", name = "강남구", level = 1)
+        ),
+        child = setOf(
+            RegionUiModel(id = "yeoksam", name = "역삼동", level = 2),
+            RegionUiModel(id = "samseong", name = "삼성동", level = 2)
+        )
     )
 
     val places: List<Place> by lazy {
@@ -214,6 +253,66 @@ object DummyData {
             images = createRandomImageUrls(1, "daegu")
         )
     )
+
+    val locations: List<LocationUiModel> by lazy {
+        listOf(
+            LocationUiModel(
+                id = "1",
+                name = "스타벅스 강남R점",
+                category = "카페",
+                address = "서울특별시 강남구 역삼동 825-2",
+                roadAddress = "서울특별시 강남구 강남대로 390",
+                latitude = 37.4979,
+                longitude = 127.0276
+            ),
+            LocationUiModel(
+                id = "2",
+                name = "코엑스",
+                category = "복합문화공간",
+                address = "서울특별시 강남구 삼성동 159",
+                roadAddress = "서울특별시 강남구 영동대로 513",
+                latitude = 37.5118,
+                longitude = 127.0593
+            ),
+            LocationUiModel(
+                id = "3",
+                name = "남산서울타워",
+                category = "관광명소",
+                address = "서울특별시 용산구 용산동2가 산 1-3",
+                roadAddress = "서울특별시 용산구 남산공원길 105",
+                latitude = 37.5511,
+                longitude = 126.9882
+            ),
+            LocationUiModel(
+                id = "4",
+                name = "뚝섬한강공원",
+                category = "공원",
+                address = "서울특별시 광진구 자양동 427-6",
+                roadAddress = "서울특별시 광진구 강변북로 139",
+                latitude = 37.5294,
+                longitude = 127.0739
+            ),
+            LocationUiModel(
+                id = "5",
+                name = "롯데월드",
+                category = "테마파크",
+                address = "서울특별시 송파구 잠실동 40-1",
+                roadAddress = "서울특별시 송파구 올림픽로 240",
+                latitude = 37.5111,
+                longitude = 127.0981
+            )
+        )
+    }
+
+    @Composable
+    fun getPlacePagingItems(): LazyPagingItems<Place> {
+        return flowOf(PagingData.from(places)).collectAsLazyPagingItems()
+    }
+
+    @Composable
+    fun getLocationPagingItems(): LazyPagingItems<LocationUiModel> {
+        return flowOf(PagingData.from(locations)).collectAsLazyPagingItems()
+    }
 
     private fun createRandomImageUrls(count: Int, seedKey: String): List<String> {
         return List(count) { index ->

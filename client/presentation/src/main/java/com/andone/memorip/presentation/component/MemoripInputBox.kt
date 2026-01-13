@@ -37,13 +37,8 @@ fun MemoripInputBox(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .border(
-                width = MemoripBorderWidth.Thin,
-                color = MemoripTheme.colors.primary,
-                shape = MemoripTheme.shapes.roundedSmall
-            )
             .background(
-                color = MemoripTheme.colors.offWhite,
+                color = MemoripTheme.colors.primaryContainer,
                 shape = MemoripTheme.shapes.roundedSmall
             )
             .padding(start = MemoripPadding.PaddingSmall)
