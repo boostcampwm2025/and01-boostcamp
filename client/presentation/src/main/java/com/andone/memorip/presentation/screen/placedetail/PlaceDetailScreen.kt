@@ -52,14 +52,15 @@ import com.andone.memorip.presentation.component.MemoripImage
 import com.andone.memorip.presentation.placedetail.PlaceDetailScreenConstants.IMAGE_ASPECT_RATIO
 import com.andone.memorip.presentation.placedetail.component.ContentCard
 import com.andone.memorip.presentation.placedetail.component.ContrastAwareText
-import com.andone.memorip.presentation.placedetail.component.ImageDialog
 import com.andone.memorip.presentation.placedetail.component.LocationCard
-import com.andone.memorip.presentation.placedetail.component.PlaceDetailInfoSection
-import com.andone.memorip.presentation.placedetail.component.PlaceDetailTopBar
 import com.andone.memorip.presentation.placedetail.component.TagCard
-import com.andone.memorip.presentation.placedetail.model.PlaceDetailAction
-import com.andone.memorip.presentation.placedetail.model.PlaceDetailEvent
-import com.andone.memorip.presentation.placedetail.model.PlaceUiModel
+import com.andone.memorip.presentation.screen.placedetail.component.ImageDialog
+import com.andone.memorip.presentation.screen.placedetail.component.PlaceDetailInfoSection
+import com.andone.memorip.presentation.screen.placedetail.component.PlaceDetailTopBar
+import com.andone.memorip.presentation.screen.placedetail.model.PlaceDetailAction
+import com.andone.memorip.presentation.screen.placedetail.PlaceDetailViewModel
+import com.andone.memorip.presentation.screen.placedetail.model.PlaceDetailEvent
+import com.andone.memorip.presentation.screen.placedetail.model.PlaceUiModel
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -168,7 +169,7 @@ private fun PlaceImagesSection(
                     .fillMaxWidth()
                     .clip(MemoripTheme.shapes.roundedMedium)
                     .aspectRatio(IMAGE_ASPECT_RATIO)
-                    .background(MemoripTheme.colors.offWhite),
+                    .background(MemoripTheme.colors.white),
             )
         }
 
