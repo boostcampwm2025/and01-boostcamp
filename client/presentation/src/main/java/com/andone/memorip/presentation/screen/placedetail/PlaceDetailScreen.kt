@@ -232,15 +232,17 @@ private fun PlaceDetailContent(
                 },
             contentAlignment = Alignment.BottomStart
         ) {
-            AsyncImage(
-                model = coil.request.ImageRequest.Builder(context)
-                    .data(place.imageUrls.firstOrNull())
-                    .allowHardware(false)
-                    .build(),
-                contentDescription = stringResource(R.string.place_detail_image_content_description),
-                contentScale = ContentScale.Crop,
-                onSuccess = { result -> bitmap = (result.result.drawable as BitmapDrawable).bitmap }
-            )
+            HorizontalPager(state = pagerState) { idx ->
+                AsyncImage(
+                    model = coil.request.ImageRequest.Builder(context)
+                        .data(place.imageUrls[idx])
+                        .allowHardware(false)
+                        .build(),
+                    contentDescription = stringResource(R.string.place_detail_image_content_description),
+                    contentScale = ContentScale.Crop,
+                    onSuccess = { result -> bitmap = (result.result.drawable as BitmapDrawable).bitmap }
+                )
+            }
 
             Column(
                 modifier = Modifier.padding(
