@@ -1,6 +1,8 @@
 package com.andone.memorip.presentation.placedetail
 
-import androidx.compose.animation.core.Animatable
+import android.R.attr.text
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,7 +16,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
@@ -35,16 +36,18 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
+import coil3.request.ImageRequest
+import coil3.request.allowHardware
 import com.andone.memorip.navigation.PlaceDetail
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.LoadingIndicatorScreen
@@ -66,7 +69,6 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
 import com.andone.memorip.presentation.util.collectWithLifecycle
 import kotlinx.collections.immutable.ImmutableList
-import kotlin.math.roundToInt
 
 private object PlaceDetailScreenConstants {
     const val IMAGE_ASPECT_RATIO = 1.5f
@@ -193,9 +195,6 @@ private fun PlaceImagesSection(
     }
 }
 
-// pointerInput과 nestedScrollConnection 충돌
-// verticalScroll과 nestedScrollConnection 충돌 순서
-
 @Composable
 private fun PlaceDetailContent(
     place: PlaceUiModel,
@@ -203,8 +202,9 @@ private fun PlaceDetailContent(
     innerPadding: PaddingValues,
     modifier: Modifier = Modifier
 ) {
-    val scrollState = rememberScrollState()
     val density = LocalDensity.current
+    val context = LocalContext.current
+    val scrollState = rememberScrollState()
     val maxHeaderHeight =
         LocalWindowInfo.current.containerDpSize.height - innerPadding.calculateTopPadding() - innerPadding.calculateBottomPadding()
     val minHeaderHeight = maxHeaderHeight * 0.3f
@@ -213,6 +213,7 @@ private fun PlaceDetailContent(
     val headerHeightPx = remember(scrollState.value) {
         (maxHeaderPx - scrollState.value).coerceIn(minHeaderPx, maxHeaderPx)
     }
+    var bitmap by remember { mutableStateOf<Bitmap?>(null) }
 
     val pagerState = rememberPagerState(pageCount = { place.imageUrls.size })
 
@@ -234,9 +235,13 @@ private fun PlaceDetailContent(
             contentAlignment = Alignment.BottomStart
         ) {
             AsyncImage(
-                model = place.imageUrls.firstOrNull(),
+                model = coil.request.ImageRequest.Builder(context)
+                    .data(place.imageUrls.firstOrNull())
+                    .allowHardware(false)
+                    .build(),
                 contentDescription = stringResource(R.string.place_detail_image_content_description),
                 contentScale = ContentScale.Crop,
+                onSuccess = { result -> bitmap = (result.result.drawable as BitmapDrawable).bitmap }
             )
 
             Column(
@@ -247,6 +252,7 @@ private fun PlaceDetailContent(
                 verticalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXSmall)
             ) {
                 ContrastAwareText(
+                    image = bitmap,
                     text = place.title,
                     style = MemoripTheme.typography.headline2
                 )
@@ -257,6 +263,7 @@ private fun PlaceDetailContent(
                         contentDescription = null
                     )
                     ContrastAwareText(
+                        image = bitmap,
                         text = place.locationName,
                         style = MemoripTheme.typography.label1
                     )
