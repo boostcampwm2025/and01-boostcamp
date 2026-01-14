@@ -35,8 +35,8 @@ fun <T : Any> MemoripPagingList(
             LazyVerticalStaggeredGrid(
                 columns = columns,
                 modifier = modifier,
-                verticalItemSpacing = MemoripSpace.SpaceXXSmall,
-                horizontalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXXSmall)
+                verticalItemSpacing = MemoripSpace.SpaceSmall,
+                horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceSmall)
             ) {
                 items(
                     count = pagingItems.itemCount,
