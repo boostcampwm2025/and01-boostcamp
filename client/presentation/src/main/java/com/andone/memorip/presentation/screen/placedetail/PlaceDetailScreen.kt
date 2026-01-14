@@ -104,7 +104,10 @@ private fun PlaceDetailScreen(
     Scaffold(
         modifier = modifier,
         topBar = {
-            PlaceDetailTopBar(onNavigationIconClick = { onAction(PlaceDetailAction.OnBackClick) })
+            PlaceDetailTopBar(
+                onNavigationIconClick = { onAction(PlaceDetailAction.OnBackClick) },
+                onActionIconClick = { /** TODO 정보 가져오기 */ }
+            )
         },
         contentWindowInsets = WindowInsets.navigationBars
     ) { innerPadding ->
