@@ -119,4 +119,12 @@ class GroupService(
 
         groupRepository.delete(group)
     }
+
+    @Transactional(readOnly = true)
+    fun getGroupById(groupId: UUID): GroupResponse {
+        val group = groupRepository.findByIdOrNull(groupId)
+            ?: throw BusinessException(code = CommonExceptionCode.GROUP_NOT_FOUND)
+        
+        return group.toGroupResponse()
+    }
 }

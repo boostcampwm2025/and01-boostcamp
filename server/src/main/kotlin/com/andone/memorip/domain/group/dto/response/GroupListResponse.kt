@@ -20,24 +20,24 @@ data class GroupListResponse(
 )
 
 fun GroupListProjection.toGroupListResponse(): GroupListResponse {
-    val imagesList = this.relatedPlaceImages
+    val imagesList = this.getRelatedPlaceImages()
         ?.split(",")
         ?.filter { it.isNotBlank() }
         ?: emptyList()
 
     return GroupListResponse(
-        id = this.id,
+        id = this.getId(),
         owner = UserResponse(
-            id = this.ownerId,
-            nickname = this.ownerNickname,
-            profileImage = this.ownerProfileImage
+            id = this.getOwnerId(),
+            nickname = this.getOwnerNickname(),
+            profileImage = this.getOwnerProfileImage()
         ),
-        title = this.title,
-        visibility = this.visibility,
-        type = this.type,
-        createdAt = this.createdAt,
-        updatedAt = this.updatedAt,
+        title = this.getTitle(),
+        visibility = this.getVisibility(),
+        type = this.getType(),
+        createdAt = this.getCreatedAt(),
+        updatedAt = this.getUpdatedAt(),
         relatedPlaceImages = imagesList,
-        placeCount = this.placeCount
+        placeCount = this.getPlaceCount()
     )
 }
