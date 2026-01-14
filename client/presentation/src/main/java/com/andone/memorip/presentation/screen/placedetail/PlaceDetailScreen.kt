@@ -30,7 +30,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
@@ -59,9 +58,11 @@ import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
 import com.andone.memorip.presentation.util.collectWithLifecycle
+import com.andone.memorip.presentation.util.toDp
+import com.andone.memorip.presentation.util.toPx
 
 private object Constants {
-    val minHeightRate = 0.5f
+    const val minHeightRate = 0.5f
 }
 
 @Composable
@@ -145,15 +146,14 @@ private fun PlaceDetailContent(
     modifier: Modifier = Modifier
 ) {
     val density = LocalDensity.current
-    val context = LocalContext.current
     val scrollState = rememberScrollState()
-    val statusBarHeightDp = with(density) {
-        WindowInsets.statusBars.getTop(this).toDp()
-    }
+    val statusBarHeightDp = WindowInsets.statusBars
+        .getTop(density = density).toFloat()
+        .toDp(density = density)
     val maxHeaderHeight = LocalWindowInfo.current.containerDpSize.height - statusBarHeightDp
     val minHeaderHeight = maxHeaderHeight * minHeightRate
-    val maxHeaderPx = with(density) { maxHeaderHeight.toPx() }
-    val minHeaderPx = with(density) { minHeaderHeight.toPx() }
+    val maxHeaderPx = maxHeaderHeight.toPx(density = density)
+    val minHeaderPx = minHeaderHeight.toPx(density = density)
     val collapseRangePx = maxHeaderPx - minHeaderPx
     val headerHeightPx = remember(scrollState.value) {
         val collapseOffset = scrollState.value.toFloat()
@@ -173,7 +173,7 @@ private fun PlaceDetailContent(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(height = with(receiver = density) { headerHeightPx.toDp() })
+                .height(height = headerHeightPx.toDp(density = density))
                 .clipToBounds()
                 .clickable { place.imageUrls.firstOrNull()?.let { image -> onImageClick(image) } },
             contentAlignment = Alignment.BottomStart
