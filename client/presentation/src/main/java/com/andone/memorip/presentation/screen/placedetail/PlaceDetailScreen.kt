@@ -10,11 +10,18 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
@@ -120,7 +127,8 @@ private fun PlaceDetailScreen(
             innerPadding = innerPadding,
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = MemoripTheme.colors.white),
+                .background(color = MemoripTheme.colors.white)
+                .padding(bottom = innerPadding.calculateBottomPadding()),
         )
     }
 
@@ -146,8 +154,10 @@ private fun PlaceDetailContent(
     val density = LocalDensity.current
     val context = LocalContext.current
     val scrollState = rememberScrollState()
-    val maxHeaderHeight =
-        LocalWindowInfo.current.containerDpSize.height - innerPadding.calculateTopPadding() - innerPadding.calculateBottomPadding()
+    val statusBarHeightDp = with(density) {
+        WindowInsets.statusBars.getTop(this).toDp()
+    }
+    val maxHeaderHeight = LocalWindowInfo.current.containerDpSize.height - statusBarHeightDp
     val minHeaderHeight = maxHeaderHeight * 0.3f
     val maxHeaderPx = with(density) { maxHeaderHeight.toPx() }
     val minHeaderPx = with(density) { minHeaderHeight.toPx() }
@@ -162,7 +172,6 @@ private fun PlaceDetailContent(
         modifier = modifier
             .background(color = MemoripTheme.colors.background)
             .verticalScroll(state = scrollState)
-            .padding(paddingValues = innerPadding)
             .padding(bottom = MemoripPadding.PaddingMedium),
         verticalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXXXLarge)
     ) {
