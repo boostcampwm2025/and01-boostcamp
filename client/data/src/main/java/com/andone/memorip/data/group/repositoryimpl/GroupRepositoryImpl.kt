@@ -6,15 +6,25 @@ import com.andone.memorip.data.group.model.GroupUpdateRequest
 import com.andone.memorip.domain.model.Group
 import com.andone.memorip.domain.model.Visibility
 import com.andone.memorip.domain.repository.GroupRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 class GroupRepositoryImpl @Inject constructor(
     private val remoteDataSource: GroupRemoteDataSource
 ) : GroupRepository {
 
-    override suspend fun getMyGroups(page: Int, size: Int): Result<List<Group>> {
+    private val _myGroups = MutableStateFlow<List<Group>>(emptyList())
+    override val myGroups: Flow<List<Group>> = _myGroups.asStateFlow()
+
+    override suspend fun fetchMyGroups(page: Int, size: Int): Result<Unit> {
         return remoteDataSource.getMyGroups(page, size)
             .map { dtoList -> dtoList.map { it.toDomain() } }
+            .onSuccess { groups ->
+                _myGroups.value = groups
+            }
+            .map { }
     }
 
     override suspend fun getPublicGroups(page: Int, size: Int): Result<List<Group>> {
@@ -39,6 +49,9 @@ class GroupRepositoryImpl @Inject constructor(
         )
         return remoteDataSource.createGroup(request)
             .map { it.toDomain() }
+            .onSuccess { createdGroup ->
+                _myGroups.value = _myGroups.value + createdGroup
+            }
     }
 
     override suspend fun updateGroup(
