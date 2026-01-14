@@ -140,8 +140,8 @@
 
     <!-- UserScreen -->
     <string name="login_default_web_client_id">245354359102-rmnl9e5lncd4d1pkn067admvgf1q8cit.apps.googleusercontent.com</string>
-    <string name="login_show_account">계정 정보 보여주기</string>
-    <string name="login_add_account">+ 계정 등록 하기</string>
+    <string name="login_show_account">계정이 추가 되었습니다!</string>
+    <string name="login_add_account">+ 계정을 추가하세요</string>
     <string name="login_show_places">올린 장소들</string>
 
 </resources>

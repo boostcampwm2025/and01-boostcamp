@@ -22,9 +22,11 @@ class MemoripApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        if (authRepository.isLoggedIn()) {
-            CoroutineScope(context = SupervisorJob() + Dispatchers.IO).launch {
-                tokenRefresher.refreshToken(force = false)
+        CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
+            try {
+                tokenRefresher.refreshToken(force = true)
+            } catch (e: Exception) {
+                authRepository.signOut()
             }
         }
     }
