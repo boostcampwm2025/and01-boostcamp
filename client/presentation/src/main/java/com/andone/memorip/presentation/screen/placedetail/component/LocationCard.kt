@@ -1,12 +1,9 @@
 package com.andone.memorip.presentation.screen.placedetail.component
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -19,11 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.R
-import com.andone.memorip.presentation.screen.placedetail.component.Dimens.LocationCardHeight
 import com.andone.memorip.presentation.screen.placedetail.component.Dimens.LocationCardRatio
-import com.andone.memorip.presentation.theme.MemoripBorderWidth
+import com.andone.memorip.presentation.screen.placedetail.component.Dimens.defaultZoomLevel
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -31,14 +26,15 @@ import com.andone.memorip.presentation.util.DummyData.place
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
 import com.naver.maps.map.compose.ExperimentalNaverMapApi
+import com.naver.maps.map.compose.MapUiSettings
 import com.naver.maps.map.compose.Marker
 import com.naver.maps.map.compose.MarkerState
 import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.rememberCameraPositionState
 
 private object Dimens {
-    val LocationCardHeight = 260.dp
-    val LocationCardRatio = 2.14f
+    val LocationCardRatio = 3f
+    val defaultZoomLevel = 17.0
 }
 
 @OptIn(ExperimentalNaverMapApi::class)
@@ -50,7 +46,7 @@ fun LocationCard(
     modifier: Modifier = Modifier
 ) {
     val cameraPosition = rememberCameraPositionState {
-        position = CameraPosition(LatLng(latitude, longitude), 17.0)
+        position = CameraPosition(LatLng(latitude, longitude), defaultZoomLevel)
     }
     val markerState = remember { MarkerState(position = LatLng(latitude, longitude)) }
 
@@ -88,6 +84,14 @@ fun LocationCard(
                 .fillMaxWidth()
                 .aspectRatio(ratio = LocationCardRatio),
             cameraPositionState = cameraPosition,
+            uiSettings = MapUiSettings(
+                isCompassEnabled = false,
+                isScaleBarEnabled = false,
+                isLogoClickEnabled = false,
+                isLocationButtonEnabled = false,
+                isIndoorLevelPickerEnabled = false,
+                isZoomControlEnabled = false
+            )
         ) {
             Marker(state = markerState)
         }
