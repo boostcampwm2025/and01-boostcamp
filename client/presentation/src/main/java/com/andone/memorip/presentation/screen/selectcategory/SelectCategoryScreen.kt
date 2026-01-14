@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -116,8 +117,8 @@ private fun SelectCategoryContent(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { onAction(SelectCategoryAction.OnFABClick) },
-                containerColor = MemoripTheme.colors.primaryContainer,
-                contentColor = MemoripTheme.colors.black
+                containerColor = MemoripTheme.colors.primary,
+                contentColor = MaterialTheme.colorScheme.onSurface
             ) {
                 Icon(
                     imageVector = ImageVector.vectorResource(R.drawable.ic_add),

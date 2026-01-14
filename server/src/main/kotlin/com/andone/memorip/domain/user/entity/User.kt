@@ -14,7 +14,7 @@ import java.util.UUID
 @SQLDelete(sql = "UPDATE users SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
 @SQLRestriction("deleted_at IS NULL")
 class User protected constructor(
-    id: UUID? = null,
+    id: UUID,
     nickname: String,
     profileImage: String?
 ) : BaseTimeSyncEntity() {

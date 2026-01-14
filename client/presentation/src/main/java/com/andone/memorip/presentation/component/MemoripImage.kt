@@ -18,10 +18,10 @@ fun MemoripImage(
         model = imageUrl,
         contentDescription = contentDescription,
         modifier = modifier,
-        placeholder = ColorPainter(MemoripTheme.colors.offWhite),
+        placeholder = ColorPainter(MemoripTheme.colors.primaryContainer),
         // todo: error, fallback 이미지 대체 필요
-        error = ColorPainter(MemoripTheme.colors.offWhite),
-        fallback = ColorPainter(MemoripTheme.colors.offWhite),
+        error = ColorPainter(MemoripTheme.colors.primaryContainer),
+        fallback = ColorPainter(MemoripTheme.colors.primaryContainer),
         contentScale = contentScale
     )
 }

@@ -19,7 +19,7 @@ fun loadLocalProperty(key: String): String {
 
 val OUTPUT_FILE = File(
     PROJECT_ROOT,
-    "presentation/src/main/assets/regions.json"
+    "app/src/main/res/raw/regions.json"
 )
 
 // 데이터 모델

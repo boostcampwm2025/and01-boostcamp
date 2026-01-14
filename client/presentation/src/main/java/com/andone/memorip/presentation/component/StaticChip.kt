@@ -1,10 +1,12 @@
 package com.andone.memorip.presentation.component
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,9 +35,17 @@ data class StaticChipColors(
         val Default: StaticChipColors
             @Composable
             get() = StaticChipColors(
-                backgroundColor = MemoripTheme.colors.offWhite,
-                textColor = MemoripTheme.colors.onOffWhite,
+                backgroundColor = MemoripTheme.colors.primaryContainer,
+                textColor = MaterialTheme.colorScheme.onSurface,
                 borderColor = null
+            )
+
+        val Selected: StaticChipColors
+            @Composable
+            get() = StaticChipColors(
+                backgroundColor = MemoripTheme.colors.primaryContainer,
+                textColor = MaterialTheme.colorScheme.onSurface,
+                borderColor = MemoripTheme.colors.primary
             )
     }
 }
@@ -48,22 +58,20 @@ fun StaticChip(
     colors: StaticChipColors = StaticChipColors.Default,
     textStyle: TextStyle = MemoripTheme.typography.label1,
     elevation: Dp = 0.dp,
+    onClick: () -> Unit = {}
 ) {
-    val borderModifier = if (colors.borderColor != null) {
-        modifier.border(
-            width = MemoripBorderWidth.Thin,
-            color = colors.borderColor,
-            shape = RoundedCornerShape(radius)
-        )
-    } else {
-        modifier
-    }
-
     Surface(
-        modifier = modifier.then(other = borderModifier),
-        shape = RoundedCornerShape(size = radius),
+        modifier = modifier,
+        shape = RoundedCornerShape(radius),
         color = colors.backgroundColor,
-        shadowElevation  = elevation
+        shadowElevation = elevation,
+        onClick = onClick,
+        border = colors.borderColor?.let {
+            BorderStroke(
+                width = MemoripBorderWidth.Thin,
+                color = it
+            )
+        }
     ) {
         Text(
             text = chipName,

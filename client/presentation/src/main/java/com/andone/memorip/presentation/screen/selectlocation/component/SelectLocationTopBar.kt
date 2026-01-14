@@ -38,7 +38,7 @@ fun SelectLocationTopBar(
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MemoripTheme.colors.offWhite,
+            containerColor = MemoripTheme.colors.primaryContainer,
             navigationIconContentColor = MemoripTheme.colors.black,
             titleContentColor = MemoripTheme.colors.black
         )

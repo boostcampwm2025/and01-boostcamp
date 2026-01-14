@@ -14,11 +14,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.presentation.component.GroupView
-import com.andone.memorip.presentation.screen.grouplist.component.AddFloatingActionButton
 import com.andone.memorip.presentation.screen.grouplist.component.GroupListTopBar
-import com.andone.memorip.presentation.screen.grouplist.model.GroupUiModel
 import com.andone.memorip.presentation.screen.grouplist.model.GroupListAction
 import com.andone.memorip.presentation.screen.grouplist.model.GroupListEvent
+import com.andone.memorip.presentation.screen.grouplist.model.GroupUiModel
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
@@ -66,8 +65,7 @@ fun GroupListScreenContents(
     Scaffold(
         modifier = modifier,
         topBar = { GroupListTopBar(onSearchClick = { }) },
-        floatingActionButton = { AddFloatingActionButton(onClick = { onAction(GroupListAction.OnFABClick) }) },
-        contentWindowInsets = WindowInsets(),
+        contentWindowInsets = WindowInsets()
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier

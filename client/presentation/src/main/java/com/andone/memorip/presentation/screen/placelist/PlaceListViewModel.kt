@@ -9,6 +9,9 @@ import com.andone.memorip.presentation.model.toUiModel
 import com.andone.memorip.presentation.screen.placelist.model.PlaceListAction
 import com.andone.memorip.presentation.screen.placelist.model.PlaceListEvent
 import com.andone.memorip.presentation.screen.placelist.model.PlaceListUiState
+import com.andone.memorip.presentation.placelist.model.RegionUiModel
+import com.andone.memorip.presentation.placelist.model.SelectedRegionState
+import com.andone.memorip.presentation.placelist.model.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
@@ -27,6 +30,14 @@ class PlaceListViewModel @Inject constructor(repository: PlaceRepository) : View
 
     private val _event = Channel<PlaceListEvent>(capacity = BUFFERED)
     val event = _event.receiveAsFlow()
+
+    init {
+        val rootRegions = repository.loadRegions().map { it.toUiModel() }
+
+        _uiState.update {
+            it.copy(rootRegions = rootRegions)
+        }
+    }
 
     val placesPagingFlow =
         repository.getPlaceList()
@@ -52,6 +63,68 @@ class PlaceListViewModel @Inject constructor(repository: PlaceRepository) : View
             PlaceListAction.OnPullToRefresh -> {
                 PlaceListEvent.RefreshPagingData
             }
+
+            is PlaceListAction.OnRegionChipClick -> {
+                onRegionClicked(region = action.region)
+            }
+        }
+    }
+
+    private fun onRegionClicked(region: RegionUiModel) {
+        _uiState.update { state ->
+            val parents = state.selectedRegionState.parents
+            val child = state.selectedRegionState.child
+
+            val nextState = when {
+                region.level < state.currentLevel -> {
+                    SelectedRegionState(
+                        parents = parents.take(n = region.level) + region,
+                        child = emptySet()
+                    )
+                }
+
+                region.level == state.currentLevel -> {
+                    val isChildEmpty = child.isEmpty()
+                    val isAlreadySelected = parents.any { it.id == region.id } ||
+                            child.any { it.id == region.id }
+
+                    val nextChild =
+                        if (isAlreadySelected) {
+                            child.filterNot { it.id == region.id }.toSet()
+                        } else {
+                            if (isChildEmpty) {
+                                setOf(parents.last()) + region
+                            } else {
+                                child + region
+                            }
+                        }
+
+                    val nextParents =
+                        if (isAlreadySelected) {
+                            parents.filterNot { it.level == region.level }
+                        } else {
+                            if (isChildEmpty) {
+                                parents.filterNot { it.level == region.level }
+                            } else {
+                                parents
+                            }
+                        }
+
+                    state.selectedRegionState.copy(
+                        parents = nextParents,
+                        child = nextChild
+                    )
+                }
+
+                else -> {
+                    SelectedRegionState(
+                        parents = parents + region,
+                        child = emptySet()
+                    )
+                }
+            }
+
+            state.copy(selectedRegionState = nextState)
         }
     }
 }

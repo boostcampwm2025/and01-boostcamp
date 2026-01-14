@@ -61,7 +61,7 @@ internal val memoripTypography = MemoripTypography(
     ),
     bodyLarge = TextStyle(
         fontFamily = NotoSansKR,
-        fontWeight = FontWeight.Normal,
+        fontWeight = FontWeight.SemiBold,
         fontSize = 16.sp,
         lineHeight = 24.sp
     ),
@@ -115,7 +115,7 @@ internal val memoripTypography = MemoripTypography(
     ),
     title2 = TextStyle(
         fontFamily = NotoSansKR,
-        fontWeight = FontWeight.SemiBold,
+        fontWeight = FontWeight.Bold,
         fontSize = 16.sp,
         lineHeight = 22.sp
     ),

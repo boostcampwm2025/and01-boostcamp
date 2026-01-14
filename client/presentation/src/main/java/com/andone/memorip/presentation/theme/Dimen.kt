@@ -42,6 +42,12 @@ object MemoripBorderWidth {
     val Strong = 8.dp
 }
 
+object MemoripShadow {
+    val Small = 1.dp
+    val Medium = 4.dp
+    val Large = 8.dp
+}
+
 object MemoripAlpha {
     /* ---------- Disabled / Inactive ---------- */
     const val DISABLED = 0.38f
@@ -61,7 +67,7 @@ object MemoripAlpha {
 
     /* ---------- Image ---------- */
     const val IMAGE_PLACEHOLDER = 0.3f
-    const val IMAGE_OVERLAY = 0.6f
+    const val IMAGE_OVERLAY = 0.68f
 
 
     /* ---------- Divider / Border ---------- */

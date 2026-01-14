@@ -14,8 +14,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -42,11 +45,11 @@ import com.andone.memorip.presentation.component.EmptyText
 import com.andone.memorip.presentation.component.MemoripPagingList
 import com.andone.memorip.presentation.component.StaggeredImageItem
 import com.andone.memorip.presentation.model.Place
-import com.andone.memorip.presentation.screen.grouplist.component.AddFloatingActionButton
 import com.andone.memorip.presentation.screen.placelist.MemoripMotion.AnimationDuration
 import com.andone.memorip.presentation.screen.placelist.MemoripMotion.ScrollThreshold
 import com.andone.memorip.presentation.screen.placelist.component.FilterSection
 import com.andone.memorip.presentation.screen.placelist.component.PlaceListTopBar
+import com.andone.memorip.presentation.screen.placelist.component.RegionSelectBottomSheet
 import com.andone.memorip.presentation.screen.placelist.model.PlaceListAction
 import com.andone.memorip.presentation.screen.placelist.model.PlaceListEvent
 import com.andone.memorip.presentation.screen.placelist.model.PlaceListUiState
@@ -116,6 +119,8 @@ fun PlaceListScreenContents(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val isRefreshing = placePagingItems.loadState.refresh is LoadState.Loading
 
+    var showRegionBottomSheet by remember { mutableStateOf(false) }
+
     var isFilterVisible by remember { mutableStateOf(true) }
     val clearFocusOnScroll = remember {
         object : NestedScrollConnection {
@@ -137,6 +142,22 @@ fun PlaceListScreenContents(
         }
     }
 
+    if (showRegionBottomSheet) {
+        ModalBottomSheet(
+            onDismissRequest = { showRegionBottomSheet = false },
+            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+            containerColor = MemoripTheme.colors.background,
+            contentColor = MaterialTheme.colorScheme.onSurface
+        ) {
+            RegionSelectBottomSheet(
+                currentRegionList = state.currentRegionList,
+                selectedRegionState = state.selectedRegionState,
+                onConfirmClick = { showRegionBottomSheet = false },
+                onRegionChipClick = { onAction(PlaceListAction.OnRegionChipClick(region = it)) }
+            )
+        }
+    }
+
     PullToRefreshBox(
         isRefreshing = isRefreshing,
         onRefresh = { onAction(PlaceListAction.OnPullToRefresh) },
@@ -151,8 +172,7 @@ fun PlaceListScreenContents(
                     onQueryChange = { onAction(PlaceListAction.OnQueryChange(query = it)) }
                 )
             },
-            floatingActionButton = { AddFloatingActionButton(onClick = { onAction(PlaceListAction.OnFABClick) }) },
-            contentWindowInsets = WindowInsets(),
+            contentWindowInsets = WindowInsets()
         ) { padding ->
             Column(modifier = Modifier.padding(paddingValues = padding)) {
                 AnimatedVisibility(
@@ -162,10 +182,11 @@ fun PlaceListScreenContents(
                 ) {
                     Column {
                         FilterSection(
-                            onChangeRegionClick = {},
+                            onChangeRegionClick = { showRegionBottomSheet = true },
                             onAddTagClick = {},
                             modifier = Modifier.padding(horizontal = MemoripPadding.PaddingMedium),
-                            tags = DummyData.categories.toImmutableList()
+                            tags = DummyData.categories.toImmutableList(),
+                            selectedRegionState = state.selectedRegionState
                         )
                         Spacer(modifier = Modifier.padding(vertical = MemoripPadding.PaddingXSmall))
                     }
@@ -176,9 +197,10 @@ fun PlaceListScreenContents(
                     itemKey = { it.id },
                     modifier = Modifier
                         .fillMaxSize()
+                        .padding(horizontal = MemoripPadding.PaddingXSmall)
                         .nestedScroll(connection = clearFocusOnScroll)
                         .pointerInput(key1 = Unit) { detectTapGestures { focusManager.clearFocus() } },
-                    staggeredCells = StaggeredGridCells.Adaptive(StaggeredGridDimens.STAGGERED_GRID_MIN_CELL_WIDTH),
+                    staggeredCells = StaggeredGridCells.Adaptive(minSize = StaggeredGridDimens.STAGGERED_GRID_MIN_CELL_WIDTH),
                     emptyContent = {
                         EmptyText(
                             text = stringResource(R.string.place_list_empty),
@@ -190,7 +212,9 @@ fun PlaceListScreenContents(
                         StaggeredImageItem(
                             imageUrl = image.url,
                             aspectRatio = image.aspectRatio,
-                            onImageClick = { onAction(PlaceListAction.OnPlaceClick(id = place.id)) }
+                            onImageClick = { onAction(PlaceListAction.OnPlaceClick(id = place.id)) },
+                            contentDescription = place.name,
+                            location = place.address,
                         )
                     }
                 )

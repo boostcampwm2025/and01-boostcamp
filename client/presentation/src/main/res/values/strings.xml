@@ -114,12 +114,17 @@
 
     <!-- PlaceList -->
     <string name="place_list_search">검색</string>
-    <string name="place_list_add_tag">+태그</string>
     <string name="place_list_region">지역 :</string>
     <string name="place_list_region_change">변경</string>
     <string name="place_list_region_default">전체</string>
     <string name="place_list_region_hierarchy">%1$s &gt; %2$s</string>
     <string name="place_list_empty">장소가 없습니다.</string>
+    <string name="place_list_region_divider">&gt;</string>
+    <string name="place_list_bottom_sheet_title">지역 선택</string>
+    <string name="place_list_bottom_sheet_confirm">확인</string>
+    <string name="place_list_comma_separator">, </string>
+    <string name="place_list_add_tag">태그 추가</string>
+
 
     <!-- PlanScreen -->
     <string name="plan_location_content_description">위치</string>
