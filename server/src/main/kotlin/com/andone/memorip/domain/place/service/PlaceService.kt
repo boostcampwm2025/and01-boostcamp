@@ -77,9 +77,8 @@ class PlaceService(
 
     fun createPlace(request: PlaceCreateRequest): PlaceCreateResponse {
 
-        val groupId = UUID.fromString("cac95ac7-9913-4ef5-9187-3da56c0d4894")
         val place = Place.create(
-            groupId = groupId,
+            groupId = request.groupId,
             writerId = request.writerId,
             title = request.title,
             content = request.content,
@@ -88,6 +87,8 @@ class PlaceService(
             address = request.address,
             imageUrls = request.imageUrls
         )
+
+        // todo: 태그 연결
 
         val savedPlace = placeRepository.save(place)
         return PlaceCreateResponse(savedPlace.id)
