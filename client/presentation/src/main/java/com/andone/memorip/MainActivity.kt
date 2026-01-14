@@ -22,11 +22,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             MemoripTheme {
                 val navigator = rememberMemoripNavigator()
-//                MemoripApp(
-//                    navigator = navigator,
-//                    snackbarManager = snackbarManager
-//                )
-                UserScreen()
+                MemoripApp(
+                    navigator = navigator,
+                    snackbarManager = snackbarManager
+                )
             }
         }
     }

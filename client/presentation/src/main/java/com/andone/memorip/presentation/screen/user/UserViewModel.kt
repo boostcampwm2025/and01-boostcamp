@@ -20,16 +20,17 @@ import javax.inject.Inject
 @HiltViewModel
 class UserViewModel @Inject constructor(val repository: AuthRepository) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(value = UserUiState())
+    private val _uiState =
+        MutableStateFlow(value = UserUiState(isLoggedIn = repository.isLoggedIn()))
     val uiState = _uiState.asStateFlow()
 
     private val _event = Channel<UserEvent>(BUFFERED)
     val event = _event.receiveAsFlow()
 
-    fun onAction(action: UserAction){
-        when(action){
+    fun onAction(action: UserAction) {
+        when (action) {
             is UserAction.OnMethodClick -> {
-                when(action.method){
+                when (action.method) {
                     LoginMethod.GOOGLE -> _event.trySend(element = UserEvent.RequestGoogleLogin)
                     LoginMethod.EMAIL -> TODO()
                     LoginMethod.PHONE -> TODO()
