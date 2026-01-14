@@ -86,10 +86,6 @@ class SelectLocationViewModel @Inject constructor(
             is SelectLocationAction.OnLocationSelect -> {
                 _event.trySend(SelectLocationEvent.SelectLocation(action.location))
             }
-
-            SelectLocationAction.OnBackClick -> {
-                _event.trySend(SelectLocationEvent.NavigateBack)
-            }
         }
     }
 
