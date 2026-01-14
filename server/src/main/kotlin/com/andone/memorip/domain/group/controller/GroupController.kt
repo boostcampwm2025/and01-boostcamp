@@ -7,6 +7,7 @@ import com.andone.memorip.domain.group.dto.response.GroupListResponse
 import com.andone.memorip.domain.group.dto.response.GroupResponse
 import com.andone.memorip.domain.group.service.GroupService
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
@@ -50,6 +51,10 @@ class GroupController(
         ]
     )
     fun getGroupById(
+        @Parameter(
+            description = "조회할 그룹 ID",
+            example = "cac95ac7-9913-4ef5-9187-3da56c0d4894"
+        )
         @PathVariable("groupId") groupId: UUID
     ): ApiResult<GroupResponse> {
         val result = groupService.getGroupById(groupId)
