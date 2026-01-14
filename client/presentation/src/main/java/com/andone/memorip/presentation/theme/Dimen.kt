@@ -29,7 +29,7 @@ object MemoripIconSize {
     val IconButton = 84.dp
 }
 
-object MemoripHeight{
+object MemoripHeight {
     val TextBoxHigh = 120.dp
     val TextBoxDefault = 32.dp
     val SearchBoxHeight = 36.dp
@@ -37,7 +37,9 @@ object MemoripHeight{
 
 object MemoripBorderWidth {
     val Thin = 1.dp
-    val Strong = 2.dp
+    val Small = 2.dp
+    val Medium = 4.dp
+    val Strong = 8.dp
 }
 
 object MemoripAlpha {

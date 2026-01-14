@@ -13,8 +13,10 @@ val OffWhite = Color(0xFFF5EDE8)
 val OnOffWhite = Color(0xFF2E2520)
 val Outline = Color(0xFF7A5A4A)
 val Gray = Color(0xFF73777C)
+val LightGray = Color(0xFFCCCCCC)
 val Red = Color(0xFFB23A2E)
 val Green = Color(0xFF3A7F5D)
+val Yellow = Color(0xFFFFFF00)
 
 val Black = Color(0xFF222222)
 val White = Color(0xFFFFFFFF)
@@ -38,11 +40,13 @@ data class MemoripColors(
     val offWhite: Color,
     val onOffWhite: Color,
     val gray: Color,
+    val lightGray: Color,
     val outline: Color,
     val error: Color,
     val green: Color,
     val black: Color,
     val white: Color,
+    val yellow: Color
 )
 
 internal val lightMemoripColors = MemoripColors(
@@ -53,11 +57,13 @@ internal val lightMemoripColors = MemoripColors(
     offWhite = OffWhite,
     onOffWhite = OnOffWhite,
     gray = Gray,
+    lightGray = LightGray,
     outline = Outline,
     error = Red,
     green = Green,
     black = Black,
     white = White,
+    yellow = Yellow
 )
 
 internal val darkMemoripColors = MemoripColors(
@@ -68,11 +74,13 @@ internal val darkMemoripColors = MemoripColors(
     offWhite = DarkOffWhite,
     onOffWhite = DarkOnOffWhite,
     gray = DarkGray,
+    lightGray = LightGray,
     outline = DarkOutline,
     error = DarkRed,
     green = Green,
     black = Black,
     white = White,
+    yellow = Yellow
 )
 
 internal val lightMaterialScheme = lightColorScheme(
