@@ -36,8 +36,8 @@ class UserViewModel @Inject constructor(
             is UserAction.OnMethodClick -> {
                 when (action.method) {
                     LoginMethod.GOOGLE -> _event.trySend(element = UserEvent.RequestGoogleLogin)
-                    LoginMethod.EMAIL -> TODO()
-                    LoginMethod.PHONE -> TODO()
+                    LoginMethod.EMAIL -> {}
+                    LoginMethod.PHONE -> {}
                 }
             }
 

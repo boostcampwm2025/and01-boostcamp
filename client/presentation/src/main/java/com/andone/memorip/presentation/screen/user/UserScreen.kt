@@ -134,9 +134,9 @@ fun UserScreenContents(
             ) {
                 Box(contentAlignment = Alignment.Center) {
                     if (state.isLoggedIn) {
-                        Text(text = "계정 정보 보여주기")
+                        Text(text = stringResource(R.string.login_show_account))
                     } else {
-                        Text(text = "+ 계정 등록 하기")
+                        Text(text = stringResource(R.string.login_add_account))
                     }
                 }
             }
@@ -150,7 +150,7 @@ fun UserScreenContents(
                 shape = memoripShapes.roundedSmall,
             ) {
                 Box(contentAlignment = Alignment.Center) {
-                    Text(text = "올린 장소들")
+                    Text(text = stringResource(R.string.login_show_places))
                 }
             }
         }
