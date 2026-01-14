@@ -40,6 +40,22 @@ class GroupController(
         return ApiResult.success(result)
     }
 
+    @GetMapping("/groups/{groupId}")
+    @Operation(
+        summary = "그룹 조회",
+        description = "그룹 ID로 그룹의 기본 정보를 조회합니다.",
+        responses = [
+            ApiResponse(responseCode = "200", description = "성공"),
+            ApiResponse(responseCode = "404", description = "그룹을 찾을 수 없습니다")
+        ]
+    )
+    fun getGroupById(
+        @PathVariable("groupId") groupId: UUID
+    ): ApiResult<GroupResponse> {
+        val result = groupService.getGroupById(groupId)
+        return ApiResult.success(result)
+    }
+
     @GetMapping("/public/groups")
     @Operation(
         summary = "공개 그룹 조회",
