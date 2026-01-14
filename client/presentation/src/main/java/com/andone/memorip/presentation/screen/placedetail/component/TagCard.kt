@@ -38,12 +38,8 @@ fun TagCard(
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = MemoripTheme.shapes.roundedMedium,
-        border = BorderStroke(
-            width = MemoripBorderWidth.Thin,
-            color = MemoripTheme.colors.gray
-        ),
         colors = CardDefaults.cardColors(
-            containerColor = MemoripTheme.colors.white,
+            containerColor = MemoripTheme.colors.primaryContainer,
             contentColor = MemoripTheme.colors.black
         ),
         elevation = CardDefaults.elevatedCardElevation(defaultElevation = MemoripElevation.ElevationMedium)

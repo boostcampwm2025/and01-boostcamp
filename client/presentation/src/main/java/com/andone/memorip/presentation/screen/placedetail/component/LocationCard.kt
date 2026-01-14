@@ -1,13 +1,15 @@
-package com.andone.memorip.presentation.placedetail.component
+package com.andone.memorip.presentation.screen.placedetail.component
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,7 +21,8 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.R
-import com.andone.memorip.presentation.placedetail.component.Dimens.LocationCardHeight
+import com.andone.memorip.presentation.screen.placedetail.component.Dimens.LocationCardHeight
+import com.andone.memorip.presentation.screen.placedetail.component.Dimens.LocationCardRatio
 import com.andone.memorip.presentation.theme.MemoripBorderWidth
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
@@ -35,13 +38,13 @@ import com.naver.maps.map.compose.rememberCameraPositionState
 
 private object Dimens {
     val LocationCardHeight = 260.dp
+    val LocationCardRatio = 2.14f
 }
 
 @OptIn(ExperimentalNaverMapApi::class)
 @Composable
 fun LocationCard(
     location: String,
-    title: String,
     latitude: Double,
     longitude: Double,
     modifier: Modifier = Modifier
@@ -54,15 +57,14 @@ fun LocationCard(
     Card(
         modifier = modifier,
         shape = MemoripTheme.shapes.roundedMedium,
-        border = BorderStroke(
-            width = MemoripBorderWidth.Thin,
-            color = MemoripTheme.colors.gray
-        ),
+        colors = CardDefaults.cardColors(
+            containerColor = MemoripTheme.colors.primaryContainer,
+            contentColor = MemoripTheme.colors.black
+        )
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(color = MemoripTheme.colors.white)
                 .padding(
                     horizontal = MemoripPadding.PaddingXLarge,
                     vertical = MemoripPadding.PaddingMedium
@@ -76,7 +78,7 @@ fun LocationCard(
                 contentDescription = null
             )
             Text(
-                text = place.locationName,
+                text = location,
                 style = MemoripTheme.typography.label1,
                 color = MemoripTheme.colors.black
             )
@@ -84,7 +86,7 @@ fun LocationCard(
         NaverMap(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(LocationCardHeight),
+                .aspectRatio(ratio = LocationCardRatio),
             cameraPositionState = cameraPosition,
         ) {
             Marker(state = markerState)
@@ -99,7 +101,6 @@ private fun LocationCardPrev() {
         val place = place
         LocationCard(
             location = place.locationName,
-            title = place.title,
             latitude = place.latitude,
             longitude = place.longitude,
         )

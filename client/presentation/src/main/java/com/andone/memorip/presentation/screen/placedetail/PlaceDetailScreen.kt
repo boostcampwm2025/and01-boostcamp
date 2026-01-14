@@ -47,7 +47,7 @@ import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.LoadingIndicatorScreen
 import com.andone.memorip.presentation.placedetail.component.ContentCard
 import com.andone.memorip.presentation.placedetail.component.ContrastAwareText
-import com.andone.memorip.presentation.placedetail.component.LocationCard
+import com.andone.memorip.presentation.screen.placedetail.component.LocationCard
 import com.andone.memorip.presentation.placedetail.component.TagCard
 import com.andone.memorip.presentation.screen.placedetail.PlaceDetailViewModel
 import com.andone.memorip.presentation.screen.placedetail.component.ImageDialog
@@ -157,6 +157,7 @@ private fun PlaceDetailContent(
 
     Column(
         modifier = modifier
+            .background(color = MemoripTheme.colors.background)
             .verticalScroll(state = scrollState)
             .padding(paddingValues = innerPadding)
             .padding(bottom = MemoripPadding.PaddingMedium),
@@ -224,7 +225,6 @@ private fun PlaceDetailContent(
             ContentCard(content = place.content)
             LocationCard(
                 location = place.locationName,
-                title = place.title,
                 latitude = place.latitude,
                 longitude = place.longitude
             )
