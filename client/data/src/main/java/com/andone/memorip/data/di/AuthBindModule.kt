@@ -1,7 +1,8 @@
 package com.andone.memorip.data.di
 
-import com.andone.memorip.data.auth.FirebaseTokenProvider
-import com.andone.memorip.domain.TokenProvider
+import com.andone.memorip.data.auth.repositoryimpl.FirebaseTokenRepositoryImpl
+import com.andone.memorip.domain.auth.TokenProvider
+import com.andone.memorip.domain.auth.TokenRefresher
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -13,6 +14,11 @@ abstract class AuthBindModule {
 
     @Binds
     abstract fun bindTokenProvider(
-        impl: FirebaseTokenProvider
+        impl: FirebaseTokenRepositoryImpl
     ): TokenProvider
+
+    @Binds
+    abstract fun TokenRefresher(
+        impl: FirebaseTokenRepositoryImpl
+    ): TokenRefresher
 }

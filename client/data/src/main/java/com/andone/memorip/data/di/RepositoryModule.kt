@@ -2,7 +2,7 @@ package com.andone.memorip.data.di
 
 import com.andone.memorip.data.kakaosearch.repositoryimpl.KakaoSearchRepositoryImpl
 import com.andone.memorip.data.place.repositoryimpl.PlaceRepositoryImpl
-import com.andone.memorip.data.repository.FirebaseAuthRepositoryImpl
+import com.andone.memorip.data.auth.repositoryimpl.FirebaseAuthRepositoryImpl
 import com.andone.memorip.domain.repository.AuthRepository
 import com.andone.memorip.domain.repository.KakaoSearchRepository
 import com.andone.memorip.domain.repository.PlaceRepository

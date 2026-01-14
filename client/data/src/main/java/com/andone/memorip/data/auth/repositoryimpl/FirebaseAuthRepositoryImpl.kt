@@ -1,4 +1,4 @@
-package com.andone.memorip.data.repository
+package com.andone.memorip.data.auth.repositoryimpl
 
 import com.andone.memorip.domain.repository.AuthRepository
 import com.google.firebase.auth.FirebaseAuth

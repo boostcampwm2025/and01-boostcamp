@@ -2,6 +2,7 @@ package com.andone.memorip.presentation.screen.user
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.andone.memorip.domain.auth.TokenRefresher
 import com.andone.memorip.domain.repository.AuthRepository
 import com.andone.memorip.presentation.screen.user.model.UserAction
 import com.andone.memorip.presentation.screen.user.model.UserEvent
@@ -18,7 +19,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class UserViewModel @Inject constructor(val repository: AuthRepository) : ViewModel() {
+class UserViewModel @Inject constructor(
+    private val repository: AuthRepository,
+    private val tokenRefresher: TokenRefresher
+) : ViewModel() {
 
     private val _uiState =
         MutableStateFlow(value = UserUiState(isLoggedIn = repository.isLoggedIn()))
@@ -44,6 +48,7 @@ class UserViewModel @Inject constructor(val repository: AuthRepository) : ViewMo
                             _uiState.update {
                                 it.copy(isLoggedIn = true)
                             }
+                            tokenRefresher.refreshToken(force = true)
                         }
                         .onFailure { e ->
                             _uiState.update {
