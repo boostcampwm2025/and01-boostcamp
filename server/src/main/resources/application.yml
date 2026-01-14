@@ -28,7 +28,10 @@ spring:
   jackson:
     default-property-inclusion: non_null
 
-
+# Firebase
+firebase:
+  credentials:
+    path: ${FIREBASE_CREDENTIALS:./firebase-service-account.json}
 
 # Naver/Object Storage
 naver:
