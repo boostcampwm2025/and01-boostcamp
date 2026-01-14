@@ -21,6 +21,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -155,10 +156,12 @@ private fun PlaceDetailContent(
     val maxHeaderPx = maxHeaderHeight.toPx(density = density)
     val minHeaderPx = minHeaderHeight.toPx(density = density)
     val collapseRangePx = maxHeaderPx - minHeaderPx
-    val headerHeightPx = remember(scrollState.value) {
-        val collapseOffset = scrollState.value.toFloat()
-            .coerceIn(0f, collapseRangePx)
-        maxHeaderPx - collapseOffset
+    val headerHeightPx by remember {
+        derivedStateOf {
+            val collapseOffset = scrollState.value.toFloat()
+                .coerceIn(0f, collapseRangePx)
+            maxHeaderPx - collapseOffset
+        }
     }
 
     val pagerState = rememberPagerState(pageCount = { place.imageUrls.size })
