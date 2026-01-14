@@ -7,9 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.andone.memorip.domain.model.request.Address
 import com.andone.memorip.domain.model.request.PlaceCreateRequest
 import com.andone.memorip.domain.repository.PlaceRepository
-import com.andone.memorip.presentation.screen.grouplist.model.GroupUiModel
 import com.andone.memorip.presentation.model.LocationUiModel
 import com.andone.memorip.presentation.model.TagUiModel
+import com.andone.memorip.presentation.screen.grouplist.model.GroupUiModel
 import com.andone.memorip.presentation.screen.placecreate.model.PlaceCreateAction
 import com.andone.memorip.presentation.screen.placecreate.model.PlaceCreateEvent
 import com.andone.memorip.presentation.screen.placecreate.model.PlaceCreateUiState
@@ -89,12 +89,16 @@ class PlaceCreateViewModel @Inject constructor(
         }
     }
 
-    fun updateCategory(category: List<TagUiModel>) {
-        _uiState.update { it.copy(category = category) }
+    fun updateImages(images: List<Uri>) {
+        _uiState.update { it.copy(images = images) }
     }
 
     fun updateLocation(location: LocationUiModel) {
         _uiState.update { it.copy(location = location) }
+    }
+
+    fun updateCategory(category: List<TagUiModel>) {
+        _uiState.update { it.copy(category = category) }
     }
 
     fun updateGroup(group: GroupUiModel) {
