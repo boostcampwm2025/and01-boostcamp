@@ -11,17 +11,17 @@ data class GroupListResponse(
     val id: String,
     val title: String,
     val visibility: GroupVisibility,
-    val type: String,
+    val relatedPlaceImages: List<String>,
+    val placeCount: Int,
     val createdAt: String,
     val updatedAt: String,
-    val relatedPlaceImages: List<String>,
-    val placeCount: Int
 ) {
     fun toDomain(): Group = Group(
         id = id,
         owner = User.EMPTY,
         title = title,
         visibility = visibility.toDomain(),
+        images = relatedPlaceImages,
         createdAt = createdAt,
         updatedAt = updatedAt
     )

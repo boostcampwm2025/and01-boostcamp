@@ -19,6 +19,7 @@ data class GroupResponse(
         owner = owner,
         title = title,
         visibility = visibility.toDomain(),
+        images = emptyList(),
         createdAt = createdAt,
         updatedAt = updatedAt
     )
