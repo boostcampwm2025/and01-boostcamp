@@ -35,7 +35,7 @@ fun PlaceCreateScreen(
     onCategoryClick: () -> Unit,
     onLocationClick: () -> Unit,
     onGroupClick: () -> Unit,
-    onBackClick: () -> Unit,
+    onImageCreate: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PlaceCreateViewModel = hiltViewModel()
 ) {
@@ -43,7 +43,7 @@ fun PlaceCreateScreen(
 
     viewModel.event.collectWithLifecycle { event ->
         when (event) {
-            PlaceCreateEvent.NavigateBack -> onBackClick()
+            PlaceCreateEvent.NavigateToHome -> onImageCreate()
             PlaceCreateEvent.NavigateToCategory -> onCategoryClick()
             PlaceCreateEvent.NavigateToLocation -> onLocationClick()
             PlaceCreateEvent.NavigateToGroup -> onGroupClick()

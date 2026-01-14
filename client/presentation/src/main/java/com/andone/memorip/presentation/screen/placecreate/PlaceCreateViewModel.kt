@@ -83,8 +83,8 @@ class PlaceCreateViewModel @Inject constructor(
                 snackBarManager.show(SnackBarEvent.NETWORK_ERROR)
             }
 
-            PlaceCreateAction.OnBackClick -> {
-                _event.trySend(PlaceCreateEvent.NavigateBack)
+            PlaceCreateAction.OnCreateSuccess -> {
+                _event.trySend(PlaceCreateEvent.NavigateToHome)
             }
         }
     }
@@ -127,7 +127,7 @@ class PlaceCreateViewModel @Inject constructor(
                     imageUrls = imageUrls
                 )
             ).onSuccess { data ->
-                onAction(PlaceCreateAction.OnBackClick)
+                onAction(PlaceCreateAction.OnCreateSuccess)
             }.onFailure { exception ->
                 snackBarManager.show(SnackBarEvent.DATA_SAVE_FAILED)
             }
