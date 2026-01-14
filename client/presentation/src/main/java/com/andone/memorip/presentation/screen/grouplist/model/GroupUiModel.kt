@@ -6,30 +6,16 @@ import java.util.UUID
 
 @Immutable
 data class GroupUiModel(
-    val id: UUID? = null,
+    val id: UUID,
     val name: String,
     val images: List<String>,
 ) {
     companion object {
-        fun default(): GroupUiModel {
-            return GroupUiModel(
-                name = "",
-                images = emptyList()
-            )
-        }
-        
-        fun create(name: String): GroupUiModel {
-            return GroupUiModel(
-                name = name,
-                images = emptyList()
-            )
-        }
-
         fun from(group: Group): GroupUiModel {
             return GroupUiModel(
                 id = UUID.fromString(group.id),
                 name = group.title,
-                images = emptyList()
+                images = group.images
             )
         }
     }
