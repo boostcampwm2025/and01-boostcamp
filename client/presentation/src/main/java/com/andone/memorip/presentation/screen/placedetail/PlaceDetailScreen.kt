@@ -1,7 +1,5 @@
 package com.andone.memorip.presentation.placedetail
 
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -21,6 +19,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,13 +39,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import coil.request.ImageRequest
 import com.andone.memorip.navigation.PlaceDetail
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.LoadingIndicatorScreen
+import com.andone.memorip.presentation.component.TagChipRow
 import com.andone.memorip.presentation.placedetail.Constants.minHeightRate
 import com.andone.memorip.presentation.placedetail.component.ContentCard
-import com.andone.memorip.presentation.placedetail.component.ContrastAwareText
 import com.andone.memorip.presentation.screen.placedetail.PlaceDetailViewModel
 import com.andone.memorip.presentation.screen.placedetail.component.ImageDialog
 import com.andone.memorip.presentation.screen.placedetail.component.LocationCard
@@ -55,6 +53,7 @@ import com.andone.memorip.presentation.screen.placedetail.component.PlaceDetailT
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceDetailAction
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceDetailEvent
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceUiModel
+import com.andone.memorip.presentation.theme.MemoripAlpha
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -161,7 +160,6 @@ private fun PlaceDetailContent(
             .coerceIn(0f, collapseRangePx)
         maxHeaderPx - collapseOffset
     }
-    var bitmap by remember { mutableStateOf<Bitmap?>(null) }
 
     val pagerState = rememberPagerState(pageCount = { place.imageUrls.size })
 
@@ -186,28 +184,28 @@ private fun PlaceDetailContent(
                 key = { idx -> place.imageUrls[idx] }
             ) { idx ->
                 AsyncImage(
-                    model = ImageRequest.Builder(context)
-                        .data(data = place.imageUrls[idx])
-                        .allowHardware(enable = false)
-                        .build(),
+                    model = place.imageUrls[idx],
                     contentDescription = stringResource(R.string.place_detail_image_content_description),
                     contentScale = ContentScale.Crop,
-                    onSuccess = { result ->
-                        bitmap = (result.result.drawable as BitmapDrawable).bitmap
-                    }
                 )
             }
 
             Column(
-                modifier = Modifier.padding(
-                    start = MemoripPadding.PaddingXXXLarge,
-                    bottom = MemoripPadding.PaddingXXXLarge
-                ),
+                modifier = Modifier
+                    .padding(
+                        start = MemoripPadding.PaddingXXXLarge,
+                        bottom = MemoripPadding.PaddingXXXLarge
+                    )
+                    .background(
+                        color = MemoripTheme.colors.surface.copy(alpha = MemoripAlpha.IMAGE_OVERLAY),
+                        shape = MemoripTheme.shapes.roundedSmall
+                    )
+                    .padding(all = MemoripPadding.PaddingMedium),
                 verticalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXSmall)
             ) {
-                ContrastAwareText(
-                    image = bitmap,
+                Text(
                     text = place.title,
+                    color = MemoripTheme.colors.black,
                     style = MemoripTheme.typography.headline2
                 )
                 Row(horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceMedium)) {
@@ -216,12 +214,13 @@ private fun PlaceDetailContent(
                         tint = MemoripTheme.colors.green,
                         contentDescription = null
                     )
-                    ContrastAwareText(
-                        image = bitmap,
+                    Text(
                         text = place.locationName,
+                        color = MemoripTheme.colors.black,
                         style = MemoripTheme.typography.label1
                     )
                 }
+                TagChipRow(tags = place.tags)
             }
         }
 
@@ -237,7 +236,6 @@ private fun PlaceDetailContent(
                 latitude = place.latitude,
                 longitude = place.longitude
             )
-//            TagCard(tags = place.tags)
             PlaceDetailInfoSection(
                 infoString = place.groupName,
                 iconRes = R.drawable.ic_folder,

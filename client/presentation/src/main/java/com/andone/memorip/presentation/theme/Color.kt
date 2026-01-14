@@ -9,6 +9,7 @@ import androidx.compose.ui.graphics.Color
 val Primary = Color(0xFF66FF66)
 val PrimaryContainer = Color(0xFFFFFFFF)
 val BackGround = Color(0xFFECF1EC)
+val Surface = Color(0xFFFFFBFE)
 val Secondary = Color(0xFF36699A)
 val Outline = Color(0xFF00FF00)
 val Gray = Color(0xFF73777C)
@@ -23,6 +24,7 @@ val DarkPrimary = Color(0xFF338033)
 val DarkPrimaryContainer = Color(0xFF424242)
 val DarkBackGround = Color(0xFF222222)
 val DarkSecondary = Color(0xFF8BB0D6)
+val DarkSurface = Color(0xFF1C1B1F)
 val DarkOutline = Color(0xFF004700)
 
 @Immutable
@@ -33,6 +35,7 @@ data class MemoripColors(
     val background: Color,
     val gray: Color,
     val outline: Color,
+    val surface: Color,
     val error: Color,
     val green: Color,
     val black: Color,
@@ -46,6 +49,7 @@ internal val lightMemoripColors = MemoripColors(
     background = BackGround,
     gray = Gray,
     outline = Outline,
+    surface = Surface,
     error = Red,
     green = Green,
     black = Black,
@@ -59,6 +63,7 @@ internal val darkMemoripColors = MemoripColors(
     background = DarkBackGround,
     gray = Gray,
     outline = DarkOutline,
+    surface = DarkSurface,
     error = Red,
     green = Green,
     black = Black,
