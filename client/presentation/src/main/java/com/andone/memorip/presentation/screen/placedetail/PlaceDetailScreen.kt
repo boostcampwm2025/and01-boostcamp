@@ -10,18 +10,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
@@ -54,10 +48,10 @@ import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.LoadingIndicatorScreen
 import com.andone.memorip.presentation.placedetail.component.ContentCard
 import com.andone.memorip.presentation.placedetail.component.ContrastAwareText
-import com.andone.memorip.presentation.screen.placedetail.component.LocationCard
 import com.andone.memorip.presentation.placedetail.component.TagCard
 import com.andone.memorip.presentation.screen.placedetail.PlaceDetailViewModel
 import com.andone.memorip.presentation.screen.placedetail.component.ImageDialog
+import com.andone.memorip.presentation.screen.placedetail.component.LocationCard
 import com.andone.memorip.presentation.screen.placedetail.component.PlaceDetailInfoSection
 import com.andone.memorip.presentation.screen.placedetail.component.PlaceDetailTopBar
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceDetailAction
@@ -124,7 +118,6 @@ private fun PlaceDetailScreen(
                 imageDialogExpanded = true
                 selectedImageUrl = it
             },
-            innerPadding = innerPadding,
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = MemoripTheme.colors.white)
@@ -148,7 +141,6 @@ private fun PlaceDetailScreen(
 private fun PlaceDetailContent(
     place: PlaceUiModel,
     onImageClick: (String) -> Unit,
-    innerPadding: PaddingValues,
     modifier: Modifier = Modifier
 ) {
     val density = LocalDensity.current
@@ -267,7 +259,6 @@ private fun PlaceDetailContentPrev() {
     MemoripTheme {
         PlaceDetailContent(
             place = PlaceUiModel(),
-            innerPadding = PaddingValues(0.dp),
             onImageClick = {},
         )
     }
