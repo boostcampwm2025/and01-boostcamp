@@ -92,4 +92,32 @@ class PlaceService(
         val savedPlace = placeRepository.save(place)
         return PlaceCreateResponse(savedPlace.id)
     }
+
+    @Transactional(readOnly = true)
+    fun getPlacesByGroupId(groupId: UUID, pageable: Pageable): PlaceListResult {
+        groupRepository.findByIdOrNull(groupId)
+            ?: throw BusinessException(code = CommonExceptionCode.GROUP_NOT_FOUND)
+        
+        val places = placeRepository.findAllByGroupId(groupId, pageable)
+        
+        val content = places.content.map { place ->
+            PlaceListItemResponse(
+                id = place.id,
+                title = place.title,
+                latitude = place.latitude,
+                longitude = place.longitude,
+                address = place.address.fullAddress,
+                imageUrl = place.thumbnailUrl
+            )
+        }
+        
+        val pagination = ApiResult.PaginationInfo(
+            currentPage = places.number + 1,
+            totalPages = places.totalPages,
+            totalCount = places.totalElements,
+            hasNext = places.hasNext()
+        )
+        
+        return PlaceListResult(content, pagination)
+    }
 }
