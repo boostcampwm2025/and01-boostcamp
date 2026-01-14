@@ -69,7 +69,7 @@ private fun EmptyImageState(
     ) {
         Text(
             text = stringResource(R.string.group_image_grid_empty_message),
-            style = MemoripTheme.typography.body2,
+            style = MemoripTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurface
         )
     }
