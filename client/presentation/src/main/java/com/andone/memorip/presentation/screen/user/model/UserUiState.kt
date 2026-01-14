@@ -1,6 +1,6 @@
-package com.andone.memorip.presentation.screen.login.model
+package com.andone.memorip.presentation.screen.user.model
 
-data class LoginUiState(
+data class UserUiState(
     val isLoading: Boolean = false,
     val isLoggedIn: Boolean = false,
     val selectedMethod: LoginMethod? = null,

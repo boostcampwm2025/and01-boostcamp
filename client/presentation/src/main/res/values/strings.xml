@@ -138,7 +138,7 @@
     <string name="snackbar_unknown_error">오류가 발생했습니다. 다시 시도해주세요</string>
     <string name="snackbar_success">성공적으로 완료되었습니다</string>
 
-    <!-- LoginScreen -->
+    <!-- UserScreen -->
     <string name="login_default_web_client_id">245354359102-rmnl9e5lncd4d1pkn067admvgf1q8cit.apps.googleusercontent.com</string>
 
 </resources>

@@ -1,12 +1,12 @@
-package com.andone.memorip.presentation.screen.login
+package com.andone.memorip.presentation.screen.user
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.andone.memorip.domain.repository.AuthRepository
-import com.andone.memorip.presentation.screen.login.model.LoginAction
-import com.andone.memorip.presentation.screen.login.model.LoginEvent
-import com.andone.memorip.presentation.screen.login.model.LoginMethod
-import com.andone.memorip.presentation.screen.login.model.LoginUiState
+import com.andone.memorip.presentation.screen.user.model.UserAction
+import com.andone.memorip.presentation.screen.user.model.UserEvent
+import com.andone.memorip.presentation.screen.user.model.LoginMethod
+import com.andone.memorip.presentation.screen.user.model.UserUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
@@ -18,25 +18,25 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(val repository: AuthRepository) : ViewModel() {
+class UserViewModel @Inject constructor(val repository: AuthRepository) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(value = LoginUiState())
+    private val _uiState = MutableStateFlow(value = UserUiState())
     val uiState = _uiState.asStateFlow()
 
-    private val _event = Channel<LoginEvent>(BUFFERED)
+    private val _event = Channel<UserEvent>(BUFFERED)
     val event = _event.receiveAsFlow()
 
-    fun onAction(action: LoginAction){
+    fun onAction(action: UserAction){
         when(action){
-            is LoginAction.OnMethodClick -> {
+            is UserAction.OnMethodClick -> {
                 when(action.method){
-                    LoginMethod.GOOGLE -> _event.trySend(element = LoginEvent.RequestGoogleLogin)
+                    LoginMethod.GOOGLE -> _event.trySend(element = UserEvent.RequestGoogleLogin)
                     LoginMethod.EMAIL -> TODO()
                     LoginMethod.PHONE -> TODO()
                 }
             }
 
-            is LoginAction.GoogleLoginSuccess -> {
+            is UserAction.GoogleLoginSuccess -> {
                 viewModelScope.launch {
                     repository.signInWithGoogle(idToken = action.idToken)
                         .onSuccess {
