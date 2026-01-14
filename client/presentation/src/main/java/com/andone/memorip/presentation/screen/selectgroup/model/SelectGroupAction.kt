@@ -12,7 +12,7 @@ sealed interface SelectGroupAction {
 
     data object OnBackClick : SelectGroupAction
 
-    data class OnDialogConfirmClick(val newGroup: GroupUiModel) : SelectGroupAction
+    data class OnDialogConfirmClick(val groupName: String) : SelectGroupAction
 
     data object OnDialogCancelClick : SelectGroupAction
 }
