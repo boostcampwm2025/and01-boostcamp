@@ -12,7 +12,7 @@ import java.util.UUID
 @SQLDelete(sql = "UPDATE place_images SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
 @SQLRestriction("deleted_at IS NULL")
 class PlaceImage protected constructor(
-    id: UUID? = null,
+    id: UUID,
     place: Place,
     url: String
 ) : BaseTimeEntity() {

@@ -7,6 +7,6 @@ import java.util.UUID
 abstract class BaseEntity {
     @Id
     @Column(columnDefinition = "UUID")
-    open var id: UUID? = null
+    open lateinit var id: UUID
         protected set
 }
