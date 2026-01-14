@@ -57,8 +57,7 @@ fun PlaceCreateContainer(
         topBar = {
             PlaceCreateTopBar(
                 currentStep = currentStep,
-                onBackClick = handleBackAction,
-                onConfirmClick = {},
+                onBackClick = handleBackAction
             )
         }
     ) { innerPadding ->
