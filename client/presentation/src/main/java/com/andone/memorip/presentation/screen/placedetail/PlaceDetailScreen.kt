@@ -7,7 +7,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -38,7 +37,6 @@ import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
@@ -46,9 +44,9 @@ import coil.request.ImageRequest
 import com.andone.memorip.navigation.PlaceDetail
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.LoadingIndicatorScreen
+import com.andone.memorip.presentation.placedetail.Constants.minHeightRate
 import com.andone.memorip.presentation.placedetail.component.ContentCard
 import com.andone.memorip.presentation.placedetail.component.ContrastAwareText
-import com.andone.memorip.presentation.placedetail.component.TagCard
 import com.andone.memorip.presentation.screen.placedetail.PlaceDetailViewModel
 import com.andone.memorip.presentation.screen.placedetail.component.ImageDialog
 import com.andone.memorip.presentation.screen.placedetail.component.LocationCard
@@ -62,6 +60,10 @@ import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
 import com.andone.memorip.presentation.util.collectWithLifecycle
+
+private object Constants {
+    val minHeightRate = 0.5f
+}
 
 @Composable
 fun PlaceDetailScreen(
@@ -150,11 +152,14 @@ private fun PlaceDetailContent(
         WindowInsets.statusBars.getTop(this).toDp()
     }
     val maxHeaderHeight = LocalWindowInfo.current.containerDpSize.height - statusBarHeightDp
-    val minHeaderHeight = maxHeaderHeight * 0.3f
+    val minHeaderHeight = maxHeaderHeight * minHeightRate
     val maxHeaderPx = with(density) { maxHeaderHeight.toPx() }
     val minHeaderPx = with(density) { minHeaderHeight.toPx() }
+    val collapseRangePx = maxHeaderPx - minHeaderPx
     val headerHeightPx = remember(scrollState.value) {
-        (maxHeaderPx - scrollState.value).coerceIn(minHeaderPx, maxHeaderPx)
+        val collapseOffset = scrollState.value.toFloat()
+            .coerceIn(0f, collapseRangePx)
+        maxHeaderPx - collapseOffset
     }
     var bitmap by remember { mutableStateOf<Bitmap?>(null) }
 
@@ -232,7 +237,7 @@ private fun PlaceDetailContent(
                 latitude = place.latitude,
                 longitude = place.longitude
             )
-            TagCard(tags = place.tags)
+//            TagCard(tags = place.tags)
             PlaceDetailInfoSection(
                 infoString = place.groupName,
                 iconRes = R.drawable.ic_folder,
