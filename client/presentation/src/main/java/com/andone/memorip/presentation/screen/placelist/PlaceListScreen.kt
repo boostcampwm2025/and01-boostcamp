@@ -117,7 +117,8 @@ fun PlaceListScreenContents(
 ) {
     val focusManager = LocalFocusManager.current
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-    val isRefreshing = placePagingItems.loadState.refresh is LoadState.Loading
+    val isRefreshing =
+        placePagingItems.loadState.refresh is LoadState.Loading && placePagingItems.itemCount > 0
 
     var showRegionBottomSheet by remember { mutableStateOf(value = false) }
 
@@ -158,40 +159,40 @@ fun PlaceListScreenContents(
         }
     }
 
-    PullToRefreshBox(
-        isRefreshing = isRefreshing,
-        onRefresh = { onAction(PlaceListAction.OnPullToRefresh) },
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Scaffold(
-            modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-            topBar = {
-                PlaceListTopBar(
-                    scrollBehavior = scrollBehavior,
-                    query = state.query,
-                    onQueryChange = { onAction(PlaceListAction.OnQueryChange(query = it)) }
-                )
-            },
-            contentWindowInsets = WindowInsets()
-        ) { padding ->
-            Column(modifier = Modifier.padding(paddingValues = padding)) {
-                AnimatedVisibility(
-                    visible = isFilterVisible,
-                    enter = expandVertically(animationSpec = tween(durationMillis = AnimationDuration)) + fadeIn(),
-                    exit = shrinkVertically(animationSpec = tween(durationMillis = AnimationDuration)) + fadeOut()
-                ) {
-                    Column {
-                        FilterSection(
-                            onChangeRegionClick = { showRegionBottomSheet = true },
-                            onAddTagClick = {},
-                            modifier = Modifier.padding(horizontal = MemoripPadding.PaddingMedium),
-                            tags = DummyData.categories.toImmutableList(),
-                            selectedRegionState = state.selectedRegionState
-                        )
-                        Spacer(modifier = Modifier.padding(vertical = MemoripPadding.PaddingXSmall))
-                    }
+    Scaffold(
+        modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = {
+            PlaceListTopBar(
+                scrollBehavior = scrollBehavior,
+                query = state.query,
+                onQueryChange = { onAction(PlaceListAction.OnQueryChange(query = it)) }
+            )
+        },
+        contentWindowInsets = WindowInsets()
+    ) { padding ->
+        Column(modifier = Modifier.padding(paddingValues = padding)) {
+            AnimatedVisibility(
+                visible = isFilterVisible,
+                enter = expandVertically(animationSpec = tween(durationMillis = AnimationDuration)) + fadeIn(),
+                exit = shrinkVertically(animationSpec = tween(durationMillis = AnimationDuration)) + fadeOut()
+            ) {
+                Column {
+                    FilterSection(
+                        onChangeRegionClick = { showRegionBottomSheet = true },
+                        onAddTagClick = {},
+                        modifier = Modifier.padding(horizontal = MemoripPadding.PaddingMedium),
+                        tags = DummyData.categories.toImmutableList(),
+                        selectedRegionState = state.selectedRegionState
+                    )
+                    Spacer(modifier = Modifier.padding(vertical = MemoripPadding.PaddingXSmall))
                 }
+            }
 
+            PullToRefreshBox(
+                isRefreshing = isRefreshing,
+                onRefresh = { onAction(PlaceListAction.OnPullToRefresh) },
+                modifier = Modifier.fillMaxSize()
+            ) {
                 MemoripPagingList(
                     pagingItems = placePagingItems,
                     itemKey = { it.id },
@@ -219,8 +220,10 @@ fun PlaceListScreenContents(
                     }
                 )
             }
+
         }
     }
+
 }
 
 @Preview
