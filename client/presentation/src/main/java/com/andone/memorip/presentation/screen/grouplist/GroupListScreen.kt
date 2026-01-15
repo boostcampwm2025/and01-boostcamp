@@ -14,6 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.presentation.component.GroupView
+import com.andone.memorip.presentation.component.LoadingIndicatorScreen
 import com.andone.memorip.presentation.screen.grouplist.component.GroupListTopBar
 import com.andone.memorip.presentation.screen.grouplist.model.GroupListAction
 import com.andone.memorip.presentation.screen.grouplist.model.GroupListEvent
@@ -25,7 +26,7 @@ import com.andone.memorip.presentation.util.collectWithLifecycle
 
 @Composable
 fun GroupListScreen(
-    onGroupClick: (Int) -> Unit,
+    onGroupClick: (String) -> Unit,
     onCreatePlaceClick: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: GroupListViewModel = hiltViewModel(),
@@ -41,18 +42,18 @@ fun GroupListScreen(
             is GroupListEvent.NavigateToPlaceCreate -> {
                 onCreatePlaceClick()
             }
-
-            GroupListEvent.ShowSnackBar -> {
-                // TODO: 설정 필요
-            }
         }
     }
 
-    GroupListScreenContents(
-        groups = uiState.groups,
-        onAction = viewModel::onAction,
-        modifier = modifier,
-    )
+    if (uiState.isLoading) {
+        LoadingIndicatorScreen()
+    } else {
+        GroupListScreenContents(
+            groups = uiState.groups,
+            onAction = viewModel::onAction,
+            modifier = modifier,
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -76,8 +77,8 @@ fun GroupListScreenContents(
             items(items = groups) { group ->
                 GroupView(
                     name = group.name,
-                    onGroupClick = { onAction(GroupListAction.OnGroupClick(groupId = 0)) },
-                    onAddClick = { onAction(GroupListAction.OnGroupClick(groupId = 0)) },
+                    onGroupClick = { onAction(GroupListAction.OnGroupClick(groupId = group.id)) },
+                    onAddClick = { onAction(GroupListAction.OnGroupClick(groupId = group.id)) },
                     images = group.images
                 )
             }
