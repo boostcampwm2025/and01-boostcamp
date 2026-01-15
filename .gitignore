@@ -17,6 +17,7 @@ local.properties
 client/app/release/
 client/app/google-services.json
 client/app/src/main/res/xml/network_security_config.xml
+client/config
 
 HELP.md
 build/
