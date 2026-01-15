@@ -2,8 +2,10 @@ package com.andone.memorip.domain.user.service
 
 import com.andone.memorip.domain.user.entity.User
 import com.andone.memorip.domain.user.repository.UserRepository
+import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
+@Service
 class UserService(private val userRepository: UserRepository) {
 
     @Transactional
