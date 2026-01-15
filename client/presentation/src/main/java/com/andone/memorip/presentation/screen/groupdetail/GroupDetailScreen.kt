@@ -13,30 +13,32 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.graphics.drawable.toBitmap
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import coil.ImageLoader
 import coil.request.ImageRequest
 import coil.request.SuccessResult
+import com.andone.memorip.navigation.GroupDetail
 import com.andone.memorip.presentation.R
-import com.andone.memorip.presentation.screen.groupdetail.component.GalleryTab
 import com.andone.memorip.presentation.screen.groupdetail.component.GroupDetailAppBar
 import com.andone.memorip.presentation.screen.groupdetail.component.MapTab
 import com.andone.memorip.presentation.screen.groupdetail.component.PlaceImagesBottomSheet
 import com.andone.memorip.presentation.screen.groupdetail.model.GroupDetailAction
 import com.andone.memorip.presentation.screen.groupdetail.model.GroupDetailEvent
 import com.andone.memorip.presentation.model.Place
-import com.andone.memorip.presentation.theme.MemoripTheme
-import com.andone.memorip.presentation.util.DummyData.places
+import com.andone.memorip.presentation.screen.placelist.PlaceListScreenContents
+import com.andone.memorip.presentation.screen.placelist.model.PlaceListAction
+import com.andone.memorip.presentation.screen.placelist.model.PlaceListUiState
 import com.andone.memorip.presentation.util.collectWithLifecycle
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -49,12 +51,18 @@ private object MarkerImageConstants {
 
 @Composable
 fun GroupDetailScreen(
+    route: GroupDetail,
     onBackClick: () -> Unit,
     onImageClick: (String) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: GroupDetailViewModel = hiltViewModel()
+    viewModel: GroupDetailViewModel = hiltViewModel<GroupDetailViewModel, GroupDetailViewModel.Factory>(
+        creationCallback = { factory ->
+            factory.create(route)
+        }
+    )
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val placesPagingItems = viewModel.placesPagingFlow.collectAsLazyPagingItems()
 
     viewModel.event.collectWithLifecycle { event ->
         when (event) {
@@ -70,7 +78,7 @@ fun GroupDetailScreen(
 
     GroupDetailScreenContent(
         groupName = uiState.groupName,
-        places = uiState.places,
+        placesPagingItems = placesPagingItems,
         currentPage = uiState.currentTab,
         onAction = viewModel::onAction,
         modifier = modifier
@@ -88,7 +96,7 @@ fun GroupDetailScreen(
 @Composable
 fun GroupDetailScreenContent(
     groupName: String,
-    places: ImmutableList<Place>,
+    placesPagingItems: LazyPagingItems<Place>,
     currentPage: Int,
     onAction: (GroupDetailAction) -> Unit,
     modifier: Modifier = Modifier
@@ -101,10 +109,26 @@ fun GroupDetailScreenContent(
 
     val markerImages = remember { mutableStateMapOf<String, Bitmap>() }
 
+    // MapTab을 위한 places 리스트 생성 (paging에서 가져온 모든 아이템)
+    var places by remember { mutableStateOf<List<Place>>(emptyList()) }
+
+    // pagingItems가 업데이트될 때마다 places 리스트 업데이트
+    LaunchedEffect(placesPagingItems.itemCount) {
+        val newPlaces = mutableListOf<Place>()
+        for (i in 0 until placesPagingItems.itemCount) {
+            placesPagingItems[i]?.let { place ->
+                newPlaces.add(place)
+            }
+        }
+        places = newPlaces
+    }
+
     /** 이미지 링크가 들어오면 삭제될 로직 */
-    LaunchedEffect(places) {
+    LaunchedEffect(places.size) {
         places.forEach { place ->
             val imageUrl = place.thumbnailImage.url
+            // 이미 로드된 이미지는 스킵
+            if (markerImages.containsKey(imageUrl)) return@forEach
 
             launch(Dispatchers.IO) {
                 runCatching {
@@ -160,11 +184,28 @@ fun GroupDetailScreenContent(
             }
 
             when (currentPage) {
-                0 -> GalleryTab(
-                    places = places,
-                    onImageClick = { id -> onAction(GroupDetailAction.OnPlaceClick(id = id)) },
-                    modifier = Modifier.fillMaxSize()
-                )
+                0 -> {
+                    PlaceListScreenContents(
+                        state = PlaceListUiState(),
+                        placePagingItems = placesPagingItems,
+                        onAction = { action ->
+                            when (action) {
+                                is PlaceListAction.OnPlaceClick -> {
+                                    onAction(GroupDetailAction.OnPlaceClick(id = action.id))
+                                }
+                                is PlaceListAction.OnPullToRefresh -> {
+                                    placesPagingItems.refresh()
+                                }
+                                else -> {
+                                    // 다른 액션은 무시 (필터, 검색 등)
+                                }
+                            }
+                        },
+                        modifier = Modifier.fillMaxSize(),
+                        showFilter = false,
+                        showTopBar = false
+                    )
+                }
 
                 1 -> MapTab(
                     places = places,
@@ -175,31 +216,5 @@ fun GroupDetailScreenContent(
                 )
             }
         }
-    }
-}
-
-@Preview(name = "Gallery Tab Selected")
-@Composable
-private fun GroupDetailScreenContentGalleryPreview() {
-    MemoripTheme {
-        GroupDetailScreenContent(
-            groupName = "Group1",
-            places = places.toImmutableList(),
-            currentPage = 0,
-            onAction = {}
-        )
-    }
-}
-
-@Preview(name = "Map Tab Selected")
-@Composable
-private fun GroupDetailScreenContentMapPreview() {
-    MemoripTheme {
-        GroupDetailScreenContent(
-            groupName = "Group1",
-            places = places.toImmutableList(),
-            onAction = { },
-            currentPage = 1
-        )
     }
 }

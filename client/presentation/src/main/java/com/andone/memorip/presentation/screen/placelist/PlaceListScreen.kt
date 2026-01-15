@@ -26,6 +26,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
@@ -113,7 +114,9 @@ fun PlaceListScreenContents(
     state: PlaceListUiState,
     placePagingItems: LazyPagingItems<Place>,
     onAction: (PlaceListAction) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    showTopBar: Boolean = true,
+    showFilter: Boolean = true
 ) {
     val focusManager = LocalFocusManager.current
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -142,6 +145,71 @@ fun PlaceListScreenContents(
         }
     }
 
+    PullToRefreshBox(
+        isRefreshing = isRefreshing,
+        onRefresh = { onAction(PlaceListAction.OnPullToRefresh) },
+        modifier = Modifier.fillMaxSize()
+    ) {
+        when {
+            showTopBar -> {
+                Scaffold(
+                    modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+                    topBar = {
+                        PlaceListTopBar(
+                            scrollBehavior = scrollBehavior,
+                            query = state.query,
+                            onQueryChange = { onAction(PlaceListAction.OnQueryChange(query = it)) }
+                        )
+                    },
+                    contentWindowInsets = WindowInsets()
+                ) { padding ->
+                    PlaceListContent(
+                        padding = padding,
+                        state = state,
+                        placePagingItems = placePagingItems,
+                        onAction = onAction,
+                        showFilter = showFilter,
+                        isFilterVisible = isFilterVisible,
+                        clearFocusOnScroll = clearFocusOnScroll,
+                        focusManager = focusManager
+                    )
+                }
+            }
+            else -> {
+                Scaffold(
+                    modifier = modifier,
+                    contentWindowInsets = WindowInsets()
+                ) { padding ->
+                    PlaceListContent(
+                        padding = padding,
+                        state = state,
+                        placePagingItems = placePagingItems,
+                        onAction = onAction,
+                        showFilter = showFilter,
+                        isFilterVisible = isFilterVisible,
+                        clearFocusOnScroll = clearFocusOnScroll,
+                        focusManager = focusManager
+                    )
+                }
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun PlaceListContent(
+    padding: androidx.compose.foundation.layout.PaddingValues,
+    state: PlaceListUiState,
+    placePagingItems: LazyPagingItems<Place>,
+    onAction: (PlaceListAction) -> Unit,
+    showFilter: Boolean,
+    isFilterVisible: Boolean,
+    clearFocusOnScroll: NestedScrollConnection,
+    focusManager: FocusManager
+) {
+    var showRegionBottomSheet by remember { mutableStateOf(value = false) }
+    
     if (showRegionBottomSheet) {
         ModalBottomSheet(
             onDismissRequest = { showRegionBottomSheet = false },
@@ -158,68 +226,52 @@ fun PlaceListScreenContents(
         }
     }
 
-    PullToRefreshBox(
-        isRefreshing = isRefreshing,
-        onRefresh = { onAction(PlaceListAction.OnPullToRefresh) },
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Scaffold(
-            modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-            topBar = {
-                PlaceListTopBar(
-                    scrollBehavior = scrollBehavior,
-                    query = state.query,
-                    onQueryChange = { onAction(PlaceListAction.OnQueryChange(query = it)) }
-                )
-            },
-            contentWindowInsets = WindowInsets()
-        ) { padding ->
-            Column(modifier = Modifier.padding(paddingValues = padding)) {
-                AnimatedVisibility(
-                    visible = isFilterVisible,
-                    enter = expandVertically(animationSpec = tween(durationMillis = AnimationDuration)) + fadeIn(),
-                    exit = shrinkVertically(animationSpec = tween(durationMillis = AnimationDuration)) + fadeOut()
-                ) {
-                    Column {
-                        FilterSection(
-                            onChangeRegionClick = { showRegionBottomSheet = true },
-                            onAddTagClick = {},
-                            modifier = Modifier.padding(horizontal = MemoripPadding.PaddingMedium),
-                            tags = DummyData.categories.toImmutableList(),
-                            selectedRegionState = state.selectedRegionState
-                        )
-                        Spacer(modifier = Modifier.padding(vertical = MemoripPadding.PaddingXSmall))
-                    }
+    Column(modifier = Modifier.padding(paddingValues = padding)) {
+        if (showFilter) {
+            AnimatedVisibility(
+                visible = isFilterVisible,
+                enter = expandVertically(animationSpec = tween(durationMillis = AnimationDuration)) + fadeIn(),
+                exit = shrinkVertically(animationSpec = tween(durationMillis = AnimationDuration)) + fadeOut()
+            ) {
+                Column {
+                    FilterSection(
+                        onChangeRegionClick = { showRegionBottomSheet = true },
+                        onAddTagClick = {},
+                        modifier = Modifier.padding(horizontal = MemoripPadding.PaddingMedium),
+                        tags = DummyData.categories.toImmutableList(),
+                        selectedRegionState = state.selectedRegionState
+                    )
+                    Spacer(modifier = Modifier.padding(vertical = MemoripPadding.PaddingXSmall))
                 }
-
-                MemoripPagingList(
-                    pagingItems = placePagingItems,
-                    itemKey = { it.id },
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = MemoripPadding.PaddingXSmall)
-                        .nestedScroll(connection = clearFocusOnScroll)
-                        .pointerInput(key1 = Unit) { detectTapGestures { focusManager.clearFocus() } },
-                    staggeredCells = StaggeredGridCells.Adaptive(minSize = StaggeredGridDimens.STAGGERED_GRID_MIN_CELL_WIDTH),
-                    emptyContent = {
-                        EmptyText(
-                            text = stringResource(R.string.place_list_empty),
-                            modifier = Modifier.fillMaxSize()
-                        )
-                    },
-                    itemContent = { place ->
-                        val image = place.thumbnailImage
-                        StaggeredImageItem(
-                            imageUrl = image.url,
-                            aspectRatio = image.aspectRatio,
-                            onImageClick = { onAction(PlaceListAction.OnPlaceClick(id = place.id)) },
-                            contentDescription = place.name,
-                            location = place.address,
-                        )
-                    }
-                )
             }
         }
+
+        MemoripPagingList(
+            pagingItems = placePagingItems,
+            itemKey = { it.id },
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = MemoripPadding.PaddingXSmall)
+                .nestedScroll(connection = clearFocusOnScroll)
+                .pointerInput(key1 = Unit) { detectTapGestures { focusManager.clearFocus() } },
+            staggeredCells = StaggeredGridCells.Adaptive(minSize = StaggeredGridDimens.STAGGERED_GRID_MIN_CELL_WIDTH),
+            emptyContent = {
+                EmptyText(
+                    text = stringResource(R.string.place_list_empty),
+                    modifier = Modifier.fillMaxSize()
+                )
+            },
+            itemContent = { place ->
+                val image = place.thumbnailImage
+                StaggeredImageItem(
+                    imageUrl = image.url,
+                    aspectRatio = image.aspectRatio,
+                    onImageClick = { onAction(PlaceListAction.OnPlaceClick(id = place.id)) },
+                    contentDescription = place.name,
+                    location = place.address,
+                )
+            }
+        )
     }
 }
 
