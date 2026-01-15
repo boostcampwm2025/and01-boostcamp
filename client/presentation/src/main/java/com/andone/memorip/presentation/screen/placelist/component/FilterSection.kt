@@ -1,14 +1,12 @@
 package com.andone.memorip.presentation.screen.placelist.component
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.placelist.model.SelectedRegionState
 import com.andone.memorip.presentation.model.TagUiModel
-import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
 import kotlinx.collections.immutable.ImmutableList

@@ -77,9 +77,8 @@ class PlaceService(
 
     fun createPlace(request: PlaceCreateRequest): PlaceCreateResponse {
 
-        val groupId = UUID.fromString("cac95ac7-9913-4ef5-9187-3da56c0d4894")
         val place = Place.create(
-            groupId = groupId,
+            groupId = request.groupId,
             writerId = request.writerId,
             title = request.title,
             content = request.content,
@@ -89,7 +88,37 @@ class PlaceService(
             imageUrls = request.imageUrls
         )
 
+        // todo: 태그 연결
+
         val savedPlace = placeRepository.save(place)
         return PlaceCreateResponse(savedPlace.id)
+    }
+
+    @Transactional(readOnly = true)
+    fun getPlacesByGroupId(groupId: UUID, pageable: Pageable): PlaceListResult {
+        groupRepository.findByIdOrNull(groupId)
+            ?: throw BusinessException(code = CommonExceptionCode.GROUP_NOT_FOUND)
+        
+        val places = placeRepository.findAllByGroupId(groupId, pageable)
+        
+        val content = places.content.map { place ->
+            PlaceListItemResponse(
+                id = place.id,
+                title = place.title,
+                latitude = place.latitude,
+                longitude = place.longitude,
+                address = place.address.fullAddress,
+                imageUrl = place.thumbnailUrl
+            )
+        }
+        
+        val pagination = ApiResult.PaginationInfo(
+            currentPage = places.number + 1,
+            totalPages = places.totalPages,
+            totalCount = places.totalElements,
+            hasNext = places.hasNext()
+        )
+        
+        return PlaceListResult(content, pagination)
     }
 }

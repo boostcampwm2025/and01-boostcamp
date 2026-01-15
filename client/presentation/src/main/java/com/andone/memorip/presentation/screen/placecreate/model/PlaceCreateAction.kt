@@ -25,5 +25,5 @@ sealed interface PlaceCreateAction {
 
     data class OnSnackBarShow(val message: String) : PlaceCreateAction
 
-    data object OnBackClick : PlaceCreateAction
+    data object OnCreateSuccess : PlaceCreateAction
 }

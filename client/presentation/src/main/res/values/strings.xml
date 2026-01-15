@@ -30,6 +30,12 @@
     <string name="group_list_add_content_description">Add</string>
     <string name="group_list_overflow_count">+%1$d</string>
 
+    <!-- SelectImageScreen -->
+    <string name="select_image_cancel">취소</string>
+    <string name="select_image_done">확인</string>
+    <string name="select_image_image_count_format">%1$d / %2$d</string>
+    <string name="select_image_title">사진 선택</string>
+
     <!-- SelectCategoryScreen -->
     <string name="select_category_back_button_description">뒤로 가기 버튼</string>
     <string name="select_category_title">카테고리 선택</string>
@@ -37,6 +43,7 @@
     <string name="select_category_confirm_button_description">카테고리 추가 확인 버튼</string>
     <string name="select_category_create_category_button_description">카테고리 추가 버튼</string>
     <string name="select_category_max_category_over_err_message">카테고리는 최대 3개까지 선택 가능합니다.</string>
+    <string name="group_image_grid_empty_message">아직 비어있어요</string>
 
     <!-- GroupView-->
     <string name="group_view_default_name">기본 그룹</string>
@@ -62,7 +69,7 @@
     <string name="groupdetail_search_button_content_description">검색</string>
 
     <!-- PlaceCreateScreen -->
-    <string name="place_create_title">Place 추가</string>
+    <string name="place_create_title">장소 추가</string>
     <string name="place_create_back_content_description">뒤로가기</string>
     <string name="place_create_check_content_description">확인</string>
     <string name="place_create_image_count_format">%1$d/%2$d</string>
@@ -89,7 +96,10 @@
 
     <!-- PlaceDetail -->
     <string name="place_detail_image_content_description">장소 이미지</string>
+    <string name="place_detail_action_description">장소 스크랩 버튼</string>
     <string name="place_detail_image_count">%1$d/%2$d</string>
+    <string name="place_detail_tag">태그</string>
+    <string name="place_detail_image_cnt">%d/%d</string>
 
     <!-- PlaceImagesBottomSheet -->
     <string name="placeimagebottomsheet_unknown_place">알 수 없는 장소</string>
@@ -137,5 +147,10 @@
     <string name="snackbar_image_upload_failed">이미지 업로드에 실패했습니다</string>
     <string name="snackbar_unknown_error">오류가 발생했습니다. 다시 시도해주세요</string>
     <string name="snackbar_success">성공적으로 완료되었습니다</string>
+
+    <!-- UserScreen -->
+    <string name="login_show_account">계정이 추가 되었습니다!</string>
+    <string name="login_add_account">+ 계정을 추가하세요</string>
+    <string name="login_show_places">올린 장소들</string>
 
 </resources>

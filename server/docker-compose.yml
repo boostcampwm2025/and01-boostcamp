@@ -9,6 +9,10 @@ services:
       - "8080:8080"
     env_file:
       - .env
+    environment:
+      FIREBASE_CREDENTIALS: /app/firebase.json
+    volumes:
+      - ./firebase-service-account.json:/app/firebase.json
     depends_on:
       db:
         condition: service_healthy

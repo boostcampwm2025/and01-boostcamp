@@ -1,4 +1,5 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.library)
@@ -42,8 +43,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlinOptions {
-        jvmTarget = "11"
+    kotlin {
+        compilerOptions {
+            jvmTarget = JvmTarget.JVM_11
+        }
     }
     buildFeatures {
         buildConfig = true
@@ -76,6 +79,10 @@ dependencies {
 
     // Paging
     implementation(libs.androidx.paging.common)
+
+    // Auth
+    implementation(platform(libs.firebase))
+    implementation(libs.firebase.auth)
 }
 
 fun getLocalProperty(propertyKey: String): String {

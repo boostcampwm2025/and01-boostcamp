@@ -12,6 +12,7 @@ import com.andone.memorip.presentation.model.LocationUiModel
 import com.andone.memorip.presentation.model.TagUiModel
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.naver.maps.map.compose.ExperimentalNaverMapApi
+import java.util.UUID
 
 @OptIn(ExperimentalNaverMapApi::class)
 @Composable
@@ -65,6 +66,7 @@ private fun PlaceCreateSelectSectionPreview() {
             category = emptyList(),
             location = null,
             group = GroupUiModel(
+                id = UUID.randomUUID(),
                 name = "",
                 images = emptyList()
             ),

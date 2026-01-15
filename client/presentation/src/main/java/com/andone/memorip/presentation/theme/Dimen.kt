@@ -10,6 +10,7 @@ object MemoripPadding {
     val PaddingMedium = 16.dp
     val PaddingLarge = 20.dp
     val PaddingXLarge = 24.dp
+    val PaddingXXXLarge = 32.dp
 }
 
 object MemoripSpace {
@@ -19,6 +20,7 @@ object MemoripSpace {
     val SpaceMedium = 16.dp
     val SpaceLarge = 20.dp
     val SpaceXLarge = 24.dp
+    val SpaceXXXLarge = 32.dp
 }
 
 object MemoripIconSize {
@@ -29,7 +31,7 @@ object MemoripIconSize {
     val IconButton = 84.dp
 }
 
-object MemoripHeight{
+object MemoripHeight {
     val TextBoxHigh = 120.dp
     val TextBoxDefault = 32.dp
     val SearchBoxHeight = 36.dp
@@ -37,7 +39,9 @@ object MemoripHeight{
 
 object MemoripBorderWidth {
     val Thin = 1.dp
-    val Strong = 2.dp
+    val Small = 2.dp
+    val Medium = 4.dp
+    val Strong = 8.dp
 }
 
 object MemoripShadow {
@@ -71,4 +75,8 @@ object MemoripAlpha {
     /* ---------- Divider / Border ---------- */
     const val DIVIDER = 0.12f
     const val BORDER = 0.2f
+}
+
+object MemoripElevation {
+    val ElevationMedium = 4.dp
 }

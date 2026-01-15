@@ -41,7 +41,7 @@ fun LocationItem(
 
 @Preview(showBackground = true)
 @Composable
-fun LocationItemPreview() {
+private fun LocationItemPreview() {
     LocationItem(
         location = LocationUiModel(
             id = "",

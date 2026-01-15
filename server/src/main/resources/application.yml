@@ -24,12 +24,16 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_batch_fetch_size: 100
 
   # Jackson (JSON null 필드 제외)
   jackson:
     default-property-inclusion: non_null
 
-
+# Firebase
+firebase:
+  credentials:
+    path: ${FIREBASE_CREDENTIALS:./firebase-service-account.json}
 
 # Naver/Object Storage
 naver:

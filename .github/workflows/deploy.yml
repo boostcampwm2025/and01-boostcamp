@@ -38,6 +38,10 @@ jobs:
           cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/memorip-backend:buildcache
           cache-to: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/memorip-backend:buildcache,mode=max
 
+      - name: Create Firebase service account json
+        run: |
+          echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_BASE64 }}" | base64 -d > firebase-service-account.json
+
       - name: Setup SSH key
         run: |
           mkdir -p ~/.ssh
@@ -50,6 +54,13 @@ jobs:
           scp -i ~/.ssh/deploy_key \
             -o StrictHostKeyChecking=no \
             server/docker-compose.yml \
+            ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:~/memorip/
+
+      - name: Copy Firebase service account json to server
+        run: |
+          scp -i ~/.ssh/deploy_key \
+            -o StrictHostKeyChecking=no \
+            firebase-service-account.json \
             ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:~/memorip/
 
       - name: Deploy on server
