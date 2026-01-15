@@ -17,6 +17,7 @@ fun EntryProviderScope<NavKey>.groupDetail(
 ) {
     entry<GroupDetail> { route ->
         GroupDetailScreen(
+            route = route,
             onBackClick = onNavigateBack,
             onImageClick = onImageClick,
             modifier = modifier
