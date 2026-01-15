@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.runtime.Composable
@@ -36,7 +35,6 @@ import com.andone.memorip.presentation.screen.selectlocation.SelectLocationScree
 import com.andone.memorip.presentation.screen.selectlocation.SelectLocationScreenDimens.markerWidth
 import com.andone.memorip.presentation.screen.selectlocation.component.LocationItem
 import com.andone.memorip.presentation.screen.selectlocation.component.LocationSelectionButton
-import com.andone.memorip.presentation.screen.selectlocation.component.SelectLocationTopBar
 import com.andone.memorip.presentation.screen.selectlocation.model.SelectLocationAction
 import com.andone.memorip.presentation.screen.selectlocation.model.SelectLocationEvent
 import com.andone.memorip.presentation.screen.selectlocation.model.SelectLocationUiState
@@ -67,7 +65,6 @@ private object SelectLocationScreenConstants {
 @Composable
 fun SelectLocationScreen(
     onLocationSelect: (LocationUiModel) -> Unit,
-    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: SelectLocationViewModel = hiltViewModel()
 ) {
@@ -77,8 +74,6 @@ fun SelectLocationScreen(
     viewModel.event.collectWithLifecycle { event ->
         when (event) {
             is SelectLocationEvent.SelectLocation -> onLocationSelect(event.location)
-
-            SelectLocationEvent.NavigateBack -> onBackClick()
         }
     }
 
@@ -116,98 +111,93 @@ private fun SelectLocationContent(
         )
     }
 
-    Scaffold(
+    SearchBar(
+        inputField = {
+            MemoripSearchBarInputField(
+                query = uiState.query,
+                expanded = searchBarExpanded,
+                onQueryChange = { onAction(SelectLocationAction.OnQueryChange(it)) },
+                onExpandedChange = { searchBarExpanded = it },
+                modifier = Modifier.fillMaxWidth()
+            )
+        },
+        expanded = searchBarExpanded,
+        onExpandedChange = { searchBarExpanded = it },
         modifier = modifier,
-        topBar = { SelectLocationTopBar(onBackClick = { onAction(SelectLocationAction.OnBackClick) }) }
-    ) { innerPadding ->
-        SearchBar(
-            inputField = {
-                MemoripSearchBarInputField(
-                    query = uiState.query,
-                    expanded = searchBarExpanded,
-                    onQueryChange = { onAction(SelectLocationAction.OnQueryChange(it)) },
-                    onExpandedChange = { searchBarExpanded = it },
-                    modifier = Modifier.fillMaxWidth()
+        colors = SearchBarDefaults.colors(containerColor = MemoripTheme.colors.white),
+        windowInsets = WindowInsets()
+    ) {
+        MemoripPagingList(
+            pagingItems = locations,
+            itemKey = { it.id },
+            modifier = Modifier.fillMaxSize(),
+            initialContent = {
+                EmptyText(
+                    text = stringResource(R.string.search_bar_placeholder),
+                    modifier = Modifier.fillMaxSize()
                 )
             },
-            expanded = searchBarExpanded,
-            onExpandedChange = { searchBarExpanded = it },
-            modifier = Modifier.padding(top = innerPadding.calculateTopPadding()),
-            colors = SearchBarDefaults.colors(containerColor = MemoripTheme.colors.white),
-            windowInsets = WindowInsets()
-        ) {
-            MemoripPagingList(
-                pagingItems = locations,
-                itemKey = { it.id },
-                modifier = Modifier.fillMaxSize(),
-                initialContent = {
-                    EmptyText(
-                        text = stringResource(R.string.search_bar_placeholder),
-                        modifier = Modifier.fillMaxSize()
-                    )
-                },
-                emptyContent = {
-                    EmptyText(
-                        text = stringResource(R.string.search_bar_empty_result),
-                        modifier = Modifier.fillMaxSize()
-                    )
-                },
-                itemContent = { location ->
-                    LocationItem(
-                        location = location,
-                        onClick = {
-                            onAction(SelectLocationAction.OnLocationClick(location))
-                            cameraPositionMove(LatLng(location.latitude, location.longitude))
-                            searchBarExpanded = false
-                        },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
-            )
-        }
-
-        Box(modifier = Modifier.fillMaxSize()) {
-            NaverMap(
-                modifier = Modifier.fillMaxSize(),
-                cameraPositionState = cameraPositionState,
-                uiSettings = remember {
-                    MapUiSettings(
-                        isCompassEnabled = true,
-                        isZoomControlEnabled = true,
-                        isLocationButtonEnabled = true
-                    )
-                },
-                onMapClick = { _, latLng ->
-                    onAction(SelectLocationAction.OnMapClick(latLng))
-                    cameraPositionMove(latLng)
-                }
-            ) {
-                uiState.location?.let { location ->
-                    Marker(
-                        state = MarkerState(
-                            position = LatLng(location.latitude, location.longitude)
-                        ),
-                        width = markerWidth,
-                        height = markerHeight,
-                        onClick = {
-                            onAction(SelectLocationAction.OnLocationClick(null))
-                            true
-                        }
-                    )
-                }
+            emptyContent = {
+                EmptyText(
+                    text = stringResource(R.string.search_bar_empty_result),
+                    modifier = Modifier.fillMaxSize()
+                )
+            },
+            itemContent = { location ->
+                LocationItem(
+                    location = location,
+                    onClick = {
+                        onAction(SelectLocationAction.OnLocationClick(location))
+                        cameraPositionMove(LatLng(location.latitude, location.longitude))
+                        searchBarExpanded = false
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
+        )
+    }
 
-            LocationSelectionButton(
-                onClick = {
-                    uiState.location?.let { onAction(SelectLocationAction.OnLocationSelect(it)) }
-                },
-                enabled = uiState.location != null,
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .navigationBarsPadding()
-                    .padding(bottom = MemoripPadding.PaddingMedium)
-            )
+    Box(modifier = Modifier.fillMaxSize()) {
+        NaverMap(
+            modifier = Modifier.fillMaxSize(),
+            cameraPositionState = cameraPositionState,
+            uiSettings = remember {
+                MapUiSettings(
+                    isCompassEnabled = true,
+                    isZoomControlEnabled = true,
+                    isLocationButtonEnabled = true
+                )
+            },
+            onMapClick = { _, latLng ->
+                onAction(SelectLocationAction.OnMapClick(latLng))
+                cameraPositionMove(latLng)
+            }
+        ) {
+            uiState.location?.let { location ->
+                Marker(
+                    state = MarkerState(
+                        position = LatLng(location.latitude, location.longitude)
+                    ),
+                    width = markerWidth,
+                    height = markerHeight,
+                    onClick = {
+                        onAction(SelectLocationAction.OnLocationClick(null))
+                        true
+                    }
+                )
+            }
         }
+
+        LocationSelectionButton(
+            onClick = {
+                uiState.location?.let { onAction(SelectLocationAction.OnLocationSelect(it)) }
+            },
+            enabled = uiState.location != null,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .navigationBarsPadding()
+                .padding(bottom = MemoripPadding.PaddingMedium)
+        )
     }
 }
 
@@ -215,9 +205,6 @@ private fun SelectLocationContent(
 @Composable
 private fun SelectLocationScreenPreview() {
     MemoripTheme {
-        SelectLocationScreen(
-            onLocationSelect = {},
-            onBackClick = {}
-        )
+        SelectLocationScreen(onLocationSelect = {})
     }
 }
