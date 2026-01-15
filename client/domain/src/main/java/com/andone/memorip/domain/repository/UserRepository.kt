@@ -3,6 +3,6 @@ package com.andone.memorip.domain.repository
 import com.andone.memorip.domain.model.User
 
 interface UserRepository {
-    fun getMe(): User
-    fun updateNickname(): User
+    suspend fun getMe(): Result<User>
+    suspend fun updateNickname(name: String): Result<User>
 }

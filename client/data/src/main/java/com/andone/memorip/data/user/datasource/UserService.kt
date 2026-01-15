@@ -10,6 +10,6 @@ interface UserService {
     @GET("/api/users/me")
     suspend fun getMe(): ApiResult<UserResponse>
 
-    @PUT
+    @PUT("/api/users/me/nickname")
     suspend fun updateNickname(@Body nickname: String): ApiResult<UserResponse>
 }
