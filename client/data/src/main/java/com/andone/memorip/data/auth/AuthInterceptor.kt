@@ -1,7 +1,6 @@
 package com.andone.memorip.data.auth
 
 import com.andone.memorip.domain.auth.TokenProvider
-import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject

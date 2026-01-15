@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.andone.memorip.navigation.rememberMemoripNavigator
-import com.andone.memorip.presentation.screen.user.UserScreen
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.snackbar.SnackBarManager
 import dagger.hilt.android.AndroidEntryPoint
