@@ -12,4 +12,5 @@ interface GroupRepository {
     suspend fun createGroup(ownerId: String, title: String, visibility: Visibility): Result<Group>
     suspend fun updateGroup(groupId: String, title: String, visibility: Visibility): Result<Unit>
     suspend fun deleteGroup(groupId: String): Result<Unit>
+    suspend fun addPlaceToGroup(groupId: String, placeId: String): Result<Unit>
 }

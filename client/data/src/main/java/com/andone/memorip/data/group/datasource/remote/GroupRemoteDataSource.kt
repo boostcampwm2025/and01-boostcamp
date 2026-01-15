@@ -12,4 +12,5 @@ interface GroupRemoteDataSource {
     suspend fun createGroup(request: GroupCreateRequest): Result<GroupResponse>
     suspend fun updateGroup(groupId: String, request: GroupUpdateRequest): Result<Unit>
     suspend fun deleteGroup(groupId: String): Result<Unit>
+    suspend fun addPlaceToGroup(groupId: String, placeId: String): Result<Unit>
 }

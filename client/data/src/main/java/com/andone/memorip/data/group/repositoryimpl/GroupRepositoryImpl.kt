@@ -69,4 +69,8 @@ class GroupRepositoryImpl @Inject constructor(
     override suspend fun deleteGroup(groupId: String): Result<Unit> {
         return remoteDataSource.deleteGroup(groupId)
     }
+
+    override suspend fun addPlaceToGroup(groupId: String, placeId: String): Result<Unit> {
+        return remoteDataSource.addPlaceToGroup(groupId, placeId)
+    }
 }

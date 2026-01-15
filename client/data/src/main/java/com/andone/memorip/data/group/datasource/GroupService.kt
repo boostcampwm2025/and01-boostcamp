@@ -1,6 +1,7 @@
 package com.andone.memorip.data.group.datasource
 
 import com.andone.memorip.data.common.ApiResult
+import com.andone.memorip.data.group.model.AddPlaceToGroupRequest
 import com.andone.memorip.data.group.model.GroupCreateRequest
 import com.andone.memorip.data.group.model.GroupListResponse
 import com.andone.memorip.data.group.model.GroupResponse
@@ -47,5 +48,11 @@ interface GroupService {
     @DELETE("/api/groups/{groupId}")
     suspend fun deleteGroup(
         @Path("groupId") groupId: String
+    ): ApiResult<Unit>
+
+    @POST("/api/groups/{groupId}/places")
+    suspend fun addPlaceToGroup(
+        @Path("groupId") groupId: String,
+        @Body request: AddPlaceToGroupRequest
     ): ApiResult<Unit>
 }

@@ -1,6 +1,7 @@
 package com.andone.memorip.data.group.datasource.remote
 
 import com.andone.memorip.data.group.datasource.GroupService
+import com.andone.memorip.data.group.model.AddPlaceToGroupRequest
 import com.andone.memorip.data.group.model.GroupCreateRequest
 import com.andone.memorip.data.group.model.GroupListResponse
 import com.andone.memorip.data.group.model.GroupResponse
@@ -34,5 +35,10 @@ class GroupRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun deleteGroup(groupId: String): Result<Unit> {
         return apiCall { groupService.deleteGroup(groupId) }
+    }
+
+    override suspend fun addPlaceToGroup(groupId: String, placeId: String): Result<Unit> {
+        val request = AddPlaceToGroupRequest(placeId = placeId)
+        return apiCall { groupService.addPlaceToGroup(groupId, request) }
     }
 }
