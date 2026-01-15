@@ -2,6 +2,7 @@ package com.andone.memorip.data.di
 
 import com.andone.memorip.data.BuildConfig
 import com.andone.memorip.data.auth.AuthInterceptor
+import com.andone.memorip.data.group.datasource.GroupService
 import com.andone.memorip.data.place.datasource.PlaceService
 import com.andone.memorip.data.user.datasource.UserService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -70,5 +71,11 @@ object ServerNetworkModule {
     @Singleton
     fun provideUserService(@ServerRetrofit retrofit: Retrofit): UserService {
         return retrofit.create(UserService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGroupService(@ServerRetrofit retrofit: Retrofit): GroupService {
+        return retrofit.create(GroupService::class.java)
     }
 }

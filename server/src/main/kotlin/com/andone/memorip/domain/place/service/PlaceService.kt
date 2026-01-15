@@ -4,12 +4,12 @@ import com.andone.memorip.common.exception.BusinessException
 import com.andone.memorip.common.exception.CommonExceptionCode
 import com.andone.memorip.common.response.ApiResult
 import com.andone.memorip.domain.group.repository.GroupRepository
+import com.andone.memorip.domain.group.dto.response.toGroupResponse
 import com.andone.memorip.domain.place.dto.PlaceDetailResponse
 import com.andone.memorip.domain.place.dto.PlaceListResult
 import com.andone.memorip.domain.place.dto.request.PlaceCreateRequest
 import com.andone.memorip.domain.place.dto.response.PlaceCreateResponse
 import com.andone.memorip.domain.place.dto.response.PlaceListItemResponse
-import com.andone.memorip.domain.place.dto.toGroupResponse
 import com.andone.memorip.domain.place.dto.toTagResponse
 import com.andone.memorip.domain.place.entity.Place
 import com.andone.memorip.domain.place.repository.PlaceImageRepository
@@ -38,8 +38,7 @@ class PlaceService(
         val images = placeImageRepository.findAllByPlaceId(id = placeId).map { it.url }
 
         return PlaceDetailResponse(
-            placeId = place.id
-                ?: throw BusinessException(code = CommonExceptionCode.PLACE_NOT_FOUND),
+            placeId = place.id,
             writerId = place.writerId,
             title = place.title,
             tags = tags,
@@ -57,12 +56,12 @@ class PlaceService(
 
         val content = page.content.map { place ->
             PlaceListItemResponse(
-                id = place.id!!,
+                id = place.id,
                 title = place.title,
                 latitude = place.latitude,
                 longitude = place.longitude,
                 address = place.address.fullAddress,
-                imageUrl = place.getImages().firstOrNull()?.url
+                imageUrl = place.thumbnailUrl
             )
         }
 
@@ -78,9 +77,8 @@ class PlaceService(
 
     fun createPlace(request: PlaceCreateRequest): PlaceCreateResponse {
 
-        val groupId = UUID.fromString("cac95ac7-9913-4ef5-9187-3da56c0d4894")
         val place = Place.create(
-            groupId = groupId,
+            groupId = request.groupId,
             writerId = request.writerId,
             title = request.title,
             content = request.content,
@@ -90,7 +88,37 @@ class PlaceService(
             imageUrls = request.imageUrls
         )
 
+        // todo: 태그 연결
+
         val savedPlace = placeRepository.save(place)
-        return PlaceCreateResponse(savedPlace.id!!)
+        return PlaceCreateResponse(savedPlace.id)
+    }
+
+    @Transactional(readOnly = true)
+    fun getPlacesByGroupId(groupId: UUID, pageable: Pageable): PlaceListResult {
+        groupRepository.findByIdOrNull(groupId)
+            ?: throw BusinessException(code = CommonExceptionCode.GROUP_NOT_FOUND)
+        
+        val places = placeRepository.findAllByGroupId(groupId, pageable)
+        
+        val content = places.content.map { place ->
+            PlaceListItemResponse(
+                id = place.id,
+                title = place.title,
+                latitude = place.latitude,
+                longitude = place.longitude,
+                address = place.address.fullAddress,
+                imageUrl = place.thumbnailUrl
+            )
+        }
+        
+        val pagination = ApiResult.PaginationInfo(
+            currentPage = places.number + 1,
+            totalPages = places.totalPages,
+            totalCount = places.totalElements,
+            hasNext = places.hasNext()
+        )
+        
+        return PlaceListResult(content, pagination)
     }
 }

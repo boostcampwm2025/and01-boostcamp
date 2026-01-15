@@ -7,6 +7,7 @@ import com.andone.memorip.domain.place.dto.response.PlaceCreateResponse
 import com.andone.memorip.domain.place.dto.response.PlaceListItemResponse
 import com.andone.memorip.domain.place.service.PlaceService
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.data.domain.Pageable
@@ -48,6 +49,33 @@ class PlaceController(
         pageable: Pageable
     ): ApiResult<List<PlaceListItemResponse>> {
         val result = placeService.getPlaceList(pageable)
+        return ApiResult.success(result.content, result.pagination)
+    }
+
+    @GetMapping("/groups/{groupId}/places")
+    @Operation(
+        summary = "그룹의 장소 목록 조회",
+        description = "특정 그룹에 속한 장소 목록을 페이징하여 조회합니다.",
+        responses = [
+            ApiResponse(responseCode = "200", description = "성공"),
+            ApiResponse(responseCode = "404", description = "그룹을 찾을 수 없습니다")
+        ]
+    )
+    fun getPlacesByGroupId(
+        @Parameter(
+            description = "조회할 그룹 ID",
+            example = "cac95ac7-9913-4ef5-9187-3da56c0d4894"
+        )
+        @PathVariable("groupId") groupId: UUID,
+        @PageableDefault(
+            page = 0,
+            size = 20,
+            sort = ["id"],
+            direction = Sort.Direction.DESC
+        )
+        pageable: Pageable
+    ): ApiResult<List<PlaceListItemResponse>> {
+        val result = placeService.getPlacesByGroupId(groupId, pageable)
         return ApiResult.success(result.content, result.pagination)
     }
 

@@ -14,7 +14,7 @@ import java.util.UUID
 @SQLDelete(sql = "UPDATE users SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
 @SQLRestriction("deleted_at IS NULL")
 class User protected constructor(
-    id: UUID? = null,
+    id: UUID,
     @Column(name = "firebase_uid", nullable = false, unique = true, length = 128)
     val firebaseUid: String,
     nickname: String,
