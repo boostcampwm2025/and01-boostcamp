@@ -2,6 +2,7 @@ package com.andone.memorip.data.di
 
 import com.andone.memorip.data.BuildConfig
 import com.andone.memorip.data.group.datasource.GroupService
+import com.andone.memorip.data.auth.AuthInterceptor
 import com.andone.memorip.data.place.datasource.PlaceService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
@@ -37,12 +38,13 @@ object ServerNetworkModule {
     @Provides
     @Singleton
     @ServerOkHttp
-    fun provideOkHttpClient(): OkHttpClient {
+    fun provideOkHttpClient(authInterceptor: AuthInterceptor): OkHttpClient {
         val logger = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
 
         return OkHttpClient.Builder()
+            .addInterceptor(authInterceptor)
             .addInterceptor(logger)
             .build()
     }

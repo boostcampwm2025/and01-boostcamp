@@ -119,9 +119,9 @@ fun PlaceListScreenContents(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val isRefreshing = placePagingItems.loadState.refresh is LoadState.Loading
 
-    var showRegionBottomSheet by remember { mutableStateOf(false) }
+    var showRegionBottomSheet by remember { mutableStateOf(value = false) }
 
-    var isFilterVisible by remember { mutableStateOf(true) }
+    var isFilterVisible by remember { mutableStateOf(value = true) }
     val clearFocusOnScroll = remember {
         object : NestedScrollConnection {
             override fun onPreScroll(

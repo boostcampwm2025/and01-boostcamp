@@ -5,6 +5,7 @@ import com.andone.memorip.data.BuildConfig
 import com.andone.memorip.data.kakaosearch.datasource.KakaoSearchService
 import com.andone.memorip.data.observer.NetworkObserverImpl
 import com.andone.memorip.domain.observer.NetworkObserver
+import com.google.firebase.auth.FirebaseAuth
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -85,4 +86,8 @@ object NetworkModule {
     ): NetworkObserver {
         return NetworkObserverImpl(context)
     }
+
+    @Provides
+    @Singleton
+    fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
 }
