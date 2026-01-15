@@ -8,7 +8,7 @@ data class Group(
     val owner: User,
     val title: String,
     val visibility: Visibility,
-    val images: List<String>,
+    val images: List<String> = emptyList(),
     val createdAt: String,
     val updatedAt: String,
 )
