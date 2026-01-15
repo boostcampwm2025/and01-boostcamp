@@ -13,9 +13,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
-class NetworkObserverImpl(
-    private val context: Context
-) : NetworkObserver {
+class NetworkObserverImpl(private val context: Context) : NetworkObserver {
 
     private val connectivityManager =
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -67,7 +65,6 @@ class NetworkObserverImpl(
 
         connectivityManager.registerNetworkCallback(request, callback)
 
-        // 초기 네트워크 상태 전송
         val initialConnected = connectivityManager.activeNetwork != null
         launch {
             send(element = if (initialConnected) NetworkStatus.Available else NetworkStatus.Unavailable)

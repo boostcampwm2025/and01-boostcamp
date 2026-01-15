@@ -13,12 +13,8 @@ import dagger.hilt.components.SingletonComponent
 abstract class AuthBindModule {
 
     @Binds
-    abstract fun bindTokenProvider(
-        impl: FirebaseTokenRepositoryImpl
-    ): TokenProvider
+    abstract fun bindTokenProvider(impl: FirebaseTokenRepositoryImpl): TokenProvider
 
     @Binds
-    abstract fun TokenRefresher(
-        impl: FirebaseTokenRepositoryImpl
-    ): TokenRefresher
+    abstract fun TokenRefresher(impl: FirebaseTokenRepositoryImpl): TokenRefresher
 }

@@ -89,6 +89,5 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideFirebaseAuth(): FirebaseAuth =
-        FirebaseAuth.getInstance()
+    fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
 }
