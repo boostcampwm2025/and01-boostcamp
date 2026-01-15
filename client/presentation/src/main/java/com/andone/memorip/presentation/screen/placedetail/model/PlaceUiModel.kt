@@ -9,6 +9,8 @@ data class PlaceUiModel(
     val title: String = "",
     val tags: ImmutableList<TagUiModel> = persistentListOf(),
     val locationName: String = "",
+    val latitude: Double = 0.toDouble(),
+    val longitude: Double = 0.toDouble(),
     val imageUrls: ImmutableList<String> = persistentListOf(),
     val groupName: String = "",
     val content: String = ""

@@ -13,7 +13,7 @@ import java.util.UUID
 @SQLDelete(sql = "UPDATE place_tags SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
 @SQLRestriction("deleted_at IS NULL")
 class PlaceTag protected constructor(
-    id: UUID? = null,
+    id: UUID,
     place: Place,
     tag: Tag
 ) : BaseTimeSyncEntity() {
