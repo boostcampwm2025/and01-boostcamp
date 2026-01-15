@@ -43,7 +43,10 @@ fun ImageCropBottomBar(
             ),
             horizontalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXSmall)
         ) {
-            itemsIndexed(imageUris) { index, uri ->
+            itemsIndexed(
+                items = imageUris,
+                key = { _, uri -> uri }
+            ) { index, uri ->
                 ThumbnailItem(
                     imageUri = uri,
                     isSelected = index == currentIndex,
