@@ -16,6 +16,7 @@ import com.andone.memorip.presentation.screen.grouplist.groupList
 import com.andone.memorip.presentation.screen.placecreate.placeCreate
 import com.andone.memorip.presentation.screen.placedetail.placeDetail
 import com.andone.memorip.presentation.screen.placelist.placeList
+import com.andone.memorip.presentation.screen.plan.plan
 import com.andone.memorip.presentation.screen.user.user
 
 @Composable
@@ -56,6 +57,8 @@ fun MemoripNav(
                 onCreatePlaceClick = navigator::navigateToPlaceCreate,
                 modifier = modifier.padding(paddingValues = innerPadding),
             )
+
+            plan()
 
             user(modifier = modifier.padding(paddingValues = innerPadding))
 
