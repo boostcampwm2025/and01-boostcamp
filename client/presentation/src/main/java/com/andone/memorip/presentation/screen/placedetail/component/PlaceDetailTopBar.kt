@@ -17,6 +17,7 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlaceDetailTopBar(
+    isMine: Boolean,
     onNavigationIconClick: () -> Unit,
     onActionIconClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -39,17 +40,19 @@ fun PlaceDetailTopBar(
             }
         },
         actions = {
-            IconButton(
-                onClick = onActionIconClick,
-                colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = MemoripTheme.colors.primaryContainer,
-                    contentColor = MemoripTheme.colors.black
-                )
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_scrap),
-                    contentDescription = stringResource(R.string.place_detail_action_description)
-                )
+            if (!isMine) {
+                IconButton(
+                    onClick = onActionIconClick,
+                    colors = IconButtonDefaults.iconButtonColors(
+                        containerColor = MemoripTheme.colors.primaryContainer,
+                        contentColor = MemoripTheme.colors.black
+                    )
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_scrap),
+                        contentDescription = stringResource(R.string.place_detail_action_description)
+                    )
+                }
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
