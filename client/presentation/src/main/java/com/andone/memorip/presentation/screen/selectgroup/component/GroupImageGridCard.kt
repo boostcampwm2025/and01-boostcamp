@@ -19,9 +19,7 @@ fun GroupImageGridCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier.fillMaxWidth(),
-    ) {
+    Column(modifier = modifier.fillMaxWidth()) {
         GroupImageGridMax3(
             images = images,
             onClick = onClick,
