@@ -29,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
@@ -43,7 +44,10 @@ import com.andone.memorip.navigation.PlaceDetail
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.LoadingIndicatorScreen
 import com.andone.memorip.presentation.component.TagChipRow
+import com.andone.memorip.presentation.placedetail.Constants.bottomAlpha
+import com.andone.memorip.presentation.placedetail.Constants.middleAlpha
 import com.andone.memorip.presentation.placedetail.Constants.minHeightRate
+import com.andone.memorip.presentation.placedetail.Constants.topAlpha
 import com.andone.memorip.presentation.placedetail.component.ContentCard
 import com.andone.memorip.presentation.screen.placedetail.PlaceDetailViewModel
 import com.andone.memorip.presentation.screen.placedetail.component.ImageDialog
@@ -53,7 +57,6 @@ import com.andone.memorip.presentation.screen.placedetail.component.PlaceDetailT
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceDetailAction
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceDetailEvent
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceUiModel
-import com.andone.memorip.presentation.theme.MemoripAlpha
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -64,6 +67,9 @@ import com.andone.memorip.presentation.util.toPx
 
 private object Constants {
     const val minHeightRate = 0.5f
+    const val topAlpha = 0f
+    const val middleAlpha = 0.75f
+    const val bottomAlpha = 0.97f
 }
 
 @Composable
@@ -147,6 +153,7 @@ private fun PlaceDetailContent(
     modifier: Modifier = Modifier
 ) {
     val density = LocalDensity.current
+    val pagerState = rememberPagerState(pageCount = { place.imageUrls.size })
     val scrollState = rememberScrollState()
     val statusBarHeightDp = WindowInsets.statusBars
         .getTop(density = density).toFloat()
@@ -163,8 +170,6 @@ private fun PlaceDetailContent(
             maxHeaderPx - collapseOffset
         }
     }
-
-    val pagerState = rememberPagerState(pageCount = { place.imageUrls.size })
 
     Column(
         modifier = modifier
@@ -194,36 +199,44 @@ private fun PlaceDetailContent(
             }
 
             Column(
-                modifier = Modifier
-                    .padding(
-                        start = MemoripPadding.PaddingXXXLarge,
-                        bottom = MemoripPadding.PaddingXXXLarge
-                    )
-                    .background(
-                        color = MemoripTheme.colors.surface.copy(alpha = MemoripAlpha.IMAGE_OVERLAY),
-                        shape = MemoripTheme.shapes.roundedSmall
-                    )
-                    .padding(all = MemoripPadding.PaddingMedium),
-                verticalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXSmall)
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(
-                    text = place.title,
-                    color = MemoripTheme.colors.black,
-                    style = MemoripTheme.typography.headline2
-                )
-                Row(horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceMedium)) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_location_on),
-                        tint = MemoripTheme.colors.green,
-                        contentDescription = null
-                    )
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = MemoripPadding.PaddingXXXLarge)
+                        .background(
+                            brush = Brush.verticalGradient(
+                                colorStops = arrayOf(
+                                    0f to MemoripTheme.colors.surface.copy(alpha = topAlpha),
+                                    0.2f to MemoripTheme.colors.surface.copy(alpha = middleAlpha),
+                                    1f to MemoripTheme.colors.surface.copy(alpha = bottomAlpha)
+                                )
+                            )
+                        )
+                        .padding(all = MemoripPadding.PaddingMedium),
+                    verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXSmall)
+                ) {
                     Text(
-                        text = place.locationName,
+                        text = place.title,
                         color = MemoripTheme.colors.black,
-                        style = MemoripTheme.typography.label1
+                        style = MemoripTheme.typography.headline2
                     )
+                    Row(horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceMedium)) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_location_on),
+                            tint = MemoripTheme.colors.green,
+                            contentDescription = null
+                        )
+                        Text(
+                            text = place.locationName,
+                            color = MemoripTheme.colors.black,
+                            style = MemoripTheme.typography.label1
+                        )
+                    }
+                    TagChipRow(tags = place.tags)
                 }
-                TagChipRow(tags = place.tags)
             }
         }
 
