@@ -5,7 +5,6 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
@@ -17,6 +16,7 @@ import com.andone.memorip.presentation.screen.grouplist.groupList
 import com.andone.memorip.presentation.screen.placecreate.placeCreate
 import com.andone.memorip.presentation.screen.placedetail.placeDetail
 import com.andone.memorip.presentation.screen.placelist.placeList
+import com.andone.memorip.presentation.screen.user.user
 
 @Composable
 fun MemoripNav(
@@ -43,6 +43,7 @@ fun MemoripNav(
             slideInHorizontally(initialOffsetX = { -it }) togetherWith
                     slideOutHorizontally(targetOffsetX = { it })
         },
+
         entryProvider = entryProvider {
             placeList(
                 onPlaceClick = navigator::navigateToPlaceDetail,
@@ -56,7 +57,7 @@ fun MemoripNav(
                 modifier = modifier.padding(paddingValues = innerPadding),
             )
 
-            entry<User> { Text(text = "user") }
+            user(modifier = modifier.padding(paddingValues = innerPadding))
 
             placeCreate(onBackClick = navigator::popBackStack)
 

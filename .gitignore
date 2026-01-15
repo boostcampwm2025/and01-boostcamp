@@ -24,6 +24,7 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 server/.env
+server/firebase-service-account.json
 
 ### STS ###
 .apt_generated
