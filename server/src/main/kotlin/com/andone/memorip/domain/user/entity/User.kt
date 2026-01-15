@@ -32,6 +32,8 @@ class User protected constructor(
         internal set
 
     companion object {
+        private const val DEFAULT_PROFILE_IMAGE = "https://api.dicebear.com/7.x/identicon/svg?seed=memorip"
+
         fun create(
             id: UUID? = null,
             nickname: String,
@@ -41,7 +43,7 @@ class User protected constructor(
             return User(
                 id = generatedId,
                 nickname = nickname,
-                profileImage = profileImage
+                profileImage = profileImage ?: DEFAULT_PROFILE_IMAGE
             )
         }
     }
