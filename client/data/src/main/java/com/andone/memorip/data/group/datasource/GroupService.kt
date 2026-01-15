@@ -5,6 +5,7 @@ import com.andone.memorip.data.group.model.AddPlaceToGroupRequest
 import com.andone.memorip.data.group.model.GroupCreateRequest
 import com.andone.memorip.data.group.model.GroupListResponse
 import com.andone.memorip.data.group.model.GroupUpdateRequest
+import com.andone.memorip.data.place.model.PlaceListItemResponse
 import com.andone.memorip.domain.model.Group
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -55,4 +56,12 @@ interface GroupService {
         @Path("groupId") groupId: String,
         @Body request: AddPlaceToGroupRequest
     ): ApiResult<Unit>
+
+    @GET("/api/groups/{groupId}/places")
+    suspend fun getGroupPlaces(
+        @Path("groupId") groupId: String,
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+        @Query("sort") sort: List<String>? = null
+    ): ApiResult<List<PlaceListItemResponse>>
 }
