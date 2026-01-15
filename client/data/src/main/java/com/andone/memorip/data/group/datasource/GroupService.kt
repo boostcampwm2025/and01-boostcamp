@@ -4,8 +4,8 @@ import com.andone.memorip.data.common.ApiResult
 import com.andone.memorip.data.group.model.AddPlaceToGroupRequest
 import com.andone.memorip.data.group.model.GroupCreateRequest
 import com.andone.memorip.data.group.model.GroupListResponse
-import com.andone.memorip.data.group.model.GroupResponse
 import com.andone.memorip.data.group.model.GroupUpdateRequest
+import com.andone.memorip.domain.model.Group
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -32,12 +32,12 @@ interface GroupService {
     @GET("/api/groups/{groupId}")
     suspend fun getGroupById(
         @Path("groupId") groupId: String
-    ): ApiResult<GroupResponse>
+    ): ApiResult<Group>
 
     @POST("/api/groups")
     suspend fun createGroup(
         @Body request: GroupCreateRequest
-    ): ApiResult<GroupResponse>
+    ): ApiResult<Group>
 
     @PATCH("/api/groups/{groupId}")
     suspend fun updateGroup(

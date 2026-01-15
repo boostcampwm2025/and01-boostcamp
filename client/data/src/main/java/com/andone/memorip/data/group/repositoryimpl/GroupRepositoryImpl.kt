@@ -34,7 +34,6 @@ class GroupRepositoryImpl @Inject constructor(
 
     override suspend fun getGroupById(groupId: String): Result<Group> {
         return remoteDataSource.getGroupById(groupId)
-            .map { it.toDomain() }
     }
 
     override suspend fun createGroup(
@@ -48,7 +47,6 @@ class GroupRepositoryImpl @Inject constructor(
             visibility = visibility.name
         )
         return remoteDataSource.createGroup(request)
-            .map { it.toDomain() }
             .onSuccess { createdGroup ->
                 _myGroups.value = _myGroups.value + createdGroup
             }

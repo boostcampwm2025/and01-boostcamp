@@ -4,9 +4,9 @@ import com.andone.memorip.data.group.datasource.GroupService
 import com.andone.memorip.data.group.model.AddPlaceToGroupRequest
 import com.andone.memorip.data.group.model.GroupCreateRequest
 import com.andone.memorip.data.group.model.GroupListResponse
-import com.andone.memorip.data.group.model.GroupResponse
 import com.andone.memorip.data.group.model.GroupUpdateRequest
 import com.andone.memorip.data.util.apiCall
+import com.andone.memorip.domain.model.Group
 import javax.inject.Inject
 
 class GroupRemoteDataSourceImpl @Inject constructor(
@@ -21,11 +21,11 @@ class GroupRemoteDataSourceImpl @Inject constructor(
         return apiCall { groupService.getPublicGroups(page, size) }
     }
 
-    override suspend fun getGroupById(groupId: String): Result<GroupResponse> {
+    override suspend fun getGroupById(groupId: String): Result<Group> {
         return apiCall { groupService.getGroupById(groupId) }
     }
 
-    override suspend fun createGroup(request: GroupCreateRequest): Result<GroupResponse> {
+    override suspend fun createGroup(request: GroupCreateRequest): Result<Group> {
         return apiCall { groupService.createGroup(request) }
     }
 

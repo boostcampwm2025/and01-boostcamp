@@ -64,7 +64,7 @@ class PlaceRemoteDataSourceImpl @Inject constructor(
 
         return parseRegionNode(rootElement)
     }
-    
+
     override suspend fun uploadImage(file: File): Result<PlaceImageUploadResponse> {
         val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
         val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
