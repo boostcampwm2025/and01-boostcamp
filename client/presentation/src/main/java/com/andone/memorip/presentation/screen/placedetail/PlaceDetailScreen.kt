@@ -199,44 +199,39 @@ private fun PlaceDetailContent(
             }
 
             Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.SpaceBetween
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = MemoripPadding.PaddingXXXLarge)
-                        .background(
-                            brush = Brush.verticalGradient(
-                                colorStops = arrayOf(
-                                    0f to MemoripTheme.colors.surface.copy(alpha = topAlpha),
-                                    0.2f to MemoripTheme.colors.surface.copy(alpha = middleAlpha),
-                                    1f to MemoripTheme.colors.surface.copy(alpha = bottomAlpha)
-                                )
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = MemoripPadding.PaddingXXXLarge)
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colorStops = arrayOf(
+                                0f to MemoripTheme.colors.surface.copy(alpha = topAlpha),
+                                0.2f to MemoripTheme.colors.surface.copy(alpha = middleAlpha),
+                                1f to MemoripTheme.colors.surface.copy(alpha = bottomAlpha)
                             )
                         )
-                        .padding(all = MemoripPadding.PaddingMedium),
-                    verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXSmall)
-                ) {
-                    Text(
-                        text = place.title,
-                        color = MemoripTheme.colors.black,
-                        style = MemoripTheme.typography.headline2
                     )
-                    Row(horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceMedium)) {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(R.drawable.ic_location_on),
-                            tint = MemoripTheme.colors.green,
-                            contentDescription = null
-                        )
-                        Text(
-                            text = place.locationName,
-                            color = MemoripTheme.colors.black,
-                            style = MemoripTheme.typography.label1
-                        )
-                    }
-                    TagChipRow(tags = place.tags)
+                    .padding(all = MemoripPadding.PaddingMedium),
+                verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXSmall)
+            ) {
+                Text(
+                    text = place.title,
+                    color = MemoripTheme.colors.black,
+                    style = MemoripTheme.typography.headline2
+                )
+                Row(horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceMedium)) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_location_on),
+                        tint = MemoripTheme.colors.green,
+                        contentDescription = null
+                    )
+                    Text(
+                        text = place.locationName,
+                        color = MemoripTheme.colors.black,
+                        style = MemoripTheme.typography.label1
+                    )
                 }
+                TagChipRow(tags = place.tags)
             }
         }
 
