@@ -33,6 +33,10 @@ class User protected constructor(
     var profileImage: String? = profileImage
         internal set
 
+    fun changeNickname(nickname: String) {
+        this.nickname = nickname
+    }
+
     companion object {
         private const val DEFAULT_PROFILE_IMAGE = "https://api.dicebear.com/7.x/identicon/svg?seed=memorip"
 

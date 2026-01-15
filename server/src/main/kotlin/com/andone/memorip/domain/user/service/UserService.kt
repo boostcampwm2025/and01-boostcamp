@@ -17,4 +17,13 @@ class UserService(private val userRepository: UserRepository) {
                 )
             )
     }
+
+    @Transactional
+    fun updateNickname(firebaseUid: String, nickname: String): User {
+        val user = userRepository.findByFirebaseUid(firebaseUid)
+            ?: throw IllegalArgumentException("사용자를 찾을 수 없습니다.")
+
+        user.changeNickname(nickname)
+        return user
+    }
 }
