@@ -1,4 +1,5 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.library)
@@ -20,7 +21,11 @@ android {
         consumerProguardFiles("consumer-rules.pro")
 
         // Naver Map Key 주입
-        manifestPlaceholders["NAVER_MAP_NCP_KEY_ID"] = getLocalProperty("NAVER_MAP_NCP_KEY_ID")
+        manifestPlaceholders["NAVER_MAP_NCP_KEY_ID"] = getLocalProperty(propertyKey = "NAVER_MAP_NCP_KEY_ID")
+
+        // client ID
+        val webClientId = getLocalProperty("LOGIN_WEB_CLIENT_ID")
+        buildConfigField("String", "LOGIN_WEB_CLIENT_ID", "\"$webClientId\"")
     }
 
     buildTypes {
@@ -37,11 +42,14 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
         isCoreLibraryDesugaringEnabled = true
     }
-    kotlinOptions {
-        jvmTarget = "11"
+    kotlin {
+        compilerOptions {
+            jvmTarget = JvmTarget.JVM_11
+        }
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -95,6 +103,15 @@ dependencies {
     
     // Paging
     implementation(libs.androidx.paging.compose)
+
+    // Credential Manager core
+    implementation(libs.androidx.credentials)
+
+    // Google 계정 연동용 확장
+    implementation(libs.androidx.credentials.play.services.auth)
+
+    // Google Identity (ID Token 발급용)
+    implementation(libs.googleid)
 }
 
 fun getLocalProperty(propertyKey: String): String {

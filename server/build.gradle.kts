@@ -50,6 +50,9 @@ dependencies {
     val dotenvVersion = "5.1.0"
     implementation(platform("me.paulschwarz:spring-dotenv-bom:$dotenvVersion"))
     developmentOnly("me.paulschwarz:springboot4-dotenv:$dotenvVersion")
+
+	// Firebase
+	implementation("com.google.firebase:firebase-admin:9.7.0")
 }
 
 kotlin {
