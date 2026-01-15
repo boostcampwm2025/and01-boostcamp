@@ -30,6 +30,12 @@
     <string name="group_list_add_content_description">Add</string>
     <string name="group_list_overflow_count">+%1$d</string>
 
+    <!-- SelectImageScreen -->
+    <string name="select_image_cancel">취소</string>
+    <string name="select_image_done">확인</string>
+    <string name="select_image_image_count_format">%1$d / %2$d</string>
+    <string name="select_image_title">사진 선택</string>
+
     <!-- SelectCategoryScreen -->
     <string name="select_category_back_button_description">뒤로 가기 버튼</string>
     <string name="select_category_title">카테고리 선택</string>
@@ -63,7 +69,7 @@
     <string name="groupdetail_search_button_content_description">검색</string>
 
     <!-- PlaceCreateScreen -->
-    <string name="place_create_title">Place 추가</string>
+    <string name="place_create_title">장소 추가</string>
     <string name="place_create_back_content_description">뒤로가기</string>
     <string name="place_create_check_content_description">확인</string>
     <string name="place_create_image_count_format">%1$d/%2$d</string>
