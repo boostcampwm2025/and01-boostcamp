@@ -3,6 +3,6 @@ package com.andone.memorip.data.user.datasource.remote
 import com.andone.memorip.domain.model.User
 
 interface UserRemoteDataSource {
-    fun getMe(): User
-    fun updateNickname(): User
+    suspend fun getMe(): Result<User>
+    suspend fun updateNickname(name: String): Result<User>
 }

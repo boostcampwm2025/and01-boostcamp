@@ -2,6 +2,8 @@ package com.andone.memorip.data.di
 
 import com.andone.memorip.data.place.datasource.remote.PlaceRemoteDataSource
 import com.andone.memorip.data.place.datasource.remote.PlaceRemoteDataSourceImpl
+import com.andone.memorip.data.user.datasource.remote.UserRemoteDataSource
+import com.andone.memorip.data.user.datasource.remote.UserRemoteDataSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -15,4 +17,8 @@ abstract class DataSourceModule {
     @Binds
     @Singleton
     abstract fun bindPlaceDataSource(impl: PlaceRemoteDataSourceImpl): PlaceRemoteDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindUserDataSource(impl: UserRemoteDataSourceImpl): UserRemoteDataSource
 }
