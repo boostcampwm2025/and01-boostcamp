@@ -96,7 +96,12 @@ dependencies {
 
     // Paging
     implementation(libs.androidx.paging.compose)
+
+    // Convention
+    detektPlugins(libs.compose.convention)
 }
+
+apply(from = providers.gradleProperty("DETEKT_IDE_SETUP_URL").get())
 
 fun getLocalProperty(propertyKey: String): String {
     val properties = gradleLocalProperties(rootDir, providers)
