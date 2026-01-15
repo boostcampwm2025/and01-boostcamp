@@ -82,12 +82,14 @@ fun ImageCropBottomBar(
                 )
             )
 
+            val iconRes =
+                if (imageUris.size == croppedImageKeys.size) R.drawable.ic_arrow_forward else R.drawable.ic_check
             IconButton(
                 onClick = onImageCrop,
                 colors = IconButtonDefaults.iconButtonColors(containerColor = MemoripTheme.colors.primary)
             ) {
                 Icon(
-                    painter = painterResource(R.drawable.ic_check),
+                    painter = painterResource(iconRes),
                     contentDescription = stringResource(R.string.select_image_done),
                     tint = MemoripTheme.colors.white
                 )
