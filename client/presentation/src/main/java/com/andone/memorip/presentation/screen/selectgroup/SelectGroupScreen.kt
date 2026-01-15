@@ -1,9 +1,11 @@
 package com.andone.memorip.presentation.screen.selectgroup
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -16,20 +18,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.presentation.R
-import com.andone.memorip.presentation.component.GroupView
+import com.andone.memorip.presentation.component.LoadingIndicatorScreen
 import com.andone.memorip.presentation.component.dialog.MemoripInputDialog
 import com.andone.memorip.presentation.screen.grouplist.model.GroupUiModel
+import com.andone.memorip.presentation.screen.selectgroup.component.GroupImageGridCard
 import com.andone.memorip.presentation.screen.selectgroup.component.SelectGroupTopBar
 import com.andone.memorip.presentation.screen.selectgroup.model.SelectGroupAction
 import com.andone.memorip.presentation.screen.selectgroup.model.SelectGroupEvent
 import com.andone.memorip.presentation.theme.MemoripPadding.PaddingMedium
 import com.andone.memorip.presentation.theme.MemoripPadding.PaddingXSmall
+import com.andone.memorip.presentation.theme.MemoripSpace.SpaceLarge
 import com.andone.memorip.presentation.theme.MemoripSpace.SpaceXSmall
 import com.andone.memorip.presentation.theme.MemoripTheme
+import com.andone.memorip.presentation.util.DummyData
 import com.andone.memorip.presentation.util.collectWithLifecycle
+
+private object SelectGroupScreenDimens {
+    val GridMinWidth = 160.dp
+}
 
 @Composable
 fun SelectGroupScreen(
@@ -66,21 +76,21 @@ fun SelectGroupScreen(
         }
     }
 
-    SelectGroupContent(
-        groups = uiState.groups,
-        onAction = viewModel::onAction,
-        modifier = modifier
-    )
+    if (uiState.isLoading) {
+        LoadingIndicatorScreen()
+    } else {
+        SelectGroupContent(
+            groups = uiState.groups,
+            onAction = viewModel::onAction,
+            modifier = modifier
+        )
+    }
 
     if (showDialog) {
         MemoripInputDialog(
             title = stringResource(R.string.select_group_dialog_title),
-            onConfirmClick = {
-                val newGroup = GroupUiModel(
-                    name = it,
-                    images = emptyList()
-                )
-                viewModel.onAction(action = SelectGroupAction.OnDialogConfirmClick(newGroup))
+            onConfirmClick = { groupName ->
+                viewModel.onAction(action = SelectGroupAction.OnDialogConfirmClick(groupName))
             },
             onCancelClick = { viewModel.onAction(action = SelectGroupAction.OnDialogCancelClick) },
             onDismissRequest = { viewModel.onAction(action = SelectGroupAction.OnDialogCancelClick) },
@@ -111,18 +121,24 @@ private fun SelectGroupContent(
             }
         },
     ) { innerPadding ->
-        LazyColumn(
-            modifier = modifier
-                .padding(paddingValues = innerPadding)
-                .padding(horizontal = PaddingMedium, vertical = PaddingXSmall),
-            verticalArrangement = Arrangement.spacedBy(SpaceXSmall)
+        LazyVerticalGrid(
+            columns = GridCells.Adaptive(minSize = SelectGroupScreenDimens.GridMinWidth),
+            modifier = modifier.padding(paddingValues = innerPadding),
+            contentPadding = PaddingValues(
+                horizontal = PaddingMedium,
+                vertical = PaddingXSmall
+            ),
+            horizontalArrangement = Arrangement.spacedBy(SpaceXSmall),
+            verticalArrangement = Arrangement.spacedBy(SpaceLarge)
         ) {
-            items(items = groups) { group ->
-                GroupView(
+            items(
+                items = groups,
+                key = { it.id }
+            ) { group ->
+                GroupImageGridCard(
                     name = group.name,
-                    onGroupClick = { onAction(SelectGroupAction.OnGroupClick(group)) },
-                    onAddClick = { },
                     images = group.images,
+                    onClick = { onAction(SelectGroupAction.OnGroupClick(group)) },
                 )
             }
         }
@@ -133,9 +149,9 @@ private fun SelectGroupContent(
 @Composable
 private fun SelectGroupScreenPrev() {
     MemoripTheme {
-        SelectGroupScreen(
-            onGroupSelect = {},
-            onBackClick = {}
+        SelectGroupContent(
+            groups = DummyData.groups,
+            onAction = {}
         )
     }
 }

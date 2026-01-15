@@ -7,4 +7,12 @@ data class User(
     val id: String,
     val nickname: String,
     val profileImg: String = "",
-)
+) {
+    companion object {
+        val EMPTY = User(
+            id = "",
+            nickname = "",
+            profileImg = ""
+        )
+    }
+}

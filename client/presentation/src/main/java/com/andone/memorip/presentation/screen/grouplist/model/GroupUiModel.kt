@@ -1,25 +1,21 @@
 package com.andone.memorip.presentation.screen.grouplist.model
 
 import androidx.compose.runtime.Immutable
+import com.andone.memorip.domain.model.Group
 import java.util.UUID
 
 @Immutable
 data class GroupUiModel(
-    val id: UUID = UUID.randomUUID(),
+    val id: UUID,
     val name: String,
     val images: List<String>,
-){
+) {
     companion object {
-        fun default(): GroupUiModel {
+        fun from(group: Group): GroupUiModel {
             return GroupUiModel(
-                name = "",
-                images = emptyList()
-            )
-        }
-        fun create(name: String): GroupUiModel {
-            return GroupUiModel(
-                name = name,
-                images = emptyList()
+                id = UUID.fromString(group.id),
+                name = group.title,
+                images = group.images
             )
         }
     }

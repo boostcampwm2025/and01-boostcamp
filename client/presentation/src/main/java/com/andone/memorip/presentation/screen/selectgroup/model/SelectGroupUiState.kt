@@ -5,5 +5,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
 data class SelectGroupUiState(
-    val groups: ImmutableList<GroupUiModel> = emptyList<GroupUiModel>().toImmutableList()
+    val groups: ImmutableList<GroupUiModel> = emptyList<GroupUiModel>().toImmutableList(),
+    val isLoading: Boolean = false
 )
