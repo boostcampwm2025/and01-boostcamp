@@ -128,18 +128,15 @@ fun PlaceDetailScreen(
                     modifier = modifier
                 )
 
-                if (uiState.isLoading) {
-                    LoadingIndicatorScreen()
-                }
+                if (uiState.isLoading) { LoadingIndicatorScreen() }
             }
             PlaceDetailScreenStep.SelectGroup -> {
                 SelectGroupScreen(
                     onGroupSelect = { group ->
                         viewModel.addPlaceToGroup(group.id.toString())
                     },
-                    onBackClick = {
-                        currentStep = PlaceDetailScreenStep.PlaceDetail
-                    },
+                    onBackClick = { currentStep = PlaceDetailScreenStep.PlaceDetail },
+                    title = stringResource(R.string.select_group_add_to_my_group_title),
                     modifier = modifier
                 )
             }
