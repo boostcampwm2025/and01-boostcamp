@@ -1,7 +1,7 @@
 package com.andone.memorip.domain.place.controller
 
 import com.andone.memorip.common.response.ApiResult
-import com.andone.memorip.domain.place.dto.PlaceDetailResponse
+import com.andone.memorip.domain.place.dto.response.PlaceDetailResponse
 import com.andone.memorip.domain.place.dto.request.PlaceCreateRequest
 import com.andone.memorip.domain.place.dto.response.PlaceCreateResponse
 import com.andone.memorip.domain.place.dto.response.PlaceListItemResponse

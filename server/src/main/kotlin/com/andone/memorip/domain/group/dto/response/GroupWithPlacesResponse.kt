@@ -2,7 +2,7 @@ package com.andone.memorip.domain.group.dto.response
 
 import com.andone.memorip.domain.group.entity.GroupType
 import com.andone.memorip.domain.group.entity.Visibility
-import com.andone.memorip.domain.place.dto.PlaceResponse
+import com.andone.memorip.domain.place.dto.response.PlaceResponse
 import java.time.LocalDateTime
 import java.util.UUID
 
