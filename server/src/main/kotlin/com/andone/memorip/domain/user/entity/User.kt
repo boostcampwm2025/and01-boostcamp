@@ -15,6 +15,8 @@ import java.util.UUID
 @SQLRestriction("deleted_at IS NULL")
 class User protected constructor(
     id: UUID? = null,
+    @Column(name = "firebase_uid", nullable = false, unique = true, length = 128)
+    val firebaseUid: String,
     nickname: String,
     profileImage: String?
 ) : BaseTimeSyncEntity() {
@@ -22,13 +24,13 @@ class User protected constructor(
     init {
         this.id = id
     }
-    
+
     @Column(nullable = false, length = 30)
     var nickname: String = nickname
         internal set
 
     @Column(name = "profile_image", nullable = true, length = 512)
-    var profileImage: String? = null
+    var profileImage: String? = profileImage
         internal set
 
     companion object {
@@ -36,12 +38,14 @@ class User protected constructor(
 
         fun create(
             id: UUID? = null,
+            firebaseUid: String,
             nickname: String,
             profileImage: String? = null
         ): User {
             val generatedId = id ?: UuidV7Generator.generate()
             return User(
                 id = generatedId,
+                firebaseUid = firebaseUid,
                 nickname = nickname,
                 profileImage = profileImage ?: DEFAULT_PROFILE_IMAGE
             )
