@@ -5,7 +5,6 @@ import com.andone.memorip.common.util.UuidV7Generator
 import jakarta.persistence.*
 import org.hibernate.annotations.SQLDelete
 import org.hibernate.annotations.SQLRestriction
-import java.time.LocalDateTime
 import java.util.UUID
 
 @Entity
@@ -63,14 +62,6 @@ class Place protected constructor(
 
     @Column(name = "thumbnail_url", length = 512)
     var thumbnailUrl: String = thumbnailUrl
-        internal set
-
-    @Column(name = "start_at", columnDefinition = "TIMESTAMPTZ")
-    var startAt: LocalDateTime? = null
-        internal set
-
-    @Column(name = "end_at", columnDefinition = "TIMESTAMPTZ")
-    var endAt: LocalDateTime? = null
         internal set
 
     @OneToMany(
@@ -153,14 +144,6 @@ class Place protected constructor(
         this.address = newAddress
     }
 
-    fun updatePeriod(startAt: LocalDateTime?, endAt: LocalDateTime?) {
-        if (startAt != null && endAt != null) {
-            require(startAt.isBefore(endAt)) { "시작일은 종료일보다 이전이어야 합니다" }
-        }
-        this.startAt = startAt
-        this.endAt = endAt
-    }
-
     companion object {
         fun create(
             id: UUID? = null,
@@ -172,18 +155,12 @@ class Place protected constructor(
             address: Address,
             content: String? = null,
             imageUrls: List<String>,
-            parentPlaceId: UUID? = null,
-            startAt: LocalDateTime? = null,
-            endAt: LocalDateTime? = null
+            parentPlaceId: UUID? = null
         ): Place {
             require(title.isNotBlank()) { "제목은 필수입니다" }
             require(title.length <= 30) { "제목은 30자 이하여야 합니다" }
             require(latitude in -90.0..90.0) { "위도는 -90 ~ 90 범위여야 합니다" }
             require(longitude in -180.0..180.0) { "경도는 -180 ~ 180 범위여야 합니다" }
-
-            if (startAt != null && endAt != null) {
-                require(startAt.isBefore(endAt)) { "시작일은 종료일보다 이전이어야 합니다" }
-            }
 
             val generatedId = id ?: UuidV7Generator.generate()
             return Place(
@@ -200,9 +177,6 @@ class Place protected constructor(
             ).apply {
                 this.content = content
                 this.parentPlaceId = parentPlaceId
-                this.startAt = startAt
-                this.endAt = endAt
-
                 if (imageUrls.isNotEmpty()) {
                     this.thumbnailUrl = imageUrls.first()
                 }
