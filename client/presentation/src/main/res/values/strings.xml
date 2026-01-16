@@ -92,6 +92,7 @@
     <string name="main_bottom_bar_place_list">장소</string>
     <string name="main_bottom_bar_user">마이페이지</string>
     <string name="main_bottom_bar_group">그룹</string>
+    <string name="main_bottom_bar_plan">계획</string>
     <string name="main_bottom_center_button_content_description">추가</string>
 
     <!-- PlaceDetail -->
@@ -149,7 +150,7 @@
     <string name="snackbar_success">성공적으로 완료되었습니다</string>
 
     <!-- UserScreen -->
-    <string name="login_show_account">계정이 추가 되었습니다!</string>
+    <string name="login_user_profile_image">유저 프로필 이미지</string>
     <string name="login_add_account">+ 계정을 추가하세요</string>
     <string name="login_show_places">올린 장소들</string>
 
