@@ -7,7 +7,7 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 
 val Primary = Color(0xFF66FF66)
-val PrimaryContainer = Color(0xFFF5F5F5)
+val PrimaryContainer = Color(0xFFF7F7F7)
 val BackGround = Color(0xFFFFFFFF)
 val Surface = Color(0xFFFFFBFE)
 val Secondary = Color(0xFF36699A)
