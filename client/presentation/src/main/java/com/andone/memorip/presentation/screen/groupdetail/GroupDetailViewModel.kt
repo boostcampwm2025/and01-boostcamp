@@ -1,22 +1,38 @@
 package com.andone.memorip.presentation.screen.groupdetail
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import androidx.paging.map as pagingMap
+import com.andone.memorip.domain.repository.GroupRepository
+import com.andone.memorip.navigation.GroupDetail
+import com.andone.memorip.presentation.model.Place
+import com.andone.memorip.presentation.model.toUiModel
 import com.andone.memorip.presentation.screen.groupdetail.model.GroupDetailAction
 import com.andone.memorip.presentation.screen.groupdetail.model.GroupDetailEvent
 import com.andone.memorip.presentation.screen.groupdetail.model.GroupDetailUiState
-import com.andone.memorip.presentation.util.DummyData.groupName
-import com.andone.memorip.presentation.util.DummyData.places
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
-import javax.inject.Inject
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-@HiltViewModel
-class GroupDetailViewModel @Inject constructor() : ViewModel() {
+@HiltViewModel(assistedFactory = GroupDetailViewModel.Factory::class)
+class GroupDetailViewModel @AssistedInject constructor(
+    @Assisted route: GroupDetail,
+    private val repository: GroupRepository
+) : ViewModel() {
+
+    private val groupId: String = route.groupId
 
     private val _uiState = MutableStateFlow(GroupDetailUiState())
     val uiState = _uiState.asStateFlow()
@@ -25,16 +41,25 @@ class GroupDetailViewModel @Inject constructor() : ViewModel() {
     val event = _event.receiveAsFlow()
 
     init {
-        _uiState.value = uiState.value.copy(
-            groupName = groupName,
-            places = places.toImmutableList()
-        )
+        // 그룹 정보 로드
+        viewModelScope.launch {
+            repository.getGroupById(groupId).onSuccess { group ->
+                _uiState.update { it.copy(groupName = group.title) }
+            }
+        }
     }
+
+    val placesPagingFlow: Flow<PagingData<Place>> =
+        repository.getGroupPlaces(groupId)
+            .map { pagingData ->
+                pagingData.pagingMap { it.toUiModel() }
+            }
+            .cachedIn(viewModelScope)
 
     fun onAction(action: GroupDetailAction) {
         when (action) {
             GroupDetailAction.OnMenuClick -> {
-                _uiState.value = _uiState.value.copy(expanded = true)
+                _uiState.update { it.copy(expanded = true) }
             }
 
             GroupDetailAction.OnBackClick -> {
@@ -42,11 +67,11 @@ class GroupDetailViewModel @Inject constructor() : ViewModel() {
             }
 
             is GroupDetailAction.OnPictureClick -> {
-                _uiState.value = _uiState.value.copy(selectedPlace = action.place)
+                _uiState.update { it.copy(selectedPlace = action.place) }
             }
 
             GroupDetailAction.OnDismissBottomSheetClick -> {
-                _uiState.value = _uiState.value.copy(selectedPlace = null)
+                _uiState.update { it.copy(selectedPlace = null) }
             }
 
             is GroupDetailAction.OnPlaceClick -> {
@@ -58,8 +83,13 @@ class GroupDetailViewModel @Inject constructor() : ViewModel() {
             }
 
             is GroupDetailAction.OnTabClick -> {
-                _uiState.value = _uiState.value.copy(currentTab = action.currentTab)
+                _uiState.update { it.copy(currentTab = action.currentTab) }
             }
         }
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(route: GroupDetail): GroupDetailViewModel
     }
 }

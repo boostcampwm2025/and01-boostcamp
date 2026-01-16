@@ -26,6 +26,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
@@ -113,12 +114,12 @@ fun PlaceListScreenContents(
     state: PlaceListUiState,
     placePagingItems: LazyPagingItems<Place>,
     onAction: (PlaceListAction) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    showTopBar: Boolean = true,
+    showFilter: Boolean = true
 ) {
     val focusManager = LocalFocusManager.current
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-    val isRefreshing =
-        placePagingItems.loadState.refresh is LoadState.Loading && placePagingItems.itemCount > 0
 
     var showRegionBottomSheet by remember { mutableStateOf(value = false) }
 
@@ -188,42 +189,70 @@ fun PlaceListScreenContents(
                 }
             }
 
-            PullToRefreshBox(
-                isRefreshing = isRefreshing,
+            PlaceListGrid(
+                placePagingItems = placePagingItems,
+                onPlaceClick = { id -> onAction(PlaceListAction.OnPlaceClick(id = id)) },
                 onRefresh = { onAction(PlaceListAction.OnPullToRefresh) },
-                modifier = Modifier.fillMaxSize()
-            ) {
-                MemoripPagingList(
-                    pagingItems = placePagingItems,
-                    itemKey = { it.id },
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = MemoripPadding.PaddingXSmall)
-                        .nestedScroll(connection = clearFocusOnScroll)
-                        .pointerInput(key1 = Unit) { detectTapGestures { focusManager.clearFocus() } },
-                    staggeredCells = StaggeredGridCells.Adaptive(minSize = StaggeredGridDimens.STAGGERED_GRID_MIN_CELL_WIDTH),
-                    emptyContent = {
-                        EmptyText(
-                            text = stringResource(R.string.place_list_empty),
-                            modifier = Modifier.fillMaxSize()
-                        )
-                    },
-                    itemContent = { place ->
-                        val image = place.thumbnailImage
-                        StaggeredImageItem(
-                            imageUrl = image.url,
-                            aspectRatio = image.aspectRatio,
-                            onImageClick = { onAction(PlaceListAction.OnPlaceClick(id = place.id)) },
-                            contentDescription = place.name,
-                            location = place.address,
-                        )
-                    }
-                )
-            }
-
+                modifier = Modifier.fillMaxSize(),
+                clearFocusOnScroll = clearFocusOnScroll,
+                focusManager = focusManager
+            )
         }
     }
+}
 
+
+@Composable
+fun PlaceListGrid(
+    placePagingItems: LazyPagingItems<Place>,
+    onPlaceClick: (String) -> Unit,
+    onRefresh: () -> Unit,
+    modifier: Modifier = Modifier,
+    clearFocusOnScroll: NestedScrollConnection? = null,
+    focusManager: androidx.compose.ui.focus.FocusManager? = null
+) {
+    val isRefreshing =
+        placePagingItems.loadState.refresh is LoadState.Loading && placePagingItems.itemCount > 0
+
+    PullToRefreshBox(
+        isRefreshing = isRefreshing,
+        onRefresh = onRefresh,
+        modifier = modifier
+    ) {
+        MemoripPagingList(
+            pagingItems = placePagingItems,
+            itemKey = { it.id },
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = MemoripPadding.PaddingXSmall)
+                .then(
+                    if (clearFocusOnScroll != null && focusManager != null) {
+                        Modifier
+                            .nestedScroll(connection = clearFocusOnScroll)
+                            .pointerInput(key1 = Unit) { detectTapGestures { focusManager.clearFocus() } }
+                    } else {
+                        Modifier
+                    }
+                ),
+            staggeredCells = StaggeredGridCells.Adaptive(minSize = StaggeredGridDimens.STAGGERED_GRID_MIN_CELL_WIDTH),
+            emptyContent = {
+                EmptyText(
+                    text = stringResource(R.string.place_list_empty),
+                    modifier = Modifier.fillMaxSize()
+                )
+            },
+            itemContent = { place ->
+                val image = place.thumbnailImage
+                StaggeredImageItem(
+                    imageUrl = image.url,
+                    aspectRatio = image.aspectRatio,
+                    onImageClick = { onPlaceClick(place.id) },
+                    contentDescription = place.name,
+                    location = place.address,
+                )
+            }
+        )
+    }
 }
 
 @Preview
