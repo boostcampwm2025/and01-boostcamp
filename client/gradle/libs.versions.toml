@@ -2,6 +2,7 @@
 agp = "8.12.3"
 coilCompose = "2.6.0"
 coilNetworkOkhttp = "3.3.0"
+composeConvention = "1.1.0"
 credentialsPlayServicesAuth = "1.5.0"
 googleid = "1.1.1"
 kotlin = "2.2.21"
@@ -38,7 +39,7 @@ coroutines = "1.10.2"
 firebase = "34.7.0"
 firebaseCrashlytics = "3.0.6"
 googleServices = "4.4.4"
-
+detekt = "1.23.8"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -96,6 +97,8 @@ logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", ver
 androidx-paging-common = { group = "androidx.paging", name = "paging-common", version.ref = "paging" }
 androidx-paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "paging" }
 
+compose-convention = { module = "com.github.GwonDongHyeon21:compose-convention", version.ref = "composeConvention" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
@@ -107,6 +110,7 @@ jetbrains-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serializati
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlytics" }
 google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 
 [bundles]
 navigation3 = ["androidx-navigation3-runtime", "androidx-navigation3-ui", "androidx-lifecycle-viewmodel-navigation3", "kotlinx-serialization-core", "androidx-material3-adaptive-navigation3"]
