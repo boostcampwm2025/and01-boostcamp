@@ -13,6 +13,9 @@ data object GroupList : NavKey
 data object User : NavKey
 
 @Serializable
+data object Plan : NavKey
+
+@Serializable
 data object PlaceCreate : NavKey
 
 @Serializable

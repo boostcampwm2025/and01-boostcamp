@@ -121,7 +121,8 @@ fun PlaceListScreenContents(
 ) {
     val focusManager = LocalFocusManager.current
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-    val isRefreshing = placePagingItems.loadState.refresh is LoadState.Loading
+    val isRefreshing =
+        placePagingItems.loadState.refresh is LoadState.Loading && placePagingItems.itemCount > 0
 
     var showRegionBottomSheet by remember { mutableStateOf(value = false) }
 
@@ -213,7 +214,6 @@ private fun PlaceListContentWithFilter(
     focusManager: FocusManager
 ) {
     var showRegionBottomSheet by remember { mutableStateOf(value = false) }
-    
     if (showRegionBottomSheet) {
         ModalBottomSheet(
             onDismissRequest = { showRegionBottomSheet = false },

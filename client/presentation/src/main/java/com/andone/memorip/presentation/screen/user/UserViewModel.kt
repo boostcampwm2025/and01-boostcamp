@@ -4,10 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.andone.memorip.domain.auth.TokenRefresher
 import com.andone.memorip.domain.repository.AuthRepository
+import com.andone.memorip.domain.repository.UserRepository
 import com.andone.memorip.presentation.screen.user.model.UserAction
 import com.andone.memorip.presentation.screen.user.model.UserEvent
 import com.andone.memorip.presentation.screen.user.model.LoginMethod
 import com.andone.memorip.presentation.screen.user.model.UserUiState
+import com.andone.memorip.presentation.screen.user.model.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
@@ -20,16 +22,23 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UserViewModel @Inject constructor(
-    private val repository: AuthRepository,
-    private val tokenRefresher: TokenRefresher
+    private val authRepository: AuthRepository,
+    private val tokenRefresher: TokenRefresher,
+    private val userRepository: UserRepository
 ) : ViewModel() {
 
     private val _uiState =
-        MutableStateFlow(value = UserUiState(isLoggedIn = repository.isLoggedIn()))
+        MutableStateFlow(value = UserUiState(isLoggedIn = authRepository.isLoggedIn()))
     val uiState = _uiState.asStateFlow()
 
     private val _event = Channel<UserEvent>(BUFFERED)
     val event = _event.receiveAsFlow()
+
+    init {
+        if (authRepository.isLoggedIn()) {
+            updateUser()
+        }
+    }
 
     fun onAction(action: UserAction) {
         when (action) {
@@ -43,12 +52,13 @@ class UserViewModel @Inject constructor(
 
             is UserAction.GoogleLoginSuccess -> {
                 viewModelScope.launch {
-                    repository.signInWithGoogle(idToken = action.idToken)
+                    authRepository.signInWithGoogle(idToken = action.idToken)
                         .onSuccess {
                             _uiState.update {
                                 it.copy(isLoggedIn = true)
                             }
                             tokenRefresher.refreshToken(force = true)
+                            updateUser()
                         }
                         .onFailure { e ->
                             _uiState.update {
@@ -57,6 +67,22 @@ class UserViewModel @Inject constructor(
                         }
                 }
             }
+        }
+    }
+
+    private fun updateUser() {
+        viewModelScope.launch {
+            userRepository.getMe()
+                .onSuccess { data ->
+                    _uiState.update {
+                        it.copy(user = data.toUiModel())
+                    }
+                }
+                .onFailure { e ->
+                    _uiState.update {
+                        it.copy(errorMessage = e.message)
+                    }
+                }
         }
     }
 }

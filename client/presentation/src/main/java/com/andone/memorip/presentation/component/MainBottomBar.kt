@@ -5,9 +5,9 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
@@ -32,6 +32,8 @@ import androidx.compose.ui.unit.dp
 import com.andone.memorip.navigation.MainBottomBarRoute
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.MainBottomBarConstants.DURATION_MILLIS
+import com.andone.memorip.presentation.component.MainBottomBarDimens.bottomBarHeight
+import com.andone.memorip.presentation.component.MainBottomBarDimens.buttonOffset
 import com.andone.memorip.presentation.component.MainBottomBarDimens.centerButtonSize
 import com.andone.memorip.presentation.component.MainBottomBarDimens.elevation
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -39,8 +41,10 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
 private object MainBottomBarDimens {
-    val centerButtonSize = 56.dp
+    val centerButtonSize = 52.dp
     val elevation = 8.dp
+    val buttonOffset = 10.dp
+    val bottomBarHeight = 72.dp
 }
 
 private object MainBottomBarConstants {
@@ -72,69 +76,39 @@ fun MainBottomBar(
             modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.BottomCenter
         ) {
-            NavigationBar(containerColor = MemoripTheme.colors.background) {
-                // 첫 번째 탭
-                tabs.getOrNull(0)?.let { tab ->
-                    BottomBarNavigationItem(
-                        tab = tab,
-                        currentTab = currentTab,
-                        onTabSelected = onTabSelected
-                    )
-                }
+            NavigationBar(
+                modifier = Modifier.height(height = bottomBarHeight),
+                containerColor = MemoripTheme.colors.background
+            ) {
+                tabs.forEachIndexed { index, tab ->
+                    if (index == tabs.size / 2) {
+                        Spacer(modifier = Modifier.width(width = centerButtonSize))
+                    }
 
-                // 두 번째 탭
-                tabs.getOrNull(1)?.let { tab ->
-                    BottomBarNavigationItem(
-                        tab = tab,
-                        currentTab = currentTab,
-                        onTabSelected = onTabSelected
-                    )
-                }
-
-                // 중앙 버튼 공간
-                Spacer(modifier = Modifier.width(centerButtonSize))
-
-                // todo : 시간표 탭
-                Spacer(modifier = Modifier.width(centerButtonSize))
-
-                // 세 번째 탭
-                tabs.getOrNull(2)?.let { tab ->
-                    BottomBarNavigationItem(
-                        tab = tab,
-                        currentTab = currentTab,
-                        onTabSelected = onTabSelected
+                    NavigationBarItem(
+                        selected = tab == currentTab,
+                        onClick = { onTabSelected(tab) },
+                        icon = {
+                            Icon(
+                                painter = painterResource(tab.selectedIconId),
+                                contentDescription = stringResource(tab.titleTextId)
+                            )
+                        },
+//                        label = { Text(text = stringResource(tab.titleTextId)) },
+                        colors = NavigationBarItemDefaults.colors(
+                            selectedIconColor = MaterialTheme.colorScheme.onSurface,
+                            selectedTextColor = MaterialTheme.colorScheme.onSurface,
+                            indicatorColor = MemoripTheme.colors.primaryContainer,
+                            unselectedIconColor = MemoripTheme.colors.gray,
+                            unselectedTextColor = MemoripTheme.colors.gray
+                        ),
                     )
                 }
             }
+
             BottomBarCenterButton(onClick = onFabClick)
         }
     }
-}
-
-@Composable
-private fun RowScope.BottomBarNavigationItem(
-    tab: MainBottomBarRoute,
-    currentTab: MainBottomBarRoute?,
-    onTabSelected: (MainBottomBarRoute) -> Unit
-) {
-    NavigationBarItem(
-        selected = tab == currentTab,
-        onClick = { onTabSelected(tab) },
-        icon = {
-            Icon(
-                painter = painterResource(tab.selectedIconId),
-                contentDescription = stringResource(tab.titleTextId)
-            )
-        },
-        label = { Text(text = stringResource(tab.titleTextId)) },
-        colors = NavigationBarItemDefaults.colors(
-            selectedIconColor = MaterialTheme.colorScheme.onSurface,
-            selectedTextColor = MaterialTheme.colorScheme.onSurface,
-            indicatorColor = MemoripTheme.colors.primaryContainer,
-            unselectedIconColor = MemoripTheme.colors.gray,
-            unselectedTextColor = MemoripTheme.colors.gray
-        ),
-    )
 }
 
 @Composable
@@ -146,7 +120,7 @@ private fun BottomBarCenterButton(
         onClick = onClick,
         modifier = modifier
             .navigationBarsPadding()
-            .offset(y = -centerButtonSize)
+            .offset(y = -buttonOffset)
             .size(centerButtonSize)
             .shadow(elevation = elevation, shape = CircleShape),
         colors = IconButtonDefaults.iconButtonColors(containerColor = MemoripTheme.colors.primary)
