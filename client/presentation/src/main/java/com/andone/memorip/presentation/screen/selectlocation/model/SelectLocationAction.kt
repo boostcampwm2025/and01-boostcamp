@@ -12,6 +12,4 @@ sealed interface SelectLocationAction {
     data class OnMapClick(val location: LatLng) : SelectLocationAction
 
     data class OnLocationSelect(val location: LocationUiModel) : SelectLocationAction
-
-    data object OnBackClick : SelectLocationAction
 }
