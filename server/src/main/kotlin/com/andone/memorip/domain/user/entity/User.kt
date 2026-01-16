@@ -38,7 +38,7 @@ class User protected constructor(
     }
 
     companion object {
-        private const val DEFAULT_PROFILE_IMAGE = "https://api.dicebear.com/7.x/identicon/svg?seed=memorip"
+        private const val DEFAULT_PROFILE_IMAGE = "https://api.dicebear.com/7.x/identicon/png?seed=memorip"
 
         fun create(
             id: UUID? = null,
