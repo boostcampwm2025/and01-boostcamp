@@ -6,22 +6,17 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,7 +26,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.component.StaggeredGridDimens.OVERLAY_HEIGHT
-import com.andone.memorip.presentation.component.StaggeredGridDimens.OVERLAY_WIDTH
 import com.andone.memorip.presentation.component.StaggeredGridDimens.STAGGERED_GRID_IMAGE_CORNER_RADIUS
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.theme.MemoripAlpha
@@ -43,7 +37,6 @@ import com.andone.memorip.presentation.util.DummyData
 private object StaggeredGridDimens {
     val STAGGERED_GRID_MIN_CELL_WIDTH = 160.dp
     val STAGGERED_GRID_IMAGE_CORNER_RADIUS = 16.dp
-    val OVERLAY_WIDTH = 104.dp
     val OVERLAY_HEIGHT = 40.dp
 }
 
@@ -80,9 +73,7 @@ fun StaggeredImageItem(
     contentDescription: String? = null,
     location: String? = null
 ) {
-    var isExpanded by remember { mutableStateOf(false) }
-
-    Box(
+    Column(
         modifier = modifier
             .clickable(
                 interactionSource = null,
@@ -90,44 +81,27 @@ fun StaggeredImageItem(
                 onClick = onImageClick
             )
             .fillMaxWidth()
-            .aspectRatio(aspectRatio)
-            .clip(RoundedCornerShape(cornerRadius))
-            .background(MemoripTheme.colors.gray),
-        contentAlignment = Alignment.Center
+            .clip(shape = RoundedCornerShape(size = cornerRadius))
+            .background(color = MemoripTheme.colors.gray)
     ) {
         MemoripImage(
             imageUrl = imageUrl,
             contentDescription = contentDescription,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(aspectRatio)
         )
 
         Box(
             modifier = Modifier
-                .align(Alignment.BottomStart)
-                .then(
-                    if (isExpanded) {
-                        Modifier.fillMaxWidth()
-                    } else {
-                        Modifier.width(width = OVERLAY_WIDTH)
-                    }
-                )
+                .fillMaxWidth()
                 .height(height = OVERLAY_HEIGHT)
-                .background(
-                    color = MemoripTheme.colors.surface.copy(alpha = MemoripAlpha.IMAGE_OVERLAY),
-                    shape = if (!isExpanded) {
-                        RoundedCornerShape(topEnd = STAGGERED_GRID_IMAGE_CORNER_RADIUS)
-                    } else {
-                        RectangleShape
-                    }
-                )
-                .clickable(
-                    interactionSource = null,
-                    indication = null,
-                    onClick = { isExpanded = !isExpanded }
-                ),
+                .background(color = MemoripTheme.colors.primaryContainer)
         ) {
             Column(
-                modifier = Modifier.padding(horizontal = MemoripPadding.PaddingXSmall),
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .padding(horizontal = MemoripPadding.PaddingXSmall),
                 verticalArrangement = Arrangement.Center
             ) {
                 if (contentDescription != null) {
