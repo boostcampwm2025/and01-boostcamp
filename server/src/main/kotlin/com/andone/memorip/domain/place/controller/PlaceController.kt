@@ -1,7 +1,7 @@
 package com.andone.memorip.domain.place.controller
 
 import com.andone.memorip.common.response.ApiResult
-import com.andone.memorip.domain.place.dto.PlaceDetailResponse
+import com.andone.memorip.domain.place.dto.response.PlaceDetailResponse
 import com.andone.memorip.domain.place.dto.request.PlaceCreateRequest
 import com.andone.memorip.domain.place.dto.response.PlaceCreateResponse
 import com.andone.memorip.domain.place.dto.response.PlaceListItemResponse
@@ -18,11 +18,11 @@ import java.util.*
 
 @RestController
 @Tag(name = "Place API", description = "장소 관련 API")
-@RequestMapping("/api/places")
+@RequestMapping("/api")
 class PlaceController(
     private val placeService: PlaceService
 ) {
-    @GetMapping("/{placeId}")
+    @GetMapping("/places/{placeId}")
     @Operation(
         summary = "장소 조회",
         description = "id로 장소를 조회합니다",
@@ -38,7 +38,7 @@ class PlaceController(
         return ApiResult.success(data = result)
     }
 
-    @GetMapping
+    @GetMapping("/places")
     fun getPlaceList(
         @PageableDefault(
             page = 0,
@@ -79,7 +79,7 @@ class PlaceController(
         return ApiResult.success(result.content, result.pagination)
     }
 
-    @PostMapping
+    @PostMapping("/places")
     fun createPlace(
         @RequestBody request: PlaceCreateRequest
     ): ApiResult<PlaceCreateResponse> {

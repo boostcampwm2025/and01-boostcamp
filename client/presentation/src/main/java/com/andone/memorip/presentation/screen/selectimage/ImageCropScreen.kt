@@ -28,8 +28,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.toSize
 import androidx.core.graphics.withSave
 import com.andone.memorip.presentation.screen.selectimage.ImageCropScreenDimens.DRAW_RECT_ALPHA
-import com.andone.memorip.presentation.screen.selectimage.component.ImageCropRatioButton
 import com.andone.memorip.presentation.screen.selectimage.component.ImageCropBottomBar
+import com.andone.memorip.presentation.screen.selectimage.component.ImageCropRatioButton
 import com.andone.memorip.presentation.screen.selectimage.component.rememberCropImageState
 import com.andone.memorip.presentation.theme.MemoripBorderWidth
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -41,7 +41,6 @@ private object ImageCropScreenDimens {
 @Composable
 fun ImageCropScreen(
     imageUris: List<Uri>,
-    onDismiss: () -> Unit,
     onImagesCrop: (List<Uri>) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -89,7 +88,7 @@ fun ImageCropScreen(
             imageUris = imageUris,
             croppedImageKeys = state.croppedImages.keys,
             currentIndex = state.currentIndex,
-            onDismiss = onDismiss,
+            onDismiss = state::removeImage,
             onClickImage = { state.selectImage(it) },
             onImageCrop = state::cropImage
         )
@@ -149,7 +148,6 @@ private fun ImageCropSection(
 private fun ImageCropScreenPreview() {
     ImageCropScreen(
         imageUris = emptyList(),
-        onDismiss = {},
         onImagesCrop = {}
     )
 }

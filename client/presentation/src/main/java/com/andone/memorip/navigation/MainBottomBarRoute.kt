@@ -15,12 +15,16 @@ enum class MainBottomBarRoute(
         R.string.main_bottom_bar_place_list,
         PlaceList
     ),
-    // TODO: 백엔드 로직 구현 후 연결
-//    GROUP_LIST(
-//        R.drawable.ic_folder,
-//        R.string.main_bottom_bar_group,
-//        GroupList
-//    ),
+    GROUP_LIST(
+        R.drawable.ic_folder,
+        R.string.main_bottom_bar_group,
+        GroupList
+    ),
+    PLAN(
+        R.drawable.ic_calendar_today,
+        R.string.main_bottom_bar_plan,
+        Plan
+    ),
     USER(
         R.drawable.ic_account_circle,
         R.string.main_bottom_bar_user,

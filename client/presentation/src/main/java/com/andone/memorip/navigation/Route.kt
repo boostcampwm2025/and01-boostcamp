@@ -13,10 +13,13 @@ data object GroupList : NavKey
 data object User : NavKey
 
 @Serializable
+data object Plan : NavKey
+
+@Serializable
 data object PlaceCreate : NavKey
 
 @Serializable
-data class GroupDetail(val groupId: Int) : NavKey
+data class GroupDetail(val groupId: String) : NavKey
 
 @Serializable
 data class PlaceDetail(val placeId: String = "") : NavKey

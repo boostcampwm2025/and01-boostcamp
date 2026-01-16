@@ -1,0 +1,197 @@
+package com.andone.memorip.presentation.screen.placecreate
+
+import android.net.Uri
+import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.andone.memorip.presentation.model.LocationUiModel
+import com.andone.memorip.presentation.model.TagUiModel
+import com.andone.memorip.presentation.screen.grouplist.model.GroupUiModel
+import com.andone.memorip.presentation.screen.placecreate.PlaceCreateNavGraphConstants.TOTAL_STEP_SIZE
+import com.andone.memorip.presentation.screen.placecreate.component.PlaceCreateTopBar
+import com.andone.memorip.presentation.screen.placecreate.component.StepProgressBar
+import com.andone.memorip.presentation.screen.placecreate.model.PlaceCreateStep
+import com.andone.memorip.presentation.screen.selectcategory.SelectCategoryScreen
+import com.andone.memorip.presentation.screen.selectgroup.SelectGroupScreen
+import com.andone.memorip.presentation.screen.selectimage.SelectImageScreen
+import com.andone.memorip.presentation.screen.selectlocation.SelectLocationScreen
+
+private object PlaceCreateNavGraphConstants {
+    const val TOTAL_STEP_SIZE = 3
+}
+
+@Composable
+fun PlaceCreateContainer(
+    onBackClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val viewModel = hiltViewModel<PlaceCreateViewModel>()
+
+    var currentStep by rememberSaveable { mutableStateOf(PlaceCreateStep.SelectImage) }
+
+    val handleBackAction: () -> Unit = {
+        when (currentStep) {
+            PlaceCreateStep.SelectImage -> onBackClick()
+            PlaceCreateStep.SelectLocation -> currentStep = PlaceCreateStep.SelectImage
+            PlaceCreateStep.PlaceCreate -> currentStep = PlaceCreateStep.SelectLocation
+            PlaceCreateStep.SelectCategory -> currentStep = PlaceCreateStep.PlaceCreate
+            PlaceCreateStep.SelectGroup -> currentStep = PlaceCreateStep.PlaceCreate
+        }
+    }
+
+    BackHandler { handleBackAction() }
+
+    AnimatedContent(
+        targetState = currentStep.stepIndex != null,
+        modifier = modifier,
+        transitionSpec = {
+            if (targetState > initialState) {
+                (slideInHorizontally { -it } + fadeIn()) togetherWith (slideOutHorizontally { it } + fadeOut())
+            } else {
+                (slideInHorizontally { it } + fadeIn()) togetherWith (slideOutHorizontally { -it } + fadeOut())
+            }
+        },
+    ) { isMainStep ->
+        if (isMainStep) {
+            PlaceCreateMainStep(
+                step = currentStep,
+                onImagesChange = viewModel::updateImages,
+                onLocationChange = viewModel::updateLocation,
+                onStepChange = { currentStep = it },
+                onBackClick = handleBackAction,
+                viewModel = viewModel
+            )
+        } else {
+            PlaceCreateSubStep(
+                step = currentStep,
+                onCategoryChange = viewModel::updateCategory,
+                onGroupChange = viewModel::updateGroup,
+                onStepChange = { currentStep = it }
+            )
+        }
+    }
+}
+
+@Composable
+fun PlaceCreateMainStep(
+    step: PlaceCreateStep,
+    onImagesChange: (List<Uri>) -> Unit,
+    onLocationChange: (LocationUiModel) -> Unit,
+    onStepChange: (PlaceCreateStep) -> Unit,
+    onBackClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: PlaceCreateViewModel = hiltViewModel()
+) {
+    Scaffold(
+        modifier = modifier,
+        topBar = {
+            PlaceCreateTopBar(
+                currentStep = step,
+                onBackClick = onBackClick
+            )
+        },
+        contentWindowInsets = WindowInsets()
+    ) { innerPadding ->
+        Column(modifier = Modifier.padding(innerPadding)) {
+            StepProgressBar(
+                currentStep = step.stepIndex ?: TOTAL_STEP_SIZE,
+                totalSteps = TOTAL_STEP_SIZE,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            AnimatedContent(
+                targetState = step,
+                transitionSpec = {
+                    if (targetState > initialState) {
+                        (slideInHorizontally { it } + fadeIn()) togetherWith (slideOutHorizontally { -it } + fadeOut())
+                    } else {
+                        (slideInHorizontally { -it } + fadeIn()) togetherWith (slideOutHorizontally { it } + fadeOut())
+                    }
+                }
+            ) { step ->
+                when (step) {
+                    PlaceCreateStep.SelectImage -> {
+                        SelectImageScreen(
+                            onImageSelect = { images ->
+                                onImagesChange(images)
+                                onStepChange(PlaceCreateStep.SelectLocation)
+                            }
+                        )
+                    }
+
+                    PlaceCreateStep.SelectLocation -> {
+                        SelectLocationScreen(
+                            onLocationSelect = { location ->
+                                onLocationChange(location)
+                                onStepChange(PlaceCreateStep.PlaceCreate)
+                            }
+                        )
+                    }
+
+                    PlaceCreateStep.PlaceCreate -> {
+                        PlaceCreateScreen(
+                            onCategoryClick = { onStepChange(PlaceCreateStep.SelectCategory) },
+                            onLocationClick = { onStepChange(PlaceCreateStep.SelectLocation) },
+                            onGroupClick = { onStepChange(PlaceCreateStep.SelectGroup) },
+                            onImageCreate = onBackClick,
+                            viewModel = viewModel
+                        )
+                    }
+
+                    else -> {}
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun PlaceCreateSubStep(
+    step: PlaceCreateStep,
+    onCategoryChange: (List<TagUiModel>) -> Unit,
+    onGroupChange: (GroupUiModel) -> Unit,
+    onStepChange: (PlaceCreateStep) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    when (step) {
+        PlaceCreateStep.SelectCategory -> {
+            SelectCategoryScreen(
+                onCategorySelect = { category ->
+                    onCategoryChange(category)
+                    onStepChange(PlaceCreateStep.PlaceCreate)
+                },
+                onBackClick = { onStepChange(PlaceCreateStep.PlaceCreate) },
+                modifier = modifier
+            )
+        }
+
+        PlaceCreateStep.SelectGroup -> {
+            SelectGroupScreen(
+                onGroupSelect = { group ->
+                    onGroupChange(group)
+                    onStepChange(PlaceCreateStep.PlaceCreate)
+                },
+                onBackClick = { onStepChange(PlaceCreateStep.PlaceCreate) },
+                modifier = modifier
+            )
+        }
+
+        else -> {}
+    }
+}

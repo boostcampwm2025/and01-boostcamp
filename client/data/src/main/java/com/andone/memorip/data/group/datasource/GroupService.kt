@@ -1,10 +1,12 @@
 package com.andone.memorip.data.group.datasource
 
 import com.andone.memorip.data.common.ApiResult
+import com.andone.memorip.data.group.model.AddPlaceToGroupRequest
 import com.andone.memorip.data.group.model.GroupCreateRequest
 import com.andone.memorip.data.group.model.GroupListResponse
-import com.andone.memorip.data.group.model.GroupResponse
 import com.andone.memorip.data.group.model.GroupUpdateRequest
+import com.andone.memorip.data.place.model.PlaceListItemResponse
+import com.andone.memorip.domain.model.Group
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -31,12 +33,12 @@ interface GroupService {
     @GET("/api/groups/{groupId}")
     suspend fun getGroupById(
         @Path("groupId") groupId: String
-    ): ApiResult<GroupResponse>
+    ): ApiResult<Group>
 
     @POST("/api/groups")
     suspend fun createGroup(
         @Body request: GroupCreateRequest
-    ): ApiResult<GroupResponse>
+    ): ApiResult<Group>
 
     @PATCH("/api/groups/{groupId}")
     suspend fun updateGroup(
@@ -48,4 +50,18 @@ interface GroupService {
     suspend fun deleteGroup(
         @Path("groupId") groupId: String
     ): ApiResult<Unit>
+
+    @POST("/api/groups/{groupId}/places")
+    suspend fun addPlaceToGroup(
+        @Path("groupId") groupId: String,
+        @Body request: AddPlaceToGroupRequest
+    ): ApiResult<Unit>
+
+    @GET("/api/groups/{groupId}/places")
+    suspend fun getGroupPlaces(
+        @Path("groupId") groupId: String,
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+        @Query("sort") sort: List<String>? = null
+    ): ApiResult<List<PlaceListItemResponse>>
 }

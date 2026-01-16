@@ -3,9 +3,11 @@ package com.andone.memorip.domain.group.controller
 import com.andone.memorip.common.response.ApiResult
 import com.andone.memorip.domain.group.dto.request.GroupCreateRequest
 import com.andone.memorip.domain.group.dto.request.GroupUpdateRequest
+import com.andone.memorip.domain.group.dto.request.GroupPlaceCreateRequest
 import com.andone.memorip.domain.group.dto.response.GroupListResponse
 import com.andone.memorip.domain.group.dto.response.GroupResponse
 import com.andone.memorip.domain.group.service.GroupService
+import com.andone.memorip.domain.place.service.GroupPlaceService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -21,7 +23,8 @@ import java.util.UUID
 @Tag(name = "Group API", description = "그룹 관련 API")
 @RequestMapping("/api")
 class GroupController(
-    private val groupService: GroupService
+    private val groupService: GroupService,
+    private val groupPlaceService: GroupPlaceService
 ) {
 
     @PostMapping("/groups")
@@ -179,6 +182,28 @@ class GroupController(
         @PathVariable("groupId") groupId: UUID
     ): ApiResult<Unit> {
         groupService.deleteGroup(groupId)
+        return ApiResult.success(Unit)
+    }
+
+    @PostMapping("/groups/{groupId}/places")
+    @Operation(
+        summary = "그룹에 장소 즐겨찾기 추가",
+        description = """
+            다른 사용자가 만든 장소를 포함하여, 기존에 존재하는 Place를 현재 그룹의 일정표에 추가합니다.
+            
+            - places 테이블은 수정하지 않고, group_places에 매핑만 생성합니다.
+            - start_at, end_at, visit_order는 이 API에서 설정하지 않으며, 모두 null로 생성됩니다.
+        """,
+        responses = [
+            ApiResponse(responseCode = "200", description = "성공 - 그룹에 장소 추가 완료"),
+            ApiResponse(responseCode = "404", description = "그룹 또는 장소를 찾을 수 없습니다")
+        ]
+    )
+    fun addPlaceToGroup(
+        @PathVariable("groupId") groupId: UUID,
+        @Valid @RequestBody request: GroupPlaceCreateRequest
+    ): ApiResult<Unit> {
+        groupPlaceService.addPlaceToGroup(groupId, request)
         return ApiResult.success(Unit)
     }
 }

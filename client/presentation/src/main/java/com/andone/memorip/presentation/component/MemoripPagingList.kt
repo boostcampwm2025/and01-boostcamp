@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemKey
@@ -111,6 +112,7 @@ fun MemoripPagingPlacesListPreview() {
         pagingItems = DummyData.getPlacePagingItems(),
         itemKey = { it.id },
         modifier = Modifier.fillMaxSize(),
+        staggeredCells = StaggeredGridCells.Adaptive(160.dp),
         initialContent = {},
         emptyContent = {},
         itemContent = { place ->

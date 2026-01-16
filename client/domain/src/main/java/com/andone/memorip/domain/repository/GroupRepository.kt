@@ -1,6 +1,8 @@
 package com.andone.memorip.domain.repository
 
+import androidx.paging.PagingData
 import com.andone.memorip.domain.model.Group
+import com.andone.memorip.domain.model.PlaceListItem
 import com.andone.memorip.domain.model.Visibility
 import kotlinx.coroutines.flow.Flow
 
@@ -12,4 +14,6 @@ interface GroupRepository {
     suspend fun createGroup(ownerId: String, title: String, visibility: Visibility): Result<Group>
     suspend fun updateGroup(groupId: String, title: String, visibility: Visibility): Result<Unit>
     suspend fun deleteGroup(groupId: String): Result<Unit>
+    suspend fun addPlaceToGroup(groupId: String, placeId: String): Result<Unit>
+    fun getGroupPlaces(groupId: String): Flow<PagingData<PlaceListItem>>
 }

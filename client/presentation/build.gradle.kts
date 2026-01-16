@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.serialization)
     alias(libs.plugins.dagger.hilt.root)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.detekt)
 }
 
 android {
@@ -100,7 +101,7 @@ dependencies {
 
     // Java 8+ API desugaring (java.time 라이브러리 지원)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
-    
+
     // Paging
     implementation(libs.androidx.paging.compose)
 
@@ -112,7 +113,12 @@ dependencies {
 
     // Google Identity (ID Token 발급용)
     implementation(libs.googleid)
+    
+    // Convention
+    detektPlugins(libs.compose.convention)
 }
+
+apply(from = providers.gradleProperty("DETEKT_IDE_SETUP_URL").get())
 
 fun getLocalProperty(propertyKey: String): String {
     val properties = gradleLocalProperties(rootDir, providers)

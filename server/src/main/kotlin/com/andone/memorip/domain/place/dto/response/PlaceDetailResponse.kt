@@ -1,7 +1,5 @@
-package com.andone.memorip.domain.place.dto
+package com.andone.memorip.domain.place.dto.response
 
-import com.andone.memorip.common.exception.BusinessException
-import com.andone.memorip.common.exception.CommonExceptionCode
 import com.andone.memorip.domain.group.dto.response.GroupResponse
 import com.andone.memorip.domain.place.entity.Address
 import com.andone.memorip.domain.place.entity.PlaceTag

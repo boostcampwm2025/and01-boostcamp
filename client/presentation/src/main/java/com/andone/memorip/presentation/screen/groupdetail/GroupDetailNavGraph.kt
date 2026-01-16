@@ -6,7 +6,7 @@ import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import com.andone.memorip.navigation.GroupDetail
 
-fun NavBackStack<NavKey>.navigateToGroupDetail(groupId: Int) {
+fun NavBackStack<NavKey>.navigateToGroupDetail(groupId: String) {
     add(GroupDetail(groupId))
 }
 
@@ -17,6 +17,7 @@ fun EntryProviderScope<NavKey>.groupDetail(
 ) {
     entry<GroupDetail> { route ->
         GroupDetailScreen(
+            route = route,
             onBackClick = onNavigateBack,
             onImageClick = onImageClick,
             modifier = modifier
