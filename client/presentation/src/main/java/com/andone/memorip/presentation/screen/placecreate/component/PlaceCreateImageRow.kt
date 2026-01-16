@@ -10,17 +10,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.net.toUri
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
-import androidx.core.net.toUri
 
 @Composable
 fun PlaceCreateImageRow(
     selectedImages: List<Uri>,
     maxCount: Int,
     onRemoveImage: (Uri) -> Unit,
-    onAddImageClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -38,7 +37,6 @@ fun PlaceCreateImageRow(
         ImageCountButton(
             current = selectedImages.size,
             max = maxCount,
-            onClick = onAddImageClick,
             modifier = Modifier.padding(vertical = MemoripPadding.PaddingXSmall)
         )
     }
@@ -58,7 +56,6 @@ private fun PlaceCreateImageRowPreview() {
             selectedImages = previewUris,
             maxCount = 10,
             onRemoveImage = {},
-            onAddImageClick = {}
         )
     }
 }

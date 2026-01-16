@@ -53,6 +53,9 @@ dependencies {
 
 	// Firebase
 	implementation("com.google.firebase:firebase-admin:9.7.0")
+
+	// Security
+	implementation("org.springframework.boot:spring-boot-starter-security")
 }
 
 kotlin {

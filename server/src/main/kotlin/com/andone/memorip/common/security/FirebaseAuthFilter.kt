@@ -7,6 +7,7 @@ import com.google.firebase.auth.FirebaseAuthException
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 
@@ -25,7 +26,12 @@ class FirebaseAuthFilter : OncePerRequestFilter() {
 
             try {
                 val decodedToken = FirebaseAuth.getInstance().verifyIdToken(idToken)
-                request.setAttribute("uid", decodedToken.uid)
+
+                val authentication = FirebaseAuthenticationToken(
+                    uid = decodedToken.uid
+                )
+
+                SecurityContextHolder.getContext().authentication = authentication
 
             } catch (e: FirebaseAuthException) {
                 throw BusinessException(CommonExceptionCode.UNAUTHORIZED)

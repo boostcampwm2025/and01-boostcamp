@@ -11,33 +11,30 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.screen.placecreate.model.PlaceCreateStep
 import com.andone.memorip.presentation.theme.MemoripTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlaceCreateTopBar(
-    onBackClick: () -> Unit,
-    onConfirmClick: () -> Unit,
-    confirmEnabled: Boolean = true
+    currentStep: PlaceCreateStep,
+    onBackClick: () -> Unit
 ) {
+    val topBarText = when (currentStep) {
+        PlaceCreateStep.SelectImage -> stringResource(R.string.select_image_title)
+        PlaceCreateStep.SelectLocation -> stringResource(R.string.select_location_title)
+        PlaceCreateStep.PlaceCreate -> stringResource(R.string.place_create_title)
+        PlaceCreateStep.SelectCategory -> stringResource(R.string.select_category_title)
+        PlaceCreateStep.SelectGroup -> stringResource(R.string.select_group_title)
+    }
+
     CenterAlignedTopAppBar(
-        title = { Text(text = stringResource(R.string.place_create_title)) },
+        title = { Text(text = topBarText) },
         navigationIcon = {
             IconButton(onClick = onBackClick) {
                 Icon(
                     painter = painterResource(R.drawable.ic_arrow_back),
                     contentDescription = stringResource(R.string.place_create_back_content_description)
-                )
-            }
-        },
-        actions = {
-            IconButton(
-                onClick = onConfirmClick,
-                enabled = confirmEnabled
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_check),
-                    contentDescription = stringResource(R.string.place_create_check_content_description)
                 )
             }
         },
@@ -50,9 +47,8 @@ fun PlaceCreateTopBar(
 private fun PlaceCreateTopBarPreview() {
     MemoripTheme {
         PlaceCreateTopBar(
+            currentStep = PlaceCreateStep.PlaceCreate,
             onBackClick = {},
-            onConfirmClick = {},
-            confirmEnabled = true
         )
     }
 }
