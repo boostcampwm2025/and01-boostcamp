@@ -33,8 +33,7 @@ import kotlinx.coroutines.delay
 fun MapTab(
     places: List<Place>,
     markerImages: Map<String, Bitmap>,
-    onShowBottomSheet: (Place) -> Unit,
-    onDismissBottomSheet: () -> Unit,
+    onPlaceClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val cameraPositionState = rememberCameraPositionState()
@@ -82,13 +81,12 @@ fun MapTab(
                         isZoomControlEnabled = true
                     )
                 },
-                onMapLoaded = { mapLoaded = true },
-                onMapClick = { _, _ -> onDismissBottomSheet() }
+                onMapLoaded = { mapLoaded = true }
             ) {
                 PlaceImageMarkers(
                     places = places,
                     markerImages = markerImages,
-                    onMarkerClick = { onShowBottomSheet(it) }
+                    onMarkerClick = { place -> onPlaceClick(place.id) }
                 )
             }
         }
@@ -117,8 +115,7 @@ private fun MapTabPreview() {
         MapTab(
             places = DummyData.places,
             markerImages = emptyMap(),
-            onShowBottomSheet = {},
-            onDismissBottomSheet = {},
+            onPlaceClick = {},
             modifier = Modifier.fillMaxSize()
         )
     }

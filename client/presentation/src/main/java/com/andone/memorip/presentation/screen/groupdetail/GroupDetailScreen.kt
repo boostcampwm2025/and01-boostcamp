@@ -200,8 +200,7 @@ fun GroupDetailScreenContent(
                 1 -> MapTab(
                     places = places,
                     markerImages = markerImages,
-                    onShowBottomSheet = { place -> onAction(GroupDetailAction.OnPictureClick(place = place)) },
-                    onDismissBottomSheet = { onAction(GroupDetailAction.OnDismissBottomSheetClick) },
+                    onPlaceClick = { id -> onAction(GroupDetailAction.OnPlaceClick(id = id)) },
                     modifier = Modifier.fillMaxSize()
                 )
             }
