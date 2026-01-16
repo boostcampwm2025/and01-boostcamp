@@ -1,6 +1,5 @@
 package com.andone.memorip.data.group.datasource
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.andone.memorip.data.place.model.toDomain
@@ -25,9 +24,7 @@ class GroupPlacesPagingSource(
             )
 
             if (response.error != null) {
-                return LoadResult.Error(
-                    IllegalStateException(response.error.message)
-                )
+                return LoadResult.Error(throwable = IllegalStateException(response.error.message))
             }
 
             val items = response.data.orEmpty().map { it.toDomain() }
@@ -40,7 +37,6 @@ class GroupPlacesPagingSource(
                 nextKey = if (hasNext) page + 1 else null
             )
         } catch (e: Exception) {
-            Log.d("에러 발생", "$e")
             LoadResult.Error(e)
         }
     }
@@ -52,4 +48,3 @@ class GroupPlacesPagingSource(
         }
     }
 }
-

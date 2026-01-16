@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
@@ -37,7 +36,6 @@ import com.andone.memorip.presentation.screen.groupdetail.model.GroupDetailActio
 import com.andone.memorip.presentation.screen.groupdetail.model.GroupDetailEvent
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.screen.placelist.PlaceListGrid
-import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.collectWithLifecycle
 import kotlinx.coroutines.Dispatchers
@@ -70,7 +68,6 @@ fun GroupDetailScreen(
             GroupDetailEvent.NavigateBack -> {
                 onBackClick()
             }
-
             is GroupDetailEvent.NavigatePlaceDetail -> {
                 onImageClick(event.id)
             }
@@ -79,8 +76,8 @@ fun GroupDetailScreen(
 
     GroupDetailScreenContent(
         groupName = uiState.groupName,
-        placesPagingItems = placesPagingItems,
         currentPage = uiState.currentTab,
+        placesPagingItems = placesPagingItems,
         onAction = viewModel::onAction,
         modifier = modifier
     )
@@ -97,8 +94,8 @@ fun GroupDetailScreen(
 @Composable
 fun GroupDetailScreenContent(
     groupName: String,
-    placesPagingItems: LazyPagingItems<Place>,
     currentPage: Int,
+    placesPagingItems: LazyPagingItems<Place>,
     onAction: (GroupDetailAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -110,10 +107,8 @@ fun GroupDetailScreenContent(
 
     val markerImages = remember { mutableStateMapOf<String, Bitmap>() }
 
-    // MapTab을 위한 places 리스트 생성 (paging에서 가져온 모든 아이템)
     var places by remember { mutableStateOf<List<Place>>(emptyList()) }
 
-    // pagingItems가 업데이트될 때마다 places 리스트 업데이트
     LaunchedEffect(placesPagingItems.itemCount) {
         val newPlaces = mutableListOf<Place>()
         for (i in 0 until placesPagingItems.itemCount) {
