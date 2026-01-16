@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
@@ -35,9 +36,9 @@ import com.andone.memorip.presentation.screen.groupdetail.component.PlaceImagesB
 import com.andone.memorip.presentation.screen.groupdetail.model.GroupDetailAction
 import com.andone.memorip.presentation.screen.groupdetail.model.GroupDetailEvent
 import com.andone.memorip.presentation.model.Place
-import com.andone.memorip.presentation.screen.placelist.PlaceListScreenContents
-import com.andone.memorip.presentation.screen.placelist.model.PlaceListAction
-import com.andone.memorip.presentation.screen.placelist.model.PlaceListUiState
+import com.andone.memorip.presentation.screen.placelist.PlaceListGrid
+import com.andone.memorip.presentation.theme.MemoripPadding
+import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.collectWithLifecycle
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -172,7 +173,9 @@ fun GroupDetailScreenContent(
         ) {
             PrimaryTabRow(
                 selectedTabIndex = currentPage,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                containerColor = MemoripTheme.colors.background,
+                contentColor = MaterialTheme.colorScheme.onSurface
             ) {
                 tabs.forEachIndexed { index, title ->
                     Tab(
@@ -185,25 +188,12 @@ fun GroupDetailScreenContent(
 
             when (currentPage) {
                 0 -> {
-                    PlaceListScreenContents(
-                        state = PlaceListUiState(),
+                    PlaceListGrid(
                         placePagingItems = placesPagingItems,
-                        onAction = { action ->
-                            when (action) {
-                                is PlaceListAction.OnPlaceClick -> {
-                                    onAction(GroupDetailAction.OnPlaceClick(id = action.id))
-                                }
-                                is PlaceListAction.OnPullToRefresh -> {
-                                    placesPagingItems.refresh()
-                                }
-                                else -> {
-                                    // 다른 액션은 무시 (필터, 검색 등)
-                                }
-                            }
-                        },
-                        modifier = Modifier.fillMaxSize(),
-                        showFilter = false,
-                        showTopBar = false
+                        onPlaceClick = { id -> onAction(GroupDetailAction.OnPlaceClick(id = id)) },
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = MemoripPadding.PaddingXSmall)
                     )
                 }
 
