@@ -19,7 +19,7 @@ data object Plan : NavKey
 data object PlaceCreate : NavKey
 
 @Serializable
-data class GroupDetail(val groupId: Int) : NavKey
+data class GroupDetail(val groupId: String) : NavKey
 
 @Serializable
 data class PlaceDetail(val placeId: String = "") : NavKey
