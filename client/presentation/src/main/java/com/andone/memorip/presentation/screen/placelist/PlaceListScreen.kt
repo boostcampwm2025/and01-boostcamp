@@ -149,7 +149,7 @@ fun PlaceListScreenContents(
             onDismissRequest = { showRegionBottomSheet = false },
             sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
             containerColor = MemoripTheme.colors.background,
-            contentColor = MaterialTheme.colorScheme.onSurface
+            contentColor = MemoripTheme.colors.onSurface
         ) {
             RegionSelectBottomSheet(
                 currentRegionList = state.currentRegionList,

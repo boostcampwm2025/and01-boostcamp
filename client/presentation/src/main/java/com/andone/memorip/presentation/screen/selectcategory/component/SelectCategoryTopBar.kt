@@ -52,8 +52,8 @@ fun SelectCategoryTopBar(
         },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = LocalMemoripColors.current.background,
-            navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
-            titleContentColor = MaterialTheme.colorScheme.onSurface
+            navigationIconContentColor = MemoripTheme.colors.onSurface,
+            titleContentColor = MemoripTheme.colors.onSurface
         )
     )
 }

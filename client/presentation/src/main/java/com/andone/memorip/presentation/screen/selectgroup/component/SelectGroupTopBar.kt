@@ -39,8 +39,8 @@ fun SelectGroupTopBar(
         },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MemoripTheme.colors.background,
-            navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
-            titleContentColor = MaterialTheme.colorScheme.onSurface
+            navigationIconContentColor = MemoripTheme.colors.onSurface,
+            titleContentColor = MemoripTheme.colors.onSurface
         )
     )
 }

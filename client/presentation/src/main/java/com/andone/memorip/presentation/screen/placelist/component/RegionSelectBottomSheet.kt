@@ -63,8 +63,8 @@ fun RegionSelectBottomSheet(
             shape = memoripShapes.roundedXSmall,
             colors = ButtonDefaults.buttonColors()
                 .copy(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onSurface
+                    containerColor = MemoripTheme.colors.primaryContainer,
+                    contentColor = MemoripTheme.colors.onSurface
                 )
         ) {
             Text(

@@ -32,8 +32,9 @@ fun FilterChip(
         Text(
             text = text,
             color = if (selected)
-                MaterialTheme.colorScheme.onSurface
+                MemoripTheme.colors.onSurface
             else
+                /** TODO MemoripTheme으로 변경하기 */
                 MaterialTheme.colorScheme.onSurfaceVariant,
             fontWeight = if (selected)
                 FontWeight.Bold

@@ -96,8 +96,8 @@ fun MainBottomBar(
                         },
 //                        label = { Text(text = stringResource(tab.titleTextId)) },
                         colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = MaterialTheme.colorScheme.onSurface,
-                            selectedTextColor = MaterialTheme.colorScheme.onSurface,
+                            selectedIconColor = MemoripTheme.colors.onSurface,
+                            selectedTextColor = MemoripTheme.colors.onSurface,
                             indicatorColor = MemoripTheme.colors.primaryContainer,
                             unselectedIconColor = MemoripTheme.colors.gray,
                             unselectedTextColor = MemoripTheme.colors.gray

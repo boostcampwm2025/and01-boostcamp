@@ -175,7 +175,7 @@ fun GroupDetailScreenContent(
                 selectedTabIndex = currentPage,
                 modifier = Modifier.fillMaxWidth(),
                 containerColor = MemoripTheme.colors.background,
-                contentColor = MaterialTheme.colorScheme.onSurface
+                contentColor = MemoripTheme.colors.onSurface
             ) {
                 tabs.forEachIndexed { index, title ->
                     Tab(

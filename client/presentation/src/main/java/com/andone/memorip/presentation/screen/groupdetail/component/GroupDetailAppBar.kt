@@ -50,6 +50,7 @@ fun GroupDetailAppBar(
         },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MemoripTheme.colors.background,
+            /** TODO 색상 변경하기 */
             titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
             navigationIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
             actionIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer

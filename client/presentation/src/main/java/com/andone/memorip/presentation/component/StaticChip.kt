@@ -36,7 +36,7 @@ data class StaticChipColors(
             @Composable
             get() = StaticChipColors(
                 backgroundColor = MemoripTheme.colors.primaryContainer,
-                textColor = MaterialTheme.colorScheme.onSurface,
+                textColor = MemoripTheme.colors.onSurface,
                 borderColor = null
             )
 
@@ -44,7 +44,7 @@ data class StaticChipColors(
             @Composable
             get() = StaticChipColors(
                 backgroundColor = MemoripTheme.colors.primaryContainer,
-                textColor = MaterialTheme.colorScheme.onSurface,
+                textColor = MemoripTheme.colors.onSurface,
                 borderColor = MemoripTheme.colors.primary
             )
     }
