@@ -27,19 +27,40 @@ interface GroupRepository: JpaRepository<Group, UUID> {
             FROM groups g
             INNER JOIN users u ON g.owner_id = u.id
             LEFT JOIN LATERAL (
-                SELECT COUNT(*) as place_count
-                FROM places p
-                WHERE p.group_id = g.id
-                  AND p.deleted_at IS NULL
+                SELECT COUNT(DISTINCT p.id) as place_count
+                FROM (
+                    SELECT p.id
+                    FROM places p
+                    WHERE p.group_id = g.id
+                      AND p.deleted_at IS NULL
+                    UNION
+                    SELECT p.id
+                    FROM group_places gp
+                    INNER JOIN places p ON gp.place_id = p.id
+                    WHERE gp.group_id = g.id
+                      AND gp.deleted_at IS NULL
+                      AND p.deleted_at IS NULL
+                ) p
             ) pc ON true
             LEFT JOIN LATERAL (
                 SELECT STRING_AGG(p.thumbnail_url, ',' ORDER BY p.created_at ASC) as related_place_images
                 FROM (
-                    SELECT p.thumbnail_url, p.created_at
-                    FROM places p
-                    WHERE p.group_id = g.id
-                      AND p.deleted_at IS NULL
-                      AND p.thumbnail_url IS NOT NULL
+                    SELECT DISTINCT p.thumbnail_url, p.created_at
+                    FROM (
+                        SELECT p.thumbnail_url, p.created_at
+                        FROM places p
+                        WHERE p.group_id = g.id
+                          AND p.deleted_at IS NULL
+                          AND p.thumbnail_url IS NOT NULL
+                        UNION
+                        SELECT p.thumbnail_url, p.created_at
+                        FROM group_places gp
+                        INNER JOIN places p ON gp.place_id = p.id
+                        WHERE gp.group_id = g.id
+                          AND gp.deleted_at IS NULL
+                          AND p.deleted_at IS NULL
+                          AND p.thumbnail_url IS NOT NULL
+                    ) p
                     ORDER BY p.created_at ASC
                     LIMIT 7
                 ) p

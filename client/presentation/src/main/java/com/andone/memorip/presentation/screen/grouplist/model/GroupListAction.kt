@@ -4,5 +4,5 @@ sealed interface GroupListAction {
 
     data object OnFABClick : GroupListAction
 
-    data class OnGroupClick(val groupId: Int) : GroupListAction
+    data class OnGroupClick(val groupId: String) : GroupListAction
 }

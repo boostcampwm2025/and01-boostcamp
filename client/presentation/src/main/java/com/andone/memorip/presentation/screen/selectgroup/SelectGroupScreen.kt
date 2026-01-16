@@ -46,6 +46,7 @@ fun SelectGroupScreen(
     onGroupSelect: (GroupUiModel) -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
+    title: String = stringResource(R.string.select_group_title),
     viewModel: SelectGroupViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -82,6 +83,7 @@ fun SelectGroupScreen(
         SelectGroupContent(
             groups = uiState.groups,
             onAction = viewModel::onAction,
+            title = title,
             modifier = modifier
         )
     }
@@ -104,10 +106,16 @@ fun SelectGroupScreen(
 private fun SelectGroupContent(
     groups: List<GroupUiModel>,
     onAction: (SelectGroupAction) -> Unit,
+    title: String = stringResource(R.string.select_group_title),
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
-        topBar = { SelectGroupTopBar(onBackClick = { onAction(SelectGroupAction.OnBackClick) }) },
+        topBar = { 
+            SelectGroupTopBar(
+                onBackClick = { onAction(SelectGroupAction.OnBackClick) },
+                title = title
+            ) 
+        },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { onAction(SelectGroupAction.OnFABClick) },

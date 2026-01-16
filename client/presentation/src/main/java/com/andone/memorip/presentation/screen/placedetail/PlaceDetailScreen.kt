@@ -1,5 +1,9 @@
 package com.andone.memorip.presentation.placedetail
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -25,6 +29,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -57,6 +62,7 @@ import com.andone.memorip.presentation.screen.placedetail.component.PlaceDetailT
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceDetailAction
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceDetailEvent
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceUiModel
+import com.andone.memorip.presentation.screen.selectgroup.SelectGroupScreen
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -70,6 +76,12 @@ private object Constants {
     const val topAlpha = 0f
     const val middleAlpha = 0.75f
     const val bottomAlpha = 0.97f
+    const val PlaceDetailScreenStep = "PlaceDetailScreenStep"
+}
+
+private enum class PlaceDetailScreenStep {
+    PlaceDetail,
+    SelectGroup
 }
 
 @Composable
@@ -84,21 +96,52 @@ fun PlaceDetailScreen(
     )
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    var currentStep by rememberSaveable { mutableStateOf(PlaceDetailScreenStep.PlaceDetail) }
 
     viewModel.event.collectWithLifecycle { event ->
         when (event) {
             PlaceDetailEvent.NavigateBack -> onNavigateBack()
+            PlaceDetailEvent.NavigateToSelectGroup -> {
+                currentStep = PlaceDetailScreenStep.SelectGroup
+            }
+            PlaceDetailEvent.PlaceAddToGroup -> {
+                currentStep = PlaceDetailScreenStep.PlaceDetail
+            }
         }
     }
 
-    PlaceDetailScreen(
-        place = uiState.place,
-        onAction = viewModel::onAction,
-        modifier = modifier
-    )
+    AnimatedContent(
+        targetState = currentStep,
+        transitionSpec = {
+            if (targetState == PlaceDetailScreenStep.PlaceDetail) {
+                slideInHorizontally { -it } togetherWith slideOutHorizontally { it }
+            } else {
+                slideInHorizontally { it } togetherWith slideOutHorizontally { -it }
+            }
+        },
+        label = Constants.PlaceDetailScreenStep
+    ) { step ->
+        when (step) {
+            PlaceDetailScreenStep.PlaceDetail -> {
+                PlaceDetailScreen(
+                    place = uiState.place,
+                    onAction = viewModel::onAction,
+                    modifier = modifier
+                )
 
-    if (uiState.isLoading) {
-        LoadingIndicatorScreen()
+                if (uiState.isLoading) { LoadingIndicatorScreen() }
+            }
+            PlaceDetailScreenStep.SelectGroup -> {
+                SelectGroupScreen(
+                    onGroupSelect = { group ->
+                        viewModel.addPlaceToGroup(group.id.toString())
+                    },
+                    onBackClick = { currentStep = PlaceDetailScreenStep.PlaceDetail },
+                    title = stringResource(R.string.select_group_add_to_my_group_title),
+                    modifier = modifier
+                )
+            }
+        }
     }
 }
 
@@ -115,8 +158,9 @@ private fun PlaceDetailScreen(
         modifier = modifier,
         topBar = {
             PlaceDetailTopBar(
+                isMine = place.isMine,
                 onNavigationIconClick = { onAction(PlaceDetailAction.OnBackClick) },
-                onActionIconClick = { /** TODO 정보 가져오기 */ }
+                onActionIconClick = { onAction(PlaceDetailAction.OnAddToGroupClick) }
             )
         },
         contentWindowInsets = WindowInsets.navigationBars

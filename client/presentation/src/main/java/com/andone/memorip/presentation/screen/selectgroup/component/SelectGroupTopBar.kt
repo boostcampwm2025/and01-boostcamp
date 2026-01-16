@@ -18,11 +18,14 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SelectGroupTopBar(onBackClick: () -> Unit) {
+fun SelectGroupTopBar(
+    onBackClick: () -> Unit,
+    title: String = stringResource(R.string.select_group_title)
+) {
     TopAppBar(
         title = {
             Text(
-                text = stringResource(R.string.select_group_title),
+                text = title,
                 style = LocalMemoripTypography.current.headline2
             )
         },

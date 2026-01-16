@@ -237,22 +237,22 @@ object DummyData {
 
     val groups = mutableStateListOf(
         GroupUiModel(
-            id = UUID.randomUUID(),
+            id = UUID.randomUUID().toString(),
             name = "기본 그룹",
             images = createRandomImageUrls(8, "group1")
         ),
         GroupUiModel(
-            id = UUID.randomUUID(),
+            id = UUID.randomUUID().toString(),
             name = "부 산",
             images = createRandomImageUrls(4, "busan")
         ),
         GroupUiModel(
-            id = UUID.randomUUID(),
+            id = UUID.randomUUID().toString(),
             name = "제주도",
             images = createRandomImageUrls(5, "jeju")
         ),
         GroupUiModel(
-            id = UUID.randomUUID(),
+            id = UUID.randomUUID().toString(),
             name = "대구 ",
             images = createRandomImageUrls(1, "daegu")
         )

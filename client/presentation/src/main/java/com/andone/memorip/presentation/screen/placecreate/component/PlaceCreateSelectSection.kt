@@ -66,7 +66,7 @@ private fun PlaceCreateSelectSectionPreview() {
             category = emptyList(),
             location = null,
             group = GroupUiModel(
-                id = UUID.randomUUID(),
+                id = UUID.randomUUID().toString(),
                 name = "",
                 images = emptyList()
             ),

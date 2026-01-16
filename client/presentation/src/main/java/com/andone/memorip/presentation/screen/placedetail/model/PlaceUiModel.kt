@@ -13,5 +13,6 @@ data class PlaceUiModel(
     val longitude: Double = 0.toDouble(),
     val imageUrls: ImmutableList<String> = persistentListOf(),
     val groupName: String = "",
-    val content: String = ""
+    val content: String = "",
+    val isMine: Boolean = false
 )

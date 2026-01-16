@@ -5,16 +5,18 @@ import com.andone.memorip.common.exception.CommonExceptionCode
 import com.andone.memorip.common.response.ApiResult
 import com.andone.memorip.domain.group.repository.GroupRepository
 import com.andone.memorip.domain.group.dto.response.toGroupResponse
-import com.andone.memorip.domain.place.dto.PlaceDetailResponse
+import com.andone.memorip.domain.place.dto.response.PlaceDetailResponse
 import com.andone.memorip.domain.place.dto.PlaceListResult
 import com.andone.memorip.domain.place.dto.request.PlaceCreateRequest
 import com.andone.memorip.domain.place.dto.response.PlaceCreateResponse
 import com.andone.memorip.domain.place.dto.response.PlaceListItemResponse
-import com.andone.memorip.domain.place.dto.toTagResponse
+import com.andone.memorip.domain.place.dto.response.toTagResponse
 import com.andone.memorip.domain.place.entity.Place
+import com.andone.memorip.domain.place.entity.GroupPlace
 import com.andone.memorip.domain.place.repository.PlaceImageRepository
 import com.andone.memorip.domain.place.repository.PlaceRepository
 import com.andone.memorip.domain.place.repository.PlaceTagRepository
+import com.andone.memorip.domain.place.repository.GroupPlaceRepository
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -26,7 +28,8 @@ class PlaceService(
     private val placeRepository: PlaceRepository,
     private val groupRepository: GroupRepository,
     private val placeTagRepository: PlaceTagRepository,
-    private val placeImageRepository: PlaceImageRepository
+    private val placeImageRepository: PlaceImageRepository,
+    private val groupPlaceRepository: GroupPlaceRepository
 ) {
     @Transactional(readOnly = true)
     fun getPlaceById(placeId: UUID): PlaceDetailResponse {
@@ -75,7 +78,11 @@ class PlaceService(
         return PlaceListResult(content, pagination)
     }
 
+    @Transactional
     fun createPlace(request: PlaceCreateRequest): PlaceCreateResponse {
+
+        val group = groupRepository.findByIdOrNull(request.groupId)
+            ?: throw BusinessException(code = CommonExceptionCode.GROUP_NOT_FOUND)
 
         val place = Place.create(
             groupId = request.groupId,
@@ -91,6 +98,12 @@ class PlaceService(
         // todo: 태그 연결
 
         val savedPlace = placeRepository.save(place)
+        val groupPlace = GroupPlace.create(
+            group = group,
+            place = savedPlace
+        )
+        groupPlaceRepository.save(groupPlace)
+
         return PlaceCreateResponse(savedPlace.id)
     }
 

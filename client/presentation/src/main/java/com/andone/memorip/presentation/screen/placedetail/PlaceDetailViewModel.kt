@@ -3,6 +3,7 @@ package com.andone.memorip.presentation.screen.placedetail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.andone.memorip.domain.repository.GroupRepository
 import com.andone.memorip.domain.repository.PlaceRepository
 import com.andone.memorip.navigation.PlaceDetail
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceDetailAction
@@ -21,11 +22,13 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 @HiltViewModel(assistedFactory = PlaceDetailViewModel.Factory::class)
 class PlaceDetailViewModel @AssistedInject constructor(
     @Assisted route: PlaceDetail,
     private val placeRepository: PlaceRepository,
+    private val groupRepository: GroupRepository,
     private val snackBarManager: SnackBarManager
 ) : ViewModel() {
 
@@ -58,6 +61,20 @@ class PlaceDetailViewModel @AssistedInject constructor(
     fun onAction(action: PlaceDetailAction) {
         when (action) {
             PlaceDetailAction.OnBackClick -> _event.trySend(PlaceDetailEvent.NavigateBack)
+            PlaceDetailAction.OnAddToGroupClick -> _event.trySend(PlaceDetailEvent.NavigateToSelectGroup)
+        }
+    }
+
+    fun addPlaceToGroup(groupId: String) {
+        viewModelScope.launch {
+            groupRepository.addPlaceToGroup(groupId, placeId)
+                .onSuccess {
+                    snackBarManager.show(event = SnackBarEvent.SUCCESS)
+                    _event.trySend(PlaceDetailEvent.PlaceAddToGroup)
+                }
+                .onFailure {
+                    snackBarManager.show(event = SnackBarEvent.NETWORK_ERROR)
+                }
         }
     }
 
