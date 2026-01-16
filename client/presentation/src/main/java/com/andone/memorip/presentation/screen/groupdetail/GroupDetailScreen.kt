@@ -187,16 +187,14 @@ fun GroupDetailScreenContent(
             }
 
             when (currentPage) {
-                0 -> {
+                 0 -> {
                     PlaceListGrid(
                         placePagingItems = placesPagingItems,
                         onPlaceClick = { id -> onAction(GroupDetailAction.OnPlaceClick(id = id)) },
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(horizontal = MemoripPadding.PaddingXSmall)
+                        onRefresh = { /* GroupDetail에서는 refresh 불필요 */ },
+                        modifier = Modifier.fillMaxSize()
                     )
                 }
-
                 1 -> MapTab(
                     places = places,
                     markerImages = markerImages,
