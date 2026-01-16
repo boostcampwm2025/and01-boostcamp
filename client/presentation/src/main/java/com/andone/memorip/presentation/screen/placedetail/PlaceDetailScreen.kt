@@ -76,6 +76,7 @@ private object Constants {
     const val topAlpha = 0f
     const val middleAlpha = 0.75f
     const val bottomAlpha = 0.97f
+    const val PlaceDetailScreenStep = "PlaceDetailScreenStep"
 }
 
 private enum class PlaceDetailScreenStep {
@@ -118,7 +119,7 @@ fun PlaceDetailScreen(
                 slideInHorizontally { it } togetherWith slideOutHorizontally { -it }
             }
         },
-        label = "PlaceDetailScreenStep"
+        label = Constants.PlaceDetailScreenStep
     ) { step ->
         when (step) {
             PlaceDetailScreenStep.PlaceDetail -> {
