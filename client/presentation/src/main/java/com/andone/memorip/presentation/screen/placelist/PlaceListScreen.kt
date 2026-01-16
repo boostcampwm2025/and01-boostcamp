@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
@@ -114,9 +113,7 @@ fun PlaceListScreenContents(
     state: PlaceListUiState,
     placePagingItems: LazyPagingItems<Place>,
     onAction: (PlaceListAction) -> Unit,
-    modifier: Modifier = Modifier,
-    showTopBar: Boolean = true,
-    showFilter: Boolean = true
+    modifier: Modifier = Modifier
 ) {
     val focusManager = LocalFocusManager.current
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -209,7 +206,7 @@ fun PlaceListGrid(
     onRefresh: () -> Unit,
     modifier: Modifier = Modifier,
     clearFocusOnScroll: NestedScrollConnection? = null,
-    focusManager: androidx.compose.ui.focus.FocusManager? = null
+    focusManager: FocusManager? = null
 ) {
     val isRefreshing =
         placePagingItems.loadState.refresh is LoadState.Loading && placePagingItems.itemCount > 0
