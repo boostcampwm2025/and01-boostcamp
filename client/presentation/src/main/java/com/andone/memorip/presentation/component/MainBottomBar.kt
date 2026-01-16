@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import com.andone.memorip.navigation.MainBottomBarRoute
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.MainBottomBarConstants.DURATION_MILLIS
+import com.andone.memorip.presentation.component.MainBottomBarDimens.bottomBarHeight
 import com.andone.memorip.presentation.component.MainBottomBarDimens.buttonOffset
 import com.andone.memorip.presentation.component.MainBottomBarDimens.centerButtonSize
 import com.andone.memorip.presentation.component.MainBottomBarDimens.elevation
@@ -43,6 +44,7 @@ private object MainBottomBarDimens {
     val centerButtonSize = 52.dp
     val elevation = 8.dp
     val buttonOffset = 10.dp
+    val bottomBarHeight = 72.dp
 }
 
 private object MainBottomBarConstants {
@@ -75,7 +77,7 @@ fun MainBottomBar(
             contentAlignment = Alignment.BottomCenter
         ) {
             NavigationBar(
-                modifier = Modifier.height(height = 72.dp),
+                modifier = Modifier.height(height = bottomBarHeight),
                 containerColor = MemoripTheme.colors.background
             ) {
                 tabs.forEachIndexed { index, tab ->
