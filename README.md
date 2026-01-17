@@ -24,8 +24,14 @@
 | <img src="https://github.com/GwonDongHyeon21.png" width="150" height="150" style="border-radius:100%" > | <img src="https://github.com/uselessnaming.png" width="150" height="150" style="border-radius:100%" > | <img src="https://github.com/HJunng.png" width="150" height="150" style="border-radius:100%" > | <img src="https://github.com/hoyadong1.png" width="150" height="150" style="border-radius:100%" > |
 | [@GwonDongHyeon21](https://github.com/GwonDongHyeon21) | [@uselessnaming](https://github.com/uselessnaming) | [@HJunng](https://github.com/HJunng) | [@hoyadong1](https://github.com/hoyadong1) |
 
-## 기술 스택
+## 기술 스택## 기술 스택
+![Android](https://img.shields.io/badge/Android-3DDC84?logo=android&logoColor=white)
 ![Kotlin](https://img.shields.io/badge/Kotlin-7F52FF?logo=kotlin&logoColor=white)
-![Compose](https://img.shields.io/badge/Jetpack%20Compose-4285F4?logo=android&logoColor=white)
+![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-4285F4?logo=android&logoColor=white)
 ![MVVM](https://img.shields.io/badge/MVVM-000000)
-![Firebase](https://img.shields.io/badge/Firebase-FFCA28?logo=firebase&logoColor=black)
+
+![Coroutines](https://img.shields.io/badge/Coroutines-0095D5)
+![Flow](https://img.shields.io/badge/Flow-0095D5)
+![Hilt](https://img.shields.io/badge/Hilt-59666C)
+
+![Firebase](https://img.shields.io/badge/Firebase%20App%20Distribution-FFCA28?logo=firebase&logoColor=black)
