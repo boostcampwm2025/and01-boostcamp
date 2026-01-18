@@ -99,7 +99,7 @@ fun PlaceListScreen(
         }
     }
 
-    PlaceListScreenContents(
+    PlaceListScreenContent(
         state = uiState,
         placePagingItems = placesPagingItems,
         onAction = viewModel::onAction,
@@ -109,7 +109,7 @@ fun PlaceListScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PlaceListScreenContents(
+fun PlaceListScreenContent(
     state: PlaceListUiState,
     placePagingItems: LazyPagingItems<Place>,
     onAction: (PlaceListAction) -> Unit,
@@ -256,7 +256,7 @@ fun PlaceListGrid(
 @Composable
 private fun PlaceListScreenContentsPreview() {
     MemoripTheme {
-        PlaceListScreenContents(
+        PlaceListScreenContent(
             state = PlaceListUiState(),
             placePagingItems = DummyData.getPlacePagingItems(),
             onAction = {},

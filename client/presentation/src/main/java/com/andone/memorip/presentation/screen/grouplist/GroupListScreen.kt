@@ -48,7 +48,7 @@ fun GroupListScreen(
     if (uiState.isLoading) {
         LoadingIndicatorScreen()
     } else {
-        GroupListScreenContents(
+        GroupListScreenContent(
             groups = uiState.groups,
             onAction = viewModel::onAction,
             modifier = modifier,
@@ -58,7 +58,7 @@ fun GroupListScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GroupListScreenContents(
+fun GroupListScreenContent(
     groups: List<GroupUiModel>,
     onAction: (GroupListAction) -> Unit,
     modifier: Modifier = Modifier,
@@ -90,7 +90,7 @@ fun GroupListScreenContents(
 @Preview(showBackground = true)
 private fun GroupListScreenContentsPreview() {
     MemoripTheme {
-        GroupListScreenContents(
+        GroupListScreenContent(
             groups = DummyData.groups,
             onAction = {}
         )
