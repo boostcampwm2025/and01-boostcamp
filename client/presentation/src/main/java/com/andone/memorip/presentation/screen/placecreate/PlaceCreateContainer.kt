@@ -133,6 +133,7 @@ fun PlaceCreateMainStep(
                 when (step) {
                     PlaceCreateStep.SelectImage -> {
                         SelectImageScreen(
+                            onBack = onBackClick,
                             onImageSelect = { images ->
                                 onImagesChange(images)
                                 onStepChange(PlaceCreateStep.SelectLocation)
