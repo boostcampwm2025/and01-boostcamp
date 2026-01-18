@@ -15,8 +15,8 @@ import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.model.TagUiModel
 import com.andone.memorip.presentation.model.toUiModel
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceUiModel
-import com.andone.memorip.presentation.placelist.model.RegionUiModel
-import com.andone.memorip.presentation.placelist.model.SelectedRegionState
+import com.andone.memorip.presentation.screen.placelist.model.RegionUiModel
+import com.andone.memorip.presentation.screen.placelist.model.SelectedRegionState
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.flowOf
 import java.time.LocalDateTime

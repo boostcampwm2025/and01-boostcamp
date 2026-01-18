@@ -1,12 +1,12 @@
-package com.andone.memorip.presentation.placedetail.component
+package com.andone.memorip.presentation.screen.placedetail.component
 
 import android.graphics.Bitmap
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
-import com.andone.memorip.presentation.placedetail.component.Constants.bottomCropRate
-import com.andone.memorip.presentation.placedetail.component.Constants.textColorLuminanceThreshold
+import com.andone.memorip.presentation.screen.placedetail.component.Constants.bottomCropRate
+import com.andone.memorip.presentation.screen.placedetail.component.Constants.textColorLuminanceThreshold
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.calculateLuminanceAverage
 import com.andone.memorip.presentation.util.cropBottomArea

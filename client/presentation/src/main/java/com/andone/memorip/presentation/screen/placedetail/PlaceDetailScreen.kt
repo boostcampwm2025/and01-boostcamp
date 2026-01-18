@@ -1,4 +1,4 @@
-package com.andone.memorip.presentation.placedetail
+package com.andone.memorip.presentation.screen.placedetail
 
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedContent
@@ -51,12 +51,11 @@ import com.andone.memorip.navigation.PlaceDetail
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.LoadingIndicatorScreen
 import com.andone.memorip.presentation.component.TagChipRow
-import com.andone.memorip.presentation.placedetail.Constants.bottomAlpha
-import com.andone.memorip.presentation.placedetail.Constants.middleAlpha
-import com.andone.memorip.presentation.placedetail.Constants.minHeightRate
-import com.andone.memorip.presentation.placedetail.Constants.topAlpha
-import com.andone.memorip.presentation.placedetail.component.ContentCard
-import com.andone.memorip.presentation.screen.placedetail.PlaceDetailViewModel
+import com.andone.memorip.presentation.screen.placedetail.Constants.bottomAlpha
+import com.andone.memorip.presentation.screen.placedetail.Constants.middleAlpha
+import com.andone.memorip.presentation.screen.placedetail.Constants.minHeightRate
+import com.andone.memorip.presentation.screen.placedetail.Constants.topAlpha
+import com.andone.memorip.presentation.screen.placedetail.component.ContentCard
 import com.andone.memorip.presentation.screen.placedetail.component.ImageDialog
 import com.andone.memorip.presentation.screen.placedetail.component.LocationCard
 import com.andone.memorip.presentation.screen.placedetail.component.PlaceDetailTopBar

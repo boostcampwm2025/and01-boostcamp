@@ -1,7 +1,5 @@
 package com.andone.memorip.presentation.screen.placelist.model
 
-import com.andone.memorip.presentation.placelist.model.RegionUiModel
-
 sealed interface PlaceListAction {
 
     data object OnFABClick : PlaceListAction

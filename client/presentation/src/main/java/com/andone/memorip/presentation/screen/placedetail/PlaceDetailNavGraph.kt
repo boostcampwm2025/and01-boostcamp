@@ -5,7 +5,6 @@ import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import com.andone.memorip.navigation.PlaceDetail
-import com.andone.memorip.presentation.placedetail.PlaceDetailScreen
 
 fun NavBackStack<NavKey>.navigateToPlaceDetail(placeId: String) {
     add(element = PlaceDetail(placeId = placeId))
