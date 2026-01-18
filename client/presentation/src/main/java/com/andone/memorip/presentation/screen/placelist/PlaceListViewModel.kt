@@ -60,7 +60,7 @@ class PlaceListViewModel @Inject constructor(repository: PlaceRepository) : View
                 _uiState.update { it.copy(query = action.query) }
             }
 
-            PlaceListAction.OnPullToRefresh -> {
+            PlaceListAction.OnRefreshPull -> {
                 PlaceListEvent.RefreshPagingData
             }
 

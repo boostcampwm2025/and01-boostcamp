@@ -10,7 +10,7 @@ sealed interface PlaceListAction {
 
     data class OnQueryChange(val query: String) : PlaceListAction
 
-    data object OnPullToRefresh : PlaceListAction
+    data object OnRefreshPull : PlaceListAction
 
     data class OnRegionChipClick(val region: RegionUiModel) : PlaceListAction
 }

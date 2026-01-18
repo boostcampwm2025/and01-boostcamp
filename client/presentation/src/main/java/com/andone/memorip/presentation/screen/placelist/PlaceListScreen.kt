@@ -189,7 +189,7 @@ fun PlaceListScreenContent(
             PlaceListGrid(
                 placePagingItems = placePagingItems,
                 onPlaceClick = { id -> onAction(PlaceListAction.OnPlaceClick(id = id)) },
-                onRefresh = { onAction(PlaceListAction.OnPullToRefresh) },
+                onRefresh = { onAction(PlaceListAction.OnRefreshPull) },
                 modifier = Modifier.fillMaxSize(),
                 clearFocusOnScroll = clearFocusOnScroll,
                 focusManager = focusManager
