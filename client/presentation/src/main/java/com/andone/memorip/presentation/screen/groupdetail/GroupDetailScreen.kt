@@ -29,7 +29,7 @@ import coil.request.ImageRequest
 import coil.request.SuccessResult
 import com.andone.memorip.navigation.GroupDetail
 import com.andone.memorip.presentation.R
-import com.andone.memorip.presentation.screen.groupdetail.component.GroupDetailAppBar
+import com.andone.memorip.presentation.screen.groupdetail.component.GroupDetailTopBar
 import com.andone.memorip.presentation.screen.groupdetail.component.MapTab
 import com.andone.memorip.presentation.screen.groupdetail.component.PlaceImagesBottomSheet
 import com.andone.memorip.presentation.screen.groupdetail.model.GroupDetailAction
@@ -152,7 +152,7 @@ fun GroupDetailScreenContent(
 
     Scaffold(
         topBar = {
-            GroupDetailAppBar(
+            GroupDetailTopBar(
                 title = groupName,
                 onBackClick = { onAction(GroupDetailAction.OnBackClick) },
                 onMenuClick = { onAction(GroupDetailAction.OnMenuClick) },
