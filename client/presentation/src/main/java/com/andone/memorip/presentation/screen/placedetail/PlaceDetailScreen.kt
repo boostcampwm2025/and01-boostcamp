@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.placedetail
 
+import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
@@ -39,6 +40,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -57,7 +59,6 @@ import com.andone.memorip.presentation.placedetail.component.ContentCard
 import com.andone.memorip.presentation.screen.placedetail.PlaceDetailViewModel
 import com.andone.memorip.presentation.screen.placedetail.component.ImageDialog
 import com.andone.memorip.presentation.screen.placedetail.component.LocationCard
-import com.andone.memorip.presentation.screen.placedetail.component.PlaceDetailInfoSection
 import com.andone.memorip.presentation.screen.placedetail.component.PlaceDetailTopBar
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceDetailAction
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceDetailEvent
@@ -297,6 +298,28 @@ private fun PlaceDetailContent(
                 modifier = Modifier.padding(start = MemoripPadding.PaddingXSmall)
             )
         }
+    }
+}
+
+@Composable
+private fun PlaceDetailInfoSection(
+    infoString: String,
+    @DrawableRes iconRes: Int,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXXSmall),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            painter = painterResource(iconRes),
+            contentDescription = null
+        )
+        Text(
+            text = infoString,
+            style = MemoripTheme.typography.labelLarge
+        )
     }
 }
 
