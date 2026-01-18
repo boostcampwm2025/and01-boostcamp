@@ -68,7 +68,7 @@ fun GroupDetailScreen(
             GroupDetailEvent.NavigateBack -> {
                 onBackClick()
             }
-            is GroupDetailEvent.NavigatePlaceDetail -> {
+            is GroupDetailEvent.NavigateToPlaceDetail -> {
                 onImageClick(event.id)
             }
         }

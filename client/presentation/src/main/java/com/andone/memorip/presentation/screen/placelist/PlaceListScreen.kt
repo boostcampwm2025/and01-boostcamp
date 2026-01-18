@@ -85,7 +85,7 @@ fun PlaceListScreen(
                 onCreatePlaceClick()
             }
 
-            is PlaceListEvent.NavigatePlaceDetail -> {
+            is PlaceListEvent.NavigateToPlaceDetail -> {
                 onPlaceClick(event.id)
             }
 

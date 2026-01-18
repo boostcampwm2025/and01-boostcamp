@@ -4,5 +4,5 @@ interface GroupDetailEvent {
 
     data object NavigateBack : GroupDetailEvent
 
-    data class NavigatePlaceDetail(val id: String) : GroupDetailEvent
+    data class NavigateToPlaceDetail(val id: String) : GroupDetailEvent
 }

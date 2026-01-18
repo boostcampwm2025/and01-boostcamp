@@ -53,7 +53,7 @@ class PlaceListViewModel @Inject constructor(repository: PlaceRepository) : View
             }
 
             is PlaceListAction.OnPlaceClick -> {
-                _event.trySend(element = PlaceListEvent.NavigatePlaceDetail(id = action.id))
+                _event.trySend(element = PlaceListEvent.NavigateToPlaceDetail(id = action.id))
             }
 
             is PlaceListAction.OnQueryChange -> {
