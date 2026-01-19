@@ -1,5 +1,5 @@
 [versions]
-agp = "8.13.2"
+agp = "8.12.3"
 coilCompose = "2.6.0"
 coilNetworkOkhttp = "3.3.0"
 composeConvention = "1.1.0"
