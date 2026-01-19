@@ -54,7 +54,7 @@ fun PlaceLocationText(
         )
         Text(
             text = address,
-            color = MaterialTheme.colorScheme.onSurface,
+            color = MemoripTheme.colors.onSurface,
             style = MemoripTheme.typography.bodySmall,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis

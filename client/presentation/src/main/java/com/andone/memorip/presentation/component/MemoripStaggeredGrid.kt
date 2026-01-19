@@ -113,7 +113,7 @@ fun StaggeredImageItem(
                 )
                 .height(height = OVERLAY_HEIGHT)
                 .background(
-                    color = MaterialTheme.colorScheme.surface.copy(alpha = MemoripAlpha.IMAGE_OVERLAY),
+                    color = MemoripTheme.colors.surface.copy(alpha = MemoripAlpha.IMAGE_OVERLAY),
                     shape = if (!isExpanded) {
                         RoundedCornerShape(topEnd = STAGGERED_GRID_IMAGE_CORNER_RADIUS)
                     } else {

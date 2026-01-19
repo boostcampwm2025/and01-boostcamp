@@ -33,7 +33,7 @@ fun RegionFilter(
         modifier = modifier.fillMaxWidth(),
         shape = memoripShapes.roundedXSmall,
         color = MemoripTheme.colors.primaryContainer,
-        contentColor = MaterialTheme.colorScheme.onSurface,
+        contentColor = MemoripTheme.colors.onSurface,
         shadowElevation = MemoripShadow.Medium
     ) {
         Row(

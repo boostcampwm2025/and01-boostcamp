@@ -38,7 +38,7 @@ fun SearchTextField(
             .fillMaxWidth()
             .height(height = MemoripHeight.SearchBoxHeight)
             .padding(end = MemoripPadding.PaddingMedium),
-        textStyle = MemoripTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.onSurface),
+        textStyle = MemoripTheme.typography.bodyLarge.copy(color = MemoripTheme.colors.onSurface),
         decorationBox = { innerTextField ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,

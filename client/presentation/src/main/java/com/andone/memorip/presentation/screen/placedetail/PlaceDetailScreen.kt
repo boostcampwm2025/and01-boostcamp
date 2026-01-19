@@ -260,7 +260,7 @@ private fun PlaceDetailContent(
             ) {
                 Text(
                     text = place.title,
-                    color = MemoripTheme.colors.black,
+                    color = MemoripTheme.colors.onSurface,
                     style = MemoripTheme.typography.headline2
                 )
                 Row(horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceMedium)) {
@@ -271,7 +271,7 @@ private fun PlaceDetailContent(
                     )
                     Text(
                         text = place.locationName,
-                        color = MemoripTheme.colors.black,
+                        color = MemoripTheme.colors.onSurface,
                         style = MemoripTheme.typography.label1
                     )
                 }

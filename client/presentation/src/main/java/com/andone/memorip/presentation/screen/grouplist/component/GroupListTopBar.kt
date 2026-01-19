@@ -28,7 +28,7 @@ fun GroupListTopBar(onSearchClick: () -> Unit) {
         },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MemoripTheme.colors.background,
-            titleContentColor = MaterialTheme.colorScheme.onSurface
+            titleContentColor = MemoripTheme.colors.onSurface
         )
     )
 }

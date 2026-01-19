@@ -15,7 +15,7 @@ fun AddFloatingActionButton(onClick: () -> Unit) {
     FloatingActionButton(
         onClick = onClick,
         containerColor = MemoripTheme.colors.primary,
-        contentColor = MaterialTheme.colorScheme.onSurface
+        contentColor = MemoripTheme.colors.onSurface
     ) {
         Icon(
             painter = painterResource(R.drawable.ic_add),

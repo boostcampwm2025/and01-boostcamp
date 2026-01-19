@@ -118,7 +118,7 @@ private fun SelectCategoryContent(
             FloatingActionButton(
                 onClick = { onAction(SelectCategoryAction.OnFABClick) },
                 containerColor = MemoripTheme.colors.primary,
-                contentColor = MaterialTheme.colorScheme.onSurface
+                contentColor = MemoripTheme.colors.onSurface
             ) {
                 Icon(
                     imageVector = ImageVector.vectorResource(R.drawable.ic_add),
