@@ -16,11 +16,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,7 +30,6 @@ import androidx.compose.ui.unit.dp
 import com.andone.memorip.navigation.MainBottomBarRoute
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.MainBottomBarConstants.DURATION_MILLIS
-import com.andone.memorip.presentation.component.MainBottomBarDimens.bottomBarHeight
 import com.andone.memorip.presentation.component.MainBottomBarDimens.buttonOffset
 import com.andone.memorip.presentation.component.MainBottomBarDimens.centerButtonSize
 import com.andone.memorip.presentation.component.MainBottomBarDimens.elevation
@@ -41,10 +38,9 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
 private object MainBottomBarDimens {
-    val centerButtonSize = 52.dp
+    val centerButtonSize = 58.dp
     val elevation = 8.dp
-    val buttonOffset = 10.dp
-    val bottomBarHeight = 72.dp
+    val buttonOffset = 16.dp
 }
 
 private object MainBottomBarConstants {
@@ -76,10 +72,7 @@ fun MainBottomBar(
             modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.BottomCenter
         ) {
-            NavigationBar(
-                modifier = Modifier.height(height = bottomBarHeight),
-                containerColor = MemoripTheme.colors.background
-            ) {
+            NavigationBar(containerColor = MemoripTheme.colors.background) {
                 tabs.forEachIndexed { index, tab ->
                     if (index == tabs.size / 2) {
                         Spacer(modifier = Modifier.width(width = centerButtonSize))

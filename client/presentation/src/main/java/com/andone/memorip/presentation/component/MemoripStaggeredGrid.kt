@@ -52,7 +52,7 @@ fun MemoripStaggeredGrid(
         horizontalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXXSmall),
         modifier = modifier.fillMaxSize(),
     ) {
-        items(places) { place ->
+        items(items = places) { place ->
             val image = place.thumbnailImage
             StaggeredImageItem(
                 imageUrl = image.url,

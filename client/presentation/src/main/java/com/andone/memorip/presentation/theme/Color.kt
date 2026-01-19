@@ -6,7 +6,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 
-val Primary = Color(0xFF66FF66)
+val Primary = Color(0xFF1ABC9C)
 val PrimaryContainer = Color(0xFFF7F7F7)
 val BackGround = Color(0xFFFFFFFF)
 val Surface = Color(0xFFFFFBFE)
@@ -22,9 +22,8 @@ val Black = Color(0xFF222222)
 val White = Color(0xFFFFFFFF)
 
 // Dark 테마용 색상
-val DarkPrimary = Color(0xFF338033)
-val DarkPrimaryContainer = Color(0xFF424242)
-val DarkBackGround = Color(0xFF222222)
+val DarkPrimaryContainer = Color(0xFF444444)
+val DarkBackGround = Color(0xFF1A1A1A)
 val DarkSecondary = Color(0xFF8BB0D6)
 val DarkSurface = Color(0xFF1C1B1F)
 val DarkOutline = Color(0xFF004700)
@@ -65,7 +64,7 @@ internal val lightMemoripColors = MemoripColors(
 )
 
 internal val darkMemoripColors = MemoripColors(
-    primary = DarkPrimary,
+    primary = Primary,
     primaryContainer = DarkPrimaryContainer,
     secondary = DarkSecondary,
     background = DarkBackGround,
