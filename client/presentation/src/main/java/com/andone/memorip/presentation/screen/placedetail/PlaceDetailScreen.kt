@@ -1,4 +1,4 @@
-package com.andone.memorip.presentation.placedetail
+package com.andone.memorip.presentation.screen.placedetail
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.slideInHorizontally
