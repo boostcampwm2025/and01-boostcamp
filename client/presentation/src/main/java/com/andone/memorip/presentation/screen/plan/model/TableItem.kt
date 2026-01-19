@@ -4,7 +4,9 @@ import java.time.LocalTime
 
 interface TableItem {
     val id: String
-    val day: Int
+    val startDay: Int
+
+    val endDay: Int
     val startTime: LocalTime
     val endTime: LocalTime
 }

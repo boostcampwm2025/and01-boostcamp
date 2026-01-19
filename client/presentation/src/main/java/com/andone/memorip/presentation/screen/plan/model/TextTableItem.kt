@@ -4,7 +4,8 @@ import java.time.LocalTime
 
 data class TextTableItem(
     override val id: String,
-    override val day: Int,
+    override val startDay: Int,
+    override val endDay: Int,
     override val startTime: LocalTime,
     override val endTime: LocalTime,
 
