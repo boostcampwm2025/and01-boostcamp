@@ -181,7 +181,7 @@ fun PlaceListScreenContents(
                     FilterSection(
                         onChangeRegionClick = { showRegionBottomSheet = true },
                         onAddTagClick = {},
-                        modifier = Modifier.padding(horizontal = MemoripPadding.PaddingLMedium),
+                        modifier = Modifier.padding(horizontal = MemoripPadding.PaddingMedium),
                         tags = DummyData.categories.toImmutableList(),
                         selectedRegionState = state.selectedRegionState
                     )
