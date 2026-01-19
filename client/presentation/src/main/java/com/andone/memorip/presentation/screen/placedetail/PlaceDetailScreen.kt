@@ -61,6 +61,7 @@ import com.andone.memorip.presentation.screen.placedetail.component.PlaceDetailI
 import com.andone.memorip.presentation.screen.placedetail.component.PlaceDetailTopBar
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceDetailAction
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceDetailEvent
+import com.andone.memorip.presentation.screen.placedetail.model.PlaceDetailScreenStep
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceUiModel
 import com.andone.memorip.presentation.screen.selectgroup.SelectGroupScreen
 import com.andone.memorip.presentation.theme.MemoripPadding
@@ -77,11 +78,6 @@ private object Constants {
     const val middleAlpha = 0.75f
     const val bottomAlpha = 0.97f
     const val PlaceDetailScreenStep = "PlaceDetailScreenStep"
-}
-
-private enum class PlaceDetailScreenStep {
-    PlaceDetail,
-    SelectGroup
 }
 
 @Composable
@@ -104,6 +100,7 @@ fun PlaceDetailScreen(
             PlaceDetailEvent.NavigateToSelectGroup -> {
                 currentStep = PlaceDetailScreenStep.SelectGroup
             }
+
             PlaceDetailEvent.PlaceAddToGroup -> {
                 currentStep = PlaceDetailScreenStep.PlaceDetail
             }
@@ -129,8 +126,11 @@ fun PlaceDetailScreen(
                     modifier = modifier
                 )
 
-                if (uiState.isLoading) { LoadingIndicatorScreen() }
+                if (uiState.isLoading) {
+                    LoadingIndicatorScreen()
+                }
             }
+
             PlaceDetailScreenStep.SelectGroup -> {
                 SelectGroupScreen(
                     onGroupSelect = { group ->
