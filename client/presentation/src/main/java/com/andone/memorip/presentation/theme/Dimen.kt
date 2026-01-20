@@ -63,6 +63,8 @@ object MemoripAlpha {
     const val INACTIVE = 0.6f
     const val SECONDARY = 0.7f
 
+    const val DEFAULT = 1f
+
 
     /* ---------- Overlay ---------- */
     const val SCRIM = 0.5f            // 모달/다이얼로그 배경

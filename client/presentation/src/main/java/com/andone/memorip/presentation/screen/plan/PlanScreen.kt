@@ -11,7 +11,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.andone.memorip.presentation.screen.plan.component.CenterDropdownTopAppBar
+import com.andone.memorip.presentation.screen.plan.component.PlanTopAppBar
 import com.andone.memorip.presentation.screen.plan.component.DayChipRow
 import com.andone.memorip.presentation.screen.plan.component.TimeTable
 import com.andone.memorip.presentation.screen.plan.model.PlanUiState
@@ -31,7 +31,7 @@ fun PlanScreen(
 
     viewModel.event.collectWithLifecycle { event ->
         when (event) {
-            is PlanEvent.ShowSnackBar -> {
+            PlanEvent.ShowSnackBar -> {
 
             }
         }
@@ -54,7 +54,7 @@ fun PlanScreenContents(
     Scaffold(
         modifier = modifier,
         topBar = {
-            CenterDropdownTopAppBar(title = stringResource(R.string.plan_default_group))
+            PlanTopAppBar(title = stringResource(R.string.plan_default_group))
         },
         contentWindowInsets = WindowInsets()
     ) { innerPadding ->
@@ -62,9 +62,11 @@ fun PlanScreenContents(
             DayChipRow(
                 totalDays = state.totalDays,
                 selectedDay = state.selectedDay,
-                onDaySelected = {},
+                onDaySelected = { onAction(PlanAction.SelectDay(day = it)) },
                 onLongClick = { onAction(PlanAction.LongClick(day = it)) },
                 onAddDayClick = { onAction(PlanAction.AddDay) },
+                onDeleteDayClick = { onAction(PlanAction.RemoveDay(day = it)) },
+                longClickedDay = state.longClickedDay
             )
             TimeTable(
                 blocks = state.blocks,

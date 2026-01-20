@@ -26,6 +26,8 @@ fun DayChipRow(
     onDaySelected: (Int) -> Unit,
     onLongClick: (Int) -> Unit = {},
     onAddDayClick: () -> Unit = {},
+    onDeleteDayClick: (Int) -> Unit = {},
+    longClickedDay: Int? = null,
 ) {
     val days = (1..totalDays).toList()
 
@@ -43,11 +45,15 @@ fun DayChipRow(
                 selected = day == selectedDay,
                 onClick = onDaySelected,
                 onLongClick = onLongClick,
+                isDeleteMode = longClickedDay != null,
+                isDeletedTarget = longClickedDay == day
             )
         }
-        IconButton(onClick = onAddDayClick) {
+        IconButton(onClick = if (longClickedDay != null) ({ onDeleteDayClick(longClickedDay) }) else onAddDayClick) {
             Icon(
-                painter = painterResource(R.drawable.ic_outline_add_circle),
+                painter = if (longClickedDay != null) painterResource(R.drawable.ic_outline_delete_24)
+                else painterResource(R.drawable.ic_outline_add_circle),
+                tint = if (longClickedDay != null) MemoripTheme.colors.error else MemoripTheme.colors.onSurface,
                 contentDescription = stringResource(R.string.plan_add_day),
             )
         }

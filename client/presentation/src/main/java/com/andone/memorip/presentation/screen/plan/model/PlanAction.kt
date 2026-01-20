@@ -8,4 +8,6 @@ sealed interface PlanAction {
     data class RemoveDay(val day: Int) : PlanAction
 
     data class LongClick(val day: Int) : PlanAction
+
+    data class SelectDay(val day: Int) : PlanAction
 }
