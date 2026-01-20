@@ -45,10 +45,7 @@ fun TimeAxis() {
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = stringResource(
-                        id = R.string.plan_time_axis_hour,
-                        hour
-                    ),
+                    text = stringResource(id = R.string.plan_time_axis_hour, hour),
                     color = MemoripTheme.colors.onSurface
                 )
             }

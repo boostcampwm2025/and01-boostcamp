@@ -27,8 +27,6 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 @Composable
 fun CenterDropdownTopAppBar(
     title: String,
-    menuItems: List<String>,
-    onMenuItemClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var expanded by remember { mutableStateOf(value = false) }
@@ -45,21 +43,6 @@ fun CenterDropdownTopAppBar(
                     expanded = expanded,
                     modifier = Modifier.clickable(onClick = { expanded = !expanded })
                 )
-
-//                DropdownMenu(
-//                    expanded = expanded,
-//                    onDismissRequest = { expanded = false }
-//                ) {
-//                    menuItems.forEach { item ->
-//                        DropdownMenuItem(
-//                            text = { Text(text = item) },
-//                            onClick = {
-//                                expanded = false
-//                                onMenuItemClick(item)
-//                            }
-//                        )
-//                    }
-//                }
             }
         },
         colors = TopAppBarDefaults.topAppBarColors().copy(
@@ -73,10 +56,6 @@ fun CenterDropdownTopAppBar(
 @Composable
 private fun CenterDropdownTopAppBarPreview() {
     MemoripTheme {
-        CenterDropdownTopAppBar(
-            title = "그룹 1",
-            menuItems = listOf("그룹1", "그룹2", "그룹3"),
-            onMenuItemClick = {},
-        )
+        CenterDropdownTopAppBar(title = "그룹 1")
     }
 }

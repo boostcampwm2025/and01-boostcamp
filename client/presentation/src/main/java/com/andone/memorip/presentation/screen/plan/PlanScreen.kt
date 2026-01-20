@@ -12,6 +12,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.presentation.screen.plan.component.CenterDropdownTopAppBar
 import com.andone.memorip.presentation.screen.plan.component.DayChipRow
 import com.andone.memorip.presentation.screen.plan.component.TimeTable
@@ -21,24 +23,31 @@ import com.andone.memorip.presentation.util.DummyData
 import com.andone.memorip.presentation.R
 
 @Composable
-fun PlanScreen(modifier: Modifier = Modifier) {
-    PlanScreenContents(modifier = modifier)
+fun PlanScreen(
+    modifier: Modifier = Modifier,
+    viewModel: PlanViewModel = hiltViewModel()
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    PlanScreenContents(
+        state = uiState,
+        modifier = modifier
+    )
 }
 
 @Composable
-fun PlanScreenContents(modifier: Modifier = Modifier) {
+fun PlanScreenContents(
+    state: PlanUiState,
+    modifier: Modifier = Modifier
+) {
     var previewState by remember {
-        mutableStateOf(PlanUiState(blocks = DummyData.timeBlocks))
+        mutableStateOf(value = PlanUiState(blocks = DummyData.timeBlocks))
     }
 
     Scaffold(
         modifier = modifier,
         topBar = {
-            CenterDropdownTopAppBar(
-                title = stringResource(R.string.plan_default_group),
-                menuItems = emptyList(),
-                onMenuItemClick = {},
-            )
+            CenterDropdownTopAppBar(title = stringResource(R.string.plan_default_group),)
         },
         contentWindowInsets = WindowInsets()
     ) { innerPadding ->
@@ -68,6 +77,6 @@ fun PlanScreenContents(modifier: Modifier = Modifier) {
 @Composable
 private fun PlanScreenContentsPreview() {
     MemoripTheme {
-        PlanScreenContents()
+        PlanScreenContents(state = PlanUiState(blocks = DummyData.timeBlocks),)
     }
 }

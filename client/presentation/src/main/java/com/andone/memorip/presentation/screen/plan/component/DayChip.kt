@@ -73,12 +73,7 @@ fun DayChip(
             ),
         contentAlignment = Alignment.Center
     ) {
-        Text(
-            text = stringResource(
-                id = R.string.plan_day_format,
-                day
-            )
-        )
+        Text(text = stringResource(id = R.string.plan_day_format, day))
     }
 }
 

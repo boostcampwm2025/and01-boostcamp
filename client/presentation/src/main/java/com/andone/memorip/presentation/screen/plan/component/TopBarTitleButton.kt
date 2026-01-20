@@ -14,6 +14,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 
 @Composable
@@ -33,7 +34,7 @@ fun TopBarTitleButton(
             style = MaterialTheme.typography.titleMedium
         )
 
-        Spacer(modifier = Modifier.width(width = 4.dp))
+        Spacer(modifier = Modifier.width(width = MemoripSpace.SpaceXXSmall))
 
         Icon(
             painter = if (expanded)

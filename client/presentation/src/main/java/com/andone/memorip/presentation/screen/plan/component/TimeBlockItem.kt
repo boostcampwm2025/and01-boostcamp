@@ -35,6 +35,7 @@ import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.theme.MemoripDragConstants.DRAG_SCALE
 import com.andone.memorip.presentation.theme.MemoripDragConstants.DRAG_SHADOW_ELEVATION
 import com.andone.memorip.presentation.theme.MemoripDragConstants.DRAG_Z_INDEX
+import com.andone.memorip.presentation.util.DummyData
 
 private object TimeBlockItemConstants {
     val SNAP_MINUTE_UNIT = 60
@@ -84,9 +85,7 @@ fun TimeBlockItem(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight()
-            ) {
-
-            }
+            ) {}
 
             Icon(
                 painter = painterResource(R.drawable.ic_outline_drag_handle_24),
@@ -106,9 +105,7 @@ fun TimeBlockItem(
                                 val absoluteYPx = startYPx + dragOffsetY
                                 val newStartMinute =
                                     engine.yPxToStartMinute(absoluteYPx)
-
-                                val snappedMinute =
-                                    ((newStartMinute + SNAP_MINUTE_UNIT / 2) / SNAP_MINUTE_UNIT) * SNAP_MINUTE_UNIT
+                                val snappedMinute = ((newStartMinute + SNAP_MINUTE_UNIT / 2) / SNAP_MINUTE_UNIT) * SNAP_MINUTE_UNIT
 
                                 dragOffsetY = 0f
                                 isDragging = false
@@ -126,12 +123,7 @@ fun TimeBlockItem(
 }
 
 
-@Preview(
-    name = "TimeBlockItem Preview",
-    showBackground = true,
-    widthDp = 360,
-    heightDp = 200
-)
+@Preview(showBackground = true)
 @Composable
 fun TimeBlockItemPreview() {
     val density = LocalDensity.current
@@ -143,11 +135,7 @@ fun TimeBlockItemPreview() {
     }
 
     TimeBlockItem(
-        block = TimeBlock(
-            id = "preview",
-            startMinute = 0,
-            durationMinute = 60
-        ),
+        block = DummyData.timeBlocks[0],
         engine = engine,
         onMoved = { _, _ -> }
     )

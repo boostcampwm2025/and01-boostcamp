@@ -74,16 +74,11 @@ fun TimeTable(
     }
 }
 
-@Preview(
-    showBackground = true,
-    heightDp = 800
-)
+@Preview(showBackground = true)
 @Composable
 private fun TimeTablePreview() {
     var previewState by remember {
-        mutableStateOf(
-            PlanUiState(blocks = DummyData.timeBlocks)
-        )
+        mutableStateOf(value = PlanUiState(blocks = DummyData.timeBlocks))
     }
 
     TimeTable(
