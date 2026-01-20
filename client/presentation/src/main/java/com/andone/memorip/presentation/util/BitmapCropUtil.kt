@@ -16,28 +16,10 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import kotlin.math.max
-import kotlin.math.min
 import kotlin.math.roundToInt
 
 object BitmapCropUtil {
 
-    /** 중앙 크롭 박스 **/
-    fun calculateCropRect(
-        viewSize: Size,
-        aspectRatio: Float,
-    ): Rect {
-        if (viewSize == Size.Zero) return Rect.Zero
-
-        val cropWidth: Float
-        val cropHeight: Float
-
-        // 비율에 따른 크롭할 크기
-        if (viewSize.width / viewSize.height > aspectRatio) {
-            cropHeight = viewSize.height
-            cropWidth = cropHeight * aspectRatio
-        } else {
-            cropWidth = viewSize.width
-            cropHeight = cropWidth / aspectRatio
     suspend fun loadBitmapFromUri(context: Context, uri: Uri): Bitmap? {
         return withContext(Dispatchers.IO) {
             runCatching {
@@ -46,55 +28,13 @@ object BitmapCropUtil {
                 }
             }.getOrNull()
         }
-
-        // 크롭 시작 좌표
-        val left = (viewSize.width - cropWidth) / 2
-        val top = (viewSize.height - cropHeight) / 2
-
-        return Rect(
-            left = left,
-            top = top,
-            right = left + cropWidth,
-            bottom = top + cropHeight
-        )
     }
 
-    /** 초기 이미지 비율 **/
-    fun calculateCenterCropScale(
         bitmap: Bitmap,
-        viewSize: Size,
-        cropRect: Rect
-    ): Float {
-        if (bitmap.width == 0 || bitmap.height == 0) return 1f
-
-        // 크롭 박스를 빈틈없이 꽉 채우는 배율
-        val scaleToFillCrop = max(
-            cropRect.width / bitmap.width,
-            cropRect.height / bitmap.height
-        )
-
-        // 이미지가 화면 밖으로 나가지 않게 하는 배율
-        val scaleToFitView = min(
-            viewSize.width / bitmap.width,
-            viewSize.height / bitmap.height
-        )
-
-        // 둘 중 작은 값을 선택 (화면을 벗어나는 것을 방지하는 것이 우선)
-        return min(scaleToFillCrop, scaleToFitView)
     }
 
-    /** 줌 아웃 한계 **/
-    fun calculateMinScale(
         bitmap: Bitmap,
-        cropRect: Rect
-    ): Float {
-        if (bitmap.width == 0 || bitmap.height == 0) return 1f
 
-        // 이미지 가로/세로 중 적어도 한 변은 크롭 박스 닿아
-        return min(
-            cropRect.width / bitmap.width,
-            cropRect.height / bitmap.height
-        )
     }
 
     /** 이동 제한 계산 **/
