@@ -1,6 +1,7 @@
 package com.andone.memorip.presentation.screen.placedetail.component
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -50,6 +51,7 @@ fun LocationCard(
     location: String,
     latitude: Double,
     longitude: Double,
+    showMap: Boolean,
     modifier: Modifier = Modifier
 ) {
     val cameraPosition = rememberCameraPositionState {
@@ -84,21 +86,29 @@ fun LocationCard(
                 color = MemoripTheme.colors.black
             )
         }
-        NaverMap(
-            modifier = Modifier
-                .fillMaxWidth()
-                .aspectRatio(ratio = LocationCardRatio),
-            cameraPositionState = cameraPosition,
-            uiSettings = MapUiSettings(
-                isCompassEnabled = false,
-                isScaleBarEnabled = false,
-                isLogoClickEnabled = false,
-                isLocationButtonEnabled = false,
-                isIndoorLevelPickerEnabled = false,
-                isZoomControlEnabled = false
-            )
-        ) {
-            Marker(state = markerState)
+
+        if (showMap) {
+            NaverMap(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(ratio = LocationCardRatio),
+                cameraPositionState = cameraPosition,
+                uiSettings = MapUiSettings(
+                    isCompassEnabled = false,
+                    isScaleBarEnabled = false,
+                    isLogoClickEnabled = false,
+                    isLocationButtonEnabled = false,
+                    isIndoorLevelPickerEnabled = false,
+                    isZoomControlEnabled = false
+                )
+            ) {
+                Marker(state = markerState)
+            }
+        } else {
+            Box(
+                modifier = Modifier.fillMaxWidth()
+                    .aspectRatio(ratio = LocationCardRatio)
+            ) {}
         }
     }
 }
@@ -112,6 +122,7 @@ private fun LocationCardPrev() {
             location = place.locationName,
             latitude = place.latitude,
             longitude = place.longitude,
+            showMap = true,
         )
     }
 }
