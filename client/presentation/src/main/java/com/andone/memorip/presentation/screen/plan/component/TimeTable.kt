@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -25,7 +24,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.andone.memorip.presentation.screen.plan.model.PlanUiState
 import com.andone.memorip.presentation.screen.plan.model.TimeBlock
 import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_DAY
@@ -34,7 +32,7 @@ import com.andone.memorip.presentation.screen.plan.utill.TimeLayoutEngine
 import com.andone.memorip.presentation.theme.MemoripTheme
 
 @Composable
-fun PlanTimeTable(
+fun TimeTable(
     uiState: PlanUiState,
     onBlockMoved: (String, Int) -> Unit
 ) {
@@ -82,7 +80,7 @@ fun PlanTimeTable(
     heightDp = 800
 )
 @Composable
-private fun PlanTimeTablePreview() {
+private fun TimeTablePreview() {
     var previewState by remember {
         mutableStateOf(
             PlanUiState(
@@ -96,7 +94,7 @@ private fun PlanTimeTablePreview() {
         )
     }
 
-    PlanTimeTable(
+    TimeTable(
         uiState = previewState,
         onBlockMoved = { id, newStartMinute ->
             previewState = previewState.copy(

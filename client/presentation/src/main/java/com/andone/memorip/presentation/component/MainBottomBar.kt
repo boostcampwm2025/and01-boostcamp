@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
@@ -33,12 +34,13 @@ import com.andone.memorip.presentation.component.MainBottomBarConstants.DURATION
 import com.andone.memorip.presentation.component.MainBottomBarDimens.buttonOffset
 import com.andone.memorip.presentation.component.MainBottomBarDimens.centerButtonSize
 import com.andone.memorip.presentation.component.MainBottomBarDimens.elevation
+import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
 private object MainBottomBarDimens {
-    val centerButtonSize = 58.dp
+    val centerButtonSize = 52.dp
     val elevation = 8.dp
     val buttonOffset = 16.dp
 }
@@ -75,7 +77,7 @@ fun MainBottomBar(
             NavigationBar(containerColor = MemoripTheme.colors.background) {
                 tabs.forEachIndexed { index, tab ->
                     if (index == tabs.size / 2) {
-                        Spacer(modifier = Modifier.width(width = centerButtonSize))
+                        Spacer(modifier = Modifier.width(width = centerButtonSize + MemoripPadding.PaddingXXXLarge))
                     }
 
                     NavigationBarItem(

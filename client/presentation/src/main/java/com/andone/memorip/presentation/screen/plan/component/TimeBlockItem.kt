@@ -62,8 +62,7 @@ fun TimeBlockItem(
                         },
                         onDragEnd = {
                             val absoluteYPx = startYPx + dragOffsetY
-                            val newStartMinute =
-                                engine.yPxToStartMinute(absoluteYPx)
+                            val newStartMinute = engine.yPxToStartMinute(absoluteYPx)
                             val snappedMinute = ((newStartMinute + 5) / 10) * 10
 
                             dragOffsetY = 0f
