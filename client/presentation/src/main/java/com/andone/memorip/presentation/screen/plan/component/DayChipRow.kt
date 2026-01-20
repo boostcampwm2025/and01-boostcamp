@@ -25,8 +25,6 @@ fun DayChipRow(
     modifier: Modifier = Modifier,
     onDaySelected: (Int) -> Unit,
     onLongClick: (Int) -> Unit = {},
-    onDrag: (Offset) -> Unit = {},
-    onDragEnd: (Offset) -> Unit = {},
     onAddDayClick: () -> Unit = {},
 ) {
     val days = (1..totalDays).toList()
@@ -45,8 +43,6 @@ fun DayChipRow(
                 selected = day == selectedDay,
                 onClick = onDaySelected,
                 onLongClick = onLongClick,
-                onDrag = onDrag,
-                onDragEnd = onDragEnd
             )
         }
         IconButton(onClick = onAddDayClick) {

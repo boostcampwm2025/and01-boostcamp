@@ -30,36 +30,13 @@ fun DayChip(
     selected: Boolean = true,
     onClick: (Int) -> Unit = {},
     onLongClick: (Int) -> Unit = {},
-    onDrag: (Offset) -> Unit = {},
-    onDragEnd: (Offset) -> Unit = {}
 ) {
-    var dragOffset by remember { mutableStateOf(Offset.Zero) }
-
     Box(
         modifier = modifier
-            .offset {
-                IntOffset(
-                    dragOffset.x.roundToInt(),
-                    dragOffset.y.roundToInt()
-                )
-            }
             .combinedClickable(
                 onClick = { onClick(day) },
                 onLongClick = { onLongClick(day) }
             )
-            .pointerInput(Unit) {
-                detectDragGesturesAfterLongPress(
-                    onDrag = { change, dragAmount ->
-                        change.consume()
-                        dragOffset += dragAmount
-                        onDrag(dragOffset)
-                    },
-                    onDragEnd = {
-                        onDragEnd(dragOffset)
-                        dragOffset = Offset.Zero
-                    }
-                )
-            }
             .clip(shape = memoripShapes.roundedXSmall)
             .background(
                 color = if (selected)
@@ -84,9 +61,6 @@ private fun DayChipPreview() {
         DayChip(
             day = 1,
             selected = true,
-            onClick = {},
-            onDrag = {},
-            onDragEnd = {}
         )
     }
 }

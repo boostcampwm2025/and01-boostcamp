@@ -20,6 +20,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.screen.plan.model.PlanUiState
+import com.andone.memorip.presentation.screen.plan.model.TimeBlock
 import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_DAY
 import com.andone.memorip.presentation.screen.plan.utill.MINUTE_HEIGHT_DP
 import com.andone.memorip.presentation.screen.plan.utill.TimeLayoutEngine
@@ -30,7 +31,7 @@ import com.andone.memorip.presentation.util.toPx
 
 @Composable
 fun TimeTable(
-    uiState: PlanUiState,
+    blocks: List<TimeBlock>,
     onBlockMoved: (String, Int) -> Unit
 ) {
     val scrollState = rememberScrollState()
@@ -56,7 +57,7 @@ fun TimeTable(
                         .fillMaxWidth()
                         .height(height = (MINUTES_PER_DAY * MINUTE_HEIGHT_DP).dp)
                 ) {
-                    uiState.blocks.forEach { block ->
+                    blocks.forEach { block ->
                         TimeBlockItem(
                             block = block,
                             engine = engine,
@@ -78,20 +79,12 @@ fun TimeTable(
 @Composable
 private fun TimeTablePreview() {
     var previewState by remember {
-        mutableStateOf(value = PlanUiState(blocks = DummyData.timeBlocks))
+        mutableStateOf(value = DummyData.timeBlocks)
     }
 
     TimeTable(
-        uiState = previewState,
-        onBlockMoved = { id, newStartMinute ->
-            previewState = previewState.copy(
-                blocks = previewState.blocks.map { block ->
-                    if (block.id == id) {
-                        block.copy(startMinute = newStartMinute)
-                    } else block
-                }
-            )
-        }
+        blocks = previewState,
+        onBlockMoved = { id, newStartMinute -> }
     )
 }
 

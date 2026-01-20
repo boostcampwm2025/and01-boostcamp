@@ -6,9 +6,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,6 +18,7 @@ import com.andone.memorip.presentation.screen.plan.model.PlanUiState
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
 import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.screen.plan.model.PlanAction
 
 @Composable
 fun PlanScreen(
@@ -31,6 +29,7 @@ fun PlanScreen(
 
     PlanScreenContents(
         state = uiState,
+        onAction = viewModel::onAction,
         modifier = modifier
     )
 }
@@ -38,16 +37,13 @@ fun PlanScreen(
 @Composable
 fun PlanScreenContents(
     state: PlanUiState,
+    onAction: (PlanAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var previewState by remember {
-        mutableStateOf(value = PlanUiState(blocks = DummyData.timeBlocks))
-    }
-
     Scaffold(
         modifier = modifier,
         topBar = {
-            CenterDropdownTopAppBar(title = stringResource(R.string.plan_default_group),)
+            CenterDropdownTopAppBar(title = stringResource(R.string.plan_default_group))
         },
         contentWindowInsets = WindowInsets()
     ) { innerPadding ->
@@ -58,15 +54,9 @@ fun PlanScreenContents(
                 onDaySelected = {},
             )
             TimeTable(
-                uiState = previewState,
+                blocks = state.blocks,
                 onBlockMoved = { id, newStartMinute ->
-                    previewState = previewState.copy(
-                        blocks = previewState.blocks.map { block ->
-                            if (block.id == id) {
-                                block.copy(startMinute = newStartMinute)
-                            } else block
-                        }
-                    )
+                    onAction(PlanAction.BlockMoved(id, newStartMinute))
                 }
             )
         }
@@ -77,6 +67,9 @@ fun PlanScreenContents(
 @Composable
 private fun PlanScreenContentsPreview() {
     MemoripTheme {
-        PlanScreenContents(state = PlanUiState(blocks = DummyData.timeBlocks),)
+        PlanScreenContents(
+            state = PlanUiState(blocks = DummyData.timeBlocks),
+            onAction = {},
+        )
     }
 }
