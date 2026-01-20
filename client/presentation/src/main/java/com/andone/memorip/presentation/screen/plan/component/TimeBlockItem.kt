@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
+import com.andone.memorip.presentation.screen.plan.component.TimeBlockItemConstants.SNAP_MINUTE_UNIT
 import com.andone.memorip.presentation.screen.plan.model.TimeBlock
 import com.andone.memorip.presentation.screen.plan.utill.MINUTE_HEIGHT_DP
 import com.andone.memorip.presentation.screen.plan.utill.TimeLayoutEngine
@@ -26,6 +27,10 @@ import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.theme.memoripShapes
 import kotlin.math.roundToInt
+
+private object TimeBlockItemConstants {
+    val SNAP_MINUTE_UNIT = 10
+}
 
 @Composable
 fun TimeBlockItem(
@@ -46,7 +51,7 @@ fun TimeBlockItem(
                 )
             }
             .fillMaxWidth()
-            .height(height = (block.durationMinute * 2).dp)
+            .height(height = (block.durationMinute * MINUTE_HEIGHT_DP).dp)
     ) {
         Box(
             modifier = Modifier
@@ -63,7 +68,8 @@ fun TimeBlockItem(
                         onDragEnd = {
                             val absoluteYPx = startYPx + dragOffsetY
                             val newStartMinute = engine.yPxToStartMinute(absoluteYPx)
-                            val snappedMinute = ((newStartMinute + 5) / 10) * 10
+                            val snappedMinute =
+                                ((newStartMinute + SNAP_MINUTE_UNIT / 2) / SNAP_MINUTE_UNIT) * SNAP_MINUTE_UNIT
 
                             dragOffsetY = 0f
                             onMoved(block.id, snappedMinute)

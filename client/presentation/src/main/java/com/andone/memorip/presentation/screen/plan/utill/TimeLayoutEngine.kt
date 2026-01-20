@@ -4,9 +4,7 @@ import com.andone.memorip.presentation.screen.plan.model.TimeBlock
 
 const val MINUTE_HEIGHT_DP = 2f
 const val MINUTES_PER_DAY = 24 * 60
-class TimeLayoutEngine(
-    private val minuteHeightPx: Float
-) {
+class TimeLayoutEngine(private val minuteHeightPx: Float) {
     fun blockStartYPx(block: TimeBlock): Float =
         minuteToYPx(block.startMinute, minuteHeightPx)
 

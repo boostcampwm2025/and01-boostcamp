@@ -14,6 +14,7 @@ import com.andone.memorip.presentation.screen.plan.component.TimeTable
 import com.andone.memorip.presentation.screen.plan.model.PlanUiState
 import com.andone.memorip.presentation.screen.plan.model.TimeBlock
 import com.andone.memorip.presentation.theme.MemoripTheme
+import com.andone.memorip.presentation.util.DummyData
 
 @Composable
 fun PlanScreen(modifier: Modifier = Modifier) {
@@ -23,16 +24,7 @@ fun PlanScreen(modifier: Modifier = Modifier) {
 @Composable
 fun PlanScreenContents(modifier: Modifier = Modifier) {
     var previewState by remember {
-        mutableStateOf(
-            PlanUiState(
-                blocks = listOf(
-                    TimeBlock("0", 0, 60),
-                    TimeBlock("1", 3 * 60, 60),
-                    TimeBlock("2", 11 * 60 + 30, 90),
-                    TimeBlock("3", 15 * 60, 45)
-                )
-            )
-        )
+        mutableStateOf(PlanUiState(blocks = DummyData.timeBlocks))
     }
 
     Scaffold(modifier = modifier) { innerPadding ->
