@@ -37,11 +37,18 @@ object MemoripHeight {
     val SearchBoxHeight = 36.dp
 }
 
-object MemoripBorderWidth {
+object MemoripLineWidth {
+
+    val Hairline = 0.5.dp
     val Thin = 1.dp
     val Small = 2.dp
+
     val Medium = 4.dp
     val Strong = 8.dp
+
+    val TimeMajor = 1.2.dp
+    val TimeMinor = 0.7.dp
+    val TimeTick = 0.4.dp
 }
 
 object MemoripShadow {

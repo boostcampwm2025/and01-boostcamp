@@ -10,6 +10,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.andone.memorip.presentation.screen.plan.component.CenterDropdownTopAppBar
 import com.andone.memorip.presentation.screen.plan.component.TimeTable
 import com.andone.memorip.presentation.screen.plan.model.PlanUiState
 import com.andone.memorip.presentation.screen.plan.model.TimeBlock
@@ -18,7 +19,7 @@ import com.andone.memorip.presentation.util.DummyData
 
 @Composable
 fun PlanScreen(modifier: Modifier = Modifier) {
-    PlanScreenContents()
+    PlanScreenContents(modifier = modifier)
 }
 
 @Composable
@@ -27,7 +28,16 @@ fun PlanScreenContents(modifier: Modifier = Modifier) {
         mutableStateOf(PlanUiState(blocks = DummyData.timeBlocks))
     }
 
-    Scaffold(modifier = modifier) { innerPadding ->
+    Scaffold(
+        modifier = modifier,
+        topBar = {
+            CenterDropdownTopAppBar(
+                title = "",
+                menuItems = emptyList(),
+                onMenuItemClick = {},
+            )
+        }
+    ) { innerPadding ->
         Column(modifier = modifier.padding(paddingValues = innerPadding)) {
             TimeTable(
                 uiState = previewState,

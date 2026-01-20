@@ -1,7 +1,6 @@
 package com.andone.memorip.presentation.screen.placecreate.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,7 +12,6 @@ import com.andone.memorip.presentation.model.LocationUiModel
 import com.andone.memorip.presentation.screen.placecreate.component.LocationMapPreviewConstant.CAMERA_POSITION_ZOOM
 import com.andone.memorip.presentation.screen.placecreate.component.LocationMapPreviewDimen.markerHeight
 import com.andone.memorip.presentation.screen.placecreate.component.LocationMapPreviewDimen.markerWidth
-import com.andone.memorip.presentation.theme.MemoripBorderWidth
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition

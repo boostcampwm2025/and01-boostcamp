@@ -31,7 +31,7 @@ import com.andone.memorip.presentation.screen.selectimage.ImageCropScreenDimens.
 import com.andone.memorip.presentation.screen.selectimage.component.ImageCropBottomBar
 import com.andone.memorip.presentation.screen.selectimage.component.ImageCropRatioButton
 import com.andone.memorip.presentation.screen.selectimage.component.rememberCropImageState
-import com.andone.memorip.presentation.theme.MemoripBorderWidth
+import com.andone.memorip.presentation.theme.MemoripLineWidth
 import com.andone.memorip.presentation.theme.MemoripTheme
 
 private object ImageCropScreenDimens {
@@ -137,7 +137,7 @@ private fun ImageCropSection(
                 color = drawRectColor,
                 topLeft = cropRect.topLeft,
                 size = cropRect.size,
-                style = Stroke(width = MemoripBorderWidth.Small.toPx())
+                style = Stroke(width = MemoripLineWidth.Small.toPx())
             )
         }
     }

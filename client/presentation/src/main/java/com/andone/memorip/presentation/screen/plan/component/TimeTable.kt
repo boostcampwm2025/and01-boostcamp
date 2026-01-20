@@ -1,35 +1,31 @@
 package com.andone.memorip.presentation.screen.plan.component
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.screen.plan.model.PlanUiState
-import com.andone.memorip.presentation.screen.plan.model.TimeBlock
 import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_DAY
 import com.andone.memorip.presentation.screen.plan.utill.MINUTE_HEIGHT_DP
 import com.andone.memorip.presentation.screen.plan.utill.TimeLayoutEngine
+import com.andone.memorip.presentation.theme.MemoripLineWidth
 import com.andone.memorip.presentation.theme.MemoripTheme
+import com.andone.memorip.presentation.util.DummyData
 
 @Composable
 fun TimeTable(
@@ -60,7 +56,6 @@ fun TimeTable(
                     .fillMaxWidth()
                     .height((MINUTES_PER_DAY * MINUTE_HEIGHT_DP).dp)
             ) {
-                TimeGridBackground()
                 VerticalGridLines()
                 uiState.blocks.forEach { block ->
                     TimeBlockItem(
@@ -75,7 +70,6 @@ fun TimeTable(
 }
 
 @Preview(
-    name = "PlanTimeTable Preview",
     showBackground = true,
     heightDp = 800
 )
@@ -83,14 +77,7 @@ fun TimeTable(
 private fun TimeTablePreview() {
     var previewState by remember {
         mutableStateOf(
-            PlanUiState(
-                blocks = listOf(
-                    TimeBlock("0", 0, 60),
-                    TimeBlock("1", 9 * 60, 60),
-                    TimeBlock("2", 11 * 60 + 30, 90),
-                    TimeBlock("3", 15 * 60, 45)
-                )
-            )
+            PlanUiState(blocks = DummyData.timeBlocks)
         )
     }
 
@@ -109,80 +96,20 @@ private fun TimeTablePreview() {
 }
 
 @Composable
-fun TimeAxis() {
-    Column(
-        modifier = Modifier
-            .width(56.dp)
-            .height((MINUTES_PER_DAY * MINUTE_HEIGHT_DP).dp)
-    ) {
-        for (hour in 0 until 24) {
-            Box(
-                modifier = Modifier.height((60 * MINUTE_HEIGHT_DP).dp)
-            ) {
-                Text(
-                    text = String.format("%02d:00", hour),
-                    color = MemoripTheme.colors.onSurface
-                )
-            }
-        }
+private fun VerticalGridLines() {
+    val lineColor = MemoripTheme.colors.gray
+    val strokeDp = MemoripLineWidth.Hairline
+
+    Canvas(modifier = Modifier.fillMaxSize()) {
+        drawLine(
+            color = lineColor,
+            start = Offset(0f, 0f),
+            end = Offset(0f, size.height),
+            strokeWidth = strokeDp.toPx()
+        )
     }
 }
 
-@Composable
-fun TimeGridBackground() {
-    Column(modifier = Modifier.fillMaxSize()) {
-        repeat(times = 24) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(height = (60 * MINUTE_HEIGHT_DP).dp)
-            ) {
-                repeat(times = 6) { index ->
-                    val minute = index * 10
-
-                    val (color, thickness) = when (minute) {
-                        0 -> MemoripTheme.colors.gray to 1.2.dp
-                        30 -> MemoripTheme.colors.gray to 0.7.dp
-                        else -> MemoripTheme.colors.gray to 0.4.dp
-                    }
-
-                    GridLine(
-                        y = minute,
-                        color = color,
-                        thickness = thickness
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun GridLine(
-    y: Int,
-    color: Color,
-    thickness: Dp
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(height = thickness)
-            .offset(y = (y * MINUTE_HEIGHT_DP).dp)
-            .background(color)
-    )
-}
-
-@Composable
-fun VerticalGridLines() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .border(
-                width = 0.5.dp,
-                color = Color.LightGray
-            )
-    )
-}
 
 
 
