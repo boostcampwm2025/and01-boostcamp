@@ -7,18 +7,25 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.screen.placedetail.component.Dimens.LocationCardRatio
 import com.andone.memorip.presentation.screen.placedetail.component.Dimens.defaultZoomLevel
+import com.andone.memorip.presentation.theme.MemoripElevation
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -50,13 +57,11 @@ fun LocationCard(
     }
     val markerState = remember { MarkerState(position = LatLng(latitude, longitude)) }
 
-    Card(
+    Surface(
         modifier = modifier,
         shape = MemoripTheme.shapes.roundedMedium,
-        colors = CardDefaults.cardColors(
-            containerColor = MemoripTheme.colors.primaryContainer,
-            contentColor = MemoripTheme.colors.black
-        )
+        contentColor = MemoripTheme.colors.black,
+        color = MemoripTheme.colors.primaryContainer
     ) {
         Row(
             modifier = Modifier
