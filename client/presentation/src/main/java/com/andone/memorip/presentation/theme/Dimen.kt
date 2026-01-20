@@ -87,3 +87,9 @@ object MemoripAlpha {
 object MemoripElevation {
     val ElevationMedium = 4.dp
 }
+
+object MemoripDragConstants{
+    val DRAG_SCALE = 1.05f
+    val DRAG_SHADOW_ELEVATION = 12f
+    val DRAG_Z_INDEX = 1f
+}

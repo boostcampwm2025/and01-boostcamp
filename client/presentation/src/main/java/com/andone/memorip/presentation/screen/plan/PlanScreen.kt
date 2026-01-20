@@ -10,13 +10,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.screen.plan.component.CenterDropdownTopAppBar
+import com.andone.memorip.presentation.screen.plan.component.DayChipRow
 import com.andone.memorip.presentation.screen.plan.component.TimeTable
 import com.andone.memorip.presentation.screen.plan.model.PlanUiState
-import com.andone.memorip.presentation.screen.plan.model.TimeBlock
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
+import com.andone.memorip.presentation.R
 
 @Composable
 fun PlanScreen(modifier: Modifier = Modifier) {
@@ -33,7 +35,7 @@ fun PlanScreenContents(modifier: Modifier = Modifier) {
         modifier = modifier,
         topBar = {
             CenterDropdownTopAppBar(
-                title = "",
+                title = stringResource(R.string.plan_default_group),
                 menuItems = emptyList(),
                 onMenuItemClick = {},
             )
@@ -41,6 +43,11 @@ fun PlanScreenContents(modifier: Modifier = Modifier) {
         contentWindowInsets = WindowInsets()
     ) { innerPadding ->
         Column(modifier = Modifier.padding(paddingValues = innerPadding)) {
+            DayChipRow(
+                totalDays = 2,
+                selectedDay = 2,
+                onDaySelected = {},
+            )
             TimeTable(
                 uiState = previewState,
                 onBlockMoved = { id, newStartMinute ->

@@ -1,7 +1,6 @@
 package com.andone.memorip.presentation.screen.plan.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -15,7 +14,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.IntOffset
@@ -34,15 +32,12 @@ import com.andone.memorip.presentation.theme.memoripShapes
 import com.andone.memorip.presentation.util.toPx
 import kotlin.math.roundToInt
 import com.andone.memorip.presentation.R
-import com.andone.memorip.presentation.screen.plan.component.TimeBlockItemConstants.DRAG_SCALE
-import com.andone.memorip.presentation.screen.plan.component.TimeBlockItemConstants.DRAG_SHADOW_ELEVATION
-import com.andone.memorip.presentation.screen.plan.component.TimeBlockItemConstants.DRAG_Z_INDEX
+import com.andone.memorip.presentation.theme.MemoripDragConstants.DRAG_SCALE
+import com.andone.memorip.presentation.theme.MemoripDragConstants.DRAG_SHADOW_ELEVATION
+import com.andone.memorip.presentation.theme.MemoripDragConstants.DRAG_Z_INDEX
 
 private object TimeBlockItemConstants {
     val SNAP_MINUTE_UNIT = 60
-    val DRAG_SCALE = 1.05f
-    val DRAG_SHADOW_ELEVATION = 12f
-    val DRAG_Z_INDEX = 1f
 }
 
 @Composable

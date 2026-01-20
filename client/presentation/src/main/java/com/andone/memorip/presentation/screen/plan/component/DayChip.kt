@@ -1,6 +1,7 @@
 package com.andone.memorip.presentation.screen.plan.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
@@ -13,23 +14,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.theme.memoripShapes
 import kotlin.math.roundToInt
+import com.andone.memorip.presentation.R
 
 @Composable
 fun DayChip(
-    text: String,
+    day: Int,
     modifier: Modifier = Modifier,
     selected: Boolean = true,
-    onClick: () -> Unit = {},
+    onClick: (Int) -> Unit = {},
+    onLongClick: (Int) -> Unit = {},
     onDrag: (Offset) -> Unit = {},
     onDragEnd: (Offset) -> Unit = {}
 ) {
-    var dragOffset by remember { mutableStateOf(value = Offset.Zero) }
+    var dragOffset by remember { mutableStateOf(Offset.Zero) }
 
     Box(
         modifier = modifier
@@ -39,6 +43,10 @@ fun DayChip(
                     dragOffset.y.roundToInt()
                 )
             }
+            .combinedClickable(
+                onClick = { onClick(day) },
+                onLongClick = { onLongClick(day) }
+            )
             .pointerInput(Unit) {
                 detectDragGesturesAfterLongPress(
                     onDrag = { change, dragAmount ->
@@ -52,12 +60,25 @@ fun DayChip(
                     }
                 )
             }
-            .clip(shape = memoripShapes.roundedXXSmall)
-            .background(color = if (selected) MemoripTheme.colors.primary else MemoripTheme.colors.primaryContainer)
-            .padding(horizontal = MemoripPadding.PaddingXSmall, vertical = MemoripPadding.PaddingXXSmall),
+            .clip(shape = memoripShapes.roundedXSmall)
+            .background(
+                color = if (selected)
+                    MemoripTheme.colors.primary
+                else
+                    MemoripTheme.colors.primaryContainer
+            )
+            .padding(
+                horizontal = MemoripPadding.PaddingXSmall,
+                vertical = MemoripPadding.PaddingXXSmall
+            ),
         contentAlignment = Alignment.Center
     ) {
-        Text(text = text)
+        Text(
+            text = stringResource(
+                id = R.string.plan_day_format,
+                day
+            )
+        )
     }
 }
 
@@ -66,10 +87,11 @@ fun DayChip(
 private fun DayChipPreview() {
     MemoripTheme {
         DayChip(
-            text = "Day 1",
+            day = 1,
             selected = true,
             onClick = {},
-            onDrag = {}
+            onDrag = {},
+            onDragEnd = {}
         )
     }
 }
