@@ -241,6 +241,7 @@ private fun PlaceDetailContent(
                 key = { idx -> place.imageUrls[idx] }
             ) { idx ->
                 AsyncImage(
+                    modifier = Modifier.fillMaxSize(),
                     model = place.imageUrls[idx],
                     contentDescription = stringResource(R.string.place_detail_image_content_description),
                     contentScale = ContentScale.Crop,
