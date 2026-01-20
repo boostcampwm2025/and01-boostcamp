@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -50,7 +49,7 @@ fun PlaceLocationText(
         Icon(
             painter = painterResource(R.drawable.ic_location_on),
             contentDescription = stringResource(R.string.plan_location_content_description),
-            modifier = Modifier.size(MemoripIconSize.IconSizeSmall),
+            modifier = Modifier.size(MemoripIconSize.IconSizeXSmall),
         )
         Text(
             text = address,
