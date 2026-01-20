@@ -1,11 +1,9 @@
-package com.andone.memorip.presentation.component
+package com.andone.memorip.presentation.component.map
 
 import android.graphics.Bitmap
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -13,7 +11,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -23,11 +20,16 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import com.andone.memorip.presentation.R
-import com.andone.memorip.presentation.theme.MemoripPadding
+import com.andone.memorip.presentation.component.map.ImageMarkerDimen.BorderWidth
+import com.andone.memorip.presentation.component.map.ImageMarkerDimen.CornerRadius
+import com.andone.memorip.presentation.component.map.ImageMarkerDimen.ImageSize
+import com.andone.memorip.presentation.theme.MemoripBorderWidth
 import com.andone.memorip.presentation.theme.MemoripTheme
 
 private object ImageMarkerDimen {
-    val ImageSize: Dp = 48.dp
+    val ImageSize: Dp = 64.dp
+    val BorderWidth: Dp = MemoripBorderWidth.Medium
+    val CornerRadius: Dp = 8.dp
 }
 
 @Composable
@@ -38,15 +40,15 @@ fun ImageMarker(
 ) {
     Box(
         modifier = modifier.size(
-            width = ImageMarkerDimen.ImageSize + MemoripPadding.PaddingXXSmall,
-            height = ImageMarkerDimen.ImageSize + MemoripPadding.PaddingXXSmall + MemoripPadding.PaddingXSmall
+            width = ImageSize + BorderWidth * 2,
+            height = ImageSize + BorderWidth * 2
         ),
         contentAlignment = Alignment.TopCenter
     ) {
         Box(
             modifier = Modifier
-                .size(ImageMarkerDimen.ImageSize + MemoripPadding.PaddingXXSmall)
-                .clip(RoundedCornerShape(MemoripPadding.PaddingXSmall))
+                .size(size = ImageSize + BorderWidth * 2)
+                .clip(shape = RoundedCornerShape(size = CornerRadius))
                 .background(borderColor),
             contentAlignment = Alignment.Center
         ) {
@@ -55,28 +57,9 @@ fun ImageMarker(
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .size(ImageMarkerDimen.ImageSize)
-                    .clip(RoundedCornerShape(MemoripPadding.PaddingXSmall - MemoripPadding.PaddingXXXSmall))
+                    .size(ImageSize)
+                    .clip(shape = RoundedCornerShape(size = CornerRadius - BorderWidth))
                     .background(Color.White)
-            )
-        }
-
-        // 꼬리
-        Canvas(
-            modifier = Modifier
-                .size(width = MemoripPadding.PaddingSmall, height = MemoripPadding.PaddingXSmall)
-                .offset(y = ImageMarkerDimen.ImageSize + MemoripPadding.PaddingXXXSmall)
-                .align(Alignment.TopCenter)
-        ) {
-            val path = Path().apply {
-                moveTo(0f, 0f)
-                lineTo(size.width / 2, size.height)
-                lineTo(size.width, 0f)
-                close()
-            }
-            drawPath(
-                path = path,
-                color = borderColor
             )
         }
     }
