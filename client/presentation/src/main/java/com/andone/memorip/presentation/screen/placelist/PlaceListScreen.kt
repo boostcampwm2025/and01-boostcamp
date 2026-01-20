@@ -221,7 +221,7 @@ fun PlaceListGrid(
             itemKey = { it.id },
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = MemoripPadding.PaddingXSmall)
+                .padding(horizontal = MemoripPadding.PaddingMedium)
                 .then(
                     if (clearFocusOnScroll != null && focusManager != null) {
                         Modifier
