@@ -30,7 +30,7 @@ fun InteractiveMultiMarkerMapView(
     uiSettings: MapUiSettings = MemoripMapDefaults.interactiveUiSettings,
     contentPadding: PaddingValues = PaddingValues(0.dp),
     onMapLoaded: () -> Unit = {},
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit = {}
 ) {
     val cameraPositionState = rememberCameraPositionState()
 
@@ -62,8 +62,7 @@ private fun InteractiveMapViewEmptyPreview() {
     MemoripTheme {
         InteractiveMultiMarkerMapView(
             initialBounds = listOf(LatLng(37.5666805, 126.9784147)),
-            modifier = Modifier.fillMaxSize(),
-            content = {}
+            modifier = Modifier.fillMaxSize()
         )
     }
 }

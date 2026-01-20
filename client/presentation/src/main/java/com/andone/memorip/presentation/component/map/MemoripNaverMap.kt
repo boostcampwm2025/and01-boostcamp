@@ -11,9 +11,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.component.LoadingIndicatorScreen
+import com.andone.memorip.presentation.theme.MemoripTheme
 import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.CameraPosition
 import com.naver.maps.map.LocationSource
 import com.naver.maps.map.Symbol
 import com.naver.maps.map.compose.CameraPositionState
@@ -22,6 +25,7 @@ import com.naver.maps.map.compose.MapProperties
 import com.naver.maps.map.compose.MapUiSettings
 import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.NaverMapComposable
+import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.indoor.IndoorSelection
 import java.util.Locale
 
@@ -79,5 +83,18 @@ fun MemoripNaverMap(
         if (!hasLoaded) {
             LoadingIndicatorScreen()
         }
+    }
+}
+
+@Preview(name = "MemoripNaverMap", showBackground = true)
+@Composable
+private fun MemoripNaverMapPreview() {
+    MemoripTheme {
+        MemoripNaverMap(
+            modifier = Modifier.fillMaxSize(),
+            cameraPositionState = rememberCameraPositionState {
+                position = CameraPosition(LatLng(37.5666805, 126.9784147), 11.0)
+            }
+        )
     }
 }
