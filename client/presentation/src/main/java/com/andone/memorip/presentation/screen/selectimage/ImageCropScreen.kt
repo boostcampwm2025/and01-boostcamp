@@ -3,14 +3,12 @@ package com.andone.memorip.presentation.screen.selectimage
 import android.graphics.Bitmap
 import android.net.Uri
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
@@ -21,21 +19,28 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.graphics.nativeCanvas
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.core.graphics.withSave
 import com.andone.memorip.presentation.screen.selectimage.ImageCropScreenDimens.DRAW_RECT_ALPHA
+import com.andone.memorip.presentation.screen.selectimage.ImageCropScreenDimens.cropPadding
+import com.andone.memorip.presentation.screen.selectimage.ImageCropScreenDimens.touchTarget
 import com.andone.memorip.presentation.screen.selectimage.component.ImageCropBottomBar
-import com.andone.memorip.presentation.screen.selectimage.component.ImageCropRatioButton
 import com.andone.memorip.presentation.screen.selectimage.component.rememberCropImageState
 import com.andone.memorip.presentation.theme.MemoripBorderWidth
+import com.andone.memorip.presentation.theme.MemoripIconSize
 import com.andone.memorip.presentation.theme.MemoripTheme
+import com.andone.memorip.presentation.util.BitmapCropUtil.detectEditorGestures
+import com.andone.memorip.presentation.util.toPx
 
 private object ImageCropScreenDimens {
     const val DRAW_RECT_ALPHA = 0.5f
+    val cropPadding = 50.dp
+    val touchTarget = 48.dp
 }
 
 @Composable
@@ -45,11 +50,13 @@ fun ImageCropScreen(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
+    val density = LocalDensity.current
 
     val state = rememberCropImageState(
         imageUris = imageUris,
         context = context,
         onImagesCrop = onImagesCrop,
+        cropPadding = cropPadding.toPx(density)
     )
 
     LaunchedEffect(state.currentUri) {
@@ -63,11 +70,18 @@ fun ImageCropScreen(
                 .weight(1f)
                 .clip(RectangleShape)
                 .onGloballyPositioned { state.updateViewSize(it.size.toSize()) }
-                .pointerInput(state.currentUri, state.aspectRatio, state.viewSize) {
-                    detectTransformGestures { _, pan, zoom, _ ->
-                        state.onGesture(pan, zoom)
-                    }
-                }
+                .detectEditorGestures(
+                    key = state.currentUri.toString(),
+                    onDragStart = { offset ->
+                        state.dragStart(
+                            offset = offset,
+                            touchTarget = touchTarget.toPx(density)
+                        )
+                    },
+                    onDrag = state::drag,
+                    onZoom = { pan, zoom -> state.zoom(pan, zoom) },
+                    onDragEnd = state::dragEnd
+                )
         ) {
             ImageCropSection(
                 imageBitmap = state.imageBitmap,
@@ -75,12 +89,6 @@ fun ImageCropScreen(
                 offset = state.offset,
                 scale = state.scale,
                 cropRect = state.cropRect
-            )
-
-            ImageCropRatioButton(
-                aspectRatio = state.aspectRatio,
-                onRatioSelect = { state.updateAspectRatio(it) },
-                modifier = Modifier.align(Alignment.TopCenter)
             )
         }
 
@@ -101,13 +109,14 @@ private fun ImageCropSection(
     viewSize: Size,
     offset: Offset,
     scale: Float,
-    cropRect: Rect
+    cropRect: Rect,
+    modifier: Modifier = Modifier
 ) {
     val drawRectColor = MemoripTheme.colors.primary
     val clipRectColor = MemoripTheme.colors.black
 
     imageBitmap?.let { bitmap ->
-        Canvas(modifier = Modifier.fillMaxSize()) {
+        Canvas(modifier = modifier.fillMaxSize()) {
             // 이미지 중앙 그리기
             with(drawContext.canvas.nativeCanvas) {
                 withSave {
@@ -139,6 +148,26 @@ private fun ImageCropSection(
                 size = cropRect.size,
                 style = Stroke(width = MemoripBorderWidth.Small.toPx())
             )
+
+            val handles = listOf(
+                cropRect.topLeft,
+                cropRect.topRight,
+                cropRect.bottomLeft,
+                cropRect.bottomRight,
+                cropRect.centerLeft,
+                cropRect.centerRight,
+                cropRect.topCenter,
+                cropRect.bottomCenter
+            )
+
+            // Crop 각 모서리와 각 변의 점
+            handles.forEach { center ->
+                drawCircle(
+                    color = drawRectColor,
+                    center = center,
+                    radius = MemoripIconSize.IconSizeSmall.value
+                )
+            }
         }
     }
 }
