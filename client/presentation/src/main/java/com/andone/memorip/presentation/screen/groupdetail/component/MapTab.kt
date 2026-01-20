@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.andone.memorip.presentation.component.map.InteractiveMapView
+import com.andone.memorip.presentation.component.map.InteractiveMultiMarkerMapView
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
@@ -20,7 +20,7 @@ fun MapTab(
     onMapLoaded: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    InteractiveMapView(
+    InteractiveMultiMarkerMapView(
         initialBounds = places.map { LatLng(it.latitude, it.longitude) },
         onMapLoaded = onMapLoaded,
         modifier = modifier
