@@ -2,6 +2,7 @@ package com.andone.memorip.presentation.util
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -37,6 +38,13 @@ object BitmapCropUtil {
         } else {
             cropWidth = viewSize.width
             cropHeight = cropWidth / aspectRatio
+    suspend fun loadBitmapFromUri(context: Context, uri: Uri): Bitmap? {
+        return withContext(Dispatchers.IO) {
+            runCatching {
+                context.contentResolver.openInputStream(uri)?.use { stream ->
+                    BitmapFactory.decodeStream(stream)
+                }
+            }.getOrNull()
         }
 
         // 크롭 시작 좌표
