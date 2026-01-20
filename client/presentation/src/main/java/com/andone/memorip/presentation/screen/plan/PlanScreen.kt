@@ -19,6 +19,8 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.screen.plan.model.PlanAction
+import com.andone.memorip.presentation.screen.plan.model.PlanEvent
+import com.andone.memorip.presentation.util.collectWithLifecycle
 
 @Composable
 fun PlanScreen(
@@ -26,6 +28,15 @@ fun PlanScreen(
     viewModel: PlanViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    viewModel.event.collectWithLifecycle { event ->
+        when (event) {
+            is PlanEvent.ShowSnackBar -> {
+
+            }
+        }
+    }
+
 
     PlanScreenContents(
         state = uiState,
@@ -49,9 +60,11 @@ fun PlanScreenContents(
     ) { innerPadding ->
         Column(modifier = Modifier.padding(paddingValues = innerPadding)) {
             DayChipRow(
-                totalDays = 2,
-                selectedDay = 2,
+                totalDays = state.totalDays,
+                selectedDay = state.selectedDay,
                 onDaySelected = {},
+                onLongClick = { onAction(PlanAction.LongClick(day = it)) },
+                onAddDayClick = { onAction(PlanAction.AddDay) },
             )
             TimeTable(
                 blocks = state.blocks,

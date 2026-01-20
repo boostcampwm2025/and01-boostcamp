@@ -2,11 +2,15 @@ package com.andone.memorip.presentation.screen.plan
 
 import androidx.lifecycle.ViewModel
 import com.andone.memorip.presentation.screen.plan.model.PlanAction
+import com.andone.memorip.presentation.screen.plan.model.PlanEvent
 import com.andone.memorip.presentation.screen.plan.model.PlanUiState
 import com.andone.memorip.presentation.util.DummyData
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
@@ -15,12 +19,31 @@ class PlanViewModel @Inject constructor() : ViewModel() {
 
     val _uiState = MutableStateFlow(value = PlanUiState(blocks = DummyData.timeBlocks))
     val uiState = _uiState.asStateFlow()
+    private val _event = Channel<PlanEvent>(capacity = BUFFERED)
+    val event = _event.receiveAsFlow()
 
     fun onAction(action: PlanAction) {
         when (action) {
-            is PlanAction.BlockMoved -> {moveBlock(action.id, action.newStartMinute)}
+            is PlanAction.BlockMoved -> {
+                moveBlock(action.id, action.newStartMinute)
+            }
+
+            PlanAction.AddDay -> {
+                _uiState.update {
+                    it.copy(totalDays = it.totalDays + 1)
+                }
+            }
+
+            is PlanAction.RemoveDay -> {
+                _uiState.update { it.copy(totalDays = it.totalDays - 1) }
+            }
+
+            is PlanAction.LongClick -> {
+                _uiState.update { it.copy(longClickedDay = action.day) }
+            }
         }
     }
+
     private fun moveBlock(id: String, newStartMinute: Int) {
         _uiState.update {
             it.copy(
