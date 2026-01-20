@@ -7,9 +7,16 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.net.Uri
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.calculatePan
+import androidx.compose.foundation.gestures.calculateZoom
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.pointer.positionChanged
 import androidx.core.graphics.createBitmap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -30,11 +37,67 @@ object BitmapCropUtil {
         }
     }
 
+    fun bitmapToScreenRect(
+        center: Offset,
+        bitmapRect: Rect,
         bitmap: Bitmap,
+        scale: Float
+    ): Rect {
+        val left = center.x + (bitmapRect.left - bitmap.width / 2) * scale
+        val top = center.y + (bitmapRect.top - bitmap.height / 2) * scale
+        val right = center.x + (bitmapRect.right - bitmap.width / 2) * scale
+        val bottom = center.y + (bitmapRect.bottom - bitmap.height / 2) * scale
+        return Rect(left, top, right, bottom)
     }
 
+    fun screenToBitmapRect(
+        center: Offset,
+        screenRect: Rect,
         bitmap: Bitmap,
+        scale: Float
+    ): Rect {
+        val left = bitmap.width / 2 + (screenRect.left - center.x) / scale
+        val top = bitmap.height / 2 + (screenRect.top - center.y) / scale
+        val right = bitmap.width / 2 + (screenRect.right - center.x) / scale
+        val bottom = bitmap.height / 2 + (screenRect.bottom - center.y) / scale
+        return Rect(left, top, right, bottom)
+    }
 
+    /** 터치 감지하여 이미지를 움직이거나 줌인/줌아웃 **/
+    fun Modifier.detectEditorGestures(
+        key: String,
+        onDragStart: (Offset) -> Unit,
+        onDrag: (Offset) -> Unit,
+        onZoom: (pan: Offset, zoom: Float) -> Unit,
+        onDragEnd: () -> Unit
+    ): Modifier {
+        return pointerInput(key) {
+            awaitEachGesture {
+                onDragStart(awaitFirstDown().position)
+
+                do {
+                    val event = awaitPointerEvent()
+                    val calculatedPan = event.calculatePan()
+                    val calculatedZoom = event.calculateZoom()
+
+                    // 화면 터치 포인트 개수에 따라 분리
+                    if (event.changes.size == 1) {
+                        onDrag(calculatedPan)
+                    } else {
+                        onZoom(calculatedPan, calculatedZoom)
+                    }
+
+                    // 화면 터치 포인트 전부 소비
+                    event.changes.forEach {
+                        if (it.positionChanged()) it.consume()
+                    }
+
+                    // 화면 터치 포인트 있으면 걔속 do
+                } while (event.changes.any { it.pressed })
+
+                onDragEnd()
+            }
+        }
     }
 
     /** 이동 제한 계산 **/
