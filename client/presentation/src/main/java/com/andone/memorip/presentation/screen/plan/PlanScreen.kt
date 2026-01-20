@@ -38,7 +38,7 @@ fun PlanScreenContents(modifier: Modifier = Modifier) {
             )
         }
     ) { innerPadding ->
-        Column(modifier = modifier.padding(paddingValues = innerPadding)) {
+        Column(modifier = Modifier.padding(paddingValues = innerPadding)) {
             TimeTable(
                 uiState = previewState,
                 onBlockMoved = { id, newStartMinute ->

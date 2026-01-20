@@ -54,7 +54,7 @@ fun TimeBlockItem(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(all = MemoripPadding.PaddingXXXSmall)
+                .padding(all = MemoripPadding.PaddingSmall)
                 .clip(shape = memoripShapes.roundedMedium)
                 .background(color = MemoripTheme.colors.primaryContainer)
                 .pointerInput(startYPx) {

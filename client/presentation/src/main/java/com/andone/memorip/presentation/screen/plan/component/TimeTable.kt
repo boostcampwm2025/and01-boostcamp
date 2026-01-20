@@ -26,6 +26,7 @@ import com.andone.memorip.presentation.screen.plan.utill.TimeLayoutEngine
 import com.andone.memorip.presentation.theme.MemoripLineWidth
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
+import com.andone.memorip.presentation.util.toPx
 
 @Composable
 fun TimeTable(
@@ -34,9 +35,7 @@ fun TimeTable(
 ) {
     val scrollState = rememberScrollState()
     val density = LocalDensity.current
-    val minuteHeightPx = with(receiver = density) {
-        MINUTE_HEIGHT_DP.dp.toPx()
-    }
+    val minuteHeightPx = MINUTE_HEIGHT_DP.dp.toPx(density)
 
     val engine = remember {
         TimeLayoutEngine(minuteHeightPx)
@@ -48,23 +47,29 @@ fun TimeTable(
             .verticalScroll(scrollState)
             .background(color = MemoripTheme.colors.background),
     ) {
-        Row {
-            TimeAxis()
+        Box {
+            Row {
+                TimeAxis()
 
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height((MINUTES_PER_DAY * MINUTE_HEIGHT_DP).dp)
-            ) {
-                VerticalGridLines()
-                uiState.blocks.forEach { block ->
-                    TimeBlockItem(
-                        block = block,
-                        engine = engine,
-                        onMoved = onBlockMoved
-                    )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(height = (MINUTES_PER_DAY * MINUTE_HEIGHT_DP).dp)
+                ) {
+                    uiState.blocks.forEach { block ->
+                        TimeBlockItem(
+                            block = block,
+                            engine = engine,
+                            onMoved = onBlockMoved
+                        )
+                    }
                 }
             }
+            HorizontalTimeGridLines(
+                totalMinutes = MINUTES_PER_DAY,
+                majorIntervalMinutes = 60,
+                minuteHeightPx = minuteHeightPx
+            )
         }
     }
 }
@@ -96,19 +101,31 @@ private fun TimeTablePreview() {
 }
 
 @Composable
-private fun VerticalGridLines() {
-    val lineColor = MemoripTheme.colors.gray
-    val strokeDp = MemoripLineWidth.Hairline
+private fun HorizontalTimeGridLines(
+    totalMinutes: Int,
+    majorIntervalMinutes: Int,
+    minuteHeightPx: Float,
+) {
+    val lineColor = MemoripTheme.colors.lightGray
+    val strokeDp = MemoripLineWidth.TimeTick
 
     Canvas(modifier = Modifier.fillMaxSize()) {
-        drawLine(
-            color = lineColor,
-            start = Offset(0f, 0f),
-            end = Offset(0f, size.height),
-            strokeWidth = strokeDp.toPx()
-        )
+        var minute = 0
+        while (minute <= totalMinutes) {
+            val y = minute * minuteHeightPx
+
+            drawLine(
+                color = lineColor,
+                start = Offset(0f, y),
+                end = Offset(size.width, y),
+                strokeWidth = strokeDp.toPx()
+            )
+
+            minute += majorIntervalMinutes
+        }
     }
 }
+
 
 
 
