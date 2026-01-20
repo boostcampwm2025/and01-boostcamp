@@ -1,6 +1,7 @@
 package com.andone.memorip.presentation.screen.plan
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -36,7 +37,8 @@ fun PlanScreenContents(modifier: Modifier = Modifier) {
                 menuItems = emptyList(),
                 onMenuItemClick = {},
             )
-        }
+        },
+        contentWindowInsets = WindowInsets()
     ) { innerPadding ->
         Column(modifier = Modifier.padding(paddingValues = innerPadding)) {
             TimeTable(
