@@ -13,6 +13,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -77,7 +78,7 @@ fun GroupDetailScreen(
 }
 
 @Composable
-fun GroupDetailScreenContent(
+private fun GroupDetailScreenContent(
     groupName: String,
     currentPage: Int,
     placesPagingItems: LazyPagingItems<Place>,
@@ -90,7 +91,7 @@ fun GroupDetailScreenContent(
     )
 
     var places by remember { mutableStateOf<List<Place>>(emptyList()) }
-    var mapLoaded by remember { mutableStateOf(false) }
+    var mapLoaded by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(placesPagingItems.itemCount) {
         val newPlaces = mutableListOf<Place>()
@@ -138,7 +139,7 @@ fun GroupDetailScreenContent(
             }
 
             when (currentPage) {
-                 0 -> {
+                0 -> {
                     PlaceListGrid(
                         placePagingItems = placesPagingItems,
                         onPlaceClick = { id -> onAction(GroupDetailAction.OnPlaceClick(id = id)) },
@@ -147,12 +148,12 @@ fun GroupDetailScreenContent(
                     )
                 }
                 1 -> MapTab(
-                    places = places,
-                    markerImages = markerImages,
-                    onPlaceClick = { id -> onAction(GroupDetailAction.OnPlaceClick(id = id)) },
-                    mapLoaded = mapLoaded,
-                    onMapLoaded = { mapLoaded = true },
-                    modifier = Modifier.fillMaxSize()
+                        places = places,
+                        markerImages = markerImages,
+                        onPlaceClick = { id -> onAction(GroupDetailAction.OnPlaceClick(id = id)) },
+                        mapLoaded = mapLoaded,
+                        onMapLoaded = { mapLoaded = true },
+                        modifier = Modifier.fillMaxSize()
                 )
             }
         }
