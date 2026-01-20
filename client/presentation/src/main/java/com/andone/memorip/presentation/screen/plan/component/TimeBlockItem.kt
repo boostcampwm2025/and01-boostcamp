@@ -8,15 +8,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.screen.plan.component.TimeBlockItemConstants.SNAP_MINUTE_UNIT
@@ -26,6 +23,7 @@ import com.andone.memorip.presentation.screen.plan.utill.TimeLayoutEngine
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.theme.memoripShapes
+import com.andone.memorip.presentation.util.toPx
 import kotlin.math.roundToInt
 
 private object TimeBlockItemConstants {
@@ -90,9 +88,7 @@ fun TimeBlockItem(
 fun TimeBlockItemPreview() {
     val density = LocalDensity.current
 
-    val minuteHeightPx = with(density) {
-        MINUTE_HEIGHT_DP.dp.toPx()
-    }
+    val minuteHeightPx = MINUTE_HEIGHT_DP.dp.toPx(density)
 
     val engine = remember {
         TimeLayoutEngine(minuteHeightPx)
