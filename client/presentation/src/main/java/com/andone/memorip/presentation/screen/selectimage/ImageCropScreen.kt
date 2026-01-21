@@ -31,8 +31,8 @@ import com.andone.memorip.presentation.screen.selectimage.ImageCropScreenDimens.
 import com.andone.memorip.presentation.screen.selectimage.ImageCropScreenDimens.touchTarget
 import com.andone.memorip.presentation.screen.selectimage.component.ImageCropBottomBar
 import com.andone.memorip.presentation.screen.selectimage.component.rememberCropImageState
-import com.andone.memorip.presentation.theme.MemoripBorderWidth
 import com.andone.memorip.presentation.theme.MemoripIconSize
+import com.andone.memorip.presentation.theme.MemoripLineWidth
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.BitmapCropUtil.detectEditorGestures
 import com.andone.memorip.presentation.util.toPx
@@ -146,7 +146,7 @@ private fun ImageCropSection(
                 color = drawRectColor,
                 topLeft = cropRect.topLeft,
                 size = cropRect.size,
-                style = Stroke(width = MemoripBorderWidth.Small.toPx())
+                style = Stroke(width = MemoripLineWidth.Small.toPx())
             )
 
             val handles = listOf(

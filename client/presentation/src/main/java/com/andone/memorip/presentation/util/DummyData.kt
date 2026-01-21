@@ -17,6 +17,7 @@ import com.andone.memorip.presentation.model.toUiModel
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceUiModel
 import com.andone.memorip.presentation.placelist.model.RegionUiModel
 import com.andone.memorip.presentation.placelist.model.SelectedRegionState
+import com.andone.memorip.presentation.screen.plan.model.TimeBlock
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.flowOf
 import java.time.LocalDateTime
@@ -307,6 +308,13 @@ object DummyData {
             )
         )
     }
+
+    val timeBlocks = listOf(
+        TimeBlock("0", 0, 60),
+        TimeBlock("1", 9 * 60, 60),
+        TimeBlock("2", 11 * 60 + 30, 90),
+        TimeBlock("3", 15 * 60, 45)
+    )
 
     @Composable
     fun getPlacePagingItems(): LazyPagingItems<Place> {

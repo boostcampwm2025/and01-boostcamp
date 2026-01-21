@@ -19,7 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.screen.grouplist.component.CardSpec.RATIO
 import com.andone.memorip.presentation.theme.LocalMemoripTypography
-import com.andone.memorip.presentation.theme.MemoripBorderWidth
+import com.andone.memorip.presentation.theme.MemoripLineWidth
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.theme.memoripShapes
@@ -39,7 +39,7 @@ fun EmptyGroupPlaceholder(onClick: () -> Unit) {
                 shape = memoripShapes.roundedSmall
             )
             .border(
-                width = MemoripBorderWidth.Thin,
+                width = MemoripLineWidth.Thin,
                 color = MemoripTheme.colors.outline,
                 shape = memoripShapes.roundedSmall
             )

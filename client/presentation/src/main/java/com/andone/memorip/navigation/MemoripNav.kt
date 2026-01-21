@@ -58,7 +58,7 @@ fun MemoripNav(
                 modifier = modifier.padding(paddingValues = innerPadding),
             )
 
-            plan()
+            plan(modifier = modifier.padding(paddingValues = innerPadding))
 
             user(modifier = modifier.padding(paddingValues = innerPadding))
 
