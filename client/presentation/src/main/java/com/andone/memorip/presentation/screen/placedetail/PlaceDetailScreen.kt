@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -207,9 +208,9 @@ private fun PlaceDetailContent(
     val density = LocalDensity.current
     val pagerState = rememberPagerState(pageCount = { place.imageUrls.size })
     val scrollState = rememberScrollState()
-    val statusBarHeightDp = WindowInsets.statusBars
-        .getTop(density = density).toFloat()
-        .toDp(density = density)
+    val statusBarHeightDp = WindowInsets.navigationBars
+        .asPaddingValues()
+        .calculateBottomPadding()
     val maxHeaderHeight = LocalWindowInfo.current.containerDpSize.height - statusBarHeightDp
     val minHeaderHeight = maxHeaderHeight * minHeightRate
     val maxHeaderPx = maxHeaderHeight.toPx(density = density)
