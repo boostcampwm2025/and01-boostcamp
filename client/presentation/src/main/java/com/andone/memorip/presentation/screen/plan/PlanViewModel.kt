@@ -72,7 +72,9 @@ class PlanViewModel @Inject constructor() : ViewModel() {
             }
 
             is PlanAction.DateSelected -> {
-
+                _uiState.update {
+                    it.copy(date = it.date.copy(startDay = action.start, endDay = action.end))
+                }
             }
         }
     }

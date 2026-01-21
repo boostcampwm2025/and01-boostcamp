@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -25,6 +26,7 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.screen.plan.component.DateContextBar
+import com.andone.memorip.presentation.screen.plan.component.DateRangeCalendar
 import com.andone.memorip.presentation.screen.plan.model.PlanAction
 import com.andone.memorip.presentation.screen.plan.model.PlanEvent
 import com.andone.memorip.presentation.util.collectWithLifecycle
@@ -91,6 +93,25 @@ fun PlanScreenContents(
     onAction: (PlanAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var showCalendar by rememberSaveable { mutableStateOf(false) }
+
+    DateContextBar(
+        currentDate = state.date.currentDay,
+        startDate = state.date.startDay,
+        endDate = state.date.endDay,
+        onClick = { showCalendar = true }
+    )
+
+    if (showCalendar) {
+        DateRangeCalendar(
+            onConfirm = { start, end ->
+                showCalendar = false
+                onAction(PlanAction.DateSelected(start, end))
+            },
+            onDismiss = { showCalendar = false }
+        )
+    }
+
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -108,7 +129,7 @@ fun PlanScreenContents(
                 currentDate = state.date.currentDay,
                 startDate = state.date.startDay,
                 endDate = state.date.endDay,
-                onClick = {}
+                onClick = { showCalendar = true }
             )
             DayChipRow(
                 totalDays = state.date.totalDays,

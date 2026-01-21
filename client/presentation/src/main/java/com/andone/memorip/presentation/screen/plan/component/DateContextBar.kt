@@ -62,6 +62,7 @@ fun DateContextBar(
             } else {
                 Text(
                     text = stringResource(R.string.plan_empty_day),
+                    modifier = Modifier.clickable(onClick = onClick),
                     style = MemoripTheme.typography.body2,
                     textDecoration = TextDecoration.Underline
                 )
@@ -69,9 +70,11 @@ fun DateContextBar(
             Spacer(modifier = Modifier.weight(weight = 1f))
             if (isDaySelected) {
                 Text(
-                    text = "${startDate.format(DateFormatters.DATE_RANGE)} ~ ${
+                    text = stringResource(
+                        id = R.string.plan_date_range_format,
+                        startDate.format(DateFormatters.DATE_RANGE),
                         endDate.format(DateFormatters.DATE_RANGE)
-                    }",
+                    ),
                     modifier = Modifier
                         .alignByBaseline()
                         .clickable(onClick = onClick),
