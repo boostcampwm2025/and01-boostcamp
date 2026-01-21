@@ -21,4 +21,26 @@ data class DateUiModel(
         } else {
             0
         }
+
+    fun currentDayFromSelectedDay(selectedDay: Int): LocalDate? {
+        if (startDay == null || selectedDay <= 0) return null
+        return startDay.plusDays((selectedDay - 1).toLong())
+    }
+
+    fun deleteDay(dayIndex: Int): Pair<LocalDate?, LocalDate?> {
+        if (startDay == null || endDay == null) return startDay to endDay
+        if (dayIndex <= 0 || dayIndex > totalDays) return startDay to endDay
+
+        return if (dayIndex == 1) {
+            if (startDay.isEqual(endDay)) {
+                null to null
+            } else {
+                val newStart = startDay.plusDays(1)
+                newStart to endDay
+            }
+        } else {
+            val newEnd = startDay.plusDays((dayIndex - 2).toLong())
+            startDay to newEnd
+        }
+    }
 }

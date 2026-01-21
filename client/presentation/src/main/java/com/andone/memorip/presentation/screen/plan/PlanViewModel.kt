@@ -30,33 +30,49 @@ class PlanViewModel @Inject constructor() : ViewModel() {
 
             PlanAction.AddDay -> {
                 _uiState.update {
-                    it.copy(totalDays = it.totalDays + 1)
+                    it.copy(date = it.date.copy(endDay = it.date.endDay?.plusDays(1)))
                 }
             }
 
             is PlanAction.RemoveDay -> {
-                _uiState.update {
-                    it.copy(
-                        totalDays = it.totalDays - 1,
-                        longClickedDay = null
+                _uiState.update { state ->
+                    val (newStart, newEnd) = state.date.deleteDay(dayIndex = action.day)
+                    state.copy(
+                        date = state.date.copy(
+                            startDay = newStart,
+                            endDay = newEnd,
+                            longClickedDay = null
+                        )
                     )
                 }
             }
 
             is PlanAction.LongClick -> {
-                _uiState.update { it.copy(longClickedDay = action.day) }
+                _uiState.update { it.copy(date = it.date.copy(longClickedDay = action.day)) }
             }
 
             is PlanAction.SelectDay -> {
-                _uiState.update { it.copy(selectedDay = action.day) }
+                _uiState.update {
+                    it.copy(
+                        date = it.date.copy(
+                            currentDay = it.date.currentDayFromSelectedDay(
+                                selectedDay = action.day
+                            )
+                        )
+                    )
+                }
             }
 
             PlanAction.RemoveDayClick -> {
-                _event.trySend(element = PlanEvent.ShowDeleteDayDialog(day = _uiState.value.longClickedDay))
+                _event.trySend(element = PlanEvent.ShowDeleteDayDialog(day = _uiState.value.date.longClickedDay))
             }
 
             PlanAction.RemoveCancel -> {
-                _uiState.update { it.copy(longClickedDay = null) }
+                _uiState.update { it.copy(date = it.date.copy(longClickedDay = null)) }
+            }
+
+            is PlanAction.DateSelected -> {
+
             }
         }
     }
