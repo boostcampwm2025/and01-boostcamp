@@ -120,20 +120,12 @@ fun PlanScreenContents(
         contentWindowInsets = WindowInsets()
     ) { innerPadding ->
         Column(modifier = Modifier.padding(paddingValues = innerPadding)) {
-            DateContextBar(
-                currentDate = state.date.currentDay,
-                startDate = state.date.startDay,
-                endDate = state.date.endDay,
-                onClick = { showCalendar = true }
+            DateSection(
+                state = state,
+                onAction = onAction,
+                showCalendar = { showCalendar = true }
             )
-            DayChipRow(
-                totalDays = state.date.totalDays,
-                selectedDay = state.date.selectedDay,
-                onDaySelected = { onAction(PlanAction.SelectDay(day = it)) },
-                onLongClick = { onAction(PlanAction.LongClick(day = it)) },
-                onAddDayClick = { onAction(PlanAction.AddDay) },
-                longClickedDay = state.date.longClickedDay
-            )
+
             TimeTable(
                 blocks = state.blocks,
                 onBlockMoved = { id, newStartMinute ->
@@ -153,4 +145,26 @@ private fun PlanScreenContentsPreview() {
             onAction = {},
         )
     }
+}
+
+@Composable
+private fun DateSection(
+    state: PlanUiState,
+    onAction: (PlanAction) -> Unit,
+    showCalendar: () -> Unit,
+) {
+    DateContextBar(
+        currentDate = state.date.currentDay,
+        startDate = state.date.startDay,
+        endDate = state.date.endDay,
+        onClick = showCalendar
+    )
+    DayChipRow(
+        totalDays = state.date.totalDays,
+        selectedDay = state.date.selectedDay,
+        onDaySelected = { onAction(PlanAction.SelectDay(day = it)) },
+        onLongClick = { onAction(PlanAction.LongClick(day = it)) },
+        onAddDayClick = { onAction(PlanAction.AddDay) },
+        longClickedDay = state.date.longClickedDay
+    )
 }
