@@ -39,9 +39,7 @@ class PlanViewModel @Inject constructor() : ViewModel() {
                     val (newStart, newEnd) = state.date.deleteDay(dayIndex = action.day)
                     state.copy(
                         date = state.date.copy(
-                            startDay = newStart,
-                            endDay = newEnd,
-                            longClickedDay = null
+                            startDay = newStart, endDay = newEnd, longClickedDay = null
                         )
                     )
                 }
@@ -73,7 +71,11 @@ class PlanViewModel @Inject constructor() : ViewModel() {
 
             is PlanAction.DateSelected -> {
                 _uiState.update {
-                    it.copy(date = it.date.copy(startDay = action.start, endDay = action.end))
+                    it.copy(
+                        date = it.date.copy(
+                            startDay = action.start, endDay = action.end, currentDay = action.start
+                        )
+                    )
                 }
             }
         }
@@ -85,8 +87,7 @@ class PlanViewModel @Inject constructor() : ViewModel() {
                 blocks = it.blocks.map { block ->
                     if (block.id == id) block.copy(startMinute = newStartMinute)
                     else block
-                }
-            )
+                })
         }
     }
 }

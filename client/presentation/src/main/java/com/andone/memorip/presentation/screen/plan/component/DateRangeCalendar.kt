@@ -1,6 +1,7 @@
 package com.andone.memorip.presentation.screen.plan.component
 
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DateRangePicker
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
@@ -11,6 +12,8 @@ import androidx.compose.ui.res.stringResource
 import com.andone.memorip.presentation.util.millisToLocalDate
 import java.time.LocalDate
 import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.theme.MemoripTheme
+import com.andone.memorip.presentation.util.DateFormatters
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -20,7 +23,7 @@ fun DateRangeCalendar(
 ) {
     val state = rememberDateRangePickerState()
 
-    AlertDialog(
+    DatePickerDialog(
         onDismissRequest = onDismiss,
         confirmButton = {
             TextButton(
@@ -32,16 +35,19 @@ fun DateRangeCalendar(
                     onConfirm(start, end)
                 }
             ) {
-                Text(text = stringResource(R.string.plan_confirm))
+                Text(stringResource(R.string.plan_confirm))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text(text = stringResource(R.string.plan_cancel))
+                Text(stringResource(R.string.plan_cancel))
             }
-        },
-        text = {
-            DateRangePicker(state = state)
         }
-    )
+    ) {
+        DateRangePicker(
+            state = state,
+            title = null,
+            headline = null
+        )
+    }
 }
