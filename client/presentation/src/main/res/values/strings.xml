@@ -157,4 +157,11 @@
     <string name="login_add_account">+ 계정을 추가하세요</string>
     <string name="login_show_places">올린 장소들</string>
 
+
+    <!-- PlanScreen -->
+    <string name="plan_time_axis_hour">%1$02d:00</string>
+    <string name="plan_day_format">Day %1$d</string>
+    <string name="plan_add_day">날 추가</string>
+    <string name="plan_default_group">기본 그룹</string>
+
 </resources>

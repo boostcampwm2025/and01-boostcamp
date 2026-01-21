@@ -19,7 +19,7 @@ import androidx.core.net.toUri
 import coil.compose.AsyncImage
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.screen.selectimage.component.ThumbnailItemDimens.imageSize
-import com.andone.memorip.presentation.theme.MemoripBorderWidth
+import com.andone.memorip.presentation.theme.MemoripLineWidth
 import com.andone.memorip.presentation.theme.MemoripTheme
 
 private object ThumbnailItemDimens {
@@ -40,7 +40,7 @@ fun ThumbnailItem(
             .size(imageSize)
             .clip(MemoripTheme.shapes.roundedXSmall)
             .border(
-                width = MemoripBorderWidth.Small,
+                width = MemoripLineWidth.Small,
                 color = borderColor,
                 shape = MemoripTheme.shapes.roundedXSmall
             )
