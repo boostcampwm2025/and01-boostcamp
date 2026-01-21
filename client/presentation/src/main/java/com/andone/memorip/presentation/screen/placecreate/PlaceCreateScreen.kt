@@ -11,8 +11,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material3.Checkbox
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -93,36 +96,41 @@ fun PlaceCreateScreenContent(
     onAction: (PlaceCreateAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Box(modifier = modifier.fillMaxSize()) {
-        Column(
-            modifier = Modifier.padding(MemoripPadding.PaddingXSmall),
-            verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceSmall)
-        ) {
-            ImageRowSection(
-                selectedImages = uiState.images,
-                maxCount = MAX_PICTURE_COUNT,
-                onRemoveImage = { uri -> onAction(PlaceCreateAction.OnImagesRemove(uri)) }
-            )
+    val scrollState = rememberScrollState()
 
-            ContentSection(
-                title = uiState.title,
-                content = uiState.content,
-                isPublic = uiState.isPublic,
-                onTitleChange = { onAction(PlaceCreateAction.OnTitleChange(it)) },
-                onContentChange = { onAction(PlaceCreateAction.OnContentChange(it)) },
-                onCheckedChange = { onAction(PlaceCreateAction.OnPublicChange) }
-            )
+    Column(
+        modifier = modifier
+            .padding(horizontal = MemoripPadding.AppHorizontalPadding)
+            .verticalScroll(scrollState),
+        verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceSmall)
+    ) {
+        ImageRowSection(
+            selectedImages = uiState.images,
+            maxCount = MAX_PICTURE_COUNT,
+            onRemoveImage = { uri -> onAction(PlaceCreateAction.OnImagesRemove(uri)) }
+        )
 
-            SelectSection(
-                category = uiState.category,
-                location = uiState.location,
-                group = uiState.group,
-                onCategoryClick = { onAction(PlaceCreateAction.OnCategoryClick) },
-                onLocationClick = { onAction(PlaceCreateAction.OnLocationClick) },
-                onGroupClick = { onAction(PlaceCreateAction.OnGroupClick) },
-                modifier = Modifier.padding(bottom = MemoripPadding.PaddingMedium)
-            )
-        }
+        ContentSection(
+            title = uiState.title,
+            content = uiState.content,
+            onTitleChange = { onAction(PlaceCreateAction.OnTitleChange(it)) },
+            onContentChange = { onAction(PlaceCreateAction.OnContentChange(it)) },
+        )
+
+        SelectSection(
+            category = uiState.category,
+            location = uiState.location,
+            group = uiState.group,
+            onCategoryClick = { onAction(PlaceCreateAction.OnCategoryClick) },
+            onLocationClick = { onAction(PlaceCreateAction.OnLocationClick) },
+            onGroupClick = { onAction(PlaceCreateAction.OnGroupClick) },
+            modifier = Modifier.padding(bottom = MemoripPadding.PaddingMedium)
+        )
+
+        PublicCheckSection(
+            isPublic = uiState.isPublic,
+            onCheckedChange = { onAction(PlaceCreateAction.OnPublicChange) }
+        )
     }
 }
 
@@ -157,10 +165,8 @@ private fun ImageRowSection(
 private fun ContentSection(
     title: String,
     content: String,
-    isPublic: Boolean,
     onTitleChange: (String) -> Unit,
     onContentChange: (String) -> Unit,
-    onCheckedChange: () -> Unit
 ) {
     Column {
         Text(
@@ -187,21 +193,6 @@ private fun ContentSection(
             onValueChange = onContentChange,
             onClear = { onContentChange("") }
         )
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.End,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = stringResource(R.string.place_create_open_to_everyone),
-                style = MemoripTheme.typography.hint1
-            )
-            Checkbox(
-                checked = isPublic,
-                onCheckedChange = { onCheckedChange() }
-            )
-        }
     }
 }
 
@@ -245,6 +236,47 @@ private fun SelectSection(
             value = categoryValue,
             leadingIcon = painterResource(R.drawable.ic_tag),
             onClick = onCategoryClick
+        )
+    }
+}
+
+@Composable
+private fun PublicCheckSection(
+    isPublic: Boolean,
+    onCheckedChange: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXSmall),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_globe),
+                contentDescription = null,
+                tint = MemoripTheme.colors.gray1
+            )
+            Text(
+                text = stringResource(R.string.place_create_open_to_everyone),
+                color = MemoripTheme.colors.gray1,
+                style = MemoripTheme.typography.hint1
+            )
+        }
+
+        Switch(
+            checked = isPublic,
+            onCheckedChange = { onCheckedChange() },
+            colors = SwitchDefaults.colors(
+                checkedTrackColor = MemoripTheme.colors.primary,
+                checkedBorderColor = MemoripTheme.colors.white,
+                uncheckedThumbColor = MemoripTheme.colors.white,
+                uncheckedTrackColor = MemoripTheme.colors.gray1,
+                uncheckedBorderColor = MemoripTheme.colors.white
+            )
         )
     }
 }
