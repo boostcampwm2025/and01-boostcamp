@@ -1,86 +1,74 @@
 package com.andone.memorip.presentation.component
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
-import com.andone.memorip.presentation.theme.MemoripPadding
-import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.theme.MemoripHeight
+import com.andone.memorip.presentation.theme.MemoripPadding
+import com.andone.memorip.presentation.theme.MemoripTheme
 
 @Composable
 fun MemoripInputBox(
-    label: String,
     value: String,
+    valueMaxLength: Int,
     onValueChange: (String) -> Unit,
     placeholder: String,
-    onClear: () -> Unit,
     modifier: Modifier = Modifier,
+    textStyle: TextStyle = MemoripTheme.typography.bodyMedium,
+    showValueLength: Boolean = true,
     height: Dp = MemoripHeight.TextBoxHigh
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(
-                color = MemoripTheme.colors.primaryContainer,
-                shape = MemoripTheme.shapes.roundedSmall
-            )
-            .padding(start = MemoripPadding.PaddingSmall)
-    ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(
-                text = label,
-                style = MemoripTheme.typography.label1
-            )
-
-            Spacer(modifier = Modifier.weight(1f))
-
-            IconButton(
-                onClick = onClear,
-                enabled = value.isNotEmpty()
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_close),
-                    contentDescription = stringResource(R.string.place_create_clear),
-                    tint = if (value.isNotEmpty()) {
-                        MemoripTheme.colors.black
-                    } else {
-                        MemoripTheme.colors.gray
-                    }
-                )
-            }
-        }
-
+    Column(modifier = modifier.padding(MemoripPadding.PaddingSmall)) {
         BasicTextField(
             value = value,
             onValueChange = onValueChange,
             modifier = Modifier
                 .fillMaxWidth()
                 .heightIn(min = height),
+            textStyle = textStyle,
             decorationBox = { innerTextField ->
                 if (value.isEmpty()) {
                     Text(
                         text = placeholder,
-                        style = MemoripTheme.typography.hint1
+                        style = textStyle,
+                        color = MemoripTheme.colors.gray1
                     )
                 }
                 innerTextField()
             }
         )
+
+        if (showValueLength) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
+                Text(
+                    text = stringResource(
+                        R.string.place_create_value_length_format,
+                        value.length, valueMaxLength
+                    ),
+                    color = MemoripTheme.colors.gray1,
+                    style = MemoripTheme.typography.caption1
+                )
+            }
+        }
     }
 }
 
@@ -90,12 +78,22 @@ private fun MemoripInputBoxPreview() {
     var text by remember { mutableStateOf("test") }
 
     MemoripTheme {
-        MemoripInputBox(
-            label = "내용",
-            value = text,
-            placeholder = "Input",
-            onValueChange = { text = it },
-            onClear = { text = "" }
-        )
+        Column {
+            MemoripInputBox(
+                value = text,
+                valueMaxLength = 30,
+                placeholder = "Input",
+                onValueChange = { text = it },
+                textStyle = MemoripTheme.typography.body2,
+                showValueLength = false,
+                height = MemoripHeight.TextBoxDefault
+            )
+            MemoripInputBox(
+                value = "",
+                valueMaxLength = 300,
+                placeholder = "Input",
+                onValueChange = { text = it },
+            )
+        }
     }
 }

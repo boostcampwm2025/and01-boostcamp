@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
@@ -33,6 +34,8 @@ import com.andone.memorip.presentation.model.LocationUiModel
 import com.andone.memorip.presentation.model.TagUiModel
 import com.andone.memorip.presentation.screen.grouplist.model.GroupUiModel
 import com.andone.memorip.presentation.screen.placecreate.PictureSetting.MAX_PICTURE_COUNT
+import com.andone.memorip.presentation.screen.placecreate.PlaceCreateScreenConstants.CONTENT_MAX_LENGTH
+import com.andone.memorip.presentation.screen.placecreate.PlaceCreateScreenConstants.TITLE_MAX_LENGTH
 import com.andone.memorip.presentation.screen.placecreate.component.ImageCountButton
 import com.andone.memorip.presentation.screen.placecreate.component.LocationMapPreview
 import com.andone.memorip.presentation.screen.placecreate.component.SelectRow
@@ -49,6 +52,11 @@ import com.naver.maps.map.compose.ExperimentalNaverMapApi
 
 private object PictureSetting {
     const val MAX_PICTURE_COUNT = 10
+}
+
+private object PlaceCreateScreenConstants {
+    const val TITLE_MAX_LENGTH = 30
+    const val CONTENT_MAX_LENGTH = 300
 }
 
 @Composable
@@ -167,31 +175,26 @@ private fun ContentSection(
     content: String,
     onTitleChange: (String) -> Unit,
     onContentChange: (String) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    Column {
-        Text(
-            text = stringResource(R.string.place_create_content_title),
-            style = MemoripTheme.typography.title1
-        )
+    Column(modifier = modifier) {
         MemoripInputBox(
-            label = stringResource(R.string.place_create_content_title),
             value = title,
+            valueMaxLength = TITLE_MAX_LENGTH,
             placeholder = stringResource(R.string.place_create_title_input),
             onValueChange = onTitleChange,
-            onClear = { onTitleChange("") },
+            textStyle = MemoripTheme.typography.bodyLarge,
+            showValueLength = false,
             height = MemoripHeight.TextBoxDefault
         )
 
-        Text(
-            text = stringResource(R.string.place_create_content),
-            style = MemoripTheme.typography.title1
-        )
+        HorizontalDivider(color = MemoripTheme.colors.gray1)
+
         MemoripInputBox(
-            label = stringResource(R.string.place_create_content),
             value = content,
+            valueMaxLength = CONTENT_MAX_LENGTH,
             placeholder = stringResource(R.string.place_create_content_input),
             onValueChange = onContentChange,
-            onClear = { onContentChange("") }
         )
     }
 }
