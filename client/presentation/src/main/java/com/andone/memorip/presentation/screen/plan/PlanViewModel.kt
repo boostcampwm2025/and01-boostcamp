@@ -66,13 +66,7 @@ class PlanViewModel @Inject constructor() : ViewModel() {
 
             is PlanAction.SelectDay -> {
                 _uiState.update {
-                    it.copy(
-                        date = it.date.copy(
-                            currentDay = it.date.currentDayFromSelectedDay(
-                                selectedDay = action.day
-                            )
-                        )
-                    )
+                    it.copy(date = it.date.copy(currentDay = it.date.currentDayFromSelectedDay(selectedDay = action.day)))
                 }
             }
 
@@ -86,11 +80,13 @@ class PlanViewModel @Inject constructor() : ViewModel() {
 
             is PlanAction.DateSelected -> {
                 _uiState.update {
-                    it.copy(
-                        date = it.date.copy(
-                            startDay = action.start, endDay = action.end, currentDay = action.start
-                        )
-                    )
+                    it.copy(date = it.date.copy(startDay = action.start, endDay = action.end, currentDay = action.start))
+                }
+            }
+
+            is PlanAction.DayScrolled -> {
+                _uiState.update {
+                    it.copy(date = it.date.copy(currentDay = it.date.currentDayFromSelectedDay(action.day)))
                 }
             }
         }

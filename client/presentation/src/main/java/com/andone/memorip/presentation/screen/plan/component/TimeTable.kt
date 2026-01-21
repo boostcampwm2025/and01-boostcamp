@@ -17,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.LocalDensity
@@ -32,6 +33,9 @@ import com.andone.memorip.presentation.theme.MemoripLineWidth
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
 import com.andone.memorip.presentation.util.toPx
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+
 private object TimeTableConstants {
     val SCROLL_DURATION = 700
 }
@@ -40,19 +44,32 @@ fun TimeTable(
     blocks: List<TimeBlock>,
     totalMinutes: Int,
     currentDay: Int?,
-    onBlockMoved: (String, Int) -> Unit
+    onBlockMoved: (String, Int) -> Unit,
+    onDayScrolled: (Int) -> Unit = {}
 ) {
     val scrollState = rememberScrollState()
     val density = LocalDensity.current
     val minuteHeightPx = MINUTE_HEIGHT_DP.dp.toPx(density)
+    val engine = remember(minuteHeightPx) {
+        TimeLayoutEngine(minuteHeightPx)
+    }
+
+    var isAutoScrolling by remember { mutableStateOf(false) }
+    var lastDayFromScroll by remember { mutableStateOf<Int?>(null) }
 
     LaunchedEffect(currentDay, minuteHeightPx) {
         val day = currentDay ?: return@LaunchedEffect
         if (day <= 0) return@LaunchedEffect
 
+        if (lastDayFromScroll == day) {
+            lastDayFromScroll = null
+            return@LaunchedEffect
+        }
+
         val dayStartMinute = (day - 1) * MINUTES_PER_DAY
         val targetYPx = (dayStartMinute * minuteHeightPx).toInt()
 
+        isAutoScrolling = true
         scrollState.animateScrollTo(
             value = targetYPx,
             animationSpec = tween(
@@ -60,11 +77,22 @@ fun TimeTable(
                 easing = LinearOutSlowInEasing
             )
         )
+        isAutoScrolling = false
     }
 
-
-    val engine = remember(minuteHeightPx) {
-        TimeLayoutEngine(minuteHeightPx)
+    LaunchedEffect(scrollState, minuteHeightPx) {
+        snapshotFlow { scrollState.value }
+            .map { scrollYPx ->
+                val minute = scrollYPx / minuteHeightPx
+                (minute / MINUTES_PER_DAY).toInt() + 1
+            }
+            .distinctUntilChanged()
+            .collect { day ->
+                if (!isAutoScrolling && scrollState.isScrollInProgress && day > 0) {
+                    lastDayFromScroll = day
+                    onDayScrolled(day)
+                }
+            }
     }
 
     Box(
@@ -80,7 +108,7 @@ fun TimeTable(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(height = (MINUTES_PER_DAY * MINUTE_HEIGHT_DP).dp)
+                        .height(height = (totalMinutes * MINUTE_HEIGHT_DP).dp)
                 ) {
                     blocks.forEach { block ->
                         TimeBlockItem(

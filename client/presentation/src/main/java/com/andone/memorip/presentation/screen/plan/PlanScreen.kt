@@ -132,6 +132,9 @@ fun PlanScreenContents(
                 currentDay = state.date.selectedDay,
                 onBlockMoved = { id, newStartMinute ->
                     onAction(PlanAction.BlockMoved(id, newStartMinute))
+                },
+                onDayScrolled = { day ->
+                    onAction(PlanAction.DayScrolled(day))
                 }
             )
         }
