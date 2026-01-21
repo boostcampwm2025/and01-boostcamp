@@ -6,12 +6,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -19,7 +15,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
@@ -29,7 +24,6 @@ import com.andone.memorip.presentation.theme.memoripShapes
 import kotlin.math.roundToInt
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.theme.MemoripAlpha
-import com.andone.memorip.presentation.theme.MemoripIconSize
 
 @Composable
 fun DayChip(
@@ -38,7 +32,6 @@ fun DayChip(
     selected: Boolean = true,
     onClick: (Int) -> Unit = {},
     onLongClick: (Int) -> Unit = {},
-    onDelete: (Int) -> Unit = {},
     isDeleteMode: Boolean = false,
     isDeletedTarget: Boolean = false,
 ) {
@@ -54,8 +47,8 @@ fun DayChip(
                 .clip(shape = memoripShapes.roundedXSmall)
                 .background(backgroundColor)
                 .combinedClickable(
-                    enabled = !isDeleteMode || isDeletedTarget,
-                    onClick = { if (isDeleteMode) onDelete(day) else onClick(day) },
+                    enabled = !isDeleteMode,
+                    onClick = { onClick(day) },
                     onLongClick = { onLongClick(day) }
                 )
                 .alpha(alpha = if (!isDeleteMode || isDeletedTarget) MemoripAlpha.DEFAULT else MemoripAlpha.SCRIM)
@@ -65,19 +58,7 @@ fun DayChip(
                 ),
             contentAlignment = Alignment.Center
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = stringResource(id = R.string.plan_day_format, day))
-
-                if (isDeleteMode && isDeletedTarget) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_outline_delete_24),
-                        contentDescription = stringResource(R.string.plan_delete),
-                        modifier = Modifier
-                            .padding(start = MemoripPadding.PaddingXSmall)
-                            .size(size = MemoripIconSize.IconSizeDefault)
-                    )
-                }
-            }
+            Text(text = stringResource(id = R.string.plan_day_format, day))
         }
     }
 }

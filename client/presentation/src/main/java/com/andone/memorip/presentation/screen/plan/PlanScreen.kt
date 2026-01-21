@@ -92,7 +92,12 @@ fun PlanScreenContents(
     Scaffold(
         modifier = modifier,
         topBar = {
-            PlanTopAppBar(title = stringResource(R.string.plan_default_group))
+            PlanTopAppBar(
+                title = stringResource(R.string.plan_default_group),
+                isDeleteMode = state.longClickedDay != null,
+                onDeleteClick = { onAction(PlanAction.RemoveDayClick) },
+                onDismissClick = {onAction(PlanAction.RemoveCancel)}
+            )
         },
         contentWindowInsets = WindowInsets()
     ) { innerPadding ->
@@ -103,7 +108,6 @@ fun PlanScreenContents(
                 onDaySelected = { onAction(PlanAction.SelectDay(day = it)) },
                 onLongClick = { onAction(PlanAction.LongClick(day = it)) },
                 onAddDayClick = { onAction(PlanAction.AddDay) },
-                onDeleteDayClick = { onAction(PlanAction.RemoveDayClick) },
                 longClickedDay = state.longClickedDay
             )
             TimeTable(
