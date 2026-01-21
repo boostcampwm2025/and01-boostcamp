@@ -9,9 +9,9 @@ import com.andone.memorip.presentation.model.toUiModel
 import com.andone.memorip.presentation.screen.placelist.model.PlaceListAction
 import com.andone.memorip.presentation.screen.placelist.model.PlaceListEvent
 import com.andone.memorip.presentation.screen.placelist.model.PlaceListUiState
-import com.andone.memorip.presentation.placelist.model.RegionUiModel
-import com.andone.memorip.presentation.placelist.model.SelectedRegionState
-import com.andone.memorip.presentation.placelist.model.toUiModel
+import com.andone.memorip.presentation.screen.placelist.model.RegionUiModel
+import com.andone.memorip.presentation.screen.placelist.model.SelectedRegionState
+import com.andone.memorip.presentation.screen.placelist.model.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
@@ -53,14 +53,14 @@ class PlaceListViewModel @Inject constructor(repository: PlaceRepository) : View
             }
 
             is PlaceListAction.OnPlaceClick -> {
-                _event.trySend(element = PlaceListEvent.NavigatePlaceDetail(id = action.id))
+                _event.trySend(element = PlaceListEvent.NavigateToPlaceDetail(id = action.id))
             }
 
             is PlaceListAction.OnQueryChange -> {
                 _uiState.update { it.copy(query = action.query) }
             }
 
-            PlaceListAction.OnPullToRefresh -> {
+            PlaceListAction.OnRefreshPull -> {
                 PlaceListEvent.RefreshPagingData
             }
 
