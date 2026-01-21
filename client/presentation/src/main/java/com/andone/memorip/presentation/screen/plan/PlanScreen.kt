@@ -3,9 +3,15 @@ package com.andone.memorip.presentation.screen.plan
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,13 +34,45 @@ fun PlanScreen(
     viewModel: PlanViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    var deleteTargetDay by remember { mutableStateOf<Int?>(value = null) }
 
     viewModel.event.collectWithLifecycle { event ->
         when (event) {
             PlanEvent.ShowSnackBar -> {
 
             }
+
+            is PlanEvent.ShowDeleteDayDialog -> {
+                deleteTargetDay = event.day
+            }
         }
+    }
+
+    deleteTargetDay?.let { day ->
+        AlertDialog(
+            onDismissRequest = {
+                deleteTargetDay = null
+                viewModel.onAction(action = PlanAction.RemoveCancel)
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    viewModel.onAction(action = PlanAction.RemoveDay(day))
+                    deleteTargetDay = null
+                }) {
+                    Text(stringResource(R.string.plan_delete))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    deleteTargetDay = null
+                    viewModel.onAction(action = PlanAction.RemoveCancel)
+                }) {
+                    Text(stringResource(R.string.plan_cancel))
+                }
+            },
+            title = { Text(stringResource(R.string.plan_day_delete)) },
+            text = { Text(stringResource(R.string.plan_day_deleted_format, day)) }
+        )
     }
 
 
@@ -65,7 +103,7 @@ fun PlanScreenContents(
                 onDaySelected = { onAction(PlanAction.SelectDay(day = it)) },
                 onLongClick = { onAction(PlanAction.LongClick(day = it)) },
                 onAddDayClick = { onAction(PlanAction.AddDay) },
-                onDeleteDayClick = { onAction(PlanAction.RemoveDay(day = it)) },
+                onDeleteDayClick = { onAction(PlanAction.RemoveDayClick) },
                 longClickedDay = state.longClickedDay
             )
             TimeTable(

@@ -163,5 +163,9 @@
     <string name="plan_day_format">Day %1$d</string>
     <string name="plan_add_day">날 추가</string>
     <string name="plan_default_group">기본 그룹</string>
+    <string name="plan_delete">삭제</string>
+    <string name="plan_cancel">취소</string>
+    <string name="plan_day_delete">Day 삭제</string>
+    <string name="plan_day_deleted_format">Day %1$d를 삭제하시겠습니까?</string>
 
 </resources>

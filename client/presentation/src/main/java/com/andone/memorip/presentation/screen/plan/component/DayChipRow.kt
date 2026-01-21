@@ -45,17 +45,18 @@ fun DayChipRow(
                 selected = day == selectedDay,
                 onClick = onDaySelected,
                 onLongClick = onLongClick,
+                onDelete = onDeleteDayClick,
                 isDeleteMode = longClickedDay != null,
                 isDeletedTarget = longClickedDay == day
             )
         }
-        IconButton(onClick = if (longClickedDay != null) ({ onDeleteDayClick(longClickedDay) }) else onAddDayClick) {
-            Icon(
-                painter = if (longClickedDay != null) painterResource(R.drawable.ic_outline_delete_24)
-                else painterResource(R.drawable.ic_outline_add_circle),
-                tint = if (longClickedDay != null) MemoripTheme.colors.error else MemoripTheme.colors.onSurface,
-                contentDescription = stringResource(R.string.plan_add_day),
-            )
+        if (longClickedDay == null) {
+            IconButton(onClick = onAddDayClick) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_outline_add_circle),
+                    contentDescription = stringResource(R.string.plan_add_day),
+                )
+            }
         }
     }
 }

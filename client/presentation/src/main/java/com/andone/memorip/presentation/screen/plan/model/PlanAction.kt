@@ -4,6 +4,9 @@ sealed interface PlanAction {
     data class BlockMoved(val id: String, val newStartMinute: Int) : PlanAction
 
     object AddDay : PlanAction
+    object RemoveDayClick : PlanAction
+
+    object RemoveCancel : PlanAction
 
     data class RemoveDay(val day: Int) : PlanAction
 
