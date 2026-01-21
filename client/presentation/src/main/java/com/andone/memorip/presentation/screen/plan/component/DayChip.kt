@@ -44,7 +44,7 @@ fun DayChip(
     key(isDeleteMode) {
         Box(
             modifier = modifier
-                .clip(shape = memoripShapes.roundedMedium)
+                .clip(shape = memoripShapes.roundedXSmall)
                 .background(backgroundColor)
                 .combinedClickable(
                     enabled = !isDeleteMode,
@@ -58,10 +58,7 @@ fun DayChip(
                 ),
             contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = stringResource(id = R.string.plan_day_format, day),
-                style = MemoripTheme.typography.label1
-            )
+            Text(text = stringResource(id = R.string.plan_day_format, day))
         }
     }
 }
