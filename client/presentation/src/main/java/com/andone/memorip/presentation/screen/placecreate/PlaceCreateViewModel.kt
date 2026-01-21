@@ -107,7 +107,11 @@ class PlaceCreateViewModel @Inject constructor(
 
     private fun createPlace(context: Context) {
         val uiStateValue = _uiState.value
-        if (uiStateValue.group == null || uiStateValue.location == null || uiStateValue.images.isEmpty()) return
+        if (uiStateValue.images.isEmpty()
+            || uiStateValue.location == null
+            || uiStateValue.title.isBlank()
+            || uiStateValue.group == null
+        ) return
 
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
@@ -117,7 +121,7 @@ class PlaceCreateViewModel @Inject constructor(
             placeRepository.createPlace(
                 PlaceCreateRequest(
                     writerId = "019b8be0-1fad-71e9-9da0-bc03ada63862", // TODO: 실제 유저 ID로 변경 필요
-                    groupId = uiStateValue.group.id.toString(),
+                    groupId = uiStateValue.group.id,
                     title = uiStateValue.title,
                     content = uiStateValue.content,
                     tag = uiStateValue.category.map { it.id },

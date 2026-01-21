@@ -16,6 +16,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
@@ -23,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,13 +40,12 @@ import com.andone.memorip.presentation.screen.placecreate.PictureSetting.MAX_PIC
 import com.andone.memorip.presentation.screen.placecreate.PlaceCreateScreenConstants.CONTENT_MAX_LENGTH
 import com.andone.memorip.presentation.screen.placecreate.PlaceCreateScreenConstants.TITLE_MAX_LENGTH
 import com.andone.memorip.presentation.screen.placecreate.component.ImageCountButton
-import com.andone.memorip.presentation.screen.placecreate.component.LocationMapPreview
+import com.andone.memorip.presentation.screen.placecreate.component.PlaceCreateBottomBar
 import com.andone.memorip.presentation.screen.placecreate.component.SelectRow
 import com.andone.memorip.presentation.screen.placecreate.component.SelectedImageItem
 import com.andone.memorip.presentation.screen.placecreate.model.PlaceCreateAction
 import com.andone.memorip.presentation.screen.placecreate.model.PlaceCreateEvent
 import com.andone.memorip.presentation.screen.placecreate.model.PlaceCreateUiState
-import com.andone.memorip.presentation.theme.MemoripHeight
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -105,41 +106,59 @@ fun PlaceCreateScreenContent(
     onAction: (PlaceCreateAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val scrollState = rememberScrollState()
+    val context = LocalContext.current
 
-    Column(
-        modifier = modifier
-            .padding(horizontal = MemoripPadding.AppHorizontalPadding)
-            .verticalScroll(scrollState),
-        verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceSmall)
-    ) {
-        ImageRowSection(
-            selectedImages = uiState.images,
-            maxCount = MAX_PICTURE_COUNT,
-            onRemoveImage = { uri -> onAction(PlaceCreateAction.OnImagesRemove(uri)) }
-        )
+    val scrollState = rememberScrollState(uiState.scrollPosition)
 
-        ContentSection(
-            title = uiState.title,
-            content = uiState.content,
-            onTitleChange = { onAction(PlaceCreateAction.OnTitleChange(it)) },
-            onContentChange = { onAction(PlaceCreateAction.OnContentChange(it)) },
-        )
+    val placeCreateEnable = uiState.images.isNotEmpty() &&
+            uiState.location != null &&
+            uiState.title.isNotBlank() &&
+            uiState.group != null
 
-        SelectSection(
-            category = uiState.category,
-            location = uiState.location,
-            group = uiState.group,
-            onCategoryClick = { onAction(PlaceCreateAction.OnCategoryClick) },
-            onLocationClick = { onAction(PlaceCreateAction.OnLocationClick) },
-            onGroupClick = { onAction(PlaceCreateAction.OnGroupClick) },
-            modifier = Modifier.padding(bottom = MemoripPadding.PaddingMedium)
-        )
 
-        PublicCheckSection(
-            isPublic = uiState.isPublic,
-            onCheckedChange = { onAction(PlaceCreateAction.OnPublicChange) }
-        )
+    Scaffold(
+        bottomBar = {
+            PlaceCreateBottomBar(
+                value = stringResource(R.string.place_create_button_text),
+                onClick = { onAction(PlaceCreateAction.OnPlaceCreate(context)) },
+                enabled = placeCreateEnable
+            )
+        }
+    ) { innerPadding ->
+        Column(
+            modifier = modifier
+                .padding(innerPadding)
+                .padding(horizontal = MemoripPadding.AppHorizontalPadding)
+                .verticalScroll(scrollState),
+            verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXLarge)
+        ) {
+            ImageRowSection(
+                selectedImages = uiState.images,
+                maxCount = MAX_PICTURE_COUNT,
+                onRemoveImage = { uri -> onAction(PlaceCreateAction.OnImagesRemove(uri)) }
+            )
+
+            ContentSection(
+                title = uiState.title,
+                content = uiState.content,
+                onTitleChange = { onAction(PlaceCreateAction.OnTitleChange(it)) },
+                onContentChange = { onAction(PlaceCreateAction.OnContentChange(it)) },
+            )
+
+            SelectSection(
+                category = uiState.category,
+                location = uiState.location,
+                group = uiState.group,
+                onCategoryClick = { onAction(PlaceCreateAction.OnCategoryClick) },
+                onLocationClick = { onAction(PlaceCreateAction.OnLocationClick) },
+                onGroupClick = { onAction(PlaceCreateAction.OnGroupClick) },
+            )
+
+            PublicCheckSection(
+                isPublic = uiState.isPublic,
+                onCheckedChange = { onAction(PlaceCreateAction.OnPublicChange) }
+            )
+        }
     }
 }
 
@@ -212,35 +231,38 @@ private fun SelectSection(
     onGroupClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val categoryValue =
-        category.joinToString(stringResource(R.string.place_create_join_to_string_comma)) { it.name }
-    val locationValue =
-        location?.name?.ifEmpty { stringResource(R.string.place_create_location_placeholder) }
-    val groupValue = group?.name
+    val locationValue = location?.name ?: stringResource(R.string.place_create_location_placeholder)
+    val groupValue = group?.name ?: stringResource(R.string.place_create_group_placeholder)
+    val categoryValue = category
+        .joinToString(stringResource(R.string.place_create_space)) { it.name }
+        .ifEmpty { stringResource(R.string.place_create_tag_placeholder) }
 
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXLarge)
+    ) {
         SelectRow(
             label = stringResource(R.string.place_create_location),
             value = locationValue,
             leadingIcon = painterResource(R.drawable.ic_location_on),
-            onClick = onLocationClick
+            onClick = onLocationClick,
+            location = location
         )
-        LocationMapPreview(
-            location = location,
-            onLocationClick = onLocationClick,
-            modifier = Modifier.weight(1f)
-        )
+
         SelectRow(
             label = stringResource(R.string.place_create_group),
             value = groupValue,
             leadingIcon = painterResource(R.drawable.ic_folder),
-            onClick = onGroupClick
+            onClick = onGroupClick,
+            trailingIcon = painterResource(R.drawable.ic_chevron_forward)
         )
+
         SelectRow(
             label = stringResource(R.string.place_create_tag),
             value = categoryValue,
             leadingIcon = painterResource(R.drawable.ic_tag),
-            onClick = onCategoryClick
+            onClick = onCategoryClick,
+            trailingIcon = painterResource(R.drawable.ic_chevron_forward)
         )
     }
 }

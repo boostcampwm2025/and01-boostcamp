@@ -1,72 +1,123 @@
 package com.andone.memorip.presentation.screen.placecreate.component
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.component.map.ReadOnlyMapView
+import com.andone.memorip.presentation.model.LocationUiModel
+import com.andone.memorip.presentation.screen.placecreate.component.SelectRowConstant.MAP_VIEW_ASPECT_RATIO
 import com.andone.memorip.presentation.theme.MemoripIconSize
+import com.andone.memorip.presentation.theme.MemoripLineWidth
 import com.andone.memorip.presentation.theme.MemoripPadding
+import com.andone.memorip.presentation.theme.MemoripShadow
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
+
+private object SelectRowConstant {
+    const val MAP_VIEW_ASPECT_RATIO = 2f
+}
 
 @Composable
 fun SelectRow(
     label: String,
+    value: String,
+    leadingIcon: Painter,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    value: String? = null,
-    leadingIcon: Painter? = null
+    location: LocationUiModel? = null,
+    trailingIcon: Painter? = null
 ) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick),
-        verticalAlignment = Alignment.CenterVertically
+    Card(
+        onClick = onClick,
+        modifier = modifier,
+        shape = MemoripTheme.shapes.roundedSmall,
+        colors = CardDefaults.cardColors(containerColor = MemoripTheme.colors.gray4),
+        border = BorderStroke(
+            width = MemoripLineWidth.Thin,
+            brush = SolidColor(MemoripTheme.colors.gray2)
+        )
     ) {
+        location?.let {
+            ReadOnlyMapView(
+                location = it,
+                aspectRatio = MAP_VIEW_ASPECT_RATIO
+            )
+        }
 
-        leadingIcon?.let {
-            Icon(
-                painter = it,
-                contentDescription = null,
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(MemoripPadding.PaddingMedium),
+            horizontalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceSmall),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
                 modifier = Modifier
                     .size(MemoripIconSize.IconSizeLarge)
-                    .padding(end = MemoripPadding.PaddingXSmall)
-            )
+                    .shadow(
+                        elevation = MemoripShadow.Small,
+                        shape = CircleShape,
+                    )
+                    .background(MemoripTheme.colors.white, CircleShape),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    painter = leadingIcon,
+                    contentDescription = null,
+                    modifier = Modifier.size(MemoripIconSize.IconSizeMedium),
+                    tint = MemoripTheme.colors.primary
+                )
+            }
+
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXXSmall)
+            ) {
+                Text(
+                    text = label,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = MemoripTheme.typography.bodyLarge,
+                )
+
+                Text(
+                    text = value,
+                    color = MemoripTheme.colors.gray,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = MemoripTheme.typography.bodySmall,
+                )
+            }
+
+            trailingIcon?.let {
+                Icon(
+                    painter = it,
+                    contentDescription = null,
+                    tint = MemoripTheme.colors.gray3
+                )
+            }
         }
-
-        Text(
-            text = label,
-            style = MemoripTheme.typography.bodyLarge,
-        )
-
-        Spacer(modifier = Modifier.width(width = MemoripSpace.SpaceMedium))
-
-        value?.let {
-            Text(
-                text = it,
-                style = MemoripTheme.typography.title2,
-            )
-        }
-
-        Spacer(modifier = Modifier.weight(weight = 1f))
-
-        Icon(
-            painter = painterResource(R.drawable.ic_chevron_forward),
-            contentDescription = null,
-            tint = MemoripTheme.colors.gray
-        )
     }
 }
 
@@ -74,9 +125,10 @@ fun SelectRow(
 @Composable
 private fun SelectRowPreview() {
     SelectRow(
-        label = "카테고리",
+        label = "태그",
+        onClick = { },
         value = "맛집",
         leadingIcon = painterResource(R.drawable.ic_tag),
-        onClick = { }
+        trailingIcon = painterResource(R.drawable.ic_chevron_forward)
     )
 }
