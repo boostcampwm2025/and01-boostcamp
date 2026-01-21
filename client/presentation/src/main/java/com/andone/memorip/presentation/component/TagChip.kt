@@ -13,7 +13,7 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
 
 private object TagChipDimen {
-    val RADIUS: Dp = 50.dp
+    val RADIUS: Dp = 8.dp
     const val BACKGROUND_COLOR_ALPHA: Float = 0.5f
     const val COLOR_LUMINANCE_THRESHOLD: Float = 0.5f
 }

@@ -53,7 +53,7 @@ fun StaticChip(
     modifier: Modifier = Modifier,
     radius: Dp = StaticChipDimen.RADIUS,
     colors: StaticChipColors = StaticChipColors.Default,
-    textStyle: TextStyle = MemoripTheme.typography.label1,
+    textStyle: TextStyle = MemoripTheme.typography.label2,
     elevation: Dp = 0.dp,
     onClick: () -> Unit = {}
 ) {
@@ -73,8 +73,8 @@ fun StaticChip(
         Text(
             text = chipName,
             modifier = Modifier.padding(
-                horizontal = MemoripPadding.PaddingSmall,
-                vertical = MemoripPadding.PaddingXXSmall
+                horizontal = MemoripPadding.PaddingXXSmall,
+                vertical = MemoripPadding.PaddingXXXSmall
             ),
             style = textStyle,
             color = colors.textColor
