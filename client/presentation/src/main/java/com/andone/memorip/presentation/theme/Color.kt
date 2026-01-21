@@ -6,6 +6,8 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 
+val Transparent = Color(0x00000000)
+
 val Primary = Color(0xFF1ABC9C)
 val PrimaryContainer = Color(0xFFF7F7F7)
 val BackGround = Color(0xFFFFFFFF)
@@ -45,7 +47,8 @@ data class MemoripColors(
     val green: Color,
     val black: Color,
     val white: Color,
-    val yellow: Color
+    val yellow: Color,
+    val transparent: Color
 )
 
 internal val lightMemoripColors = MemoripColors(
@@ -63,7 +66,8 @@ internal val lightMemoripColors = MemoripColors(
     green = Green,
     black = Black,
     white = White,
-    yellow = Yellow
+    yellow = Yellow,
+    transparent = Transparent
 )
 
 internal val darkMemoripColors = MemoripColors(
@@ -81,7 +85,8 @@ internal val darkMemoripColors = MemoripColors(
     green = Green,
     black = Black,
     white = White,
-    yellow = Yellow
+    yellow = Yellow,
+    transparent = Transparent
 )
 
 internal val lightMaterialScheme = lightColorScheme(
