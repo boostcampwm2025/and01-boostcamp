@@ -39,29 +39,22 @@ fun ImageMarker(
     borderColor: Color = MemoripTheme.colors.primaryContainer
 ) {
     Box(
-        modifier = modifier.size(
-            width = ImageSize + BorderWidth * 2,
-            height = ImageSize + BorderWidth * 2
-        ),
-        contentAlignment = Alignment.TopCenter
+        modifier = modifier
+            .size(size = ImageSize + BorderWidth * 2)
+            .clip(shape = RoundedCornerShape(size = CornerRadius))
+            .background(borderColor),
+        contentAlignment = Alignment.Center
     ) {
-        Box(
+        Image(
+            bitmap = imageBitmap.asImageBitmap(),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            alignment = Alignment.Center,
             modifier = Modifier
-                .size(size = ImageSize + BorderWidth * 2)
-                .clip(shape = RoundedCornerShape(size = CornerRadius))
-                .background(borderColor),
-            contentAlignment = Alignment.Center
-        ) {
-            Image(
-                bitmap = imageBitmap.asImageBitmap(),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(ImageSize)
-                    .clip(shape = RoundedCornerShape(size = CornerRadius - BorderWidth))
-                    .background(Color.White)
-            )
-        }
+                .size(ImageSize)
+                .clip(shape = RoundedCornerShape(size = CornerRadius - BorderWidth))
+                .background(Color.White)
+        )
     }
 }
 
