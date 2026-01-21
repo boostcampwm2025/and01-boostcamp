@@ -31,16 +31,15 @@ data class DateUiModel(
         if (startDay == null || endDay == null) return startDay to endDay
         if (dayIndex <= 0 || dayIndex > totalDays) return startDay to endDay
 
+        if (startDay.isEqual(endDay)) {
+            return null to null
+        }
+
         return if (dayIndex == 1) {
-            if (startDay.isEqual(endDay)) {
-                null to null
-            } else {
-                val newStart = startDay.plusDays(1)
-                newStart to endDay
-            }
+            val newStart = startDay.plusDays(1)
+            newStart to endDay
         } else {
-            val newEnd = startDay.plusDays((dayIndex - 2).toLong())
-            startDay to newEnd
+            startDay to endDay.minusDays(1)
         }
     }
 }
