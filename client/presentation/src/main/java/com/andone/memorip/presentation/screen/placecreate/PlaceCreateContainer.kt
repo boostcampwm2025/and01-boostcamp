@@ -11,6 +11,7 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -108,7 +109,11 @@ fun PlaceCreateMainStep(
         },
         contentWindowInsets = WindowInsets()
     ) { innerPadding ->
-        Column(modifier = Modifier.padding(innerPadding)) {
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+                .navigationBarsPadding()
+        ) {
             StepProgressBar(
                 currentStep = step.stepIndex ?: TOTAL_STEP_SIZE,
                 totalSteps = TOTAL_STEP_SIZE,
@@ -128,6 +133,7 @@ fun PlaceCreateMainStep(
                 when (step) {
                     PlaceCreateStep.SelectImage -> {
                         SelectImageScreen(
+                            onBack = onBackClick,
                             onImageSelect = { images ->
                                 onImagesChange(images)
                                 onStepChange(PlaceCreateStep.SelectLocation)
