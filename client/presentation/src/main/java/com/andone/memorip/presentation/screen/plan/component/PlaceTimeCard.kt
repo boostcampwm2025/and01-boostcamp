@@ -77,19 +77,19 @@ private fun CompactPlaceTimeCard(
         tonalElevation = PlaceTimeCardDimen.CARD_ELEVATION
     ) {
         Row(
-            modifier = Modifier.padding(MemoripPadding.PaddingMedium),
-            horizontalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceSmall)
+            modifier = Modifier.padding(all = MemoripPadding.PaddingMedium),
+            horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceSmall)
         ) {
             MemoripImage(
                 imageUrl = place.thumbnailImage.url,
                 contentDescription = place.name,
                 modifier = Modifier
                     .size(PlaceTimeCardDimen.COMPACT_IMAGE_SIZE)
-                    .clip(RoundedCornerShape(PlaceTimeCardDimen.IMAGE_CORNER_RADIUS)),
+                    .clip(shape = RoundedCornerShape(size = PlaceTimeCardDimen.IMAGE_CORNER_RADIUS)),
                 contentScale = ContentScale.Crop
             )
 
-            Column(verticalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXXSmall)) {
+            Column(verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXXSmall)) {
                 Text(
                     text = place.name,
                     color = MemoripTheme.colors.black,

@@ -24,8 +24,9 @@ object MemoripSpace {
 }
 
 object MemoripIconSize {
-    val IconSizeXSmall = 12.dp
-    val IconSizeSmall = 16.dp
+    val IconSizeXXSmall = 12.dp
+    val IconSizeXSmall = 16.dp
+    val IconSizeSmall = 20.dp
     val IconSizeMedium = 24.dp
     val IconSizeLarge = 36.dp
     val IconButton = 84.dp
@@ -37,11 +38,18 @@ object MemoripHeight {
     val SearchBoxHeight = 36.dp
 }
 
-object MemoripBorderWidth {
+object MemoripLineWidth {
+
+    val Hairline = 0.5.dp
     val Thin = 1.dp
     val Small = 2.dp
+
     val Medium = 4.dp
     val Strong = 8.dp
+
+    val TimeMajor = 1.2.dp
+    val TimeMinor = 0.7.dp
+    val TimeTick = 0.4.dp
 }
 
 object MemoripShadow {
@@ -55,6 +63,8 @@ object MemoripAlpha {
     const val DISABLED = 0.38f
     const val INACTIVE = 0.6f
     const val SECONDARY = 0.7f
+
+    const val DEFAULT = 1f
 
 
     /* ---------- Overlay ---------- */
@@ -79,4 +89,10 @@ object MemoripAlpha {
 
 object MemoripElevation {
     val ElevationMedium = 4.dp
+}
+
+object MemoripDragConstants{
+    val DRAG_SCALE = 1.05f
+    val DRAG_SHADOW_ELEVATION = 12f
+    val DRAG_Z_INDEX = 1f
 }

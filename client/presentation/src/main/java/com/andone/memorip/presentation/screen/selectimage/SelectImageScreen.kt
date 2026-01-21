@@ -23,6 +23,7 @@ private object SelectImageScreenConstants {
 
 @Composable
 fun SelectImageScreen(
+    onBack: () -> Unit,
     onImageSelect: (List<Uri>) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: SelectImageViewModel = hiltViewModel()
@@ -31,6 +32,7 @@ fun SelectImageScreen(
 
     viewModel.event.collectWithLifecycle { event ->
         when (event) {
+            SelectImageEvent.NavigateBack -> onBack()
             is SelectImageEvent.NavigateToSelectLocation -> onImageSelect(event.images)
         }
     }
@@ -53,6 +55,8 @@ fun SelectImageScreenContent(
             val imageCount = MAX_PICTURE_COUNT - uiState.selectedImages.size
             if (uris.isNotEmpty()) {
                 onAction(SelectImageAction.OnImagesSelect(uris.take(imageCount)))
+            } else {
+                onAction(SelectImageAction.OnBack)
             }
         }
 
@@ -76,5 +80,8 @@ fun SelectImageScreenContent(
 @Preview(showBackground = true)
 @Composable
 fun SelectImageScreenPreview() {
-    SelectImageScreen(onImageSelect = {})
+    SelectImageScreen(
+        onBack = {},
+        onImageSelect = {}
+    )
 }

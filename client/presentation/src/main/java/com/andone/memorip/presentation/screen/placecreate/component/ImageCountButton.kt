@@ -15,7 +15,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.R
-import com.andone.memorip.presentation.theme.MemoripBorderWidth
+import com.andone.memorip.presentation.theme.MemoripLineWidth
 import com.andone.memorip.presentation.theme.MemoripIconSize
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -30,7 +30,7 @@ fun ImageCountButton(
         modifier = modifier
             .size(width = MemoripIconSize.IconButton, height = MemoripIconSize.IconButton)
             .border(
-                width = MemoripBorderWidth.Thin,
+                width = MemoripLineWidth.Thin,
                 color = MemoripTheme.colors.gray,
                 shape = MemoripTheme.shapes.roundedSmall
             ),
