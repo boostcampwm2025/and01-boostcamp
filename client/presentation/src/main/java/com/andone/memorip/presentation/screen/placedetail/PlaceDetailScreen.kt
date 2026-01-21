@@ -1,6 +1,5 @@
 package com.andone.memorip.presentation.screen.placedetail
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
@@ -99,12 +98,10 @@ fun PlaceDetailScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var currentStep by rememberSaveable { mutableStateOf(PlaceDetailScreenStep.PlaceDetail) }
-    var showMap by remember { mutableStateOf(true) }
 
     viewModel.event.collectWithLifecycle { event ->
         when (event) {
             PlaceDetailEvent.NavigateBack -> {
-                showMap = false
                 onNavigateBack()
             }
 
@@ -116,11 +113,6 @@ fun PlaceDetailScreen(
                 currentStep = PlaceDetailScreenStep.PlaceDetail
             }
         }
-    }
-
-    BackHandler {
-        showMap = false
-        onNavigateBack()
     }
 
     AnimatedContent(
@@ -138,7 +130,6 @@ fun PlaceDetailScreen(
             PlaceDetailScreenStep.PlaceDetail -> {
                 PlaceDetailScreen(
                     place = uiState.place,
-                    showMap = showMap,
                     onAction = viewModel::onAction,
                     modifier = modifier
                 )
@@ -165,7 +156,6 @@ fun PlaceDetailScreen(
 @Composable
 private fun PlaceDetailScreen(
     place: PlaceUiModel,
-    showMap: Boolean,
     onAction: (PlaceDetailAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -329,7 +319,6 @@ private fun PlaceDetailScreenPrev() {
     MemoripTheme {
         PlaceDetailScreen(
             place = DummyData.place,
-            showMap = true,
             onAction = {}
         )
     }
