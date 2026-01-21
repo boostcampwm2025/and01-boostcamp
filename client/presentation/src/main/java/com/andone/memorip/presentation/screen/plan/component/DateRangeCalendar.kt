@@ -14,14 +14,24 @@ import java.time.LocalDate
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DateFormatters
+import java.time.ZoneId
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DateRangeCalendar(
+    initialStartDate: LocalDate?,
+    initialEndDate: LocalDate?,
     onConfirm: (LocalDate, LocalDate) -> Unit,
     onDismiss: () -> Unit,
 ) {
-    val state = rememberDateRangePickerState()
+    val state = rememberDateRangePickerState(
+        initialSelectedStartDateMillis = initialStartDate?.atStartOfDay(
+            ZoneId.systemDefault()
+        )?.toInstant()?.toEpochMilli(),
+        initialSelectedEndDateMillis = initialEndDate?.atStartOfDay(
+            ZoneId.systemDefault()
+        )?.toInstant()?.toEpochMilli()
+    )
 
     DatePickerDialog(
         onDismissRequest = onDismiss,

@@ -95,15 +95,10 @@ fun PlanScreenContents(
 ) {
     var showCalendar by rememberSaveable { mutableStateOf(false) }
 
-    DateContextBar(
-        currentDate = state.date.currentDay,
-        startDate = state.date.startDay,
-        endDate = state.date.endDay,
-        onClick = { showCalendar = true }
-    )
-
     if (showCalendar) {
         DateRangeCalendar(
+            initialStartDate = state.date.startDay,
+            initialEndDate = state.date.endDay,
             onConfirm = { start, end ->
                 showCalendar = false
                 onAction(PlanAction.DateSelected(start, end))
