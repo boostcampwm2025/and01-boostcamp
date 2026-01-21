@@ -113,9 +113,3 @@ private fun HorizontalTimeGridLines(
         }
     }
 }
-
-
-
-
-
-
