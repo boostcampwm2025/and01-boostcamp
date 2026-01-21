@@ -19,9 +19,9 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.andone.memorip.presentation.screen.plan.model.PlanUiState
 import com.andone.memorip.presentation.screen.plan.model.TimeBlock
 import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_DAY
+import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_HOUR
 import com.andone.memorip.presentation.screen.plan.utill.MINUTE_HEIGHT_DP
 import com.andone.memorip.presentation.screen.plan.utill.TimeLayoutEngine
 import com.andone.memorip.presentation.theme.MemoripLineWidth
@@ -32,6 +32,7 @@ import com.andone.memorip.presentation.util.toPx
 @Composable
 fun TimeTable(
     blocks: List<TimeBlock>,
+    totalMinutes: Int,
     onBlockMoved: (String, Int) -> Unit
 ) {
     val scrollState = rememberScrollState()
@@ -50,7 +51,7 @@ fun TimeTable(
     ) {
         Box {
             Row {
-                TimeAxis()
+                TimeAxis(totalMinutes = totalMinutes)
 
                 Box(
                     modifier = Modifier
@@ -67,8 +68,7 @@ fun TimeTable(
                 }
             }
             HorizontalTimeGridLines(
-                totalMinutes = MINUTES_PER_DAY,
-                majorIntervalMinutes = 60,
+                totalMinutes = totalMinutes,
                 minuteHeightPx = minuteHeightPx
             )
         }
@@ -84,14 +84,15 @@ private fun TimeTablePreview() {
 
     TimeTable(
         blocks = previewState,
-        onBlockMoved = { id, newStartMinute -> }
+        totalMinutes = MINUTES_PER_DAY,
+        onBlockMoved = { id, newStartMinute -> },
     )
 }
 
 @Composable
 private fun HorizontalTimeGridLines(
-    totalMinutes: Int,
-    majorIntervalMinutes: Int,
+    totalMinutes: Int = MINUTES_PER_DAY,
+    majorIntervalMinutes: Int = MINUTES_PER_HOUR,
     minuteHeightPx: Float,
 ) {
     val lineColor = MemoripTheme.colors.lightGray

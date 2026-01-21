@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.screen.plan.model
 
+import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_DAY
 import java.time.LocalDate
 
 data class DateUiModel(
@@ -21,6 +22,9 @@ data class DateUiModel(
         } else {
             0
         }
+
+    val totalMinutes: Int
+        get() = totalDays * MINUTES_PER_DAY
 
     fun currentDayFromSelectedDay(selectedDay: Int): LocalDate? {
         if (startDay == null || selectedDay <= 0) return null
