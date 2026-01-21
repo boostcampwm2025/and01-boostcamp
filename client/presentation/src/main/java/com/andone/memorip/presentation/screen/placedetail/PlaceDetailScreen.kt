@@ -185,7 +185,6 @@ private fun PlaceDetailScreen(
     ) { innerPadding ->
         PlaceDetailContent(
             place = place,
-            showMap = showMap,
             onImageClick = {
                 imageDialogExpanded = true
                 selectedImageUrl = it
@@ -212,7 +211,6 @@ private fun PlaceDetailScreen(
 @Composable
 private fun PlaceDetailContent(
     place: PlaceUiModel,
-    showMap: Boolean,
     onImageClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -315,7 +313,6 @@ private fun PlaceDetailContent(
                 location = place.locationName,
                 latitude = place.latitude,
                 longitude = place.longitude,
-                showMap = showMap
             )
             PlaceDetailInfoSection(
                 infoString = place.groupName,
@@ -344,7 +341,6 @@ private fun PlaceDetailContentPrev() {
     MemoripTheme {
         PlaceDetailContent(
             place = PlaceUiModel(),
-            showMap = true,
             onImageClick = {},
         )
     }

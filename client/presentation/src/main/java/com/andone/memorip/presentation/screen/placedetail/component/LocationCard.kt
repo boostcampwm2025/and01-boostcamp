@@ -51,7 +51,6 @@ fun LocationCard(
     location: String,
     latitude: Double,
     longitude: Double,
-    showMap: Boolean,
     modifier: Modifier = Modifier
 ) {
     val cameraPosition = rememberCameraPositionState {
@@ -87,28 +86,21 @@ fun LocationCard(
             )
         }
 
-        if (showMap) {
-            NaverMap(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(ratio = LocationCardRatio),
-                cameraPositionState = cameraPosition,
-                uiSettings = MapUiSettings(
-                    isCompassEnabled = false,
-                    isScaleBarEnabled = false,
-                    isLogoClickEnabled = false,
-                    isLocationButtonEnabled = false,
-                    isIndoorLevelPickerEnabled = false,
-                    isZoomControlEnabled = false
-                )
-            ) {
-                Marker(state = markerState)
-            }
-        } else {
-            Box(
-                modifier = Modifier.fillMaxWidth()
-                    .aspectRatio(ratio = LocationCardRatio)
-            ) {}
+        NaverMap(
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(ratio = LocationCardRatio),
+            cameraPositionState = cameraPosition,
+            uiSettings = MapUiSettings(
+                isCompassEnabled = false,
+                isScaleBarEnabled = false,
+                isLogoClickEnabled = false,
+                isLocationButtonEnabled = false,
+                isIndoorLevelPickerEnabled = false,
+                isZoomControlEnabled = false
+            )
+        ) {
+            Marker(state = markerState)
         }
     }
 }
@@ -121,8 +113,7 @@ private fun LocationCardPrev() {
         LocationCard(
             location = place.locationName,
             latitude = place.latitude,
-            longitude = place.longitude,
-            showMap = true,
+            longitude = place.longitude
         )
     }
 }
