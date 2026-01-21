@@ -124,7 +124,10 @@ private fun SelectLocationContent(
         expanded = searchBarExpanded,
         onExpandedChange = { searchBarExpanded = it },
         modifier = modifier,
-        colors = SearchBarDefaults.colors(containerColor = MemoripTheme.colors.white),
+        colors = SearchBarDefaults.colors(
+            containerColor = MemoripTheme.colors.white,
+            dividerColor = MemoripTheme.colors.primary
+        ),
         windowInsets = WindowInsets()
     ) {
         MemoripPagingList(
