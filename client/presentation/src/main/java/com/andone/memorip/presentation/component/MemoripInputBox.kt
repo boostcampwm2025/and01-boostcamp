@@ -4,9 +4,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.layout.height
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,7 +20,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.theme.MemoripHeight
-import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
 
 @Composable
@@ -31,27 +30,30 @@ fun MemoripInputBox(
     placeholder: String,
     modifier: Modifier = Modifier,
     textStyle: TextStyle = MemoripTheme.typography.bodyMedium,
+    singleLine: Boolean = false,
     showValueLength: Boolean = true,
     height: Dp = MemoripHeight.TextBoxHigh
 ) {
-    Column(modifier = modifier.padding(MemoripPadding.PaddingSmall)) {
-        BasicTextField(
+    Column(modifier = modifier) {
+        OutlinedTextField(
             value = value,
-            onValueChange = onValueChange,
+            onValueChange = { if (it.length <= valueMaxLength) onValueChange(it) },
             modifier = Modifier
                 .fillMaxWidth()
-                .heightIn(min = height),
+                .height(height),
             textStyle = textStyle,
-            decorationBox = { innerTextField ->
-                if (value.isEmpty()) {
-                    Text(
-                        text = placeholder,
-                        style = textStyle,
-                        color = MemoripTheme.colors.gray1
-                    )
-                }
-                innerTextField()
-            }
+            placeholder = {
+                Text(
+                    text = placeholder,
+                    style = textStyle,
+                    color = MemoripTheme.colors.gray1
+                )
+            },
+            singleLine = singleLine,
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = MemoripTheme.colors.transparent,
+                unfocusedBorderColor = MemoripTheme.colors.transparent
+            )
         )
 
         if (showValueLength) {
@@ -85,8 +87,9 @@ private fun MemoripInputBoxPreview() {
                 placeholder = "Input",
                 onValueChange = { text = it },
                 textStyle = MemoripTheme.typography.body2,
+                singleLine = true,
                 showValueLength = false,
-                height = MemoripHeight.TextBoxDefault
+                height = OutlinedTextFieldDefaults.MinHeight
             )
             MemoripInputBox(
                 value = "",

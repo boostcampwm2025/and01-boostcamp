@@ -35,7 +35,6 @@ object MemoripIconSize {
 
 object MemoripHeight {
     val TextBoxHigh = 120.dp
-    val TextBoxDefault = 32.dp
     val SearchBoxHeight = 36.dp
 }
 
@@ -92,7 +91,7 @@ object MemoripElevation {
     val ElevationMedium = 4.dp
 }
 
-object MemoripDragConstants{
+object MemoripDragConstants {
     val DRAG_SCALE = 1.05f
     val DRAG_SHADOW_ELEVATION = 12f
     val DRAG_Z_INDEX = 1f

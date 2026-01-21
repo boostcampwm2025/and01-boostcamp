@@ -15,6 +15,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
@@ -184,8 +185,9 @@ private fun ContentSection(
             placeholder = stringResource(R.string.place_create_title_input),
             onValueChange = onTitleChange,
             textStyle = MemoripTheme.typography.bodyLarge,
+            singleLine = true,
             showValueLength = false,
-            height = MemoripHeight.TextBoxDefault
+            height = OutlinedTextFieldDefaults.MinHeight
         )
 
         HorizontalDivider(color = MemoripTheme.colors.gray1)
