@@ -23,12 +23,12 @@ import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.map.ImageMarkerDimen.BorderWidth
 import com.andone.memorip.presentation.component.map.ImageMarkerDimen.CornerRadius
 import com.andone.memorip.presentation.component.map.ImageMarkerDimen.ImageSize
-import com.andone.memorip.presentation.theme.MemoripBorderWidth
+import com.andone.memorip.presentation.theme.MemoripLineWidth
 import com.andone.memorip.presentation.theme.MemoripTheme
 
 private object ImageMarkerDimen {
     val ImageSize: Dp = 64.dp
-    val BorderWidth: Dp = MemoripBorderWidth.Medium
+    val BorderWidth: Dp = MemoripLineWidth.Medium
     val CornerRadius: Dp = 8.dp
 }
 
