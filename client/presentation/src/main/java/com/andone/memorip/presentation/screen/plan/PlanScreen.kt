@@ -70,6 +70,7 @@ fun PlanScreenContents(
             )
             TimeTable(
                 blocks = state.blocks,
+                onBlockAdd = { onAction(PlanAction.ItemDragStart(it)) },
                 onBlockMoved = { id, newStartMinute ->
                     onAction(PlanAction.BlockMoved(id, newStartMinute))
                 }

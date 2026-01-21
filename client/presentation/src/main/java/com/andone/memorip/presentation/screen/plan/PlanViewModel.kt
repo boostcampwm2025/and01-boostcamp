@@ -35,10 +35,12 @@ class PlanViewModel @Inject constructor() : ViewModel() {
             }
 
             is PlanAction.RemoveDay -> {
-                _uiState.update { it.copy(
-                    totalDays = it.totalDays - 1,
-                    longClickedDay = null
-                ) }
+                _uiState.update {
+                    it.copy(
+                        totalDays = it.totalDays - 1,
+                        longClickedDay = null
+                    )
+                }
             }
 
             is PlanAction.LongClick -> {
@@ -47,6 +49,10 @@ class PlanViewModel @Inject constructor() : ViewModel() {
 
             is PlanAction.SelectDay -> {
                 _uiState.update { it.copy(selectedDay = action.day) }
+            }
+
+            is PlanAction.ItemDragStart -> {
+                _uiState.update { it.copy(blocks = uiState.value.blocks + action.item) }
             }
         }
     }

@@ -1,6 +1,5 @@
 package com.andone.memorip.presentation.screen.plan.component
 
-import android.util.Log
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateOffsetAsState
 import androidx.compose.foundation.Canvas
@@ -23,7 +22,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -31,17 +29,17 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
-import androidx.compose.ui.layout.positionOnScreen
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.toSize
+import androidx.compose.ui.zIndex
+import com.andone.memorip.presentation.model.Place
+import com.andone.memorip.presentation.screen.plan.component.TimeBlockItemConstants.SNAP_MINUTE_UNIT
 import com.andone.memorip.presentation.screen.plan.model.TimeBlock
 import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_DAY
 import com.andone.memorip.presentation.screen.plan.utill.MINUTE_HEIGHT_DP
@@ -55,6 +53,7 @@ import com.andone.memorip.presentation.util.toPx
 @Composable
 fun TimeTable(
     blocks: List<TimeBlock>,
+    onBlockAdd: (TimeBlock) -> Unit,
     onBlockMoved: (String, Int) -> Unit
 ) {
     val scrollState = rememberScrollState()
@@ -65,18 +64,18 @@ fun TimeTable(
         TimeLayoutEngine(minuteHeightPx)
     }
 
-    val places = remember{ DummyData.places.toMutableStateList() }
-    var rowBounds by remember{ mutableStateOf<Rect?>(null) }
+    val places = remember { DummyData.places.toMutableStateList() }
     var rowTop by remember { mutableStateOf(0f) }
-    var rowBottom by remember { mutableStateOf(0f) }
+    var timeTabTopPx by remember { mutableStateOf(0f) }
 
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
+    Column(modifier = Modifier.fillMaxSize()) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
+                .onGloballyPositioned {
+                    timeTabTopPx = it.positionInRoot().y
+                }
                 .verticalScroll(scrollState)
                 .background(color = MemoripTheme.colors.background),
         ) {
@@ -107,17 +106,14 @@ fun TimeTable(
         }
         LazyRow(
             modifier = Modifier
-                .height(120.dp)
                 .fillMaxWidth()
-                .padding(horizontal = MemoripPadding.PaddingMedium)
+                .padding(
+                    horizontal = MemoripPadding.PaddingMedium,
+                    vertical = MemoripPadding.PaddingSmall
+                )
                 .onGloballyPositioned { layout ->
                     val position = layout.positionInRoot()
                     rowTop = position.y
-                    rowBottom = position.y + layout.size.height
-                    rowBounds = Rect(
-                        position,
-                        layout.size.toSize()
-                    )
                 },
             horizontalArrangement = Arrangement.spacedBy(MemoripPadding.PaddingXSmall),
             verticalAlignment = Alignment.CenterVertically
@@ -126,11 +122,11 @@ fun TimeTable(
                 items = places,
                 key = { it.id }
             ) { place ->
-                var offset by remember{ mutableStateOf(Offset.Zero) }
-                var originOffset by remember{ mutableStateOf(Offset.Zero) }
-                var isDragging by remember{ mutableStateOf(false) }
-                var itemTopY by remember{ mutableStateOf(0f) }
-                var itemBottomY by remember{ mutableStateOf(0f) }
+                var offset by remember { mutableStateOf(Offset.Zero) }
+                var originOffset by remember { mutableStateOf(Offset.Zero) }
+                var isDragging by remember { mutableStateOf(false) }
+                var itemTopY by remember { mutableStateOf(0f) }
+                var itemBottomY by remember { mutableStateOf(0f) }
                 val animatedOffset by animateOffsetAsState(
                     targetValue = offset
                 )
@@ -173,6 +169,13 @@ fun TimeTable(
                                     if (isRowInside) {
                                         offset = originOffset
                                     } else {
+                                        val absoluteYPx =
+                                            ((itemTopY + itemBottomY) / 2) + offset.y + scrollState.value - timeTabTopPx
+                                        val newStartMinute =
+                                            engine.yPxToStartMinute(absoluteYPx)
+                                        val snappedMinute =
+                                            ((newStartMinute + SNAP_MINUTE_UNIT / 2) / SNAP_MINUTE_UNIT) * SNAP_MINUTE_UNIT
+                                        onBlockAdd(createNewBlock(place, snappedMinute))
                                         places.remove(place)
                                     }
                                 },
@@ -182,7 +185,8 @@ fun TimeTable(
                                     offset += amount
                                 }
                             )
-                        },
+                        }
+                        .zIndex(if (isDragging) 1f else 0f),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
@@ -194,6 +198,14 @@ fun TimeTable(
     }
 }
 
+private fun createNewBlock(place: Place, startMinute: Int): TimeBlock {
+    return TimeBlock(
+        id = place.id,
+        startMinute = startMinute,
+        durationMinute = 60,
+    )
+}
+
 @Preview(showBackground = true)
 @Composable
 private fun TimeTablePreview() {
@@ -203,7 +215,8 @@ private fun TimeTablePreview() {
 
     TimeTable(
         blocks = previewState,
-        onBlockMoved = { id, newStartMinute -> }
+        onBlockMoved = { id, newStartMinute -> },
+        onBlockAdd = { timeBlock -> }
     )
 }
 
