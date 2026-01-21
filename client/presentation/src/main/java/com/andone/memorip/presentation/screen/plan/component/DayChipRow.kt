@@ -27,7 +27,7 @@ private object DayChipRowConstants{
 @Composable
 fun DayChipRow(
     totalDays: Int,
-    selectedDay: Int,
+    selectedDay: Int?,
     modifier: Modifier = Modifier,
     onDaySelected: (Int) -> Unit,
     onLongClick: (Int) -> Unit = {},

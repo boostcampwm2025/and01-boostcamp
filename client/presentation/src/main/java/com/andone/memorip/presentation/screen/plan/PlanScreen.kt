@@ -129,6 +129,7 @@ fun PlanScreenContents(
             TimeTable(
                 blocks = state.blocks,
                 totalMinutes = state.date.totalMinutes,
+                currentDay = state.date.selectedDay,
                 onBlockMoved = { id, newStartMinute ->
                     onAction(PlanAction.BlockMoved(id, newStartMinute))
                 }

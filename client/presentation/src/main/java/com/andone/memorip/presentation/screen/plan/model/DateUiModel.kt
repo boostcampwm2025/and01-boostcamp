@@ -16,11 +16,11 @@ data class DateUiModel(
             0
         }
 
-    val selectedDay: Int
+    val selectedDay: Int?
         get() = if (startDay != null && currentDay != null) {
             currentDay.dayOfYear - startDay.dayOfYear + 1
         } else {
-            0
+            null
         }
 
     val totalMinutes: Int

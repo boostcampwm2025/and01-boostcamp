@@ -1,5 +1,7 @@
 package com.andone.memorip.presentation.screen.plan.component
 
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -10,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -19,6 +22,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.SCROLL_DURATION
 import com.andone.memorip.presentation.screen.plan.model.TimeBlock
 import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_DAY
 import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_HOUR
@@ -28,18 +32,38 @@ import com.andone.memorip.presentation.theme.MemoripLineWidth
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
 import com.andone.memorip.presentation.util.toPx
-
+private object TimeTableConstants {
+    val SCROLL_DURATION = 700
+}
 @Composable
 fun TimeTable(
     blocks: List<TimeBlock>,
     totalMinutes: Int,
+    currentDay: Int?,
     onBlockMoved: (String, Int) -> Unit
 ) {
     val scrollState = rememberScrollState()
     val density = LocalDensity.current
     val minuteHeightPx = MINUTE_HEIGHT_DP.dp.toPx(density)
 
-    val engine = remember {
+    LaunchedEffect(currentDay, minuteHeightPx) {
+        val day = currentDay ?: return@LaunchedEffect
+        if (day <= 0) return@LaunchedEffect
+
+        val dayStartMinute = (day - 1) * MINUTES_PER_DAY
+        val targetYPx = (dayStartMinute * minuteHeightPx).toInt()
+
+        scrollState.animateScrollTo(
+            value = targetYPx,
+            animationSpec = tween(
+                durationMillis = SCROLL_DURATION,
+                easing = LinearOutSlowInEasing
+            )
+        )
+    }
+
+
+    val engine = remember(minuteHeightPx) {
         TimeLayoutEngine(minuteHeightPx)
     }
 
@@ -85,6 +109,7 @@ private fun TimeTablePreview() {
     TimeTable(
         blocks = previewState,
         totalMinutes = MINUTES_PER_DAY,
+        currentDay = 1,
         onBlockMoved = { id, newStartMinute -> },
     )
 }
