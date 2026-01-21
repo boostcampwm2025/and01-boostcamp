@@ -96,27 +96,27 @@ fun PlanScreenContents(
         topBar = {
             PlanTopAppBar(
                 title = stringResource(R.string.plan_default_group),
-                isDeleteMode = state.longClickedDay != null,
+                isDeleteMode = state.date.longClickedDay != null,
                 onDeleteClick = { onAction(PlanAction.RemoveDayClick) },
-                onDismissClick = {onAction(PlanAction.RemoveCancel)}
+                onDismissClick = { onAction(PlanAction.RemoveCancel) }
             )
         },
         contentWindowInsets = WindowInsets()
     ) { innerPadding ->
         Column(modifier = Modifier.padding(paddingValues = innerPadding)) {
             DateContextBar(
-                currentDate = LocalDate.of(2025, 1, 20),
-                startDate = LocalDate.of(2025, 1, 20),
-                endDate = LocalDate.of(2025, 1, 22),
+                currentDate = state.date.currentDay,
+                startDate = state.date.startDay,
+                endDate = state.date.endDay,
                 onClick = {}
             )
             DayChipRow(
-                totalDays = state.totalDays,
-                selectedDay = state.selectedDay,
+                totalDays = state.date.totalDays,
+                selectedDay = state.date.selectedDay,
                 onDaySelected = { onAction(PlanAction.SelectDay(day = it)) },
                 onLongClick = { onAction(PlanAction.LongClick(day = it)) },
                 onAddDayClick = { onAction(PlanAction.AddDay) },
-                longClickedDay = state.longClickedDay
+                longClickedDay = state.date.longClickedDay
             )
             TimeTable(
                 blocks = state.blocks,
