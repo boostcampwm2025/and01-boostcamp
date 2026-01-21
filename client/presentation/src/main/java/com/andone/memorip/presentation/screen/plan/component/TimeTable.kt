@@ -84,7 +84,7 @@ fun TimeTable(
         snapshotFlow { scrollState.value }
             .map { scrollYPx ->
                 val minute = scrollYPx / minuteHeightPx
-                (minute / MINUTES_PER_DAY).toInt() + 1
+                ((minute + 1) / MINUTES_PER_DAY).toInt() + 1
             }
             .distinctUntilChanged()
             .collect { day ->
