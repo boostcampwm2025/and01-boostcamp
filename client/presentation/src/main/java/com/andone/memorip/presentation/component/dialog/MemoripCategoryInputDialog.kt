@@ -19,14 +19,16 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.component.dialog.DialogConstants.LEADING_ICON_SIZE
 import com.andone.memorip.presentation.component.dialog.DialogConstants.MAX_LENGTH
-import com.andone.memorip.presentation.component.dialog.DialogDimens.LEADING_ICON_SIZE
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.rememberColorState
 
 private object DialogConstants {
     val MAX_LENGTH = 6
+    val LEADING_ICON_SIZE = 36.dp
 }
 
 @Composable
@@ -89,9 +91,11 @@ fun MemoripCategoryInputDialog(
             )
         )
         TextField(
-            value = stringResource(R.string.category_dialog_color_format,colorState.inputColor),
+            value = stringResource(R.string.category_dialog_color_format, colorState.inputColor),
             onValueChange = { value ->
-                if (value.length <= MAX_LENGTH + 1) { colorState.updateColor(value) }
+                if (value.length <= MAX_LENGTH + 1) {
+                    colorState.updateColor(value)
+                }
             },
             textStyle = MemoripTheme.typography.body2,
             leadingIcon = {
