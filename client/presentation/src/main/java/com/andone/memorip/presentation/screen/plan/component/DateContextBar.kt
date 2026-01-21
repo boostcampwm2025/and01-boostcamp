@@ -10,89 +10,74 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripShadow
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.theme.memoripShapes
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.Locale
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.theme.MemoripIconSize
 import com.andone.memorip.presentation.util.DateFormatters
+import java.time.format.TextStyle
 
 @Composable
 fun DateContextBar(
-    currentDate: LocalDate,
-    startDate: LocalDate,
-    endDate: LocalDate,
+    currentDate: LocalDate?,
+    startDate: LocalDate?,
+    endDate: LocalDate?,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
 ) {
+    val isDaySelected = currentDate != null && startDate != null && endDate != null
 
     Surface(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick),
+        modifier = modifier.fillMaxWidth(),
         color = MemoripTheme.colors.background,
     ) {
         Row(
-            modifier = Modifier.padding(vertical = MemoripPadding.PaddingSmall),
+            modifier = Modifier
+                .padding(horizontal = MemoripPadding.PaddingMedium),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXXSmall)
         ) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXXSmall),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+
+            if (isDaySelected) {
                 Text(
                     text = currentDate.format(DateFormatters.DAY_SHORT),
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold
+                    style = MemoripTheme.typography.headline2,
+                    modifier = Modifier.alignByBaseline()
                 )
 
                 Text(
-                    text = currentDate.dayOfWeek.getDisplayName(
-                        java.time.format.TextStyle.FULL,
-                        Locale.KOREAN
-                    ),
-                    style = MaterialTheme.typography.labelMedium,
+                    text = currentDate.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.KOREAN),
+                    style = MemoripTheme.typography.bodySmall,
+                    modifier = Modifier.alignByBaseline()
+                )
+            } else {
+                Text(
+                    text = stringResource(R.string.plan_empty_day),
+                    style = MemoripTheme.typography.body2,
+                    textDecoration = TextDecoration.Underline
                 )
             }
-
-            Surface(
-                shape = memoripShapes.roundedMedium,
-                color = MemoripTheme.colors.primaryContainer,
-                shadowElevation = MemoripShadow.Large,
-                contentColor = MemoripTheme.colors.onSurface
-            ) {
-                Row(
-                    modifier = Modifier.padding(
-                        horizontal = MemoripPadding.PaddingSmall,
-                        vertical = MemoripPadding.PaddingXXSmall
-                    ),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXSmall)
-                ) {
-                    Text(
-                        text = "${startDate.format(DateFormatters.DATE_RANGE)} ~ ${
-                            endDate.format(
-                                DateFormatters.DATE_RANGE
-                            )
-                        }",
-                        style = MemoripTheme.typography.label1
-                    )
-
-                    Icon(
-                        painter = painterResource(R.drawable.ic_outline_edit),
-                        contentDescription = null,
-                        modifier = Modifier.size(size = MemoripIconSize.IconSizeXSmall)
-                    )
-                }
+            Spacer(modifier = Modifier.weight(weight = 1f))
+            if (isDaySelected) {
+                Text(
+                    text = "${startDate.format(DateFormatters.DATE_RANGE)} ~ ${
+                        endDate.format(DateFormatters.DATE_RANGE)
+                    }",
+                    modifier = Modifier
+                        .alignByBaseline()
+                        .clickable(onClick = onClick),
+                    style = MemoripTheme.typography.label1,
+                    textDecoration = TextDecoration.Underline
+                )
             }
         }
     }
@@ -102,11 +87,19 @@ fun DateContextBar(
 @Composable
 private fun DateContextBarPreview() {
     MemoripTheme {
-        DateContextBar(
-            currentDate = LocalDate.of(2025, 1, 20),
-            startDate = LocalDate.of(2025, 1, 20),
-            endDate = LocalDate.of(2025, 1, 22),
-            onClick = {}
-        )
+        Column {
+            DateContextBar(
+                currentDate = LocalDate.of(2025, 1, 20),
+                startDate = LocalDate.of(2025, 1, 20),
+                endDate = LocalDate.of(2025, 1, 22),
+                onClick = {}
+            )
+            DateContextBar(
+                currentDate = null,
+                startDate = null,
+                endDate = null,
+                onClick = {}
+            )
+        }
     }
 }

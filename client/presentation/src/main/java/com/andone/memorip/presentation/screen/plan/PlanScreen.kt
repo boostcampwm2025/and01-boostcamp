@@ -24,9 +24,11 @@ import com.andone.memorip.presentation.screen.plan.model.PlanUiState
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
 import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.screen.plan.component.DateContextBar
 import com.andone.memorip.presentation.screen.plan.model.PlanAction
 import com.andone.memorip.presentation.screen.plan.model.PlanEvent
 import com.andone.memorip.presentation.util.collectWithLifecycle
+import java.time.LocalDate
 
 @Composable
 fun PlanScreen(
@@ -102,6 +104,12 @@ fun PlanScreenContents(
         contentWindowInsets = WindowInsets()
     ) { innerPadding ->
         Column(modifier = Modifier.padding(paddingValues = innerPadding)) {
+            DateContextBar(
+                currentDate = LocalDate.of(2025, 1, 20),
+                startDate = LocalDate.of(2025, 1, 20),
+                endDate = LocalDate.of(2025, 1, 22),
+                onClick = {}
+            )
             DayChipRow(
                 totalDays = state.totalDays,
                 selectedDay = state.selectedDay,
