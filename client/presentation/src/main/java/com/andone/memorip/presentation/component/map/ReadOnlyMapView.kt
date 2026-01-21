@@ -20,7 +20,7 @@ import com.naver.maps.map.compose.MarkerState
 import com.naver.maps.map.compose.rememberCameraPositionState
 
 private object ReadOnlyMapViewConstants {
-    const val DEFAULT_ZOOM_LEVEL = 17.0
+    const val DEFAULT_ZOOM_LEVEL = 15.0
     val DEFAULT_MARKER_WIDTH = 24.dp
     val DEFAULT_MARKER_HEIGHT = 32.dp
     const val DEFAULT_LATITUDE = 37.5666805
@@ -30,15 +30,15 @@ private object ReadOnlyMapViewConstants {
 @OptIn(ExperimentalNaverMapApi::class)
 @Composable
 fun ReadOnlyMapView(
-    location: LocationUiModel? = null,
     modifier: Modifier = Modifier,
-    zoomLevel: Double = ReadOnlyMapViewConstants.DEFAULT_ZOOM_LEVEL,
+    location: LocationUiModel? = null,
     aspectRatio: Float? = null,
-    onClick: (() -> Unit)? = null,
+    zoomLevel: Double = ReadOnlyMapViewConstants.DEFAULT_ZOOM_LEVEL,
     properties: MapProperties = MemoripMapDefaults.defaultProperties,
     uiSettings: MapUiSettings = MemoripMapDefaults.readOnlyUiSettings,
     markerWidth: Dp = ReadOnlyMapViewConstants.DEFAULT_MARKER_WIDTH,
-    markerHeight: Dp = ReadOnlyMapViewConstants.DEFAULT_MARKER_HEIGHT
+    markerHeight: Dp = ReadOnlyMapViewConstants.DEFAULT_MARKER_HEIGHT,
+    onClick: (() -> Unit)? = null
 ) {
     val displayLocation = location ?: LocationUiModel(
         latitude = ReadOnlyMapViewConstants.DEFAULT_LATITUDE,
@@ -46,7 +46,7 @@ fun ReadOnlyMapView(
     )
 
     val showMarker = location != null
-    
+
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition(
             LatLng(displayLocation.latitude, displayLocation.longitude),
@@ -88,13 +88,13 @@ fun ReadOnlyMapView(
 private fun ReadOnlyMapViewWithMarkerPreview() {
     MemoripTheme {
         ReadOnlyMapView(
+            modifier = Modifier.fillMaxWidth(),
             location = LocationUiModel(
                 name = "서울시청",
                 address = "서울특별시 중구 세종대로 110",
                 latitude = 37.5666805,
                 longitude = 126.9784147
-            ),
-            modifier = Modifier.fillMaxWidth()
+            )
         )
     }
 }
