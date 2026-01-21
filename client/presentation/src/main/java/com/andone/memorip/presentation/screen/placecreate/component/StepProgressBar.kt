@@ -32,12 +32,7 @@ fun StepProgressBar(
     val inactiveColor = MemoripTheme.colors.lightGray
 
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(
-                vertical = MemoripPadding.PaddingSmall,
-                horizontal = MemoripPadding.PaddingLarge
-            ),
+        modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
@@ -96,7 +91,7 @@ private fun StepCircle(
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
-            .size(MemoripIconSize.IconSizeLarge)
+            .size(MemoripIconSize.IconSizeSmall)
             .background(color = backgroundColor, shape = MemoripTheme.shapes.roundedMax)
     ) {
         if (isCompleted) {
@@ -121,6 +116,7 @@ private fun StepCircle(
 private fun StepProgressBarPreview() {
     StepProgressBar(
         currentStep = 2,
-        totalSteps = 3
+        totalSteps = 3,
+        modifier = Modifier.fillMaxWidth(0.5f)
     )
 }

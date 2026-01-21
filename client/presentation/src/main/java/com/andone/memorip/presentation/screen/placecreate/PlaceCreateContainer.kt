@@ -8,9 +8,13 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -24,6 +28,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.andone.memorip.presentation.model.LocationUiModel
 import com.andone.memorip.presentation.model.TagUiModel
 import com.andone.memorip.presentation.screen.grouplist.model.GroupUiModel
+import com.andone.memorip.presentation.screen.placecreate.PlaceCreateContainerDimens.BAR_WIDTH_FRACTION
 import com.andone.memorip.presentation.screen.placecreate.PlaceCreateNavGraphConstants.TOTAL_STEP_SIZE
 import com.andone.memorip.presentation.screen.placecreate.component.PlaceCreateTopBar
 import com.andone.memorip.presentation.screen.placecreate.component.StepProgressBar
@@ -32,6 +37,11 @@ import com.andone.memorip.presentation.screen.selectcategory.SelectCategoryScree
 import com.andone.memorip.presentation.screen.selectgroup.SelectGroupScreen
 import com.andone.memorip.presentation.screen.selectimage.SelectImageScreen
 import com.andone.memorip.presentation.screen.selectlocation.SelectLocationScreen
+import com.andone.memorip.presentation.theme.MemoripSpace
+
+private object PlaceCreateContainerDimens {
+    const val BAR_WIDTH_FRACTION = 0.4f
+}
 
 private object PlaceCreateNavGraphConstants {
     const val TOTAL_STEP_SIZE = 3
@@ -114,12 +124,18 @@ fun PlaceCreateMainStep(
                 .padding(innerPadding)
                 .navigationBarsPadding()
         ) {
-            StepProgressBar(
-                currentStep = step.stepIndex ?: TOTAL_STEP_SIZE,
-                totalSteps = TOTAL_STEP_SIZE,
-                modifier = Modifier.fillMaxWidth()
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                StepProgressBar(
+                    currentStep = step.stepIndex ?: TOTAL_STEP_SIZE,
+                    totalSteps = TOTAL_STEP_SIZE,
+                    modifier = Modifier.fillMaxWidth(BAR_WIDTH_FRACTION)
+                )
+            }
 
+            Spacer(modifier = Modifier.height(MemoripSpace.SpaceSmall))
             AnimatedContent(
                 targetState = step,
                 transitionSpec = {
