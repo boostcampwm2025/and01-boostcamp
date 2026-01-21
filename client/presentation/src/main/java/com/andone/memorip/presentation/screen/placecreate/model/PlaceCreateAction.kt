@@ -21,6 +21,8 @@ sealed interface PlaceCreateAction {
 
     data class OnImagesRemove(val imageUri: Uri) : PlaceCreateAction
 
+    data class OnScrollPositionChange(val position: Int) : PlaceCreateAction
+
     data class OnPlaceCreate(val context: Context) : PlaceCreateAction
 
     data class OnSnackBarShow(val message: String) : PlaceCreateAction

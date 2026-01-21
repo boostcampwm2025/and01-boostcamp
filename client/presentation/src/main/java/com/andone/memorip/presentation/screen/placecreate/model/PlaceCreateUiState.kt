@@ -12,6 +12,7 @@ data class PlaceCreateUiState(
     val category: List<TagUiModel> = emptyList(),
     val location: LocationUiModel? = null,
     val group: GroupUiModel? = null,
+    val scrollPosition: Int = 0,
     val isPublic: Boolean = false,
     val isLoading: Boolean = false
 )

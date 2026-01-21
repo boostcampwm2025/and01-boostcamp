@@ -75,6 +75,10 @@ class PlaceCreateViewModel @Inject constructor(
                 _uiState.update { it.copy(images = it.images - action.imageUri) }
             }
 
+            is PlaceCreateAction.OnScrollPositionChange -> {
+                _uiState.update { it.copy(scrollPosition = action.position) }
+            }
+
             is PlaceCreateAction.OnPlaceCreate -> {
                 createPlace(action.context)
             }
