@@ -38,7 +38,7 @@ object MemoripMapDefaults {
         isTiltGesturesEnabled = true,
         isRotateGesturesEnabled = true,
         isCompassEnabled = false,
-        isScaleBarEnabled = false,
+        isScaleBarEnabled = true,
         isZoomControlEnabled = true,
         isIndoorLevelPickerEnabled = true,
         isLocationButtonEnabled = true,
