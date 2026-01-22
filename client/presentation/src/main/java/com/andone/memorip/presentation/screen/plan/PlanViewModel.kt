@@ -24,7 +24,7 @@ import javax.inject.Inject
 class PlanViewModel @Inject constructor() : ViewModel() {
     private val _uiState = MutableStateFlow(
         value = PlanUiState(
-            blocks = DummyData.places.map { it.toTimeBlock(dayStart = DummyData.dummyDate.startDay!!.atStartOfDay()) },
+            blocks = DummyData.places.mapNotNull { it.toTimeBlock(dayStart = DummyData.dummyDate.startDay!!.atStartOfDay()) },
             blockUiModels = DummyData.places.associateBy { it.id },
             date = DummyData.dummyDate,
         )
@@ -58,15 +58,22 @@ class PlanViewModel @Inject constructor() : ViewModel() {
                     )
 
                     val adjustedUiModels = adjustBlockUiModelsAfterDayRemoved(
-                        blocks = state.blocks,
                         blockUiModels = state.blockUiModels,
                         removedDayIndex = action.day,
                         date = state.date
                     )
 
-                    val newBlocks = adjustedUiModels.values
-                        .filterIsInstance<Place>()
-                        .map { it.toTimeBlock(dayStart = newStart!!.atStartOfDay()) }
+                    val newBlocks = newStart?.let { day ->
+                        adjustedUiModels.values
+                            .filterIsInstance<Place>()
+                            .mapNotNull { place ->
+                                place.startDateTime?.let {
+                                    place.toTimeBlock(dayStart = day.atStartOfDay())
+                                }
+                            }
+                    } ?: emptyList()
+
+                    android.util.Log.d("갱신된 블락들", "$newBlocks")
 
                     state.copy(
                         date = date.copy(
@@ -181,41 +188,52 @@ class PlanViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun adjustBlockUiModelsAfterDayRemoved(
-        blocks: List<TimeBlock>,
         blockUiModels: Map<String, PlanBlockUiModel>,
         removedDayIndex: Int,
         date: DateUiModel
     ): Map<String, PlanBlockUiModel> {
 
-        val removedIds = blocks
-            .filter { it.day == removedDayIndex }
-            .map { it.id }
-            .toSet()
-
         val removedDate = date.currentDayFromSelectedDay(removedDayIndex)
 
-        return blockUiModels.mapNotNull { (id, uiModel) ->
+        val removedIds = blockUiModels
+            .mapNotNull { (id, uiModel) ->
+                if (uiModel is Place && removedDate != null) {
+                    val date = uiModel.startDateTime?.toLocalDate()
+                    if (date == removedDate) id else null
+                } else null
+            }
+            .toSet()
 
-            if (id in removedIds) return@mapNotNull null
+        return blockUiModels.mapNotNull { (id, uiModel) ->
 
             if (uiModel is Place && removedDate != null) {
                 val place = uiModel
 
-                val startDate = place.startDateTime.toLocalDate()
+                val startDate = place.startDateTime?.toLocalDate()
+                val endDateTime = place.endDateTime
 
-                val adjusted = when {
-                    startDate.isAfter(removedDate) -> place.copy(
+                if (id in removedIds) {
+                    return@mapNotNull id to place.copy(
+                        startDateTime = null,
+                        endDateTime = null
+                    )
+                }
+
+                if (startDate == null || endDateTime == null) {
+                    return@mapNotNull id to place
+                }
+
+                if (startDate.isAfter(removedDate)) {
+                    return@mapNotNull id to place.copy(
                         startDateTime = place.startDateTime.minusDays(1),
                         endDateTime = place.endDateTime.minusDays(1)
                     )
-
-                    else -> place
                 }
 
-                id to adjusted
-            } else {
-                id to uiModel
+                return@mapNotNull id to place
             }
+
+            id to uiModel
         }.toMap()
     }
 }
