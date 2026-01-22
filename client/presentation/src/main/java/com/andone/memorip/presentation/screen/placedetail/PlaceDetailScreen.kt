@@ -273,7 +273,10 @@ private fun PlaceDetailContent(
                             )
                         )
                     )
-                    .padding(all = MemoripPadding.PaddingMedium),
+                    .padding(
+                        horizontal = MemoripPadding.AppHorizontalPadding,
+                        vertical = MemoripPadding.PaddingMedium
+                    ),
                 verticalArrangement = Arrangement.spacedBy(
                     alignment = Alignment.Bottom,
                     space = MemoripSpace.SpaceXSmall
