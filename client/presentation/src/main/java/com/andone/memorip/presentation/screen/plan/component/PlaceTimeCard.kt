@@ -4,6 +4,9 @@ import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -37,8 +40,6 @@ import com.andone.memorip.presentation.util.DummyData
 import kotlinx.collections.immutable.toImmutableList
 
 private object PlaceTimeCardDimen {
-    val COMPACT_IMAGE_SIZE = 112.dp
-    val EXPANDED_IMAGE_HEIGHT = 160.dp
     val CARD_ELEVATION = 2.dp
     val IMAGE_CORNER_RADIUS = 8.dp
 }
@@ -145,7 +146,8 @@ private fun CompactPlaceTimeCard(
                 imageUrl = place.thumbnailImage.url,
                 contentDescription = place.name,
                 modifier = Modifier
-                    .size(PlaceTimeCardDimen.COMPACT_IMAGE_SIZE)
+                    .fillMaxHeight()
+                    .aspectRatio(ratio = 1f)
                     .clip(shape = RoundedCornerShape(size = PlaceTimeCardDimen.IMAGE_CORNER_RADIUS)),
                 contentScale = ContentScale.Crop
             )
@@ -188,14 +190,15 @@ private fun ExpandedPlaceTimeCard(
                 contentDescription = place.name,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(height = PlaceTimeCardDimen.EXPANDED_IMAGE_HEIGHT)
+                    .weight(weight = 1f)
                     .clip(shape = RoundedCornerShape(size = PlaceTimeCardDimen.IMAGE_CORNER_RADIUS)),
                 contentScale = ContentScale.Crop
             )
 
-            Column(modifier = Modifier
-                .padding(horizontal = MemoripPadding.PaddingMedium)
-                .padding(bottom = MemoripPadding.PaddingSmall)
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = MemoripPadding.PaddingMedium)
+                    .padding(bottom = MemoripPadding.PaddingSmall)
             ) {
                 Text(
                     text = place.name,
@@ -205,12 +208,8 @@ private fun ExpandedPlaceTimeCard(
                     style = MemoripTheme.typography.headline2,
                 )
                 TagChipRow(tags = place.categories.toImmutableList())
-                Row(horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceSmall)) {
+                Row(horizontalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceSmall)) {
                     PlaceLocationText(address = place.address)
-//                    PlaceTimeText(
-//                        startDateTime = place.startDateTime,
-//                        endDateTime = place.endDateTime
-//                    )
                 }
             }
         }

@@ -79,53 +79,41 @@ fun TimeBlockItem(
                 shape = memoripShapes.roundedMedium
             )
     ) {
-        Row(
-            modifier = Modifier.fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .pointerInput(startYPx) {
+                    detectDragGesturesAfterLongPress(
+                        onDragStart = {
+                            isDragging = true
+                        },
+                        onDrag = { change, dragAmount ->
+                            change.consume()
+                            dragOffsetY += dragAmount.y
+                        },
+                        onDragEnd = {
+                            val absoluteYPx = startYPx + dragOffsetY
+                            val newStartMinute =
+                                engine.yPxToStartMinute(absoluteYPx)
+                            val snappedMinute =
+                                ((newStartMinute + SNAP_MINUTE_UNIT / 2) / SNAP_MINUTE_UNIT) * SNAP_MINUTE_UNIT
+
+                            dragOffsetY = 0f
+                            isDragging = false
+                            onMoved(block.id, snappedMinute)
+                        },
+                        onDragCancel = {
+                            dragOffsetY = 0f
+                            isDragging = false
+                        }
+                    )
+                },
+            contentAlignment = Alignment.CenterStart
         ) {
-            Box(
-                modifier = Modifier
-                    .weight(weight = 1f)
-                    .fillMaxHeight(),
-                contentAlignment = Alignment.CenterStart
-            ) {
-                content()
-            }
-
-            Icon(
-                painter = painterResource(R.drawable.ic_outline_drag_handle_24),
-                contentDescription = null,
-                modifier = Modifier
-                    .padding(horizontal = MemoripPadding.PaddingSmall)
-                    .pointerInput(startYPx) {
-                        detectDragGesturesAfterLongPress(
-                            onDragStart = {
-                                isDragging = true
-                            },
-                            onDrag = { change, dragAmount ->
-                                change.consume()
-                                dragOffsetY += dragAmount.y
-                            },
-                            onDragEnd = {
-                                val absoluteYPx = startYPx + dragOffsetY
-                                val newStartMinute =
-                                    engine.yPxToStartMinute(absoluteYPx)
-                                val snappedMinute =
-                                    ((newStartMinute + SNAP_MINUTE_UNIT / 2) / SNAP_MINUTE_UNIT) * SNAP_MINUTE_UNIT
-
-                                dragOffsetY = 0f
-                                isDragging = false
-                                onMoved(block.id, snappedMinute)
-                            },
-                            onDragCancel = {
-                                dragOffsetY = 0f
-                                isDragging = false
-                            }
-                        )
-                    }
-            )
+            content()
         }
     }
+
 }
 
 @Preview(showBackground = true)
