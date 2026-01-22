@@ -3,6 +3,7 @@ package com.andone.memorip.presentation.screen.plan.component
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -46,7 +47,7 @@ fun TimeTable(
     totalMinutes: Int,
     currentDay: Int?,
     onDayScrolled: (Int) -> Unit = {},
-    content: @Composable BoxScope.(TimeLayoutEngine) -> Unit
+    content: @Composable (TimeLayoutEngine, ScrollState) -> Unit
 ) {
     val scrollState = rememberScrollState()
     val density = LocalDensity.current
@@ -115,7 +116,7 @@ fun TimeTable(
                         .fillMaxWidth()
                         .height(height = (totalMinutes * MINUTE_HEIGHT_DP).dp)
                 ) {
-                    content(engine)
+                    content(engine,scrollState)
                 }
             }
         }
@@ -128,7 +129,7 @@ private fun TimeTablePreview() {
     TimeTable(
         totalMinutes = MINUTES_PER_DAY,
         currentDay = 1,
-        content = {},
+        content = {_, _ -> },
     )
 }
 

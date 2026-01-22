@@ -134,11 +134,12 @@ fun PlanScreenContents(
                 onDayScrolled = { day ->
                     onAction(PlanAction.DayScrolled(day))
                 }
-            ) { engine ->
+            ) { engine, scrollState ->
                 state.blocks.forEach { block ->
                     TimeBlockItem(
                         block = block,
                         engine = engine,
+                        scrollState = scrollState,
                         onMoved = { id, newStartMinute ->
                             onAction(PlanAction.BlockMoved(id, newStartMinute))
                         }

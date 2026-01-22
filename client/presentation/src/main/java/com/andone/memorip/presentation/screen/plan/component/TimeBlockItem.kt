@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.screen.plan.component
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.layout.Box
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -46,6 +48,7 @@ private object TimeBlockItemConstants {
 fun TimeBlockItem(
     block: TimeBlock,
     engine: TimeLayoutEngine,
+    scrollState: ScrollState,
     onMoved: (String, Int) -> Unit,
     content: @Composable BoxScope.() -> Unit
 ) {
@@ -94,9 +97,7 @@ fun TimeBlockItem(
                         onDragEnd = {
                             val rawYPx = startYPx + dragOffsetY
                             val clampedYPx = rawYPx.coerceAtLeast(minimumValue = 0f)
-
                             val newStartMinute = engine.yPxToStartMinute(clampedYPx)
-
                             val snappedMinute =
                                 ((newStartMinute + SNAP_MINUTE_UNIT / 2) / SNAP_MINUTE_UNIT) * SNAP_MINUTE_UNIT
 
@@ -132,6 +133,7 @@ fun TimeBlockItemPreview() {
     TimeBlockItem(
         block = DummyData.timeBlocks[0],
         engine = engine,
+        scrollState = rememberScrollState(),
         onMoved = { _, _ -> },
         content = {}
     )
