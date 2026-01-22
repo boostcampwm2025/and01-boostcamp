@@ -2,6 +2,7 @@ package com.andone.memorip.presentation.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.luminance
@@ -44,7 +45,7 @@ fun TagChip(
 @Composable
 private fun TagChipPreview() {
     MemoripTheme {
-        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Row {
             DummyData.categories.forEach {
                 TagChip(it)
             }

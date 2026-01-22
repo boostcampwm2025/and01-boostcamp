@@ -54,6 +54,39 @@ fun StaticChip(
     radius: Dp = StaticChipDimen.RADIUS,
     colors: StaticChipColors = StaticChipColors.Default,
     textStyle: TextStyle = MemoripTheme.typography.label2,
+    elevation: Dp = 0.dp
+) {
+    Surface(
+        modifier = modifier,
+        shape = RoundedCornerShape(radius),
+        color = colors.backgroundColor,
+        shadowElevation = elevation,
+        border = colors.borderColor?.let {
+            BorderStroke(
+                width = MemoripLineWidth.Thin,
+                color = it
+            )
+        }
+    ) {
+        Text(
+            text = chipName,
+            modifier = Modifier.padding(
+                horizontal = MemoripPadding.PaddingXXSmall,
+                vertical = MemoripPadding.PaddingXXXSmall
+            ),
+            style = textStyle,
+            color = colors.textColor
+        )
+    }
+}
+
+@Composable
+fun ClickableChip(
+    chipName: String,
+    modifier: Modifier = Modifier,
+    radius: Dp = StaticChipDimen.RADIUS,
+    colors: StaticChipColors = StaticChipColors.Default,
+    textStyle: TextStyle = MemoripTheme.typography.label2,
     elevation: Dp = 0.dp,
     onClick: () -> Unit = {}
 ) {
