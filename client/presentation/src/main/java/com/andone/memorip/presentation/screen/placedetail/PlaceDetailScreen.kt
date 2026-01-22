@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
@@ -149,7 +148,7 @@ fun PlaceDetailScreen(
             PlaceDetailScreenStep.SelectGroup -> {
                 SelectGroupScreen(
                     onGroupSelect = { group ->
-                        viewModel.addPlaceToGroup(group.id.toString())
+                        viewModel.addPlaceToGroup(group.id)
                     },
                     onBackClick = { currentStep = PlaceDetailScreenStep.PlaceDetail },
                     title = stringResource(R.string.select_group_add_to_my_group_title),
@@ -166,8 +165,8 @@ private fun PlaceDetailScreen(
     onAction: (PlaceDetailAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var imageDialogExpanded by remember { mutableStateOf(false) }
-    var selectedImageUrl by remember { mutableStateOf("") }
+    var imageDialogExpanded by remember { mutableStateOf(value = false) }
+    var selectedImageUrl by remember { mutableStateOf(value = "") }
 
     Scaffold(
         modifier = modifier,
@@ -235,7 +234,7 @@ private fun PlaceDetailContent(
             .background(color = MemoripTheme.colors.background)
             .verticalScroll(state = scrollState)
             .padding(bottom = MemoripPadding.PaddingMedium),
-        verticalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXXXLarge)
+        verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXXXLarge)
     ) {
         Box(
             modifier = Modifier
@@ -303,7 +302,7 @@ private fun PlaceDetailContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = MemoripPadding.PaddingMedium),
-            verticalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceMedium)
+            verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceMedium)
         ) {
             ContentCard(content = place.content)
             LocationCard(
