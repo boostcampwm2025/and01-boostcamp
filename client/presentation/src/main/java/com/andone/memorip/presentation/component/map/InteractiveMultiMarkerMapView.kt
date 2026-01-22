@@ -12,13 +12,14 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.geometry.LatLngBounds
 import com.naver.maps.map.CameraUpdate
+import com.naver.maps.map.compose.CameraPositionState
 import com.naver.maps.map.compose.ExperimentalNaverMapApi
 import com.naver.maps.map.compose.MapProperties
 import com.naver.maps.map.compose.MapUiSettings
 import com.naver.maps.map.compose.rememberCameraPositionState
 
 private object InteractiveMapViewDimen {
-    const val BoundsPadding = 200
+    const val BoundsPadding = 400
 }
 
 @OptIn(ExperimentalNaverMapApi::class)
@@ -26,27 +27,28 @@ private object InteractiveMapViewDimen {
 fun InteractiveMultiMarkerMapView(
     initialBounds: List<LatLng>,
     modifier: Modifier = Modifier,
+    cameraPositionState: CameraPositionState? = null,
     properties: MapProperties = MemoripMapDefaults.defaultProperties,
     uiSettings: MapUiSettings = MemoripMapDefaults.interactiveUiSettings,
     contentPadding: PaddingValues = PaddingValues(0.dp),
     onMapLoaded: () -> Unit = {},
     content: @Composable () -> Unit = {}
 ) {
-    val cameraPositionState = rememberCameraPositionState()
+    val internalCameraState = rememberCameraPositionState()
+    val cameraState = cameraPositionState ?: internalCameraState
 
     LaunchedEffect(initialBounds) {
-        if (initialBounds.isNotEmpty()) {
+        if (initialBounds.isNotEmpty() && cameraPositionState == null) {
             val bounds = LatLngBounds.Builder().apply {
                 initialBounds.forEach { include(it) }
             }.build()
             val cameraUpdate = CameraUpdate.fitBounds(bounds, BoundsPadding)
-            cameraPositionState.move(cameraUpdate)
+            internalCameraState.move(cameraUpdate)
         }
     }
-
     MemoripNaverMap(
         modifier = modifier,
-        cameraPositionState = cameraPositionState,
+        cameraPositionState = cameraState,
         properties = properties,
         uiSettings = uiSettings,
         contentPadding = contentPadding,
