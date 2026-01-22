@@ -17,9 +17,11 @@ import com.andone.memorip.presentation.model.toUiModel
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceUiModel
 import com.andone.memorip.presentation.placelist.model.RegionUiModel
 import com.andone.memorip.presentation.placelist.model.SelectedRegionState
+import com.andone.memorip.presentation.screen.plan.model.DateUiModel
 import com.andone.memorip.presentation.screen.plan.model.TimeBlock
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.flowOf
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.UUID
 import kotlin.random.Random
@@ -114,7 +116,7 @@ object DummyData {
                     127.027610,
                     "강남구, 서울",
                     LocalDateTime.of(2025, 12, 1, 9, 0),
-                    LocalDateTime.of(2025, 12, 1, 9, 30),
+                    LocalDateTime.of(2025, 12, 1, 10, 0),
                     0
                 )
             )
@@ -137,8 +139,8 @@ object DummyData {
                     37.517305,
                     127.047502,
                     "성수동, 서울",
-                    LocalDateTime.of(2025, 12, 1, 18, 0),
-                    LocalDateTime.of(2025, 12, 1, 20, 0),
+                    LocalDateTime.of(2025, 12, 1, 19, 0),
+                    LocalDateTime.of(2025, 12, 1, 21, 0),
                     2
                 )
             )
@@ -149,8 +151,8 @@ object DummyData {
                     37.505228,
                     127.050324,
                     "왕십리, 서울",
-                    LocalDateTime.of(2025, 12, 1, 20, 30),
-                    LocalDateTime.of(2025, 12, 1, 23, 0),
+                    LocalDateTime.of(2025, 12, 1, 21, 0),
+                    LocalDateTime.of(2025, 12, 1, 23, 30),
                     0
                 )
             )
@@ -173,13 +175,32 @@ object DummyData {
                     37.495592,
                     127.028747,
                     "강남구, 서울",
-                    LocalDateTime.of(2025, 12, 1, 13, 0),
-                    LocalDateTime.of(2025, 12, 1, 15, 30),
+                    LocalDateTime.of(2025, 12, 1, 16, 0),
+                    LocalDateTime.of(2025, 12, 1, 18, 30),
                     2
+                )
+            )
+            add(
+                createPlace(
+                    "6",
+                    "KFC",
+                    37.495592,
+                    127.028747,
+                    "경기도, 광명",
+                    LocalDateTime.of(2025, 12, 2, 13, 0),
+                    LocalDateTime.of(2025, 12, 2, 15, 30),
+                    1
                 )
             )
         }
     }
+
+    val dummyDate =
+        DateUiModel(
+            startDay = LocalDate.of(2025, 12, 1),
+            endDay = LocalDate.of(2025, 12, 2),
+            currentDay = LocalDate.of(2025, 12, 1)
+        )
 
     private fun createPlaceImages(placeId: String, count: Int = 50): List<ImageItem> {
         return List(count) { imageIndex ->

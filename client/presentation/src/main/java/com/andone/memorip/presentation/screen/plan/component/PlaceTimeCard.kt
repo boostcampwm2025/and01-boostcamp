@@ -14,6 +14,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -39,7 +40,8 @@ private object PlaceTimeCardDimen {
 }
 
 private object PlaceTimeCardConstants {
-    const val EXPANDED_LAYOUT_THRESHOLD_MINUTES = 90
+    const val COMPACT_LAYOUT_THRESHOLD_MINUTES = 120
+    const val EXPANDED_LAYOUT_THRESHOLD_MINUTES = 200
 }
 
 @Composable
@@ -48,20 +50,69 @@ fun PlaceTimeCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    if (place.durationMinutes < PlaceTimeCardConstants.EXPANDED_LAYOUT_THRESHOLD_MINUTES) {
-        CompactPlaceTimeCard(
-            place = place,
-            onClick = onClick,
-            modifier = modifier
-        )
-    } else {
-        ExpandedPlaceTimeCard(
-            place = place,
-            onClick = onClick,
-            modifier = modifier
-        )
+    when {
+        place.durationMinutes < PlaceTimeCardConstants.COMPACT_LAYOUT_THRESHOLD_MINUTES -> {
+            TextPlaceTimeCard(
+                place = place,
+                onClick = onClick,
+                modifier = modifier
+            )
+        }
+
+        place.durationMinutes < PlaceTimeCardConstants.EXPANDED_LAYOUT_THRESHOLD_MINUTES -> {
+            CompactPlaceTimeCard(
+                place = place,
+                onClick = onClick,
+                modifier = modifier
+            )
+        }
+
+        else -> {
+            ExpandedPlaceTimeCard(
+                place = place,
+                onClick = onClick,
+                modifier = modifier
+            )
+        }
     }
 }
+
+@Composable
+private fun TextPlaceTimeCard(
+    place: Place,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        onClick = onClick,
+        modifier = modifier.fillMaxWidth(),
+        shape = MemoripTheme.shapes.roundedMedium,
+        color = MemoripTheme.colors.primaryContainer,
+        tonalElevation = PlaceTimeCardDimen.CARD_ELEVATION,
+        contentColor = MemoripTheme.colors.onSurface,
+    ) {
+        Row(
+            modifier = Modifier.padding(MemoripPadding.PaddingMedium),
+            horizontalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceSmall),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = place.name,
+                modifier = Modifier.alignByBaseline(),
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1,
+                style = MemoripTheme.typography.title1,
+            )
+            Text(
+                text = place.address,
+                modifier = Modifier.alignByBaseline(),
+                style = MemoripTheme.typography.bodySmall,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
+    }
+}
+
 
 @Composable
 private fun CompactPlaceTimeCard(
@@ -73,12 +124,13 @@ private fun CompactPlaceTimeCard(
         onClick = onClick,
         modifier = modifier.fillMaxWidth(),
         shape = MemoripTheme.shapes.roundedMedium,
-        color = MemoripTheme.colors.white,
+        color = MemoripTheme.colors.primaryContainer,
         tonalElevation = PlaceTimeCardDimen.CARD_ELEVATION
     ) {
         Row(
             modifier = Modifier.padding(all = MemoripPadding.PaddingMedium),
-            horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceSmall)
+            horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceSmall),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             MemoripImage(
                 imageUrl = place.thumbnailImage.url,
@@ -97,7 +149,7 @@ private fun CompactPlaceTimeCard(
                     maxLines = 1,
                     style = MemoripTheme.typography.headline2
                 )
-                TagChipRow(tags = place.categories.toImmutableList())
+//                TagChipRow(tags = place.categories.toImmutableList())
                 PlaceLocationText(address = place.address)
                 PlaceTimeText(
                     startDateTime = place.startDateTime,
@@ -118,7 +170,7 @@ private fun ExpandedPlaceTimeCard(
         onClick = onClick,
         modifier = modifier.fillMaxWidth(),
         shape = MemoripTheme.shapes.roundedMedium,
-        color = MemoripTheme.colors.white,
+        color = MemoripTheme.colors.primaryContainer,
         tonalElevation = PlaceTimeCardDimen.CARD_ELEVATION
     ) {
         Column {

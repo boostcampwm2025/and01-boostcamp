@@ -2,12 +2,13 @@ package com.andone.memorip.presentation.model
 
 import androidx.compose.runtime.Immutable
 import com.andone.memorip.domain.model.PlaceListItem
+import com.andone.memorip.presentation.screen.plan.model.TimeBlock
 import java.time.Duration
 import java.time.LocalDateTime
 
 @Immutable
 data class Place(
-    val id: String,
+    override val id: String,
     val name: String,
     val latitude: Double,
     val longitude: Double,
@@ -17,7 +18,7 @@ data class Place(
     val categories: List<TagUiModel>,
     val thumbnailImage: ImageItem,
     val images: List<ImageItem>
-) {
+) : PlanBlockUiModel {
     val durationMinutes: Long
         get() = Duration.between(startDateTime, endDateTime).toMinutes()
 
@@ -58,3 +59,17 @@ fun PlaceListItem.toUiModel(): Place =
         ),
         images = emptyList()
     )
+
+fun Place.toTimeBlock(dayStart: LocalDateTime): TimeBlock {
+    val startMinute =
+        Duration.between(dayStart, startDateTime).toMinutes().toInt()
+
+    val durationMinute = durationMinutes.toInt()
+
+    return TimeBlock(
+        id = id,
+        startMinute = startMinute,
+        durationMinute = durationMinute,
+        column = 0
+    )
+}

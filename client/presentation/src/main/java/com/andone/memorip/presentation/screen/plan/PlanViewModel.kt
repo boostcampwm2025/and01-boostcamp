@@ -1,6 +1,7 @@
 package com.andone.memorip.presentation.screen.plan
 
 import androidx.lifecycle.ViewModel
+import com.andone.memorip.presentation.model.toTimeBlock
 import com.andone.memorip.presentation.screen.plan.model.DateUiModel
 import com.andone.memorip.presentation.screen.plan.model.PlanAction
 import com.andone.memorip.presentation.screen.plan.model.PlanEvent
@@ -19,7 +20,11 @@ import javax.inject.Inject
 @HiltViewModel
 class PlanViewModel @Inject constructor() : ViewModel() {
 
-    val _uiState = MutableStateFlow(value = PlanUiState(blocks = DummyData.timeBlocks))
+    val _uiState = MutableStateFlow(value = PlanUiState(
+        blocks = DummyData.places.map { it.toTimeBlock(dayStart = DummyData.dummyDate.startDay!!.atStartOfDay()) },
+        blockUiModels = DummyData.places.associateBy { it.id },
+        date = DummyData.dummyDate,
+    ))
     val uiState = _uiState.asStateFlow()
     private val _event = Channel<PlanEvent>(capacity = BUFFERED)
     val event = _event.receiveAsFlow()

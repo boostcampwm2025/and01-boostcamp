@@ -3,6 +3,7 @@ package com.andone.memorip.presentation.screen.plan.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -46,6 +47,7 @@ fun TimeBlockItem(
     block: TimeBlock,
     engine: TimeLayoutEngine,
     onMoved: (String, Int) -> Unit,
+    content: @Composable BoxScope.() -> Unit
 ) {
     var dragOffsetY by remember { mutableFloatStateOf(value = 0f) }
     val startYPx = engine.blockStartYPx(block)
@@ -60,8 +62,8 @@ fun TimeBlockItem(
                 )
             }
             .fillMaxWidth()
-            .height((block.durationMinute * MINUTE_HEIGHT_DP).dp)
-            .padding(MemoripPadding.PaddingSmall)
+            .height(height = (block.durationMinute * MINUTE_HEIGHT_DP).dp)
+            .padding(MemoripPadding.PaddingXSmall)
             .graphicsLayer {
                 if (isDragging) {
                     scaleX = DRAG_SCALE
@@ -83,9 +85,12 @@ fun TimeBlockItem(
         ) {
             Box(
                 modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight()
-            ) {}
+                    .weight(weight = 1f)
+                    .fillMaxHeight(),
+                contentAlignment = Alignment.CenterStart
+            ) {
+                content()
+            }
 
             Icon(
                 painter = painterResource(R.drawable.ic_outline_drag_handle_24),
@@ -137,6 +142,7 @@ fun TimeBlockItemPreview() {
     TimeBlockItem(
         block = DummyData.timeBlocks[0],
         engine = engine,
-        onMoved = { _, _ -> }
+        onMoved = { _, _ -> },
+        content = {}
     )
 }

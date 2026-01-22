@@ -5,6 +5,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -39,13 +40,13 @@ import kotlinx.coroutines.flow.map
 private object TimeTableConstants {
     val SCROLL_DURATION = 700
 }
+
 @Composable
 fun TimeTable(
-    blocks: List<TimeBlock>,
     totalMinutes: Int,
     currentDay: Int?,
-    onBlockMoved: (String, Int) -> Unit,
-    onDayScrolled: (Int) -> Unit = {}
+    onDayScrolled: (Int) -> Unit = {},
+    content: @Composable BoxScope.(TimeLayoutEngine) -> Unit
 ) {
     val scrollState = rememberScrollState()
     val density = LocalDensity.current
@@ -102,6 +103,10 @@ fun TimeTable(
             .background(color = MemoripTheme.colors.background),
     ) {
         Box {
+            HorizontalTimeGridLines(
+                totalMinutes = totalMinutes,
+                minuteHeightPx = minuteHeightPx
+            )
             Row {
                 TimeAxis(totalMinutes = totalMinutes)
 
@@ -110,19 +115,9 @@ fun TimeTable(
                         .fillMaxWidth()
                         .height(height = (totalMinutes * MINUTE_HEIGHT_DP).dp)
                 ) {
-                    blocks.forEach { block ->
-                        TimeBlockItem(
-                            block = block,
-                            engine = engine,
-                            onMoved = onBlockMoved
-                        )
-                    }
+                    content(engine)
                 }
             }
-            HorizontalTimeGridLines(
-                totalMinutes = totalMinutes,
-                minuteHeightPx = minuteHeightPx
-            )
         }
     }
 }
@@ -130,15 +125,10 @@ fun TimeTable(
 @Preview(showBackground = true)
 @Composable
 private fun TimeTablePreview() {
-    var previewState by remember {
-        mutableStateOf(value = DummyData.timeBlocks)
-    }
-
     TimeTable(
-        blocks = previewState,
         totalMinutes = MINUTES_PER_DAY,
         currentDay = 1,
-        onBlockMoved = { id, newStartMinute -> },
+        content = {},
     )
 }
 
@@ -152,7 +142,7 @@ private fun HorizontalTimeGridLines(
     val strokeDp = MemoripLineWidth.TimeTick
 
     Canvas(modifier = Modifier.fillMaxSize()) {
-        var minute = 0
+        var minute = MINUTES_PER_HOUR
         while (minute <= totalMinutes) {
             val y = minute * minuteHeightPx
 
