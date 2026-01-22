@@ -61,7 +61,7 @@ class PlaceListViewModel @Inject constructor(repository: PlaceRepository) : View
             }
 
             PlaceListAction.OnRefreshPull -> {
-                PlaceListEvent.RefreshPagingData
+                _event.trySend(element = PlaceListEvent.RefreshPagingData)
             }
 
             is PlaceListAction.OnRegionChipClick -> {

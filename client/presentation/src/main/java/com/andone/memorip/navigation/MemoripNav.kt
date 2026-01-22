@@ -62,7 +62,10 @@ fun MemoripNav(
 
             user(modifier = modifier.padding(paddingValues = innerPadding))
 
-            placeCreate(onBackClick = navigator::popBackStack)
+            placeCreate(
+                onNavigateToHome = { navigator.navigateToTab(MainBottomBarRoute.PLACE_LIST) },
+                onBackClick = navigator::popBackStack
+            )
 
             groupDetail(
                 onNavigateBack = navigator::popBackStack,
