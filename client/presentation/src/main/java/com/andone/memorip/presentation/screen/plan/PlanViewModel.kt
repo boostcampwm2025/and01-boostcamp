@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.andone.memorip.presentation.screen.plan.model.DateUiModel
 import com.andone.memorip.presentation.screen.plan.model.PlanAction
 import com.andone.memorip.presentation.screen.plan.model.PlanEvent
+import com.andone.memorip.presentation.screen.plan.model.PlanEvent.*
 import com.andone.memorip.presentation.screen.plan.model.PlanUiState
 import com.andone.memorip.presentation.util.DummyData
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PlanViewModel @Inject constructor() : ViewModel() {
 
-    val _uiState = MutableStateFlow(value = PlanUiState(blocks = DummyData.timeBlocks))
+    private val _uiState = MutableStateFlow(value = PlanUiState(blocks = DummyData.timeBlocks))
     val uiState = _uiState.asStateFlow()
     private val _event = Channel<PlanEvent>(capacity = BUFFERED)
     val event = _event.receiveAsFlow()
@@ -57,12 +58,6 @@ class PlanViewModel @Inject constructor() : ViewModel() {
                         )
                     )
                 }
-                _uiState.update {
-                    it.copy(
-                        totalDays = it.totalDays - 1,
-                        longClickedDay = null
-                    )
-                }
             }
 
 
@@ -77,7 +72,7 @@ class PlanViewModel @Inject constructor() : ViewModel() {
             }
 
             PlanAction.RemoveDayClick -> {
-                _event.trySend(element = PlanEvent.ShowDeleteDayDialog(day = _uiState.value.date.longClickedDay))
+                _event.trySend(element = ShowDeleteDayDialog(day = _uiState.value.date.longClickedDay))
             }
 
             PlanAction.RemoveCancel -> {
