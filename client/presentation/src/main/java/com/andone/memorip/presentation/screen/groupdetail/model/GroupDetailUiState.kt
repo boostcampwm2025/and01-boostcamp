@@ -7,4 +7,6 @@ data class GroupDetailUiState(
     var selectedPlace: Place? = null,
     val currentTab: Int = 0,
     val expanded: Boolean = false,
+    val mapSelectedPlace: Place? = null,
+    val mapBottomSheetContent: MapBottomSheetStep = MapBottomSheetStep.PlaceList,
 )
