@@ -1,11 +1,15 @@
 package com.andone.memorip.presentation.screen.plan.model
 
+import com.andone.memorip.domain.model.TimeBlock
 import java.time.LocalDate
 
 sealed interface PlanAction {
     data class BlockMoved(val id: String, val newStartMinute: Int) : PlanAction
 
+    data class ItemDragStart(val item: TimeBlock): PlanAction
+
     object AddDay : PlanAction
+
     object RemoveDayClick : PlanAction
 
     object RemoveCancel : PlanAction

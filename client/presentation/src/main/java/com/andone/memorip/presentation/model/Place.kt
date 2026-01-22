@@ -2,27 +2,28 @@ package com.andone.memorip.presentation.model
 
 import androidx.compose.runtime.Immutable
 import com.andone.memorip.domain.model.PlaceListItem
+import com.andone.memorip.domain.model.TimeBlock
 import java.time.Duration
 import java.time.LocalDateTime
 
 @Immutable
 data class Place(
-    val id: String,
+    override val id: String,
     val name: String,
     val latitude: Double,
     val longitude: Double,
     val address: String,
-    val startDateTime: LocalDateTime,
-    val endDateTime: LocalDateTime,
+    val startDateTime: LocalDateTime?,
+    val endDateTime: LocalDateTime?,
     val categories: List<TagUiModel>,
     val thumbnailImage: ImageItem,
     val images: List<ImageItem>
-) {
+) : PlanBlockUiModel {
     val durationMinutes: Long
-        get() = Duration.between(startDateTime, endDateTime).toMinutes()
+        get() = if (startDateTime != null && endDateTime != null)
+            Duration.between(startDateTime, endDateTime).toMinutes()
+        else 0L
 
-    val isMultiDay: Boolean
-        get() = startDateTime.toLocalDate() != endDateTime.toLocalDate()
 
     companion object {
         fun empty(): Place = Place(
@@ -58,3 +59,27 @@ fun PlaceListItem.toUiModel(): Place =
         ),
         images = emptyList()
     )
+
+fun Place.toTimeBlock(dayStart: LocalDateTime): TimeBlock? {
+    if (startDateTime == null || endDateTime == null) return null
+
+    val dayOffset = Duration.between(
+        dayStart.toLocalDate().atStartOfDay(),
+        startDateTime.toLocalDate().atStartOfDay()
+    ).toDays().toInt()
+
+    val dayIndex = dayOffset + 1
+
+    val startMinute =
+        Duration.between(dayStart, startDateTime).toMinutes().toInt()
+
+    val durationMinute = durationMinutes.toInt()
+
+    return TimeBlock(
+        id = id,
+        startMinute = startMinute,
+        durationMinute = durationMinute,
+        day = dayIndex,
+        column = 0
+    )
+}

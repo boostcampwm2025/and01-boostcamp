@@ -25,12 +25,14 @@ import com.andone.memorip.presentation.screen.plan.model.PlanUiState
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
 import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.screen.plan.component.DateContextBar
 import com.andone.memorip.presentation.screen.plan.component.DateRangeCalendar
+import com.andone.memorip.presentation.screen.plan.component.PlaceTimeCard
+import com.andone.memorip.presentation.screen.plan.component.TimeBlockItem
 import com.andone.memorip.presentation.screen.plan.model.PlanAction
 import com.andone.memorip.presentation.screen.plan.model.PlanEvent
 import com.andone.memorip.presentation.util.collectWithLifecycle
-import java.time.LocalDate
 
 @Composable
 fun PlanScreen(
@@ -127,16 +129,35 @@ fun PlanScreenContents(
             )
 
             TimeTable(
-                blocks = state.blocks,
                 totalMinutes = state.date.totalMinutes,
                 currentDay = state.date.selectedDay,
-                onBlockMoved = { id, newStartMinute ->
-                    onAction(PlanAction.BlockMoved(id, newStartMinute))
-                },
+                onBlockAdd = { onAction(PlanAction.ItemDragStart(it)) },
                 onDayScrolled = { day ->
                     onAction(PlanAction.DayScrolled(day))
                 }
-            )
+            ) { engine, scrollState ->
+                state.blocks.forEach { block ->
+                    TimeBlockItem(
+                        block = block,
+                        engine = engine,
+                        scrollState = scrollState,
+                        onMoved = { id, newStartMinute ->
+                            onAction(PlanAction.BlockMoved(id, newStartMinute))
+                        }
+                    ) {
+                        when (val uiModel = state.blockUiModels[block.id]) {
+                            is Place -> {
+                                PlaceTimeCard(
+                                    place = uiModel,
+                                    onClick = {}
+                                )
+                            }
+
+                            null -> Unit
+                        }
+                    }
+                }
+            }
         }
     }
 }

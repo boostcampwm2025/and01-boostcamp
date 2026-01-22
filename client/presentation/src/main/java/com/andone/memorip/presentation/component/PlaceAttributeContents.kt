@@ -41,6 +41,7 @@ fun TagChipRow(
 fun PlaceLocationText(
     address: String,
     modifier: Modifier = Modifier,
+    maxLines: Int = 1,
     iconTint: Color? = null,
 ) {
     Row(
@@ -58,7 +59,7 @@ fun PlaceLocationText(
             text = address,
             color = MemoripTheme.colors.onSurface,
             style = MemoripTheme.typography.bodySmall,
-            maxLines = 1,
+            maxLines = maxLines,
             overflow = TextOverflow.Ellipsis
         )
     }
