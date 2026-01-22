@@ -11,6 +11,7 @@ import com.andone.memorip.presentation.screen.plan.model.PlanEvent
 import com.andone.memorip.presentation.screen.plan.model.PlanEvent.*
 import com.andone.memorip.presentation.screen.plan.model.PlanUiState
 import com.andone.memorip.presentation.util.DummyData
+import com.andone.memorip.presentation.util.DummyData.place
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
@@ -28,8 +29,8 @@ class PlanViewModel @Inject constructor() : ViewModel() {
         value = PlanUiState(
 //            blocks = DummyData.places.mapNotNull { it.toTimeBlock(dayStart = DummyData.dummyDate.startDay!!.atStartOfDay()) },
             blocks = emptyList(),
-            blockUiModels = DummyData.places.associateBy { it.id },
-            date = DummyData.dummyDate,
+//            blockUiModels = DummyData.places.associateBy { it.id },
+//            date = DummyData.dummyDate,
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -139,7 +140,12 @@ class PlanViewModel @Inject constructor() : ViewModel() {
             }
 
             is PlanAction.ItemDragStart -> {
-                _uiState.update { it.copy(blocks = uiState.value.blocks + action.item) }
+                _uiState.update {
+                    it.copy(
+                        blockUiModels = uiState.value.blockUiModels + (action.item.id to action.item),
+                        blocks = uiState.value.blocks + action.item.toTimeBlock(it.date.currentDay!!.atStartOfDay())!!
+                    )
+                }
             }
         }
     }

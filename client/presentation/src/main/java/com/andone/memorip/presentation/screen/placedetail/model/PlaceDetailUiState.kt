@@ -17,5 +17,7 @@ fun PlaceDetailResponse.toUiModel(): PlaceUiModel = PlaceUiModel(
     imageUrls = this.images.toImmutableList(),
     groupName = this.group.title,
     content = this.content ?: "",
-    isMine = false // TODO: 현재 사용자 ID와 writerId 비교하여 설정
+    isMine = false,
+    longitude = this.longitude,
+    latitude = this.latitude
 )
