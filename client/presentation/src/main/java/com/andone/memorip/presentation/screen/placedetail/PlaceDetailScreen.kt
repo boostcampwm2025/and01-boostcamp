@@ -53,9 +53,12 @@ import com.andone.memorip.presentation.component.LoadingIndicatorScreen
 import com.andone.memorip.presentation.component.TagChipRow
 import com.andone.memorip.presentation.placedetail.component.ContentCard
 import com.andone.memorip.presentation.screen.placedetail.Constants.bottomAlpha
+import com.andone.memorip.presentation.screen.placedetail.Constants.bottomRatio
 import com.andone.memorip.presentation.screen.placedetail.Constants.middleAlpha
+import com.andone.memorip.presentation.screen.placedetail.Constants.middleRatio
 import com.andone.memorip.presentation.screen.placedetail.Constants.minHeightRate
 import com.andone.memorip.presentation.screen.placedetail.Constants.topAlpha
+import com.andone.memorip.presentation.screen.placedetail.Constants.topRatio
 import com.andone.memorip.presentation.screen.placedetail.Dimens.overlayHeight
 import com.andone.memorip.presentation.screen.placedetail.component.ImageDialog
 import com.andone.memorip.presentation.screen.placedetail.component.LocationCard
@@ -80,6 +83,9 @@ private object Constants {
     const val middleAlpha = 0.8f
     const val bottomAlpha = 1f
     const val PlaceDetailScreenStep = "PlaceDetailScreenStep"
+    const val topRatio = 0f
+    const val middleRatio = 0.5f
+    const val bottomRatio = 1f
 }
 
 private object Dimens {
@@ -260,9 +266,9 @@ private fun PlaceDetailContent(
                     .background(
                         brush = Brush.verticalGradient(
                             colorStops = arrayOf(
-                                0f to MemoripTheme.colors.white.copy(alpha = topAlpha),
-                                0.5f to MemoripTheme.colors.white.copy(alpha = middleAlpha),
-                                1f to MemoripTheme.colors.white.copy(alpha = bottomAlpha)
+                                topRatio to MemoripTheme.colors.white.copy(alpha = topAlpha),
+                                middleRatio to MemoripTheme.colors.white.copy(alpha = middleAlpha),
+                                bottomRatio to MemoripTheme.colors.white.copy(alpha = bottomAlpha)
                             )
                         )
                     )
