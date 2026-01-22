@@ -22,10 +22,9 @@ import com.andone.memorip.presentation.component.dialog.DialogDimens.INNER_PADDI
 import com.andone.memorip.presentation.component.dialog.DialogDimens.SPACING
 import com.andone.memorip.presentation.theme.MemoripTheme
 
-object DialogDimens {
+private object DialogDimens {
     val INNER_PADDING = 24.dp
     val SPACING = 8.dp
-    val LEADING_ICON_SIZE = 36.dp
 }
 
 @Composable

@@ -29,13 +29,11 @@ object MemoripIconSize {
     val IconSizeXSmall = 16.dp
     val IconSizeSmall = 20.dp
     val IconSizeMedium = 24.dp
-    val IconSizeLarge = 36.dp
-    val IconButton = 84.dp
+    val IconSizeLarge = 40.dp
 }
 
 object MemoripHeight {
     val TextBoxHigh = 120.dp
-    val TextBoxDefault = 32.dp
     val SearchBoxHeight = 36.dp
 }
 
@@ -86,13 +84,16 @@ object MemoripAlpha {
     /* ---------- Divider / Border ---------- */
     const val DIVIDER = 0.12f
     const val BORDER = 0.2f
+
+    /* ---------- Icon / IconButton ---------- */
+    const val BUTTON = 0.6f
 }
 
 object MemoripElevation {
     val ElevationMedium = 4.dp
 }
 
-object MemoripDragConstants{
+object MemoripDragConstants {
     val DRAG_SCALE = 1.05f
     val DRAG_SHADOW_ELEVATION = 12f
     val DRAG_Z_INDEX = 1f

@@ -6,19 +6,25 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 
+val Transparent = Color(0x00000000)
+
 val Primary = Color(0xFF1ABC9C)
 val PrimaryContainer = Color(0xFFF7F7F7)
 val BackGround = Color(0xFFFFFFFF)
 val Surface = Color(0xFFFFFBFE)
 val Secondary = Color(0xFF36699A)
 val Outline = Color(0xFF00FF00)
-val Gray = Color(0xFF73777C)
-val LightGray = Color(0xFFCCCCCC)
 val Red = Color(0xFFB23A2E)
 val Green = Color(0xFF3A7F5D)
 val Yellow = Color(0xFFFFFF00)
 
 val Black = Color(0xFF222222)
+val Gray = Color(0xFF73777C)
+val Gray1 = Color(0xFF9CA3AF)
+val Gray2 = Color(0xFFF3F4F6)
+val Gray3 = Color(0xFFD1D5DB)
+val Gray4 = Color(0xFFF9FAFB)
+val LightGray = Color(0xFFCCCCCC)
 val White = Color(0xFFFFFFFF)
 
 // Dark 테마용 색상
@@ -35,6 +41,10 @@ data class MemoripColors(
     val secondary: Color,
     val background: Color,
     val gray: Color,
+    val gray1: Color,
+    val gray2: Color,
+    val gray3: Color,
+    val gray4: Color,
     val lightGray: Color,
     val outline: Color,
     val surface: Color,
@@ -43,7 +53,8 @@ data class MemoripColors(
     val green: Color,
     val black: Color,
     val white: Color,
-    val yellow: Color
+    val yellow: Color,
+    val transparent: Color
 )
 
 internal val lightMemoripColors = MemoripColors(
@@ -52,6 +63,10 @@ internal val lightMemoripColors = MemoripColors(
     secondary = Secondary,
     background = BackGround,
     gray = Gray,
+    gray1 = Gray1,
+    gray2 = Gray2,
+    gray3 = Gray3,
+    gray4 = Gray4,
     lightGray = LightGray,
     outline = Outline,
     surface = Surface,
@@ -60,7 +75,8 @@ internal val lightMemoripColors = MemoripColors(
     green = Green,
     black = Black,
     white = White,
-    yellow = Yellow
+    yellow = Yellow,
+    transparent = Transparent
 )
 
 internal val darkMemoripColors = MemoripColors(
@@ -69,6 +85,10 @@ internal val darkMemoripColors = MemoripColors(
     secondary = DarkSecondary,
     background = DarkBackGround,
     gray = Gray,
+    gray1 = Gray1,
+    gray2 = Gray2,
+    gray3 = Gray3,
+    gray4 = Gray4,
     lightGray = LightGray,
     outline = DarkOutline,
     surface = DarkSurface,
@@ -77,7 +97,8 @@ internal val darkMemoripColors = MemoripColors(
     green = Green,
     black = Black,
     white = White,
-    yellow = Yellow
+    yellow = Yellow,
+    transparent = Transparent
 )
 
 internal val lightMaterialScheme = lightColorScheme(
