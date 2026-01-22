@@ -59,7 +59,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
 private object TimeTableConstants {
-    val SCROLL_DURATION = 700
+    const val SCROLL_DURATION = 700
 }
 
 @Composable
@@ -273,6 +273,8 @@ private fun TimeTablePreview() {
         totalMinutes = MINUTES_PER_DAY,
         currentDay = 1,
         onBlockMoved = { id, newStartMinute -> },
+        onBlockAdd = { timeBlock -> },
+        onDayScrolled = { value -> }
     )
 }
 
@@ -284,19 +286,16 @@ private fun HorizontalTimeGridLines(
 ) {
     val lineColor = MemoripTheme.colors.lightGray
     val strokeDp = MemoripLineWidth.TimeTick
-
     Canvas(modifier = Modifier.fillMaxSize()) {
         var minute = 0
         while (minute <= totalMinutes) {
             val y = minute * minuteHeightPx
-
             drawLine(
                 color = lineColor,
                 start = Offset(0f, y),
                 end = Offset(size.width, y),
                 strokeWidth = strokeDp.toPx()
             )
-
             minute += majorIntervalMinutes
         }
     }
