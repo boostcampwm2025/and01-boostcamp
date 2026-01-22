@@ -4,7 +4,8 @@ import com.andone.memorip.presentation.model.Place
 
 data class GroupDetailUiState(
     val groupName: String = "",
-    var selectedPlace: Place? = null,
     val currentTab: Int = 0,
     val expanded: Boolean = false,
+    val mapSelectedPlace: Place? = null,
+    val mapBottomSheetContent: MapBottomSheetStep = MapBottomSheetStep.PlaceList,
 )

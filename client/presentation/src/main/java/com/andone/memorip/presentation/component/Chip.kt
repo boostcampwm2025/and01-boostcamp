@@ -23,23 +23,23 @@ private object StaticChipDimen {
 }
 
 @Immutable
-data class StaticChipColors(
+data class ChipColors(
     val backgroundColor: Color,
     val textColor: Color,
     val borderColor: Color? = null
 ) {
     companion object {
-        val Default: StaticChipColors
+        val Default: ChipColors
             @Composable
-            get() = StaticChipColors(
+            get() = ChipColors(
                 backgroundColor = MemoripTheme.colors.primaryContainer,
                 textColor = MemoripTheme.colors.onSurface,
                 borderColor = null
             )
 
-        val Selected: StaticChipColors
+        val Selected: ChipColors
             @Composable
-            get() = StaticChipColors(
+            get() = ChipColors(
                 backgroundColor = MemoripTheme.colors.primaryContainer,
                 textColor = MemoripTheme.colors.onSurface,
                 borderColor = MemoripTheme.colors.primary
@@ -52,7 +52,40 @@ fun StaticChip(
     chipName: String,
     modifier: Modifier = Modifier,
     radius: Dp = StaticChipDimen.RADIUS,
-    colors: StaticChipColors = StaticChipColors.Default,
+    colors: ChipColors = ChipColors.Default,
+    textStyle: TextStyle = MemoripTheme.typography.label2,
+    elevation: Dp = 0.dp
+) {
+    Surface(
+        modifier = modifier,
+        shape = RoundedCornerShape(radius),
+        color = colors.backgroundColor,
+        shadowElevation = elevation,
+        border = colors.borderColor?.let {
+            BorderStroke(
+                width = MemoripLineWidth.Thin,
+                color = it
+            )
+        }
+    ) {
+        Text(
+            text = chipName,
+            modifier = Modifier.padding(
+                horizontal = MemoripPadding.PaddingXXSmall,
+                vertical = MemoripPadding.PaddingXXXSmall
+            ),
+            style = textStyle,
+            color = colors.textColor
+        )
+    }
+}
+
+@Composable
+fun ClickableChip(
+    chipName: String,
+    modifier: Modifier = Modifier,
+    radius: Dp = StaticChipDimen.RADIUS,
+    colors: ChipColors = ChipColors.Default,
     textStyle: TextStyle = MemoripTheme.typography.label1,
     elevation: Dp = 0.dp,
     onClick: () -> Unit = {}
@@ -84,20 +117,27 @@ fun StaticChip(
 
 @Preview(showBackground = true)
 @Composable
-fun StaticChipPreview() {
+fun ChipPreview() {
     MemoripTheme {
         Column {
             StaticChip(chipName = "태그태그태그태그태그")
             StaticChip(
                 chipName = "느좋",
-                colors = StaticChipColors.Default.copy(
+                colors = ChipColors.Default.copy(
                     borderColor = MemoripTheme.colors.primary
                 )
             )
             StaticChip(
                 chipName = "카페",
                 radius = 10.dp,
-                colors = StaticChipColors.Default.copy(
+                colors = ChipColors.Default.copy(
+                    borderColor = MemoripTheme.colors.primary
+                )
+            )
+            ClickableChip(
+                chipName = "카페",
+                radius = 50.dp,
+                colors = ChipColors.Default.copy(
                     borderColor = MemoripTheme.colors.primary
                 )
             )

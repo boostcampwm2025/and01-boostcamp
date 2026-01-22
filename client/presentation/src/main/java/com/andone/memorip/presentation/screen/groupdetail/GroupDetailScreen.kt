@@ -4,10 +4,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.PrimaryTabRow
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SecondaryTabRow
 import androidx.compose.material3.Tab
-import androidx.compose.material3.Text
+import androidx.compose.ui.res.painterResource
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -27,9 +28,9 @@ import com.andone.memorip.presentation.component.map.rememberBitmapMarkerLoader
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.screen.groupdetail.component.GroupDetailTopBar
 import com.andone.memorip.presentation.screen.groupdetail.component.MapTab
-import com.andone.memorip.presentation.screen.groupdetail.component.PlaceImagesBottomSheet
 import com.andone.memorip.presentation.screen.groupdetail.model.GroupDetailAction
 import com.andone.memorip.presentation.screen.groupdetail.model.GroupDetailEvent
+import com.andone.memorip.presentation.screen.groupdetail.model.MapBottomSheetStep
 import com.andone.memorip.presentation.screen.placelist.PlaceListGrid
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.collectWithLifecycle
@@ -48,6 +49,17 @@ fun GroupDetailScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val placesPagingItems = viewModel.placesPagingFlow.collectAsLazyPagingItems()
+    var places by remember { mutableStateOf<List<Place>>(emptyList()) }
+
+    LaunchedEffect(placesPagingItems.itemCount) {
+        val newPlaces = mutableListOf<Place>()
+        for (i in 0 until placesPagingItems.itemCount) {
+            placesPagingItems[i]?.let { place ->
+                newPlaces.add(place)
+            }
+        }
+        places = newPlaces
+    }
 
     viewModel.event.collectWithLifecycle { event ->
         when (event) {
@@ -64,46 +76,32 @@ fun GroupDetailScreen(
     GroupDetailScreenContent(
         groupName = uiState.groupName,
         currentPage = uiState.currentTab,
+        places = places,
         placesPagingItems = placesPagingItems,
+        mapSelectedPlace = uiState.mapSelectedPlace,
+        mapBottomSheetContent = uiState.mapBottomSheetContent,
         onAction = viewModel::onAction,
         modifier = modifier
     )
-
-    if (uiState.selectedPlace != null) {
-        PlaceImagesBottomSheet(
-            placeName = uiState.selectedPlace!!.name,
-            images = uiState.selectedPlace!!.images,
-            onDismiss = { viewModel.onAction(GroupDetailAction.OnDismissBottomSheetClick) }
-        )
-    }
 }
 
 @Composable
 private fun GroupDetailScreenContent(
     groupName: String,
     currentPage: Int,
+    places: List<Place>,
     placesPagingItems: LazyPagingItems<Place>,
+    mapSelectedPlace: Place?,
+    mapBottomSheetContent: MapBottomSheetStep,
     onAction: (GroupDetailAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val tabs = listOf(
-        stringResource(R.string.groupdetail_tab_gallery),
-        stringResource(R.string.groupdetail_tab_map)
+        R.drawable.ic_image to R.string.groupdetail_tab_gallery,
+        R.drawable.ic_map to R.string.groupdetail_tab_map
     )
 
-    var places by remember { mutableStateOf<List<Place>>(emptyList()) }
     var mapLoaded by rememberSaveable { mutableStateOf(false) }
-
-    LaunchedEffect(placesPagingItems.itemCount) {
-        val newPlaces = mutableListOf<Place>()
-        for (i in 0 until placesPagingItems.itemCount) {
-            placesPagingItems[i]?.let { place ->
-                newPlaces.add(place)
-            }
-        }
-        places = newPlaces
-    }
-
     val markerImages = rememberBitmapMarkerLoader(
         imageUrls = places.map { it.thumbnailImage.url }
     )
@@ -124,17 +122,27 @@ private fun GroupDetailScreenContent(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            PrimaryTabRow(
+            SecondaryTabRow(
                 selectedTabIndex = currentPage,
                 modifier = Modifier.fillMaxWidth(),
                 containerColor = MemoripTheme.colors.background,
                 contentColor = MemoripTheme.colors.onSurface
             ) {
-                tabs.forEachIndexed { index, title ->
+                tabs.forEachIndexed { index, (iconRes, _) ->
                     Tab(
                         selected = currentPage == index,
                         onClick = { onAction(GroupDetailAction.OnTabClick(currentTab = index)) },
-                        text = { Text(text = title) }
+                        icon = {
+                            Icon(
+                                painter = painterResource(iconRes),
+                                contentDescription = stringResource(tabs[index].second),
+                                tint = if (currentPage == index) {
+                                    MemoripTheme.colors.primary
+                                } else {
+                                    MemoripTheme.colors.gray
+                                }
+                            )
+                        }
                     )
                 }
             }
@@ -152,10 +160,12 @@ private fun GroupDetailScreenContent(
                 1 -> MapTab(
                     places = places,
                     markerImages = markerImages,
-                    onPlaceClick = { id -> onAction(GroupDetailAction.OnPlaceClick(id = id)) },
+                    mapBottomSheetContent = mapBottomSheetContent,
                     mapLoaded = mapLoaded,
                     onMapLoaded = { mapLoaded = true },
-                    modifier = Modifier.fillMaxSize()
+                    onAction = onAction,
+                    modifier = Modifier.fillMaxSize(),
+                    mapSelectedPlace = mapSelectedPlace
                 )
             }
         }
