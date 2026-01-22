@@ -1,6 +1,7 @@
 package com.andone.memorip.presentation.screen.plan
 
 import androidx.lifecycle.ViewModel
+import com.andone.memorip.domain.model.TimeBlock
 import com.andone.memorip.presentation.model.toTimeBlock
 import com.andone.memorip.presentation.screen.plan.model.DateUiModel
 import com.andone.memorip.presentation.screen.plan.model.PlanAction
@@ -20,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PlanViewModel @Inject constructor() : ViewModel() {
 
-    val _uiState = MutableStateFlow(value = PlanUiState(
+    private val _uiState = MutableStateFlow(value = PlanUiState(
         blocks = DummyData.places.map { it.toTimeBlock(dayStart = DummyData.dummyDate.startDay!!.atStartOfDay()) },
         blockUiModels = DummyData.places.associateBy { it.id },
         date = DummyData.dummyDate,
@@ -59,7 +60,7 @@ class PlanViewModel @Inject constructor() : ViewModel() {
                             endDay = newEnd,
                             currentDay = newCurrent,
                             longClickedDay = null
-                        )
+                        ),
                     )
                 }
             }
@@ -144,5 +145,20 @@ class PlanViewModel @Inject constructor() : ViewModel() {
             current.isBefore(newStart) -> newStart
             else -> current
         }
+    }
+
+    private fun adjustblockUiModelsAfterDayRemoved(
+        blocks: List<TimeBlock>,
+        removedDayIndex: Int
+    ): List<TimeBlock> {
+        return blocks
+            .filterNot { it.day == removedDayIndex }
+            .map { block ->
+                if (block.day > removedDayIndex) {
+                    block.copy(day = block.day - 1)
+                } else {
+                    block
+                }
+            }
     }
 }
