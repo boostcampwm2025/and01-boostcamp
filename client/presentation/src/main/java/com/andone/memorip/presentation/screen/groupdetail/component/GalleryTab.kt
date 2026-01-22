@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.screen.groupdetail.component
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
@@ -37,8 +38,12 @@ fun GalleryTab(
         itemKey = { it.id },
         modifier = modifier
             .fillMaxSize()
-            .padding(horizontal = MemoripPadding.PaddingXSmall),
+            .padding(all = MemoripPadding.PaddingXSmall),
         staggeredCells = StaggeredGridCells.Adaptive(minSize = STAGGERED_GRID_MIN_CELL_WIDTH),
+        contentPadding = PaddingValues(
+            horizontal = MemoripPadding.AppHorizontalPadding,
+            vertical = MemoripPadding.PaddingMedium
+        ),
         emptyContent = {
             EmptyText(
                 text = stringResource(R.string.place_list_empty),
