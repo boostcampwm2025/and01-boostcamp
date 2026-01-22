@@ -198,7 +198,8 @@ private fun ExpandedPlaceTimeCard(
             Column(
                 modifier = Modifier
                     .padding(horizontal = MemoripPadding.PaddingMedium)
-                    .padding(bottom = MemoripPadding.PaddingSmall)
+                    .padding(bottom = MemoripPadding.PaddingSmall),
+                verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXXSmall)
             ) {
                 Text(
                     text = place.name,

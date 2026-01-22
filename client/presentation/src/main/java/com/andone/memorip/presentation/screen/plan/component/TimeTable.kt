@@ -82,7 +82,7 @@ private object TimeTableConstant {
 fun TimeTable(
     totalMinutes: Int,
     currentDay: Int?,
-    onBlockAdd: (Place) -> Unit,
+    onBlockAdd: (Place, Int) -> Unit,
     onDayScrolled: (Int) -> Unit = {},
     content: @Composable (TimeLayoutEngine, ScrollState) -> Unit
 ) {
@@ -228,7 +228,7 @@ fun TimeTable(
                                                         engine.yPxToStartMinute(absoluteYPx)
                                                     val snappedMinute =
                                                         ((newStartMinute + SNAP_MINUTE_UNIT / 2) / SNAP_MINUTE_UNIT) * SNAP_MINUTE_UNIT
-                                                    onBlockAdd(place)
+                                                    onBlockAdd(place, snappedMinute)
                                                     places.remove(place)
                                                 }
                                             }
@@ -283,7 +283,7 @@ private fun TimeTablePreview() {
     TimeTable(
         totalMinutes = MINUTES_PER_DAY,
         currentDay = 1,
-        onBlockAdd = {},
+        onBlockAdd = {_, _ -> },
         content = { _, _ -> },
     )
 }
