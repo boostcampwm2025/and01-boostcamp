@@ -25,7 +25,7 @@ fun ContentCard(
         color = MemoripTheme.colors.primaryContainer
     ) {
         Text(
-            modifier = Modifier.padding(MemoripPadding.PaddingXLarge),
+            modifier = Modifier.padding(all = MemoripPadding.PaddingXLarge),
             text = content,
             style = MemoripTheme.typography.labelLarge
         )

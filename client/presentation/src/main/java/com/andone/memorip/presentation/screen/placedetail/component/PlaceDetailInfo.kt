@@ -21,7 +21,7 @@ fun PlaceDetailInfoSection(
 ) {
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXXSmall),
+        horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXXSmall),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
