@@ -15,8 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.R
-import com.andone.memorip.presentation.component.StaticChip
-import com.andone.memorip.presentation.component.StaticChipColors
+import com.andone.memorip.presentation.component.ClickableChip
+import com.andone.memorip.presentation.component.ChipColors
 import com.andone.memorip.presentation.screen.placelist.model.RegionUiModel
 import com.andone.memorip.presentation.screen.placelist.model.SelectedRegionState
 import com.andone.memorip.presentation.theme.MemoripPadding
@@ -86,13 +86,13 @@ private fun RegionChipListSection(
         horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceSmall),
     ) {
         regionList.forEach { region ->
-            StaticChip(
+            ClickableChip(
                 chipName = region.name,
                 colors =
                     if (region.isSelected) {
-                        StaticChipColors.Selected
+                        ChipColors.Selected
                     } else {
-                        StaticChipColors.Default
+                        ChipColors.Default
                     },
                 onClick = { onChipClick(region) }
             )

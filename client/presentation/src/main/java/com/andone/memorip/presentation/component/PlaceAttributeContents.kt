@@ -33,7 +33,7 @@ fun TagChipRow(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXXSmall)
     ) {
-        tags.forEach { tag -> TagChip(tag = tag) }
+        tags.forEach { tag -> StaticTagChip(tag = tag) }
     }
 }
 
