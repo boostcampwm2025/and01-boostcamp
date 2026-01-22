@@ -32,12 +32,13 @@ import java.util.Locale
 @OptIn(ExperimentalNaverMapApi::class)
 @Composable
 fun MemoripNaverMap(
-    modifier: Modifier = Modifier,
     cameraPositionState: CameraPositionState,
+    modifier: Modifier = Modifier,
     properties: MapProperties? = null,
     uiSettings: MapUiSettings? = null,
     locationSource: LocationSource? = null,
     locale: Locale? = null,
+    contentPadding: PaddingValues = PaddingValues(0.dp),
     onMapClick: (PointF, LatLng) -> Unit = { _, _ -> },
     onMapLongClick: (PointF, LatLng) -> Unit = { _, _ -> },
     onMapDoubleTab: (PointF, LatLng) -> Boolean = { _, _ -> false },
@@ -47,7 +48,6 @@ fun MemoripNaverMap(
     onOptionChange: () -> Unit = {},
     onSymbolClick: (Symbol) -> Boolean = { false },
     onIndoorSelectionChange: (IndoorSelection?) -> Unit = {},
-    contentPadding: PaddingValues = PaddingValues(0.dp),
     content:
     @Composable @NaverMapComposable
         () -> Unit = {}
