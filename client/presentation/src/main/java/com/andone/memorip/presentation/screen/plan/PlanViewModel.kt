@@ -75,8 +75,6 @@ class PlanViewModel @Inject constructor() : ViewModel() {
                             }
                     } ?: emptyList()
 
-                    android.util.Log.d("갱신된 블락들", "$newBlocks")
-
                     state.copy(
                         date = date.copy(
                             startDay = newStart,

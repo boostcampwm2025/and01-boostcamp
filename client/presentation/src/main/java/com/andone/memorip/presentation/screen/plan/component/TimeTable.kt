@@ -166,7 +166,7 @@ fun TimeTable(
                                 .fillMaxWidth()
                                 .height(height = (totalMinutes * MINUTE_HEIGHT_DP).dp)
                         ) {
-                            content(engine,scrollState)
+                            content(engine, scrollState)
                         }
                     }
                 }
@@ -309,8 +309,8 @@ private fun TimeTablePreview() {
     TimeTable(
         totalMinutes = MINUTES_PER_DAY,
         currentDay = 1,
-        onBlockAdd = { timeBlock -> },
-        content = {_, _ -> },
+        onBlockAdd = {},
+        content = { _, _ -> },
     )
 }
 
