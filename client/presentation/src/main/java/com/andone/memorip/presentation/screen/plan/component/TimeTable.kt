@@ -71,7 +71,7 @@ private object TimeTableConstants {
     const val SCROLL_DURATION = 700
     const val DEFAULT_DURATION = 60
     const val FULL_WEIGHT = 1f
-    const val PICKED_SCALE = 0.8f
+    const val PICKED_SCALE = 1.2f
     const val PICKED_ELEVATION = 12f
     const val PICKED_ZINDEX = 1f
     const val DEFAULT_ZINDEX = 0f
