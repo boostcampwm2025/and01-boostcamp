@@ -2,7 +2,7 @@ package com.andone.memorip.presentation.model
 
 import androidx.compose.runtime.Immutable
 import com.andone.memorip.domain.model.PlaceListItem
-import com.andone.memorip.presentation.screen.plan.model.TimeBlock
+import com.andone.memorip.domain.model.TimeBlock
 import java.time.Duration
 import java.time.LocalDateTime
 

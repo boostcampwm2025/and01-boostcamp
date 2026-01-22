@@ -1,7 +1,6 @@
 package com.andone.memorip.presentation.screen.plan.utill
 
-import com.andone.memorip.presentation.screen.plan.model.TimeBlock
-import kotlin.text.toInt
+import com.andone.memorip.domain.model.TimeBlock
 
 class TimeLayoutEngine(private val minuteHeightPx: Float) {
     fun blockStartYPx(block: TimeBlock): Float {

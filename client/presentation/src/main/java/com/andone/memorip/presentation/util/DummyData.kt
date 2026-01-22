@@ -18,7 +18,7 @@ import com.andone.memorip.presentation.screen.placedetail.model.PlaceUiModel
 import com.andone.memorip.presentation.placelist.model.RegionUiModel
 import com.andone.memorip.presentation.placelist.model.SelectedRegionState
 import com.andone.memorip.presentation.screen.plan.model.DateUiModel
-import com.andone.memorip.presentation.screen.plan.model.TimeBlock
+import com.andone.memorip.domain.model.TimeBlock
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.flowOf
 import java.time.LocalDate

@@ -25,7 +25,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.SCROLL_DURATION
-import com.andone.memorip.presentation.screen.plan.model.TimeBlock
+import com.andone.memorip.domain.model.TimeBlock
 import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_DAY
 import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_HOUR
 import com.andone.memorip.presentation.screen.plan.utill.MINUTE_HEIGHT_DP

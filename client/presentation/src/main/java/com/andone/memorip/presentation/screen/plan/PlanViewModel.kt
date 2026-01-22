@@ -98,12 +98,25 @@ class PlanViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun moveBlock(id: String, newStartMinute: Int) {
-        _uiState.update {
-            it.copy(
-                blocks = it.blocks.map { block ->
-                    if (block.id == id) block.copy(startMinute = newStartMinute)
+        _uiState.update { state ->
+            val target = state.blocks.find { it.id == id } ?: return@update state
+
+            if (!target.canMoveTo(
+                    newStartMinute = newStartMinute,
+                    blocks = state.blocks,
+                    totalMinutes = state.date.totalMinutes
+                )
+            ) {
+                return@update state
+            }
+
+            state.copy(
+                blocks = state.blocks.map { block ->
+                    if (block.id == id)
+                        block.movedTo(newStartMinute, state.date.totalMinutes)
                     else block
-                })
+                }
+            )
         }
     }
 

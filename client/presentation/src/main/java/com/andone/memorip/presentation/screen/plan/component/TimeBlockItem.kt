@@ -24,7 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.zIndex
 import com.andone.memorip.presentation.screen.plan.component.TimeBlockItemConstants.SNAP_MINUTE_UNIT
-import com.andone.memorip.presentation.screen.plan.model.TimeBlock
+import com.andone.memorip.domain.model.TimeBlock
 import com.andone.memorip.presentation.screen.plan.utill.MINUTE_HEIGHT_DP
 import com.andone.memorip.presentation.screen.plan.utill.TimeLayoutEngine
 import com.andone.memorip.presentation.theme.MemoripPadding
@@ -92,9 +92,11 @@ fun TimeBlockItem(
                             dragOffsetY += dragAmount.y
                         },
                         onDragEnd = {
-                            val absoluteYPx = startYPx + dragOffsetY
-                            val newStartMinute =
-                                engine.yPxToStartMinute(absoluteYPx)
+                            val rawYPx = startYPx + dragOffsetY
+                            val clampedYPx = rawYPx.coerceAtLeast(minimumValue = 0f)
+
+                            val newStartMinute = engine.yPxToStartMinute(clampedYPx)
+
                             val snappedMinute =
                                 ((newStartMinute + SNAP_MINUTE_UNIT / 2) / SNAP_MINUTE_UNIT) * SNAP_MINUTE_UNIT
 
