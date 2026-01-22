@@ -46,7 +46,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.screen.plan.component.TimeBlockItemConstants.SNAP_MINUTE_UNIT
+import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.DEFAULT_ELEVATION
+import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.DEFAULT_SCALE
+import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.DEFAULT_ZINDEX
 import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.FULL_WEIGHT
+import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.PICKED_ELEVATION
+import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.PICKED_SCALE
+import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.PICKED_ZINDEX
+import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.SCALE_ANIMATION
 import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.SCROLL_DURATION
 import com.andone.memorip.presentation.screen.plan.model.DraggablePlace
 import com.andone.memorip.presentation.screen.plan.model.TimeBlock
@@ -65,6 +72,13 @@ import kotlinx.coroutines.flow.map
 private object TimeTableConstants {
     const val SCROLL_DURATION = 700
     const val FULL_WEIGHT = 1f
+    const val PICKED_SCALE = 0.8f
+    const val DEFAULT_SCALE = 1f
+    const val SCALE_ANIMATION = "Scale Animation"
+    const val PICKED_ELEVATION = 12f
+    const val DEFAULT_ELEVATION = 0f
+    const val PICKED_ZINDEX = 1f
+    const val DEFAULT_ZINDEX = 0f
 }
 
 @Composable
@@ -85,7 +99,6 @@ fun TimeTable(
 
     var isAutoScrolling by remember { mutableStateOf(false) }
     var lastDayFromScroll by remember { mutableStateOf<Int?>(null) }
-
 
     val places = remember { DummyData.places.toMutableStateList() }
     var rowTop by remember { mutableStateOf(0f) }
@@ -192,8 +205,8 @@ fun TimeTable(
                     var relativePos by remember { mutableStateOf(value = Offset.Zero) }
                     val animatedOffset by animateOffsetAsState(targetValue = offset)
                     val scale by animateFloatAsState(
-                        targetValue = if (selectedPlace != null) 0.8f else 1f,
-                        label = "catch animation"
+                        targetValue = if (selectedPlace != null) PICKED_SCALE else DEFAULT_SCALE,
+                        label = SCALE_ANIMATION
                     )
                     var idx by remember { mutableStateOf(-1) }
 
@@ -214,7 +227,7 @@ fun TimeTable(
                             .graphicsLayer {
                                 scaleX = scale
                                 scaleY = scale
-                                shadowElevation = if (selectedPlace != null) 12f else 0f
+                                shadowElevation = if (selectedPlace != null) PICKED_ELEVATION else DEFAULT_ELEVATION
                             }
                             .width(width = 80.dp)
                             .height(height = 100.dp)
@@ -261,7 +274,7 @@ fun TimeTable(
                                     }
                                 )
                             }
-                            .zIndex(zIndex = if (selectedPlace != null) 1f else 0f)
+                            .zIndex(zIndex = if (selectedPlace != null) PICKED_ZINDEX else DEFAULT_ZINDEX)
                             .alpha(alpha = if (selectedPlace != null && selectedPlace!!.place == place) 0.3f else 1f),
                         contentAlignment = Alignment.Center
                     ) {
@@ -285,9 +298,9 @@ fun TimeTable(
                         )
                     }
                     .graphicsLayer {
-                        scaleX = 0.8f
-                        scaleY = 0.8f
-                        shadowElevation = 12f
+                        scaleX = PICKED_SCALE
+                        scaleY = PICKED_SCALE
+                        shadowElevation = PICKED_ELEVATION
                     }
                     .background(
                         color = MemoripTheme.colors.black,
