@@ -32,9 +32,11 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalDensity
@@ -44,7 +46,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.screen.plan.component.TimeBlockItemConstants.SNAP_MINUTE_UNIT
+import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.FULL_WEIGHT
 import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.SCROLL_DURATION
+import com.andone.memorip.presentation.screen.plan.model.DraggablePlace
 import com.andone.memorip.presentation.screen.plan.model.TimeBlock
 import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_DAY
 import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_HOUR
@@ -60,6 +64,7 @@ import kotlinx.coroutines.flow.map
 
 private object TimeTableConstants {
     const val SCROLL_DURATION = 700
+    const val FULL_WEIGHT = 1f
 }
 
 @Composable
@@ -84,7 +89,9 @@ fun TimeTable(
 
     val places = remember { DummyData.places.toMutableStateList() }
     var rowTop by remember { mutableStateOf(0f) }
-    var timeTabTopPx by remember { mutableStateOf(0f) }
+    var timeTableTop by remember { mutableStateOf(0f) }
+    var selectedPlace by remember { mutableStateOf<DraggablePlace?>(null) }
+    var rootCoordinates by remember { mutableStateOf<LayoutCoordinates?>(null) }
 
     LaunchedEffect(currentDay, minuteHeightPx) {
         val day = currentDay ?: return@LaunchedEffect
@@ -124,130 +131,174 @@ fun TimeTable(
             }
     }
 
-    Column(modifier = Modifier.fillMaxSize()) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
-                .onGloballyPositioned {
-                    timeTabTopPx = it.positionInRoot().y
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .onGloballyPositioned { rootCoordinates = it }
+    ) {
+        Column(modifier = Modifier.fillMaxSize()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(weight = FULL_WEIGHT)
+                    .onGloballyPositioned { timeTableTop = it.positionInRoot().y }
+                    .verticalScroll(state = scrollState)
+                    .background(color = MemoripTheme.colors.background),
+            ) {
+                Box {
+                    Row {
+                        TimeAxis(totalMinutes = totalMinutes)
+
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(height = (totalMinutes * MINUTE_HEIGHT_DP).dp)
+                        ) {
+                            blocks.forEach { block ->
+                                TimeBlockItem(
+                                    block = block,
+                                    engine = engine,
+                                    onMoved = onBlockMoved
+                                )
+                            }
+                        }
+                    }
+                    HorizontalTimeGridLines(
+                        totalMinutes = totalMinutes,
+                        minuteHeightPx = minuteHeightPx
+                    )
                 }
-                .verticalScroll(scrollState)
-                .background(color = MemoripTheme.colors.background),
-        ) {
-            Box {
-                Row {
-                    TimeAxis(totalMinutes = totalMinutes)
+            }
+            LazyRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        horizontal = MemoripPadding.PaddingMedium,
+                        vertical = MemoripPadding.PaddingSmall
+                    )
+                    .onGloballyPositioned { layout ->
+                        rowTop = layout.positionInRoot().y
+                    },
+                horizontalArrangement = Arrangement.spacedBy(space = MemoripPadding.PaddingXSmall),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                items(
+                    items = places,
+                    key = { it.id }
+                ) { place ->
+                    var offset by remember { mutableStateOf(value = Offset.Zero) }
+                    var itemTop by remember { mutableStateOf(value = 0f) }
+                    var itemBottom by remember { mutableStateOf(value = 0f) }
+                    var relativePos by remember { mutableStateOf(value = Offset.Zero) }
+                    val animatedOffset by animateOffsetAsState(targetValue = offset)
+                    val scale by animateFloatAsState(
+                        targetValue = if (selectedPlace != null) 0.8f else 1f,
+                        label = "catch animation"
+                    )
+                    var idx by remember { mutableStateOf(-1) }
 
                     Box(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .height(height = (totalMinutes * MINUTE_HEIGHT_DP).dp)
-                    ) {
-                        blocks.forEach { block ->
-                            TimeBlockItem(
-                                block = block,
-                                engine = engine,
-                                onMoved = onBlockMoved
+                            .onGloballyPositioned { layout ->
+                                val pos = layout.positionInRoot()
+                                itemTop = pos.y
+                                itemBottom = pos.y + layout.size.height
+                                relativePos = rootCoordinates?.localPositionOf(layout, Offset.Zero) ?: Offset.Zero
+                            }
+                            .offset {
+                                IntOffset(
+                                    x = animatedOffset.x.toInt(),
+                                    y = animatedOffset.y.toInt()
+                                )
+                            }
+                            .graphicsLayer {
+                                scaleX = scale
+                                scaleY = scale
+                                shadowElevation = if (selectedPlace != null) 12f else 0f
+                            }
+                            .width(width = 80.dp)
+                            .height(height = 100.dp)
+                            .background(
+                                color = MemoripTheme.colors.primaryContainer,
+                                shape = MemoripTheme.shapes.roundedMedium
                             )
-                        }
+                            .pointerInput(key1 = place.id) {
+                                detectDragGesturesAfterLongPress(
+                                    onDragStart = {
+                                        selectedPlace = DraggablePlace(
+                                            place = place,
+                                            originPos = relativePos,
+                                            offset = Offset.Zero
+                                        )
+                                        idx = places.indexOf(place)
+                                    },
+                                    onDragEnd = {
+                                        val isRowInside = (itemBottom + offset.y) >= rowTop
+                                        if (isRowInside) {
+                                            offset = selectedPlace!!.originPos
+                                        } else {
+                                            val absoluteYPx =
+                                                ((itemTop + itemBottom) / 2) + offset.y + scrollState.value - timeTableTop
+                                            val newStartMinute =
+                                                engine.yPxToStartMinute(absoluteYPx)
+                                            val snappedMinute =
+                                                ((newStartMinute + SNAP_MINUTE_UNIT / 2) / SNAP_MINUTE_UNIT) * SNAP_MINUTE_UNIT
+                                            onBlockAdd(createNewBlock(place, snappedMinute))
+                                            places.remove(place)
+                                        }
+                                        selectedPlace = null
+                                    },
+                                    onDragCancel = {
+                                        selectedPlace = null
+                                    },
+                                    onDrag = { change, amount ->
+                                        change.consume()
+                                        offset += amount
+                                        selectedPlace?.let { place ->
+                                            selectedPlace =
+                                                place.copy(offset = place.offset + amount)
+                                        }
+                                    }
+                                )
+                            }
+                            .zIndex(zIndex = if (selectedPlace != null) 1f else 0f)
+                            .alpha(alpha = if (selectedPlace != null && selectedPlace!!.place == place) 0.3f else 1f),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = place.name
+                        )
                     }
                 }
-                HorizontalTimeGridLines(
-                    totalMinutes = totalMinutes,
-                    minuteHeightPx = minuteHeightPx
-                )
             }
         }
-        LazyRow(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    horizontal = MemoripPadding.PaddingMedium,
-                    vertical = MemoripPadding.PaddingSmall
-                )
-                .onGloballyPositioned { layout ->
-                    val position = layout.positionInRoot()
-                    rowTop = position.y
-                },
-            horizontalArrangement = Arrangement.spacedBy(MemoripPadding.PaddingXSmall),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            items(
-                items = places,
-                key = { it.id }
-            ) { place ->
-                var offset by remember { mutableStateOf(Offset.Zero) }
-                var originOffset by remember { mutableStateOf(Offset.Zero) }
-                var isDragging by remember { mutableStateOf(false) }
-                var itemTopY by remember { mutableStateOf(0f) }
-                var itemBottomY by remember { mutableStateOf(0f) }
-                val animatedOffset by animateOffsetAsState(
-                    targetValue = offset
-                )
-                val scale by animateFloatAsState(
-                    targetValue = if (isDragging) 0.8f else 1f,
-                    label = "catch animation"
-                )
-
-                Box(
-                    modifier = Modifier
-                        .onGloballyPositioned { layout ->
-                            val pos = layout.positionInRoot()
-                            itemTopY = pos.y
-                            itemBottomY = pos.y + layout.size.height
-                        }
-                        .offset {
-                            IntOffset(animatedOffset.x.toInt(), animatedOffset.y.toInt())
-                        }
-                        .graphicsLayer {
-                            scaleX = scale
-                            scaleY = scale
-                            shadowElevation = if (isDragging) 12f else 0f
-                        }
-                        .width(width = 80.dp)
-                        .height(height = 100.dp)
-                        .background(
-                            color = MemoripTheme.colors.primaryContainer,
-                            shape = MemoripTheme.shapes.roundedMedium
+        if (selectedPlace != null) {
+            val place = selectedPlace!!
+            Box(
+                modifier = Modifier
+                    .width(width = 80.dp)
+                    .height(height = 100.dp)
+                    .offset {
+                        IntOffset(
+                            (place.originPos.x + place.offset.x).toInt(),
+                            (place.originPos.y + place.offset.y).toInt()
                         )
-                        .pointerInput(key1 = place.id) {
-                            detectDragGesturesAfterLongPress(
-                                onDragStart = {
-                                    isDragging = true
-                                    originOffset = offset
-                                },
-                                onDragEnd = {
-                                    isDragging = false
-
-                                    val isRowInside = (itemBottomY + offset.y) >= rowTop
-                                    if (isRowInside) {
-                                        offset = originOffset
-                                    } else {
-                                        val absoluteYPx =
-                                            ((itemTopY + itemBottomY) / 2) + offset.y + scrollState.value - timeTabTopPx
-                                        val newStartMinute =
-                                            engine.yPxToStartMinute(absoluteYPx)
-                                        val snappedMinute =
-                                            ((newStartMinute + SNAP_MINUTE_UNIT / 2) / SNAP_MINUTE_UNIT) * SNAP_MINUTE_UNIT
-                                        onBlockAdd(createNewBlock(place, snappedMinute))
-                                        places.remove(place)
-                                    }
-                                },
-                                onDragCancel = { isDragging = false },
-                                onDrag = { change, amount ->
-                                    change.consume()
-                                    offset += amount
-                                }
-                            )
-                        }
-                        .zIndex(if (isDragging) 1f else 0f),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = place.name
-                    )
-                }
+                    }
+                    .graphicsLayer {
+                        scaleX = 0.8f
+                        scaleY = 0.8f
+                        shadowElevation = 12f
+                    }
+                    .background(
+                        color = MemoripTheme.colors.black,
+                        shape = MemoripTheme.shapes.roundedMedium
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = place.place.name,
+                    color = MemoripTheme.colors.white
+                )
             }
         }
     }
