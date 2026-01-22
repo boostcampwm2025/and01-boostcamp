@@ -3,6 +3,7 @@ package com.andone.memorip.presentation.theme
 import androidx.compose.ui.unit.dp
 
 object MemoripPadding {
+    val AppHorizontalPadding = 16.dp
     val PaddingXXXSmall = 2.dp
     val PaddingXXSmall = 4.dp
     val PaddingXSmall = 8.dp

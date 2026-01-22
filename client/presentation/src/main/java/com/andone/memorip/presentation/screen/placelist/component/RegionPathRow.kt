@@ -1,4 +1,4 @@
-package com.andone.memorip.presentation.placelist.component
+package com.andone.memorip.presentation.screen.placelist.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -14,7 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.R
-import com.andone.memorip.presentation.placelist.model.SelectedRegionState
+import com.andone.memorip.presentation.screen.placelist.model.SelectedRegionState
 import com.andone.memorip.presentation.util.DummyData
 
 @Composable
