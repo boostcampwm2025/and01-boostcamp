@@ -29,8 +29,7 @@ import com.andone.memorip.presentation.screen.selectgroup.component.GroupImageGr
 import com.andone.memorip.presentation.screen.selectgroup.component.SelectGroupTopBar
 import com.andone.memorip.presentation.screen.selectgroup.model.SelectGroupAction
 import com.andone.memorip.presentation.screen.selectgroup.model.SelectGroupEvent
-import com.andone.memorip.presentation.theme.MemoripPadding.PaddingMedium
-import com.andone.memorip.presentation.theme.MemoripPadding.PaddingXSmall
+import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace.SpaceLarge
 import com.andone.memorip.presentation.theme.MemoripSpace.SpaceXSmall
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -110,16 +109,16 @@ private fun SelectGroupContent(
     title: String = stringResource(R.string.select_group_title),
 ) {
     Scaffold(
-        topBar = { 
+        topBar = {
             SelectGroupTopBar(
                 onBackClick = { onAction(SelectGroupAction.OnBackClick) },
                 title = title
-            ) 
+            )
         },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { onAction(SelectGroupAction.OnFABClick) },
-                containerColor = MemoripTheme.colors.primaryContainer,
+                containerColor = MemoripTheme.colors.primary,
                 contentColor = MemoripTheme.colors.black
             ) {
                 Icon(
@@ -132,10 +131,7 @@ private fun SelectGroupContent(
         LazyVerticalGrid(
             columns = GridCells.Adaptive(minSize = SelectGroupScreenDimens.GridMinWidth),
             modifier = modifier.padding(paddingValues = innerPadding),
-            contentPadding = PaddingValues(
-                horizontal = PaddingMedium,
-                vertical = PaddingXSmall
-            ),
+            contentPadding = PaddingValues(horizontal = MemoripPadding.AppHorizontalPadding),
             horizontalArrangement = Arrangement.spacedBy(SpaceXSmall),
             verticalArrangement = Arrangement.spacedBy(SpaceLarge)
         ) {
