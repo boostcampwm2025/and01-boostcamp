@@ -96,7 +96,7 @@ fun TimeBlockItem(
                 painter = painterResource(R.drawable.ic_outline_drag_handle_24),
                 contentDescription = null,
                 modifier = Modifier
-                    .padding(end = MemoripPadding.PaddingSmall)
+                    .padding(horizontal = MemoripPadding.PaddingSmall)
                     .pointerInput(startYPx) {
                         detectDragGesturesAfterLongPress(
                             onDragStart = {

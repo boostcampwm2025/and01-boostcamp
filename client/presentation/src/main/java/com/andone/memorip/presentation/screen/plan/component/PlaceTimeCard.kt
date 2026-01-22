@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,14 +19,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.MemoripImage
 import com.andone.memorip.presentation.component.PlaceLocationText
 import com.andone.memorip.presentation.component.PlaceTimeText
 import com.andone.memorip.presentation.component.TagChipRow
 import com.andone.memorip.presentation.model.Place
+import com.andone.memorip.presentation.theme.MemoripIconSize
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -33,7 +37,7 @@ import com.andone.memorip.presentation.util.DummyData
 import kotlinx.collections.immutable.toImmutableList
 
 private object PlaceTimeCardDimen {
-    val COMPACT_IMAGE_SIZE = 80.dp
+    val COMPACT_IMAGE_SIZE = 112.dp
     val EXPANDED_IMAGE_HEIGHT = 160.dp
     val CARD_ELEVATION = 2.dp
     val IMAGE_CORNER_RADIUS = 8.dp
@@ -41,7 +45,7 @@ private object PlaceTimeCardDimen {
 
 private object PlaceTimeCardConstants {
     const val COMPACT_LAYOUT_THRESHOLD_MINUTES = 120
-    const val EXPANDED_LAYOUT_THRESHOLD_MINUTES = 200
+    const val EXPANDED_LAYOUT_THRESHOLD_MINUTES = 240
 }
 
 @Composable
@@ -93,9 +97,14 @@ private fun TextPlaceTimeCard(
     ) {
         Row(
             modifier = Modifier.padding(MemoripPadding.PaddingMedium),
-            horizontalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceSmall),
+            horizontalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXSmall),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_location_on),
+                contentDescription = null,
+                modifier = Modifier.size(MemoripIconSize.IconSizeMedium)
+            )
             Text(
                 text = place.name,
                 modifier = Modifier.alignByBaseline(),
@@ -144,17 +153,17 @@ private fun CompactPlaceTimeCard(
             Column(verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXXSmall)) {
                 Text(
                     text = place.name,
-                    color = MemoripTheme.colors.black,
+                    color = MemoripTheme.colors.onSurface,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
                     style = MemoripTheme.typography.headline2
                 )
 //                TagChipRow(tags = place.categories.toImmutableList())
-                PlaceLocationText(address = place.address)
-                PlaceTimeText(
-                    startDateTime = place.startDateTime,
-                    endDateTime = place.endDateTime
-                )
+                PlaceLocationText(address = place.address, maxLines = 2)
+//                PlaceTimeText(
+//                    startDateTime = place.startDateTime,
+//                    endDateTime = place.endDateTime
+//                )
             }
         }
     }
@@ -184,13 +193,13 @@ private fun ExpandedPlaceTimeCard(
                 contentScale = ContentScale.Crop
             )
 
-            Column(
-                modifier = Modifier.padding(all = MemoripPadding.PaddingMedium),
-                verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXXSmall)
+            Column(modifier = Modifier
+                .padding(horizontal = MemoripPadding.PaddingMedium)
+                .padding(bottom = MemoripPadding.PaddingSmall)
             ) {
                 Text(
                     text = place.name,
-                    color = MemoripTheme.colors.black,
+                    color = MemoripTheme.colors.onSurface,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
                     style = MemoripTheme.typography.headline2,
@@ -198,10 +207,10 @@ private fun ExpandedPlaceTimeCard(
                 TagChipRow(tags = place.categories.toImmutableList())
                 Row(horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceSmall)) {
                     PlaceLocationText(address = place.address)
-                    PlaceTimeText(
-                        startDateTime = place.startDateTime,
-                        endDateTime = place.endDateTime
-                    )
+//                    PlaceTimeText(
+//                        startDateTime = place.startDateTime,
+//                        endDateTime = place.endDateTime
+//                    )
                 }
             }
         }
