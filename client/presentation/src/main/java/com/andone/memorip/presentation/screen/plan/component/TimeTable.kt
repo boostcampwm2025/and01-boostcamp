@@ -1,7 +1,9 @@
 package com.andone.memorip.presentation.screen.plan.component
 
+import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateOffsetAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
@@ -21,10 +23,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,8 +44,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.screen.plan.component.TimeBlockItemConstants.SNAP_MINUTE_UNIT
+import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.SCROLL_DURATION
 import com.andone.memorip.presentation.screen.plan.model.TimeBlock
 import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_DAY
+import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_HOUR
 import com.andone.memorip.presentation.screen.plan.utill.MINUTE_HEIGHT_DP
 import com.andone.memorip.presentation.screen.plan.utill.TimeLayoutEngine
 import com.andone.memorip.presentation.theme.MemoripLineWidth
@@ -49,24 +55,74 @@ import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
 import com.andone.memorip.presentation.util.toPx
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+
+private object TimeTableConstants {
+    val SCROLL_DURATION = 700
+}
 
 @Composable
 fun TimeTable(
     blocks: List<TimeBlock>,
     onBlockAdd: (TimeBlock) -> Unit,
-    onBlockMoved: (String, Int) -> Unit
+    onBlockMoved: (String, Int) -> Unit,
+    totalMinutes: Int,
+    currentDay: Int?,
+    onDayScrolled: (Int) -> Unit = {}
 ) {
     val scrollState = rememberScrollState()
     val density = LocalDensity.current
     val minuteHeightPx = MINUTE_HEIGHT_DP.dp.toPx(density)
-
-    val engine = remember {
+    val engine = remember(minuteHeightPx) {
         TimeLayoutEngine(minuteHeightPx)
     }
+
+    var isAutoScrolling by remember { mutableStateOf(false) }
+    var lastDayFromScroll by remember { mutableStateOf<Int?>(null) }
+
 
     val places = remember { DummyData.places.toMutableStateList() }
     var rowTop by remember { mutableStateOf(0f) }
     var timeTabTopPx by remember { mutableStateOf(0f) }
+
+    LaunchedEffect(currentDay, minuteHeightPx) {
+        val day = currentDay ?: return@LaunchedEffect
+        if (day <= 0) return@LaunchedEffect
+
+        if (lastDayFromScroll == day) {
+            lastDayFromScroll = null
+            return@LaunchedEffect
+        }
+
+        val dayStartMinute = (day - 1) * MINUTES_PER_DAY
+        val targetYPx = (dayStartMinute * minuteHeightPx).toInt()
+
+        isAutoScrolling = true
+        scrollState.animateScrollTo(
+            value = targetYPx,
+            animationSpec = tween(
+                durationMillis = SCROLL_DURATION,
+                easing = LinearOutSlowInEasing
+            )
+        )
+        isAutoScrolling = false
+    }
+
+    LaunchedEffect(scrollState, minuteHeightPx) {
+        snapshotFlow { scrollState.value }
+            .map { scrollYPx ->
+                val minute = scrollYPx / minuteHeightPx
+                ((minute + 1) / MINUTES_PER_DAY).toInt() + 1
+            }
+            .distinctUntilChanged()
+            .collect { day ->
+                if (!isAutoScrolling && scrollState.isScrollInProgress && day > 0) {
+                    lastDayFromScroll = day
+                    onDayScrolled(day)
+                }
+            }
+    }
 
     Column(modifier = Modifier.fillMaxSize()) {
         Box(
@@ -81,12 +137,12 @@ fun TimeTable(
         ) {
             Box {
                 Row {
-                    TimeAxis()
+                    TimeAxis(totalMinutes = totalMinutes)
 
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(height = (MINUTES_PER_DAY * MINUTE_HEIGHT_DP).dp)
+                            .height(height = (totalMinutes * MINUTE_HEIGHT_DP).dp)
                     ) {
                         blocks.forEach { block ->
                             TimeBlockItem(
@@ -98,8 +154,7 @@ fun TimeTable(
                     }
                 }
                 HorizontalTimeGridLines(
-                    totalMinutes = MINUTES_PER_DAY,
-                    majorIntervalMinutes = 60,
+                    totalMinutes = totalMinutes,
                     minuteHeightPx = minuteHeightPx
                 )
             }
@@ -215,15 +270,16 @@ private fun TimeTablePreview() {
 
     TimeTable(
         blocks = previewState,
+        totalMinutes = MINUTES_PER_DAY,
+        currentDay = 1,
         onBlockMoved = { id, newStartMinute -> },
-        onBlockAdd = { timeBlock -> }
     )
 }
 
 @Composable
 private fun HorizontalTimeGridLines(
-    totalMinutes: Int,
-    majorIntervalMinutes: Int,
+    totalMinutes: Int = MINUTES_PER_DAY,
+    majorIntervalMinutes: Int = MINUTES_PER_HOUR,
     minuteHeightPx: Float,
 ) {
     val lineColor = MemoripTheme.colors.lightGray

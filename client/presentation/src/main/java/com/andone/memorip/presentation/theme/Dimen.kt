@@ -3,6 +3,7 @@ package com.andone.memorip.presentation.theme
 import androidx.compose.ui.unit.dp
 
 object MemoripPadding {
+    val AppHorizontalPadding = 16.dp
     val PaddingXXXSmall = 2.dp
     val PaddingXXSmall = 4.dp
     val PaddingXSmall = 8.dp
@@ -24,8 +25,9 @@ object MemoripSpace {
 }
 
 object MemoripIconSize {
-    val IconSizeXSmall = 12.dp
-    val IconSizeSmall = 16.dp
+    val IconSizeXXSmall = 12.dp
+    val IconSizeXSmall = 16.dp
+    val IconSizeSmall = 20.dp
     val IconSizeMedium = 24.dp
     val IconSizeLarge = 36.dp
     val IconButton = 84.dp

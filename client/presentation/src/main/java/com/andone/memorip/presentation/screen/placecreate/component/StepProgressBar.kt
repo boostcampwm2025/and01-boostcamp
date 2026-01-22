@@ -103,7 +103,7 @@ private fun StepCircle(
             Icon(
                 painter = painterResource(R.drawable.ic_check),
                 contentDescription = null,
-                modifier = Modifier.size(MemoripIconSize.IconSizeSmall),
+                modifier = Modifier.size(MemoripIconSize.IconSizeXSmall),
                 tint = MemoripTheme.colors.white
             )
         } else {

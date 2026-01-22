@@ -1,6 +1,7 @@
 package com.andone.memorip.presentation.screen.plan
 
 import androidx.lifecycle.ViewModel
+import com.andone.memorip.presentation.screen.plan.model.DateUiModel
 import com.andone.memorip.presentation.screen.plan.model.PlanAction
 import com.andone.memorip.presentation.screen.plan.model.PlanEvent
 import com.andone.memorip.presentation.screen.plan.model.PlanUiState
@@ -12,6 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,11 +32,31 @@ class PlanViewModel @Inject constructor() : ViewModel() {
 
             PlanAction.AddDay -> {
                 _uiState.update {
-                    it.copy(totalDays = it.totalDays + 1)
+                    it.copy(date = it.date.copy(endDay = it.date.endDay?.plusDays(1)))
                 }
             }
 
             is PlanAction.RemoveDay -> {
+                _uiState.update { state ->
+                    val date = state.date
+                    val (newStart, newEnd) = date.deleteDay(dayIndex = action.day)
+
+                    val newCurrent = adjustCurrentDay(
+                        date = date,
+                        dayIndex = action.day,
+                        newStart = newStart,
+                        newEnd = newEnd
+                    )
+
+                    state.copy(
+                        date = date.copy(
+                            startDay = newStart,
+                            endDay = newEnd,
+                            currentDay = newCurrent,
+                            longClickedDay = null
+                        )
+                    )
+                }
                 _uiState.update {
                     it.copy(
                         totalDays = it.totalDays - 1,
@@ -43,12 +65,35 @@ class PlanViewModel @Inject constructor() : ViewModel() {
                 }
             }
 
+
             is PlanAction.LongClick -> {
-                _uiState.update { it.copy(longClickedDay = action.day) }
+                _uiState.update { it.copy(date = it.date.copy(longClickedDay = action.day)) }
             }
 
             is PlanAction.SelectDay -> {
-                _uiState.update { it.copy(selectedDay = action.day) }
+                _uiState.update {
+                    it.copy(date = it.date.copy(currentDay = it.date.currentDayFromSelectedDay(selectedDay = action.day)))
+                }
+            }
+
+            PlanAction.RemoveDayClick -> {
+                _event.trySend(element = PlanEvent.ShowDeleteDayDialog(day = _uiState.value.date.longClickedDay))
+            }
+
+            PlanAction.RemoveCancel -> {
+                _uiState.update { it.copy(date = it.date.copy(longClickedDay = null)) }
+            }
+
+            is PlanAction.DateSelected -> {
+                _uiState.update {
+                    it.copy(date = it.date.copy(startDay = action.start, endDay = action.end, currentDay = action.start))
+                }
+            }
+
+            is PlanAction.DayScrolled -> {
+                _uiState.update {
+                    it.copy(date = it.date.copy(currentDay = it.date.currentDayFromSelectedDay(action.day)))
+                }
             }
 
             is PlanAction.ItemDragStart -> {
@@ -63,8 +108,33 @@ class PlanViewModel @Inject constructor() : ViewModel() {
                 blocks = it.blocks.map { block ->
                     if (block.id == id) block.copy(startMinute = newStartMinute)
                     else block
+                })
+        }
+    }
+
+    private fun adjustCurrentDay(
+        date: DateUiModel,
+        dayIndex: Int,
+        newStart: LocalDate?,
+        newEnd: LocalDate?
+    ): LocalDate? {
+        if (newStart == null || newEnd == null) return null
+
+        val deletedDay = date.currentDayFromSelectedDay(dayIndex)
+        val current = date.currentDay ?: return newStart
+
+        return when {
+            deletedDay != null && current.isEqual(deletedDay) -> {
+                val next = deletedDay.plusDays(1)
+                when {
+                    next.isAfter(newEnd) -> newEnd
+                    next.isBefore(newStart) -> newStart
+                    else -> next
                 }
-            )
+            }
+            current.isAfter(newEnd) -> newEnd
+            current.isBefore(newStart) -> newStart
+            else -> current
         }
     }
 }

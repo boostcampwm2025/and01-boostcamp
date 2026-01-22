@@ -1,4 +1,4 @@
-package com.andone.memorip.presentation.placelist.model
+package com.andone.memorip.presentation.screen.placelist.model
 
 import com.andone.memorip.domain.model.Region
 import java.util.UUID
