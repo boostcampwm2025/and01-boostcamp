@@ -17,8 +17,8 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 
 @Composable
 fun LocationSelectionButton(
-    onClick: () -> Unit,
     enabled: Boolean,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Button(

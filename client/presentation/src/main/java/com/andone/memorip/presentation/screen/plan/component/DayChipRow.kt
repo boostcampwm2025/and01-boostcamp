@@ -23,11 +23,11 @@ fun DayChipRow(
     totalDays: Int,
     selectedDay: Int,
     modifier: Modifier = Modifier,
+    longClickedDay: Int? = null,
     onDaySelected: (Int) -> Unit,
     onLongClick: (Int) -> Unit = {},
     onAddDayClick: () -> Unit = {},
     onDeleteDayClick: (Int) -> Unit = {},
-    longClickedDay: Int? = null,
 ) {
     val days = (1..totalDays).toList()
 
