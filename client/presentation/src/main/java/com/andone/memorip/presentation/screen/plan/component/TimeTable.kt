@@ -46,6 +46,7 @@ import com.andone.memorip.domain.model.TimeBlock
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.screen.plan.component.TimeBlockItemConstants.SNAP_MINUTE_UNIT
 import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.DEFAULT_ALPHA
+import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.DEFAULT_DURATION
 import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.DEFAULT_ZINDEX
 import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.FULL_WEIGHT
 import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.PICKED_ALPHA
@@ -68,6 +69,7 @@ import kotlinx.coroutines.flow.map
 
 private object TimeTableConstants {
     const val SCROLL_DURATION = 700
+    const val DEFAULT_DURATION = 60
     const val FULL_WEIGHT = 1f
     const val PICKED_SCALE = 0.8f
     const val PICKED_ELEVATION = 12f
@@ -227,7 +229,7 @@ fun TimeTable(
                                                         engine.yPxToStartMinute(absoluteYPx)
                                                     val snappedMinute =
                                                         ((newStartMinute + SNAP_MINUTE_UNIT / 2) / SNAP_MINUTE_UNIT) * SNAP_MINUTE_UNIT
-                                                    onBlockAdd(createNewBlock(place, snappedMinute))
+                                                    onBlockAdd(createNewBlock(place, snappedMinute, currentDay))
                                                     places.remove(place)
                                                 }
                                             }
@@ -276,11 +278,17 @@ fun TimeTable(
     }
 }
 
-private fun createNewBlock(place: Place, startMinute: Int): TimeBlock {
+private fun createNewBlock(
+    place: Place,
+    startMinute: Int,
+    currentDay: Int,
+    durationMinute: Int = DEFAULT_DURATION
+): TimeBlock {
     return TimeBlock(
         id = place.id,
         startMinute = startMinute,
-        durationMinute = 60,
+        durationMinute = durationMinute,
+        day = currentDay
     )
 }
 
