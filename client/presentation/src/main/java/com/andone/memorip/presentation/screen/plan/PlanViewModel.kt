@@ -26,7 +26,8 @@ class PlanViewModel @Inject constructor() : ViewModel() {
 
     private val _uiState = MutableStateFlow(
         value = PlanUiState(
-            blocks = DummyData.places.mapNotNull { it.toTimeBlock(dayStart = DummyData.dummyDate.startDay!!.atStartOfDay()) },
+//            blocks = DummyData.places.mapNotNull { it.toTimeBlock(dayStart = DummyData.dummyDate.startDay!!.atStartOfDay()) },
+            blocks = emptyList(),
             blockUiModels = DummyData.places.associateBy { it.id },
             date = DummyData.dummyDate,
         )
