@@ -34,7 +34,7 @@ fun RegionSelectBottomSheet(
     onRegionChipClick: (regionUiModel: RegionUiModel) -> Unit = {},
 ) {
     Column(
-        modifier = modifier.padding(horizontal = MemoripPadding.PaddingMedium),
+        modifier = modifier.padding(horizontal = MemoripPadding.AppHorizontalPadding),
         verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceMedium)
     ) {
         Text(

@@ -10,6 +10,7 @@ import com.andone.memorip.presentation.screen.plan.model.PlanAction
 import com.andone.memorip.presentation.screen.plan.model.PlanEvent
 import com.andone.memorip.presentation.screen.plan.model.PlanEvent.*
 import com.andone.memorip.presentation.screen.plan.model.PlanUiState
+import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_DAY
 import com.andone.memorip.presentation.util.DummyData
 import com.andone.memorip.presentation.util.DummyData.place
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -140,10 +141,30 @@ class PlanViewModel @Inject constructor() : ViewModel() {
             }
 
             is PlanAction.ItemDragStart -> {
+                val date = _uiState.value.date
+                val baseDay = date.startDay ?: return
+
+                val totalMinute = action.startMinute
+
+                val dayOffset = totalMinute / MINUTES_PER_DAY
+                val minuteInDay = totalMinute % MINUTES_PER_DAY
+
+                val targetDay = baseDay.plusDays(dayOffset.toLong())
+
+                val startDateTime = targetDay.atStartOfDay()
+                    .plusMinutes(minuteInDay.toLong())
+
+                val endDateTime = startDateTime.plusMinutes(action.item.durationMinutes)
+
+                val newPlace = action.item.copy(
+                    startDateTime = startDateTime,
+                    endDateTime = endDateTime
+                )
+
                 _uiState.update {
                     it.copy(
-                        blockUiModels = uiState.value.blockUiModels + (action.item.id to action.item),
-                        blocks = uiState.value.blocks + action.item.toTimeBlock(it.date.currentDay!!.atStartOfDay())!!
+                        blockUiModels = it.blockUiModels + (action.item.id to newPlace),
+                        blocks = it.blocks + newPlace.toTimeBlock(dayStart = it.date.currentDay!!.atStartOfDay())!!
                     )
                 }
             }
@@ -172,6 +193,7 @@ class PlanViewModel @Inject constructor() : ViewModel() {
             )
         }
     }
+
     private fun adjustCurrentDay(
         date: DateUiModel,
         dayIndex: Int,
@@ -192,6 +214,7 @@ class PlanViewModel @Inject constructor() : ViewModel() {
                     else -> next
                 }
             }
+
             current.isAfter(newEnd) -> newEnd
             current.isBefore(newStart) -> newStart
             else -> current

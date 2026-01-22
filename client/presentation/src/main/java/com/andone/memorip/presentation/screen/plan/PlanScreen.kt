@@ -131,7 +131,7 @@ fun PlanScreenContents(
             TimeTable(
                 totalMinutes = state.date.totalMinutes,
                 currentDay = state.date.selectedDay,
-                onBlockAdd = { onAction(PlanAction.ItemDragStart(it)) },
+                onBlockAdd = { place, start -> onAction(PlanAction.ItemDragStart(place, start)) },
                 onDayScrolled = { day ->
                     onAction(PlanAction.DayScrolled(day))
                 }
