@@ -184,7 +184,7 @@ fun PlaceListScreenContent(
                     FilterSection(
                         onChangeRegionClick = { showRegionBottomSheet = true },
                         onAddTagClick = {},
-                        modifier = Modifier.padding(horizontal = MemoripPadding.PaddingMedium),
+                        modifier = Modifier.padding(horizontal = MemoripPadding.AppHorizontalPadding),
                         tags = DummyData.categories.toImmutableList(),
                         selectedRegionState = state.selectedRegionState
                     )
@@ -246,7 +246,7 @@ fun PlaceListGrid(
             itemKey = { it.id },
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = MemoripPadding.PaddingMedium)
+                .padding(horizontal = MemoripPadding.AppHorizontalPadding)
                 .then(
                     if (clearFocusOnScroll != null && focusManager != null) {
                         Modifier

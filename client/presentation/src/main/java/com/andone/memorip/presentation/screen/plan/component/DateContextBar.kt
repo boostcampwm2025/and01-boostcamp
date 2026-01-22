@@ -42,7 +42,7 @@ fun DateContextBar(
     ) {
         Row(
             modifier = Modifier
-                .padding(horizontal = MemoripPadding.PaddingMedium),
+                .padding(horizontal = MemoripPadding.AppHorizontalPadding),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXXSmall)
         ) {

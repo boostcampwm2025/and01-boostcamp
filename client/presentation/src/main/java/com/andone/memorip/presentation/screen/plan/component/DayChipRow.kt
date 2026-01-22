@@ -38,7 +38,7 @@ fun DayChipRow(
 
     Row(
         modifier = modifier
-            .padding(horizontal = MemoripPadding.PaddingMedium)
+            .padding(horizontal = MemoripPadding.AppHorizontalPadding)
             .padding(bottom = MemoripPadding.PaddingXXSmall)
             .height(height = HEIGHT)
             .horizontalScroll(state = rememberScrollState()),
