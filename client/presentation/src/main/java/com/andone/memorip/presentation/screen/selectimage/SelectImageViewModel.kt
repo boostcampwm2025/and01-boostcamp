@@ -32,6 +32,10 @@ class SelectImageViewModel @Inject constructor() : ViewModel() {
             is SelectImageAction.OnImagesCrop -> {
                 addImages(action.images)
             }
+
+            SelectImageAction.OnBack -> {
+                _event.trySend(SelectImageEvent.NavigateBack)
+            }
         }
     }
 

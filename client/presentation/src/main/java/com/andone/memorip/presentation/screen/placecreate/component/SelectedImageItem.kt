@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.andone.memorip.presentation.theme.MemoripBorderWidth
+import com.andone.memorip.presentation.theme.MemoripLineWidth
 import com.andone.memorip.presentation.theme.MemoripIconSize
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.R
@@ -38,7 +38,7 @@ fun SelectedImageItem(
             modifier = Modifier
                 .matchParentSize()
                 .border(
-                    width = MemoripBorderWidth.Thin,
+                    width = MemoripLineWidth.Thin,
                     color = MemoripTheme.colors.gray,
                     shape = MemoripTheme.shapes.roundedSmall
                 )

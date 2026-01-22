@@ -2,91 +2,102 @@ package com.andone.memorip.presentation.util
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.net.Uri
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.calculatePan
+import androidx.compose.foundation.gestures.calculateZoom
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.pointer.positionChanged
 import androidx.core.graphics.createBitmap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import kotlin.math.max
-import kotlin.math.min
 import kotlin.math.roundToInt
 
 object BitmapCropUtil {
 
-    /** 중앙 크롭 박스 **/
-    fun calculateCropRect(
-        viewSize: Size,
-        aspectRatio: Float,
-    ): Rect {
-        if (viewSize == Size.Zero) return Rect.Zero
-
-        val cropWidth: Float
-        val cropHeight: Float
-
-        // 비율에 따른 크롭할 크기
-        if (viewSize.width / viewSize.height > aspectRatio) {
-            cropHeight = viewSize.height
-            cropWidth = cropHeight * aspectRatio
-        } else {
-            cropWidth = viewSize.width
-            cropHeight = cropWidth / aspectRatio
+    suspend fun loadBitmapFromUri(context: Context, uri: Uri): Bitmap? {
+        return withContext(Dispatchers.IO) {
+            runCatching {
+                context.contentResolver.openInputStream(uri)?.use { stream ->
+                    BitmapFactory.decodeStream(stream)
+                }
+            }.getOrNull()
         }
-
-        // 크롭 시작 좌표
-        val left = (viewSize.width - cropWidth) / 2
-        val top = (viewSize.height - cropHeight) / 2
-
-        return Rect(
-            left = left,
-            top = top,
-            right = left + cropWidth,
-            bottom = top + cropHeight
-        )
     }
 
-    /** 초기 이미지 비율 **/
-    fun calculateCenterCropScale(
+    fun bitmapToScreenRect(
+        center: Offset,
+        bitmapRect: Rect,
         bitmap: Bitmap,
-        viewSize: Size,
-        cropRect: Rect
-    ): Float {
-        if (bitmap.width == 0 || bitmap.height == 0) return 1f
-
-        // 크롭 박스를 빈틈없이 꽉 채우는 배율
-        val scaleToFillCrop = max(
-            cropRect.width / bitmap.width,
-            cropRect.height / bitmap.height
-        )
-
-        // 이미지가 화면 밖으로 나가지 않게 하는 배율
-        val scaleToFitView = min(
-            viewSize.width / bitmap.width,
-            viewSize.height / bitmap.height
-        )
-
-        // 둘 중 작은 값을 선택 (화면을 벗어나는 것을 방지하는 것이 우선)
-        return min(scaleToFillCrop, scaleToFitView)
+        scale: Float
+    ): Rect {
+        val left = center.x + (bitmapRect.left - bitmap.width / 2) * scale
+        val top = center.y + (bitmapRect.top - bitmap.height / 2) * scale
+        val right = center.x + (bitmapRect.right - bitmap.width / 2) * scale
+        val bottom = center.y + (bitmapRect.bottom - bitmap.height / 2) * scale
+        return Rect(left, top, right, bottom)
     }
 
-    /** 줌 아웃 한계 **/
-    fun calculateMinScale(
+    fun screenToBitmapRect(
+        center: Offset,
+        screenRect: Rect,
         bitmap: Bitmap,
-        cropRect: Rect
-    ): Float {
-        if (bitmap.width == 0 || bitmap.height == 0) return 1f
+        scale: Float
+    ): Rect {
+        val left = bitmap.width / 2 + (screenRect.left - center.x) / scale
+        val top = bitmap.height / 2 + (screenRect.top - center.y) / scale
+        val right = bitmap.width / 2 + (screenRect.right - center.x) / scale
+        val bottom = bitmap.height / 2 + (screenRect.bottom - center.y) / scale
+        return Rect(left, top, right, bottom)
+    }
 
-        // 이미지 가로/세로 중 적어도 한 변은 크롭 박스 닿아
-        return min(
-            cropRect.width / bitmap.width,
-            cropRect.height / bitmap.height
-        )
+    /** 터치 감지하여 이미지를 움직이거나 줌인/줌아웃 **/
+    fun Modifier.detectEditorGestures(
+        key: String,
+        onDragStart: (Offset) -> Unit,
+        onDrag: (Offset) -> Unit,
+        onZoom: (pan: Offset, zoom: Float) -> Unit,
+        onDragEnd: () -> Unit
+    ): Modifier {
+        return pointerInput(key) {
+            awaitEachGesture {
+                onDragStart(awaitFirstDown().position)
+
+                do {
+                    val event = awaitPointerEvent()
+                    val calculatedPan = event.calculatePan()
+                    val calculatedZoom = event.calculateZoom()
+
+                    // 화면 터치 포인트 개수에 따라 분리
+                    if (event.changes.size == 1) {
+                        onDrag(calculatedPan)
+                    } else {
+                        onZoom(calculatedPan, calculatedZoom)
+                    }
+
+                    // 화면 터치 포인트 전부 소비
+                    event.changes.forEach {
+                        if (it.positionChanged()) it.consume()
+                    }
+
+                    // 화면 터치 포인트 있으면 걔속 do
+                } while (event.changes.any { it.pressed })
+
+                onDragEnd()
+            }
+        }
     }
 
     /** 이동 제한 계산 **/

@@ -15,15 +15,15 @@ enum class MainBottomBarRoute(
         R.string.main_bottom_bar_place_list,
         PlaceList
     ),
-    GROUP_LIST(
-        R.drawable.ic_folder,
-        R.string.main_bottom_bar_group,
-        GroupList
-    ),
     PLAN(
         R.drawable.ic_calendar_today,
         R.string.main_bottom_bar_plan,
         Plan
+    ),
+    GROUP_LIST(
+        R.drawable.ic_folder,
+        R.string.main_bottom_bar_group,
+        GroupList
     ),
     USER(
         R.drawable.ic_account_circle,

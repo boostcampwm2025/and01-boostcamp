@@ -68,50 +68,11 @@ fun PlaceCreateScreen(
         }
     }
 
-    PlaceCreateScreenContents(
-        uiState = uiState,
-        onAction = viewModel::onAction,
-        modifier = modifier,
-    )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun PlaceCreateScreenContents(
-    uiState: PlaceCreateUiState,
-    onAction: (PlaceCreateAction) -> Unit,
-    modifier: Modifier = Modifier
-) {
     Box(modifier = modifier.fillMaxSize()) {
-        Column(
-            modifier = Modifier.padding(MemoripPadding.PaddingXSmall),
-            verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceSmall)
-        ) {
-            ImageRowSection(
-                selectedImages = uiState.images,
-                maxCount = MAX_PICTURE_COUNT,
-                onRemoveImage = { uri -> onAction(PlaceCreateAction.OnImagesRemove(uri)) }
-            )
-
-            ContentSection(
-                title = uiState.title,
-                content = uiState.content,
-                isPublic = uiState.isPublic,
-                onTitleChange = { onAction(PlaceCreateAction.OnTitleChange(it)) },
-                onContentChange = { onAction(PlaceCreateAction.OnContentChange(it)) },
-                onCheckedChange = { onAction(PlaceCreateAction.OnPublicChange) }
-            )
-
-            SelectSection(
-                category = uiState.category,
-                location = uiState.location,
-                group = uiState.group,
-                onCategoryClick = { onAction(PlaceCreateAction.OnCategoryClick) },
-                onLocationClick = { onAction(PlaceCreateAction.OnLocationClick) },
-                onGroupClick = { onAction(PlaceCreateAction.OnGroupClick) },
-                modifier = Modifier.padding(bottom = MemoripPadding.PaddingMedium)
-            )
-        }
+        PlaceCreateScreenContent(
+            uiState = uiState,
+            onAction = viewModel::onAction
+        )
 
         if (uiState.isLoading) {
             LoadingIndicatorScreen(
@@ -122,6 +83,44 @@ fun PlaceCreateScreenContents(
                 )
             )
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun PlaceCreateScreenContent(
+    uiState: PlaceCreateUiState,
+    onAction: (PlaceCreateAction) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier.padding(MemoripPadding.PaddingXSmall),
+        verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceSmall)
+    ) {
+        ImageRowSection(
+            selectedImages = uiState.images,
+            maxCount = MAX_PICTURE_COUNT,
+            onRemoveImage = { uri -> onAction(PlaceCreateAction.OnImagesRemove(uri)) }
+        )
+
+        ContentSection(
+            title = uiState.title,
+            content = uiState.content,
+            isPublic = uiState.isPublic,
+            onTitleChange = { onAction(PlaceCreateAction.OnTitleChange(it)) },
+            onContentChange = { onAction(PlaceCreateAction.OnContentChange(it)) },
+            onCheckedChange = { onAction(PlaceCreateAction.OnPublicChange) }
+        )
+
+        SelectSection(
+            category = uiState.category,
+            location = uiState.location,
+            group = uiState.group,
+            onCategoryClick = { onAction(PlaceCreateAction.OnCategoryClick) },
+            onLocationClick = { onAction(PlaceCreateAction.OnLocationClick) },
+            onGroupClick = { onAction(PlaceCreateAction.OnGroupClick) },
+            modifier = Modifier.padding(bottom = MemoripPadding.PaddingMedium)
+        )
     }
 }
 
@@ -252,7 +251,7 @@ private fun SelectSection(
 @Composable
 private fun PlaceCreateScreenContentsPreview() {
     MemoripTheme {
-        PlaceCreateScreenContents(
+        PlaceCreateScreenContent(
             uiState = PlaceCreateUiState(),
             onAction = {}
         )

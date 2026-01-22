@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.R
-import com.andone.memorip.presentation.theme.MemoripBorderWidth
+import com.andone.memorip.presentation.theme.MemoripLineWidth
 import com.andone.memorip.presentation.theme.MemoripIconSize
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -72,7 +72,7 @@ private fun StepLine(
 
     Box(
         modifier = modifier
-            .height(MemoripBorderWidth.Small)
+            .height(MemoripLineWidth.Small)
             .padding(horizontal = MemoripPadding.PaddingXXSmall)
             .background(color)
     )
@@ -103,7 +103,7 @@ private fun StepCircle(
             Icon(
                 painter = painterResource(R.drawable.ic_check),
                 contentDescription = null,
-                modifier = Modifier.size(MemoripIconSize.IconSizeSmall),
+                modifier = Modifier.size(MemoripIconSize.IconSizeXSmall),
                 tint = MemoripTheme.colors.white
             )
         } else {
