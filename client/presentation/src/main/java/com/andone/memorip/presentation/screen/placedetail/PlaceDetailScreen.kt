@@ -267,9 +267,9 @@ private fun PlaceDetailContent(
                     .background(
                         brush = Brush.verticalGradient(
                             colorStops = arrayOf(
-                                TOP_RATIO to MemoripTheme.colors.white.copy(alpha = TOP_ALPHA),
-                                MIDDLE_RATIO to MemoripTheme.colors.white.copy(alpha = MIDDLE_ALPHA),
-                                BOTTOM_RATIO to MemoripTheme.colors.white.copy(alpha = BOTTOM_ALPHA)
+                                TOP_RATIO to MemoripTheme.colors.background.copy(alpha = TOP_ALPHA),
+                                MIDDLE_RATIO to MemoripTheme.colors.background.copy(alpha = MIDDLE_ALPHA),
+                                BOTTOM_RATIO to MemoripTheme.colors.background.copy(alpha = BOTTOM_ALPHA)
                             )
                         )
                     )
