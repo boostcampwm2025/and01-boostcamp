@@ -1,4 +1,4 @@
-package com.andone.memorip.presentation.placedetail.component
+package com.andone.memorip.presentation.screen.placedetail.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

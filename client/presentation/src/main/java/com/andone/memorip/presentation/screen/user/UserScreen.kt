@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -107,7 +106,7 @@ fun UserScreen(
         }
     }
 
-    UserScreenContents(
+    UserScreenContent(
         state = uiState,
         onAction = viewModel::onAction,
         modifier = modifier,
@@ -115,7 +114,7 @@ fun UserScreen(
 }
 
 @Composable
-fun UserScreenContents(
+fun UserScreenContent(
     state: UserUiState,
     onAction: (UserAction) -> Unit,
     modifier: Modifier = Modifier,
@@ -192,7 +191,7 @@ fun UserScreenContents(
 @Composable
 private fun UserScreenContentsPreview() {
     MemoripTheme {
-        UserScreenContents(
+        UserScreenContent(
             state = UserUiState(),
             onAction = {},
         )
@@ -203,7 +202,7 @@ private fun UserScreenContentsPreview() {
 @Composable
 private fun UserScreenContentsLogedinPreview() {
     MemoripTheme {
-        UserScreenContents(
+        UserScreenContent(
             state = UserUiState(
                 isLoggedIn = true,
                 user = UserUiModel(

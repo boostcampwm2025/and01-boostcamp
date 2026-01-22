@@ -6,6 +6,7 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -45,18 +46,23 @@ import com.andone.memorip.presentation.component.EmptyText
 import com.andone.memorip.presentation.component.MemoripPagingList
 import com.andone.memorip.presentation.component.StaggeredImageItem
 import com.andone.memorip.presentation.model.Place
+import com.andone.memorip.presentation.model.TagUiModel
 import com.andone.memorip.presentation.screen.placelist.MemoripMotion.AnimationDuration
 import com.andone.memorip.presentation.screen.placelist.MemoripMotion.ScrollThreshold
-import com.andone.memorip.presentation.screen.placelist.component.FilterSection
 import com.andone.memorip.presentation.screen.placelist.component.PlaceListTopBar
+import com.andone.memorip.presentation.screen.placelist.component.RegionFilter
 import com.andone.memorip.presentation.screen.placelist.component.RegionSelectBottomSheet
+import com.andone.memorip.presentation.screen.placelist.component.TagFilter
 import com.andone.memorip.presentation.screen.placelist.model.PlaceListAction
 import com.andone.memorip.presentation.screen.placelist.model.PlaceListEvent
 import com.andone.memorip.presentation.screen.placelist.model.PlaceListUiState
+import com.andone.memorip.presentation.screen.placelist.model.SelectedRegionState
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
 import com.andone.memorip.presentation.util.collectWithLifecycle
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
 private object StaggeredGridDimens {
@@ -85,7 +91,7 @@ fun PlaceListScreen(
                 onCreatePlaceClick()
             }
 
-            is PlaceListEvent.NavigatePlaceDetail -> {
+            is PlaceListEvent.NavigateToPlaceDetail -> {
                 onPlaceClick(event.id)
             }
 
@@ -99,7 +105,7 @@ fun PlaceListScreen(
         }
     }
 
-    PlaceListScreenContents(
+    PlaceListScreenContent(
         state = uiState,
         placePagingItems = placesPagingItems,
         onAction = viewModel::onAction,
@@ -109,7 +115,7 @@ fun PlaceListScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PlaceListScreenContents(
+fun PlaceListScreenContent(
     state: PlaceListUiState,
     placePagingItems: LazyPagingItems<Place>,
     onAction: (PlaceListAction) -> Unit,
@@ -189,7 +195,7 @@ fun PlaceListScreenContents(
             PlaceListGrid(
                 placePagingItems = placePagingItems,
                 onPlaceClick = { id -> onAction(PlaceListAction.OnPlaceClick(id = id)) },
-                onRefresh = { onAction(PlaceListAction.OnPullToRefresh) },
+                onRefresh = { onAction(PlaceListAction.OnRefreshPull) },
                 modifier = Modifier.fillMaxSize(),
                 clearFocusOnScroll = clearFocusOnScroll,
                 focusManager = focusManager
@@ -198,6 +204,25 @@ fun PlaceListScreenContents(
     }
 }
 
+@Composable
+private fun FilterSection(
+    onChangeRegionClick: () -> Unit,
+    onAddTagClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    tags: ImmutableList<TagUiModel> = persistentListOf(),
+    selectedRegionState: SelectedRegionState = SelectedRegionState(),
+) {
+    Column(modifier = modifier) {
+        RegionFilter(
+            modifier = Modifier.clickable(onClick = onChangeRegionClick),
+            selectedRegionState = selectedRegionState,
+        )
+        TagFilter(
+            tags = tags,
+            onAddTagClick = onAddTagClick
+        )
+    }
+}
 
 @Composable
 fun PlaceListGrid(
@@ -256,7 +281,7 @@ fun PlaceListGrid(
 @Composable
 private fun PlaceListScreenContentsPreview() {
     MemoripTheme {
-        PlaceListScreenContents(
+        PlaceListScreenContent(
             state = PlaceListUiState(),
             placePagingItems = DummyData.getPlacePagingItems(),
             onAction = {},

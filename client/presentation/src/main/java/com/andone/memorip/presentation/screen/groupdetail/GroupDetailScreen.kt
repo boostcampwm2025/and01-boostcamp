@@ -25,7 +25,7 @@ import com.andone.memorip.navigation.GroupDetail
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.map.rememberBitmapMarkerLoader
 import com.andone.memorip.presentation.model.Place
-import com.andone.memorip.presentation.screen.groupdetail.component.GroupDetailAppBar
+import com.andone.memorip.presentation.screen.groupdetail.component.GroupDetailTopBar
 import com.andone.memorip.presentation.screen.groupdetail.component.MapTab
 import com.andone.memorip.presentation.screen.groupdetail.component.PlaceImagesBottomSheet
 import com.andone.memorip.presentation.screen.groupdetail.model.GroupDetailAction
@@ -54,7 +54,8 @@ fun GroupDetailScreen(
             GroupDetailEvent.NavigateBack -> {
                 onBackClick()
             }
-            is GroupDetailEvent.NavigatePlaceDetail -> {
+
+            is GroupDetailEvent.NavigateToPlaceDetail -> {
                 onImageClick(event.id)
             }
         }
@@ -109,7 +110,7 @@ private fun GroupDetailScreenContent(
 
     Scaffold(
         topBar = {
-            GroupDetailAppBar(
+            GroupDetailTopBar(
                 title = groupName,
                 onBackClick = { onAction(GroupDetailAction.OnBackClick) },
                 onMenuClick = { onAction(GroupDetailAction.OnMenuClick) },
@@ -147,13 +148,14 @@ private fun GroupDetailScreenContent(
                         modifier = Modifier.fillMaxSize()
                     )
                 }
+
                 1 -> MapTab(
-                        places = places,
-                        markerImages = markerImages,
-                        onPlaceClick = { id -> onAction(GroupDetailAction.OnPlaceClick(id = id)) },
-                        mapLoaded = mapLoaded,
-                        onMapLoaded = { mapLoaded = true },
-                        modifier = Modifier.fillMaxSize()
+                    places = places,
+                    markerImages = markerImages,
+                    onPlaceClick = { id -> onAction(GroupDetailAction.OnPlaceClick(id = id)) },
+                    mapLoaded = mapLoaded,
+                    onMapLoaded = { mapLoaded = true },
+                    modifier = Modifier.fillMaxSize()
                 )
             }
         }

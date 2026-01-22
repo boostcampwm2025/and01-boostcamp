@@ -75,7 +75,7 @@ class GroupDetailViewModel @AssistedInject constructor(
             }
 
             is GroupDetailAction.OnPlaceClick -> {
-                _event.trySend(element = GroupDetailEvent.NavigatePlaceDetail(id = action.id))
+                _event.trySend(element = GroupDetailEvent.NavigateToPlaceDetail(id = action.id))
             }
 
             GroupDetailAction.OnSearchClick -> {

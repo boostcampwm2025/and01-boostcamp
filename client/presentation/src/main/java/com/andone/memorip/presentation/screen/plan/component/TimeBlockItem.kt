@@ -105,7 +105,8 @@ fun TimeBlockItem(
                                 val absoluteYPx = startYPx + dragOffsetY
                                 val newStartMinute =
                                     engine.yPxToStartMinute(absoluteYPx)
-                                val snappedMinute = ((newStartMinute + SNAP_MINUTE_UNIT / 2) / SNAP_MINUTE_UNIT) * SNAP_MINUTE_UNIT
+                                val snappedMinute =
+                                    ((newStartMinute + SNAP_MINUTE_UNIT / 2) / SNAP_MINUTE_UNIT) * SNAP_MINUTE_UNIT
 
                                 dragOffsetY = 0f
                                 isDragging = false
@@ -121,7 +122,6 @@ fun TimeBlockItem(
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

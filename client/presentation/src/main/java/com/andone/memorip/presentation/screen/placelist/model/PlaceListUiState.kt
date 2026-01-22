@@ -1,8 +1,5 @@
 package com.andone.memorip.presentation.screen.placelist.model
 
-import com.andone.memorip.presentation.placelist.model.RegionUiModel
-import com.andone.memorip.presentation.placelist.model.SelectedRegionState
-
 data class PlaceListUiState(
     val query: String = "",
     val rootRegions: List<RegionUiModel> = emptyList(),

@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.screen.placedetail
 
+import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
@@ -39,6 +40,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -50,18 +52,18 @@ import com.andone.memorip.navigation.PlaceDetail
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.LoadingIndicatorScreen
 import com.andone.memorip.presentation.component.TagChipRow
-import com.andone.memorip.presentation.placedetail.component.ContentCard
-import com.andone.memorip.presentation.screen.placedetail.Constants.bottomAlpha
-import com.andone.memorip.presentation.screen.placedetail.Constants.bottomRatio
-import com.andone.memorip.presentation.screen.placedetail.Constants.middleAlpha
-import com.andone.memorip.presentation.screen.placedetail.Constants.middleRatio
-import com.andone.memorip.presentation.screen.placedetail.Constants.minHeightRate
-import com.andone.memorip.presentation.screen.placedetail.Constants.topAlpha
-import com.andone.memorip.presentation.screen.placedetail.Constants.topRatio
-import com.andone.memorip.presentation.screen.placedetail.Dimens.overlayHeight
+import com.andone.memorip.presentation.screen.placedetail.PlaceDetailScreenConstants.BOTTOM_ALPHA
+import com.andone.memorip.presentation.screen.placedetail.PlaceDetailScreenConstants.BOTTOM_RATIO
+import com.andone.memorip.presentation.screen.placedetail.PlaceDetailScreenConstants.MIDDLE_ALPHA
+import com.andone.memorip.presentation.screen.placedetail.PlaceDetailScreenConstants.MIDDLE_RATIO
+import com.andone.memorip.presentation.screen.placedetail.PlaceDetailScreenConstants.MIN_HEIGHT_RATE
+import com.andone.memorip.presentation.screen.placedetail.PlaceDetailScreenConstants.PLACE_DETAIL_SCREEN_STEP_LABEL
+import com.andone.memorip.presentation.screen.placedetail.PlaceDetailScreenConstants.TOP_ALPHA
+import com.andone.memorip.presentation.screen.placedetail.PlaceDetailScreenConstants.TOP_RATIO
+import com.andone.memorip.presentation.screen.placedetail.PlaceDetailScreenDimens.OVERLAY_HEIGHT
+import com.andone.memorip.presentation.screen.placedetail.component.ContentCard
 import com.andone.memorip.presentation.screen.placedetail.component.ImageDialog
 import com.andone.memorip.presentation.screen.placedetail.component.LocationCard
-import com.andone.memorip.presentation.screen.placedetail.component.PlaceDetailInfoSection
 import com.andone.memorip.presentation.screen.placedetail.component.PlaceDetailTopBar
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceDetailAction
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceDetailEvent
@@ -76,19 +78,19 @@ import com.andone.memorip.presentation.util.collectWithLifecycle
 import com.andone.memorip.presentation.util.toDp
 import com.andone.memorip.presentation.util.toPx
 
-private object Constants {
-    const val minHeightRate = 0.5f
-    const val topAlpha = 0f
-    const val middleAlpha = 0.8f
-    const val bottomAlpha = 1f
-    const val PlaceDetailScreenStep = "PlaceDetailScreenStep"
-    const val topRatio = 0f
-    const val middleRatio = 0.5f
-    const val bottomRatio = 1f
+private object PlaceDetailScreenConstants {
+    const val MIN_HEIGHT_RATE = 0.5f
+    const val TOP_ALPHA = 0f
+    const val MIDDLE_ALPHA = 0.8f
+    const val BOTTOM_ALPHA = 1f
+    const val PLACE_DETAIL_SCREEN_STEP_LABEL = "PlaceDetailScreenStep"
+    const val TOP_RATIO = 0f
+    const val MIDDLE_RATIO = 0.5f
+    const val BOTTOM_RATIO = 1f
 }
 
-private object Dimens {
-    val overlayHeight = 180.dp
+private object PlaceDetailScreenDimens {
+    val OVERLAY_HEIGHT = 180.dp
 }
 
 @Composable
@@ -130,7 +132,7 @@ fun PlaceDetailScreen(
                 slideInHorizontally { it } togetherWith slideOutHorizontally { -it }
             }
         },
-        label = Constants.PlaceDetailScreenStep
+        label = PLACE_DETAIL_SCREEN_STEP_LABEL
     ) { step ->
         when (step) {
             PlaceDetailScreenStep.PlaceDetail -> {
@@ -217,7 +219,7 @@ private fun PlaceDetailContent(
         .asPaddingValues()
         .calculateBottomPadding()
     val maxHeaderHeight = LocalWindowInfo.current.containerDpSize.height - statusBarHeightDp
-    val minHeaderHeight = maxHeaderHeight * minHeightRate
+    val minHeaderHeight = maxHeaderHeight * MIN_HEIGHT_RATE
     val maxHeaderPx = maxHeaderHeight.toPx(density = density)
     val minHeaderPx = minHeaderHeight.toPx(density = density)
     val collapseRangePx = maxHeaderPx - minHeaderPx
@@ -260,14 +262,14 @@ private fun PlaceDetailContent(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(height = overlayHeight)
+                    .height(height = OVERLAY_HEIGHT)
                     .padding(top = MemoripPadding.PaddingXXXLarge)
                     .background(
                         brush = Brush.verticalGradient(
                             colorStops = arrayOf(
-                                topRatio to MemoripTheme.colors.white.copy(alpha = topAlpha),
-                                middleRatio to MemoripTheme.colors.white.copy(alpha = middleAlpha),
-                                bottomRatio to MemoripTheme.colors.white.copy(alpha = bottomAlpha)
+                                TOP_RATIO to MemoripTheme.colors.white.copy(alpha = TOP_ALPHA),
+                                MIDDLE_RATIO to MemoripTheme.colors.white.copy(alpha = MIDDLE_ALPHA),
+                                BOTTOM_RATIO to MemoripTheme.colors.white.copy(alpha = BOTTOM_ALPHA)
                             )
                         )
                     )
@@ -316,6 +318,28 @@ private fun PlaceDetailContent(
                 modifier = Modifier.padding(start = MemoripPadding.PaddingXSmall)
             )
         }
+    }
+}
+
+@Composable
+private fun PlaceDetailInfoSection(
+    infoString: String,
+    @DrawableRes iconRes: Int,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXXSmall),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            painter = painterResource(iconRes),
+            contentDescription = null
+        )
+        Text(
+            text = infoString,
+            style = MemoripTheme.typography.labelLarge
+        )
     }
 }
 

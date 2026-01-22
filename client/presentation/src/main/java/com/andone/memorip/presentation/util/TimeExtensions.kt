@@ -3,7 +3,10 @@ package com.andone.memorip.presentation.util
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.andone.memorip.presentation.R
+import java.time.Instant
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.ZoneId
 
 /**
  * ex) 오후 03:00
@@ -37,3 +40,8 @@ fun formatTimeRange(start: LocalDateTime, end: LocalDateTime): String {
         end.toTimeString()
     )
 }
+
+fun millisToLocalDate(millis: Long): LocalDate =
+    Instant.ofEpochMilli(millis)
+        .atZone(ZoneId.systemDefault())
+        .toLocalDate()
