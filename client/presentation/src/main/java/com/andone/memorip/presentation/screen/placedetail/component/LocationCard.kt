@@ -1,14 +1,10 @@
 package com.andone.memorip.presentation.screen.placedetail.component
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -16,17 +12,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.component.map.ReadOnlyMapView
+import com.andone.memorip.presentation.model.LocationUiModel
 import com.andone.memorip.presentation.screen.placedetail.component.Dimens.LocationCardRatio
 import com.andone.memorip.presentation.screen.placedetail.component.Dimens.defaultZoomLevel
-import com.andone.memorip.presentation.theme.MemoripElevation
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -34,10 +27,7 @@ import com.andone.memorip.presentation.util.DummyData.place
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
 import com.naver.maps.map.compose.ExperimentalNaverMapApi
-import com.naver.maps.map.compose.MapUiSettings
-import com.naver.maps.map.compose.Marker
 import com.naver.maps.map.compose.MarkerState
-import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.rememberCameraPositionState
 
 private object Dimens {
@@ -86,22 +76,16 @@ fun LocationCard(
             )
         }
 
-        NaverMap(
+        ReadOnlyMapView(
             modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(ratio = LocationCardRatio),
-            cameraPositionState = cameraPosition,
-            uiSettings = MapUiSettings(
-                isCompassEnabled = false,
-                isScaleBarEnabled = false,
-                isLogoClickEnabled = false,
-                isLocationButtonEnabled = false,
-                isIndoorLevelPickerEnabled = false,
-                isZoomControlEnabled = false
+            location = LocationUiModel(
+                address = location,
+                latitude = latitude,
+                longitude = longitude
             )
-        ) {
-            Marker(state = markerState)
-        }
+        )
     }
 }
 
