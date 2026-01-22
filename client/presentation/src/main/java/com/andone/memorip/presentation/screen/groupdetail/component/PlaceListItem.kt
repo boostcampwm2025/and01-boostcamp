@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.screen.groupdetail.component
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,6 +25,7 @@ import com.andone.memorip.presentation.component.MemoripImage
 import com.andone.memorip.presentation.component.PlaceLocationText
 import com.andone.memorip.presentation.component.TagChipRow
 import com.andone.memorip.presentation.model.Place
+import com.andone.memorip.presentation.theme.MemoripLineWidth
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -47,7 +49,11 @@ fun PlaceListItem(
         modifier = modifier.fillMaxWidth(),
         shape = MemoripTheme.shapes.roundedMedium,
         color = MemoripTheme.colors.white,
-        tonalElevation = PlaceListItemDimen.CARD_ELEVATION
+        tonalElevation = PlaceListItemDimen.CARD_ELEVATION,
+        border = BorderStroke(
+            width = MemoripLineWidth.Small,
+            color = MemoripTheme.colors.primaryContainer
+        )
     ) {
         Row(
             modifier = Modifier
