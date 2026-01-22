@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -45,15 +44,15 @@ import androidx.compose.ui.zIndex
 import com.andone.memorip.domain.model.TimeBlock
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.screen.plan.component.TimeBlockItemConstants.SNAP_MINUTE_UNIT
-import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.DEFAULT_ALPHA
-import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.DEFAULT_DURATION
-import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.DEFAULT_ZINDEX
-import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.FULL_WEIGHT
-import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.PICKED_ALPHA
-import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.PICKED_ELEVATION
-import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.PICKED_SCALE
-import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.PICKED_ZINDEX
-import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.SCROLL_DURATION
+import com.andone.memorip.presentation.screen.plan.component.TimeTableConstant.DEFAULT_ALPHA
+import com.andone.memorip.presentation.screen.plan.component.TimeTableConstant.DEFAULT_DURATION
+import com.andone.memorip.presentation.screen.plan.component.TimeTableConstant.DEFAULT_ZINDEX
+import com.andone.memorip.presentation.screen.plan.component.TimeTableConstant.FULL_WEIGHT
+import com.andone.memorip.presentation.screen.plan.component.TimeTableConstant.PICKED_ALPHA
+import com.andone.memorip.presentation.screen.plan.component.TimeTableConstant.PICKED_ELEVATION
+import com.andone.memorip.presentation.screen.plan.component.TimeTableConstant.PICKED_SCALE
+import com.andone.memorip.presentation.screen.plan.component.TimeTableConstant.PICKED_ZINDEX
+import com.andone.memorip.presentation.screen.plan.component.TimeTableConstant.SCROLL_DURATION
 import com.andone.memorip.presentation.screen.plan.model.DraggablePlace
 import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_DAY
 import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_HOUR
@@ -67,7 +66,7 @@ import com.andone.memorip.presentation.util.toPx
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
-private object TimeTableConstants {
+private object TimeTableConstant {
     const val SCROLL_DURATION = 700
     const val DEFAULT_DURATION = 60
     const val FULL_WEIGHT = 1f
