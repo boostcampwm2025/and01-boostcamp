@@ -25,5 +25,9 @@
 
 <img width="1105" height="616" alt="image" src="https://github.com/user-attachments/assets/9ac3a9d8-70df-4e63-8140-c066340e510e" />
 
+## 주요 화면
+
+
+
 
 
