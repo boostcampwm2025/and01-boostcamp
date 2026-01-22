@@ -32,6 +32,7 @@ import com.andone.memorip.presentation.screen.groupdetail.model.GroupDetailActio
 import com.andone.memorip.presentation.screen.groupdetail.model.GroupDetailEvent
 import com.andone.memorip.presentation.screen.groupdetail.model.MapBottomSheetStep
 import com.andone.memorip.presentation.screen.placelist.PlaceListGrid
+import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.collectWithLifecycle
 
@@ -42,9 +43,7 @@ fun GroupDetailScreen(
     onImageClick: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: GroupDetailViewModel = hiltViewModel<GroupDetailViewModel, GroupDetailViewModel.Factory>(
-        creationCallback = { factory ->
-            factory.create(route)
-        }
+        creationCallback = { factory -> factory.create(route) }
     )
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -148,14 +147,13 @@ private fun GroupDetailScreenContent(
             }
 
             when (currentPage) {
-                0 -> {
-                    PlaceListGrid(
-                        placePagingItems = placesPagingItems,
-                        onPlaceClick = { id -> onAction(GroupDetailAction.OnPlaceClick(id = id)) },
-                        onRefresh = { /* GroupDetail에서는 refresh 불필요 */ },
-                        modifier = Modifier.fillMaxSize()
-                    )
-                }
+                0 -> PlaceListGrid(
+                    placePagingItems = placesPagingItems,
+                    onPlaceClick = { id -> onAction(GroupDetailAction.OnPlaceClick(id = id)) },
+                    onRefresh = { /* GroupDetail에서는 refresh 불필요 */ },
+                    modifier = Modifier.fillMaxSize()
+                        .padding(vertical = MemoripPadding.AppHorizontalPadding)
+                )
 
                 1 -> MapTab(
                     places = places,
