@@ -2,6 +2,8 @@ package com.andone.memorip.presentation.screen.plan
 
 import androidx.lifecycle.ViewModel
 import com.andone.memorip.domain.model.TimeBlock
+import com.andone.memorip.presentation.model.Place
+import com.andone.memorip.presentation.model.PlanBlockUiModel
 import com.andone.memorip.presentation.model.toTimeBlock
 import com.andone.memorip.presentation.screen.plan.model.DateUiModel
 import com.andone.memorip.presentation.screen.plan.model.PlanAction
@@ -20,12 +22,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PlanViewModel @Inject constructor() : ViewModel() {
-
-    private val _uiState = MutableStateFlow(value = PlanUiState(
-        blocks = DummyData.places.map { it.toTimeBlock(dayStart = DummyData.dummyDate.startDay!!.atStartOfDay()) },
-        blockUiModels = DummyData.places.associateBy { it.id },
-        date = DummyData.dummyDate,
-    ))
+    private val _uiState = MutableStateFlow(
+        value = PlanUiState(
+            blocks = DummyData.places.map { it.toTimeBlock(dayStart = DummyData.dummyDate.startDay!!.atStartOfDay()) },
+            blockUiModels = DummyData.places.associateBy { it.id },
+            date = DummyData.dummyDate,
+        )
+    )
     val uiState = _uiState.asStateFlow()
     private val _event = Channel<PlanEvent>(capacity = BUFFERED)
     val event = _event.receiveAsFlow()
@@ -54,6 +57,17 @@ class PlanViewModel @Inject constructor() : ViewModel() {
                         newEnd = newEnd
                     )
 
+                    val adjustedUiModels = adjustBlockUiModelsAfterDayRemoved(
+                        blocks = state.blocks,
+                        blockUiModels = state.blockUiModels,
+                        removedDayIndex = action.day,
+                        date = state.date
+                    )
+
+                    val newBlocks = adjustedUiModels.values
+                        .filterIsInstance<Place>()
+                        .map { it.toTimeBlock(dayStart = newStart!!.atStartOfDay()) }
+
                     state.copy(
                         date = date.copy(
                             startDay = newStart,
@@ -61,6 +75,8 @@ class PlanViewModel @Inject constructor() : ViewModel() {
                             currentDay = newCurrent,
                             longClickedDay = null
                         ),
+                        blockUiModels = adjustedUiModels,
+                        blocks = newBlocks
                     )
                 }
             }
@@ -72,7 +88,13 @@ class PlanViewModel @Inject constructor() : ViewModel() {
 
             is PlanAction.SelectDay -> {
                 _uiState.update {
-                    it.copy(date = it.date.copy(currentDay = it.date.currentDayFromSelectedDay(selectedDay = action.day)))
+                    it.copy(
+                        date = it.date.copy(
+                            currentDay = it.date.currentDayFromSelectedDay(
+                                selectedDay = action.day
+                            )
+                        )
+                    )
                 }
             }
 
@@ -86,13 +108,25 @@ class PlanViewModel @Inject constructor() : ViewModel() {
 
             is PlanAction.DateSelected -> {
                 _uiState.update {
-                    it.copy(date = it.date.copy(startDay = action.start, endDay = action.end, currentDay = action.start))
+                    it.copy(
+                        date = it.date.copy(
+                            startDay = action.start,
+                            endDay = action.end,
+                            currentDay = action.start
+                        )
+                    )
                 }
             }
 
             is PlanAction.DayScrolled -> {
                 _uiState.update {
-                    it.copy(date = it.date.copy(currentDay = it.date.currentDayFromSelectedDay(action.day)))
+                    it.copy(
+                        date = it.date.copy(
+                            currentDay = it.date.currentDayFromSelectedDay(
+                                action.day
+                            )
+                        )
+                    )
                 }
             }
         }
@@ -120,7 +154,6 @@ class PlanViewModel @Inject constructor() : ViewModel() {
             )
         }
     }
-
     private fun adjustCurrentDay(
         date: DateUiModel,
         dayIndex: Int,
@@ -147,18 +180,42 @@ class PlanViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    private fun adjustblockUiModelsAfterDayRemoved(
+    private fun adjustBlockUiModelsAfterDayRemoved(
         blocks: List<TimeBlock>,
-        removedDayIndex: Int
-    ): List<TimeBlock> {
-        return blocks
-            .filterNot { it.day == removedDayIndex }
-            .map { block ->
-                if (block.day > removedDayIndex) {
-                    block.copy(day = block.day - 1)
-                } else {
-                    block
+        blockUiModels: Map<String, PlanBlockUiModel>,
+        removedDayIndex: Int,
+        date: DateUiModel
+    ): Map<String, PlanBlockUiModel> {
+
+        val removedIds = blocks
+            .filter { it.day == removedDayIndex }
+            .map { it.id }
+            .toSet()
+
+        val removedDate = date.currentDayFromSelectedDay(removedDayIndex)
+
+        return blockUiModels.mapNotNull { (id, uiModel) ->
+
+            if (id in removedIds) return@mapNotNull null
+
+            if (uiModel is Place && removedDate != null) {
+                val place = uiModel
+
+                val startDate = place.startDateTime.toLocalDate()
+
+                val adjusted = when {
+                    startDate.isAfter(removedDate) -> place.copy(
+                        startDateTime = place.startDateTime.minusDays(1),
+                        endDateTime = place.endDateTime.minusDays(1)
+                    )
+
+                    else -> place
                 }
+
+                id to adjusted
+            } else {
+                id to uiModel
             }
+        }.toMap()
     }
 }
