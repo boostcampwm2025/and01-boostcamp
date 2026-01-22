@@ -106,7 +106,7 @@ fun PlaceCreateScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PlaceCreateScreenContent(
+private fun PlaceCreateScreenContent(
     uiState: PlaceCreateUiState,
     onAction: (PlaceCreateAction) -> Unit,
     modifier: Modifier = Modifier

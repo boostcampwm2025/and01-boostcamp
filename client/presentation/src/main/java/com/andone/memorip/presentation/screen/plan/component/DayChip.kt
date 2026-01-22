@@ -30,10 +30,10 @@ fun DayChip(
     day: Int,
     modifier: Modifier = Modifier,
     selected: Boolean = true,
-    onClick: (Int) -> Unit = {},
-    onLongClick: (Int) -> Unit = {},
     isDeleteMode: Boolean = false,
     isDeletedTarget: Boolean = false,
+    onClick: (Int) -> Unit = {},
+    onLongClick: (Int) -> Unit = {},
 ) {
     val backgroundColor = when {
         isDeleteMode && isDeletedTarget -> MemoripTheme.colors.error
