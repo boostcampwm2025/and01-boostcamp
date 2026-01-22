@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -22,25 +24,29 @@ import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.LoadingIndicatorScreen
+import com.andone.memorip.presentation.component.MemoripImage
 import com.andone.memorip.presentation.component.MemoripInputBox
 import com.andone.memorip.presentation.model.LocationUiModel
 import com.andone.memorip.presentation.model.TagUiModel
 import com.andone.memorip.presentation.screen.grouplist.model.GroupUiModel
-import com.andone.memorip.presentation.screen.placecreate.PictureSetting.MAX_PICTURE_COUNT
-import com.andone.memorip.presentation.screen.placecreate.PlaceCreateScreenConstants.CONTENT_MAX_LENGTH
-import com.andone.memorip.presentation.screen.placecreate.PlaceCreateScreenConstants.TITLE_MAX_LENGTH
-import com.andone.memorip.presentation.screen.placecreate.component.ImageCountButton
+import com.andone.memorip.presentation.screen.placecreate.PlaceCreateScreenConstant.CONTENT_MAX_LENGTH
+import com.andone.memorip.presentation.screen.placecreate.PlaceCreateScreenConstant.IMAGE_RATIO
+import com.andone.memorip.presentation.screen.placecreate.PlaceCreateScreenConstant.TITLE_MAX_LENGTH
+import com.andone.memorip.presentation.screen.placecreate.component.ImageCountCard
 import com.andone.memorip.presentation.screen.placecreate.component.PlaceCreateBottomBar
 import com.andone.memorip.presentation.screen.placecreate.component.SelectRow
 import com.andone.memorip.presentation.screen.placecreate.component.SelectedImageItem
@@ -50,16 +56,14 @@ import com.andone.memorip.presentation.screen.placecreate.model.PlaceCreateUiSta
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
+import com.andone.memorip.presentation.util.DummyData
 import com.andone.memorip.presentation.util.collectWithLifecycle
 import com.naver.maps.map.compose.ExperimentalNaverMapApi
 
-private object PictureSetting {
-    const val MAX_PICTURE_COUNT = 10
-}
-
-private object PlaceCreateScreenConstants {
+private object PlaceCreateScreenConstant {
     const val TITLE_MAX_LENGTH = 30
     const val CONTENT_MAX_LENGTH = 300
+    const val IMAGE_RATIO = 1.5f
 }
 
 @Composable
@@ -116,6 +120,10 @@ fun PlaceCreateScreenContent(
             uiState.title.isNotBlank() &&
             uiState.group != null
 
+    LaunchedEffect(Unit) {
+        onAction(PlaceCreateAction.OnImageSelect(uiState.images.first()))
+    }
+
     DisposableEffect(Unit) {
         onDispose {
             onAction(PlaceCreateAction.OnScrollPositionChange(scrollState.value))
@@ -129,7 +137,8 @@ fun PlaceCreateScreenContent(
                 onClick = { onAction(PlaceCreateAction.OnPlaceCreate(context)) },
                 enabled = placeCreateEnable
             )
-        }
+        },
+        contentWindowInsets = WindowInsets()
     ) { innerPadding ->
         Column(
             modifier = modifier
@@ -139,8 +148,9 @@ fun PlaceCreateScreenContent(
             verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXLarge)
         ) {
             ImageRowSection(
-                selectedImages = uiState.images,
-                maxCount = MAX_PICTURE_COUNT,
+                images = uiState.images,
+                selectedImage = uiState.selectedImage,
+                onImageSelect = { uri -> onAction(PlaceCreateAction.OnImageSelect(uri)) },
                 onRemoveImage = { uri -> onAction(PlaceCreateAction.OnImagesRemove(uri)) }
             )
 
@@ -170,28 +180,51 @@ fun PlaceCreateScreenContent(
 
 @Composable
 private fun ImageRowSection(
-    selectedImages: List<Uri>,
-    maxCount: Int,
+    images: List<Uri>,
+    selectedImage: Uri?,
+    onImageSelect: (Uri) -> Unit,
     onRemoveImage: (Uri) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Row(
-        modifier = modifier.horizontalScroll(state = rememberScrollState()),
-        horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceSmall),
-        verticalAlignment = Alignment.CenterVertically
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceSmall)
     ) {
-        selectedImages.forEach { uri ->
-            SelectedImageItem(
-                imageUri = uri,
-                onRemoveClick = { onRemoveImage(uri) }
-            )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(IMAGE_RATIO),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Box {
+                MemoripImage(
+                    imageUrl = selectedImage.toString(),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Fit
+                )
+                ImageCountCard(
+                    currentImageIndex = images.indexOf(selectedImage),
+                    totalImageCount = images.size,
+                    modifier = Modifier.align(Alignment.BottomEnd)
+                )
+            }
         }
 
-        ImageCountButton(
-            current = selectedImages.size,
-            max = maxCount,
-            modifier = Modifier.padding(vertical = MemoripPadding.PaddingXSmall)
-        )
+        Row(
+            modifier = Modifier.horizontalScroll(state = rememberScrollState()),
+            horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXSmall),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            images.forEach { uri ->
+                SelectedImageItem(
+                    imageUri = uri,
+                    isSelected = selectedImage == uri,
+                    onClick = { onImageSelect(uri) },
+                    onRemoveClick = { onRemoveImage(uri) }
+                )
+            }
+        }
     }
 }
 
@@ -237,8 +270,10 @@ private fun SelectSection(
     onGroupClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val locationValue = location?.name ?: stringResource(R.string.place_create_location_placeholder)
-    val groupValue = group?.name ?: stringResource(R.string.place_create_group_placeholder)
+    val locationValue = location?.name
+        ?.ifBlank { null } ?: stringResource(R.string.place_create_location_placeholder)
+    val groupValue = group?.name
+        ?: stringResource(R.string.place_create_group_placeholder)
     val categoryValue = category
         .joinToString(stringResource(R.string.place_create_space)) { it.name }
         .ifEmpty { stringResource(R.string.place_create_tag_placeholder) }
@@ -318,9 +353,13 @@ private fun PublicCheckSection(
 @Composable
 private fun PlaceCreateScreenContentsPreview() {
     MemoripTheme {
-        PlaceCreateScreenContent(
-            uiState = PlaceCreateUiState(),
-            onAction = {}
-        )
+        Column {
+            PlaceCreateScreenContent(
+                uiState = PlaceCreateUiState(
+                    images = DummyData.groups.first().images.take(3).map { it.toUri() }
+                ),
+                onAction = {}
+            )
+        }
     }
 }

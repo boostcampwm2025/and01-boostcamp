@@ -30,7 +30,6 @@ object MemoripIconSize {
     val IconSizeSmall = 20.dp
     val IconSizeMedium = 24.dp
     val IconSizeLarge = 40.dp
-    val IconButton = 84.dp
 }
 
 object MemoripHeight {
@@ -85,6 +84,9 @@ object MemoripAlpha {
     /* ---------- Divider / Border ---------- */
     const val DIVIDER = 0.12f
     const val BORDER = 0.2f
+
+    /* ---------- Icon / IconButton ---------- */
+    const val BUTTON = 0.6f
 }
 
 object MemoripElevation {
