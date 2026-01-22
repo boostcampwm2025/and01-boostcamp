@@ -20,7 +20,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -43,6 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import com.andone.memorip.domain.model.TimeBlock
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.screen.plan.component.TimeBlockItemConstants.SNAP_MINUTE_UNIT
 import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.DEFAULT_ALPHA
@@ -53,7 +53,6 @@ import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.
 import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.PICKED_SCALE
 import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.PICKED_ZINDEX
 import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.SCROLL_DURATION
-import com.andone.memorip.domain.model.TimeBlock
 import com.andone.memorip.presentation.screen.plan.model.DraggablePlace
 import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_DAY
 import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_HOUR
@@ -192,8 +191,8 @@ fun TimeTable(
                     var itemBottom by remember { mutableStateOf(value = 0f) }
                     var relativePos by remember { mutableStateOf(value = Offset.Zero) }
                     var isDraggable by remember { mutableStateOf(false) }
-
-                    Box(
+                    PlacePickerItem(
+                        place = place,
                         modifier = Modifier
                             .onGloballyPositioned { layout ->
                                 val pos = layout.positionInRoot()
@@ -202,8 +201,6 @@ fun TimeTable(
                                 relativePos = rootCoordinates?.localPositionOf(layout, Offset.Zero)
                                     ?: Offset.Zero
                             }
-                            .width(width = 80.dp)
-                            .height(height = 100.dp)
                             .background(
                                 color = MemoripTheme.colors.primaryContainer,
                                 shape = backgroundShape
@@ -252,22 +249,16 @@ fun TimeTable(
                                 }
                             }
                             .zIndex(zIndex = if (isDraggable) PICKED_ZINDEX else DEFAULT_ZINDEX)
-                            .alpha(alpha = if (isDraggable) PICKED_ALPHA else DEFAULT_ALPHA),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = place.name
-                        )
-                    }
+                            .alpha(alpha = if (isDraggable) PICKED_ALPHA else DEFAULT_ALPHA)
+                    )
                 }
             }
         }
         if (selectedPlace != null) {
             val place = selectedPlace!!
-            Box(
+            PlacePickerItem(
+                place = place.place,
                 modifier = Modifier
-                    .width(width = 80.dp)
-                    .height(height = 100.dp)
                     .offset {
                         IntOffset(
                             x = (place.originPos.x + place.offset.x).toInt(),
@@ -280,17 +271,7 @@ fun TimeTable(
                         shadowElevation = PICKED_ELEVATION
                         shape = backgroundShape
                     }
-                    .background(
-                        color = MemoripTheme.colors.black,
-                        shape = backgroundShape
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = place.place.name,
-                    color = MemoripTheme.colors.white
-                )
-            }
+            )
         }
     }
 }
