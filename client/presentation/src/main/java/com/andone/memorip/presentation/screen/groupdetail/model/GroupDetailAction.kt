@@ -14,7 +14,7 @@ sealed interface GroupDetailAction {
 
     data object OnBackClick : GroupDetailAction
 
-    data class OnPictureClick(val place: Place) : GroupDetailAction
+    data class OnMapPlaceClick(val place: Place) : GroupDetailAction
 
-    data object OnDismissBottomSheetClick : GroupDetailAction
+    data object OnMapPlaceClose : GroupDetailAction
 }

@@ -4,7 +4,6 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -35,12 +34,6 @@ fun GroupDetailTopBar(
             }
         },
         actions = {
-            IconButton(onClick = onMenuClick) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_more_vert),
-                    contentDescription = stringResource(R.string.groupdetail_menu_button_content_description)
-                )
-            }
             IconButton(onClick = onSearchClick) {
                 Icon(
                     painter = painterResource(R.drawable.ic_search),
@@ -50,10 +43,9 @@ fun GroupDetailTopBar(
         },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MemoripTheme.colors.background,
-            /** TODO 색상 변경하기 */
-            titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-            navigationIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-            actionIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+            navigationIconContentColor = MemoripTheme.colors.onSurface,
+            titleContentColor = MemoripTheme.colors.onSurface,
+            actionIconContentColor = MemoripTheme.colors.onSurface
         ),
         modifier = modifier
     )

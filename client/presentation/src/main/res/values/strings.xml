@@ -68,6 +68,7 @@
     <string name="groupdetail_back_button_content_description">뒤로 가기</string>
     <string name="groupdetail_menu_button_content_description">메뉴</string>
     <string name="groupdetail_search_button_content_description">검색</string>
+    <string name="groupdetail_place_list_title">장소 목록</string>
 
     <!-- PlaceCreateScreen -->
     <string name="place_create_title">장소 추가</string>

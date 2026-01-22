@@ -12,6 +12,7 @@ import com.andone.memorip.presentation.model.toUiModel
 import com.andone.memorip.presentation.screen.groupdetail.model.GroupDetailAction
 import com.andone.memorip.presentation.screen.groupdetail.model.GroupDetailEvent
 import com.andone.memorip.presentation.screen.groupdetail.model.GroupDetailUiState
+import com.andone.memorip.presentation.screen.groupdetail.model.MapBottomSheetStep
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -41,7 +42,6 @@ class GroupDetailViewModel @AssistedInject constructor(
     val event = _event.receiveAsFlow()
 
     init {
-        // 그룹 정보 로드
         viewModelScope.launch {
             repository.getGroupById(groupId).onSuccess { group ->
                 _uiState.update { it.copy(groupName = group.title) }
@@ -66,14 +66,6 @@ class GroupDetailViewModel @AssistedInject constructor(
                 _event.trySend(element = GroupDetailEvent.NavigateBack)
             }
 
-            is GroupDetailAction.OnPictureClick -> {
-                _uiState.update { it.copy(selectedPlace = action.place) }
-            }
-
-            GroupDetailAction.OnDismissBottomSheetClick -> {
-                _uiState.update { it.copy(selectedPlace = null) }
-            }
-
             is GroupDetailAction.OnPlaceClick -> {
                 _event.trySend(element = GroupDetailEvent.NavigateToPlaceDetail(id = action.id))
             }
@@ -84,6 +76,24 @@ class GroupDetailViewModel @AssistedInject constructor(
 
             is GroupDetailAction.OnTabClick -> {
                 _uiState.update { it.copy(currentTab = action.currentTab) }
+            }
+
+            is GroupDetailAction.OnMapPlaceClick -> {
+                _uiState.update {
+                    it.copy(
+                        mapSelectedPlace = action.place,
+                        mapBottomSheetContent = MapBottomSheetStep.PlaceDetail
+                    )
+                }
+            }
+
+            GroupDetailAction.OnMapPlaceClose -> {
+                _uiState.update {
+                    it.copy(
+                        mapSelectedPlace = null,
+                        mapBottomSheetContent = MapBottomSheetStep.PlaceList
+                    )
+                }
             }
         }
     }

@@ -15,7 +15,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.andone.memorip.presentation.component.TagChip
 import com.andone.memorip.presentation.model.TagUiModel
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -23,6 +22,7 @@ import com.andone.memorip.presentation.util.DummyData
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.component.ClickableTagChip
 
 @Composable
 fun TagFilter(
@@ -36,7 +36,7 @@ fun TagFilter(
             .horizontalScroll(state = rememberScrollState()),
         horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXSmall)
     ) {
-        tags.forEach { tag -> TagChip(tag = tag) }
+        tags.forEach { tag -> ClickableTagChip(tag = tag) }
         IconButton(onClick = onAddTagClick) {
             Icon(
                 painter = painterResource(R.drawable.ic_outline_add_circle),
