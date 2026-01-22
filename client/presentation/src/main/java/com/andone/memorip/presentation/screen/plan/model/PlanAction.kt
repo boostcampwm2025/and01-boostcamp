@@ -5,6 +5,8 @@ import java.time.LocalDate
 sealed interface PlanAction {
     data class BlockMoved(val id: String, val newStartMinute: Int) : PlanAction
 
+    data class ItemDragStart(val item: TimeBlock): PlanAction
+
     object AddDay : PlanAction
     object RemoveDayClick : PlanAction
 

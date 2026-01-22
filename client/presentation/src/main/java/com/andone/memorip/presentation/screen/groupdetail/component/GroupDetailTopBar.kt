@@ -17,7 +17,7 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GroupDetailAppBar(
+fun GroupDetailTopBar(
     title: String,
     onBackClick: () -> Unit,
     onMenuClick: () -> Unit,
@@ -61,9 +61,9 @@ fun GroupDetailAppBar(
 
 @Preview
 @Composable
-private fun GroupDetailAppBarPreview() {
+private fun GroupDetailTopBarPreview() {
     MemoripTheme {
-        GroupDetailAppBar(
+        GroupDetailTopBar(
             title = "Group1",
             onBackClick = {},
             onSearchClick = {},

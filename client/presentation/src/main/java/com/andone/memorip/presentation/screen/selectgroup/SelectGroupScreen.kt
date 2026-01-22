@@ -106,8 +106,8 @@ fun SelectGroupScreen(
 private fun SelectGroupContent(
     groups: List<GroupUiModel>,
     onAction: (SelectGroupAction) -> Unit,
-    title: String = stringResource(R.string.select_group_title),
     modifier: Modifier = Modifier,
+    title: String = stringResource(R.string.select_group_title),
 ) {
     Scaffold(
         topBar = { 

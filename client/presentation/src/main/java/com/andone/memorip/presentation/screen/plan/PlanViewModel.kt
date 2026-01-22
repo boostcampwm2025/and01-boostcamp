@@ -8,6 +8,7 @@ import com.andone.memorip.presentation.model.toTimeBlock
 import com.andone.memorip.presentation.screen.plan.model.DateUiModel
 import com.andone.memorip.presentation.screen.plan.model.PlanAction
 import com.andone.memorip.presentation.screen.plan.model.PlanEvent
+import com.andone.memorip.presentation.screen.plan.model.PlanEvent.*
 import com.andone.memorip.presentation.screen.plan.model.PlanUiState
 import com.andone.memorip.presentation.util.DummyData
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,6 +23,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PlanViewModel @Inject constructor() : ViewModel() {
+
     private val _uiState = MutableStateFlow(
         value = PlanUiState(
             blocks = DummyData.places.mapNotNull { it.toTimeBlock(dayStart = DummyData.dummyDate.startDay!!.atStartOfDay()) },
@@ -106,7 +108,7 @@ class PlanViewModel @Inject constructor() : ViewModel() {
             }
 
             PlanAction.RemoveDayClick -> {
-                _event.trySend(element = PlanEvent.ShowDeleteDayDialog(day = _uiState.value.date.longClickedDay))
+                _event.trySend(element = ShowDeleteDayDialog(day = _uiState.value.date.longClickedDay))
             }
 
             PlanAction.RemoveCancel -> {
@@ -135,6 +137,10 @@ class PlanViewModel @Inject constructor() : ViewModel() {
                         )
                     )
                 }
+            }
+
+            is PlanAction.ItemDragStart -> {
+                _uiState.update { it.copy(blocks = uiState.value.blocks + action.item) }
             }
         }
     }

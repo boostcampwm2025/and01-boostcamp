@@ -13,10 +13,10 @@ import com.naver.maps.geometry.LatLng
 
 @Composable
 fun MapTab(
+    mapLoaded: Boolean,
     places: List<Place>,
     markerImages: Map<String, Bitmap>,
     onPlaceClick: (String) -> Unit,
-    mapLoaded: Boolean,
     onMapLoaded: () -> Unit,
     modifier: Modifier = Modifier
 ) {

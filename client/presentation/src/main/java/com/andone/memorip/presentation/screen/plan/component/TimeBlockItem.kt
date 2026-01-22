@@ -35,12 +35,14 @@ import com.andone.memorip.presentation.theme.memoripShapes
 import com.andone.memorip.presentation.util.toPx
 import kotlin.math.roundToInt
 import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.theme.MemoripDragConstants.DRAG_SCALE
 import com.andone.memorip.presentation.theme.MemoripDragConstants.DRAG_SHADOW_ELEVATION
 import com.andone.memorip.presentation.theme.MemoripDragConstants.DRAG_Z_INDEX
 import com.andone.memorip.presentation.util.DummyData
+import java.util.UUID
 
-private object TimeBlockItemConstants {
+object TimeBlockItemConstants {
     val SNAP_MINUTE_UNIT = 60
 }
 
