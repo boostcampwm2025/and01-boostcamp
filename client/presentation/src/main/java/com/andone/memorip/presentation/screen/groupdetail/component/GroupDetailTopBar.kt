@@ -34,12 +34,6 @@ fun GroupDetailTopBar(
             }
         },
         actions = {
-            IconButton(onClick = onMenuClick) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_more_vert),
-                    contentDescription = stringResource(R.string.groupdetail_menu_button_content_description)
-                )
-            }
             IconButton(onClick = onSearchClick) {
                 Icon(
                     painter = painterResource(R.drawable.ic_search),
