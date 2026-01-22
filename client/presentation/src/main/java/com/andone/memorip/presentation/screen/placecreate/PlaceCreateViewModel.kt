@@ -67,8 +67,12 @@ class PlaceCreateViewModel @Inject constructor(
                 _uiState.update { it.copy(isPublic = !_uiState.value.isPublic) }
             }
 
+            is PlaceCreateAction.OnImageSelect -> {
+                _uiState.update { it.copy(selectedImage = action.imageUri) }
+            }
+
             is PlaceCreateAction.OnImagesRemove -> {
-                _uiState.update { it.copy(images = it.images - action.imageUri) }
+                removeImage(action.imageUri)
             }
 
             is PlaceCreateAction.OnScrollPositionChange -> {
@@ -103,6 +107,22 @@ class PlaceCreateViewModel @Inject constructor(
 
     fun updateGroup(group: GroupUiModel) {
         _uiState.update { it.copy(group = group) }
+    }
+
+    private fun removeImage(imageUri: Uri) {
+        _uiState.update {
+            val images = it.images - imageUri
+            val selectedImage = if (it.selectedImage == imageUri) {
+                images.firstOrNull()
+            } else {
+                it.selectedImage
+            }
+
+            it.copy(
+                images = images,
+                selectedImage = selectedImage
+            )
+        }
     }
 
     private fun createPlace(context: Context) {
