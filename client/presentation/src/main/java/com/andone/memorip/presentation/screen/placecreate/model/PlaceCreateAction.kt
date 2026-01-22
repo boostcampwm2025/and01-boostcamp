@@ -17,8 +17,6 @@ sealed interface PlaceCreateAction {
 
     data object OnPublicChange : PlaceCreateAction
 
-    data class OnImagesAdd(val images: List<Uri>) : PlaceCreateAction
-
     data class OnImagesRemove(val imageUri: Uri) : PlaceCreateAction
 
     data class OnScrollPositionChange(val position: Int) : PlaceCreateAction

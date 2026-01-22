@@ -1,7 +1,11 @@
 package com.andone.memorip.presentation.screen.placecreate.component
 
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
@@ -17,10 +21,10 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.andone.memorip.presentation.theme.MemoripLineWidth
-import com.andone.memorip.presentation.theme.MemoripIconSize
-import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.theme.MemoripIconSize
+import com.andone.memorip.presentation.theme.MemoripLineWidth
+import com.andone.memorip.presentation.theme.MemoripTheme
 
 private object IconOffset {
     val DeleteIcon = DpOffset(x = 1.dp, y = (-1).dp)
@@ -76,7 +80,7 @@ fun SelectedImageItem(
 
 @Preview
 @Composable
-private fun SelectedImageItemPreview(){
+private fun SelectedImageItemPreview() {
     MemoripTheme {
         SelectedImageItem(
             imageUri = "",
