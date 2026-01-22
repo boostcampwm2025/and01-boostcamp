@@ -26,8 +26,8 @@ import com.andone.memorip.presentation.theme.MemoripHeight
 fun MemoripInputBox(
     label: String,
     value: String,
-    onValueChange: (String) -> Unit,
     placeholder: String,
+    onValueChange: (String) -> Unit,
     onClear: () -> Unit,
     modifier: Modifier = Modifier,
     height: Dp = MemoripHeight.TextBoxHigh

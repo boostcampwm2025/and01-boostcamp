@@ -1,6 +1,5 @@
 package com.andone.memorip.presentation.component.map
 
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -32,7 +31,6 @@ private object ReadOnlyMapViewConstants {
 fun ReadOnlyMapView(
     modifier: Modifier = Modifier,
     location: LocationUiModel? = null,
-    aspectRatio: Float? = null,
     zoomLevel: Double = ReadOnlyMapViewConstants.DEFAULT_ZOOM_LEVEL,
     properties: MapProperties = MemoripMapDefaults.defaultProperties,
     uiSettings: MapUiSettings = MemoripMapDefaults.readOnlyUiSettings,
@@ -53,21 +51,13 @@ fun ReadOnlyMapView(
             zoomLevel
         )
     }
-    
+
     val markerState = remember(displayLocation) {
         MarkerState(position = LatLng(displayLocation.latitude, displayLocation.longitude))
     }
 
-    val mapModifier = if (aspectRatio != null) {
-        modifier
-            .fillMaxWidth()
-            .aspectRatio(ratio = aspectRatio)
-    } else {
-        modifier.fillMaxWidth()
-    }
-
     MemoripNaverMap(
-        modifier = mapModifier,
+        modifier = modifier,
         cameraPositionState = cameraPositionState,
         properties = properties,
         uiSettings = uiSettings,
