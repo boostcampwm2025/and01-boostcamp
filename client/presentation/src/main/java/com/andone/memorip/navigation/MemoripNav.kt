@@ -1,5 +1,7 @@
 package com.andone.memorip.navigation
 
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
@@ -11,6 +13,7 @@ import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDe
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import com.andone.memorip.navigation.MemoripNavConstant.tabTransition
 import com.andone.memorip.presentation.screen.groupdetail.groupDetail
 import com.andone.memorip.presentation.screen.grouplist.groupList
 import com.andone.memorip.presentation.screen.placecreate.placeCreate
@@ -18,6 +21,10 @@ import com.andone.memorip.presentation.screen.placedetail.placeDetail
 import com.andone.memorip.presentation.screen.placelist.placeList
 import com.andone.memorip.presentation.screen.plan.plan
 import com.andone.memorip.presentation.screen.user.user
+
+private object MemoripNavConstant {
+    val tabTransition = NavDisplay.transitionSpec { fadeIn() togetherWith fadeOut() }
+}
 
 @Composable
 fun MemoripNav(
@@ -32,35 +39,42 @@ fun MemoripNav(
             rememberSaveableStateHolderNavEntryDecorator(),
             rememberViewModelStoreNavEntryDecorator()
         ),
-//        transitionSpec = {
-//            slideInHorizontally(initialOffsetX = { it }) togetherWith
-//                    slideOutHorizontally(targetOffsetX = { -it })
-//        },
-//        popTransitionSpec = {
-//            slideInHorizontally(initialOffsetX = { -it }) togetherWith
-//                    slideOutHorizontally(targetOffsetX = { it })
-//        },
+        transitionSpec = {
+            slideInHorizontally(initialOffsetX = { it }) togetherWith
+                    slideOutHorizontally(targetOffsetX = { -it })
+        },
+        popTransitionSpec = {
+            slideInHorizontally(initialOffsetX = { -it }) togetherWith
+                    slideOutHorizontally(targetOffsetX = { it })
+        },
         predictivePopTransitionSpec = {
             slideInHorizontally(initialOffsetX = { -it }) togetherWith
                     slideOutHorizontally(targetOffsetX = { it })
         },
-
         entryProvider = entryProvider {
             placeList(
+                metadata = tabTransition,
                 onPlaceClick = navigator::navigateToPlaceDetail,
                 onCreatePlaceClick = navigator::navigateToPlaceCreate,
                 modifier = modifier.padding(paddingValues = innerPadding)
             )
 
             groupList(
+                metadata = tabTransition,
                 onGroupClick = { groupId -> navigator.navigateToGroupDetail(groupId) },
                 onCreatePlaceClick = navigator::navigateToPlaceCreate,
                 modifier = modifier.padding(paddingValues = innerPadding),
             )
 
-            plan(modifier = modifier.padding(paddingValues = innerPadding))
+            plan(
+                metadata = tabTransition,
+                modifier = modifier.padding(paddingValues = innerPadding)
+            )
 
-            user(modifier = modifier.padding(paddingValues = innerPadding))
+            user(
+                metadata = tabTransition,
+                modifier = modifier.padding(paddingValues = innerPadding)
+            )
 
             placeCreate(
                 onNavigateToHome = { navigator.navigateToTab(MainBottomBarRoute.PLACE_LIST) },

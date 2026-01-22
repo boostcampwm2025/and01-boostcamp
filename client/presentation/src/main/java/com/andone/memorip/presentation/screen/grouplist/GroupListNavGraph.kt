@@ -6,11 +6,12 @@ import androidx.navigation3.runtime.NavKey
 import com.andone.memorip.navigation.GroupList
 
 fun EntryProviderScope<NavKey>.groupList(
+    metadata: Map<String, Any>,
     onGroupClick: (String) -> Unit,
     onCreatePlaceClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    entry<GroupList> {
+    entry<GroupList>(metadata = metadata) {
         GroupListScreen(
             onGroupClick = onGroupClick,
             onCreatePlaceClick = onCreatePlaceClick,
