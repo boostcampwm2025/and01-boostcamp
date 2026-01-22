@@ -1,8 +1,6 @@
 package com.andone.memorip.presentation.screen.plan.component
 
 import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.animateOffsetAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -47,15 +45,12 @@ import androidx.compose.ui.zIndex
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.screen.plan.component.TimeBlockItemConstants.SNAP_MINUTE_UNIT
 import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.DEFAULT_ALPHA
-import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.DEFAULT_ELEVATION
-import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.DEFAULT_SCALE
 import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.DEFAULT_ZINDEX
 import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.FULL_WEIGHT
 import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.PICKED_ALPHA
 import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.PICKED_ELEVATION
 import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.PICKED_SCALE
 import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.PICKED_ZINDEX
-import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.SCALE_ANIMATION
 import com.andone.memorip.presentation.screen.plan.component.TimeTableConstants.SCROLL_DURATION
 import com.andone.memorip.presentation.screen.plan.model.DraggablePlace
 import com.andone.memorip.presentation.screen.plan.model.TimeBlock
@@ -75,10 +70,7 @@ private object TimeTableConstants {
     const val SCROLL_DURATION = 700
     const val FULL_WEIGHT = 1f
     const val PICKED_SCALE = 0.8f
-    const val DEFAULT_SCALE = 1f
-    const val SCALE_ANIMATION = "Scale Animation"
     const val PICKED_ELEVATION = 12f
-    const val DEFAULT_ELEVATION = 0f
     const val PICKED_ZINDEX = 1f
     const val DEFAULT_ZINDEX = 0f
     const val PICKED_ALPHA = 0.3f
@@ -235,7 +227,8 @@ fun TimeTable(
                                         },
                                         onDragEnd = {
                                             selectedPlace?.let { selectedPlace ->
-                                                val isRowInside = (itemBottom + selectedPlace.offset.y) >= rowTop
+                                                val isRowInside =
+                                                    (itemBottom + selectedPlace.offset.y) >= rowTop
                                                 if (!isRowInside) {
                                                     val absoluteYPx =
                                                         ((itemTop + itemBottom) / 2) + selectedPlace.offset.y + scrollState.value - timeTableTop
@@ -257,7 +250,8 @@ fun TimeTable(
                                         onDrag = { change, amount ->
                                             change.consume()
                                             selectedPlace?.let { place ->
-                                                selectedPlace = place.copy(offset = place.offset + amount)
+                                                selectedPlace =
+                                                    place.copy(offset = place.offset + amount)
                                             }
                                         }
                                     )
