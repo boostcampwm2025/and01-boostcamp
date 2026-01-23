@@ -287,7 +287,7 @@ private fun PlaceDetailContent(
                 Row(horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceMedium)) {
                     Icon(
                         imageVector = ImageVector.vectorResource(R.drawable.ic_location_on),
-                        tint = MemoripTheme.colors.green,
+                        tint = MemoripTheme.colors.primary,
                         contentDescription = null
                     )
                     Text(
