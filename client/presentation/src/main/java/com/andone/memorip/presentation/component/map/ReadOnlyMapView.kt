@@ -1,9 +1,12 @@
 package com.andone.memorip.presentation.component.map
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -56,20 +59,35 @@ fun ReadOnlyMapView(
         MarkerState(position = LatLng(displayLocation.latitude, displayLocation.longitude))
     }
 
-    MemoripNaverMap(
-        modifier = modifier,
-        cameraPositionState = cameraPositionState,
-        properties = properties,
-        uiSettings = uiSettings,
-        onMapClick = onClick?.let { { _, _ -> it() } } ?: { _, _ -> }
+    Box(
+        modifier = modifier
     ) {
-        if (showMarker) {
-            Marker(
-                state = markerState,
-                width = markerWidth,
-                height = markerHeight
-            )
+        MemoripNaverMap(
+            modifier = modifier,
+            cameraPositionState = cameraPositionState,
+            properties = properties,
+            uiSettings = uiSettings,
+            onMapClick = onClick?.let { { _, _ -> it() } } ?: { _, _ -> }
+        ) {
+            if (showMarker) {
+                Marker(
+                    state = markerState,
+                    width = markerWidth,
+                    height = markerHeight
+                )
+            }
         }
+        Box(
+            modifier = Modifier.fillMaxSize()
+                .pointerInput(key1 = Unit) {
+                    awaitPointerEventScope {
+                        while (true) {
+                            val event = awaitPointerEvent()
+                            event.changes.forEach { it.consume() }
+                        }
+                    }
+                }
+        )
     }
 }
 
