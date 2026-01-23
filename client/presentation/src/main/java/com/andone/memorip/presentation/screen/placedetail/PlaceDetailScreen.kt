@@ -243,7 +243,7 @@ private fun PlaceDetailContent(
                 .fillMaxWidth()
                 .height(height = headerHeightPx.toDp(density = density))
                 .clipToBounds()
-                .clickable { place.imageUrls.firstOrNull()?.let { image -> onImageClick(image) } },
+                .clickable { onImageClick(place.imageUrls[pagerState.currentPage]) },
             contentAlignment = Alignment.BottomStart
         ) {
             HorizontalPager(
