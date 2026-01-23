@@ -366,22 +366,18 @@ class CropImageState(
             val bitmap = imageBitmap
             val uri = currentUri
             if (bitmap != null && uri != null) {
-                if (croppedImages.size == imageUris.size) {
-                    val finalResult = imageUris.mapNotNull { croppedImages[it] }
-                    if (finalResult.size == imageUris.size) {
-                        onImagesCrop(finalResult)
-                    }
-                } else {
-                    val resultUri = BitmapCropUtil.cropImage(
-                        context = context,
-                        bitmap = bitmap,
-                        viewSize = viewSize,
-                        offset = offset,
-                        scale = scale,
-                        cropRect = cropRect
-                    )
-                    croppedImages[uri] = resultUri
+                croppedImages[uri] = BitmapCropUtil.cropImage(
+                    context = context,
+                    bitmap = bitmap,
+                    viewSize = viewSize,
+                    offset = offset,
+                    scale = scale,
+                    cropRect = cropRect
+                )
 
+                if (croppedImages.size == imageUris.size) {
+                    onImagesCrop(imageUris.mapNotNull { croppedImages[it] })
+                } else {
                     val nextIndex = imageUris.indexOfFirst { !croppedImages.containsKey(it) }
                     if (nextIndex != -1) {
                         currentIndex = nextIndex
