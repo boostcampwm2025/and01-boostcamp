@@ -87,13 +87,13 @@ internal val darkMemoripColors = MemoripColors(
 internal val lightMaterialScheme = lightColorScheme(
     primary = lightMemoripColors.primary,
     primaryContainer = lightMemoripColors.primaryContainer,
-    background = lightMemoripColors.background,
+    background = lightMemoripColors.background
 )
 
 internal val darkMaterialScheme = darkColorScheme(
     primary = darkMemoripColors.primary,
     primaryContainer = darkMemoripColors.primaryContainer,
-    background = darkMemoripColors.background,
+    background = darkMemoripColors.background
 )
 
 internal val LocalMemoripColors = staticCompositionLocalOf {
