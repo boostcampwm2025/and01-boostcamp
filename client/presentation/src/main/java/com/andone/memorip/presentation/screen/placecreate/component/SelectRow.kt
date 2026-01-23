@@ -52,8 +52,12 @@ fun SelectRow(
     Card(
         onClick = onClick,
         modifier = modifier,
+        enabled = location == null,
         shape = MemoripTheme.shapes.roundedSmall,
-        colors = CardDefaults.cardColors(containerColor = MemoripTheme.colors.gray4),
+        colors = CardDefaults.cardColors(
+            containerColor = MemoripTheme.colors.gray4,
+            disabledContainerColor = MemoripTheme.colors.gray4
+        ),
         border = BorderStroke(
             width = MemoripLineWidth.Thin,
             brush = SolidColor(MemoripTheme.colors.gray2)
@@ -97,6 +101,7 @@ fun SelectRow(
             ) {
                 Text(
                     text = label,
+                    color = MemoripTheme.colors.onSurface,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     style = MemoripTheme.typography.bodyLarge,
