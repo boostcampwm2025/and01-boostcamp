@@ -22,7 +22,7 @@ android {
         consumerProguardFiles("consumer-rules.pro")
 
         // Naver Map Key 주입
-        manifestPlaceholders["NAVER_MAP_NCP_KEY_ID"] = getLocalProperty(propertyKey = "NAVER_MAP_NCP_KEY_ID")
+        manifestPlaceholders["NAVER_MAP_NCP_KEY_ID"] = getLocalProperty("NAVER_MAP_NCP_KEY_ID")
 
         // client ID
         val webClientId = getLocalProperty("LOGIN_WEB_CLIENT_ID")
@@ -113,8 +113,9 @@ dependencies {
 
     // Google Identity (ID Token 발급용)
     implementation(libs.googleid)
-    
+
     // Convention
+    implementation(libs.compose.convention)
     detektPlugins(libs.compose.convention)
 }
 

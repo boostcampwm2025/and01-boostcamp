@@ -60,7 +60,7 @@ fun ImageCropBottomBar(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
-                    horizontal = MemoripPadding.PaddingLarge,
+                    horizontal = MemoripPadding.AppHorizontalPadding,
                     vertical = MemoripPadding.PaddingMedium
                 ),
             horizontalArrangement = Arrangement.SpaceBetween,

@@ -11,12 +11,14 @@ fun NavBackStack<NavKey>.navigateToPlaceCreate() {
 }
 
 fun EntryProviderScope<NavKey>.placeCreate(
+    onNavigateToHome: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     entry<PlaceCreate> {
         PlaceCreateContainer(
             modifier = modifier,
+            onNavigateToHome = onNavigateToHome,
             onBackClick = onBackClick
         )
     }
