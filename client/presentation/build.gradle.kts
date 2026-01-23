@@ -116,6 +116,7 @@ dependencies {
     
     // Convention
     detektPlugins(libs.compose.convention)
+    implementation(libs.compose.convention)
 }
 
 apply(from = providers.gradleProperty("DETEKT_IDE_SETUP_URL").get())
