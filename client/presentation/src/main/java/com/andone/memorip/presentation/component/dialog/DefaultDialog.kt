@@ -67,7 +67,7 @@ internal fun DefaultDialog(
                     TextButton(onClick = onCancelClick) {
                         Text(
                             text = stringResource(R.string.dialog_cancel_message),
-                            color = MemoripTheme.colors.primary,
+                            color = MemoripTheme.colors.gray,
                             style = MemoripTheme.typography.label1
                         )
                     }
