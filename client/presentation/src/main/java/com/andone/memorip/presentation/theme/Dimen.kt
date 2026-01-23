@@ -78,7 +78,7 @@ object MemoripAlpha {
 
     /* ---------- Image ---------- */
     const val IMAGE_PLACEHOLDER = 0.3f
-    const val IMAGE_OVERLAY = 0.68f
+    const val IMAGE_OVERLAY = 0.5f
 
 
     /* ---------- Divider / Border ---------- */
