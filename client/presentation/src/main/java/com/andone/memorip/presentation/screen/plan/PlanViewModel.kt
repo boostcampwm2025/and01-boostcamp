@@ -1,6 +1,6 @@
 package com.andone.memorip.presentation.screen.plan
 
-import androidx.compose.runtime.toMutableStateList
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.model.PlanBlockUiModel
@@ -157,11 +157,18 @@ class PlanViewModel @Inject constructor() : ViewModel() {
 
                 val endDateTime = startDateTime.plusMinutes(action.item.durationMinutes)
 
+                val isDuplicated = uiState.value.blocks.any {
+                    val rangeBaseDay = baseDay.plusDays((it.day - 1).toLong())
+                    val startRange = rangeBaseDay.atStartOfDay().plusMinutes(it.startMinute.toLong())
+                    val endRange = rangeBaseDay.atStartOfDay().plusMinutes(it.endMinute.toLong())
+                    startDateTime in startRange..endRange
+                }
+                if (isDuplicated) { return }
+
                 val newPlace = action.item.copy(
                     startDateTime = startDateTime,
                     endDateTime = endDateTime
                 )
-
                 _uiState.update {
                     it.copy(
                         blockUiModels = it.blockUiModels + (action.item.id to newPlace),
