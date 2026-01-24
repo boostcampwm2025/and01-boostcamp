@@ -143,9 +143,10 @@ class PlanViewModel @Inject constructor() : ViewModel() {
                 }
             }
 
-            is PlanAction.ItemDragStart -> {
+            is PlanAction.ItemDragEnd -> {
                 val date = _uiState.value.date
                 val baseDay = date.startDay ?: return
+                Log.d("DEBUG TEST", "snap minute : ${action.startMinute}")
 
                 val totalMinute = action.startMinute
 
