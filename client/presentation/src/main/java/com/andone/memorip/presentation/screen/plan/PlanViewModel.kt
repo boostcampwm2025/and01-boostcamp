@@ -1,19 +1,15 @@
 package com.andone.memorip.presentation.screen.plan
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.andone.memorip.domain.model.TimeBlock
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.model.PlanBlockUiModel
 import com.andone.memorip.presentation.model.toTimeBlock
 import com.andone.memorip.presentation.screen.plan.model.DateUiModel
 import com.andone.memorip.presentation.screen.plan.model.PlanAction
 import com.andone.memorip.presentation.screen.plan.model.PlanEvent
-import com.andone.memorip.presentation.screen.plan.model.PlanEvent.*
+import com.andone.memorip.presentation.screen.plan.model.PlanEvent.ShowDeleteDayDialog
 import com.andone.memorip.presentation.screen.plan.model.PlanUiState
 import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_DAY
-import com.andone.memorip.presentation.util.DummyData
-import com.andone.memorip.presentation.util.DummyData.place
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
@@ -118,8 +114,6 @@ class PlanViewModel @Inject constructor() : ViewModel() {
             }
 
             is PlanAction.DateSelected -> {
-                Log.d("DEBUG TEST", "start : ${action.start}")
-                Log.d("DEBUG TEST", "end : ${action.end}")
                 _uiState.update {
                     it.copy(
                         date = it.date.copy(
@@ -146,7 +140,6 @@ class PlanViewModel @Inject constructor() : ViewModel() {
             is PlanAction.ItemDragEnd -> {
                 val date = _uiState.value.date
                 val baseDay = date.startDay ?: return
-                Log.d("DEBUG TEST", "snap minute : ${action.startMinute}")
 
                 val totalMinute = action.startMinute
 
@@ -168,7 +161,7 @@ class PlanViewModel @Inject constructor() : ViewModel() {
                 _uiState.update {
                     it.copy(
                         blockUiModels = it.blockUiModels + (action.item.id to newPlace),
-                        blocks = it.blocks + newPlace.toTimeBlock(dayStart = it.date.currentDay!!.atStartOfDay())!!
+                        blocks = uiState.value.blocks + newPlace.toTimeBlock(dayStart = uiState.value.date.startDay!!.atStartOfDay())!!
                     )
                 }
             }
