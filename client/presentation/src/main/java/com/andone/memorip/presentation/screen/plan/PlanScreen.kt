@@ -33,6 +33,7 @@ import com.andone.memorip.presentation.screen.plan.component.TimeBlockItem
 import com.andone.memorip.presentation.screen.plan.model.PlanAction
 import com.andone.memorip.presentation.screen.plan.model.PlanEvent
 import com.andone.memorip.presentation.util.collectWithLifecycle
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun PlanScreen(
@@ -131,6 +132,7 @@ fun PlanScreenContents(
             TimeTable(
                 totalMinutes = state.date.totalMinutes,
                 currentDay = state.date.selectedDay,
+                places = state.places,
                 onBlockAdd = { place, start -> onAction(PlanAction.ItemDragEnd(place, start)) },
                 onDayScrolled = { day ->
                     onAction(PlanAction.DayScrolled(day))
@@ -167,7 +169,10 @@ fun PlanScreenContents(
 private fun PlanScreenContentsPreview() {
     MemoripTheme {
         PlanScreenContents(
-            state = PlanUiState(blocks = DummyData.timeBlocks),
+            state = PlanUiState(
+                places = DummyData.places.toImmutableList(),
+                blocks = DummyData.timeBlocks
+            ),
             onAction = {},
         )
     }

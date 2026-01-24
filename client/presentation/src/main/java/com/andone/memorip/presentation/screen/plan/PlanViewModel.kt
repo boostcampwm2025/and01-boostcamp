@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.screen.plan
 
+import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.model.PlanBlockUiModel
@@ -10,7 +11,9 @@ import com.andone.memorip.presentation.screen.plan.model.PlanEvent
 import com.andone.memorip.presentation.screen.plan.model.PlanEvent.ShowDeleteDayDialog
 import com.andone.memorip.presentation.screen.plan.model.PlanUiState
 import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_DAY
+import com.andone.memorip.presentation.util.DummyData
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,6 +28,7 @@ class PlanViewModel @Inject constructor() : ViewModel() {
 
     private val _uiState = MutableStateFlow(
         value = PlanUiState(
+            places = DummyData.places.toImmutableList(),
 //            blocks = DummyData.places.mapNotNull { it.toTimeBlock(dayStart = DummyData.dummyDate.startDay!!.atStartOfDay()) },
             blocks = emptyList(),
 //            blockUiModels = DummyData.places.associateBy { it.id },
@@ -161,7 +165,8 @@ class PlanViewModel @Inject constructor() : ViewModel() {
                 _uiState.update {
                     it.copy(
                         blockUiModels = it.blockUiModels + (action.item.id to newPlace),
-                        blocks = uiState.value.blocks + newPlace.toTimeBlock(dayStart = uiState.value.date.startDay!!.atStartOfDay())!!
+                        blocks = uiState.value.blocks + newPlace.toTimeBlock(dayStart = uiState.value.date.startDay!!.atStartOfDay())!!,
+                        places = (it.places - action.item).toImmutableList()
                     )
                 }
             }
