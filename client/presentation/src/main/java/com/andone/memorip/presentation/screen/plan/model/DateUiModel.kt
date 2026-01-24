@@ -36,7 +36,7 @@ data class DateUiModel(
 
     fun deleteDay(dayIndex: Int): Pair<LocalDate?, LocalDate?> {
         if (startDay == null || endDay == null) return startDay to endDay
-        if (dayIndex <= 0 || dayIndex > totalDays) return startDay to endDay
+        if (dayIndex in 0 until totalDays) return startDay to endDay
 
         if (startDay.isEqual(endDay)) {
             return null to null
