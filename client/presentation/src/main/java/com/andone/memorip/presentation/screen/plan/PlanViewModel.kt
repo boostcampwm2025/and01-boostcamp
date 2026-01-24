@@ -1,6 +1,5 @@
 package com.andone.memorip.presentation.screen.plan
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.model.PlanBlockUiModel
@@ -159,11 +158,15 @@ class PlanViewModel @Inject constructor() : ViewModel() {
 
                 val isDuplicated = uiState.value.blocks.any {
                     val rangeBaseDay = baseDay.plusDays((it.day - 1).toLong())
-                    val startRange = rangeBaseDay.atStartOfDay().plusMinutes(it.startMinute.toLong())
-                    val endRange = rangeBaseDay.atStartOfDay().plusMinutes(it.endMinute.toLong())
+                    val startRange =
+                        rangeBaseDay.atStartOfDay().plusMinutes(it.startMinute.toLong())
+                    val endRange =
+                        rangeBaseDay.atStartOfDay().plusMinutes((it.endMinute - 1).toLong())
                     startDateTime in startRange..endRange
                 }
-                if (isDuplicated) { return }
+                if (isDuplicated) {
+                    return
+                }
 
                 val newPlace = action.item.copy(
                     startDateTime = startDateTime,
