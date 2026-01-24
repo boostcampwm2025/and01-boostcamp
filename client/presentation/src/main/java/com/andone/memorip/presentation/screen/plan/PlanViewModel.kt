@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.screen.plan
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.andone.memorip.domain.model.TimeBlock
 import com.andone.memorip.presentation.model.Place
@@ -117,6 +118,8 @@ class PlanViewModel @Inject constructor() : ViewModel() {
             }
 
             is PlanAction.DateSelected -> {
+                Log.d("DEBUG TEST", "start : ${action.start}")
+                Log.d("DEBUG TEST", "end : ${action.end}")
                 _uiState.update {
                     it.copy(
                         date = it.date.copy(

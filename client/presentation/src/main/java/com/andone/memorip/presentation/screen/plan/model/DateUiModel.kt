@@ -1,7 +1,10 @@
 package com.andone.memorip.presentation.screen.plan.model
 
+import android.util.Log
 import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_DAY
 import java.time.LocalDate
+import java.time.temporal.ChronoUnit
+import kotlin.math.absoluteValue
 
 data class DateUiModel(
     val startDay: LocalDate? = null,
@@ -11,7 +14,7 @@ data class DateUiModel(
 ) {
     val totalDays: Int
         get() = if (startDay != null && endDay != null) {
-            endDay.dayOfYear - startDay.dayOfYear + 1
+            ChronoUnit.DAYS.between(startDay, endDay).toInt() + 1
         } else {
             0
         }
