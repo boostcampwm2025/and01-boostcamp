@@ -71,7 +71,7 @@ fun PlaceCreateScreen(
     onCategoryClick: () -> Unit,
     onLocationClick: () -> Unit,
     onGroupClick: () -> Unit,
-    onImageCreate: () -> Unit,
+    onNavigateToHome: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PlaceCreateViewModel = hiltViewModel()
 ) {
@@ -79,7 +79,7 @@ fun PlaceCreateScreen(
 
     viewModel.event.collectWithLifecycle { event ->
         when (event) {
-            PlaceCreateEvent.NavigateToHome -> onImageCreate()
+            PlaceCreateEvent.NavigateToHome -> onNavigateToHome()
             PlaceCreateEvent.NavigateToCategory -> onCategoryClick()
             PlaceCreateEvent.NavigateToLocation -> onLocationClick()
             PlaceCreateEvent.NavigateToGroup -> onGroupClick()
@@ -122,6 +122,12 @@ private fun PlaceCreateScreenContent(
 
     LaunchedEffect(Unit) {
         onAction(PlaceCreateAction.OnImageSelect(uiState.images.first()))
+    }
+
+    LaunchedEffect(uiState.images) {
+        if (uiState.images.isEmpty()) {
+            onAction(PlaceCreateAction.OnLastImageRemove)
+        }
     }
 
     DisposableEffect(Unit) {

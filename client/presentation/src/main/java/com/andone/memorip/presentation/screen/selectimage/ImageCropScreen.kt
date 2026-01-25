@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.core.graphics.withSave
+import androidx.core.net.toUri
 import com.andone.memorip.presentation.component.LoadingIndicatorScreen
 import com.andone.memorip.presentation.screen.selectimage.ImageCropScreenDimens.DRAW_RECT_ALPHA
 import com.andone.memorip.presentation.screen.selectimage.ImageCropScreenDimens.cropPadding
@@ -36,6 +37,7 @@ import com.andone.memorip.presentation.theme.MemoripIconSize
 import com.andone.memorip.presentation.theme.MemoripLineWidth
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.BitmapCropUtil.detectEditorGestures
+import com.andone.memorip.presentation.util.DummyData
 import com.andone.memorip.presentation.util.toPx
 
 private object ImageCropScreenDimens {
