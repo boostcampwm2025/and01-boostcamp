@@ -25,7 +25,6 @@ fun <T : Any> MemoripPagingList(
     emptyContent: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     staggeredCells: StaggeredGridCells? = null,
-    initialContent: @Composable () -> Unit = {},
     itemContent: @Composable (T) -> Unit
 ) {
     val loadState = pagingItems.loadState
@@ -77,11 +76,7 @@ fun <T : Any> MemoripPagingList(
         }
 
         is LoadState.NotLoading -> {
-            if (loadState.append.endOfPaginationReached) {
-                emptyContent()
-            } else {
-                initialContent()
-            }
+            emptyContent()
         }
     }
 }
