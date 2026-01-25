@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.core.graphics.withSave
+import com.andone.memorip.presentation.component.LoadingIndicatorScreen
 import com.andone.memorip.presentation.screen.selectimage.ImageCropScreenDimens.DRAW_RECT_ALPHA
 import com.andone.memorip.presentation.screen.selectimage.ImageCropScreenDimens.cropPadding
 import com.andone.memorip.presentation.screen.selectimage.ImageCropScreenDimens.touchTarget
@@ -64,32 +65,36 @@ fun ImageCropScreen(
     }
 
     Column(modifier = modifier.fillMaxSize()) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
-                .clip(RectangleShape)
-                .onGloballyPositioned { state.updateViewSize(it.size.toSize()) }
-                .detectEditorGestures(
-                    key = state.currentUri.toString(),
-                    onDragStart = { offset ->
-                        state.dragStart(
-                            offset = offset,
-                            touchTarget = touchTarget.toPx(density)
-                        )
-                    },
-                    onDrag = state::drag,
-                    onZoom = { pan, zoom -> state.zoom(pan, zoom) },
-                    onDragEnd = state::dragEnd
+        if (state.isLoading) {
+            LoadingIndicatorScreen(modifier = Modifier.weight(1f))
+        } else {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .clip(RectangleShape)
+                    .onGloballyPositioned { state.updateViewSize(it.size.toSize()) }
+                    .detectEditorGestures(
+                        key = state.currentUri.toString(),
+                        onDragStart = { offset ->
+                            state.dragStart(
+                                offset = offset,
+                                touchTarget = touchTarget.toPx(density)
+                            )
+                        },
+                        onDrag = state::drag,
+                        onZoom = { pan, zoom -> state.zoom(pan, zoom) },
+                        onDragEnd = state::dragEnd
+                    )
+            ) {
+                ImageCropSection(
+                    imageBitmap = state.imageBitmap,
+                    viewSize = state.viewSize,
+                    offset = state.offset,
+                    scale = state.scale,
+                    cropRect = state.cropRect
                 )
-        ) {
-            ImageCropSection(
-                imageBitmap = state.imageBitmap,
-                viewSize = state.viewSize,
-                offset = state.offset,
-                scale = state.scale,
-                cropRect = state.cropRect
-            )
+            }
         }
 
         ImageCropBottomBar(

@@ -84,6 +84,9 @@ class CropImageState(
 
     val croppedImages = mutableStateMapOf<Uri, Uri>()
 
+    var isLoading by mutableStateOf(false)
+        private set
+
     private var currentDragHandle by mutableStateOf(DragHandle.None)
 
     private val viewCenter: Offset
@@ -105,10 +108,12 @@ class CropImageState(
     }
 
     suspend fun loadImage() {
+        isLoading = true
         currentUri?.let { uri ->
             imageBitmap = loadBitmapFromUri(context = context, uri = uri)
             resetTransformation()
         }
+        isLoading = false
     }
 
     private fun resetTransformation() {
