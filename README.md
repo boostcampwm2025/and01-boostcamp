@@ -14,7 +14,7 @@
 이 서비스는 사용자들의 실제 경험을 기반으로
 장소를 기록하고, 공유하고, 계획까지 이어질 수 있도록 돕는 것을 목표로 합니다.
 
-<img width="911" height="512" alt="image" src="https://github.com/user-attachments/assets/f15caefd-627f-4603-866e-26e422e41566" />
+https://github.com/user-attachments/assets/f15caefd-627f-4603-866e-26e422e41566
 
 ## 주요 기능
 :one: **원하는 장소 사진들을 한눈에**
@@ -22,13 +22,24 @@
 사용자가 원하는 장소를 쉽게 찾을 수 있도록 검색과 필터링 기능을 제공합니다.
 위치 필터는 원하는 세부 항목을 점점 쌓아가는 방식입니다.
 
+https://github.com/user-attachments/assets/48233bf5-9203-4cd3-a09d-aee7e7f990d8
+
+https://github.com/user-attachments/assets/7f4c526e-19b3-4a1b-aab1-8ae79ce71669
+
+
 :two: **간편한 앱 사용**
 
 기존 앱들의 UI와 달리 텍스트를 최소화하여 간단한 인터랙션으로 동작합니다.
 
+https://github.com/user-attachments/assets/bdda5a38-d1ab-48f2-a387-9b7a88dc0fc7
+
+
+
 :three: **취향에 맞게 가져와 사용하는 장소 경험 공유 시스템**
 
 익명 공유를 통해 개인정보 노출 부담 없이 순수하게 장소에 대한 경험을 공유할 수 있습니다.
+
+https://github.com/user-attachments/assets/6e4fda34-6480-432a-bfd0-b13d3ffda09f
 
 ## 프로젝트 구조
 
