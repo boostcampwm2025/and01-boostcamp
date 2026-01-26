@@ -17,4 +17,5 @@ interface GroupListProjection {
     fun getUpdatedAt(): LocalDateTime
     fun getPlaceCount(): Long
     fun getRelatedPlaceImages(): String?
+    fun getIsPlaceAdded(): Boolean
 }
