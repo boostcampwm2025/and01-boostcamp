@@ -1,5 +1,6 @@
 package com.andone.memorip.domain.group.dto.response
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.andone.memorip.domain.group.entity.GroupType
 import com.andone.memorip.domain.group.entity.Visibility
 import com.andone.memorip.domain.group.repository.GroupListProjection
@@ -16,7 +17,9 @@ data class GroupListResponse(
     val createdAt: LocalDateTime,
     val updatedAt: LocalDateTime,
     val relatedPlaceImages: List<String>,
-    val placeCount: Long
+    val placeCount: Long,
+    @get:JsonProperty("isPlaceAdded")
+    val isPlaceAdded: Boolean = false
 )
 
 fun GroupListProjection.toGroupListResponse(): GroupListResponse {
@@ -38,6 +41,7 @@ fun GroupListProjection.toGroupListResponse(): GroupListResponse {
         createdAt = this.getCreatedAt(),
         updatedAt = this.getUpdatedAt(),
         relatedPlaceImages = imagesList,
-        placeCount = this.getPlaceCount()
+        placeCount = this.getPlaceCount(),
+        isPlaceAdded = this.getIsPlaceAdded()
     )
 }
