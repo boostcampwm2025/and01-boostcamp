@@ -40,7 +40,7 @@ fun EmptyGroupPlaceholder(onClick: () -> Unit) {
             )
             .border(
                 width = MemoripLineWidth.Thin,
-                color = MemoripTheme.colors.outline,
+                color = MemoripTheme.colors.primary,
                 shape = memoripShapes.roundedSmall
             )
             .clickable(
@@ -63,7 +63,7 @@ fun EmptyGroupPlaceholder(onClick: () -> Unit) {
             Text(
                 text = stringResource(R.string.group_view_add_place),
                 style = LocalMemoripTypography.current.body2,
-                color = MemoripTheme.colors.outline
+                color = MemoripTheme.colors.primary
             )
         }
     }
