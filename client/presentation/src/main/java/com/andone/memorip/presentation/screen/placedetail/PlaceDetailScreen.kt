@@ -154,11 +154,10 @@ fun PlaceDetailScreen(
 
             PlaceDetailScreenStep.SelectGroup -> {
                 SelectGroupScreen(
-                    onGroupSelect = { group ->
-                        viewModel.addPlaceToGroup(group.id)
-                    },
+                    onGroupSelect = { },
                     onBackClick = { currentStep = PlaceDetailScreenStep.PlaceDetail },
                     title = stringResource(R.string.select_group_add_to_my_group_title),
+                    placeId = route.placeId,
                     modifier = modifier
                 )
             }
@@ -353,7 +352,7 @@ private fun PlaceDetailInfoSection(
 
 @Preview(showBackground = true)
 @Composable
-private fun PlaceDetailScreenPrev() {
+private fun PlaceDetailScreenPreview() {
     MemoripTheme {
         PlaceDetailScreen(
             place = DummyData.place,
@@ -364,7 +363,7 @@ private fun PlaceDetailScreenPrev() {
 
 @Preview(showBackground = true)
 @Composable
-private fun PlaceDetailContentPrev() {
+private fun PlaceDetailContentPreview() {
     MemoripTheme {
         PlaceDetailContent(
             place = PlaceUiModel(),

@@ -3,6 +3,7 @@ package com.andone.memorip.presentation.screen.selectgroup.model
 import androidx.compose.runtime.Immutable
 import com.andone.memorip.domain.model.Group
 import com.andone.memorip.domain.model.GroupWithPlaceAdded
+import com.andone.memorip.presentation.model.GroupUiModel
 
 @Immutable
 data class SelectGroupUiModel(
@@ -31,4 +32,12 @@ data class SelectGroupUiModel(
             )
         }
     }
+}
+
+fun SelectGroupUiModel.toGroupUiModel(): GroupUiModel {
+    return GroupUiModel(
+        id = this.id,
+        name = this.name,
+        images = this.images
+    )
 }
