@@ -3,8 +3,10 @@ package com.andone.memorip.presentation.model
 import androidx.compose.runtime.Immutable
 import com.andone.memorip.domain.model.PlaceListItem
 import com.andone.memorip.domain.model.TimeBlock
+import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_DAY
 import java.time.Duration
 import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
 
 @Immutable
 data class Place(
@@ -63,15 +65,15 @@ fun PlaceListItem.toUiModel(): Place =
 fun Place.toTimeBlock(dayStart: LocalDateTime): TimeBlock? {
     if (startDateTime == null || endDateTime == null) return null
 
-    val dayOffset = Duration.between(
-        dayStart.toLocalDate().atStartOfDay(),
-        startDateTime.toLocalDate().atStartOfDay()
-    ).toDays().toInt()
+    val dayOffset = ChronoUnit.DAYS.between(
+        dayStart.toLocalDate(),
+        startDateTime.toLocalDate()
+    ).toInt()
 
     val dayIndex = dayOffset + 1
 
     val startMinute =
-        Duration.between(dayStart, startDateTime).toMinutes().toInt()
+        Duration.between(dayStart, startDateTime).toMinutes().toInt() - dayOffset * MINUTES_PER_DAY
 
     val durationMinute = durationMinutes.toInt()
 

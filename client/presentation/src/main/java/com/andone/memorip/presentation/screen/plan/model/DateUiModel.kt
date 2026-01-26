@@ -2,6 +2,7 @@ package com.andone.memorip.presentation.screen.plan.model
 
 import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_DAY
 import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 
 data class DateUiModel(
     val startDay: LocalDate? = null,
@@ -11,14 +12,14 @@ data class DateUiModel(
 ) {
     val totalDays: Int
         get() = if (startDay != null && endDay != null) {
-            endDay.dayOfYear - startDay.dayOfYear + 1
+            ChronoUnit.DAYS.between(startDay, endDay).toInt() + 1
         } else {
             0
         }
 
     val selectedDay: Int?
         get() = if (startDay != null && currentDay != null) {
-            currentDay.dayOfYear - startDay.dayOfYear + 1
+            ChronoUnit.DAYS.between(startDay, currentDay).toInt() + 1
         } else {
             null
         }
@@ -33,7 +34,7 @@ data class DateUiModel(
 
     fun deleteDay(dayIndex: Int): Pair<LocalDate?, LocalDate?> {
         if (startDay == null || endDay == null) return startDay to endDay
-        if (dayIndex <= 0 || dayIndex > totalDays) return startDay to endDay
+        if (dayIndex in 0 until totalDays) return startDay to endDay
 
         if (startDay.isEqual(endDay)) {
             return null to null
