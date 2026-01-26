@@ -71,7 +71,7 @@ fun GroupListScreenContent(
         LazyColumn(
             modifier = Modifier
                 .padding(paddingValues = innerPadding)
-                .padding(horizontal = MemoripPadding.PaddingXSmall),
+                .padding(horizontal = MemoripPadding.AppHorizontalPadding),
             verticalArrangement = Arrangement.spacedBy(space = MemoripPadding.PaddingXSmall)
         ) {
             items(items = groups) { group ->
