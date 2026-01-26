@@ -55,7 +55,7 @@ class PlaceService(
     }
 
     fun getPlaceList(pageable: Pageable): PlaceListResult {
-        val page = placeRepository.findAll(pageable)
+        val page = placeRepository.findAllByIsPublicTrue(pageable)
 
         val content = page.content.map { place ->
             PlaceListItemResponse(
