@@ -42,7 +42,7 @@ import com.andone.memorip.presentation.component.MemoripImage
 import com.andone.memorip.presentation.component.MemoripInputBox
 import com.andone.memorip.presentation.model.LocationUiModel
 import com.andone.memorip.presentation.model.TagUiModel
-import com.andone.memorip.presentation.screen.grouplist.model.GroupUiModel
+import com.andone.memorip.presentation.model.GroupUiModel
 import com.andone.memorip.presentation.screen.placecreate.PlaceCreateScreenConstant.CONTENT_MAX_LENGTH
 import com.andone.memorip.presentation.screen.placecreate.PlaceCreateScreenConstant.IMAGE_RATIO
 import com.andone.memorip.presentation.screen.placecreate.PlaceCreateScreenConstant.TITLE_MAX_LENGTH

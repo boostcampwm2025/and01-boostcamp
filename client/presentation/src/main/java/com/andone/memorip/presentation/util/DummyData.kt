@@ -13,7 +13,7 @@ import com.andone.memorip.presentation.model.LocationUiModel
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.model.TagUiModel
 import com.andone.memorip.presentation.model.toUiModel
-import com.andone.memorip.presentation.screen.grouplist.model.GroupUiModel
+import com.andone.memorip.presentation.model.GroupUiModel
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceUiModel
 import com.andone.memorip.presentation.screen.placelist.model.RegionUiModel
 import com.andone.memorip.presentation.screen.placelist.model.SelectedRegionState

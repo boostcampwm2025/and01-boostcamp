@@ -19,7 +19,7 @@ import com.andone.memorip.presentation.component.LoadingIndicatorScreen
 import com.andone.memorip.presentation.screen.grouplist.component.GroupListTopBar
 import com.andone.memorip.presentation.screen.grouplist.model.GroupListAction
 import com.andone.memorip.presentation.screen.grouplist.model.GroupListEvent
-import com.andone.memorip.presentation.screen.grouplist.model.GroupUiModel
+import com.andone.memorip.presentation.model.GroupUiModel
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
