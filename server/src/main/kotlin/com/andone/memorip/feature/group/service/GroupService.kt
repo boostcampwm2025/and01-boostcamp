@@ -105,6 +105,7 @@ class GroupService(
 
         group.updateTitle(request.title)
         group.updateVisibility(request.visibility)
+        group.updatePeriod(request.startDate, request.endDate)
     }
 
     @Transactional
