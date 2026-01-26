@@ -22,10 +22,9 @@ import com.andone.memorip.presentation.util.handleAppendState
 fun <T : Any> MemoripPagingList(
     pagingItems: LazyPagingItems<T>,
     itemKey: (T) -> Any,
+    emptyContent: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     staggeredCells: StaggeredGridCells? = null,
-    initialContent: @Composable () -> Unit = {},
-    emptyContent: @Composable () -> Unit,
     itemContent: @Composable (T) -> Unit
 ) {
     val loadState = pagingItems.loadState
@@ -77,24 +76,19 @@ fun <T : Any> MemoripPagingList(
         }
 
         is LoadState.NotLoading -> {
-            if (loadState.append.endOfPaginationReached) {
-                emptyContent()
-            } else {
-                initialContent()
-            }
+            emptyContent()
         }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun MemoripPagingLocationsListPreview() {
+private fun MemoripPagingLocationsListPreview() {
     MemoripPagingList(
         pagingItems = DummyData.getLocationPagingItems(),
         itemKey = { it.id },
-        modifier = Modifier.fillMaxSize(),
-        initialContent = {},
         emptyContent = {},
+        modifier = Modifier.fillMaxSize(),
         itemContent = { location ->
             LocationItem(
                 location = location,
@@ -107,14 +101,13 @@ fun MemoripPagingLocationsListPreview() {
 
 @Preview(showBackground = true)
 @Composable
-fun MemoripPagingPlacesListPreview() {
+private fun MemoripPagingPlacesListPreview() {
     MemoripPagingList(
         pagingItems = DummyData.getPlacePagingItems(),
         itemKey = { it.id },
+        emptyContent = {},
         modifier = Modifier.fillMaxSize(),
         staggeredCells = StaggeredGridCells.Adaptive(160.dp),
-        initialContent = {},
-        emptyContent = {},
         itemContent = { place ->
             val image = place.thumbnailImage
             StaggeredImageItem(

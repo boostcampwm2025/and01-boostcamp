@@ -49,6 +49,7 @@ private object PlaceCreateNavGraphConstants {
 
 @Composable
 fun PlaceCreateContainer(
+    onNavigateToHome: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -85,6 +86,7 @@ fun PlaceCreateContainer(
                 onImagesChange = viewModel::updateImages,
                 onLocationChange = viewModel::updateLocation,
                 onStepChange = { currentStep = it },
+                onNavigateToHome = onNavigateToHome,
                 onBackClick = handleBackAction,
                 viewModel = viewModel
             )
@@ -105,6 +107,7 @@ fun PlaceCreateMainStep(
     onImagesChange: (List<Uri>) -> Unit,
     onLocationChange: (LocationUiModel) -> Unit,
     onStepChange: (PlaceCreateStep) -> Unit,
+    onNavigateToHome: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PlaceCreateViewModel = hiltViewModel()
@@ -171,7 +174,7 @@ fun PlaceCreateMainStep(
                             onCategoryClick = { onStepChange(PlaceCreateStep.SelectCategory) },
                             onLocationClick = { onStepChange(PlaceCreateStep.SelectLocation) },
                             onGroupClick = { onStepChange(PlaceCreateStep.SelectGroup) },
-                            onImageCreate = onBackClick,
+                            onNavigateToHome = onNavigateToHome,
                             viewModel = viewModel
                         )
                     }

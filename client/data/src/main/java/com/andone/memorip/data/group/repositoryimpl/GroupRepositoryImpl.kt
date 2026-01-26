@@ -50,7 +50,7 @@ class GroupRepositoryImpl @Inject constructor(
         )
         return remoteDataSource.createGroup(request)
             .onSuccess { createdGroup ->
-                _myGroups.value = _myGroups.value + createdGroup
+                _myGroups.value = listOf(createdGroup) + _myGroups.value
             }
     }
 

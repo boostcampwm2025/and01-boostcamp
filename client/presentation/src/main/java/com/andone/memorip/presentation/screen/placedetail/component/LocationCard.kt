@@ -64,16 +64,18 @@ fun LocationCard(
             )
         }
 
-        ReadOnlyMapView(
-            modifier = Modifier
-                .fillMaxWidth()
-                .aspectRatio(ratio = LOCATION_CARD_RATIO),
-            location = LocationUiModel(
-                address = location,
-                latitude = latitude,
-                longitude = longitude
+        if (longitude != 0.0 || latitude != 0.0) {
+            ReadOnlyMapView(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(ratio = LOCATION_CARD_RATIO),
+                location = LocationUiModel(
+                    address = location,
+                    latitude = latitude,
+                    longitude = longitude
+                )
             )
-        )
+        }
     }
 }
 

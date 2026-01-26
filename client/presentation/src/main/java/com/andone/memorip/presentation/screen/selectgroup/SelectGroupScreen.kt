@@ -1,7 +1,9 @@
 package com.andone.memorip.presentation.screen.selectgroup
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -29,8 +31,7 @@ import com.andone.memorip.presentation.screen.selectgroup.component.GroupImageGr
 import com.andone.memorip.presentation.screen.selectgroup.component.SelectGroupTopBar
 import com.andone.memorip.presentation.screen.selectgroup.model.SelectGroupAction
 import com.andone.memorip.presentation.screen.selectgroup.model.SelectGroupEvent
-import com.andone.memorip.presentation.theme.MemoripPadding.PaddingMedium
-import com.andone.memorip.presentation.theme.MemoripPadding.PaddingXSmall
+import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace.SpaceLarge
 import com.andone.memorip.presentation.theme.MemoripSpace.SpaceXSmall
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -110,16 +111,16 @@ private fun SelectGroupContent(
     title: String = stringResource(R.string.select_group_title),
 ) {
     Scaffold(
-        topBar = { 
+        topBar = {
             SelectGroupTopBar(
                 onBackClick = { onAction(SelectGroupAction.OnBackClick) },
                 title = title
-            ) 
+            )
         },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { onAction(SelectGroupAction.OnFABClick) },
-                containerColor = MemoripTheme.colors.primaryContainer,
+                containerColor = MemoripTheme.colors.primary,
                 contentColor = MemoripTheme.colors.black
             ) {
                 Icon(
@@ -129,25 +130,28 @@ private fun SelectGroupContent(
             }
         },
     ) { innerPadding ->
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(minSize = SelectGroupScreenDimens.GridMinWidth),
-            modifier = modifier.padding(paddingValues = innerPadding),
-            contentPadding = PaddingValues(
-                horizontal = PaddingMedium,
-                vertical = PaddingXSmall
-            ),
-            horizontalArrangement = Arrangement.spacedBy(SpaceXSmall),
-            verticalArrangement = Arrangement.spacedBy(SpaceLarge)
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(paddingValues = innerPadding)
+                .padding(all = MemoripPadding.AppHorizontalPadding)
         ) {
-            items(
-                items = groups,
-                key = { it.id }
-            ) { group ->
-                GroupImageGridCard(
-                    name = group.name,
-                    images = group.images,
-                    onClick = { onAction(SelectGroupAction.OnGroupClick(group)) },
-                )
+            LazyVerticalGrid(
+                columns = GridCells.Adaptive(minSize = SelectGroupScreenDimens.GridMinWidth),
+                modifier = Modifier.fillMaxSize(),
+                horizontalArrangement = Arrangement.spacedBy(SpaceXSmall),
+                verticalArrangement = Arrangement.spacedBy(SpaceLarge)
+            ) {
+                items(
+                    items = groups,
+                    key = { it.id }
+                ) { group ->
+                    GroupImageGridCard(
+                        name = group.name,
+                        images = group.images,
+                        onClick = { onAction(SelectGroupAction.OnGroupClick(group)) },
+                    )
+                }
             }
         }
     }

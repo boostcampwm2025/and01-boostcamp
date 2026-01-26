@@ -130,7 +130,7 @@ fun UserScreenContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(height = ACCOUNT_SECTION_HEIGHT)
-                    .padding(all = MemoripPadding.PaddingSmall)
+                    .padding(all = MemoripPadding.AppHorizontalPadding)
                     .clickable(
                         enabled = !state.isLoggedIn,
                         onClick = {

@@ -19,10 +19,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.net.toUri
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
+import com.andone.memorip.presentation.util.DummyData
 
 @Composable
 fun ImageCropBottomBar(
@@ -60,7 +62,7 @@ fun ImageCropBottomBar(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
-                    horizontal = MemoripPadding.PaddingLarge,
+                    horizontal = MemoripPadding.AppHorizontalPadding,
                     vertical = MemoripPadding.PaddingMedium
                 ),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -85,14 +87,12 @@ fun ImageCropBottomBar(
                 )
             )
 
-            val iconRes =
-                if (imageUris.size == croppedImageKeys.size) R.drawable.ic_arrow_forward else R.drawable.ic_check
             IconButton(
                 onClick = onImageCrop,
                 colors = IconButtonDefaults.iconButtonColors(containerColor = MemoripTheme.colors.primary)
             ) {
                 Icon(
-                    painter = painterResource(iconRes),
+                    painter = painterResource(R.drawable.ic_check),
                     contentDescription = stringResource(R.string.select_image_done),
                     tint = MemoripTheme.colors.white
                 )
@@ -105,7 +105,7 @@ fun ImageCropBottomBar(
 @Composable
 private fun ImageCropBottomBarPreview() {
     ImageCropBottomBar(
-        imageUris = emptyList(),
+        imageUris = DummyData.placeImages.map { it.url.toUri() },
         croppedImageKeys = emptySet(),
         currentIndex = 0,
         onDismiss = {},

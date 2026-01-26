@@ -63,6 +63,8 @@ import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
 import com.andone.memorip.presentation.util.toPx
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
@@ -82,7 +84,8 @@ private object TimeTableConstant {
 fun TimeTable(
     totalMinutes: Int,
     currentDay: Int?,
-    onBlockAdd: (TimeBlock) -> Unit,
+    places: ImmutableList<Place>,
+    onBlockAdd: (Place, Int) -> Unit,
     onDayScrolled: (Int) -> Unit = {},
     content: @Composable (TimeLayoutEngine, ScrollState) -> Unit
 ) {
@@ -92,7 +95,6 @@ fun TimeTable(
     val engine = remember(minuteHeightPx) {
         TimeLayoutEngine(minuteHeightPx)
     }
-    val places = remember { DummyData.places.toMutableStateList() }
     val backgroundShape = MemoripTheme.shapes.roundedMedium
     var rowTop by remember { mutableStateOf(0f) }
     var timeTableTop by remember { mutableStateOf(0f) }
@@ -228,8 +230,7 @@ fun TimeTable(
                                                         engine.yPxToStartMinute(absoluteYPx)
                                                     val snappedMinute =
                                                         ((newStartMinute + SNAP_MINUTE_UNIT / 2) / SNAP_MINUTE_UNIT) * SNAP_MINUTE_UNIT
-                                                    onBlockAdd(createNewBlock(place, snappedMinute, currentDay))
-                                                    places.remove(place)
+                                                    onBlockAdd(place, snappedMinute)
                                                 }
                                             }
                                             selectedPlace = null
@@ -277,27 +278,14 @@ fun TimeTable(
     }
 }
 
-private fun createNewBlock(
-    place: Place,
-    startMinute: Int,
-    currentDay: Int,
-    durationMinute: Int = DEFAULT_DURATION
-): TimeBlock {
-    return TimeBlock(
-        id = place.id,
-        startMinute = startMinute,
-        durationMinute = durationMinute,
-        day = currentDay
-    )
-}
-
 @Preview(showBackground = true)
 @Composable
 private fun TimeTablePreview() {
     TimeTable(
         totalMinutes = MINUTES_PER_DAY,
         currentDay = 1,
-        onBlockAdd = {},
+        places = DummyData.places.toImmutableList(),
+        onBlockAdd = {_, _ -> },
         content = { _, _ -> },
     )
 }

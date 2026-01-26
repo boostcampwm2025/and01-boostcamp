@@ -48,7 +48,7 @@ fun PlaceListItem(
         onClick = { onClick(place.id) },
         modifier = modifier.fillMaxWidth(),
         shape = MemoripTheme.shapes.roundedMedium,
-        color = MemoripTheme.colors.white,
+        color = MemoripTheme.colors.background,
         tonalElevation = PlaceListItemDimen.CARD_ELEVATION,
         border = BorderStroke(
             width = MemoripLineWidth.Small,

@@ -1,17 +1,18 @@
 package com.andone.memorip.presentation.screen.plan
 
 import androidx.lifecycle.ViewModel
-import com.andone.memorip.domain.model.TimeBlock
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.model.PlanBlockUiModel
 import com.andone.memorip.presentation.model.toTimeBlock
 import com.andone.memorip.presentation.screen.plan.model.DateUiModel
 import com.andone.memorip.presentation.screen.plan.model.PlanAction
 import com.andone.memorip.presentation.screen.plan.model.PlanEvent
-import com.andone.memorip.presentation.screen.plan.model.PlanEvent.*
+import com.andone.memorip.presentation.screen.plan.model.PlanEvent.ShowDeleteDayDialog
 import com.andone.memorip.presentation.screen.plan.model.PlanUiState
+import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_DAY
 import com.andone.memorip.presentation.util.DummyData
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,10 +27,11 @@ class PlanViewModel @Inject constructor() : ViewModel() {
 
     private val _uiState = MutableStateFlow(
         value = PlanUiState(
+            places = DummyData.places.toImmutableList(),
 //            blocks = DummyData.places.mapNotNull { it.toTimeBlock(dayStart = DummyData.dummyDate.startDay!!.atStartOfDay()) },
             blocks = emptyList(),
-            blockUiModels = DummyData.places.associateBy { it.id },
-            date = DummyData.dummyDate,
+//            blockUiModels = DummyData.places.associateBy { it.id },
+//            date = DummyData.dummyDate,
         )
     )
     val uiState = _uiState.asStateFlow()
@@ -138,8 +140,45 @@ class PlanViewModel @Inject constructor() : ViewModel() {
                 }
             }
 
-            is PlanAction.ItemDragStart -> {
-                _uiState.update { it.copy(blocks = uiState.value.blocks + action.item) }
+            is PlanAction.ItemDragEnd -> {
+                val date = _uiState.value.date
+                val baseDay = date.startDay ?: return
+
+                val totalMinute = action.startMinute
+
+                val dayOffset = totalMinute / MINUTES_PER_DAY
+                val minuteInDay = totalMinute % MINUTES_PER_DAY
+
+                val targetDay = baseDay.plusDays(dayOffset.toLong())
+
+                val startDateTime = targetDay.atStartOfDay()
+                    .plusMinutes(minuteInDay.toLong())
+
+                val endDateTime = startDateTime.plusMinutes(action.item.durationMinutes)
+
+                val isDuplicated = uiState.value.blocks.any {
+                    val rangeBaseDay = baseDay.plusDays((it.day - 1).toLong())
+                    val startRange =
+                        rangeBaseDay.atStartOfDay().plusMinutes(it.startMinute.toLong())
+                    val endRange =
+                        rangeBaseDay.atStartOfDay().plusMinutes((it.endMinute - 1).toLong())
+                    startDateTime in startRange..endRange
+                }
+                if (isDuplicated) {
+                    return
+                }
+
+                val newPlace = action.item.copy(
+                    startDateTime = startDateTime,
+                    endDateTime = endDateTime
+                )
+                _uiState.update {
+                    it.copy(
+                        blockUiModels = it.blockUiModels + (action.item.id to newPlace),
+                        blocks = uiState.value.blocks + newPlace.toTimeBlock(dayStart = uiState.value.date.startDay!!.atStartOfDay())!!,
+                        places = (it.places - action.item).toImmutableList()
+                    )
+                }
             }
         }
     }
@@ -166,6 +205,7 @@ class PlanViewModel @Inject constructor() : ViewModel() {
             )
         }
     }
+
     private fun adjustCurrentDay(
         date: DateUiModel,
         dayIndex: Int,
@@ -186,6 +226,7 @@ class PlanViewModel @Inject constructor() : ViewModel() {
                     else -> next
                 }
             }
+
             current.isAfter(newEnd) -> newEnd
             current.isBefore(newStart) -> newStart
             else -> current

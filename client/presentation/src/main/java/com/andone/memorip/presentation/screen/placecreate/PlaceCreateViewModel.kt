@@ -75,6 +75,10 @@ class PlaceCreateViewModel @Inject constructor(
                 removeImage(action.imageUri)
             }
 
+            is PlaceCreateAction.OnLastImageRemove -> {
+                _event.trySend(PlaceCreateEvent.NavigateToHome)
+            }
+
             is PlaceCreateAction.OnScrollPositionChange -> {
                 _uiState.update { it.copy(scrollPosition = action.position) }
             }

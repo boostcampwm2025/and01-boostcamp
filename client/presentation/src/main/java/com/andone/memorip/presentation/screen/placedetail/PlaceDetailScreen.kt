@@ -243,7 +243,7 @@ private fun PlaceDetailContent(
                 .fillMaxWidth()
                 .height(height = headerHeightPx.toDp(density = density))
                 .clipToBounds()
-                .clickable { place.imageUrls.firstOrNull()?.let { image -> onImageClick(image) } },
+                .clickable { onImageClick(place.imageUrls[pagerState.currentPage]) },
             contentAlignment = Alignment.BottomStart
         ) {
             HorizontalPager(
@@ -273,7 +273,10 @@ private fun PlaceDetailContent(
                             )
                         )
                     )
-                    .padding(all = MemoripPadding.PaddingMedium),
+                    .padding(
+                        horizontal = MemoripPadding.AppHorizontalPadding,
+                        vertical = MemoripPadding.PaddingMedium
+                    ),
                 verticalArrangement = Arrangement.spacedBy(
                     alignment = Alignment.Bottom,
                     space = MemoripSpace.SpaceXSmall

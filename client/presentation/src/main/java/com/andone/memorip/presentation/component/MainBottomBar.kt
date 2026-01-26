@@ -4,22 +4,24 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,7 +36,7 @@ import com.andone.memorip.presentation.component.MainBottomBarConstants.DURATION
 import com.andone.memorip.presentation.component.MainBottomBarDimens.buttonOffset
 import com.andone.memorip.presentation.component.MainBottomBarDimens.centerButtonSize
 import com.andone.memorip.presentation.component.MainBottomBarDimens.elevation
-import com.andone.memorip.presentation.theme.MemoripPadding
+import com.andone.memorip.presentation.theme.MemoripHeight
 import com.andone.memorip.presentation.theme.MemoripTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -58,6 +60,8 @@ fun MainBottomBar(
     onFabClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val bottomPadding = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+
     AnimatedVisibility(
         visible = visible,
         modifier = modifier,
@@ -71,33 +75,36 @@ fun MainBottomBar(
         )
     ) {
         Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.BottomCenter
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(MemoripHeight.bottomBar + bottomPadding)
+                .background(MemoripTheme.colors.background),
+            contentAlignment = Alignment.TopCenter
         ) {
-            NavigationBar(containerColor = MemoripTheme.colors.background) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(MemoripHeight.bottomBar),
+                horizontalArrangement = Arrangement.SpaceAround,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 tabs.forEachIndexed { index, tab ->
                     if (index == tabs.size / 2) {
-                        Spacer(modifier = Modifier.width(width = centerButtonSize + MemoripPadding.PaddingXXXLarge))
+                        Spacer(modifier = Modifier.width(centerButtonSize))
                     }
 
-                    NavigationBarItem(
-                        selected = tab == currentTab,
+                    val iconColor =
+                        if (tab == currentTab) MemoripTheme.colors.primary else MemoripTheme.colors.gray
+
+                    IconButton(
                         onClick = { onTabSelected(tab) },
-                        icon = {
-                            Icon(
-                                painter = painterResource(tab.selectedIconId),
-                                contentDescription = stringResource(tab.titleTextId)
-                            )
-                        },
-//                        label = { Text(text = stringResource(tab.titleTextId)) },
-                        colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = MemoripTheme.colors.onSurface,
-                            selectedTextColor = MemoripTheme.colors.onSurface,
-                            indicatorColor = MemoripTheme.colors.primaryContainer,
-                            unselectedIconColor = MemoripTheme.colors.gray,
-                            unselectedTextColor = MemoripTheme.colors.gray
-                        ),
-                    )
+                        colors = IconButtonDefaults.iconButtonColors(contentColor = iconColor)
+                    ) {
+                        Icon(
+                            painter = painterResource(tab.selectedIconId),
+                            contentDescription = stringResource(tab.titleTextId)
+                        )
+                    }
                 }
             }
 
