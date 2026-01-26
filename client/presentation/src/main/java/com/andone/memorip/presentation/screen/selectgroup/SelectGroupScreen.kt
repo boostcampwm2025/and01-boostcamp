@@ -1,7 +1,9 @@
 package com.andone.memorip.presentation.screen.selectgroup
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -128,22 +130,28 @@ private fun SelectGroupContent(
             }
         },
     ) { innerPadding ->
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(minSize = SelectGroupScreenDimens.GridMinWidth),
-            modifier = modifier.padding(paddingValues = innerPadding),
-            contentPadding = PaddingValues(horizontal = MemoripPadding.AppHorizontalPadding),
-            horizontalArrangement = Arrangement.spacedBy(SpaceXSmall),
-            verticalArrangement = Arrangement.spacedBy(SpaceLarge)
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(paddingValues = innerPadding)
+                .padding(all = MemoripPadding.AppHorizontalPadding)
         ) {
-            items(
-                items = groups,
-                key = { it.id }
-            ) { group ->
-                GroupImageGridCard(
-                    name = group.name,
-                    images = group.images,
-                    onClick = { onAction(SelectGroupAction.OnGroupClick(group)) },
-                )
+            LazyVerticalGrid(
+                columns = GridCells.Adaptive(minSize = SelectGroupScreenDimens.GridMinWidth),
+                modifier = Modifier.fillMaxSize(),
+                horizontalArrangement = Arrangement.spacedBy(SpaceXSmall),
+                verticalArrangement = Arrangement.spacedBy(SpaceLarge)
+            ) {
+                items(
+                    items = groups,
+                    key = { it.id }
+                ) { group ->
+                    GroupImageGridCard(
+                        name = group.name,
+                        images = group.images,
+                        onClick = { onAction(SelectGroupAction.OnGroupClick(group)) },
+                    )
+                }
             }
         }
     }

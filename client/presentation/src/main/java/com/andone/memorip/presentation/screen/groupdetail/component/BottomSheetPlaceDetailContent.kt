@@ -105,14 +105,12 @@ fun BottomSheetPlaceDetailContent(
             onClick = onCloseClick,
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .padding(MemoripPadding.PaddingSmall),
-            colors = IconButtonDefaults.iconButtonColors(
-                contentColor = MemoripTheme.colors.black
-            )
+                .padding(MemoripPadding.PaddingSmall)
         ) {
             Icon(
                 painter = painterResource(R.drawable.ic_close),
-                contentDescription = stringResource(R.string.dialog_close_button_description)
+                contentDescription = stringResource(R.string.dialog_close_button_description),
+                tint = MemoripTheme.colors.onSurface
             )
         }
     }
