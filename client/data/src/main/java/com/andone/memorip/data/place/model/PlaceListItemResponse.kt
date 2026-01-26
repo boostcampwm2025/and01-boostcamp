@@ -10,7 +10,8 @@ data class PlaceListItemResponse(
     val latitude: Double,
     val longitude: Double,
     val address: String,
-    val imageUrl: String? = null
+    val imageUrl: String? = null,
+    val isPublic: Boolean
 )
 
 fun PlaceListItemResponse.toDomain(): PlaceListItem =
