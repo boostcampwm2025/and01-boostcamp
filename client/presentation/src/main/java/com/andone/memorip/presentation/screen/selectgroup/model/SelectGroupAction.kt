@@ -2,6 +2,11 @@ package com.andone.memorip.presentation.screen.selectgroup.model
 
 sealed interface SelectGroupAction {
 
+    data class OnInitialize(
+        val placeId: String?,
+        val initialSelectedGroupId: String?
+    ) : SelectGroupAction
+
     data object OnFABClick : SelectGroupAction
 
     data class OnGroupClick(val group: SelectGroupUiModel) : SelectGroupAction

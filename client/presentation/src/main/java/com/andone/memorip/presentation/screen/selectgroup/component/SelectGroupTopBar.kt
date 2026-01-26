@@ -22,7 +22,7 @@ fun SelectGroupTopBar(
     onCheckClick: () -> Unit,
     modifier: Modifier = Modifier,
     title: String = stringResource(R.string.select_group_title),
-    hasSelectedGroups: Boolean = false
+    hasChanges: Boolean = false
 ) {
     TopAppBar(
         title = {
@@ -44,7 +44,7 @@ fun SelectGroupTopBar(
                 Icon(
                     imageVector = ImageVector.vectorResource(R.drawable.ic_check),
                     contentDescription = stringResource(R.string.select_group_check_button_description),
-                    tint = if (hasSelectedGroups) {
+                    tint = if (hasChanges) {
                         MemoripTheme.colors.primary
                     } else {
                         MemoripTheme.colors.lightGray
@@ -67,7 +67,7 @@ private fun SelectGroupTopBarPreview() {
         SelectGroupTopBar(
             onBackClick = {},
             onCheckClick = {},
-            hasSelectedGroups = false
+            hasChanges = false
         )
     }
 }
