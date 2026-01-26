@@ -4,6 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PlaceGroupsUpdateRequest(
-    val addGroupIds: List<String> = emptyList(),
-    val removeGroupIds: List<String> = emptyList()
+    val addGroupIds: List<String>,
+    val removeGroupIds: List<String>
 )
