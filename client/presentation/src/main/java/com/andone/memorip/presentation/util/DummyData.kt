@@ -183,7 +183,7 @@ object DummyData {
             add(
                 createPlace(
                     "6",
-                    "KFC",
+                    "KFCKFCKFCKFCKFCKFCKFCKFCKFCKFCKFCKFCKFCKFC",
                     37.495592,
                     127.028747,
                     "경기도, 광명",
