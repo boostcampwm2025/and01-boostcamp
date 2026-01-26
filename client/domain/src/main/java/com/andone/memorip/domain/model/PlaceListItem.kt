@@ -6,5 +6,6 @@ data class PlaceListItem(
     val latitude: Double,
     val longitude: Double,
     val address: String,
-    val imageUrl: String
+    val imageUrl: String,
+    val isPublic: Boolean
 )

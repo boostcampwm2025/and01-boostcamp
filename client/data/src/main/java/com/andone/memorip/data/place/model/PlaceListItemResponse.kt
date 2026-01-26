@@ -21,6 +21,7 @@ fun PlaceListItemResponse.toDomain(): PlaceListItem =
         latitude = latitude,
         longitude = longitude,
         address = address,
-        imageUrl = imageUrl ?: ""
+        imageUrl = imageUrl ?: "",
+        isPublic = isPublic
     )
 
