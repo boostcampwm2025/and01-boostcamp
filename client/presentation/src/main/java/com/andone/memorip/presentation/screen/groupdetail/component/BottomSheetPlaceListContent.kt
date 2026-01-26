@@ -32,7 +32,7 @@ fun BottomSheetPlaceListContent(
     ) {
         Text(
             text = stringResource(R.string.groupdetail_place_list_title),
-            style = MemoripTheme.typography.headline2,
+            style = MemoripTheme.typography.headlineBold20,
             color = MemoripTheme.colors.onSurface,
             modifier = Modifier
                 .fillMaxWidth()

@@ -25,7 +25,7 @@ fun MemoripSearchBarInputField(
     onExpandedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    CompositionLocalProvider(value = LocalTextStyle provides MemoripTheme.typography.title2) {
+    CompositionLocalProvider(value = LocalTextStyle provides MemoripTheme.typography.bodyMedium14) {
         SearchBarDefaults.InputField(
             query = query,
             onQueryChange = { onQueryChange(it) },
@@ -36,7 +36,7 @@ fun MemoripSearchBarInputField(
             placeholder = {
                 Text(
                     text = stringResource(R.string.search_bar_placeholder),
-                    style = MemoripTheme.typography.title2,
+                    style = MemoripTheme.typography.labelMedium14,
                 )
             },
             leadingIcon = {

@@ -107,7 +107,7 @@ fun StaggeredImageItem(
                 Text(
                     text = contentDescription?.takeIf { it.isNotBlank() }
                         ?: stringResource(R.string.place_list_no_title),
-                    style = MemoripTheme.typography.label1,
+                    style = MemoripTheme.typography.labelRegular10,
                     overflow = TextOverflow.Ellipsis
                 )
                 Spacer(modifier = Modifier.height(height = MemoripPadding.PaddingXXSmall))

@@ -65,7 +65,7 @@ fun PlacePickerItem(
         ) {
             Text(
                 text = place.name,
-                style = MemoripTheme.typography.labelExtBold,
+                style = MemoripTheme.typography.titleBold12,
                 color = MemoripTheme.colors.onSurface,
                 overflow = TextOverflow.Ellipsis
             )

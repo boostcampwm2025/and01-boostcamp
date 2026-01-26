@@ -28,7 +28,7 @@ fun SelectCategoryTopBar(
         title = {
             Text(
                 text = stringResource(R.string.select_category_title),
-                style = LocalMemoripTypography.current.headline2
+                style = LocalMemoripTypography.current.headlineBold20
             )
         },
         navigationIcon = {
