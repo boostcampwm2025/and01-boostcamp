@@ -3,13 +3,16 @@ package com.andone.memorip.domain.place.controller
 import com.andone.memorip.common.response.ApiResult
 import com.andone.memorip.domain.place.dto.response.PlaceDetailResponse
 import com.andone.memorip.domain.place.dto.request.PlaceCreateRequest
+import com.andone.memorip.domain.place.dto.request.PlaceGroupsUpdateRequest
 import com.andone.memorip.domain.place.dto.response.PlaceCreateResponse
 import com.andone.memorip.domain.place.dto.response.PlaceListItemResponse
+import com.andone.memorip.domain.place.service.GroupPlaceService
 import com.andone.memorip.domain.place.service.PlaceService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.validation.Valid
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.data.web.PageableDefault
@@ -20,7 +23,8 @@ import java.util.*
 @Tag(name = "Place API", description = "장소 관련 API")
 @RequestMapping("/api")
 class PlaceController(
-    private val placeService: PlaceService
+    private val placeService: PlaceService,
+    private val groupPlaceService: GroupPlaceService
 ) {
     @GetMapping("/places/{placeId}")
     @Operation(
@@ -85,5 +89,44 @@ class PlaceController(
     ): ApiResult<PlaceCreateResponse> {
         val placeId = placeService.createPlace(request)
         return ApiResult.success(placeId)
+    }
+
+    @PatchMapping("/places/{placeId}/groups")
+    @Operation(
+        summary = "여러 그룹에 장소 추가/제거",
+        description = """
+            여러 그룹에 한번에 장소를 추가하거나 제거합니다.
+            
+            **Request Body:**
+            - `addGroupIds` (List<UUID>): 장소를 추가할 그룹 ID 목록 (선택)
+            - `removeGroupIds` (List<UUID>): 장소를 제거할 그룹 ID 목록 (선택)
+            
+            **제약사항:**
+            - `addGroupIds`와 `removeGroupIds` 중 최소 하나는 비어있지 않아야 합니다
+            - 요청에 포함되지 않은 그룹은 현재 상태 유지 (페이징 문제 해결)
+            - 이미 추가된 그룹에 다시 추가 요청 시 스킵
+            - 없는 그룹에서 제거 요청 시 스킵
+            
+            **예시:**
+            ```json
+            {
+              "addGroupIds": ["uuid1", "uuid2"],
+              "removeGroupIds": ["uuid3"]
+            }
+            ```
+        """,
+        responses = [
+            ApiResponse(responseCode = "200", description = "성공"),
+            ApiResponse(responseCode = "400", description = "잘못된 요청 - addGroupIds와 removeGroupIds가 모두 비어있음"),
+            ApiResponse(responseCode = "404", description = "장소 또는 그룹을 찾을 수 없습니다")
+        ]
+    )
+    fun updatePlaceGroups(
+        @Parameter(description = "장소 ID")
+        @PathVariable placeId: UUID,
+        @Valid @RequestBody request: PlaceGroupsUpdateRequest
+    ): ApiResult<Unit> {
+        groupPlaceService.updatePlaceGroups(placeId, request)
+        return ApiResult.success(Unit)
     }
 }
