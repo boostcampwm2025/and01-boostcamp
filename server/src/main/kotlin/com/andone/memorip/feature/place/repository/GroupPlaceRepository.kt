@@ -12,4 +12,6 @@ interface GroupPlaceRepository : JpaRepository<GroupPlace, UUID> {
     
     @Query("SELECT gp FROM GroupPlace gp WHERE gp.group.id = :groupId ORDER BY gp.createdAt ASC")
     fun findByGroupId(@Param("groupId") groupId: UUID): List<GroupPlace>
+
+    fun findAllByGroupId(groupId: UUID): List<GroupPlace>
 }

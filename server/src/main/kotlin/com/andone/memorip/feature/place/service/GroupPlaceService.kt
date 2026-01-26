@@ -4,6 +4,7 @@ import com.andone.memorip.common.exception.BusinessException
 import com.andone.memorip.common.exception.CommonExceptionCode
 import com.andone.memorip.feature.group.dto.request.GroupPlaceCreateRequest
 import com.andone.memorip.feature.group.repository.GroupRepository
+import com.andone.memorip.feature.place.dto.response.GroupPlaceListResponse
 import com.andone.memorip.feature.place.entity.GroupPlace
 import com.andone.memorip.feature.place.repository.GroupPlaceRepository
 import com.andone.memorip.feature.place.repository.PlaceRepository
@@ -64,5 +65,28 @@ class GroupPlaceService(
             ?: throw BusinessException(CommonExceptionCode.PLACE_NOT_FOUND)
 
         groupPlace.clearPeriod()
+    }
+
+    @Transactional(readOnly = true)
+    fun getGroupPlaces(groupId: UUID): List<GroupPlaceListResponse> {
+        val group = groupRepository.findByIdOrNull(groupId)
+            ?: throw BusinessException(CommonExceptionCode.GROUP_NOT_FOUND)
+
+        val groupPlaces = groupPlaceRepository.findAllByGroupId(groupId)
+
+        return groupPlaces.map { gp ->
+            val place = gp.place
+            GroupPlaceListResponse(
+                groupPlaceId = gp.id,
+                placeId = place.id,
+                title = place.title,
+                thumbnailUrl = place.thumbnailUrl,
+                address = place.address.fullAddress,
+                latitude = place.latitude,
+                longitude = place.longitude,
+                startAt = gp.startAt,
+                endAt = gp.endAt
+            )
+        }
     }
 }
