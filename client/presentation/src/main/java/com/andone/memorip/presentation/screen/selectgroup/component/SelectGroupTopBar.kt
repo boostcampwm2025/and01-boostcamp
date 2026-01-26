@@ -7,6 +7,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -18,7 +19,10 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 @Composable
 fun SelectGroupTopBar(
     onBackClick: () -> Unit,
-    title: String = stringResource(R.string.select_group_title)
+    onCheckClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    title: String = stringResource(R.string.select_group_title),
+    hasSelectedGroups: Boolean = false
 ) {
     TopAppBar(
         title = {
@@ -35,6 +39,19 @@ fun SelectGroupTopBar(
                 )
             }
         },
+        actions = {
+            IconButton(onClick = onCheckClick) {
+                Icon(
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_check),
+                    contentDescription = stringResource(R.string.select_group_check_button_description),
+                    tint = if (hasSelectedGroups) {
+                        MemoripTheme.colors.primary
+                    } else {
+                        MemoripTheme.colors.lightGray
+                    }
+                )
+            }
+        },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MemoripTheme.colors.background,
             navigationIconContentColor = MemoripTheme.colors.onSurface,
@@ -45,8 +62,12 @@ fun SelectGroupTopBar(
 
 @Composable
 @Preview
-private fun SelectGroupTopBarPrev() {
+private fun SelectGroupTopBarPreview() {
     MemoripTheme {
-        SelectGroupTopBar(onBackClick = {})
+        SelectGroupTopBar(
+            onBackClick = {},
+            onCheckClick = {},
+            hasSelectedGroups = false
+        )
     }
 }
