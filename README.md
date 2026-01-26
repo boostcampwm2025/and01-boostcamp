@@ -14,7 +14,7 @@
 이 서비스는 사용자들의 실제 경험을 기반으로
 장소를 기록하고, 공유하고, 계획까지 이어질 수 있도록 돕는 것을 목표로 합니다.
 
-https://github.com/user-attachments/assets/f15caefd-627f-4603-866e-26e422e41566
+<img width="840" height="600" src="https://github.com/user-attachments/assets/f15caefd-627f-4603-866e-26e422e41566"/>
 
 ## 주요 기능
 :one: **원하는 장소 사진들을 한눈에**
