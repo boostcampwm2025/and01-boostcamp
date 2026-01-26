@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Matrix
 import android.graphics.Paint
 import android.net.Uri
 import androidx.compose.foundation.gestures.awaitEachGesture
@@ -18,6 +19,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChanged
 import androidx.core.graphics.createBitmap
+import androidx.exifinterface.media.ExifInterface
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -30,8 +32,29 @@ object BitmapCropUtil {
     suspend fun loadBitmapFromUri(context: Context, uri: Uri): Bitmap? {
         return withContext(Dispatchers.IO) {
             runCatching {
-                context.contentResolver.openInputStream(uri)?.use { stream ->
+                // EXIF 데이터 - 회전 각도 확인
+                val rotation = context.contentResolver.openInputStream(uri)?.use { stream ->
+                    val orientation = ExifInterface(stream).getAttributeInt(
+                        ExifInterface.TAG_ORIENTATION,
+                        ExifInterface.ORIENTATION_NORMAL
+                    )
+                    when (orientation) {
+                        ExifInterface.ORIENTATION_ROTATE_90 -> 90f
+                        ExifInterface.ORIENTATION_ROTATE_180 -> 180f
+                        ExifInterface.ORIENTATION_ROTATE_270 -> 270f
+                        else -> 0f
+                    }
+                } ?: return@runCatching null
+
+                val bitmap = context.contentResolver.openInputStream(uri)?.use { stream ->
                     BitmapFactory.decodeStream(stream)
+                } ?: return@runCatching null
+
+                if (rotation != 0f) {
+                    val matrix = Matrix().apply { postRotate(rotation) }
+                    Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+                } else {
+                    bitmap
                 }
             }.getOrNull()
         }

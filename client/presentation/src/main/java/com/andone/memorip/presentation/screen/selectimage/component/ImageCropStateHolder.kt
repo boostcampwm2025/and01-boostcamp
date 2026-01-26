@@ -18,6 +18,7 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import com.andone.memorip.presentation.screen.selectimage.component.ImageCropStateHolderConstants.MAX_RATIO
 import com.andone.memorip.presentation.screen.selectimage.component.ImageCropStateHolderConstants.MIN_SIZE
+import com.andone.memorip.presentation.screen.selectimage.model.CropTransformData
 import com.andone.memorip.presentation.util.BitmapCropUtil
 import com.andone.memorip.presentation.util.BitmapCropUtil.bitmapToScreenRect
 import com.andone.memorip.presentation.util.BitmapCropUtil.calculateOffset
@@ -43,23 +44,25 @@ enum class DragHandle {
 @Composable
 fun rememberCropImageState(
     imageUris: List<Uri>,
+    transformData: Map<Uri, CropTransformData>,
     context: Context,
     cropPadding: Float,
-    onImagesCrop: (List<Uri>) -> Unit,
+    onImagesCrop: (List<Uri>, Map<Uri, CropTransformData>) -> Unit,
     scope: CoroutineScope = rememberCoroutineScope()
 ): CropImageState {
-    return remember(imageUris, context, cropPadding, scope, onImagesCrop) {
-        CropImageState(imageUris, context, cropPadding, scope, onImagesCrop)
+    return remember(imageUris, transformData, context, cropPadding, scope, onImagesCrop) {
+        CropImageState(imageUris, transformData, context, cropPadding, scope, onImagesCrop)
     }
 }
 
 @Stable
 class CropImageState(
     private val imageUris: List<Uri>,
+    private val transformData: Map<Uri, CropTransformData>,
     private val context: Context,
     private val cropPadding: Float,
     private val scope: CoroutineScope,
-    private val onImagesCrop: (List<Uri>) -> Unit
+    private val onImagesCrop: (List<Uri>, Map<Uri, CropTransformData>) -> Unit
 ) {
     var currentIndex by mutableIntStateOf(0)
         private set
@@ -84,6 +87,12 @@ class CropImageState(
 
     val croppedImages = mutableStateMapOf<Uri, Uri>()
 
+    private val transformDataMap =
+        mutableStateMapOf<Uri, CropTransformData>().apply { putAll(transformData) }
+
+    var isLoading by mutableStateOf(false)
+        private set
+
     private var currentDragHandle by mutableStateOf(DragHandle.None)
 
     private val viewCenter: Offset
@@ -96,19 +105,46 @@ class CropImageState(
         )
 
     fun updateViewSize(size: Size) {
-        viewSize = size
-        resetTransformation()
+        if (viewSize != size) {
+            viewSize = size
+            if (cropRect == Rect.Zero) {
+                resetTransformation()
+            }
+        }
     }
 
     fun selectImage(index: Int) {
+        saveState()
         currentIndex = index
     }
 
+    private fun saveState() {
+        currentUri?.let { uri ->
+            if (imageBitmap != null && cropRect != Rect.Zero) {
+                transformDataMap[uri] = CropTransformData(
+                    scale = scale,
+                    offset = offset,
+                    cropRect = cropRect
+                )
+            }
+        }
+    }
+
     suspend fun loadImage() {
+        isLoading = true
         currentUri?.let { uri ->
             imageBitmap = loadBitmapFromUri(context = context, uri = uri)
-            resetTransformation()
+
+            val savedData = transformDataMap[uri]
+            if (savedData != null) {
+                scale = savedData.scale
+                offset = savedData.offset
+                cropRect = savedData.cropRect
+            } else {
+                resetTransformation()
+            }
         }
+        isLoading = false
     }
 
     private fun resetTransformation() {
@@ -362,29 +398,27 @@ class CropImageState(
     }
 
     fun cropImage() {
+        saveState()
+
         scope.launch {
             val bitmap = imageBitmap
             val uri = currentUri
             if (bitmap != null && uri != null) {
-                if (croppedImages.size == imageUris.size) {
-                    val finalResult = imageUris.mapNotNull { croppedImages[it] }
-                    if (finalResult.size == imageUris.size) {
-                        onImagesCrop(finalResult)
-                    }
-                } else {
-                    val resultUri = BitmapCropUtil.cropImage(
-                        context = context,
-                        bitmap = bitmap,
-                        viewSize = viewSize,
-                        offset = offset,
-                        scale = scale,
-                        cropRect = cropRect
-                    )
-                    croppedImages[uri] = resultUri
+                croppedImages[uri] = BitmapCropUtil.cropImage(
+                    context = context,
+                    bitmap = bitmap,
+                    viewSize = viewSize,
+                    offset = offset,
+                    scale = scale,
+                    cropRect = cropRect
+                )
 
+                if (croppedImages.size == imageUris.size) {
+                    onImagesCrop(imageUris.mapNotNull { croppedImages[it] }, transformDataMap)
+                } else {
                     val nextIndex = imageUris.indexOfFirst { !croppedImages.containsKey(it) }
                     if (nextIndex != -1) {
-                        currentIndex = nextIndex
+                        selectImage(nextIndex)
                     }
                 }
             }

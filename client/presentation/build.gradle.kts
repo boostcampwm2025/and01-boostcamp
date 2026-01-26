@@ -117,6 +117,9 @@ dependencies {
     // Convention
     implementation(libs.compose.convention)
     detektPlugins(libs.compose.convention)
+
+    // EXIF
+    implementation(libs.androidx.exifinterface)
 }
 
 apply(from = providers.gradleProperty("DETEKT_IDE_SETUP_URL").get())

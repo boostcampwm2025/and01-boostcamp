@@ -174,7 +174,7 @@ fun PlaceCreateMainStep(
                             onCategoryClick = { onStepChange(PlaceCreateStep.SelectCategory) },
                             onLocationClick = { onStepChange(PlaceCreateStep.SelectLocation) },
                             onGroupClick = { onStepChange(PlaceCreateStep.SelectGroup) },
-                            onImageCreate = onNavigateToHome,
+                            onNavigateToHome = onNavigateToHome,
                             viewModel = viewModel
                         )
                     }
