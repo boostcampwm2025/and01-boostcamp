@@ -54,8 +54,20 @@ class PlaceService(
         )
     }
 
-    fun getPlaceList(pageable: Pageable): PlaceListResult {
-        val page = placeRepository.findAll(pageable)
+    fun getPlaceList(
+        query: String?,
+        tagIds: List<UUID>?,
+        region1Depth: String?,
+        region2Depth: String?,
+        pageable: Pageable
+    ): PlaceListResult {
+        val page = placeRepository.searchPlaces(
+            query = query,
+            tagIds = tagIds,
+            region1Depth = region1Depth,
+            region2Depth = region2Depth,
+            pageable = pageable
+        )
 
         val content = page.content.map { place ->
             PlaceListItemResponse(
