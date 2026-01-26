@@ -6,6 +6,7 @@ import com.andone.memorip.feature.group.dto.request.GroupUpdateRequest
 import com.andone.memorip.feature.group.dto.request.GroupPlaceCreateRequest
 import com.andone.memorip.feature.group.dto.request.GroupPlaceTimeUpdateRequest
 import com.andone.memorip.feature.group.dto.response.GroupListResponse
+import com.andone.memorip.feature.group.dto.response.GroupPeriodResponse
 import com.andone.memorip.feature.group.dto.response.GroupResponse
 import com.andone.memorip.feature.group.service.GroupService
 import com.andone.memorip.feature.place.dto.response.GroupPlaceListResponse
@@ -278,6 +279,12 @@ class GroupController(
         @PathVariable groupId: UUID
     ): ApiResult<List<GroupPlaceListResponse>> {
         val result = groupPlaceService.getGroupPlaces(groupId)
+        return ApiResult.success(result)
+    }
+
+    @GetMapping("/groups/simple")
+    fun getSimpleGroups(): ApiResult<List<GroupPeriodResponse>> {
+        val result = groupService.getSimpleGroupPeriods()
         return ApiResult.success(result)
     }
 }
