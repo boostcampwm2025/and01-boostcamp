@@ -309,7 +309,9 @@ private fun PlaceDetailContent(
                 .padding(horizontal = MemoripPadding.PaddingMedium),
             verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceMedium)
         ) {
-            ContentCard(content = place.content)
+            if (place.content.isNotEmpty()) {
+                ContentCard(content = place.content)
+            }
             LocationCard(
                 location = place.locationName,
                 latitude = place.latitude,
