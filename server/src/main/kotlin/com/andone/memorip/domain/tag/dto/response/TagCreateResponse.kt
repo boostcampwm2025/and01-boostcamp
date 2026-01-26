@@ -17,3 +17,11 @@ data class TagCreateResponse(
         )
     }
 }
+
+fun Tag.toTagCreateResponse(): TagCreateResponse{
+    return TagCreateResponse(
+        id = this.id,
+        name = this.name,
+        colorHex = this.colorHex
+    )
+}
