@@ -26,18 +26,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.core.graphics.withSave
-import androidx.core.net.toUri
 import com.andone.memorip.presentation.component.LoadingIndicatorScreen
 import com.andone.memorip.presentation.screen.selectimage.ImageCropScreenDimens.DRAW_RECT_ALPHA
 import com.andone.memorip.presentation.screen.selectimage.ImageCropScreenDimens.cropPadding
 import com.andone.memorip.presentation.screen.selectimage.ImageCropScreenDimens.touchTarget
 import com.andone.memorip.presentation.screen.selectimage.component.ImageCropBottomBar
 import com.andone.memorip.presentation.screen.selectimage.component.rememberCropImageState
+import com.andone.memorip.presentation.screen.selectimage.model.CropTransformData
 import com.andone.memorip.presentation.theme.MemoripIconSize
 import com.andone.memorip.presentation.theme.MemoripLineWidth
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.BitmapCropUtil.detectEditorGestures
-import com.andone.memorip.presentation.util.DummyData
 import com.andone.memorip.presentation.util.toPx
 
 private object ImageCropScreenDimens {
@@ -49,7 +48,8 @@ private object ImageCropScreenDimens {
 @Composable
 fun ImageCropScreen(
     imageUris: List<Uri>,
-    onImagesCrop: (List<Uri>) -> Unit,
+    transformData: Map<Uri, CropTransformData>,
+    onImagesCrop: (List<Uri>, Map<Uri, CropTransformData>) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -57,6 +57,7 @@ fun ImageCropScreen(
 
     val state = rememberCropImageState(
         imageUris = imageUris,
+        transformData = transformData,
         context = context,
         onImagesCrop = onImagesCrop,
         cropPadding = cropPadding.toPx(density)
@@ -184,6 +185,7 @@ private fun ImageCropSection(
 private fun ImageCropScreenPreview() {
     ImageCropScreen(
         imageUris = emptyList(),
-        onImagesCrop = {}
+        transformData = emptyMap(),
+        onImagesCrop = { _, _ -> }
     )
 }

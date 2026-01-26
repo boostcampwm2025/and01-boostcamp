@@ -75,7 +75,8 @@ fun SelectImageScreenContent(
     if (uiState.selectedImages.isNotEmpty()) {
         ImageCropScreen(
             imageUris = uiState.selectedImages,
-            onImagesCrop = { uris -> onAction(SelectImageAction.OnImagesCrop(uris)) },
+            transformData = uiState.transformData,
+            onImagesCrop = { uris, data -> onAction(SelectImageAction.OnImagesCrop(uris, data)) },
             modifier = modifier
         )
     }
