@@ -1,6 +1,7 @@
 package com.andone.memorip.presentation.screen.groupdetail
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -114,6 +115,7 @@ private fun GroupDetailScreenContent(
                 onSearchClick = { onAction(GroupDetailAction.OnSearchClick) }
             )
         },
+        contentWindowInsets = WindowInsets(),
         modifier = modifier
     ) { innerPadding ->
         Column(
