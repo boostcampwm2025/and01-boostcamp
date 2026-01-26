@@ -26,7 +26,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
-import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -41,11 +40,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import com.andone.memorip.domain.model.TimeBlock
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.screen.plan.component.TimeBlockItemConstants.SNAP_MINUTE_UNIT
 import com.andone.memorip.presentation.screen.plan.component.TimeTableConstant.DEFAULT_ALPHA
-import com.andone.memorip.presentation.screen.plan.component.TimeTableConstant.DEFAULT_DURATION
 import com.andone.memorip.presentation.screen.plan.component.TimeTableConstant.DEFAULT_ZINDEX
 import com.andone.memorip.presentation.screen.plan.component.TimeTableConstant.FULL_WEIGHT
 import com.andone.memorip.presentation.screen.plan.component.TimeTableConstant.PICKED_ALPHA
@@ -285,7 +282,7 @@ private fun TimeTablePreview() {
         totalMinutes = MINUTES_PER_DAY,
         currentDay = 1,
         places = DummyData.places.toImmutableList(),
-        onBlockAdd = {_, _ -> },
+        onBlockAdd = { _, _ -> },
         content = { _, _ -> },
     )
 }

@@ -21,14 +21,14 @@ fun EmptyText(
         Text(
             text = text,
             color = MemoripTheme.colors.gray,
-            style = MemoripTheme.typography.bodyLarge
+            style = MemoripTheme.typography.bodyBold16
         )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun EmptyTextPreview() {
+private fun EmptyTextPreview() {
     EmptyText(
         text = "결과가 없습니다.",
         modifier = Modifier.fillMaxSize()

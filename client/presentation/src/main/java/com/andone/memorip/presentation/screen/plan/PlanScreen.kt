@@ -18,20 +18,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.andone.memorip.presentation.screen.plan.component.PlanTopAppBar
-import com.andone.memorip.presentation.screen.plan.component.DayChipRow
-import com.andone.memorip.presentation.screen.plan.component.TimeTable
-import com.andone.memorip.presentation.screen.plan.model.PlanUiState
-import com.andone.memorip.presentation.theme.MemoripTheme
-import com.andone.memorip.presentation.util.DummyData
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.screen.plan.component.DateContextBar
 import com.andone.memorip.presentation.screen.plan.component.DateRangeCalendar
+import com.andone.memorip.presentation.screen.plan.component.DayChipRow
 import com.andone.memorip.presentation.screen.plan.component.PlaceTimeCard
+import com.andone.memorip.presentation.screen.plan.component.PlanTopAppBar
 import com.andone.memorip.presentation.screen.plan.component.TimeBlockItem
+import com.andone.memorip.presentation.screen.plan.component.TimeTable
 import com.andone.memorip.presentation.screen.plan.model.PlanAction
 import com.andone.memorip.presentation.screen.plan.model.PlanEvent
+import com.andone.memorip.presentation.screen.plan.model.PlanUiState
+import com.andone.memorip.presentation.theme.MemoripTheme
+import com.andone.memorip.presentation.util.DummyData
 import com.andone.memorip.presentation.util.collectWithLifecycle
 import kotlinx.collections.immutable.toImmutableList
 

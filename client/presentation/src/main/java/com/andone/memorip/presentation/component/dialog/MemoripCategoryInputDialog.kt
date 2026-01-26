@@ -51,7 +51,7 @@ fun MemoripCategoryInputDialog(
         TextField(
             value = name,
             onValueChange = { name = it },
-            textStyle = MemoripTheme.typography.body2,
+            textStyle = MemoripTheme.typography.bodyMedium16,
             label = {
                 Text(text = stringResource(R.string.dialog_name_place_holder))
             },
@@ -71,7 +71,7 @@ fun MemoripCategoryInputDialog(
                 if (name.isEmpty()) {
                     Text(
                         text = stringResource(R.string.category_dialog_empty_name_err_hint),
-                        style = MemoripTheme.typography.hint1
+                        style = MemoripTheme.typography.labelRegular12
                     )
                 }
             },
@@ -97,7 +97,7 @@ fun MemoripCategoryInputDialog(
                     colorState.updateColor(value)
                 }
             },
-            textStyle = MemoripTheme.typography.body2,
+            textStyle = MemoripTheme.typography.bodyMedium16,
             leadingIcon = {
                 Box(
                     modifier = Modifier
@@ -124,7 +124,7 @@ fun MemoripCategoryInputDialog(
                 if (!colorState.isValidColorInput()) {
                     Text(
                         text = stringResource(colorState.getErrMsg()),
-                        style = MemoripTheme.typography.hint1
+                        style = MemoripTheme.typography.labelRegular12
                     )
                 }
             },

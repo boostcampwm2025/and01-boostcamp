@@ -8,8 +8,8 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
@@ -285,7 +285,7 @@ private fun PlaceDetailContent(
                 Text(
                     text = place.title,
                     color = MemoripTheme.colors.onSurface,
-                    style = MemoripTheme.typography.headline2
+                    style = MemoripTheme.typography.headlineBold32
                 )
                 Row(horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceMedium)) {
                     Icon(
@@ -296,7 +296,7 @@ private fun PlaceDetailContent(
                     Text(
                         text = place.locationName,
                         color = MemoripTheme.colors.onSurface,
-                        style = MemoripTheme.typography.label1
+                        style = MemoripTheme.typography.bodyMedium14
                     )
                 }
                 TagChipRow(tags = place.tags)
@@ -341,7 +341,7 @@ private fun PlaceDetailInfoSection(
         )
         Text(
             text = infoString,
-            style = MemoripTheme.typography.labelLarge
+            style = MemoripTheme.typography.bodyMedium14
         )
     }
 }

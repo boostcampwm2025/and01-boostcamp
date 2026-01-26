@@ -59,7 +59,7 @@ fun LocationCard(
             )
             Text(
                 text = location,
-                style = MemoripTheme.typography.label1,
+                style = MemoripTheme.typography.bodyMedium16,
                 color = MemoripTheme.colors.black
             )
         }

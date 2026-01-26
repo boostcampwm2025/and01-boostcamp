@@ -105,7 +105,7 @@ private fun StepCircle(
             Text(
                 text = step.toString(),
                 color = contentColor,
-                style = MemoripTheme.typography.label1
+                style = MemoripTheme.typography.bodyBold12
             )
         }
     }

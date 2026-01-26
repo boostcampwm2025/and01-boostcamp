@@ -28,12 +28,12 @@ fun LocationItem(
     ) {
         Text(
             text = location.name,
-            style = MemoripTheme.typography.bodyLarge
+            style = MemoripTheme.typography.bodyBold16
         )
         Text(
             text = location.roadAddress,
             color = MemoripTheme.colors.gray,
-            style = MemoripTheme.typography.bodySmall
+            style = MemoripTheme.typography.labelRegular14
         )
     }
     HorizontalDivider()

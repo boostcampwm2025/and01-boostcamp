@@ -104,7 +104,7 @@ fun SelectRow(
                     color = MemoripTheme.colors.onSurface,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    style = MemoripTheme.typography.bodyLarge,
+                    style = MemoripTheme.typography.bodyBold14,
                 )
 
                 Text(
@@ -112,7 +112,7 @@ fun SelectRow(
                     color = MemoripTheme.colors.gray,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    style = MemoripTheme.typography.bodySmall,
+                    style = MemoripTheme.typography.labelRegular12,
                 )
             }
 

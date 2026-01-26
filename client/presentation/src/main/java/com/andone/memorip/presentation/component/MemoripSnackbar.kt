@@ -63,7 +63,7 @@ private fun MemoripSnackbarContent(
                     Text(
                         text = it,
                         color = MemoripTheme.colors.primary,
-                        style = MemoripTheme.typography.bodySmall
+                        style = MemoripTheme.typography.bodyBold14
                     )
                 }
             }
@@ -75,7 +75,7 @@ private fun MemoripSnackbarContent(
         content = {
             Text(
                 text = message,
-                style = MemoripTheme.typography.bodySmall
+                style = MemoripTheme.typography.bodyRegular12
             )
         }
     )

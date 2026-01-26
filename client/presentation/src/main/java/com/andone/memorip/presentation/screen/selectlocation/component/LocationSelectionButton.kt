@@ -41,7 +41,7 @@ fun LocationSelectionButton(
             )
             Text(
                 text = stringResource(R.string.select_location_button),
-                style = MemoripTheme.typography.bodyLarge
+                style = MemoripTheme.typography.labelMedium14
             )
         }
     }

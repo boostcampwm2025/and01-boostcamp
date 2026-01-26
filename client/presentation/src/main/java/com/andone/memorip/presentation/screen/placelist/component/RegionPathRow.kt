@@ -25,7 +25,7 @@ fun RegionPathRow(
 ) {
     val decoration = if (isUnderline) TextDecoration.Underline else TextDecoration.None
 
-    val regionTextStyle = MemoripTheme.typography.label1.copy(textDecoration = decoration)
+    val regionTextStyle = MemoripTheme.typography.bodyBold14.copy(textDecoration = decoration)
 
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -35,7 +35,7 @@ fun RegionPathRow(
         if (selectedRegionState.parents.isEmpty() && selectedRegionState.child.isEmpty()) {
             Text(
                 text = stringResource(R.string.place_list_region_default),
-                style = MemoripTheme.typography.label1,
+                style = MemoripTheme.typography.bodyBold14,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -51,7 +51,7 @@ fun RegionPathRow(
                 if (selectedRegionState.parents.lastIndex != index || selectedRegionState.child.isNotEmpty()) {
                     Text(
                         text = stringResource(R.string.place_list_region_divider),
-                        style = MemoripTheme.typography.label1,
+                        style = MemoripTheme.typography.bodyBold14,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )

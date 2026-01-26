@@ -52,7 +52,7 @@ internal fun DefaultDialog(
                 Text(
                     text = title,
                     modifier = Modifier.padding(vertical = INNER_PADDING),
-                    style = MemoripTheme.typography.headline2
+                    style = MemoripTheme.typography.headlineBold20
                 )
                 content()
                 Row(
@@ -68,7 +68,7 @@ internal fun DefaultDialog(
                         Text(
                             text = stringResource(R.string.dialog_cancel_message),
                             color = MemoripTheme.colors.gray,
-                            style = MemoripTheme.typography.label1
+                            style = MemoripTheme.typography.bodyBold16
                         )
                     }
                     TextButton(
@@ -78,7 +78,7 @@ internal fun DefaultDialog(
                         Text(
                             text = stringResource(R.string.dialog_confirm_message),
                             color = MemoripTheme.colors.primary,
-                            style = MemoripTheme.typography.label1
+                            style = MemoripTheme.typography.bodyBold16
                         )
                     }
                 }
@@ -99,7 +99,7 @@ private fun DefaultDialogPrev() {
         ) {
             Text(
                 text = "테스트하고자 생성한 Preview 입니다.\n어쩌고 저쩌고",
-                style = MemoripTheme.typography.body1,
+                style = MemoripTheme.typography.bodyMedium16,
                 textAlign = TextAlign.Center
             )
         }
