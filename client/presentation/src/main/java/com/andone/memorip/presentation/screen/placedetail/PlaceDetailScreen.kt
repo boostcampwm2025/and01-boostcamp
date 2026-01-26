@@ -45,6 +45,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.activity.compose.BackHandler
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
@@ -106,6 +107,10 @@ fun PlaceDetailScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var currentStep by rememberSaveable { mutableStateOf(PlaceDetailScreenStep.PlaceDetail) }
+
+    BackHandler(enabled = currentStep == PlaceDetailScreenStep.SelectGroup) {
+        currentStep = PlaceDetailScreenStep.PlaceDetail
+    }
 
     viewModel.event.collectWithLifecycle { event ->
         when (event) {
