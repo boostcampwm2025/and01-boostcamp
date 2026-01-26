@@ -2,7 +2,7 @@ package com.andone.memorip.domain.tag.controller
 
 import com.andone.memorip.common.response.ApiResult
 import com.andone.memorip.domain.tag.dto.request.TagCreateRequest
-import com.andone.memorip.domain.tag.dto.response.TagCreateResponse
+import com.andone.memorip.domain.tag.dto.response.TagResponse
 import com.andone.memorip.domain.tag.dto.response.toTagCreateResponse
 import com.andone.memorip.domain.tag.service.TagService
 import org.springframework.web.bind.annotation.*
@@ -16,7 +16,7 @@ class TagController(
     @PostMapping
     fun createTag(
         @RequestBody req: TagCreateRequest
-    ): ApiResult<TagCreateResponse>{
+    ): ApiResult<TagResponse>{
         val result = tagService.createTag(req)
         return ApiResult.success(result.toTagCreateResponse())
     }

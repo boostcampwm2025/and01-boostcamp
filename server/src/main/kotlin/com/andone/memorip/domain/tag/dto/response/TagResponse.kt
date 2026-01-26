@@ -4,13 +4,13 @@ import com.andone.memorip.domain.tag.entity.Tag
 import java.util.UUID
 
 
-data class TagCreateResponse(
+data class TagResponse(
     val id: UUID,
     val name: String,
     val colorHex: String
 ) {
     companion object {
-        fun from(tag: Tag) = TagCreateResponse(
+        fun from(tag: Tag) = TagResponse(
             id = tag.id,
             name = tag.name,
             colorHex = tag.colorHex
@@ -18,8 +18,8 @@ data class TagCreateResponse(
     }
 }
 
-fun Tag.toTagCreateResponse(): TagCreateResponse{
-    return TagCreateResponse(
+fun Tag.toTagCreateResponse(): TagResponse{
+    return TagResponse(
         id = this.id,
         name = this.name,
         colorHex = this.colorHex
