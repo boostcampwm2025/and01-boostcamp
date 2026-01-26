@@ -1,6 +1,5 @@
 package com.andone.memorip.presentation.screen.plan.component
 
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DateRangePicker
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -9,12 +8,10 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.util.millisToLocalDate
 import java.time.LocalDate
-import com.andone.memorip.presentation.R
-import com.andone.memorip.presentation.theme.MemoripTheme
-import com.andone.memorip.presentation.util.DateFormatters
-import java.time.ZoneId
+import java.time.ZoneOffset
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -25,12 +22,10 @@ fun DateRangeCalendar(
     onDismiss: () -> Unit,
 ) {
     val state = rememberDateRangePickerState(
-        initialSelectedStartDateMillis = initialStartDate?.atStartOfDay(
-            ZoneId.systemDefault()
-        )?.toInstant()?.toEpochMilli(),
-        initialSelectedEndDateMillis = initialEndDate?.atStartOfDay(
-            ZoneId.systemDefault()
-        )?.toInstant()?.toEpochMilli()
+        initialSelectedStartDateMillis = initialStartDate?.atStartOfDay(ZoneOffset.UTC)?.toInstant()
+            ?.toEpochMilli(),
+        initialSelectedEndDateMillis = initialEndDate?.atStartOfDay(ZoneOffset.UTC)?.toInstant()
+            ?.toEpochMilli()
     )
 
     DatePickerDialog(
