@@ -73,7 +73,7 @@ class PlanViewModel @Inject constructor() : ViewModel() {
                             .filterIsInstance<Place>()
                             .mapNotNull { place ->
                                 place.startDateTime?.let {
-                                    place.toTimeBlock(dayStart = day.atStartOfDay())
+                                    place.toTimeBlock(dayStart = state.date.startDay!!.atStartOfDay())
                                 }
                             }
                     } ?: emptyList()
