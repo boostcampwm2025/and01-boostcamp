@@ -10,6 +10,7 @@ import com.andone.memorip.feature.place.repository.PlaceRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
 import java.util.UUID
 
 @Service
@@ -35,5 +36,33 @@ class GroupPlaceService(
         )
 
         groupPlaceRepository.save(groupPlace)
+    }
+
+    @Transactional
+    fun updateGroupPlaceTime(
+        groupPlaceId: UUID,
+        startAt: LocalDateTime?,
+        endAt: LocalDateTime?
+    ) {
+        val groupPlace = groupPlaceRepository.findByIdOrNull(groupPlaceId)
+            ?: throw BusinessException(CommonExceptionCode.PLACE_NOT_FOUND)
+
+        groupPlace.updatePeriod(startAt, endAt)
+    }
+
+    @Transactional
+    fun removePlaceFromGroup(groupPlaceId: UUID) {
+        val groupPlace = groupPlaceRepository.findByIdOrNull(groupPlaceId)
+            ?: throw BusinessException(CommonExceptionCode.PLACE_NOT_FOUND)
+
+        groupPlaceRepository.delete(groupPlace)
+    }
+
+    @Transactional
+    fun clearGroupPlacePeriod(groupPlaceId: UUID) {
+        val groupPlace = groupPlaceRepository.findByIdOrNull(groupPlaceId)
+            ?: throw BusinessException(CommonExceptionCode.PLACE_NOT_FOUND)
+
+        groupPlace.clearPeriod()
     }
 }
