@@ -38,6 +38,8 @@ class PlanViewModel @Inject constructor() : ViewModel() {
     private val _event = Channel<PlanEvent>(capacity = BUFFERED)
     val event = _event.receiveAsFlow()
 
+    private val originPlaces = uiState.value.places
+
     fun onAction(action: PlanAction) {
         when (action) {
             is PlanAction.BlockMoved -> {
@@ -51,44 +53,46 @@ class PlanViewModel @Inject constructor() : ViewModel() {
             }
 
             is PlanAction.RemoveDay -> {
-                _uiState.update { state ->
-                    val date = state.date
-                    val (newStart, newEnd) = date.deleteDay(dayIndex = action.day)
+                val date = uiState.value.date
+                val (newStart, newEnd) = date.deleteDay(dayIndex = action.day)
 
-                    val newCurrent = adjustCurrentDay(
-                        date = date,
-                        dayIndex = action.day,
-                        newStart = newStart,
-                        newEnd = newEnd
-                    )
+                val newCurrent = adjustCurrentDay(
+                    date = date,
+                    dayIndex = action.day,
+                    newStart = newStart,
+                    newEnd = newEnd
+                )
 
-                    val adjustedUiModels = adjustBlockUiModelsAfterDayRemoved(
-                        blockUiModels = state.blockUiModels,
-                        removedDayIndex = action.day,
-                        date = state.date
-                    )
-
-                    val newBlocks = newStart?.let { day ->
-                        adjustedUiModels.values
-                            .filterIsInstance<Place>()
-                            .mapNotNull { place ->
-                                place.startDateTime?.let {
-                                    place.toTimeBlock(dayStart = state.date.startDay!!.atStartOfDay())
+                adjustBlockUiModelsAfterDayRemoved(
+                    blockUiModels = uiState.value.blockUiModels,
+                    removedDayIndex = action.day,
+                    date = uiState.value.date,
+                    onUpdateState = { adjustedUiModels, value ->
+                        val newBlocks = newStart?.let {
+                            adjustedUiModels.values
+                                .filterIsInstance<Place>()
+                                .mapNotNull { place ->
+                                    place.startDateTime?.let {
+                                        place.toTimeBlock(dayStart = uiState.value.date.startDay!!.atStartOfDay())
+                                    }
                                 }
-                            }
-                    } ?: emptyList()
+                        } ?: emptyList()
 
-                    state.copy(
-                        date = date.copy(
-                            startDay = newStart,
-                            endDay = newEnd,
-                            currentDay = newCurrent,
-                            longClickedDay = null
-                        ),
-                        blockUiModels = adjustedUiModels,
-                        blocks = newBlocks
-                    )
-                }
+                        _uiState.update { state ->
+                            state.copy(
+                                date = date.copy(
+                                    startDay = newStart,
+                                    endDay = newEnd,
+                                    currentDay = newCurrent,
+                                    longClickedDay = null
+                                ),
+                                blockUiModels = adjustedUiModels,
+                                blocks = newBlocks,
+                                places = (uiState.value.places + value).toImmutableList()
+                            )
+                        }
+                    }
+                )
             }
 
 
@@ -236,8 +240,9 @@ class PlanViewModel @Inject constructor() : ViewModel() {
     private fun adjustBlockUiModelsAfterDayRemoved(
         blockUiModels: Map<String, PlanBlockUiModel>,
         removedDayIndex: Int,
-        date: DateUiModel
-    ): Map<String, PlanBlockUiModel> {
+        date: DateUiModel,
+        onUpdateState: (Map<String, PlanBlockUiModel>, List<Place>) -> Unit
+    ) {
 
         val removedDate = date.currentDayFromSelectedDay(removedDayIndex)
 
@@ -250,8 +255,9 @@ class PlanViewModel @Inject constructor() : ViewModel() {
             }
             .toSet()
 
-        return blockUiModels.mapNotNull { (id, uiModel) ->
+        val removedPlaces = originPlaces.filter{ it.id in removedIds }
 
+        val blockUiModel = blockUiModels.mapNotNull { (id, uiModel) ->
             if (uiModel is Place && removedDate != null) {
                 val place = uiModel
 
@@ -281,5 +287,7 @@ class PlanViewModel @Inject constructor() : ViewModel() {
 
             id to uiModel
         }.toMap()
+
+        onUpdateState(blockUiModel, removedPlaces)
     }
 }
