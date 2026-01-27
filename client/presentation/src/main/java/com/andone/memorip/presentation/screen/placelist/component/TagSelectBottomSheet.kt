@@ -32,7 +32,7 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.theme.memoripShapes
 import com.andone.memorip.presentation.util.DummyData
 
-private object TagSelectBottomSheetConstant{
+private object TagSelectBottomSheetConstant {
     val TAG_LIST_HEIGHT = 104.dp
 }
 
@@ -40,9 +40,10 @@ private object TagSelectBottomSheetConstant{
 fun TagSelectBottomSheet(
     modifier: Modifier = Modifier,
     tagPagingItems: LazyPagingItems<TagUiModel>,
-    selectedTags: List<TagUiModel> = emptyList(),
+    selectedTags: Set<TagUiModel> = emptySet(),
     onConfirmClick: () -> Unit = {},
     onTagChipClick: (tagUiModel: TagUiModel) -> Unit = {},
+    onDeselectClick: (tagUiModel: TagUiModel) -> Unit = {},
 ) {
     Column(
         modifier = modifier.padding(horizontal = MemoripPadding.AppHorizontalPadding),
@@ -67,7 +68,9 @@ fun TagSelectBottomSheet(
 
         TagListSection(
             tagPagingItems = tagPagingItems,
-            onChipClick = onTagChipClick
+            selectedTags = selectedTags,
+            onChipClick = onTagChipClick,
+            onDeselectClick = onDeselectClick,
         )
 
         HorizontalDivider()
@@ -92,10 +95,14 @@ fun TagSelectBottomSheet(
 
 @Composable
 private fun TagListSection(
-    modifier: Modifier = Modifier,
     tagPagingItems: LazyPagingItems<TagUiModel>,
-    onChipClick: (tagUiModel: TagUiModel) -> Unit = {}
+    modifier: Modifier = Modifier,
+    selectedTags: Set<TagUiModel> = emptySet(),
+    onChipClick: (tagUiModel: TagUiModel) -> Unit = {},
+    onDeselectClick: (tagUiModel: TagUiModel) -> Unit = {},
 ) {
+    val selectedIds = selectedTags.map { it.id }.toSet()
+
     MemoripPagingList(
         pagingItems = tagPagingItems,
         itemKey = { it.id },
@@ -110,7 +117,17 @@ private fun TagListSection(
             .height(height = TAG_LIST_HEIGHT),
         useHorizontalGrid = true,
         itemContent = {
-            ClickableTagChip(tag = it)
+            ClickableTagChip(
+                tag = it,
+                isSelected = selectedIds.contains(it.id),
+                onClick = {
+                    if (selectedIds.contains(it.id)) {
+                        onDeselectClick(it)
+                    } else {
+                        onChipClick(it)
+                    }
+                }
+            )
         },
     )
 }
@@ -121,7 +138,7 @@ private fun TagSelectBottomSheetPreview() {
     MemoripTheme {
         TagSelectBottomSheet(
             tagPagingItems = DummyData.getTagPagingItems(),
-            selectedTags = DummyData.categories.toList()
+            selectedTags = DummyData.categories.toSet()
         )
     }
 }

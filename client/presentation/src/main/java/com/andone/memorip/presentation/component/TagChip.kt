@@ -45,6 +45,8 @@ fun StaticTagChip(
 fun ClickableTagChip(
     tag: TagUiModel,
     modifier: Modifier = Modifier,
+    isSelected: Boolean = false,
+    onClick: () -> Unit = {}
 ) {
     val textColor = if (tag.color.luminance() > TagChipDimen.COLOR_LUMINANCE_THRESHOLD) {
         MemoripTheme.colors.black
@@ -56,10 +58,12 @@ fun ClickableTagChip(
         chipName = tag.name,
         modifier = modifier,
         radius = TagChipDimen.CLICKABLE_CHIP_RADIUS,
+        isSelected = isSelected,
         colors = ChipColors(
             backgroundColor = tag.color.copy(alpha = TagChipDimen.BACKGROUND_COLOR_ALPHA),
             textColor = textColor
-        )
+        ),
+        onClick = onClick
     )
 }
 

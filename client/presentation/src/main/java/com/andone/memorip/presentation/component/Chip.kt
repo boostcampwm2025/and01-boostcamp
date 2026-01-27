@@ -1,21 +1,30 @@
 package com.andone.memorip.presentation.component
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.theme.MemoripIconSize
 import com.andone.memorip.presentation.theme.MemoripLineWidth
 import com.andone.memorip.presentation.theme.MemoripPadding
+import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 
 private object StaticChipDimen {
@@ -85,6 +94,7 @@ fun ClickableChip(
     chipName: String,
     modifier: Modifier = Modifier,
     radius: Dp = StaticChipDimen.RADIUS,
+    isSelected: Boolean = false,
     colors: ChipColors = ChipColors.Default,
     textStyle: TextStyle = MemoripTheme.typography.bodyBold12,
     elevation: Dp = 0.dp,
@@ -103,15 +113,29 @@ fun ClickableChip(
             )
         }
     ) {
-        Text(
-            text = chipName,
+        Row(
             modifier = Modifier.padding(
                 horizontal = MemoripPadding.PaddingSmall,
                 vertical = MemoripPadding.PaddingXXSmall
             ),
-            style = textStyle,
-            color = colors.textColor
-        )
+            horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXXSmall),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            if (isSelected) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_check),
+                    contentDescription = null,
+                    tint = colors.textColor,
+                    modifier = Modifier.size(MemoripIconSize.IconSizeXSmall)
+                )
+            }
+
+            Text(
+                text = chipName,
+                style = textStyle,
+                color = colors.textColor
+            )
+        }
     }
 }
 

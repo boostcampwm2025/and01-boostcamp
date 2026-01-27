@@ -78,6 +78,14 @@ class PlaceListViewModel @Inject constructor(
             is PlaceListAction.OnRegionChipClick -> {
                 onRegionClicked(region = action.region)
             }
+
+            is PlaceListAction.OnTagChipClick -> {
+                _uiState.update { it.copy(selectedTags = it.selectedTags + action.tag) }
+            }
+
+            is PlaceListAction.OnDeleteTagClick -> {
+                _uiState.update { it.copy(selectedTags = it.selectedTags - action.tag) }
+            }
         }
     }
 

@@ -178,7 +178,10 @@ fun PlaceListScreenContent(
         ) {
             TagSelectBottomSheet(
                 tagPagingItems = tagPagingItems,
-                selectedTags = state.selectedTags.toImmutableList(),
+                selectedTags = state.selectedTags,
+                onConfirmClick = { showTagBottomSheet = false },
+                onTagChipClick = { onAction(PlaceListAction.OnTagChipClick(tag = it)) },
+                onDeselectClick = { onAction(PlaceListAction.OnDeleteTagClick(tag = it)) }
             )
         }
     }
@@ -203,7 +206,7 @@ fun PlaceListScreenContent(
                 Column {
                     FilterSection(
                         onChangeRegionClick = { showRegionBottomSheet = true },
-                        onAddTagClick = { showTagBottomSheet = true},
+                        onAddTagClick = { showTagBottomSheet = true },
                         modifier = Modifier.padding(horizontal = MemoripPadding.AppHorizontalPadding),
                         tags = state.selectedTags.toImmutableList(),
                         selectedRegionState = state.selectedRegionState
