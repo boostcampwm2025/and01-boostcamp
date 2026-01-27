@@ -17,4 +17,6 @@ sealed interface PlaceListAction {
     data class OnTagChipClick(val tag: TagUiModel) : PlaceListAction
 
     data class OnDeleteTagClick(val tag: TagUiModel) : PlaceListAction
+
+    data object ClearRegionFilter : PlaceListAction
 }

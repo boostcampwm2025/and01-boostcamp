@@ -7,12 +7,12 @@ import kotlinx.serialization.Serializable
 data class TagListItemResponse(
     val id: String,
     val name: String,
-    val color: String
+    val colorHex: String
 )
 
 fun TagListItemResponse.toDomain(): Tag =
     Tag(
         id = id,
         name = name,
-        color = color
+        color = colorHex
     )

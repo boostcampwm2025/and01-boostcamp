@@ -50,10 +50,22 @@ class PlaceListViewModel @Inject constructor(
 
     private val filterFlow = uiState
         .map { state ->
+            val regionState = state.selectedRegionState
+            val parents = regionState.parents
+            val child = regionState.child
+
+            val depth1 = parents.firstOrNull()?.name
+
+            val depth2 = when {
+                child.isNotEmpty() -> child.map { it.name }
+                parents.size >= 2 -> listOf(parents.last().name)
+                else -> emptyList()
+            }
+
             Triple(
                 state.selectedTags.mapNotNull { UUID.fromString(it.id) },
-                state.selectedRegionState.parents.firstOrNull()?.name,
-                state.selectedRegionState.child.map { it.name }
+                depth1,
+                depth2
             )
         }
         .distinctUntilChanged()
@@ -117,6 +129,12 @@ class PlaceListViewModel @Inject constructor(
 
             is PlaceListAction.OnDeleteTagClick -> {
                 _uiState.update { it.copy(selectedTags = it.selectedTags - action.tag) }
+            }
+
+            PlaceListAction.ClearRegionFilter -> {
+                _uiState.update {
+                    it.copy(selectedRegionState = SelectedRegionState())
+                }
             }
         }
     }

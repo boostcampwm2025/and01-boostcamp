@@ -24,7 +24,11 @@ class PlaceListPagingSource(
             val response = service.getPlaces(
                 page = page,
                 size = pageSize,
-                sort = sort
+                sort = sort,
+                query = query,
+                tagIds = tagIds,
+                region1Depth = region1Depth,
+                region2Depth = region2Depth
             )
 
             if (response.error != null) {
