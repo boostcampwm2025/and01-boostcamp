@@ -54,6 +54,7 @@ class PlaceService(
         )
     }
 
+    @Transactional(readOnly = true)
     fun getPlaceList(
         query: String?,
         tagIds: List<UUID>?,

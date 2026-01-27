@@ -4,9 +4,12 @@ import com.andone.memorip.common.response.ApiResult
 import com.andone.memorip.feature.group.dto.request.GroupCreateRequest
 import com.andone.memorip.feature.group.dto.request.GroupUpdateRequest
 import com.andone.memorip.feature.group.dto.request.GroupPlaceCreateRequest
+import com.andone.memorip.feature.group.dto.request.GroupPlaceTimeUpdateRequest
 import com.andone.memorip.feature.group.dto.response.GroupListResponse
+import com.andone.memorip.feature.group.dto.response.GroupPeriodResponse
 import com.andone.memorip.feature.group.dto.response.GroupResponse
 import com.andone.memorip.feature.group.service.GroupService
+import com.andone.memorip.feature.place.dto.response.GroupPlaceListResponse
 import com.andone.memorip.feature.place.service.GroupPlaceService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
@@ -211,5 +214,83 @@ class GroupController(
     ): ApiResult<Unit> {
         groupPlaceService.addPlaceToGroup(groupId, request)
         return ApiResult.success(Unit)
+    }
+
+    @PatchMapping("/groups/places/{groupPlaceId}/time")
+    @Operation(
+        summary = "그룹 장소 일정 시간 수정",
+        description = "그룹에 추가된 장소의 시작/종료 시간을 수정합니다.",
+        responses = [
+            ApiResponse(responseCode = "200", description = "성공"),
+            ApiResponse(responseCode = "404", description = "GroupPlace를 찾을 수 없습니다")
+        ]
+    )
+    fun updateGroupPlaceTime(
+        @PathVariable groupPlaceId: UUID,
+        @RequestBody request: GroupPlaceTimeUpdateRequest
+    ): ApiResult<Unit> {
+        groupPlaceService.updateGroupPlaceTime(
+            groupPlaceId = groupPlaceId,
+            startAt = request.startAt,
+            endAt = request.endAt
+        )
+        return ApiResult.success(Unit)
+    }
+
+    @DeleteMapping("/groups/places/{groupPlaceId}")
+    @Operation(
+        summary = "그룹에서 장소 제거",
+        description = "그룹 일정에서 특정 장소를 제거합니다.",
+        responses = [
+            ApiResponse(responseCode = "200", description = "성공"),
+            ApiResponse(responseCode = "404", description = "GroupPlace를 찾을 수 없습니다")
+        ]
+    )
+    fun removePlaceFromGroup(
+        @PathVariable groupPlaceId: UUID
+    ): ApiResult<Unit> {
+        groupPlaceService.removePlaceFromGroup(groupPlaceId)
+        return ApiResult.success(Unit)
+    }
+
+    @PatchMapping("/groups/places/{groupPlaceId}/time/clear")
+    @Operation(
+        summary = "그룹 장소 일정 시간 초기화",
+        description = "해당 장소의 시작/종료 시간을 null로 초기화합니다.",
+        responses = [
+            ApiResponse(responseCode = "200", description = "성공"),
+            ApiResponse(responseCode = "404", description = "GroupPlace를 찾을 수 없습니다")
+        ]
+    )
+    fun clearGroupPlacePeriod(
+        @PathVariable groupPlaceId: UUID
+    ): ApiResult<Unit> {
+        groupPlaceService.clearGroupPlacePeriod(groupPlaceId)
+        return ApiResult.success(Unit)
+    }
+
+    @GetMapping("/groups/{groupId}/places")
+    @Operation(
+        summary = "그룹에 추가된 장소 목록 조회",
+        description = """
+        그룹에 포함된 장소 목록을 일정 정보(startAt, endAt)와 함께 조회합니다.
+        startAt 기준 오름차순 정렬, 없으면 생성 순으로 정렬됩니다.
+    """,
+        responses = [
+            ApiResponse(responseCode = "200", description = "성공"),
+            ApiResponse(responseCode = "404", description = "그룹을 찾을 수 없습니다")
+        ]
+    )
+    fun getGroupPlaces(
+        @PathVariable groupId: UUID
+    ): ApiResult<List<GroupPlaceListResponse>> {
+        val result = groupPlaceService.getGroupPlaces(groupId)
+        return ApiResult.success(result)
+    }
+
+    @GetMapping("/groups/simple")
+    fun getSimpleGroups(): ApiResult<List<GroupPeriodResponse>> {
+        val result = groupService.getSimpleGroupPeriods()
+        return ApiResult.success(result)
     }
 }
