@@ -269,7 +269,7 @@ class GroupController(
         return ApiResult.success(Unit)
     }
 
-    @GetMapping("/groups/{groupId}/places")
+    @GetMapping("/groups/{groupId}/plan/places")
     @Operation(
         summary = "그룹에 추가된 장소 목록 조회",
         description = """
