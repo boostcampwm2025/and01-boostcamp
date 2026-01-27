@@ -29,7 +29,7 @@ fun MemoripInputBox(
     onValueChange: (String) -> Unit,
     placeholder: String,
     modifier: Modifier = Modifier,
-    textStyle: TextStyle = MemoripTheme.typography.bodyMedium,
+    textStyle: TextStyle = MemoripTheme.typography.bodyMedium16,
     singleLine: Boolean = false,
     showValueLength: Boolean = true,
     height: Dp = MemoripHeight.TextBoxHigh
@@ -67,7 +67,7 @@ fun MemoripInputBox(
                         value.length, valueMaxLength
                     ),
                     color = MemoripTheme.colors.gray1,
-                    style = MemoripTheme.typography.caption1
+                    style = MemoripTheme.typography.labelRegular12
                 )
             }
         }
@@ -86,7 +86,6 @@ private fun MemoripInputBoxPreview() {
                 valueMaxLength = 30,
                 placeholder = "Input",
                 onValueChange = { text = it },
-                textStyle = MemoripTheme.typography.body2,
                 singleLine = true,
                 showValueLength = false,
                 height = OutlinedTextFieldDefaults.MinHeight

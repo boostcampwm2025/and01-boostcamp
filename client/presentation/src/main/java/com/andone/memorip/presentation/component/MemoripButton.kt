@@ -33,7 +33,7 @@ fun MemoripButton(
             Text(
                 text = value,
                 color = textColor,
-                style = MemoripTheme.typography.title2
+                style = MemoripTheme.typography.labelBold16
             )
         }
     }

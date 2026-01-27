@@ -65,10 +65,10 @@ fun MemoripInputDialog(
                 unfocusedContainerColor = MemoripTheme.colors.primaryContainer,
                 focusedTextColor = MemoripTheme.colors.black,
                 unfocusedTextColor = MemoripTheme.colors.black,
-                focusedPlaceholderColor = MemoripTheme.colors.outline,
-                unfocusedPlaceholderColor = MemoripTheme.colors.outline,
-                focusedLabelColor = MemoripTheme.colors.outline,
-                unfocusedLabelColor = MemoripTheme.colors.outline,
+                focusedPlaceholderColor = MemoripTheme.colors.primary,
+                unfocusedPlaceholderColor = MemoripTheme.colors.primary,
+                focusedLabelColor = MemoripTheme.colors.primary,
+                unfocusedLabelColor = MemoripTheme.colors.primary,
             )
         )
     }

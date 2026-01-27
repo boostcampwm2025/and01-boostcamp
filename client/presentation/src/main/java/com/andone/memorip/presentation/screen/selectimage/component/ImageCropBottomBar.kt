@@ -84,7 +84,9 @@ fun ImageCropBottomBar(
                     R.string.select_image_image_count_format,
                     croppedImageKeys.size,
                     imageUris.size
-                )
+                ),
+                color = MemoripTheme.colors.onSurface,
+                style = MemoripTheme.typography.labelMedium16
             )
 
             IconButton(

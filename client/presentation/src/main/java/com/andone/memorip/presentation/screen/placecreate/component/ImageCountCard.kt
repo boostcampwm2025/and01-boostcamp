@@ -52,7 +52,7 @@ fun ImageCountCard(
                 R.string.place_create_image_count_format,
                 currentImageIndex + 1, totalImageCount
             ),
-            style = MemoripTheme.typography.caption1
+            style = MemoripTheme.typography.labelRegular12
         )
     }
 }

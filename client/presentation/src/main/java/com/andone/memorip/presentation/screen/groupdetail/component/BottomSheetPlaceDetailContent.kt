@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -61,7 +60,7 @@ fun BottomSheetPlaceDetailContent(
         ) {
             Text(
                 text = place.name,
-                style = MemoripTheme.typography.headline2,
+                style = MemoripTheme.typography.titleBold16,
                 color = MemoripTheme.colors.onSurface,
                 modifier = Modifier.fillMaxWidth()
             )

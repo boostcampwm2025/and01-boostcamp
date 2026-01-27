@@ -24,7 +24,7 @@ fun MemoripDialog(
     ) {
         Text(
             text = content,
-            style = MemoripTheme.typography.body1
+            style = MemoripTheme.typography.bodyMedium16
         )
     }
 }

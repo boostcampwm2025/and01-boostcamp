@@ -45,7 +45,7 @@ fun ContrastAwareTextPrev() {
         ContrastAwareText(
             image = null,
             text = "",
-            style = MemoripTheme.typography.label1
+            style = MemoripTheme.typography.labelRegular12
         )
     }
 }

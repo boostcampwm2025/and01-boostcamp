@@ -31,7 +31,7 @@ fun GroupImageGridCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = MemoripSpace.SpaceXXSmall),
-            style = MemoripTheme.typography.title2,
+            style = MemoripTheme.typography.bodyBold14,
             color = MemoripTheme.colors.onSurface,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
