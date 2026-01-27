@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.screen.selectimage
 
+import android.content.res.Configuration
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -16,6 +17,7 @@ import com.andone.memorip.presentation.screen.selectimage.SelectImageScreenConst
 import com.andone.memorip.presentation.screen.selectimage.model.SelectImageAction
 import com.andone.memorip.presentation.screen.selectimage.model.SelectImageEvent
 import com.andone.memorip.presentation.screen.selectimage.model.SelectImageUiState
+import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.collectWithLifecycle
 import kotlin.math.max
 
@@ -83,7 +85,10 @@ fun SelectImageScreenContent(
 }
 
 @Preview(showBackground = true)
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun SelectImageScreenPreview() {
-    SelectImageScreen(onBack = {}, onImageSelect = {})
+    MemoripTheme {
+        SelectImageScreen(onBack = {}, onImageSelect = {})
+    }
 }
