@@ -29,16 +29,16 @@ interface PlaceRepository : JpaRepository<Place, UUID> {
     SELECT DISTINCT p FROM Place p
     LEFT JOIN p.placeTags pt
     WHERE p.isPublic = true
-      AND(CAST(:query AS string) IS NULL OR LOWER(p.title) LIKE LOWER(CAST(CONCAT('%', :query, '%') AS string)))
+      AND (:query IS NULL OR p.title ILIKE %:query%)
       AND (:region1Depth IS NULL OR p.address.region1Depth = :region1Depth)
-      AND (:region2Depth IS NULL OR p.address.region2Depth = :region2Depth)
+      AND (:region2Depth IS NULL OR p.address.region2Depth IN :region2Depth)
       AND (:tagIds IS NULL OR pt.tag.id IN :tagIds)
     """)
     fun searchPlaces(
         @Param("query") query: String?,
         @Param("tagIds") tagIds: List<UUID>?,
         @Param("region1Depth") region1Depth: String?,
-        @Param("region2Depth") region2Depth: String?,
+        @Param("region2Depth") region2Depth: List<String>?,
         pageable: Pageable
     ): Page<Place>
 }

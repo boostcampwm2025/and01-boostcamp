@@ -269,9 +269,9 @@ class GroupController(
         return ApiResult.success(Unit)
     }
 
-    @GetMapping("/groups/{groupId}/places")
+    @GetMapping("/groups/{groupId}/plan/places")
     @Operation(
-        summary = "그룹에 추가된 장소 목록 조회",
+        summary = "그룹에 추가된 계획 장소 목록 조회",
         description = """
         그룹에 포함된 장소 목록을 일정 정보(startAt, endAt)와 함께 조회합니다.
         startAt 기준 오름차순 정렬, 없으면 생성 순으로 정렬됩니다.
@@ -289,6 +289,7 @@ class GroupController(
     }
 
     @GetMapping("/groups/simple")
+    @Operation(summary = "여행 시작, 종료 날짜를 포함한 그룹 리스트 조회")
     fun getSimpleGroups(): ApiResult<List<GroupPeriodResponse>> {
         val result = groupService.getSimpleGroupPeriods()
         return ApiResult.success(result)

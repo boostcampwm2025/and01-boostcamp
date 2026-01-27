@@ -47,7 +47,7 @@ class PlaceController(
         @RequestParam(required = false) query: String?,
         @RequestParam(required = false) tagIds: List<UUID>?,
         @RequestParam(required = false) region1Depth: String?,
-        @RequestParam(required = false) region2Depth: String?,
+        @RequestParam(required = false) region2Depth: List<String>?,
         @PageableDefault(
             page = 0,
             size = 20,
