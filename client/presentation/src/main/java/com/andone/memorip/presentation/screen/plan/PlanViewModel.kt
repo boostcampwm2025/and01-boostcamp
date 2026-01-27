@@ -215,7 +215,9 @@ class PlanViewModel @Inject constructor(
             }
 
             is PlanAction.GroupChoiceConfirmClick -> {
-
+                _uiState.update{
+                    it.copy(selectedGroup = action.selectedGroup)
+                }
             }
         }
     }
