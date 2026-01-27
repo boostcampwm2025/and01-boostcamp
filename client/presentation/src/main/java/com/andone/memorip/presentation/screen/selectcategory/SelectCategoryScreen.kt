@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.screen.selectcategory
 
+import android.content.res.Configuration
 import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -153,8 +154,9 @@ private fun SelectCategoryContent(
 }
 
 @Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun SelectCategoryPrev() {
+private fun SelectCategoryPreview() {
     MemoripTheme {
         SelectCategoryScreen(
             onCategorySelect = {},
