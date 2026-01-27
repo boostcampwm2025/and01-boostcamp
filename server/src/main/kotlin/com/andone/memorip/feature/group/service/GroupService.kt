@@ -57,16 +57,18 @@ class GroupService(
     fun getPublicGroups(pageable: Pageable): PagedResult<GroupListResponse> {
         return getGroupListWithPagination(
             ownerId = null,
+            placeId = null,
             visibility = "PUBLIC",
             pageable = pageable
         )
     }
 
     @Transactional(readOnly = true)
-    fun getMyGroups(pageable: Pageable): PagedResult<GroupListResponse> {
+    fun getMyGroups(pageable: Pageable, placeId: UUID? = null): PagedResult<GroupListResponse> {
         val currentUserId = getCurrentUserId()
         return getGroupListWithPagination(
             ownerId = currentUserId,
+            placeId = placeId,
             visibility = null,
             pageable = pageable
         )
@@ -74,11 +76,13 @@ class GroupService(
 
     private fun getGroupListWithPagination(
         ownerId: UUID?,
+        placeId: UUID?,
         visibility: String?,
         pageable: Pageable
     ): PagedResult<GroupListResponse> {
         val projections = groupRepository.findGroupListByOwnerId(
             ownerId = ownerId,
+            placeId = placeId,
             visibility = visibility,
             limit = pageable.pageSize,
             offset = pageable.offset.toInt()

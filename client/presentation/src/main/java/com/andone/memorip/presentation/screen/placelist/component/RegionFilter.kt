@@ -44,7 +44,7 @@ fun RegionFilter(
         ) {
             Text(
                 text = stringResource(R.string.place_list_region),
-                style = MemoripTheme.typography.labelExtBold
+                style = MemoripTheme.typography.bodyBold14
             )
             RegionPathRow(selectedRegionState = selectedRegionState)
             Spacer(modifier = Modifier.weight(1f))

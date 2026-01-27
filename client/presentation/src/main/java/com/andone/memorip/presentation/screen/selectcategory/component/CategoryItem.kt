@@ -49,7 +49,7 @@ fun CategoryItem(
             modifier = Modifier
                 .weight(1f)
                 .padding(start = PaddingXSmall),
-            style = MemoripTheme.typography.body2
+            style = MemoripTheme.typography.bodyBold16
         )
         Checkbox(
             checked = checked,

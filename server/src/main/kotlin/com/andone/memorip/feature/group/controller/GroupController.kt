@@ -114,16 +114,22 @@ class GroupController(
             - size: 페이지 크기 (기본값: 20)
             - sort: 정렬 기준 (기본값: id, desc)
             
+            선택적 파라미터:
+            - placeId: 특정 장소가 각 그룹에 포함되어 있는지 확인 (isPlaceAdded 필드)
+            
             응답 포함 정보:
             - 그룹 기본 정보 (id, title, visibility, type, createdAt, updatedAt)
             - relatedPlaceImages: 그룹에 속한 Place의 대표 이미지 URL 목록 (최대 7개, 생성 순서)
             - placeCount: 그룹에 속한 Place 총 개수
+            - isPlaceAdded: placeId가 제공된 경우, 해당 장소가 그룹에 포함되어 있는지 여부 (기본값: false)
         """,
         responses = [
             ApiResponse(responseCode = "200", description = "성공 - 내 그룹 목록 조회 완료")
         ]
     )
     fun getMyGroups(
+        @Parameter(description = "특정 장소가 그룹에 포함되어 있는지 확인할 장소 ID (선택)")
+        @RequestParam(required = false) placeId: UUID?,
         @PageableDefault(
             page = 0,
             size = 20,
@@ -132,7 +138,7 @@ class GroupController(
         )
         pageable: Pageable
     ): ApiResult<List<GroupListResponse>> {
-        val result = groupService.getMyGroups(pageable)
+        val result = groupService.getMyGroups(pageable, placeId)
         return ApiResult.success(result.content, result.pagination)
     }
 

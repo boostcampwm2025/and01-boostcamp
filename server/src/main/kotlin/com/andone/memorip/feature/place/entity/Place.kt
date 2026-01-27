@@ -5,7 +5,7 @@ import com.andone.memorip.common.util.UuidV7Generator
 import jakarta.persistence.*
 import org.hibernate.annotations.SQLDelete
 import org.hibernate.annotations.SQLRestriction
-import java.util.UUID
+import java.util.*
 
 @Entity
 @Table(name = "places")
@@ -21,13 +21,14 @@ class Place protected constructor(
     longitude: Double,
     address: Address,
     thumbnailUrl: String,
-    imageUrls: List<String>
+    imageUrls: List<String>,
+    isPublic: Boolean
 ) : BaseTimeSyncEntity() {
 
     init {
         this.id = id
     }
-    
+
     @Column(name = "group_id", nullable = false, columnDefinition = "UUID")
     var groupId: UUID = groupId
         internal set
@@ -35,7 +36,7 @@ class Place protected constructor(
     @Column(name = "parent_place_id", columnDefinition = "UUID")
     var parentPlaceId: UUID? = null
         internal set
-    
+
     @Column(name = "writer_id", nullable = false, columnDefinition = "UUID")
     var writerId: UUID = writerId
         internal set
@@ -62,6 +63,10 @@ class Place protected constructor(
 
     @Column(name = "thumbnail_url", length = 512)
     var thumbnailUrl: String = thumbnailUrl
+        internal set
+
+    @Column(nullable = false)
+    var isPublic: Boolean = isPublic
         internal set
 
     @OneToMany(
@@ -91,11 +96,11 @@ class Place protected constructor(
     fun addImage(url: String, id: UUID? = null): PlaceImage {
         val newImage = PlaceImage.create(id = id, place = this, url = url)
         images.add(newImage)
-        
+
         if (thumbnailUrl == null) {
             thumbnailUrl = url
         }
-        
+
         return newImage
     }
 
@@ -103,7 +108,7 @@ class Place protected constructor(
         // todo: object storage의 사진들 삭제, 추가 로직 넣어서 사용해야 함. -> service에서 할 듯?
         images.clear()
         newUrls.forEach { addImage(it) }
-        
+
         // 이미지 업데이트 시 첫 번째 이미지를 대표 이미지로 설정
         thumbnailUrl = newUrls.firstOrNull() ?: ""
     }
@@ -155,6 +160,7 @@ class Place protected constructor(
             address: Address,
             content: String? = null,
             imageUrls: List<String>,
+            isPublic: Boolean,
             parentPlaceId: UUID? = null
         ): Place {
             require(title.isNotBlank()) { "제목은 필수입니다" }
@@ -173,7 +179,8 @@ class Place protected constructor(
                 longitude = longitude,
                 address = address,
                 thumbnailUrl = imageUrls.firstOrNull() ?: "",
-                imageUrls = imageUrls
+                imageUrls = imageUrls,
+                isPublic = isPublic
             ).apply {
                 this.content = content
                 this.parentPlaceId = parentPlaceId

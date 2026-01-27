@@ -32,6 +32,14 @@ class PlaceRepositoryImpl @Inject constructor(
         return placeRemoteDataSource.createPlace(place)
     }
 
+    override suspend fun updatePlaceGroups(
+        placeId: String,
+        addGroupIds: List<String>,
+        removeGroupIds: List<String>
+    ): Result<Unit> {
+        return placeRemoteDataSource.updatePlaceGroups(placeId, addGroupIds, removeGroupIds)
+    }
+
     override fun loadRegions(): List<Region> {
         return placeRemoteDataSource.loadRegions()
     }

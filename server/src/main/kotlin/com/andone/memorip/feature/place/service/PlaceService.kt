@@ -3,25 +3,25 @@ package com.andone.memorip.feature.place.service
 import com.andone.memorip.common.exception.BusinessException
 import com.andone.memorip.common.exception.CommonExceptionCode
 import com.andone.memorip.common.response.ApiResult
-import com.andone.memorip.feature.group.repository.GroupRepository
 import com.andone.memorip.feature.group.dto.response.toGroupResponse
-import com.andone.memorip.feature.place.dto.response.PlaceDetailResponse
+import com.andone.memorip.feature.group.repository.GroupRepository
 import com.andone.memorip.feature.place.dto.PlaceListResult
 import com.andone.memorip.feature.place.dto.request.PlaceCreateRequest
 import com.andone.memorip.feature.place.dto.response.PlaceCreateResponse
+import com.andone.memorip.feature.place.dto.response.PlaceDetailResponse
 import com.andone.memorip.feature.place.dto.response.PlaceListItemResponse
 import com.andone.memorip.feature.place.dto.response.toTagResponse
-import com.andone.memorip.feature.place.entity.Place
 import com.andone.memorip.feature.place.entity.GroupPlace
+import com.andone.memorip.feature.place.entity.Place
+import com.andone.memorip.feature.place.repository.GroupPlaceRepository
 import com.andone.memorip.feature.place.repository.PlaceImageRepository
 import com.andone.memorip.feature.place.repository.PlaceRepository
 import com.andone.memorip.feature.place.repository.PlaceTagRepository
-import com.andone.memorip.feature.place.repository.GroupPlaceRepository
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.util.UUID
+import java.util.*
 
 @Service
 class PlaceService(
@@ -77,7 +77,8 @@ class PlaceService(
                 latitude = place.latitude,
                 longitude = place.longitude,
                 address = place.address.fullAddress,
-                imageUrl = place.thumbnailUrl
+                imageUrl = place.thumbnailUrl,
+                isPublic = place.isPublic
             )
         }
 
@@ -105,7 +106,8 @@ class PlaceService(
             latitude = request.latitude,
             longitude = request.longitude,
             address = request.address,
-            imageUrls = request.imageUrls
+            imageUrls = request.imageUrls,
+            isPublic = request.isPublic,
         )
 
         // todo: 태그 연결
@@ -124,9 +126,9 @@ class PlaceService(
     fun getPlacesByGroupId(groupId: UUID, pageable: Pageable): PlaceListResult {
         groupRepository.findByIdOrNull(groupId)
             ?: throw BusinessException(code = CommonExceptionCode.GROUP_NOT_FOUND)
-        
+
         val places = placeRepository.findAllByGroupId(groupId, pageable)
-        
+
         val content = places.content.map { place ->
             PlaceListItemResponse(
                 id = place.id,
@@ -134,17 +136,18 @@ class PlaceService(
                 latitude = place.latitude,
                 longitude = place.longitude,
                 address = place.address.fullAddress,
-                imageUrl = place.thumbnailUrl
+                imageUrl = place.thumbnailUrl,
+                isPublic = place.isPublic
             )
         }
-        
+
         val pagination = ApiResult.PaginationInfo(
             currentPage = places.number + 1,
             totalPages = places.totalPages,
             totalCount = places.totalElements,
             hasNext = places.hasNext()
         )
-        
+
         return PlaceListResult(content, pagination)
     }
 }

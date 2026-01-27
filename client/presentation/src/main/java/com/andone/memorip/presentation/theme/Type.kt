@@ -23,128 +23,160 @@ val NotoSansKR = FontFamily(
 
 @Immutable
 data class MemoripTypography(
-    val headlineLarge: TextStyle,
-    val headline1: TextStyle,
-    val headline2: TextStyle,
-    val bodyLarge: TextStyle,
-    val bodyMedium: TextStyle,
-    val bodySmall: TextStyle,
-    val title1: TextStyle,
-    val title2: TextStyle,
-    val body1: TextStyle,
-    val body2: TextStyle,
-    val caption1: TextStyle,
-    val hint1: TextStyle,
-    val labelExtBold: TextStyle,
-    val label1: TextStyle,
-    val label2: TextStyle,
-    val number1: TextStyle,
-    val labelLarge: TextStyle,
+    val headlineBold32: TextStyle,
+    val headlineBold24: TextStyle,
+    val headlineBold20: TextStyle,
+    val headlineBold18: TextStyle,
+    val titleBold20: TextStyle,
+    val titleBold18: TextStyle,
+    val titleBold16: TextStyle,
+    val titleBold14: TextStyle,
+    val titleBold12: TextStyle,
+    val titleMedium14: TextStyle,
+    val bodyBold18: TextStyle,
+    val bodyBold16: TextStyle,
+    val bodyBold14: TextStyle,
+    val bodyBold12: TextStyle,
+    val bodyMedium16: TextStyle,
+    val bodyMedium14: TextStyle,
+    val bodyRegular18: TextStyle,
+    val bodyRegular12: TextStyle,
+    val bodyRegular10: TextStyle,
+    val labelBold16: TextStyle,
+    val labelRegular14: TextStyle,
+    val labelRegular12: TextStyle,
+    val labelRegular10: TextStyle,
+    val labelMedium16: TextStyle,
+    val labelMedium14: TextStyle,
 )
 
 internal val memoripTypography = MemoripTypography(
-    headlineLarge = TextStyle(
+    headlineBold32 = TextStyle(
         fontFamily = NotoSansKR,
-        fontWeight = FontWeight.Normal,
+        fontWeight = FontWeight.Bold,
         fontSize = 32.sp,
-        lineHeight = 40.sp
+        lineHeight = 48.sp
     ),
-    headline1 = TextStyle(
-        fontFamily = NotoSansKR,
-        fontWeight = FontWeight.Normal,
-        fontSize = 93.sp,
-        lineHeight = 93.sp
-    ),
-    headline2 = TextStyle(
+    headlineBold24 = TextStyle(
         fontFamily = NotoSansKR,
         fontWeight = FontWeight.Bold,
-        fontSize = 24.sp,
-        lineHeight = 32.sp
+        fontSize = 24.sp
     ),
-    bodyLarge = TextStyle(
+    headlineBold20 = TextStyle(
         fontFamily = NotoSansKR,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 16.sp,
-        lineHeight = 24.sp
+        fontWeight = FontWeight.Bold,
+        fontSize = 20.sp
     ),
-    bodyMedium = TextStyle(
+    headlineBold18 = TextStyle(
         fontFamily = NotoSansKR,
-        fontWeight = FontWeight.Normal,
-        fontSize = 14.sp,
-        lineHeight = 20.sp
+        fontWeight = FontWeight.Bold,
+        fontSize = 18.sp
     ),
-    bodySmall = TextStyle(
+    titleBold20 = TextStyle(
         fontFamily = NotoSansKR,
-        fontWeight = FontWeight.Normal,
-        fontSize = 12.sp,
-        lineHeight = 16.sp
+        fontWeight = FontWeight.Bold,
+        fontSize = 20.sp
     ),
-    body1 = TextStyle(
+    titleBold18 = TextStyle(
         fontFamily = NotoSansKR,
-        fontWeight = FontWeight.Normal,
-        fontSize = 24.sp,
-        lineHeight = 32.sp
+        fontWeight = FontWeight.Bold,
+        fontSize = 18.sp
     ),
-    body2 = TextStyle(
+    titleBold16 = TextStyle(
         fontFamily = NotoSansKR,
-        fontWeight = FontWeight.Normal,
-        fontSize = 20.sp,
-        lineHeight = 24.sp
+        fontWeight = FontWeight.Bold,
+        fontSize = 16.sp
     ),
-    hint1 = TextStyle(
+    titleBold14 = TextStyle(
+        fontFamily = NotoSansKR,
+        fontWeight = FontWeight.Bold,
+        fontSize = 14.sp
+    ),
+    titleBold12 = TextStyle(
+        fontFamily = NotoSansKR,
+        fontWeight = FontWeight.Bold,
+        fontSize = 12.sp
+    ),
+    titleMedium14 = TextStyle(
         fontFamily = NotoSansKR,
         fontWeight = FontWeight.Medium,
-        fontSize = 12.sp,
-        lineHeight = 16.sp
+        fontSize = 14.sp
     ),
-    labelLarge = TextStyle(
-        fontFamily = NotoSansKR,
-        fontWeight = FontWeight.Normal,
-        fontSize = 14.sp,
-        lineHeight = 20.sp
-    ),
-    labelExtBold = TextStyle(
-        fontFamily = NotoSansKR,
-        fontWeight = FontWeight.ExtraBold,
-        fontSize = 14.sp,
-        lineHeight = 20.sp
-    ),
-    label1 = TextStyle(
+    bodyBold18 = TextStyle(
         fontFamily = NotoSansKR,
         fontWeight = FontWeight.Bold,
-        fontSize = 14.sp,
-        lineHeight = 20.sp
+        fontSize = 18.sp
     ),
-    label2 = TextStyle(
-        fontFamily = NotoSansKR,
-        fontWeight = FontWeight.Normal,
-        fontSize = 12.sp,
-        lineHeight = 20.sp
-    ),
-    title1 = TextStyle(
-        fontFamily = NotoSansKR,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 18.sp,
-        lineHeight = 24.sp
-    ),
-    title2 = TextStyle(
+    bodyBold16 = TextStyle(
         fontFamily = NotoSansKR,
         fontWeight = FontWeight.Bold,
-        fontSize = 16.sp,
-        lineHeight = 22.sp
+        fontSize = 16.sp
     ),
-    caption1 = TextStyle(
+    bodyBold14 = TextStyle(
         fontFamily = NotoSansKR,
-        fontWeight = FontWeight.Normal,
-        fontSize = 12.sp,
-        lineHeight = 16.sp
+        fontWeight = FontWeight.Bold,
+        fontSize = 14.sp
     ),
-    number1 = TextStyle(
+    bodyBold12 = TextStyle(
+        fontFamily = NotoSansKR,
+        fontWeight = FontWeight.Bold,
+        fontSize = 12.sp
+    ),
+    bodyMedium16 = TextStyle(
         fontFamily = NotoSansKR,
         fontWeight = FontWeight.Medium,
-        fontSize = 13.sp,
-        lineHeight = 18.sp
+        fontSize = 16.sp
     ),
+    bodyMedium14 = TextStyle(
+        fontFamily = NotoSansKR,
+        fontWeight = FontWeight.Medium,
+        fontSize = 14.sp
+    ),
+    bodyRegular18 = TextStyle(
+        fontFamily = NotoSansKR,
+        fontWeight = FontWeight.Normal,
+        fontSize = 18.sp
+    ),
+    bodyRegular12 = TextStyle(
+        fontFamily = NotoSansKR,
+        fontWeight = FontWeight.Normal,
+        fontSize = 12.sp
+    ),
+    bodyRegular10 = TextStyle(
+        fontFamily = NotoSansKR,
+        fontWeight = FontWeight.Normal,
+        fontSize = 10.sp
+    ),
+    labelBold16 = TextStyle(
+        fontFamily = NotoSansKR,
+        fontWeight = FontWeight.Bold,
+        fontSize = 16.sp
+    ),
+    labelRegular14 = TextStyle(
+        fontFamily = NotoSansKR,
+        fontWeight = FontWeight.Normal,
+        fontSize = 14.sp
+    ),
+    labelRegular12 = TextStyle(
+        fontFamily = NotoSansKR,
+        fontWeight = FontWeight.Normal,
+        fontSize = 12.sp
+    ),
+    labelRegular10 = TextStyle(
+        fontFamily = NotoSansKR,
+        fontWeight = FontWeight.Normal,
+        fontSize = 10.sp
+    ),
+    labelMedium16 = TextStyle(
+        fontFamily = NotoSansKR,
+        fontWeight = FontWeight.Medium,
+        fontSize = 16.sp
+    ),
+    labelMedium14 = TextStyle(
+        fontFamily = NotoSansKR,
+        fontWeight = FontWeight.Medium,
+        fontSize = 14.sp
+    )
 )
 
 internal val LocalMemoripTypography = staticCompositionLocalOf {

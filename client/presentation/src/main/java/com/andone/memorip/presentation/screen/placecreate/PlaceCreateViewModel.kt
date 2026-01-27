@@ -9,7 +9,7 @@ import com.andone.memorip.domain.model.request.PlaceCreateRequest
 import com.andone.memorip.domain.repository.PlaceRepository
 import com.andone.memorip.presentation.model.LocationUiModel
 import com.andone.memorip.presentation.model.TagUiModel
-import com.andone.memorip.presentation.screen.grouplist.model.GroupUiModel
+import com.andone.memorip.presentation.model.GroupUiModel
 import com.andone.memorip.presentation.screen.placecreate.model.PlaceCreateAction
 import com.andone.memorip.presentation.screen.placecreate.model.PlaceCreateEvent
 import com.andone.memorip.presentation.screen.placecreate.model.PlaceCreateUiState
@@ -91,6 +91,10 @@ class PlaceCreateViewModel @Inject constructor(
                 snackBarManager.show(SnackBarEvent.NETWORK_ERROR)
             }
 
+            is PlaceCreateAction.OnGroupSelect -> {
+                updateGroup(action.group)
+            }
+
             PlaceCreateAction.OnCreateSuccess -> {
                 _event.trySend(PlaceCreateEvent.NavigateToHome)
             }
@@ -152,7 +156,8 @@ class PlaceCreateViewModel @Inject constructor(
                     latitude = uiStateValue.location.latitude,
                     longitude = uiStateValue.location.longitude,
                     address = Address.from(uiStateValue.location.address),
-                    imageUrls = imageUrls
+                    imageUrls = imageUrls,
+                    isPublic = uiStateValue.isPublic
                 )
             ).onSuccess { data ->
                 onAction(PlaceCreateAction.OnCreateSuccess)

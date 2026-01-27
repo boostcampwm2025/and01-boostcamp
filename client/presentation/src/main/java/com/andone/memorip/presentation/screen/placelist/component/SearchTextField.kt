@@ -37,7 +37,7 @@ fun SearchTextField(
             .fillMaxWidth()
             .height(height = MemoripHeight.SearchBoxHeight)
             .padding(end = MemoripPadding.PaddingMedium),
-        textStyle = MemoripTheme.typography.bodyLarge.copy(color = MemoripTheme.colors.onSurface),
+        textStyle = MemoripTheme.typography.labelRegular14.copy(color = MemoripTheme.colors.onSurface),
         decorationBox = { innerTextField ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -62,7 +62,7 @@ fun SearchTextField(
 
 @Preview
 @Composable
-private fun SearchTextFieldPreview(){
+private fun SearchTextFieldPreview() {
     MemoripTheme {
         SearchTextField(
             value = "검색",

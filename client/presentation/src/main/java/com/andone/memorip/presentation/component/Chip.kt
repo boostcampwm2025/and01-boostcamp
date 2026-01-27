@@ -53,7 +53,7 @@ fun StaticChip(
     modifier: Modifier = Modifier,
     radius: Dp = StaticChipDimen.RADIUS,
     colors: ChipColors = ChipColors.Default,
-    textStyle: TextStyle = MemoripTheme.typography.label2,
+    textStyle: TextStyle = MemoripTheme.typography.bodyBold12,
     elevation: Dp = 0.dp
 ) {
     Surface(
@@ -86,7 +86,7 @@ fun ClickableChip(
     modifier: Modifier = Modifier,
     radius: Dp = StaticChipDimen.RADIUS,
     colors: ChipColors = ChipColors.Default,
-    textStyle: TextStyle = MemoripTheme.typography.label1,
+    textStyle: TextStyle = MemoripTheme.typography.bodyBold12,
     elevation: Dp = 0.dp,
     onClick: () -> Unit = {}
 ) {

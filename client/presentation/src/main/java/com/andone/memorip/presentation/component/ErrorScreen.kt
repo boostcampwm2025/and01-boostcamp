@@ -43,7 +43,7 @@ fun ErrorScreen(
             Text(
                 text = retryButtonText,
                 color = MemoripTheme.colors.white,
-                style = MemoripTheme.typography.label1
+                style = MemoripTheme.typography.labelRegular12
             )
         }
     }

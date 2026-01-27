@@ -1,6 +1,7 @@
 package com.andone.memorip.feature.place.dto.response
 
-import java.util.UUID
+import com.fasterxml.jackson.annotation.JsonProperty
+import java.util.*
 
 data class PlaceListItemResponse(
     val id: UUID,
@@ -8,5 +9,8 @@ data class PlaceListItemResponse(
     val latitude: Double,
     val longitude: Double,
     val address: String,
-    val imageUrl: String?
+    val imageUrl: String?,
+
+    @get:JsonProperty("isPublic")
+    val isPublic: Boolean
 )

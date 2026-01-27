@@ -6,7 +6,7 @@ import com.andone.memorip.domain.repository.GroupRepository
 import com.andone.memorip.presentation.screen.grouplist.model.GroupListAction
 import com.andone.memorip.presentation.screen.grouplist.model.GroupListEvent
 import com.andone.memorip.presentation.screen.grouplist.model.GroupListUiState
-import com.andone.memorip.presentation.screen.grouplist.model.GroupUiModel
+import com.andone.memorip.presentation.model.GroupUiModel
 import com.andone.memorip.presentation.util.snackbar.SnackBarEvent
 import com.andone.memorip.presentation.util.snackbar.SnackBarManager
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -62,7 +62,7 @@ fun EmptyGroupPlaceholder(onClick: () -> Unit) {
 
             Text(
                 text = stringResource(R.string.group_view_add_place),
-                style = LocalMemoripTypography.current.body2,
+                style = LocalMemoripTypography.current.bodyBold18,
                 color = MemoripTheme.colors.primary
             )
         }

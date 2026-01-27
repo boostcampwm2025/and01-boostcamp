@@ -113,10 +113,10 @@ dependencies {
 
     // Google Identity (ID Token 발급용)
     implementation(libs.googleid)
-
+    
     // Convention
-    implementation(libs.compose.convention)
     detektPlugins(libs.compose.convention)
+    implementation(libs.compose.convention)
 
     // EXIF
     implementation(libs.androidx.exifinterface)

@@ -8,8 +8,8 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
@@ -45,6 +45,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.activity.compose.BackHandler
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
@@ -107,6 +108,10 @@ fun PlaceDetailScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var currentStep by rememberSaveable { mutableStateOf(PlaceDetailScreenStep.PlaceDetail) }
 
+    BackHandler(enabled = currentStep == PlaceDetailScreenStep.SelectGroup) {
+        currentStep = PlaceDetailScreenStep.PlaceDetail
+    }
+
     viewModel.event.collectWithLifecycle { event ->
         when (event) {
             PlaceDetailEvent.NavigateBack -> {
@@ -149,11 +154,10 @@ fun PlaceDetailScreen(
 
             PlaceDetailScreenStep.SelectGroup -> {
                 SelectGroupScreen(
-                    onGroupSelect = { group ->
-                        viewModel.addPlaceToGroup(group.id)
-                    },
+                    onGroupSelect = { },
                     onBackClick = { currentStep = PlaceDetailScreenStep.PlaceDetail },
                     title = stringResource(R.string.select_group_add_to_my_group_title),
+                    placeId = route.placeId,
                     modifier = modifier
                 )
             }
@@ -285,18 +289,18 @@ private fun PlaceDetailContent(
                 Text(
                     text = place.title,
                     color = MemoripTheme.colors.onSurface,
-                    style = MemoripTheme.typography.headline2
+                    style = MemoripTheme.typography.headlineBold32
                 )
                 Row(horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceMedium)) {
                     Icon(
                         imageVector = ImageVector.vectorResource(R.drawable.ic_location_on),
-                        tint = MemoripTheme.colors.green,
+                        tint = MemoripTheme.colors.primary,
                         contentDescription = null
                     )
                     Text(
                         text = place.locationName,
                         color = MemoripTheme.colors.onSurface,
-                        style = MemoripTheme.typography.label1
+                        style = MemoripTheme.typography.bodyMedium14
                     )
                 }
                 TagChipRow(tags = place.tags)
@@ -341,14 +345,14 @@ private fun PlaceDetailInfoSection(
         )
         Text(
             text = infoString,
-            style = MemoripTheme.typography.labelLarge
+            style = MemoripTheme.typography.bodyMedium14
         )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun PlaceDetailScreenPrev() {
+private fun PlaceDetailScreenPreview() {
     MemoripTheme {
         PlaceDetailScreen(
             place = DummyData.place,
@@ -359,7 +363,7 @@ private fun PlaceDetailScreenPrev() {
 
 @Preview(showBackground = true)
 @Composable
-private fun PlaceDetailContentPrev() {
+private fun PlaceDetailContentPreview() {
     MemoripTheme {
         PlaceDetailContent(
             place = PlaceUiModel(),
