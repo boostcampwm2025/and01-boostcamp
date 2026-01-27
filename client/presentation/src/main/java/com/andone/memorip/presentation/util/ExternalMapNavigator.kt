@@ -9,12 +9,6 @@ import androidx.core.net.toUri
 
 private const val NAVER_MAP_PACKAGE = "com.nhn.android.nmap"
 
-data class MapAppOption(
-    val name: String,
-    val packageName: String,
-    val intent: Intent,
-)
-
 fun Context.openMapOrAskApp(
     location: LocationUiModel,
 ) {
@@ -38,8 +32,9 @@ fun Context.openMapOrAskApp(
 }
 
 private fun createGeoIntent(location: LocationUiModel): Intent {
+    val displayName = location.name.ifBlank { location.address }
     val geoUri: Uri =
-        "geo:${location.latitude},${location.longitude}?q=${location.latitude},${location.longitude}(${location.address})"
+        "geo:${location.latitude},${location.longitude}?q=${location.latitude},${location.longitude}(${displayName})"
             .toUri()
     return Intent(Intent.ACTION_VIEW, geoUri)
 }
