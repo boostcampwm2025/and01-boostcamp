@@ -125,6 +125,7 @@ fun PlaceListScreenContent(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     var showRegionBottomSheet by remember { mutableStateOf(value = false) }
+    var showTagBottomSheet by remember { mutableStateOf(false) }
 
     var isFilterVisible by remember { mutableStateOf(value = true) }
     val clearFocusOnScroll = remember {
@@ -163,6 +164,17 @@ fun PlaceListScreenContent(
         }
     }
 
+    if (showTagBottomSheet) {
+        ModalBottomSheet(
+            onDismissRequest = { showTagBottomSheet = false },
+            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+            containerColor = MemoripTheme.colors.background,
+            contentColor = MemoripTheme.colors.onSurface
+        ) {
+
+        }
+    }
+
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -183,9 +195,9 @@ fun PlaceListScreenContent(
                 Column {
                     FilterSection(
                         onChangeRegionClick = { showRegionBottomSheet = true },
-                        onAddTagClick = {},
+                        onAddTagClick = { showTagBottomSheet = true},
                         modifier = Modifier.padding(horizontal = MemoripPadding.AppHorizontalPadding),
-                        tags = DummyData.categories.toImmutableList(),
+                        tags = state.selectedTags.toImmutableList(),
                         selectedRegionState = state.selectedRegionState
                     )
                     Spacer(modifier = Modifier.padding(vertical = MemoripPadding.PaddingXSmall))
