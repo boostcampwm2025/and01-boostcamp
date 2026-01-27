@@ -121,7 +121,7 @@ fun SelectRow(
                 Icon(
                     painter = it,
                     contentDescription = null,
-                    tint = MemoripTheme.colors.gray3
+                    tint = MemoripTheme.colors.gray1
                 )
             }
         }
