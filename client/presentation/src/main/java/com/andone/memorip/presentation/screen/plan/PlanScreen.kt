@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.screen.plan
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
@@ -13,14 +14,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.component.MemoripButton
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.screen.plan.component.DateContextBar
+import com.andone.memorip.presentation.screen.plan.component.DateNotSelectedContent
 import com.andone.memorip.presentation.screen.plan.component.DateRangeCalendar
 import com.andone.memorip.presentation.screen.plan.component.DayChipRow
 import com.andone.memorip.presentation.screen.plan.component.PlaceTimeCard
@@ -82,7 +86,6 @@ fun PlanScreen(
         )
     }
 
-
     PlanScreenContents(
         state = uiState,
         onAction = viewModel::onAction,
@@ -122,59 +125,50 @@ fun PlanScreenContents(
         },
         contentWindowInsets = WindowInsets()
     ) { innerPadding ->
-        Column(modifier = Modifier.padding(paddingValues = innerPadding)) {
-            DateSection(
-                state = state,
-                onAction = onAction,
-                showCalendar = { showCalendar = true }
-            )
 
-            TimeTable(
-                totalMinutes = state.date.totalMinutes,
-                currentDay = state.date.selectedDay,
-                places = state.places,
-                onBlockAdd = { place, start -> onAction(PlanAction.ItemDragEnd(place, start)) },
-                onDayScrolled = { day ->
-                    onAction(PlanAction.DayScrolled(day))
-                }
-            ) { engine, scrollState ->
-                state.blocks.forEach { block ->
-                    TimeBlockItem(
-                        block = block,
-                        engine = engine,
-                        scrollState = scrollState,
-                        onMoved = { id, newStartMinute ->
-                            onAction(PlanAction.BlockMoved(id, newStartMinute))
-                        }
-                    ) {
-                        when (val uiModel = state.blockUiModels[block.id]) {
-                            is Place -> {
-                                PlaceTimeCard(
-                                    place = uiModel,
-                                    onClick = {}
-                                )
+        if (state.date.startDay == null) {
+            DateNotSelectedContent(onSelectDateClick = { showCalendar = true })
+        } else {
+            Column(modifier = Modifier.padding(paddingValues = innerPadding)) {
+                DateSection(
+                    state = state,
+                    onAction = onAction,
+                    showCalendar = { showCalendar = true }
+                )
+
+                TimeTable(
+                    totalMinutes = state.date.totalMinutes,
+                    currentDay = state.date.selectedDay,
+                    places = state.places,
+                    onBlockAdd = { place, start -> onAction(PlanAction.ItemDragEnd(place, start)) },
+                    onDayScrolled = { day ->
+                        onAction(PlanAction.DayScrolled(day))
+                    }
+                ) { engine, scrollState ->
+                    state.blocks.forEach { block ->
+                        TimeBlockItem(
+                            block = block,
+                            engine = engine,
+                            scrollState = scrollState,
+                            onMoved = { id, newStartMinute ->
+                                onAction(PlanAction.BlockMoved(id, newStartMinute))
                             }
+                        ) {
+                            when (val uiModel = state.blockUiModels[block.id]) {
+                                is Place -> {
+                                    PlaceTimeCard(
+                                        place = uiModel,
+                                        onClick = {}
+                                    )
+                                }
 
-                            null -> Unit
+                                null -> Unit
+                            }
                         }
                     }
                 }
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun PlanScreenContentsPreview() {
-    MemoripTheme {
-        PlanScreenContents(
-            state = PlanUiState(
-                places = DummyData.places.toImmutableList(),
-                blocks = DummyData.timeBlocks
-            ),
-            onAction = {},
-        )
     }
 }
 
@@ -198,4 +192,18 @@ private fun DateSection(
         onAddDayClick = { onAction(PlanAction.AddDay) },
         longClickedDay = state.date.longClickedDay
     )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun PlanScreenContentsPreview() {
+    MemoripTheme {
+        PlanScreenContents(
+            state = PlanUiState(
+                places = DummyData.places.toImmutableList(),
+                blocks = DummyData.timeBlocks
+            ),
+            onAction = {},
+        )
+    }
 }
