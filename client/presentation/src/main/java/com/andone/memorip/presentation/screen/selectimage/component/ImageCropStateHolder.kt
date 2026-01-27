@@ -133,7 +133,7 @@ class CropImageState(
     suspend fun loadImage() {
         isLoading = true
         currentUri?.let { uri ->
-            imageBitmap = loadBitmapFromUri(context = context, uri = uri)
+            imageBitmap = loadBitmapFromUri(context = context, uri = uri, viewSize = viewSize)
 
             val savedData = transformDataMap[uri]
             if (savedData != null) {
