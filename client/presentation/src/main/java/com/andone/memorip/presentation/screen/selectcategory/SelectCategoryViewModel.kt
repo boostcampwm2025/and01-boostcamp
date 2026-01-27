@@ -89,9 +89,14 @@ class SelectCategoryViewModel @Inject constructor(
             color = color
         )
 
-        val categories = _uiState.value.categories + newTag
-        _uiState.value = _uiState.value.copy(categories = categories.toImmutableList())
-        _event.trySend(SelectCategoryEvent.DismissDialog)
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
+            tagRepository.addTags(newTag.toDomainModel())
+                .onSuccess {
+                    _event.trySend(SelectCategoryEvent.DismissDialog)
+                    _uiState.update { it.copy(isLoading = false) }
+                }
+        }
     }
 
     private fun updateChecked(tag: TagUiModel) {

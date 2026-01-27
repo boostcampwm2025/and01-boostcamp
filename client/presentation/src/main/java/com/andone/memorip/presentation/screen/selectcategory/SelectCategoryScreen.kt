@@ -78,8 +78,8 @@ fun SelectCategoryScreen(
     }
 
     SelectCategoryContent(
-        checkedList = uiState.checkedSet,
         tagsPagingItems = tagsPagingItems,
+        checkedCategories = uiState.checkedCategories,
         onAction = viewModel::onAction,
         modifier = modifier
     )
@@ -103,8 +103,8 @@ fun SelectCategoryScreen(
 
 @Composable
 private fun SelectCategoryContent(
-    checkedList: ImmutableSet<String>,
     tagsPagingItems: LazyPagingItems<TagUiModel>,
+    checkedCategories: List<TagUiModel>,
     onAction: (SelectCategoryAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -112,7 +112,7 @@ private fun SelectCategoryContent(
         modifier = modifier,
         topBar = {
             SelectCategoryTopBar(
-                checkEnabled = checkedList.isNotEmpty(),
+                checkEnabled = checkedCategories.isNotEmpty(),
                 onConfirmClick = { onAction(SelectCategoryAction.OnConfirmClick) },
                 onBackClick = { onAction(SelectCategoryAction.OnBackClick) }
             )

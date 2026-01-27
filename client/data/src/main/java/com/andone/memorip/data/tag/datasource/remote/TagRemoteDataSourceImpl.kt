@@ -5,7 +5,9 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.andone.memorip.data.tag.datasource.TagPagingSource
 import com.andone.memorip.data.tag.datasource.TagService
+import com.andone.memorip.data.tag.model.TagRequest
 import com.andone.memorip.data.tag.model.TagResponse
+import com.andone.memorip.data.util.apiCall
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -26,6 +28,10 @@ class TagRemoteDataSourceImpl @Inject constructor(
                 )
             }
         ).flow
+    }
+
+    override suspend fun addTags(tag: TagRequest): Result<String> {
+        return apiCall { tagService.addTag(tag) }
     }
 
     companion object {
