@@ -24,7 +24,7 @@ import com.andone.memorip.presentation.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlanTopAppBar(
-    title: String,
+    title: String?,
     modifier: Modifier = Modifier,
     isDeleteMode: Boolean = false,
     onTitleClick: () -> Unit,
