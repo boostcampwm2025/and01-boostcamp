@@ -10,8 +10,6 @@ import java.util.*
 
 interface PlaceRepository : JpaRepository<Place, UUID> {
 
-    fun findAllByIsPublicTrue(pageable: Pageable): Page<Place>
-
     @Query(
         value = """
         SELECT p FROM Place p
@@ -30,7 +28,8 @@ interface PlaceRepository : JpaRepository<Place, UUID> {
     @Query("""
     SELECT DISTINCT p FROM Place p
     LEFT JOIN p.placeTags pt
-    WHERE (:query IS NULL OR LOWER(p.title) LIKE LOWER(CONCAT('%', :query, '%')))
+    WHERE p.isPublic = true
+      AND (:query IS NULL OR LOWER(p.title) LIKE LOWER(CONCAT('%', :query, '%')))
       AND (:region1Depth IS NULL OR p.address.region1Depth = :region1Depth)
       AND (:region2Depth IS NULL OR p.address.region2Depth = :region2Depth)
       AND (:tagIds IS NULL OR pt.tag.id IN :tagIds)
