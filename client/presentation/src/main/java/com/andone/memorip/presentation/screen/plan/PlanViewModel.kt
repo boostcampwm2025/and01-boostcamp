@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.model.PlanBlockUiModel
 import com.andone.memorip.presentation.model.toTimeBlock
+import com.andone.memorip.presentation.screen.plan.PlanViewModelConstants.DAYS_LIMIT
 import com.andone.memorip.presentation.screen.plan.model.DateUiModel
 import com.andone.memorip.presentation.screen.plan.model.PlanAction
 import com.andone.memorip.presentation.screen.plan.model.PlanEvent
@@ -11,6 +12,8 @@ import com.andone.memorip.presentation.screen.plan.model.PlanEvent.ShowDeleteDay
 import com.andone.memorip.presentation.screen.plan.model.PlanUiState
 import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_DAY
 import com.andone.memorip.presentation.util.DummyData
+import com.andone.memorip.presentation.util.snackbar.SnackBarEvent
+import com.andone.memorip.presentation.util.snackbar.SnackBarManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
@@ -20,10 +23,19 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.days
+import kotlin.time.DurationUnit
+
+private object PlanViewModelConstants {
+    const val DAYS_LIMIT = 30
+}
 
 @HiltViewModel
-class PlanViewModel @Inject constructor() : ViewModel() {
+class PlanViewModel @Inject constructor(
+    private val snackBarManager: SnackBarManager
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
         value = PlanUiState(
@@ -121,6 +133,16 @@ class PlanViewModel @Inject constructor() : ViewModel() {
             }
 
             is PlanAction.DateSelected -> {
+                val dayDiff = ChronoUnit.DAYS.between(
+                    action.start,
+                    action.end
+                ).days.toInt(DurationUnit.DAYS)
+
+                if (dayDiff > DAYS_LIMIT) {
+                    snackBarManager.show(SnackBarEvent.PLAN_DAYS_VALIDATION_ERROR)
+                    return
+                }
+
                 _uiState.update {
                     it.copy(
                         date = it.date.copy(
@@ -255,7 +277,7 @@ class PlanViewModel @Inject constructor() : ViewModel() {
             }
             .toSet()
 
-        val removedPlaces = originPlaces.filter{ it.id in removedIds }
+        val removedPlaces = originPlaces.filter { it.id in removedIds }
 
         val blockUiModel = blockUiModels.mapNotNull { (id, uiModel) ->
             if (uiModel is Place && removedDate != null) {

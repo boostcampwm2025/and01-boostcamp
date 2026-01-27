@@ -8,7 +8,9 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.millisToLocalDate
 import java.time.LocalDate
 import java.time.ZoneOffset
@@ -19,7 +21,7 @@ fun DateRangeCalendar(
     initialStartDate: LocalDate?,
     initialEndDate: LocalDate?,
     onConfirm: (LocalDate, LocalDate) -> Unit,
-    onDismiss: () -> Unit,
+    onDismiss: () -> Unit
 ) {
     val state = rememberDateRangePickerState(
         initialSelectedStartDateMillis = initialStartDate?.atStartOfDay(ZoneOffset.UTC)?.toInstant()
@@ -53,6 +55,19 @@ fun DateRangeCalendar(
             state = state,
             title = null,
             headline = null
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun DateRangeCalendarPreview() {
+    MemoripTheme {
+        DateRangeCalendar(
+            initialStartDate = null,
+            initialEndDate = null,
+            onConfirm = { _, _ -> },
+            onDismiss = { }
         )
     }
 }
