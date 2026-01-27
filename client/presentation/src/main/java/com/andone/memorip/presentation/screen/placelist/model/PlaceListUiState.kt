@@ -6,7 +6,6 @@ data class PlaceListUiState(
     val query: String = "",
     val rootRegions: List<RegionUiModel> = emptyList(),
     val selectedRegionState: SelectedRegionState = SelectedRegionState(),
-    val tags: List<TagUiModel> = emptyList(),
     val selectedTags: Set<TagUiModel> = emptySet()
 ) {
     val currentRegionList: List<RegionUiModel>

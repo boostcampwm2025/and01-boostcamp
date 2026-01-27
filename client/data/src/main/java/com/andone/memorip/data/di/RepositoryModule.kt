@@ -3,7 +3,6 @@ package com.andone.memorip.data.di
 import com.andone.memorip.data.group.repositoryimpl.GroupRepositoryImpl
 import com.andone.memorip.data.kakaosearch.repositoryimpl.KakaoSearchRepositoryImpl
 import com.andone.memorip.data.place.repositoryimpl.PlaceRepositoryImpl
-
 import com.andone.memorip.domain.repository.GroupRepository
 import com.andone.memorip.data.auth.repositoryimpl.FirebaseAuthRepositoryImpl
 import com.andone.memorip.data.auth.repositoryimpl.FirebaseTokenRepositoryImpl
@@ -47,11 +46,12 @@ abstract class RepositoryModule {
     abstract fun bindUserRepository(impl: UserRepositoryImpl): UserRepository
 
     @Binds
+    @Singleton
+    abstract fun bindTagRepository(impl: TagRepositoryImpl): TagRepository
+
+    @Binds
     abstract fun bindTokenProvider(impl: FirebaseTokenRepositoryImpl): TokenProvider
 
     @Binds
-    abstract fun TokenRefresher(impl: FirebaseTokenRepositoryImpl): TokenRefresher
-
-    @Binds
-    abstract fun TagRepository(impl: TagRepositoryImpl): TagRepository
+    abstract fun bingTokenRefresher(impl: FirebaseTokenRepositoryImpl): TokenRefresher
 }

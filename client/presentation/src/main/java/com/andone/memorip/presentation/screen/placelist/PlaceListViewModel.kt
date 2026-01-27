@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import androidx.paging.map
 import com.andone.memorip.domain.repository.PlaceRepository
+import com.andone.memorip.domain.repository.TagRepository
 import com.andone.memorip.presentation.model.toUiModel
 import com.andone.memorip.presentation.screen.placelist.model.PlaceListAction
 import com.andone.memorip.presentation.screen.placelist.model.PlaceListEvent
@@ -23,7 +24,10 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
-class PlaceListViewModel @Inject constructor(repository: PlaceRepository) : ViewModel() {
+class PlaceListViewModel @Inject constructor(
+    repository: PlaceRepository,
+    tagRepository: TagRepository
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(value = PlaceListUiState())
     val uiState = _uiState.asStateFlow()
@@ -41,6 +45,13 @@ class PlaceListViewModel @Inject constructor(repository: PlaceRepository) : View
 
     val placesPagingFlow =
         repository.getPlaceList()
+            .map { pagingData ->
+                pagingData.map { it.toUiModel() }
+            }
+            .cachedIn(viewModelScope)
+
+    val tagsPagingFlow =
+        tagRepository.getTagList()
             .map { pagingData ->
                 pagingData.map { it.toUiModel() }
             }

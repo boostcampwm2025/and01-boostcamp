@@ -1,10 +1,14 @@
 package com.andone.memorip.presentation.screen.placelist.component
 
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -14,45 +18,56 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.paging.compose.LazyPagingItems
 import com.andone.memorip.presentation.R
-import com.andone.memorip.presentation.component.ClickableChip
-import com.andone.memorip.presentation.component.ChipColors
-import com.andone.memorip.presentation.screen.placelist.model.RegionUiModel
-import com.andone.memorip.presentation.screen.placelist.model.SelectedRegionState
+import com.andone.memorip.presentation.component.ClickableTagChip
+import com.andone.memorip.presentation.component.EmptyText
+import com.andone.memorip.presentation.component.MemoripPagingList
+import com.andone.memorip.presentation.model.TagUiModel
+import com.andone.memorip.presentation.screen.placelist.component.TagSelectBottomSheetConstant.TAG_LIST_HEIGHT
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.theme.memoripShapes
 import com.andone.memorip.presentation.util.DummyData
 
+private object TagSelectBottomSheetConstant{
+    val TAG_LIST_HEIGHT = 104.dp
+}
+
 @Composable
-fun RegionSelectBottomSheet(
+fun TagSelectBottomSheet(
     modifier: Modifier = Modifier,
-    currentRegionList: List<RegionUiModel> = emptyList(),
-    selectedRegionState: SelectedRegionState = SelectedRegionState(),
+    tagPagingItems: LazyPagingItems<TagUiModel>,
+    selectedTags: List<TagUiModel> = emptyList(),
     onConfirmClick: () -> Unit = {},
-    onRegionChipClick: (regionUiModel: RegionUiModel) -> Unit = {},
+    onTagChipClick: (tagUiModel: TagUiModel) -> Unit = {},
 ) {
     Column(
         modifier = modifier.padding(horizontal = MemoripPadding.AppHorizontalPadding),
         verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceMedium)
     ) {
         Text(
-            text = stringResource(R.string.place_list_bottom_sheet_title),
+            text = stringResource(R.string.place_list_add_tag),
             modifier = Modifier.align(Alignment.CenterHorizontally),
             style = MemoripTheme.typography.headlineBold20
         )
 
-        RegionPathRow(
-            selectedRegionState = selectedRegionState,
-            isUnderline = true
-        )
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .horizontalScroll(state = rememberScrollState()),
+            horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXSmall)
+        ) {
+            selectedTags.forEach { tag -> ClickableTagChip(tag = tag) }
+        }
 
         HorizontalDivider()
 
         TagListSection(
-            regionList = currentRegionList,
-            onChipClick = onRegionChipClick
+            tagPagingItems = tagPagingItems,
+            onChipClick = onTagChipClick
         )
 
         HorizontalDivider()
@@ -78,35 +93,35 @@ fun RegionSelectBottomSheet(
 @Composable
 private fun TagListSection(
     modifier: Modifier = Modifier,
-    regionList: List<RegionUiModel> = emptyList(),
-    onChipClick: (regionUiModel: RegionUiModel) -> Unit = {}
+    tagPagingItems: LazyPagingItems<TagUiModel>,
+    onChipClick: (tagUiModel: TagUiModel) -> Unit = {}
 ) {
-    FlowRow(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceSmall),
-    ) {
-        regionList.forEach { region ->
-            ClickableChip(
-                chipName = region.name,
-                colors =
-                    if (region.isSelected) {
-                        ChipColors.Selected
-                    } else {
-                        ChipColors.Default
-                    },
-                onClick = { onChipClick(region) }
+    MemoripPagingList(
+        pagingItems = tagPagingItems,
+        itemKey = { it.id },
+        emptyContent = {
+            EmptyText(
+                text = stringResource(R.string.place_list_empty),
+                modifier = Modifier.fillMaxSize()
             )
-        }
-    }
+        },
+        modifier = modifier
+            .padding(horizontal = MemoripPadding.AppHorizontalPadding)
+            .height(height = TAG_LIST_HEIGHT),
+        useHorizontalGrid = true,
+        itemContent = {
+            ClickableTagChip(tag = it)
+        },
+    )
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun RegionSelectBottomSheetPreview() {
+private fun TagSelectBottomSheetPreview() {
     MemoripTheme {
-        RegionSelectBottomSheet(
-            currentRegionList = DummyData.regions.toList(),
-            selectedRegionState = DummyData.regionState
+        TagSelectBottomSheet(
+            tagPagingItems = DummyData.getTagPagingItems(),
+            selectedTags = DummyData.categories.toList()
         )
     }
 }

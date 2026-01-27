@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.runtime.Composable
@@ -25,6 +27,8 @@ fun <T : Any> MemoripPagingList(
     emptyContent: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     staggeredCells: StaggeredGridCells? = null,
+    useHorizontalGrid: Boolean = false,
+    horizontalGridRows: Int = 3,
     itemContent: @Composable (T) -> Unit
 ) {
     val loadState = pagingItems.loadState
@@ -48,15 +52,33 @@ fun <T : Any> MemoripPagingList(
                 handleAppendState(loadState.append, pagingItems::retry)
             }
         } ?: run {
-            LazyColumn(modifier = modifier) {
-                items(
-                    count = pagingItems.itemCount,
-                    key = pagingItems.itemKey { itemKey(it) }
-                ) { index ->
-                    pagingItems[index]?.let { itemContent(it) }
-                }
+            if (useHorizontalGrid) {
+                LazyHorizontalGrid(
+                    rows = GridCells.Fixed(horizontalGridRows),
+                    modifier = modifier,
+                    horizontalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceSmall),
+                    verticalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceSmall)
+                ) {
+                    items(
+                        count = pagingItems.itemCount,
+                        key = pagingItems.itemKey { itemKey(it) }
+                    ) { index ->
+                        pagingItems[index]?.let { itemContent(it) }
+                    }
 
-                handleAppendState(loadState.append, pagingItems::retry)
+                    handleAppendState(loadState.append, pagingItems::retry)
+                }
+            } else {
+                LazyColumn(modifier = modifier) {
+                    items(
+                        count = pagingItems.itemCount,
+                        key = pagingItems.itemKey { itemKey(it) }
+                    ) { index ->
+                        pagingItems[index]?.let { itemContent(it) }
+                    }
+
+                    handleAppendState(loadState.append, pagingItems::retry)
+                }
             }
         }
         return

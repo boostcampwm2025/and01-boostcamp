@@ -53,6 +53,7 @@ import com.andone.memorip.presentation.screen.placelist.component.PlaceListTopBa
 import com.andone.memorip.presentation.screen.placelist.component.RegionFilter
 import com.andone.memorip.presentation.screen.placelist.component.RegionSelectBottomSheet
 import com.andone.memorip.presentation.screen.placelist.component.TagFilter
+import com.andone.memorip.presentation.screen.placelist.component.TagSelectBottomSheet
 import com.andone.memorip.presentation.screen.placelist.model.PlaceListAction
 import com.andone.memorip.presentation.screen.placelist.model.PlaceListEvent
 import com.andone.memorip.presentation.screen.placelist.model.PlaceListUiState
@@ -85,6 +86,8 @@ fun PlaceListScreen(
 
     val placesPagingItems = viewModel.placesPagingFlow.collectAsLazyPagingItems()
 
+    val tagPagingItems = viewModel.tagsPagingFlow.collectAsLazyPagingItems()
+
     viewModel.event.collectWithLifecycle { event ->
         when (event) {
             is PlaceListEvent.NavigateToPlaceCreate -> {
@@ -108,6 +111,7 @@ fun PlaceListScreen(
     PlaceListScreenContent(
         state = uiState,
         placePagingItems = placesPagingItems,
+        tagPagingItems = tagPagingItems,
         onAction = viewModel::onAction,
         modifier = modifier
     )
@@ -118,6 +122,7 @@ fun PlaceListScreen(
 fun PlaceListScreenContent(
     state: PlaceListUiState,
     placePagingItems: LazyPagingItems<Place>,
+    tagPagingItems: LazyPagingItems<TagUiModel>,
     onAction: (PlaceListAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -171,7 +176,10 @@ fun PlaceListScreenContent(
             containerColor = MemoripTheme.colors.background,
             contentColor = MemoripTheme.colors.onSurface
         ) {
-
+            TagSelectBottomSheet(
+                tagPagingItems = tagPagingItems,
+                selectedTags = state.selectedTags.toImmutableList(),
+            )
         }
     }
 
@@ -296,6 +304,7 @@ private fun PlaceListScreenContentsPreview() {
         PlaceListScreenContent(
             state = PlaceListUiState(),
             placePagingItems = DummyData.getPlacePagingItems(),
+            tagPagingItems = DummyData.getTagPagingItems(),
             onAction = {},
         )
     }
