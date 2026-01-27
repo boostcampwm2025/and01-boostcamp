@@ -8,7 +8,9 @@ import com.andone.memorip.feature.group.dto.request.GroupCreateRequest
 import com.andone.memorip.feature.group.dto.request.GroupUpdateRequest
 import com.andone.memorip.feature.group.dto.response.GroupListResponse
 import com.andone.memorip.feature.group.dto.response.GroupResponse
+import com.andone.memorip.feature.group.dto.response.GroupPeriodResponse
 import com.andone.memorip.feature.group.dto.response.toGroupListResponse
+import com.andone.memorip.feature.group.dto.response.toGroupPeriodResponse
 import com.andone.memorip.feature.group.dto.response.toGroupResponse
 import com.andone.memorip.feature.group.entity.Group
 import com.andone.memorip.feature.group.entity.GroupType
@@ -109,6 +111,7 @@ class GroupService(
 
         group.updateTitle(request.title)
         group.updateVisibility(request.visibility)
+        group.updatePeriod(request.startDate, request.endDate)
     }
 
     @Transactional
@@ -130,5 +133,11 @@ class GroupService(
             ?: throw BusinessException(code = CommonExceptionCode.GROUP_NOT_FOUND)
         
         return group.toGroupResponse()
+    }
+
+    @Transactional(readOnly = true)
+    fun getSimpleGroupPeriods(): List<GroupPeriodResponse> {
+        return groupRepository.findSimpleGroups()
+            .map {it.toGroupPeriodResponse()}
     }
 }

@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Size
+import java.time.LocalDate
 
 data class GroupUpdateRequest(
     @field:NotBlank(message = "그룹 제목은 필수입니다")
@@ -19,5 +20,11 @@ data class GroupUpdateRequest(
         allowableValues = ["PRIVATE", "PUBLIC"],
         required = true
     )
-    var visibility: Visibility
+    var visibility: Visibility,
+
+    @Schema(description = "시작 날짜", example = "2024-03-01", required = false)
+    val startDate: LocalDate? = null,
+
+    @Schema(description = "종료 날짜", example = "2024-03-31", required = false)
+    val endDate: LocalDate? = null
 )
