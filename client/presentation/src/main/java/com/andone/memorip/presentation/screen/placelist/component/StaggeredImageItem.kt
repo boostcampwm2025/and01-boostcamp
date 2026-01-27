@@ -1,4 +1,4 @@
-package com.andone.memorip.presentation.component
+package com.andone.memorip.presentation.screen.placelist.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,8 +22,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.R
-import com.andone.memorip.presentation.component.StaggeredGridDimens.OVERLAY_HEIGHT
-import com.andone.memorip.presentation.component.StaggeredGridDimens.STAGGERED_GRID_IMAGE_CORNER_RADIUS
+import com.andone.memorip.presentation.component.MemoripImage
+import com.andone.memorip.presentation.component.PlaceLocationText
+import com.andone.memorip.presentation.screen.placelist.component.StaggeredGridDimens.OVERLAY_HEIGHT
+import com.andone.memorip.presentation.screen.placelist.component.StaggeredGridDimens.STAGGERED_GRID_IMAGE_CORNER_RADIUS
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
 

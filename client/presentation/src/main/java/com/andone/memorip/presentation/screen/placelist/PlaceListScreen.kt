@@ -44,7 +44,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.EmptyText
 import com.andone.memorip.presentation.component.MemoripPagingList
-import com.andone.memorip.presentation.component.StaggeredImageItem
+import com.andone.memorip.presentation.screen.placelist.component.StaggeredImageItem
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.model.TagUiModel
 import com.andone.memorip.presentation.screen.placelist.MemoripMotion.AnimationDuration
