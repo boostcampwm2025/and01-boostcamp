@@ -39,6 +39,8 @@ class PlanViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(
         value = PlanUiState(
+            groups = DummyData.groups.toImmutableList(),
+            selectedGroup = DummyData.groups.first(),
             places = DummyData.places.toImmutableList(),
 //            blocks = DummyData.places.mapNotNull { it.toTimeBlock(dayStart = DummyData.dummyDate.startDay!!.atStartOfDay()) },
             blocks = emptyList(),
@@ -206,6 +208,14 @@ class PlanViewModel @Inject constructor(
                         places = (it.places - action.item).toImmutableList()
                     )
                 }
+            }
+
+            PlanAction.GroupChoiceClick -> {
+                _event.trySend(element = PlanEvent.ShowGroupChoiceDialog)
+            }
+
+            is PlanAction.GroupChoiceConfirmClick -> {
+
             }
         }
     }
