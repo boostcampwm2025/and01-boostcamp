@@ -180,6 +180,9 @@ class PlanViewModel @Inject constructor() : ViewModel() {
                     )
                 }
             }
+            PlanAction.ShowCalendarClick -> {
+                _event.trySend(element = PlanEvent.ShowCalendarDialog)
+            }
         }
     }
 

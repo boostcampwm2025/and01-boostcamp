@@ -1,6 +1,5 @@
 package com.andone.memorip.presentation.screen.plan
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
@@ -23,7 +22,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.presentation.R
-import com.andone.memorip.presentation.component.MemoripButton
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.screen.plan.component.DateContextBar
 import com.andone.memorip.presentation.screen.plan.component.DateNotSelectedContent
@@ -48,6 +46,7 @@ fun PlanScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var deleteTargetDay by remember { mutableStateOf<Int?>(value = null) }
+    var showCalendar by rememberSaveable { mutableStateOf(false) }
 
     viewModel.event.collectWithLifecycle { event ->
         when (event) {
@@ -57,6 +56,10 @@ fun PlanScreen(
 
             is PlanEvent.ShowDeleteDayDialog -> {
                 deleteTargetDay = event.day
+            }
+
+            PlanEvent.ShowCalendarDialog -> {
+                showCalendar = true
             }
         }
     }
@@ -88,6 +91,18 @@ fun PlanScreen(
         )
     }
 
+    if (showCalendar) {
+        DateRangeCalendar(
+            initialStartDate = uiState.date.startDay,
+            initialEndDate = uiState.date.endDay,
+            onConfirm = { start, end ->
+                showCalendar = false
+                viewModel.onAction(PlanAction.DateSelected(start, end))
+            },
+            onDismiss = { showCalendar = false }
+        )
+    }
+
     PlanScreenContents(
         state = uiState,
         onAction = viewModel::onAction,
@@ -101,20 +116,6 @@ fun PlanScreenContents(
     onAction: (PlanAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var showCalendar by rememberSaveable { mutableStateOf(false) }
-
-    if (showCalendar) {
-        DateRangeCalendar(
-            initialStartDate = state.date.startDay,
-            initialEndDate = state.date.endDay,
-            onConfirm = { start, end ->
-                showCalendar = false
-                onAction(PlanAction.DateSelected(start, end))
-            },
-            onDismiss = { showCalendar = false }
-        )
-    }
-
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -132,15 +133,15 @@ fun PlanScreenContents(
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
-            ){
-                DateNotSelectedContent(onSelectDateClick = { showCalendar = true })
+            ) {
+                DateNotSelectedContent(onSelectDateClick = { onAction(PlanAction.ShowCalendarClick) })
             }
         } else {
             Column(modifier = Modifier.padding(paddingValues = innerPadding)) {
                 DateSection(
                     state = state,
                     onAction = onAction,
-                    showCalendar = { showCalendar = true }
+                    showCalendar = { onAction(PlanAction.ShowCalendarClick) }
                 )
 
                 TimeTable(
