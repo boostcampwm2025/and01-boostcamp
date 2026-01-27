@@ -34,9 +34,11 @@ data class TimeBlock(
     fun movedTo(newStartMinute: Int, totalMinutes: Int): TimeBlock {
         val maxStart = totalMinutes - durationMinute
         val start = newStartMinute
-            .coerceAtLeast(0)
-            .coerceAtMost(maxStart)
+            .coerceIn(0, maxStart)
 
-        return copy(startMinute = start)
+        return copy(
+            day = (start / 1440) + 1,
+            startMinute = start
+        )
     }
 }
