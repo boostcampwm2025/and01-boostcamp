@@ -2,9 +2,8 @@ package com.andone.memorip.presentation.screen.selectcategory
 
 import android.content.res.Configuration
 import android.util.Log
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -21,7 +20,11 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.component.EmptyText
+import com.andone.memorip.presentation.component.MemoripPagingList
 import com.andone.memorip.presentation.component.dialog.MemoripCategoryInputDialog
 import com.andone.memorip.presentation.model.TagUiModel
 import com.andone.memorip.presentation.screen.selectcategory.component.CategoryItem
@@ -32,8 +35,6 @@ import com.andone.memorip.presentation.screen.selectcategory.model.toErrorMessag
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.collectWithLifecycle
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.ImmutableSet
 
 @Composable
 fun SelectCategoryScreen(
@@ -44,6 +45,7 @@ fun SelectCategoryScreen(
 ) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val tagsPagingItems = viewModel.tagsPagingFlow.collectAsLazyPagingItems()
 
     var showDialog by remember { mutableStateOf(false) }
 
@@ -62,6 +64,7 @@ fun SelectCategoryScreen(
             }
 
             SelectCategoryEvent.DismissDialog -> {
+                tagsPagingItems.refresh()
                 showDialog = false
             }
 
@@ -75,8 +78,8 @@ fun SelectCategoryScreen(
     }
 
     SelectCategoryContent(
-        categories = uiState.categories,
         checkedList = uiState.checkedSet,
+        tagsPagingItems = tagsPagingItems,
         onAction = viewModel::onAction,
         modifier = modifier
     )
@@ -100,8 +103,8 @@ fun SelectCategoryScreen(
 
 @Composable
 private fun SelectCategoryContent(
-    categories: ImmutableList<TagUiModel>,
     checkedList: ImmutableSet<String>,
+    tagsPagingItems: LazyPagingItems<TagUiModel>,
     onAction: (SelectCategoryAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -127,29 +130,34 @@ private fun SelectCategoryContent(
             }
         }
     ) { innerPadding ->
-        LazyColumn(
+        MemoripPagingList(
+            pagingItems = tagsPagingItems,
+            itemKey = { it.id },
             modifier = Modifier
+                .fillMaxSize()
                 .padding(innerPadding)
-                .padding(horizontal = MemoripPadding.AppHorizontalPadding)
-        ) {
-            items(
-                items = categories,
-                key = { it.id }
-            ) { category ->
+                .padding(horizontal = MemoripPadding.AppHorizontalPadding),
+            emptyContent = {
+                EmptyText(
+                    text = stringResource(R.string.place_list_empty),
+                    modifier = Modifier.fillMaxSize()
+                )
+            },
+            itemContent = { tag ->
                 CategoryItem(
-                    tagUiModel = category,
-                    checked = category.id in checkedList,
+                    tagUiModel = tag,
+                    checked = tag in checkedCategories,
                     onCheckedChange = { checked ->
                         onAction(
                             SelectCategoryAction.OnCategoryItemClick(
-                                tagUiModel = category,
+                                tagUiModel = tag,
                                 checked = checked
                             )
                         )
                     }
                 )
             }
-        }
+        )
     }
 }
 

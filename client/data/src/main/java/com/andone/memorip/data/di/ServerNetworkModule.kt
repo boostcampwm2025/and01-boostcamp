@@ -4,6 +4,7 @@ import com.andone.memorip.data.BuildConfig
 import com.andone.memorip.data.auth.AuthInterceptor
 import com.andone.memorip.data.group.datasource.GroupService
 import com.andone.memorip.data.place.datasource.PlaceService
+import com.andone.memorip.data.tag.datasource.TagService
 import com.andone.memorip.data.user.datasource.UserService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
@@ -65,6 +66,12 @@ object ServerNetworkModule {
     @Singleton
     fun providePlaceService(@ServerRetrofit retrofit: Retrofit): PlaceService {
         return retrofit.create(PlaceService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideTagService(@ServerRetrofit retrofit: Retrofit): TagService {
+        return retrofit.create(TagService::class.java)
     }
 
     @Provides
