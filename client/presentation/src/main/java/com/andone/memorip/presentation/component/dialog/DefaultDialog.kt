@@ -52,6 +52,7 @@ internal fun DefaultDialog(
                 Text(
                     text = title,
                     modifier = Modifier.padding(vertical = INNER_PADDING),
+                    color = MemoripTheme.colors.onSurface,
                     style = MemoripTheme.typography.headlineBold20
                 )
                 content()

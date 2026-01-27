@@ -9,7 +9,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.mutableStateSetOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -19,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.dialog.DefaultDialog
 import com.andone.memorip.presentation.model.GroupUiModel
-import com.andone.memorip.presentation.screen.plan.component.SelectGroupDialogDimen.DIALOG_HEIGHT
+import com.andone.memorip.presentation.screen.plan.component.SelectGroupDialogDimen.DIALOG_ITEM_TOTAL_HEIGHT
 import com.andone.memorip.presentation.theme.MemoripLineWidth
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -28,34 +27,35 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
 private object SelectGroupDialogDimen {
-    val DIALOG_HEIGHT = 450.dp
+    val DIALOG_ITEM_TOTAL_HEIGHT = 300.dp
 }
 
 @Composable
 fun SelectGroupDialog(
     groups: ImmutableList<GroupUiModel>,
     onDismissRequest: () -> Unit,
-    onConfirmClick: () -> Unit,
-    onCancelCLick: () -> Unit,
+    onConfirmClick: (GroupUiModel) -> Unit,
+    onCancelClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var enabled by remember { mutableStateOf(false) }
-    val selectedIds = remember { mutableStateSetOf<String?>(null) }
+    var selectedGroup by remember { mutableStateOf(groups.first()) }
 
     DefaultDialog(
         title = stringResource(R.string.select_group_dialog_title),
-        onConfirmClick = onConfirmClick,
-        onCancelClick = onCancelCLick,
+        onConfirmClick = {
+            onConfirmClick(selectedGroup)
+            onDismissRequest()
+        },
+        onCancelClick = onCancelClick,
         onDismissRequest = onDismissRequest,
         modifier = modifier,
-        confirmEnabled = enabled
     ) {
         HorizontalDivider(
             thickness = MemoripLineWidth.Thin,
             color = MemoripTheme.colors.primaryContainer
         )
         LazyColumn(
-            modifier = Modifier.height(DIALOG_HEIGHT),
+            modifier = Modifier.height(DIALOG_ITEM_TOTAL_HEIGHT),
             verticalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXXSmall)
         ) {
             items(
@@ -64,14 +64,8 @@ fun SelectGroupDialog(
             ) { group ->
                 SelectGroupItem(
                     group = group,
-                    selected = group.id in selectedIds,
-                    onItemClick = {
-                        if (group.id in selectedIds) {
-                            selectedIds.remove(group.id)
-                        } else {
-                            selectedIds.add(group.id)
-                        }
-                    },
+                    selected = selectedGroup.id == group.id,
+                    onItemClick = { selectedGroup = group },
                     modifier = Modifier.fillMaxWidth()
                 )
             }
@@ -87,7 +81,7 @@ private fun SelectGroupDialogPreview() {
             groups = DummyData.groups.toImmutableList(),
             onDismissRequest = { },
             onConfirmClick = { },
-            onCancelCLick = { }
+            onCancelClick = { },
         )
     }
 }

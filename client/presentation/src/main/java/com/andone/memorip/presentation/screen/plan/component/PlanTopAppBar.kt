@@ -27,6 +27,7 @@ fun PlanTopAppBar(
     title: String,
     modifier: Modifier = Modifier,
     isDeleteMode: Boolean = false,
+    onTitleClick: () -> Unit,
     onDeleteClick: () -> Unit = {},
     onDismissClick: () -> Unit = {},
 ) {
@@ -42,7 +43,12 @@ fun PlanTopAppBar(
                     TopBarTitleButton(
                         title = title,
                         expanded = expanded,
-                        modifier = Modifier.clickable(onClick = { expanded = !expanded })
+                        modifier = Modifier.clickable(
+                            onClick = {
+                                expanded = !expanded
+                                onTitleClick()
+                            }
+                        )
                     )
                 }
             }
@@ -80,6 +86,9 @@ fun PlanTopAppBar(
 @Composable
 private fun PlanTopAppBarPreview() {
     MemoripTheme {
-        PlanTopAppBar(title = "그룹 1")
+        PlanTopAppBar(
+            title = "그룹 1",
+            onTitleClick = {  }
+        )
     }
 }

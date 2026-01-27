@@ -27,6 +27,7 @@ fun TopBarTitleButton(
     ) {
         Text(
             text = title,
+            color = MemoripTheme.colors.onSurface,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             style = MemoripTheme.typography.headlineBold18
@@ -35,10 +36,8 @@ fun TopBarTitleButton(
         Spacer(modifier = Modifier.width(width = MemoripSpace.SpaceXXSmall))
 
         Icon(
-            painter = if (expanded)
-                painterResource(R.drawable.ic_outline_arrow_drop_up_24)
-            else
-                painterResource(R.drawable.ic_outline_arrow_drop_down_24),
+            painter = if (expanded) painterResource(R.drawable.ic_outline_arrow_drop_up_24)
+                else painterResource(R.drawable.ic_outline_arrow_drop_down_24),
             contentDescription = null
         )
     }

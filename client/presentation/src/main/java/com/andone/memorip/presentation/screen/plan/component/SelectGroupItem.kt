@@ -47,14 +47,14 @@ fun SelectGroupItem(
                 imageUrl = group.images.first(),
                 contentDescription = stringResource(R.string.plan_group_thumbnail_description),
                 modifier = Modifier
-                    .size(size = MemoripIconSize.IconSizeMedium)
-                    .clip(shape = MemoripTheme.shapes.roundedMax)
-                    .padding(end = MemoripPadding.PaddingSmall)
+                    .size(size = MemoripIconSize.IconSizeLarge)
+                    .clip(shape = MemoripTheme.shapes.roundedMedium)
             )
             Text(
                 text = group.name,
+                modifier = Modifier.padding(start = MemoripPadding.PaddingMedium),
                 color = MemoripTheme.colors.onSurface,
-                style = MemoripTheme.typography.titleMedium14
+                style = MemoripTheme.typography.titleBold20
             )
         }
 

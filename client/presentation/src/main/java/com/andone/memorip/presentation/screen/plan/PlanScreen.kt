@@ -25,6 +25,7 @@ import com.andone.memorip.presentation.screen.plan.component.DateRangeCalendar
 import com.andone.memorip.presentation.screen.plan.component.DayChipRow
 import com.andone.memorip.presentation.screen.plan.component.PlaceTimeCard
 import com.andone.memorip.presentation.screen.plan.component.PlanTopAppBar
+import com.andone.memorip.presentation.screen.plan.component.SelectGroupDialog
 import com.andone.memorip.presentation.screen.plan.component.TimeBlockItem
 import com.andone.memorip.presentation.screen.plan.component.TimeTable
 import com.andone.memorip.presentation.screen.plan.model.PlanAction
@@ -42,11 +43,16 @@ fun PlanScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var deleteTargetDay by remember { mutableStateOf<Int?>(value = null) }
+    var showGroupChoice by remember { mutableStateOf(false) }
 
     viewModel.event.collectWithLifecycle { event ->
         when (event) {
             is PlanEvent.ShowDeleteDayDialog -> {
                 deleteTargetDay = event.day
+            }
+
+            PlanEvent.ShowGroupChoiceDialog -> {
+                showGroupChoice = true
             }
         }
     }
@@ -78,6 +84,18 @@ fun PlanScreen(
         )
     }
 
+    if (showGroupChoice) {
+        SelectGroupDialog(
+            groups = uiState.groups,
+            onDismissRequest = { showGroupChoice = false },
+            onConfirmClick = { group ->
+                viewModel.onAction(
+                    action = PlanAction.GroupChoiceConfirmClick(selectedGroup = group)
+                )
+            },
+            onCancelClick = { showGroupChoice = false }
+        )
+    }
 
     PlanScreenContents(
         state = uiState,
@@ -110,8 +128,9 @@ fun PlanScreenContents(
         modifier = modifier,
         topBar = {
             PlanTopAppBar(
-                title = stringResource(R.string.plan_default_group),
+                title = state.selectedGroup.name,
                 isDeleteMode = state.date.longClickedDay != null,
+                onTitleClick = { onAction(PlanAction.GroupChoiceClick) },
                 onDeleteClick = { onAction(PlanAction.RemoveDayClick) },
                 onDismissClick = { onAction(PlanAction.RemoveCancel) }
             )
@@ -166,6 +185,8 @@ private fun PlanScreenContentsPreview() {
     MemoripTheme {
         PlanScreenContents(
             state = PlanUiState(
+                selectedGroup = DummyData.groups.first(),
+                groups = DummyData.groups.toImmutableList(),
                 places = DummyData.places.toImmutableList(),
                 blocks = DummyData.timeBlocks
             ),
