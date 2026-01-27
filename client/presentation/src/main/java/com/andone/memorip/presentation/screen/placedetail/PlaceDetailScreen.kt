@@ -24,6 +24,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -97,6 +98,7 @@ private object PlaceDetailScreenDimens {
 fun PlaceDetailScreen(
     route: PlaceDetail,
     onNavigateBack: () -> Unit,
+    onNavigateGroupList: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PlaceDetailViewModel = hiltViewModel<PlaceDetailViewModel, PlaceDetailViewModel.Factory>(
         creationCallback = { factory ->
@@ -119,6 +121,10 @@ fun PlaceDetailScreen(
 
             PlaceDetailEvent.PlaceAddToGroup -> {
                 currentStep = PlaceDetailScreenStep.PlaceDetail
+            }
+
+            PlaceDetailEvent.NavigateToGroupList -> {
+                onNavigateGroupList()
             }
         }
     }
@@ -187,6 +193,7 @@ private fun PlaceDetailScreen(
                 imageDialogExpanded = true
                 selectedImageUrl = it
             },
+            onAction = onAction,
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = MemoripTheme.colors.white)
@@ -210,6 +217,7 @@ private fun PlaceDetailScreen(
 private fun PlaceDetailContent(
     place: PlaceUiModel,
     onImageClick: (String) -> Unit,
+    onAction: (PlaceDetailAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val density = LocalDensity.current
@@ -320,6 +328,7 @@ private fun PlaceDetailContent(
             PlaceDetailInfoSection(
                 infoString = place.groupName,
                 iconRes = R.drawable.ic_folder,
+                onAction = onAction,
                 modifier = Modifier.padding(start = MemoripPadding.PaddingXSmall)
             )
         }
@@ -330,21 +339,26 @@ private fun PlaceDetailContent(
 private fun PlaceDetailInfoSection(
     infoString: String,
     @DrawableRes iconRes: Int,
+    onAction: (PlaceDetailAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Row(
+    Surface(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXXSmall),
-        verticalAlignment = Alignment.CenterVertically
+        onClick = { onAction(PlaceDetailAction.GroupClick) }
     ) {
-        Icon(
-            painter = painterResource(iconRes),
-            contentDescription = null
-        )
-        Text(
-            text = infoString,
-            style = MemoripTheme.typography.labelLarge
-        )
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXXSmall),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                painter = painterResource(iconRes),
+                contentDescription = null
+            )
+            Text(
+                text = infoString,
+                style = MemoripTheme.typography.labelLarge
+            )
+        }
     }
 }
 
@@ -365,6 +379,7 @@ private fun PlaceDetailContentPrev() {
     MemoripTheme {
         PlaceDetailContent(
             place = PlaceUiModel(),
+            onAction = {},
             onImageClick = {},
         )
     }

@@ -35,12 +35,15 @@ class MemoripNavigator(
         backStack.add(tab.route)
     }
 
+    fun navigateToGroupList() {
+        backStack.add(MainBottomBarRoute.GROUP_LIST.route)
+    }
+
     fun navigateToPlaceCreate() = backStack.navigateToPlaceCreate()
 
     fun navigateToGroupDetail(groupId:String) = backStack.navigateToGroupDetail(groupId)
 
     fun navigateToPlaceDetail(placeId: String) = backStack.navigateToPlaceDetail(placeId)
-
     fun popBackStack() = backStack.removeLastOrNull()
 }
 

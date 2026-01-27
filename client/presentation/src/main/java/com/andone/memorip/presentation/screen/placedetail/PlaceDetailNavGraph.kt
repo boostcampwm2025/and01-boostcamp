@@ -12,12 +12,14 @@ fun NavBackStack<NavKey>.navigateToPlaceDetail(placeId: String) {
 
 fun EntryProviderScope<NavKey>.placeDetail(
     onNavigateBack: () -> Unit,
+    onNavigateGroupList: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     entry<PlaceDetail> { route ->
         PlaceDetailScreen(
             route = route,
             onNavigateBack = onNavigateBack,
+            onNavigateGroupList = onNavigateGroupList,
             modifier = modifier
         )
     }
