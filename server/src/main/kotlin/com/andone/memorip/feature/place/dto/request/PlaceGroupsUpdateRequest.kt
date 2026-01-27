@@ -1,4 +1,4 @@
-package com.andone.memorip.domain.place.dto.request
+package com.andone.memorip.feature.place.dto.request
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.validation.constraints.AssertTrue

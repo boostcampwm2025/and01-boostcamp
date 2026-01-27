@@ -1,9 +1,9 @@
 package com.andone.memorip.feature.place.controller
 
 import com.andone.memorip.common.response.ApiResult
+import com.andone.memorip.feature.place.dto.request.PlaceGroupsUpdateRequest
 import com.andone.memorip.feature.place.dto.response.PlaceDetailResponse
 import com.andone.memorip.feature.place.dto.request.PlaceCreateRequest
-import com.andone.memorip.feature.place.dto.request.PlaceGroupsUpdateRequest
 import com.andone.memorip.feature.place.dto.response.PlaceCreateResponse
 import com.andone.memorip.feature.place.dto.response.PlaceListItemResponse
 import com.andone.memorip.feature.place.service.GroupPlaceService
