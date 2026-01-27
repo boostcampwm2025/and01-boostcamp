@@ -152,7 +152,8 @@ class PlaceCreateViewModel @Inject constructor(
                     latitude = uiStateValue.location.latitude,
                     longitude = uiStateValue.location.longitude,
                     address = Address.from(uiStateValue.location.address),
-                    imageUrls = imageUrls
+                    imageUrls = imageUrls,
+                    isPublic = uiStateValue.isPublic
                 )
             ).onSuccess { data ->
                 onAction(PlaceCreateAction.OnCreateSuccess)
