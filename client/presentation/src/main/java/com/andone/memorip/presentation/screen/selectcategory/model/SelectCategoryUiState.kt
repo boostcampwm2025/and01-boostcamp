@@ -4,5 +4,4 @@ import com.andone.memorip.presentation.model.TagUiModel
 
 data class SelectCategoryUiState(
     val checkedCategories: List<TagUiModel> = emptyList(),
-    val isLoading: Boolean = true
 )

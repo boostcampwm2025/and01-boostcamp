@@ -30,7 +30,7 @@ class TagRemoteDataSourceImpl @Inject constructor(
         ).flow
     }
 
-    override suspend fun addTags(tag: TagRequest): Result<String> {
+    override suspend fun addTags(tag: TagRequest): Result<TagResponse> {
         return apiCall { tagService.addTag(tag) }
     }
 

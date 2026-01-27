@@ -21,7 +21,8 @@ class TagRepositoryImpl @Inject constructor(
             }
     }
 
-    override suspend fun addTags(tag: Tag): Result<String> {
+    override suspend fun addTags(tag: Tag): Result<Tag> {
         return tagRemoteDataSourceImpl.addTags(tag.toDataModel())
+            .map { it.toDomainModel() }
     }
 }

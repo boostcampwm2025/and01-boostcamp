@@ -86,11 +86,9 @@ class SelectCategoryViewModel @Inject constructor(
         )
 
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true) }
             tagRepository.addTags(newTag.toDomainModel())
                 .onSuccess {
                     _event.trySend(SelectCategoryEvent.DismissDialog)
-                    _uiState.update { it.copy(isLoading = false) }
                 }
         }
     }

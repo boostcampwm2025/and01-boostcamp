@@ -19,5 +19,5 @@ interface TagService {
     @POST("/api/tags")
     suspend fun addTag(
         @Body tag: TagRequest
-    ): ApiResult<String>
+    ): ApiResult<TagResponse>
 }
