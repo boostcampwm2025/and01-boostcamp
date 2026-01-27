@@ -128,7 +128,7 @@ fun PlanScreenContents(
         modifier = modifier,
         topBar = {
             PlanTopAppBar(
-                title = state.selectedGroup.name,
+                title = state.selectedGroup?.name,
                 isDeleteMode = state.date.longClickedDay != null,
                 onTitleClick = { onAction(PlanAction.GroupChoiceClick) },
                 onDeleteClick = { onAction(PlanAction.RemoveDayClick) },
