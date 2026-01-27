@@ -45,7 +45,7 @@ class PlaceListViewModel @Inject constructor(
     @OptIn(FlowPreview::class)
     private val queryFlow = uiState
         .map { it.query }
-        .debounce(300)
+        .debounce(timeoutMillis = QUERY_DEBOUNCE_TIME)
         .distinctUntilChanged()
 
     private val filterFlow = uiState
@@ -63,7 +63,7 @@ class PlaceListViewModel @Inject constructor(
             }
 
             Triple(
-                state.selectedTags.mapNotNull { UUID.fromString(it.id) },
+                state.selectedTags.map { it.id },
                 depth1,
                 depth2
             )
@@ -195,5 +195,9 @@ class PlaceListViewModel @Inject constructor(
 
             state.copy(selectedRegionState = nextState)
         }
+    }
+
+    companion object {
+        private const val QUERY_DEBOUNCE_TIME = 300L
     }
 }

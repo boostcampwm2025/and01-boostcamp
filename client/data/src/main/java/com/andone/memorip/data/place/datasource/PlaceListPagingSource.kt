@@ -12,7 +12,7 @@ class PlaceListPagingSource(
     private val pageSize: Int,
     private val sort: List<String>? = null,
     private val query: String? = null,
-    private val tagIds: List<UUID>? = null,
+    private val tagIds: List<String>? = null,
     private val region1Depth: String? = null,
     private val region2Depth: List<String>? = null
 ) : PagingSource<Int, PlaceListItem>() {

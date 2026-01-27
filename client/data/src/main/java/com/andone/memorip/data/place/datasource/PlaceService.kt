@@ -23,7 +23,7 @@ interface PlaceService {
     @GET("/api/places")
     suspend fun getPlaces(
         @Query("query") query: String? = null,
-        @Query("tagIds") tagIds: List<UUID>? = null,
+        @Query("tagIds") tagIds: List<String>? = null,
         @Query("region1Depth") region1Depth: String? = null,
         @Query("region2Depth") region2Depth: List<String>? = null,
         @Query("page") page: Int,

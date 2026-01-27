@@ -42,7 +42,7 @@ class PlaceRemoteDataSourceImpl @Inject constructor(
 
     override fun getPlaceList(
         query: String?,
-        tagIds: List<UUID>?,
+        tagIds: List<String>?,
         region1Depth: String?,
         region2Depth: List<String>?,
         sort: List<String>?

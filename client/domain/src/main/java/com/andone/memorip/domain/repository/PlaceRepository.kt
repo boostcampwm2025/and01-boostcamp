@@ -15,7 +15,7 @@ interface PlaceRepository {
     suspend fun getPlaceDetail(placeId: String): Result<PlaceDetailResponse>
     fun getPlaceList(
         query: String? = null,
-        tagIds: List<UUID>? = null,
+        tagIds: List<String>? = null,
         region1Depth: String? = null,
         region2Depth: List<String>? = null,
         sort: List<String>? = null
