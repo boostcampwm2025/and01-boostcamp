@@ -45,10 +45,6 @@ fun PlanScreen(
 
     viewModel.event.collectWithLifecycle { event ->
         when (event) {
-            PlanEvent.ShowSnackBar -> {
-
-            }
-
             is PlanEvent.ShowDeleteDayDialog -> {
                 deleteTargetDay = event.day
             }
