@@ -20,7 +20,17 @@ interface GroupRepository: JpaRepository<Group, UUID> {
                 g.created_at as createdAt,
                 g.updated_at as updatedAt,
                 COALESCE(pc.place_count, 0) as placeCount,
-                COALESCE(pi.related_place_images, '') as relatedPlaceImages
+                COALESCE(pi.related_place_images, '') as relatedPlaceImages,
+                (CASE 
+                WHEN :placeId IS NULL THEN false
+                ELSE EXISTS (
+                    SELECT 1 FROM places p 
+                    WHERE p.group_id = g.id AND p.id = CAST(:placeId AS UUID) AND p.deleted_at IS NULL
+                    UNION
+                    SELECT 1 FROM group_places gp 
+                    WHERE gp.group_id = g.id AND gp.place_id = CAST(:placeId AS UUID) AND gp.deleted_at IS NULL
+                )
+            END) as isPlaceAdded
             FROM groups g
             INNER JOIN users u ON g.owner_id = u.id
             LEFT JOIN LATERAL (
@@ -73,6 +83,7 @@ interface GroupRepository: JpaRepository<Group, UUID> {
     )
     fun findGroupListByOwnerId(
         @Param("ownerId") ownerId: UUID?,
+        @Param("placeId") placeId: UUID?,
         @Param("visibility") visibility: String?,
         @Param("limit") limit: Int,
         @Param("offset") offset: Int

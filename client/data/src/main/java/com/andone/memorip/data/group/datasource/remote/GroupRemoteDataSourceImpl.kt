@@ -19,8 +19,8 @@ class GroupRemoteDataSourceImpl @Inject constructor(
     private val groupService: GroupService
 ) : GroupRemoteDataSource {
 
-    override suspend fun getMyGroups(page: Int, size: Int): Result<List<GroupListResponse>> {
-        return apiCall { groupService.getMyGroups(page, size) }
+    override suspend fun getMyGroups(page: Int, size: Int, placeId: String?): Result<List<GroupListResponse>> {
+        return apiCall { groupService.getMyGroups(page, size, placeId = placeId) }
     }
 
     override suspend fun getPublicGroups(page: Int, size: Int): Result<List<GroupListResponse>> {

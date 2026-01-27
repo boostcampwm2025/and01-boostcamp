@@ -1,6 +1,7 @@
 package com.andone.memorip.data.group.model
 
 import com.andone.memorip.domain.model.Group
+import com.andone.memorip.domain.model.GroupWithPlaceAdded
 import com.andone.memorip.domain.model.User
 import com.andone.memorip.domain.model.Visibility
 import kotlinx.serialization.SerialName
@@ -15,6 +16,7 @@ data class GroupListResponse(
     val placeCount: Int,
     val createdAt: String,
     val updatedAt: String,
+    val isPlaceAdded: Boolean = false,
 ) {
     fun toDomain(): Group = Group(
         id = id,
@@ -24,6 +26,11 @@ data class GroupListResponse(
         images = relatedPlaceImages,
         createdAt = createdAt,
         updatedAt = updatedAt
+    )
+
+    fun toDomainWithPlaceAdded(): GroupWithPlaceAdded = GroupWithPlaceAdded(
+        group = toDomain(),
+        isPlaceAdded = isPlaceAdded
     )
 }
 

@@ -9,7 +9,7 @@ import com.andone.memorip.domain.model.request.PlaceCreateRequest
 import com.andone.memorip.domain.repository.PlaceRepository
 import com.andone.memorip.presentation.model.LocationUiModel
 import com.andone.memorip.presentation.model.TagUiModel
-import com.andone.memorip.presentation.screen.grouplist.model.GroupUiModel
+import com.andone.memorip.presentation.model.GroupUiModel
 import com.andone.memorip.presentation.screen.placecreate.model.PlaceCreateAction
 import com.andone.memorip.presentation.screen.placecreate.model.PlaceCreateEvent
 import com.andone.memorip.presentation.screen.placecreate.model.PlaceCreateUiState
@@ -89,6 +89,10 @@ class PlaceCreateViewModel @Inject constructor(
 
             is PlaceCreateAction.OnSnackBarShow -> {
                 snackBarManager.show(SnackBarEvent.NETWORK_ERROR)
+            }
+
+            is PlaceCreateAction.OnGroupSelect -> {
+                updateGroup(action.group)
             }
 
             PlaceCreateAction.OnCreateSuccess -> {

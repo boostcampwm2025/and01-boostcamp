@@ -15,12 +15,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
 
 private object MemoripSnackbarDimen {
     val MAX_WIDTH = 400.dp
     val MIN_HEIGHT = 80.dp
-    val HORIZONTAL_PADDING = 12.dp
     val SNACKBAR_PADDING = 12.dp
 }
 
@@ -32,7 +32,7 @@ fun MemoripSnackbar(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = MemoripSnackbarDimen.HORIZONTAL_PADDING),
+            .padding(horizontal = MemoripPadding.AppHorizontalPadding),
         contentAlignment = Alignment.BottomCenter
     ) {
         SnackbarHost(hostState = hostState) { snackbarData ->
@@ -92,4 +92,3 @@ private fun MemoripSnackbarPreview() {
         )
     }
 }
-
