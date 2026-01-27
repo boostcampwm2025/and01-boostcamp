@@ -8,13 +8,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
-import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
-import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,42 +21,15 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.StaggeredGridDimens.OVERLAY_HEIGHT
 import com.andone.memorip.presentation.component.StaggeredGridDimens.STAGGERED_GRID_IMAGE_CORNER_RADIUS
-import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.theme.MemoripPadding
-import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
-import com.andone.memorip.presentation.util.DummyData
-import com.andone.memorip.presentation.R
 
 private object StaggeredGridDimens {
-    val STAGGERED_GRID_MIN_CELL_WIDTH = 160.dp
     val STAGGERED_GRID_IMAGE_CORNER_RADIUS = 16.dp
     val OVERLAY_HEIGHT = 52.dp
-}
-
-@Composable
-fun MemoripStaggeredGrid(
-    places: List<Place>,
-    onImageClick: (String) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    LazyVerticalStaggeredGrid(
-        columns = StaggeredGridCells.Adaptive(StaggeredGridDimens.STAGGERED_GRID_MIN_CELL_WIDTH),
-        verticalItemSpacing = MemoripSpace.SpaceXXSmall,
-        horizontalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXXSmall),
-        modifier = modifier.fillMaxSize(),
-    ) {
-        items(items = places) { place ->
-            val image = place.thumbnailImage
-            StaggeredImageItem(
-                imageUrl = image.url,
-                aspectRatio = image.aspectRatio,
-                onImageClick = { onImageClick(place.id) }
-            )
-        }
-    }
 }
 
 @Composable
@@ -117,17 +86,6 @@ fun StaggeredImageItem(
                 )
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun MemoripStaggeredGridPreview() {
-    MemoripTheme {
-        MemoripStaggeredGrid(
-            places = DummyData.places,
-            onImageClick = {}
-        )
     }
 }
 
