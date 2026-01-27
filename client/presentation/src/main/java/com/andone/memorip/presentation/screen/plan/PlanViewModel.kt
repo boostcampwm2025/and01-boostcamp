@@ -1,23 +1,25 @@
 package com.andone.memorip.presentation.screen.plan
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.andone.memorip.domain.model.TimeBlock
 import com.andone.memorip.domain.repository.GroupRepository
+import com.andone.memorip.domain.repository.PlaceRepository
 import com.andone.memorip.presentation.model.GroupUiModel
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.model.PlanBlockUiModel
-import com.andone.memorip.presentation.screen.plan.model.PlanGroupUiModel
-import com.andone.memorip.presentation.screen.plan.model.PlanPlaceUiModel
 import com.andone.memorip.presentation.model.toTimeBlock
+import com.andone.memorip.presentation.model.toUiModel
 import com.andone.memorip.presentation.screen.plan.PlanViewModelConstants.DAYS_LIMIT
 import com.andone.memorip.presentation.screen.plan.model.DateUiModel
 import com.andone.memorip.presentation.screen.plan.model.PlanAction
 import com.andone.memorip.presentation.screen.plan.model.PlanEvent
 import com.andone.memorip.presentation.screen.plan.model.PlanEvent.ShowDeleteDayDialog
+import com.andone.memorip.presentation.screen.plan.model.PlanGroupUiModel
+import com.andone.memorip.presentation.screen.plan.model.PlanPlaceUiModel
 import com.andone.memorip.presentation.screen.plan.model.PlanUiState
 import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_DAY
-import com.andone.memorip.presentation.util.DummyData
 import com.andone.memorip.presentation.util.snackbar.SnackBarEvent
 import com.andone.memorip.presentation.util.snackbar.SnackBarManager
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -32,6 +34,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
@@ -45,6 +48,7 @@ private object PlanViewModelConstants {
 @HiltViewModel
 class PlanViewModel @Inject constructor(
     private val groupRepository: GroupRepository,
+    private val placeRepository: PlaceRepository,
     private val snackBarManager: SnackBarManager
 ) : ViewModel() {
 
@@ -59,7 +63,7 @@ class PlanViewModel @Inject constructor(
             groups = myGroups.map { GroupUiModel.from(it) }.toImmutableList()
         )
     }
-    private val placesFlow = MutableStateFlow(value = DummyData.places.toImmutableList())
+    private val placesFlow = MutableStateFlow<List<Place>>(emptyList())
     private val blocksFlow = MutableStateFlow(value = emptyList<TimeBlock>())
     private val dateFlow = MutableStateFlow(value = DateUiModel())
     private val blockUiModelsFlow = MutableStateFlow(value = emptyMap<String, PlanBlockUiModel>())
@@ -69,23 +73,11 @@ class PlanViewModel @Inject constructor(
         blockUiModelsFlow
     ) { places, blocks, blockUiModels ->
         PlanPlaceUiModel(
-            places = places,
+            places = places.toImmutableList(),
             blocks = blocks.toImmutableList(),
             blockUiModels = blockUiModels.toImmutableMap()
         )
     }
-//    private val _uiState = MutableStateFlow(
-//        value = PlanUiState(
-//            groups = DummyData.groups.toImmutableList(),
-//            selectedGroup = DummyData.groups.first(),
-//            places = DummyData.places.toImmutableList(),
-////            blocks = DummyData.places.mapNotNull { it.toTimeBlock(dayStart = DummyData.dummyDate.startDay!!.atStartOfDay()) },
-//            blocks = emptyList(),
-////            blockUiModels = DummyData.places.associateBy { it.id },
-////            date = DummyData.dummyDate,
-//        )
-//    )
-//    val uiState = _uiState.asStateFlow()
 
     val uiState = combine(
         groupFlow,
@@ -114,7 +106,9 @@ class PlanViewModel @Inject constructor(
     fun onAction(action: PlanAction) {
         when (action) {
             is PlanAction.BlockMoved -> {
+                Log.d("DEBUG TEST", "move before : ${uiState.value.blocks}")
                 moveBlock(action.id, action.newStartMinute)
+                Log.d("DEBUG TEST", "move after : ${uiState.value.blocks}")
             }
 
             PlanAction.AddDay -> {
@@ -253,6 +247,15 @@ class PlanViewModel @Inject constructor(
 
             is PlanAction.GroupChoiceConfirmClick -> {
                 selectedGroupFlow.update { action.selectedGroup }
+                viewModelScope.launch {
+                    placeRepository.getPlaceByGroupId(
+                        groupId = action.selectedGroup.id,
+                        page = 0,
+                        size = 20
+                    )
+                        .onSuccess { result -> placesFlow.update { result.map { it.toUiModel() } } }
+                        .onFailure { snackBarManager.show(SnackBarEvent.NETWORK_ERROR) }
+                }
             }
         }
     }
@@ -260,7 +263,7 @@ class PlanViewModel @Inject constructor(
     private fun moveBlock(id: String, newStartMinute: Int) {
         blocksFlow.update {
             val target = uiState.value.blocks.find { it.id == id } ?: return@update it
-
+            Log.d("DEBUG TEST", "target : $target")
             if (!target.canMoveTo(
                     newStartMinute = newStartMinute,
                     blocks = uiState.value.blocks,
@@ -271,9 +274,18 @@ class PlanViewModel @Inject constructor(
             }
 
             uiState.value.blocks.map { block ->
-                if (block.id == id)
+                Log.d("DEBUG TEST", "block : $block")
+                if (block.id == id) {
+
+                    Log.d("DEBUG TEST", "moved to call")
+                    Log.d(
+                        "DEBUG TEST",
+                        "newStartMinute: $newStartMinute / totalMinutes: ${uiState.value.date.totalMinutes}"
+                    )
                     block.movedTo(newStartMinute, uiState.value.date.totalMinutes)
-                else block
+                } else {
+                    block
+                }
             }
         }
     }
@@ -311,7 +323,6 @@ class PlanViewModel @Inject constructor(
         date: DateUiModel,
         onUpdateState: (Map<String, PlanBlockUiModel>, List<Place>) -> Unit
     ) {
-
         val removedDate = date.currentDayFromSelectedDay(removedDayIndex)
 
         val removedIds = blockUiModels
