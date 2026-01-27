@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.screen.placecreate.component
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -115,11 +116,13 @@ private fun StepCircle(
 }
 
 @Preview(showBackground = true)
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun StepProgressBarPreview() {
-    StepProgressBar(
-        currentStep = 2,
-        totalSteps = 3,
-        modifier = Modifier.fillMaxWidth(0.5f)
-    )
+    MemoripTheme {
+        StepProgressBar(
+            currentStep = 2,
+            modifier = Modifier.fillMaxWidth(0.5f)
+        )
+    }
 }
