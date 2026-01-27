@@ -7,8 +7,8 @@ import com.andone.memorip.domain.repository.GroupRepository
 import com.andone.memorip.presentation.model.GroupUiModel
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.model.PlanBlockUiModel
-import com.andone.memorip.presentation.model.PlanGroupUiModel
-import com.andone.memorip.presentation.model.PlanPlaceUiModel
+import com.andone.memorip.presentation.screen.plan.model.PlanGroupUiModel
+import com.andone.memorip.presentation.screen.plan.model.PlanPlaceUiModel
 import com.andone.memorip.presentation.model.toTimeBlock
 import com.andone.memorip.presentation.screen.plan.PlanViewModelConstants.DAYS_LIMIT
 import com.andone.memorip.presentation.screen.plan.model.DateUiModel
