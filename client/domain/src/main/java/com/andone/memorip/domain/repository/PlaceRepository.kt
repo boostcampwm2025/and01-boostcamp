@@ -9,10 +9,17 @@ import com.andone.memorip.domain.model.response.PlaceDetailResponse
 import com.andone.memorip.domain.model.response.PlaceImageUploadResponse
 import kotlinx.coroutines.flow.Flow
 import java.io.File
+import java.util.UUID
 
 interface PlaceRepository {
     suspend fun getPlaceDetail(placeId: String): Result<PlaceDetailResponse>
-    fun getPlaceList(): Flow<PagingData<PlaceListItem>>
+    fun getPlaceList(
+        query: String? = null,
+        tagIds: List<UUID>? = null,
+        region1Depth: String? = null,
+        region2Depth: List<String>? = null,
+        sort: List<String>? = null
+    ): Flow<PagingData<PlaceListItem>>
     suspend fun uploadImage(file: File): Result<PlaceImageUploadResponse>
     suspend fun createPlace(place: PlaceCreateRequest): Result<PlaceCreateResponse>
     suspend fun updatePlaceGroups(

@@ -6,8 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface TagService {
-
-    @GET
+    @GET("/api/tags")
     suspend fun getTags(
         @Query("page") page: Int,
         @Query("size") size: Int,

@@ -11,6 +11,7 @@ import com.andone.memorip.domain.model.response.PlaceImageUploadResponse
 import com.andone.memorip.domain.repository.PlaceRepository
 import kotlinx.coroutines.flow.Flow
 import java.io.File
+import java.util.UUID
 import javax.inject.Inject
 
 class PlaceRepositoryImpl @Inject constructor(
@@ -20,8 +21,20 @@ class PlaceRepositoryImpl @Inject constructor(
         return placeRemoteDataSource.getPlaceDetail(placeId = placeId)
     }
 
-    override fun getPlaceList(): Flow<PagingData<PlaceListItem>> {
-        return placeRemoteDataSource.getPlaceList()
+    override fun getPlaceList(
+        query: String?,
+        tagIds: List<UUID>?,
+        region1Depth: String?,
+        region2Depth: List<String>?,
+        sort: List<String>?
+    ): Flow<PagingData<PlaceListItem>> {
+        return placeRemoteDataSource.getPlaceList(
+            query = query,
+            tagIds = tagIds,
+            region1Depth = region1Depth,
+            region2Depth = region2Depth,
+            sort = sort
+        )
     }
 
     override suspend fun uploadImage(file: File): Result<PlaceImageUploadResponse> {

@@ -14,13 +14,20 @@ import com.andone.memorip.presentation.screen.placelist.model.RegionUiModel
 import com.andone.memorip.presentation.screen.placelist.model.SelectedRegionState
 import com.andone.memorip.presentation.screen.placelist.model.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,16 +42,33 @@ class PlaceListViewModel @Inject constructor(
     private val _event = Channel<PlaceListEvent>(capacity = BUFFERED)
     val event = _event.receiveAsFlow()
 
-    init {
-        val rootRegions = repository.loadRegions().map { it.toUiModel() }
+    @OptIn(FlowPreview::class)
+    private val queryFlow = uiState
+        .map { it.query }
+        .debounce(300)
+        .distinctUntilChanged()
 
-        _uiState.update {
-            it.copy(rootRegions = rootRegions)
+    private val filterFlow = uiState
+        .map { state ->
+            Triple(
+                state.selectedTags.mapNotNull { UUID.fromString(it.id) },
+                state.selectedRegionState.parents.firstOrNull()?.name,
+                state.selectedRegionState.child.map { it.name }
+            )
         }
-    }
+        .distinctUntilChanged()
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     val placesPagingFlow =
-        repository.getPlaceList()
+        combine(queryFlow, filterFlow) { query, (tagIds, region1Depth, region2Depth) ->
+            repository.getPlaceList(
+                query = query,
+                tagIds = tagIds,
+                region1Depth = region1Depth,
+                region2Depth = region2Depth
+            )
+        }
+            .flatMapLatest { it }
             .map { pagingData ->
                 pagingData.map { it.toUiModel() }
             }
@@ -56,6 +80,14 @@ class PlaceListViewModel @Inject constructor(
                 pagingData.map { it.toUiModel() }
             }
             .cachedIn(viewModelScope)
+
+    init {
+        val rootRegions = repository.loadRegions().map { it.toUiModel() }
+
+        _uiState.update {
+            it.copy(rootRegions = rootRegions)
+        }
+    }
 
     fun onAction(action: PlaceListAction) {
         when (action) {

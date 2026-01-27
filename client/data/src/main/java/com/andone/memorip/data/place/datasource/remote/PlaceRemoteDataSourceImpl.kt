@@ -25,6 +25,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
+import java.util.UUID
 import javax.inject.Inject
 import kotlin.collections.component1
 import kotlin.collections.component2
@@ -39,7 +40,13 @@ class PlaceRemoteDataSourceImpl @Inject constructor(
         return apiCall { placeService.getPlaceDetail(placeId = placeId) }
     }
 
-    override fun getPlaceList(): Flow<PagingData<PlaceListItem>> =
+    override fun getPlaceList(
+        query: String?,
+        tagIds: List<UUID>?,
+        region1Depth: String?,
+        region2Depth: List<String>?,
+        sort: List<String>?
+    ): Flow<PagingData<PlaceListItem>> =
         Pager(
             config = PagingConfig(
                 pageSize = DEFAULT_PAGE_SIZE,
@@ -49,7 +56,12 @@ class PlaceRemoteDataSourceImpl @Inject constructor(
             pagingSourceFactory = {
                 PlaceListPagingSource(
                     service = placeService,
-                    pageSize = DEFAULT_PAGE_SIZE
+                    pageSize = DEFAULT_PAGE_SIZE,
+                    sort = sort,
+                    query = query,
+                    tagIds = tagIds,
+                    region1Depth = region1Depth,
+                    region2Depth = region2Depth
                 )
             }
         ).flow
