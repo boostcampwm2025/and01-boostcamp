@@ -51,6 +51,7 @@
 
     <!-- SelectGroupScreen -->
     <string name="select_group_back_button_description">뒤로 가기 버튼</string>
+    <string name="select_group_check_button_description">그룹 선택 확인 버튼</string>
     <string name="select_group_title">그룹 선택</string>
     <string name="select_group_add_to_my_group_title">내 그룹에 추가</string>
     <string name="select_group_dialog_title">그룹 추가</string>

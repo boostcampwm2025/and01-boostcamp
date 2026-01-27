@@ -2,28 +2,22 @@ package com.andone.memorip.presentation.screen.plan.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.IntOffset
+import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.theme.MemoripAlpha
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.theme.memoripShapes
-import kotlin.math.roundToInt
-import com.andone.memorip.presentation.R
-import com.andone.memorip.presentation.theme.MemoripAlpha
 
 @Composable
 fun DayChip(
@@ -39,6 +33,11 @@ fun DayChip(
         isDeleteMode && isDeletedTarget -> MemoripTheme.colors.error
         !isDeleteMode && selected -> MemoripTheme.colors.primary
         else -> MemoripTheme.colors.primaryContainer
+    }
+    val textColor = when {
+        isDeleteMode && isDeletedTarget -> MemoripTheme.colors.white
+        !isDeleteMode && selected -> MemoripTheme.colors.white
+        else -> MemoripTheme.colors.onSurface
     }
 
     key(isDeleteMode) {
@@ -58,7 +57,11 @@ fun DayChip(
                 ),
             contentAlignment = Alignment.Center
         ) {
-            Text(text = stringResource(id = R.string.plan_day_format, day))
+            Text(
+                text = stringResource(id = R.string.plan_day_format, day),
+                color = textColor,
+                style = MemoripTheme.typography.titleMedium14
+            )
         }
     }
 }

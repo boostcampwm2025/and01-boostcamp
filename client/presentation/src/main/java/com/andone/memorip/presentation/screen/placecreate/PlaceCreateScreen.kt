@@ -42,7 +42,7 @@ import com.andone.memorip.presentation.component.MemoripImage
 import com.andone.memorip.presentation.component.MemoripInputBox
 import com.andone.memorip.presentation.model.LocationUiModel
 import com.andone.memorip.presentation.model.TagUiModel
-import com.andone.memorip.presentation.screen.grouplist.model.GroupUiModel
+import com.andone.memorip.presentation.model.GroupUiModel
 import com.andone.memorip.presentation.screen.placecreate.PlaceCreateScreenConstant.CONTENT_MAX_LENGTH
 import com.andone.memorip.presentation.screen.placecreate.PlaceCreateScreenConstant.IMAGE_RATIO
 import com.andone.memorip.presentation.screen.placecreate.PlaceCreateScreenConstant.TITLE_MAX_LENGTH
@@ -248,7 +248,6 @@ private fun ContentSection(
             valueMaxLength = TITLE_MAX_LENGTH,
             placeholder = stringResource(R.string.place_create_title_input),
             onValueChange = onTitleChange,
-            textStyle = MemoripTheme.typography.bodyLarge,
             singleLine = true,
             showValueLength = false,
             height = OutlinedTextFieldDefaults.MinHeight
@@ -337,7 +336,7 @@ private fun PublicCheckSection(
             Text(
                 text = stringResource(R.string.place_create_open_to_everyone),
                 color = MemoripTheme.colors.gray1,
-                style = MemoripTheme.typography.hint1
+                style = MemoripTheme.typography.bodyMedium14
             )
         }
 

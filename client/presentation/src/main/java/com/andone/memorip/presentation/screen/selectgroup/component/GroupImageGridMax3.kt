@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -69,7 +68,7 @@ private fun EmptyImageState(
     ) {
         Text(
             text = stringResource(R.string.group_image_grid_empty_message),
-            style = MemoripTheme.typography.bodySmall,
+            style = MemoripTheme.typography.bodyBold14,
             color = MemoripTheme.colors.onSurface
         )
     }

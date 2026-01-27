@@ -1,8 +1,9 @@
 package com.andone.memorip.presentation.screen.grouplist
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -18,7 +19,7 @@ import com.andone.memorip.presentation.component.LoadingIndicatorScreen
 import com.andone.memorip.presentation.screen.grouplist.component.GroupListTopBar
 import com.andone.memorip.presentation.screen.grouplist.model.GroupListAction
 import com.andone.memorip.presentation.screen.grouplist.model.GroupListEvent
-import com.andone.memorip.presentation.screen.grouplist.model.GroupUiModel
+import com.andone.memorip.presentation.model.GroupUiModel
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
@@ -69,9 +70,13 @@ fun GroupListScreenContent(
         contentWindowInsets = WindowInsets()
     ) { innerPadding ->
         LazyColumn(
-            modifier = Modifier
-                .padding(paddingValues = innerPadding)
-                .padding(horizontal = MemoripPadding.AppHorizontalPadding),
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(
+                start = MemoripPadding.AppHorizontalPadding,
+                top = innerPadding.calculateTopPadding(),
+                end = MemoripPadding.AppHorizontalPadding,
+                bottom = innerPadding.calculateBottomPadding()
+            ),
             verticalArrangement = Arrangement.spacedBy(space = MemoripPadding.PaddingXSmall)
         ) {
             items(items = groups) { group ->

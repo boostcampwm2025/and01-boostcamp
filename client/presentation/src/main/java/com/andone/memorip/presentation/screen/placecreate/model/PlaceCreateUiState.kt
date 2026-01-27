@@ -3,7 +3,7 @@ package com.andone.memorip.presentation.screen.placecreate.model
 import android.net.Uri
 import com.andone.memorip.presentation.model.LocationUiModel
 import com.andone.memorip.presentation.model.TagUiModel
-import com.andone.memorip.presentation.screen.grouplist.model.GroupUiModel
+import com.andone.memorip.presentation.model.GroupUiModel
 
 data class PlaceCreateUiState(
     var title: String = "",

@@ -40,7 +40,7 @@ fun RegionSelectBottomSheet(
         Text(
             text = stringResource(R.string.place_list_bottom_sheet_title),
             modifier = Modifier.align(Alignment.CenterHorizontally),
-            style = MemoripTheme.typography.title1
+            style = MemoripTheme.typography.headlineBold20
         )
 
         RegionPathRow(
@@ -69,7 +69,7 @@ fun RegionSelectBottomSheet(
         ) {
             Text(
                 text = stringResource(R.string.place_list_bottom_sheet_confirm),
-                style = MemoripTheme.typography.title1
+                style = MemoripTheme.typography.labelBold16
             )
         }
     }

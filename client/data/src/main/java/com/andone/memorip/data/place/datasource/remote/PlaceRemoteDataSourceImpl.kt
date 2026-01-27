@@ -6,6 +6,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.andone.memorip.data.place.datasource.PlaceListPagingSource
 import com.andone.memorip.data.place.datasource.PlaceService
+import com.andone.memorip.data.place.model.PlaceGroupsUpdateRequest
 import com.andone.memorip.data.util.apiCall
 import com.andone.memorip.domain.model.PlaceListItem
 import com.andone.memorip.domain.model.Region
@@ -76,14 +77,24 @@ class PlaceRemoteDataSourceImpl @Inject constructor(
         return apiCall { placeService.createPlace(place) }
     }
 
+    override suspend fun updatePlaceGroups(
+        placeId: String,
+        addGroupIds: List<String>,
+        removeGroupIds: List<String>
+    ): Result<Unit> {
+        val request = PlaceGroupsUpdateRequest(
+            addGroupIds = addGroupIds,
+            removeGroupIds = removeGroupIds
+        )
+        return apiCall { placeService.updatePlaceGroups(placeId, request) }
+    }
+
     private fun parseRegionNode(
         element: JsonElement,
         parent: Region? = null,
         level: Int = 1
     ): List<Region> {
-
         return when (element) {
-
             is JsonObject -> {
                 element.map { (key, value) ->
                     val region = Region(
@@ -105,7 +116,6 @@ class PlaceRemoteDataSourceImpl @Inject constructor(
             is JsonArray -> {
                 element.mapNotNull { item ->
                     when (item) {
-
                         is JsonPrimitive ->
                             if (item.isString) {
                                 Region(
@@ -113,7 +123,7 @@ class PlaceRemoteDataSourceImpl @Inject constructor(
                                     parent = parent,
                                     level = level
                                 )
-                            } else null
+                            } else { null }
 
                         is JsonObject ->
                             parseRegionNode(
@@ -136,7 +146,7 @@ class PlaceRemoteDataSourceImpl @Inject constructor(
                             level = level
                         )
                     )
-                } else emptyList()
+                } else { emptyList() }
             }
         }
     }

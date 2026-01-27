@@ -103,7 +103,7 @@ private fun NetworkStatusBannerContent(
                         stringResource(R.string.network_status_connected)
                 },
                 color = MemoripTheme.colors.white,
-                style = MemoripTheme.typography.bodySmall
+                style = MemoripTheme.typography.bodyMedium14
             )
         }
     }

@@ -9,7 +9,7 @@ import com.andone.memorip.domain.model.PlaceListItem
 import kotlinx.coroutines.flow.Flow
 
 interface GroupRemoteDataSource {
-    suspend fun getMyGroups(page: Int, size: Int): Result<List<GroupListResponse>>
+    suspend fun getMyGroups(page: Int, size: Int, placeId: String? = null): Result<List<GroupListResponse>>
     suspend fun getPublicGroups(page: Int, size: Int): Result<List<GroupListResponse>>
     suspend fun getGroupById(groupId: String): Result<Group>
     suspend fun createGroup(request: GroupCreateRequest): Result<Group>

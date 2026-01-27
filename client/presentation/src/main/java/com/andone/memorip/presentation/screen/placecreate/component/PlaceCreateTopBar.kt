@@ -29,7 +29,13 @@ fun PlaceCreateTopBar(
     }
 
     CenterAlignedTopAppBar(
-        title = { Text(text = topBarText) },
+        title = {
+            Text(
+                text = topBarText,
+                style = MemoripTheme.typography.headlineBold20,
+                color = MemoripTheme.colors.onSurface
+            )
+        },
         navigationIcon = {
             IconButton(onClick = onBackClick) {
                 Icon(

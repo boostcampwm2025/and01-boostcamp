@@ -3,7 +3,11 @@ package com.andone.memorip
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
@@ -22,6 +26,7 @@ import com.andone.memorip.presentation.component.MainBottomBar
 import com.andone.memorip.presentation.component.MemoripSnackbar
 import com.andone.memorip.presentation.component.NetworkStatusBanner
 import com.andone.memorip.presentation.observer.NetworkViewModel
+import com.andone.memorip.presentation.theme.MemoripHeight
 import com.andone.memorip.presentation.util.collectWithLifecycle
 import com.andone.memorip.presentation.util.snackbar.SnackBarManager
 
@@ -34,6 +39,11 @@ fun MemoripApp(
     val context = LocalContext.current
     val networkStatus by networkViewModel.networkStatus.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
+    val systemNavigationBarPadding = WindowInsets.navigationBars
+        .asPaddingValues()
+        .calculateBottomPadding()
+    val snackbarBottomPadding = MemoripHeight.bottomBar + systemNavigationBarPadding
+
 
     @SuppressLint("LocalContextGetResourceValueCall")
     snackbarManager.message.collectWithLifecycle { event ->
@@ -56,9 +66,6 @@ fun MemoripApp(
                 onFabClick = navigator::navigateToPlaceCreate
             )
         },
-        snackbarHost = {
-            MemoripSnackbar(hostState = snackbarHostState)
-        },
         contentWindowInsets = WindowInsets()
     ) { innerPadding ->
         Box(modifier = Modifier.fillMaxSize()) {
@@ -70,6 +77,16 @@ fun MemoripApp(
                 status = networkStatus,
                 modifier = Modifier.align(Alignment.TopCenter)
             )
+            Box(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = snackbarBottomPadding)
+            ) {
+                MemoripSnackbar(
+                    hostState = snackbarHostState,
+                    modifier = Modifier.navigationBarsPadding()
+                )
+            }
         }
     }
 }

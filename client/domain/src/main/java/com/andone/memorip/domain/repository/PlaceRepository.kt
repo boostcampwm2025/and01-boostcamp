@@ -15,5 +15,10 @@ interface PlaceRepository {
     fun getPlaceList(): Flow<PagingData<PlaceListItem>>
     suspend fun uploadImage(file: File): Result<PlaceImageUploadResponse>
     suspend fun createPlace(place: PlaceCreateRequest): Result<PlaceCreateResponse>
+    suspend fun updatePlaceGroups(
+        placeId: String,
+        addGroupIds: List<String>,
+        removeGroupIds: List<String>
+    ): Result<Unit>
     fun loadRegions(): List<Region>
 }
