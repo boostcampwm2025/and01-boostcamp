@@ -47,4 +47,12 @@ interface PlaceService {
         @Path("placeId") placeId: String,
         @Body request: PlaceGroupsUpdateRequest
     ): ApiResult<Unit>
+
+    @GET("/api/groups/{groupId}/places")
+    suspend fun getPlaceByGroupId(
+        @Path("groupId") groupId: String,
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+        @Query("sort") sort: List<String>? = listOf("id,desc"),
+    ): ApiResult<List<PlaceListItemResponse>>
 }

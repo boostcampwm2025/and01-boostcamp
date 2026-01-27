@@ -7,6 +7,7 @@ import androidx.paging.PagingData
 import com.andone.memorip.data.place.datasource.PlaceListPagingSource
 import com.andone.memorip.data.place.datasource.PlaceService
 import com.andone.memorip.data.place.model.PlaceGroupsUpdateRequest
+import com.andone.memorip.data.place.model.PlaceListItemResponse
 import com.andone.memorip.data.util.apiCall
 import com.andone.memorip.domain.model.PlaceListItem
 import com.andone.memorip.domain.model.Region
@@ -26,10 +27,6 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import javax.inject.Inject
-import kotlin.collections.component1
-import kotlin.collections.component2
-import kotlin.collections.map
-import kotlin.collections.mapNotNull
 
 class PlaceRemoteDataSourceImpl @Inject constructor(
     private val placeService: PlaceService,
@@ -123,7 +120,9 @@ class PlaceRemoteDataSourceImpl @Inject constructor(
                                     parent = parent,
                                     level = level
                                 )
-                            } else { null }
+                            } else {
+                                null
+                            }
 
                         is JsonObject ->
                             parseRegionNode(
@@ -146,9 +145,19 @@ class PlaceRemoteDataSourceImpl @Inject constructor(
                             level = level
                         )
                     )
-                } else { emptyList() }
+                } else {
+                    emptyList()
+                }
             }
         }
+    }
+
+    override suspend fun getPlaceByGroupId(
+        groupId: String,
+        page: Int,
+        size: Int
+    ): Result<List<PlaceListItemResponse>> {
+        return apiCall { placeService.getPlaceByGroupId(groupId = groupId, page, size) }
     }
 
     companion object {
