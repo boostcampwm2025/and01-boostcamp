@@ -17,17 +17,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.R
-import com.andone.memorip.presentation.theme.MemoripLineWidth
+import com.andone.memorip.presentation.screen.placecreate.model.PlaceCreateStep
 import com.andone.memorip.presentation.theme.MemoripIconSize
+import com.andone.memorip.presentation.theme.MemoripLineWidth
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
 
 @Composable
 fun StepProgressBar(
-    currentStep: Int,
-    totalSteps: Int,
+    currentStep: Int?,
     modifier: Modifier = Modifier
 ) {
+    val totalSteps = PlaceCreateStep.entries.count { it.stepIndex != null }
+    val currentStep = currentStep ?: totalSteps
+
     val activeColor = MemoripTheme.colors.primary
     val inactiveColor = MemoripTheme.colors.lightGray
 

@@ -139,8 +139,7 @@ fun PlaceCreateMainStep(
                 horizontalArrangement = Arrangement.Center
             ) {
                 StepProgressBar(
-                    currentStep = step.stepIndex ?: TOTAL_STEP_SIZE,
-                    totalSteps = TOTAL_STEP_SIZE,
+                    currentStep = step.stepIndex,
                     modifier = Modifier.fillMaxWidth(BAR_WIDTH_FRACTION)
                 )
             }
