@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.screen.selectlocation.component
 
+import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -28,6 +29,7 @@ fun LocationItem(
     ) {
         Text(
             text = location.name,
+            color = MemoripTheme.colors.onSurface,
             style = MemoripTheme.typography.bodyBold16
         )
         Text(
@@ -40,18 +42,21 @@ fun LocationItem(
 }
 
 @Preview(showBackground = true)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun LocationItemPreview() {
-    LocationItem(
-        location = LocationUiModel(
-            id = "",
-            name = "국밥집",
-            category = "음식",
-            address = "서울시 이쪽구 저쪽동",
-            roadAddress = "서울시 이쪽로 저쪽번지",
-            latitude = 0.0,
-            longitude = 0.0,
-        ),
-        onClick = {}
-    )
+    MemoripTheme {
+        LocationItem(
+            location = LocationUiModel(
+                id = "",
+                name = "국밥집",
+                category = "음식",
+                address = "서울시 이쪽구 저쪽동",
+                roadAddress = "서울시 이쪽로 저쪽번지",
+                latitude = 0.0,
+                longitude = 0.0,
+            ),
+            onClick = {}
+        )
+    }
 }

@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.screen.selectlocation.component
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -47,9 +48,10 @@ fun LocationSelectionButton(
     }
 }
 
-@Preview(showBackground = true)
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun LocationSelectionButtonPreview() {
+private fun LocationSelectionButtonPreview() {
     MemoripTheme {
         LocationSelectionButton(
             onClick = {},
