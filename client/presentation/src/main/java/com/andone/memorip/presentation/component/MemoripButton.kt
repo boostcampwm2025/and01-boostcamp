@@ -19,7 +19,7 @@ fun MemoripButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true
 ) {
-    val textColor = if (enabled) MemoripTheme.colors.onSurface else MemoripTheme.colors.gray
+    val textColor = if (enabled) MemoripTheme.colors.white else MemoripTheme.colors.gray
 
     Card(
         onClick = onClick,

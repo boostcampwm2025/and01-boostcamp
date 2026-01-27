@@ -29,8 +29,9 @@ fun LocationSelectionButton(
         enabled = enabled,
         colors = ButtonDefaults.buttonColors(
             containerColor = MemoripTheme.colors.primary,
-            contentColor = MemoripTheme.colors.onSurface,
-            disabledContainerColor = MemoripTheme.colors.primaryContainer
+            contentColor = MemoripTheme.colors.white,
+            disabledContainerColor = MemoripTheme.colors.lightGray,
+            disabledContentColor = MemoripTheme.colors.gray
         ),
         elevation = ButtonDefaults.buttonElevation(
             defaultElevation = MemoripShadow.Medium,
