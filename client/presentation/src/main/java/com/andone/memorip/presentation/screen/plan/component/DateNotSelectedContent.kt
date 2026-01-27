@@ -14,7 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -29,7 +28,6 @@ import com.andone.memorip.presentation.screen.plan.component.DateNotSelectedCont
 import com.andone.memorip.presentation.screen.plan.component.DateNotSelectedContentConstant.ROTATE_DEGREE
 import com.andone.memorip.presentation.screen.plan.component.DateNotSelectedContentDimen.ICON_BOX_SIZE
 import com.andone.memorip.presentation.screen.plan.component.DateNotSelectedContentDimen.ICON_SIZE
-import com.andone.memorip.presentation.screen.plan.component.DateNotSelectedContentDimen.INNER_BOX_ELEVATION
 import com.andone.memorip.presentation.screen.plan.component.DateNotSelectedContentDimen.INNER_BOX_SIZE
 import com.andone.memorip.presentation.theme.MemoripLineWidth
 import com.andone.memorip.presentation.theme.MemoripPadding

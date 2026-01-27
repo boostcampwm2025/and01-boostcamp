@@ -1,8 +1,10 @@
 package com.andone.memorip.presentation.screen.plan
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Scaffold
@@ -127,7 +129,12 @@ fun PlanScreenContents(
     ) { innerPadding ->
 
         if (state.date.startDay == null) {
-            DateNotSelectedContent(onSelectDateClick = { showCalendar = true })
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ){
+                DateNotSelectedContent(onSelectDateClick = { showCalendar = true })
+            }
         } else {
             Column(modifier = Modifier.padding(paddingValues = innerPadding)) {
                 DateSection(
