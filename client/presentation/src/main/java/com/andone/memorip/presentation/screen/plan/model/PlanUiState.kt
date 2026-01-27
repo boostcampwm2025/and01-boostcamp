@@ -5,12 +5,14 @@ import com.andone.memorip.presentation.model.GroupUiModel
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.model.PlanBlockUiModel
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 data class PlanUiState(
-    val groups: ImmutableList<GroupUiModel>,
-    val selectedGroup: GroupUiModel,
-    val places: ImmutableList<Place>,
-    val blocks: List<TimeBlock>,
+    val groups: ImmutableList<GroupUiModel> = persistentListOf(),
+    val selectedGroup: GroupUiModel? = null,
+    val places: ImmutableList<Place> = persistentListOf(),
+    val blocks: List<TimeBlock> = emptyList(),
     val blockUiModels: Map<String, PlanBlockUiModel> = emptyMap(),
-    val date: DateUiModel = DateUiModel()
+    val date: DateUiModel = DateUiModel(),
+    val isLoading: Boolean = false
 )
