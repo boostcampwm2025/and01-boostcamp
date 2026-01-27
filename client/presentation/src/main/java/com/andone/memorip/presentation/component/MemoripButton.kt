@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.component
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,7 +19,7 @@ fun MemoripButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true
 ) {
-    val textColor = if (enabled) MemoripTheme.colors.white else MemoripTheme.colors.gray
+    val textColor = if (enabled) MemoripTheme.colors.onSurface else MemoripTheme.colors.gray
 
     Card(
         onClick = onClick,
@@ -39,9 +40,10 @@ fun MemoripButton(
     }
 }
 
-@Preview(showBackground = true)
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun MemoripButtonPreview() {
+private fun MemoripButtonPreview() {
     MemoripTheme {
         Column {
             MemoripButton(

@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.screen.placecreate.component
 
+import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -55,8 +56,8 @@ fun SelectRow(
         enabled = location == null,
         shape = MemoripTheme.shapes.roundedSmall,
         colors = CardDefaults.cardColors(
-            containerColor = MemoripTheme.colors.gray4,
-            disabledContainerColor = MemoripTheme.colors.gray4
+            containerColor = MemoripTheme.colors.primaryContainer,
+            disabledContainerColor = MemoripTheme.colors.primaryContainer
         ),
         border = BorderStroke(
             width = MemoripLineWidth.Thin,
@@ -84,7 +85,7 @@ fun SelectRow(
                         elevation = MemoripShadow.Small,
                         shape = CircleShape,
                     )
-                    .background(MemoripTheme.colors.white, CircleShape),
+                    .background(MemoripTheme.colors.background, CircleShape),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
@@ -128,13 +129,16 @@ fun SelectRow(
 }
 
 @Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun SelectRowPreview() {
-    SelectRow(
-        label = "태그",
-        onClick = { },
-        value = "맛집",
-        leadingIcon = painterResource(R.drawable.ic_tag),
-        trailingIcon = painterResource(R.drawable.ic_chevron_forward)
-    )
+    MemoripTheme {
+        SelectRow(
+            label = "태그",
+            onClick = { },
+            value = "맛집",
+            leadingIcon = painterResource(R.drawable.ic_tag),
+            trailingIcon = painterResource(R.drawable.ic_chevron_forward)
+        )
+    }
 }
