@@ -136,9 +136,8 @@
     <string name="place_list_bottom_sheet_confirm">확인</string>
     <string name="place_list_comma_separator">, </string>
     <string name="place_list_add_tag">태그 추가</string>
-    <string name="place_list_no_address_info">위치 정보가 없습니다</string>
+    <string name="place_list_no_address_title">사용자 지정</string>
     <string name="place_list_no_title">제목 없음</string>
-
 
     <!-- PlanScreen -->
     <string name="plan_location_content_description">위치</string>
@@ -162,7 +161,6 @@
     <string name="login_user_profile_image">유저 프로필 이미지</string>
     <string name="login_add_account">+ 계정을 추가하세요</string>
     <string name="login_show_places">올린 장소들</string>
-
 
     <!-- PlanScreen -->
     <string name="plan_time_axis_hour">%1$02d:00</string>

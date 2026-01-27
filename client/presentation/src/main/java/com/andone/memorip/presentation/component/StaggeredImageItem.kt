@@ -82,7 +82,7 @@ fun StaggeredImageItem(
                 Spacer(modifier = Modifier.height(height = MemoripPadding.PaddingXXSmall))
                 PlaceLocationText(
                     address = location?.takeIf { it.isNotBlank() }
-                        ?: stringResource(R.string.place_list_no_address_info)
+                        ?: stringResource(R.string.place_list_no_address_title)
                 )
             }
         }
