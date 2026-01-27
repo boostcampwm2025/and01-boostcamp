@@ -38,6 +38,7 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.painterResource
@@ -53,6 +54,7 @@ import com.andone.memorip.navigation.PlaceDetail
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.LoadingIndicatorScreen
 import com.andone.memorip.presentation.component.TagChipRow
+import com.andone.memorip.presentation.model.LocationUiModel
 import com.andone.memorip.presentation.screen.placedetail.PlaceDetailScreenConstants.BOTTOM_ALPHA
 import com.andone.memorip.presentation.screen.placedetail.PlaceDetailScreenConstants.BOTTOM_RATIO
 import com.andone.memorip.presentation.screen.placedetail.PlaceDetailScreenConstants.MIDDLE_ALPHA
@@ -75,6 +77,7 @@ import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
+import com.andone.memorip.presentation.util.openMapOrAskApp
 import com.andone.memorip.presentation.util.collectWithLifecycle
 import com.andone.memorip.presentation.util.toDp
 import com.andone.memorip.presentation.util.toPx
@@ -173,6 +176,7 @@ private fun PlaceDetailScreen(
 ) {
     var imageDialogExpanded by remember { mutableStateOf(value = false) }
     var selectedImageUrl by remember { mutableStateOf(value = "") }
+    val context = LocalContext.current
 
     Scaffold(
         modifier = modifier,
@@ -195,6 +199,11 @@ private fun PlaceDetailScreen(
                 .fillMaxSize()
                 .background(color = MemoripTheme.colors.white)
                 .padding(bottom = innerPadding.calculateBottomPadding()),
+            onNavigateToExternalMap = { locationUiModel ->
+                context.openMapOrAskApp(
+                    location = locationUiModel,
+                )
+            },
         )
     }
 
@@ -214,7 +223,8 @@ private fun PlaceDetailScreen(
 private fun PlaceDetailContent(
     place: PlaceUiModel,
     onImageClick: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigateToExternalMap: (LocationUiModel) -> Unit = {}
 ) {
     val density = LocalDensity.current
     val pagerState = rememberPagerState(pageCount = { place.imageUrls.size })
@@ -318,6 +328,19 @@ private fun PlaceDetailContent(
                 location = place.locationName,
                 latitude = place.latitude,
                 longitude = place.longitude,
+                onNavigateToExternalMap = {
+                    onNavigateToExternalMap(
+                        LocationUiModel(
+                            id = "",
+                            name = place.locationName,
+                            category = "",
+                            address = place.locationName,
+                            roadAddress = "",
+                            latitude = place.latitude,
+                            longitude = place.longitude
+                        )
+                    )
+                }
             )
             PlaceDetailInfoSection(
                 infoString = place.groupName,
@@ -368,6 +391,7 @@ private fun PlaceDetailContentPreview() {
         PlaceDetailContent(
             place = PlaceUiModel(),
             onImageClick = {},
+            onNavigateToExternalMap = {}
         )
     }
 }
