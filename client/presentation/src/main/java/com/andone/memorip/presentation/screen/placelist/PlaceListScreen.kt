@@ -164,7 +164,8 @@ fun PlaceListScreenContent(
                 currentRegionList = state.currentRegionList,
                 selectedRegionState = state.selectedRegionState,
                 onConfirmClick = { showRegionBottomSheet = false },
-                onRegionChipClick = { onAction(PlaceListAction.OnRegionChipClick(region = it)) }
+                onRegionChipClick = { onAction(PlaceListAction.OnRegionChipClick(region = it)) },
+                onResetClick = { onAction(PlaceListAction.ClearRegionFilter) }
             )
         }
     }

@@ -33,7 +33,7 @@ import com.andone.memorip.presentation.theme.memoripShapes
 import com.andone.memorip.presentation.util.DummyData
 
 private object TagSelectBottomSheetConstant {
-    val TAG_LIST_HEIGHT = 104.dp
+    val TAG_LIST_HEIGHT = 120.dp
 }
 
 @Composable

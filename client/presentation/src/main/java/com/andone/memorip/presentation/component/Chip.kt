@@ -96,7 +96,7 @@ fun ClickableChip(
     radius: Dp = StaticChipDimen.RADIUS,
     isSelected: Boolean = false,
     colors: ChipColors = ChipColors.Default,
-    textStyle: TextStyle = MemoripTheme.typography.bodyBold12,
+    textStyle: TextStyle = MemoripTheme.typography.bodyBold14,
     elevation: Dp = 0.dp,
     onClick: () -> Unit = {}
 ) {

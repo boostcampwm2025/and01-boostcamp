@@ -138,6 +138,7 @@
     <string name="place_list_add_tag">태그 추가</string>
     <string name="place_list_no_address_info">위치 정보가 없습니다</string>
     <string name="place_list_no_title">제목 없음</string>
+    <string name="place_list_reset">초기화</string>
 
 
     <!-- PlanScreen -->
