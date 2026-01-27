@@ -54,11 +54,7 @@ class SelectCategoryViewModel @Inject constructor(
             }
 
             is SelectCategoryAction.OnConfirmClick -> {
-                _event.trySend(
-                    element = SelectCategoryEvent.SelectCategory(
-                        categories = _uiState.value.categories.filter { it.id in _uiState.value.checkedSet }
-                    )
-                )
+                _event.trySend(element = SelectCategoryEvent.SelectCategory(categories = _uiState.value.checkedCategories))
             }
 
             SelectCategoryAction.OnDialogCancelClick -> {
@@ -100,15 +96,18 @@ class SelectCategoryViewModel @Inject constructor(
     }
 
     private fun updateChecked(tag: TagUiModel) {
-        val checkedSet = if (tag.id in _uiState.value.checkedSet) {
-            _uiState.value.checkedSet - tag.id
-        } else {
-            if (_uiState.value.checkedSet.size >= MAX_SELECTABLE_COUNT) {
-                _event.trySend(element = SelectCategoryEvent.ShowSnackBar(message = SelectCategoryError.MaxCategoryOverError))
-                return
+        _uiState.update {
+            val newList = if (tag in it.checkedCategories) {
+                it.checkedCategories - tag
+            } else {
+                if (it.checkedCategories.size >= MAX_SELECTABLE_COUNT) {
+                    _event.trySend(SelectCategoryEvent.ShowSnackBar(SelectCategoryError.MaxCategoryOverError))
+                    return
+                }
+                it.checkedCategories + tag
             }
-            _uiState.value.checkedSet + tag.id
+
+            it.copy(checkedCategories = newList)
         }
-        _uiState.value = _uiState.value.copy(checkedSet = checkedSet.toImmutableSet())
     }
 }
