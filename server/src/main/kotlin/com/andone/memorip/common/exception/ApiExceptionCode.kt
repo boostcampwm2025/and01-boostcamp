@@ -20,7 +20,6 @@ enum class CommonExceptionCode(
 
     // 도메인 별로
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다."),
-
     PLACE_NOT_FOUND(HttpStatus.NOT_FOUND, "장소를 찾을 수 없습니다."),
 
     GROUP_NOT_FOUND(HttpStatus.NOT_FOUND, "그룹을 찾을 수 없습니다."),
@@ -28,4 +27,5 @@ enum class CommonExceptionCode(
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "인증에 실패했습니다."),
     GROUP_FORBIDDEN(HttpStatus.FORBIDDEN, "해당 그룹에 대한 권한이 없습니다."),
     GROUP_CANNOT_DELETE_DEFAULT(HttpStatus.BAD_REQUEST, "기본 그룹은 삭제할 수 없습니다."),
+    TAG_CONFLICT(HttpStatus.CONFLICT, "이미 존재하는 태그명입니다")
 }
