@@ -177,6 +177,8 @@
     <string name="plan_empty_day">날짜를 선택해주세요</string>
     <string name="plan_confirm">확인</string>
     <string name="plan_date_range_format">%1$s ~ %2$s</string>
+    <string name="plan_group_thumbnail_description">그룹 썸네일 이미지</string>
+    <string name="plan_group_select_btn_description">그룹 선택 버튼</string>
 
     <!-- PlacePickerItem -->
     <string name="place_picker_item_image_description">장소에 대한 이미지</string>
