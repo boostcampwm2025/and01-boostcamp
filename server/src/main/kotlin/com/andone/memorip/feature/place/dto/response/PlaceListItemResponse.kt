@@ -11,6 +11,6 @@ data class PlaceListItemResponse(
     val address: String,
     val imageUrl: String?,
 
-    @JsonProperty("isPublic")
+    @get:JsonProperty("isPublic")
     val isPublic: Boolean
 )
