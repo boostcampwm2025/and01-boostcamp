@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.screen.placedetail
 
+import androidx.activity.compose.BackHandler
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.slideInHorizontally
@@ -8,8 +9,8 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
@@ -24,6 +25,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -45,7 +47,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.activity.compose.BackHandler
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
@@ -98,6 +99,7 @@ private object PlaceDetailScreenDimens {
 fun PlaceDetailScreen(
     route: PlaceDetail,
     onNavigateBack: () -> Unit,
+    onNavigateGroupList: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PlaceDetailViewModel = hiltViewModel<PlaceDetailViewModel, PlaceDetailViewModel.Factory>(
         creationCallback = { factory ->
@@ -124,6 +126,10 @@ fun PlaceDetailScreen(
 
             PlaceDetailEvent.PlaceAddToGroup -> {
                 currentStep = PlaceDetailScreenStep.PlaceDetail
+            }
+
+            PlaceDetailEvent.NavigateToGroupList -> {
+                onNavigateGroupList()
             }
         }
     }
@@ -191,6 +197,7 @@ private fun PlaceDetailScreen(
                 imageDialogExpanded = true
                 selectedImageUrl = it
             },
+            onAction = onAction,
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = MemoripTheme.colors.white)
@@ -214,6 +221,7 @@ private fun PlaceDetailScreen(
 private fun PlaceDetailContent(
     place: PlaceUiModel,
     onImageClick: (String) -> Unit,
+    onAction: (PlaceDetailAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val density = LocalDensity.current
@@ -313,15 +321,19 @@ private fun PlaceDetailContent(
                 .padding(horizontal = MemoripPadding.PaddingMedium),
             verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceMedium)
         ) {
-            ContentCard(content = place.content)
+            if (place.content.isNotEmpty()) {
+                ContentCard(content = place.content)
+            }
             LocationCard(
                 location = place.locationName,
                 latitude = place.latitude,
                 longitude = place.longitude,
             )
+            /** TODO 로그인 기능 구현 시 나의 장소만 그룹 보이도록 수정하기 */
             PlaceDetailInfoSection(
                 infoString = place.groupName,
                 iconRes = R.drawable.ic_folder,
+                onAction = onAction,
                 modifier = Modifier.padding(start = MemoripPadding.PaddingXSmall)
             )
         }
@@ -332,21 +344,26 @@ private fun PlaceDetailContent(
 private fun PlaceDetailInfoSection(
     infoString: String,
     @DrawableRes iconRes: Int,
+    onAction: (PlaceDetailAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Row(
+    Surface(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXXSmall),
-        verticalAlignment = Alignment.CenterVertically
+        onClick = { onAction(PlaceDetailAction.GroupClick) }
     ) {
-        Icon(
-            painter = painterResource(iconRes),
-            contentDescription = null
-        )
-        Text(
-            text = infoString,
-            style = MemoripTheme.typography.bodyMedium14
-        )
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXXSmall),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                painter = painterResource(iconRes),
+                contentDescription = null
+            )
+            Text(
+                text = infoString,
+                style = MemoripTheme.typography.bodyMedium16
+            )
+        }
     }
 }
 
@@ -367,6 +384,7 @@ private fun PlaceDetailContentPreview() {
     MemoripTheme {
         PlaceDetailContent(
             place = PlaceUiModel(),
+            onAction = {},
             onImageClick = {},
         )
     }

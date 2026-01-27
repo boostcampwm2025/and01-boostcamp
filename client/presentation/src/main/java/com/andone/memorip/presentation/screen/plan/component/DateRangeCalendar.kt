@@ -1,6 +1,5 @@
 package com.andone.memorip.presentation.screen.plan.component
 
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DateRangePicker
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -9,12 +8,12 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.andone.memorip.presentation.util.millisToLocalDate
-import java.time.LocalDate
+import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.theme.MemoripTheme
-import com.andone.memorip.presentation.util.DateFormatters
-import java.time.ZoneId
+import com.andone.memorip.presentation.util.millisToLocalDate
+import java.time.LocalDate
+import java.time.ZoneOffset
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -22,15 +21,13 @@ fun DateRangeCalendar(
     initialStartDate: LocalDate?,
     initialEndDate: LocalDate?,
     onConfirm: (LocalDate, LocalDate) -> Unit,
-    onDismiss: () -> Unit,
+    onDismiss: () -> Unit
 ) {
     val state = rememberDateRangePickerState(
-        initialSelectedStartDateMillis = initialStartDate?.atStartOfDay(
-            ZoneId.systemDefault()
-        )?.toInstant()?.toEpochMilli(),
-        initialSelectedEndDateMillis = initialEndDate?.atStartOfDay(
-            ZoneId.systemDefault()
-        )?.toInstant()?.toEpochMilli()
+        initialSelectedStartDateMillis = initialStartDate?.atStartOfDay(ZoneOffset.UTC)?.toInstant()
+            ?.toEpochMilli(),
+        initialSelectedEndDateMillis = initialEndDate?.atStartOfDay(ZoneOffset.UTC)?.toInstant()
+            ?.toEpochMilli()
     )
 
     DatePickerDialog(
@@ -58,6 +55,19 @@ fun DateRangeCalendar(
             state = state,
             title = null,
             headline = null
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun DateRangeCalendarPreview() {
+    MemoripTheme {
+        DateRangeCalendar(
+            initialStartDate = null,
+            initialEndDate = null,
+            onConfirm = { _, _ -> },
+            onDismiss = { }
         )
     }
 }
