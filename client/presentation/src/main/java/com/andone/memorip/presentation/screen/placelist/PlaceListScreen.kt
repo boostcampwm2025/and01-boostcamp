@@ -210,7 +210,8 @@ fun PlaceListScreenContent(
                         onAddTagClick = { showTagBottomSheet = true },
                         modifier = Modifier.padding(horizontal = MemoripPadding.AppHorizontalPadding),
                         tags = state.selectedTags.toImmutableList(),
-                        selectedRegionState = state.selectedRegionState
+                        selectedRegionState = state.selectedRegionState,
+                        onChipClick = { onAction(PlaceListAction.OnDeleteTagClick(tag = it)) }
                     )
                     Spacer(modifier = Modifier.padding(vertical = MemoripPadding.PaddingXSmall))
                 }
@@ -235,6 +236,7 @@ private fun FilterSection(
     modifier: Modifier = Modifier,
     tags: ImmutableList<TagUiModel> = persistentListOf(),
     selectedRegionState: SelectedRegionState = SelectedRegionState(),
+    onChipClick: (tagUiModel: TagUiModel) -> Unit = {}
 ) {
     Column(modifier = modifier) {
         RegionFilter(
@@ -243,7 +245,8 @@ private fun FilterSection(
         )
         TagFilter(
             tags = tags,
-            onAddTagClick = onAddTagClick
+            onAddTagClick = onAddTagClick,
+            onChipClick = onChipClick
         )
     }
 }
