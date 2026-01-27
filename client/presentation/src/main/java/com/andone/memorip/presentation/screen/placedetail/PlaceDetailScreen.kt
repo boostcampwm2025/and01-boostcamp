@@ -325,6 +325,7 @@ private fun PlaceDetailContent(
                 latitude = place.latitude,
                 longitude = place.longitude,
             )
+            /** TODO 로그인 기능 구현 시 나의 장소만 그룹 보이도록 수정하기 */
             PlaceDetailInfoSection(
                 infoString = place.groupName,
                 iconRes = R.drawable.ic_folder,
