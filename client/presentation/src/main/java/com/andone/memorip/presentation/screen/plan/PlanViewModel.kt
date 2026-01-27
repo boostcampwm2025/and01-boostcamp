@@ -187,10 +187,11 @@ class PlanViewModel @Inject constructor(
                     val startRange =
                         rangeBaseDay.atStartOfDay().plusMinutes(it.startMinute.toLong())
                     val endRange =
-                        rangeBaseDay.atStartOfDay().plusMinutes((it.endMinute - 1).toLong())
-                    startDateTime in startRange..endRange
+                        rangeBaseDay.atStartOfDay().plusMinutes(it.endMinute.toLong())
+                    startDateTime in startRange..endRange.minusMinutes(1) || endDateTime in startRange.plusMinutes(1)..endRange
                 }
                 if (isDuplicated) {
+                    snackBarManager.show(SnackBarEvent.PLAN_INVALID_ERROR)
                     return
                 }
 

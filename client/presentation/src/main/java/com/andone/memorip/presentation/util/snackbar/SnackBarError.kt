@@ -23,6 +23,7 @@ enum class SnackBarEvent(
 
     // UI Error
     PLAN_DAYS_VALIDATION_ERROR(messageResId = R.string.snackbar_plan_days_validation_error),
+    PLAN_INVALID_ERROR(messageResId = R.string.snackbar_plan_invalid_error),
 
     // 성공
     SUCCESS(messageResId = R.string.snackbar_success)
