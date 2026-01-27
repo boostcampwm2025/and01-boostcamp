@@ -1,25 +1,23 @@
-package com.andone.memorip.data.place.datasource
+package com.andone.memorip.data.tag.datasource
 
 import android.util.Log
-import com.andone.memorip.domain.model.PlaceListItem
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.andone.memorip.data.place.model.toDomain
+import com.andone.memorip.domain.model.Tag
+import com.andone.memorip.data.tag.model.toDomain
 
-class PlaceListPagingSource(
-    private val service: PlaceService,
+class TagListPagingSource(
+    private val service: TagService,
     private val pageSize: Int,
-    private val sort: List<String>? = null
-) : PagingSource<Int, PlaceListItem>() {
+) : PagingSource<Int, Tag>() {
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PlaceListItem> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Tag> {
         val page = params.key ?: 0
 
         return try {
-            val response = service.getPlaces(
+            val response = service.getTags(
                 page = page,
-                size = pageSize,
-                sort = sort
+                size = pageSize
             )
 
             if (response.error != null) {
@@ -41,7 +39,7 @@ class PlaceListPagingSource(
         }
     }
 
-    override fun getRefreshKey(state: PagingState<Int, PlaceListItem>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, Tag>): Int? {
         return state.anchorPosition?.let { anchor ->
             state.closestPageToPosition(anchor)?.prevKey?.plus(1)
                 ?: state.closestPageToPosition(anchor)?.nextKey?.minus(1)
