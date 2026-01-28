@@ -26,11 +26,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.andone.memorip.presentation.model.GroupUiModel
 import com.andone.memorip.presentation.model.LocationUiModel
 import com.andone.memorip.presentation.model.TagUiModel
-import com.andone.memorip.presentation.model.GroupUiModel
 import com.andone.memorip.presentation.screen.placecreate.PlaceCreateContainerDimens.BAR_WIDTH_FRACTION
-import com.andone.memorip.presentation.screen.placecreate.PlaceCreateNavGraphConstants.TOTAL_STEP_SIZE
 import com.andone.memorip.presentation.screen.placecreate.component.PlaceCreateTopBar
 import com.andone.memorip.presentation.screen.placecreate.component.StepProgressBar
 import com.andone.memorip.presentation.screen.placecreate.model.PlaceCreateAction
@@ -86,7 +85,9 @@ fun PlaceCreateContainer(
         if (isMainStep) {
             PlaceCreateMainStep(
                 step = currentStep,
-                onImagesChange = viewModel::updateImages,
+                onImagesChange = { images, thumbnailImageRatio ->
+                    viewModel.updateImages(images, thumbnailImageRatio)
+                },
                 onLocationChange = viewModel::updateLocation,
                 onStepChange = { currentStep = it },
                 onNavigateToHome = onNavigateToHome,
@@ -111,7 +112,7 @@ fun PlaceCreateContainer(
 @Composable
 fun PlaceCreateMainStep(
     step: PlaceCreateStep,
-    onImagesChange: (List<Uri>) -> Unit,
+    onImagesChange: (List<Uri>, Float) -> Unit,
     onLocationChange: (LocationUiModel) -> Unit,
     onStepChange: (PlaceCreateStep) -> Unit,
     onNavigateToHome: () -> Unit,
@@ -159,8 +160,8 @@ fun PlaceCreateMainStep(
                     PlaceCreateStep.SelectImage -> {
                         SelectImageScreen(
                             onBack = onBackClick,
-                            onImageSelect = { images ->
-                                onImagesChange(images)
+                            onImageSelect = { images, thumbnailImageRatio ->
+                                onImagesChange(images, thumbnailImageRatio)
                                 onStepChange(PlaceCreateStep.SelectLocation)
                             }
                         )

@@ -29,7 +29,7 @@ private object SelectImageScreenConstants {
 @Composable
 fun SelectImageScreen(
     onBack: () -> Unit,
-    onImageSelect: (List<Uri>) -> Unit,
+    onImageSelect: (List<Uri>, Float) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: SelectImageViewModel = hiltViewModel()
 ) {
@@ -37,8 +37,13 @@ fun SelectImageScreen(
 
     viewModel.event.collectWithLifecycle { event ->
         when (event) {
-            SelectImageEvent.NavigateBack -> onBack()
-            is SelectImageEvent.NavigateToSelectLocation -> onImageSelect(event.images)
+            SelectImageEvent.NavigateBack -> {
+                onBack()
+            }
+
+            is SelectImageEvent.NavigateToSelectLocation -> {
+                onImageSelect(event.images, event.thumbnailImageRatio)
+            }
         }
     }
 
@@ -89,6 +94,6 @@ fun SelectImageScreenContent(
 @Composable
 private fun SelectImageScreenPreview() {
     MemoripTheme {
-        SelectImageScreen(onBack = {}, onImageSelect = {})
+        SelectImageScreen(onBack = {}, onImageSelect = { _, _ -> })
     }
 }
