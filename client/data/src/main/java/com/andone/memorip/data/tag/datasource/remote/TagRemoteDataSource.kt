@@ -6,6 +6,6 @@ import com.andone.memorip.data.tag.model.TagResponse
 import kotlinx.coroutines.flow.Flow
 
 interface TagRemoteDataSource {
-    fun loadTags(userId: String): Flow<PagingData<TagResponse>>
+    fun loadTags(): Flow<PagingData<TagResponse>>
     suspend fun addTags(tag: TagRequest): Result<TagResponse>
 }

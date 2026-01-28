@@ -14,7 +14,7 @@ import javax.inject.Inject
 class TagRemoteDataSourceImpl @Inject constructor(
     private val tagService: TagService
 ) : TagRemoteDataSource {
-    override fun loadTags(userId: String): Flow<PagingData<TagResponse>> {
+    override fun loadTags(): Flow<PagingData<TagResponse>> {
         return Pager(
             config = PagingConfig(
                 pageSize = DEFAULT_PAGE_SIZE,

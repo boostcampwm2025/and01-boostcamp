@@ -41,7 +41,7 @@ class SelectCategoryViewModel @Inject constructor(
     private val _event = Channel<SelectCategoryEvent>(capacity = BUFFERED)
     val event = _event.receiveAsFlow()
 
-    val tagsPagingFlow = tagRepository.loadTags("019b8be0-1fad-71e9-9da0-bc03ada63862")
+    val tagsPagingFlow = tagRepository.loadTags()
         .map { pagingData ->
             pagingData.map { it.toUiModel() }
         }

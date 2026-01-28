@@ -14,8 +14,8 @@ import javax.inject.Inject
 class TagRepositoryImpl @Inject constructor(
     private val tagRemoteDataSourceImpl: TagRemoteDataSource
 ) : TagRepository {
-    override fun loadTags(userId: String): Flow<PagingData<Tag>> {
-        return tagRemoteDataSourceImpl.loadTags(userId)
+    override fun loadTags(): Flow<PagingData<Tag>> {
+        return tagRemoteDataSourceImpl.loadTags()
             .map { pagingData ->
                 pagingData.map { it.toDomainModel() }
             }
