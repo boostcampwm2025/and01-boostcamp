@@ -257,6 +257,9 @@ class PlanViewModel @Inject constructor(
                         .onFailure { snackBarManager.show(SnackBarEvent.NETWORK_ERROR) }
                 }
             }
+            PlanAction.ShowCalendarClick -> {
+                _event.trySend(element = PlanEvent.ShowCalendarDialog)
+            }
         }
     }
 

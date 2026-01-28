@@ -28,7 +28,8 @@ import com.andone.memorip.presentation.component.ClickableTagChip
 fun TagFilter(
     tags: ImmutableList<TagUiModel>,
     modifier: Modifier = Modifier,
-    onAddTagClick: () -> Unit = {}
+    onAddTagClick: () -> Unit = {},
+    onChipClick: (tagUiModel: TagUiModel) -> Unit = {}
 ) {
     Row(
         modifier = modifier
@@ -36,7 +37,7 @@ fun TagFilter(
             .horizontalScroll(state = rememberScrollState()),
         horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXSmall)
     ) {
-        tags.forEach { tag -> ClickableTagChip(tag = tag) }
+        tags.forEach { tag -> ClickableTagChip(tag = tag, onClick = { onChipClick(tag) }) }
         IconButton(onClick = onAddTagClick) {
             Icon(
                 painter = painterResource(R.drawable.ic_outline_add_circle),

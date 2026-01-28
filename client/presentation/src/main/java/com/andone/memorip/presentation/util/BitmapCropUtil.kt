@@ -29,35 +29,84 @@ import kotlin.math.roundToInt
 
 object BitmapCropUtil {
 
-    suspend fun loadBitmapFromUri(context: Context, uri: Uri): Bitmap? {
-        return withContext(Dispatchers.IO) {
+    suspend fun loadBitmapFromUri(context: Context, uri: Uri, viewSize: Size): Bitmap? =
+        withContext(Dispatchers.IO) {
             runCatching {
-                // EXIF 데이터 - 회전 각도 확인
-                val rotation = context.contentResolver.openInputStream(uri)?.use { stream ->
-                    val orientation = ExifInterface(stream).getAttributeInt(
-                        ExifInterface.TAG_ORIENTATION,
-                        ExifInterface.ORIENTATION_NORMAL
-                    )
-                    when (orientation) {
-                        ExifInterface.ORIENTATION_ROTATE_90 -> 90f
-                        ExifInterface.ORIENTATION_ROTATE_180 -> 180f
-                        ExifInterface.ORIENTATION_ROTATE_270 -> 270f
-                        else -> 0f
-                    }
-                } ?: return@runCatching null
+                val sampledBitmap = decodeSampledBitmap(context, uri, viewSize)
+                    ?: return@runCatching null
 
-                val bitmap = context.contentResolver.openInputStream(uri)?.use { stream ->
-                    BitmapFactory.decodeStream(stream)
-                } ?: return@runCatching null
-
-                if (rotation != 0f) {
-                    val matrix = Matrix().apply { postRotate(rotation) }
-                    Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
-                } else {
-                    bitmap
-                }
+                applyExifRotation(context, uri, sampledBitmap)
             }.getOrNull()
         }
+
+    /** 비트맵 리사이징 **/
+    private fun decodeSampledBitmap(context: Context, uri: Uri, viewSize: Size): Bitmap? {
+        val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+
+        // 이미지 크기만 읽기
+        context.contentResolver.openInputStream(uri).use { stream ->
+            BitmapFactory.decodeStream(stream, null, options)
+        }
+
+        // 계산된 비율로 이미지 로딩 (메모리 할당)
+        return context.contentResolver.openInputStream(uri)?.use { stream ->
+            options.inSampleSize = calculateSize(options, viewSize)
+            options.inJustDecodeBounds = false
+
+            BitmapFactory.decodeStream(stream, null, options)
+        }
+    }
+
+    /** 이미지 비율 계산 **/
+    private fun calculateSize(options: BitmapFactory.Options, viewSize: Size): Int {
+        val height = options.outHeight
+        val width = options.outWidth
+        var sampleSize = 1
+
+        if (height > viewSize.height || width > viewSize.width) {
+            val halfHeight = height / 2
+            val halfWidth = width / 2
+            while ((halfHeight / sampleSize) >= viewSize.height
+                && (halfWidth / sampleSize) >= viewSize.width
+            ) {
+                sampleSize *= 2
+            }
+        }
+
+        return sampleSize
+    }
+
+    /** 이미지 회전 적용 **/
+    private fun applyExifRotation(context: Context, uri: Uri, bitmap: Bitmap): Bitmap {
+        val rotation = readRotation(context, uri)
+
+        if (rotation == 0f) return bitmap
+
+        // 회전 적용하여 이미지 비트맵 생성
+        val matrix = Matrix().apply { postRotate(rotation) }
+        val rotatedBitmap =
+            Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+
+        // 메모리 정리
+        if (bitmap != rotatedBitmap) bitmap.recycle()
+
+        return rotatedBitmap
+    }
+
+    /** EXIF 각도 읽기 **/
+    private fun readRotation(context: Context, uri: Uri): Float {
+        return context.contentResolver.openInputStream(uri)?.use { stream ->
+            val exif = ExifInterface(stream)
+            when (exif.getAttributeInt(
+                ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_NORMAL
+            )) {
+                ExifInterface.ORIENTATION_ROTATE_90 -> 90f
+                ExifInterface.ORIENTATION_ROTATE_180 -> 180f
+                ExifInterface.ORIENTATION_ROTATE_270 -> 270f
+                else -> 0f
+            }
+        } ?: 0f
     }
 
     fun bitmapToScreenRect(

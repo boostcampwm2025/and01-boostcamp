@@ -108,6 +108,8 @@
     <string name="place_detail_image_count">%1$d/%2$d</string>
     <string name="place_detail_tag">태그</string>
     <string name="place_detail_image_cnt">%d/%d</string>
+    <string name="place_detail_view_in_map_app">지도 앱에서 보기</string>
+    <string name="place_detail_chooser_title">지도 앱에서 위치 보기</string>
 
     <!-- PlaceImagesBottomSheet -->
     <string name="placeimagebottomsheet_unknown_place">알 수 없는 장소</string>
@@ -136,8 +138,9 @@
     <string name="place_list_bottom_sheet_confirm">확인</string>
     <string name="place_list_comma_separator">, </string>
     <string name="place_list_add_tag">태그 추가</string>
-    <string name="place_list_no_address_info">위치 정보가 없습니다</string>
+    <string name="place_list_no_address_title">사용자 지정</string>
     <string name="place_list_no_title">제목 없음</string>
+    <string name="place_list_reset">초기화</string>
 
     <!-- PlanScreen -->
     <string name="plan_location_content_description">위치</string>
@@ -164,7 +167,6 @@
     <string name="login_add_account">+ 계정을 추가하세요</string>
     <string name="login_show_places">올린 장소들</string>
 
-
     <!-- PlanScreen -->
     <string name="plan_time_axis_hour">%1$02d:00</string>
     <string name="plan_day_format">Day %1$d</string>
@@ -177,6 +179,9 @@
     <string name="plan_empty_day">날짜를 선택해주세요</string>
     <string name="plan_confirm">확인</string>
     <string name="plan_date_range_format">%1$s ~ %2$s</string>
+    <string name="plan_select_date">날짜 선택하기</string>
+    <string name="plan_not_select_date_title">날짜가 선택되지 않았어요</string>
+    <string name="plan_not_select_date_description">일정이 정해지지 않았나요?\n날짜를 선택하고 새로운 추억을 계획해보세요.</string>
     <string name="plan_group_thumbnail_description">그룹 썸네일 이미지</string>
     <string name="plan_group_select_btn_description">그룹 선택 버튼</string>
     <string name="plan_no_group">그룹이 존재하지 않습니다</string>

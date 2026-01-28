@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.component
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -39,9 +40,10 @@ fun MemoripButton(
     }
 }
 
-@Preview(showBackground = true)
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun MemoripButtonPreview() {
+private fun MemoripButtonPreview() {
     MemoripTheme {
         Column {
             MemoripButton(

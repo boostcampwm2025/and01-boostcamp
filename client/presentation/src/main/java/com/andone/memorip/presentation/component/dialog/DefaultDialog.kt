@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.component.dialog
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -42,7 +43,7 @@ internal fun DefaultDialog(
             modifier = modifier,
             shape = MemoripTheme.shapes.roundedXLarge,
             color = MemoripTheme.colors.primaryContainer,
-            contentColor = MemoripTheme.colors.black
+            contentColor = MemoripTheme.colors.onSurface
         ) {
             Column(
                 modifier = Modifier.padding(horizontal = INNER_PADDING),
@@ -68,7 +69,7 @@ internal fun DefaultDialog(
                     TextButton(onClick = onCancelClick) {
                         Text(
                             text = stringResource(R.string.dialog_cancel_message),
-                            color = MemoripTheme.colors.gray,
+                            color = MemoripTheme.colors.onSurface,
                             style = MemoripTheme.typography.bodyBold16
                         )
                     }
@@ -89,9 +90,10 @@ internal fun DefaultDialog(
 }
 
 @Preview(showBackground = true)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun DefaultDialogPrev() {
-    MemoripTheme(darkTheme = false) {
+private fun DefaultDialogPreview() {
+    MemoripTheme {
         DefaultDialog(
             title = "앱 확인 알림",
             onConfirmClick = {},

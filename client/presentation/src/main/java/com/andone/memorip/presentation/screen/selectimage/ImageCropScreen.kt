@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.screen.selectimage
 
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.net.Uri
 import androidx.compose.foundation.Canvas
@@ -181,11 +182,14 @@ private fun ImageCropSection(
 }
 
 @Preview(showBackground = true)
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun ImageCropScreenPreview() {
-    ImageCropScreen(
-        imageUris = emptyList(),
-        transformData = emptyMap(),
-        onImagesCrop = { _, _ -> }
-    )
+    MemoripTheme {
+        ImageCropScreen(
+            imageUris = emptyList(),
+            transformData = emptyMap(),
+            onImagesCrop = { _, _ -> },
+        )
+    }
 }

@@ -5,11 +5,16 @@ import com.andone.memorip.domain.model.PlaceListItem
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.andone.memorip.data.place.model.toDomain
+import java.util.UUID
 
 class PlaceListPagingSource(
     private val service: PlaceService,
     private val pageSize: Int,
-    private val sort: List<String>? = null
+    private val sort: List<String>? = null,
+    private val query: String? = null,
+    private val tagIds: List<String>? = null,
+    private val region1Depth: String? = null,
+    private val region2Depth: List<String>? = null
 ) : PagingSource<Int, PlaceListItem>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PlaceListItem> {
@@ -19,13 +24,15 @@ class PlaceListPagingSource(
             val response = service.getPlaces(
                 page = page,
                 size = pageSize,
-                sort = sort
+                sort = sort,
+                query = query,
+                tagIds = tagIds,
+                region1Depth = region1Depth,
+                region2Depth = region2Depth
             )
 
             if (response.error != null) {
-                return LoadResult.Error(
-                    IllegalStateException(response.error.message)
-                )
+                return LoadResult.Error(IllegalStateException(response.error.message))
             }
 
             val items = response.data.orEmpty().map { it.toDomain() }

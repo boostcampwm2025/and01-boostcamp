@@ -16,11 +16,16 @@ import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
+import java.util.UUID
 
 interface PlaceService {
 
     @GET("/api/places")
     suspend fun getPlaces(
+        @Query("query") query: String? = null,
+        @Query("tagIds") tagIds: List<String>? = null,
+        @Query("region1Depth") region1Depth: String? = null,
+        @Query("region2Depth") region2Depth: List<String>? = null,
         @Query("page") page: Int,
         @Query("size") size: Int,
         @Query("sort") sort: List<String>? = null

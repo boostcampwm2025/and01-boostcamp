@@ -26,4 +26,5 @@ sealed interface PlanAction {
     data class DayScrolled(val day: Int) : PlanAction
     data object GroupChoiceClick : PlanAction
     data class GroupChoiceConfirmClick(val selectedGroup: GroupUiModel) : PlanAction
+    data object ShowCalendarClick: PlanAction
 }
