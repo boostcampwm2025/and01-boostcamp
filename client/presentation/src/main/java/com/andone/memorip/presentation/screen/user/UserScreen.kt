@@ -133,12 +133,8 @@ fun UserScreenContent(
                 if (state.isLoggedIn) {
                     UserProfileSection(
                         user = state.user,
-                        onEditClick = {
-
-                        },
-                        onProfileImageClick = {
-
-                        }
+                        onEditClick = {},
+                        onProfileImageClick = {}
                     )
                 } else {
                     Box(contentAlignment = Alignment.Center) {
