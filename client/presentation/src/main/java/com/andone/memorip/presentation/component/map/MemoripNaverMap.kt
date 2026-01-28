@@ -2,18 +2,25 @@ package com.andone.memorip.presentation.component.map
 
 import android.graphics.PointF
 import android.location.Location
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.component.LoadingIndicatorScreen
+import com.andone.memorip.presentation.component.map.MoemoripNaverMapDimen.BLOCK_LOGO_HEIGHT
+import com.andone.memorip.presentation.component.map.MoemoripNaverMapDimen.BLOCK_LOGO_WIDTH
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
@@ -28,6 +35,11 @@ import com.naver.maps.map.compose.NaverMapComposable
 import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.indoor.IndoorSelection
 import java.util.Locale
+
+private object MoemoripNaverMapDimen {
+    val BLOCK_LOGO_WIDTH = 80.dp
+    val BLOCK_LOGO_HEIGHT = 40.dp
+}
 
 @OptIn(ExperimentalNaverMapApi::class)
 @Composable
@@ -59,7 +71,7 @@ fun MemoripNaverMap(
         onMapLoaded()
     }
 
-    Box(modifier = modifier) {
+    Box {
         NaverMap(
             modifier = Modifier.fillMaxSize(),
             cameraPositionState = cameraPositionState,
@@ -83,6 +95,18 @@ fun MemoripNaverMap(
         if (!hasLoaded) {
             LoadingIndicatorScreen()
         }
+
+        Box(
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(bottom = contentPadding.calculateBottomPadding())
+                .size(width = BLOCK_LOGO_WIDTH, height = BLOCK_LOGO_HEIGHT)
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,
+                    onClick = {}
+                )
+        )
     }
 }
 

@@ -66,7 +66,7 @@ fun CategoryItem(
 
 @Preview(showBackground = true)
 @Composable
-private fun CategoryItemPrev() {
+private fun CategoryItemPreview() {
     MemoripTheme {
         var checked by remember { mutableStateOf(false) }
         CategoryItem(

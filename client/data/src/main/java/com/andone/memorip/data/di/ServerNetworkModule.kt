@@ -70,6 +70,12 @@ object ServerNetworkModule {
 
     @Provides
     @Singleton
+    fun provideTagService(@ServerRetrofit retrofit: Retrofit): TagService {
+        return retrofit.create(TagService::class.java)
+    }
+
+    @Provides
+    @Singleton
     fun provideUserService(@ServerRetrofit retrofit: Retrofit): UserService {
         return retrofit.create(UserService::class.java)
     }
@@ -78,11 +84,5 @@ object ServerNetworkModule {
     @Singleton
     fun provideGroupService(@ServerRetrofit retrofit: Retrofit): GroupService {
         return retrofit.create(GroupService::class.java)
-    }
-
-    @Provides
-    @Singleton
-    fun provideTagService(@ServerRetrofit retrofit: Retrofit): TagService {
-        return retrofit.create(TagService::class.java)
     }
 }

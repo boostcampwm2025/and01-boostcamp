@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.screen.selectimage.component
 
+import android.content.res.Configuration
 import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -104,6 +105,7 @@ fun ImageCropBottomBar(
 }
 
 @Preview(showBackground = true)
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun ImageCropBottomBarPreview() {
     ImageCropBottomBar(

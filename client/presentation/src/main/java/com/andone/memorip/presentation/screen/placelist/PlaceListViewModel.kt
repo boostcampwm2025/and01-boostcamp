@@ -27,7 +27,6 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
-import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -87,7 +86,7 @@ class PlaceListViewModel @Inject constructor(
             .cachedIn(viewModelScope)
 
     val tagsPagingFlow =
-        tagRepository.getTagList()
+        tagRepository.loadTags()
             .map { pagingData ->
                 pagingData.map { it.toUiModel() }
             }

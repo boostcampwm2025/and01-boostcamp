@@ -108,6 +108,8 @@
     <string name="place_detail_image_count">%1$d/%2$d</string>
     <string name="place_detail_tag">태그</string>
     <string name="place_detail_image_cnt">%d/%d</string>
+    <string name="place_detail_view_in_map_app">지도 앱에서 보기</string>
+    <string name="place_detail_chooser_title">지도 앱에서 위치 보기</string>
 
     <!-- PlaceImagesBottomSheet -->
     <string name="placeimagebottomsheet_unknown_place">알 수 없는 장소</string>
@@ -136,10 +138,9 @@
     <string name="place_list_bottom_sheet_confirm">확인</string>
     <string name="place_list_comma_separator">, </string>
     <string name="place_list_add_tag">태그 추가</string>
-    <string name="place_list_no_address_info">위치 정보가 없습니다</string>
+    <string name="place_list_no_address_title">사용자 지정</string>
     <string name="place_list_no_title">제목 없음</string>
     <string name="place_list_reset">초기화</string>
-
 
     <!-- PlanScreen -->
     <string name="plan_location_content_description">위치</string>
@@ -157,6 +158,8 @@
     <string name="snackbar_data_save_failed">데이터를 저장하지 못했습니다</string>
     <string name="snackbar_image_upload_failed">이미지 업로드에 실패했습니다</string>
     <string name="snackbar_unknown_error">오류가 발생했습니다. 다시 시도해주세요</string>
+    <string name="snackbar_plan_days_validation_error">날짜는 최대 1달까지 지정 가능합니다</string>
+    <string name="snackbar_plan_invalid_error">다른 계획과 중복 배치는 지원하지 않습니다</string>
     <string name="snackbar_success">성공적으로 완료되었습니다</string>
 
     <!-- UserScreen -->
@@ -192,7 +195,6 @@
 
 
 
-
     <!-- PlanScreen -->
     <string name="plan_time_axis_hour">%1$02d:00</string>
     <string name="plan_day_format">Day %1$d</string>
@@ -205,6 +207,9 @@
     <string name="plan_empty_day">날짜를 선택해주세요</string>
     <string name="plan_confirm">확인</string>
     <string name="plan_date_range_format">%1$s ~ %2$s</string>
+    <string name="plan_select_date">날짜 선택하기</string>
+    <string name="plan_not_select_date_title">날짜가 선택되지 않았어요</string>
+    <string name="plan_not_select_date_description">일정이 정해지지 않았나요?\n날짜를 선택하고 새로운 추억을 계획해보세요.</string>
 
     <!-- PlacePickerItem -->
     <string name="place_picker_item_image_description">장소에 대한 이미지</string>

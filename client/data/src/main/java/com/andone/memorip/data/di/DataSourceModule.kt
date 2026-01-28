@@ -24,13 +24,13 @@ abstract class DataSourceModule {
 
     @Binds
     @Singleton
+    abstract fun bindTagDataSource(impl: TagRemoteDataSourceImpl): TagRemoteDataSource
+
+    @Binds
+    @Singleton
     abstract fun bindUserDataSource(impl: UserRemoteDataSourceImpl): UserRemoteDataSource
 
     @Binds
     @Singleton
     abstract fun bindGroupDataSource(impl: GroupRemoteDataSourceImpl): GroupRemoteDataSource
-
-    @Binds
-    @Singleton
-    abstract fun bindTagDataSource(impl: TagRemoteDataSourceImpl): TagRemoteDataSource
 }

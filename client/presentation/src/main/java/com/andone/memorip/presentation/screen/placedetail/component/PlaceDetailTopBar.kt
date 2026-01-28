@@ -30,7 +30,7 @@ fun PlaceDetailTopBar(
                 onClick = onNavigationIconClick,
                 colors = IconButtonDefaults.iconButtonColors(
                     containerColor = MemoripTheme.colors.primaryContainer,
-                    contentColor = MemoripTheme.colors.black
+                    contentColor = MemoripTheme.colors.onSurface
                 )
             ) {
                 Icon(
@@ -45,7 +45,7 @@ fun PlaceDetailTopBar(
                     onClick = onActionIconClick,
                     colors = IconButtonDefaults.iconButtonColors(
                         containerColor = MemoripTheme.colors.primaryContainer,
-                        contentColor = MemoripTheme.colors.black
+                        contentColor = MemoripTheme.colors.onSurface
                     )
                 ) {
                     Icon(

@@ -6,5 +6,8 @@ sealed interface SelectImageEvent {
 
     data object NavigateBack : SelectImageEvent
 
-    data class NavigateToSelectLocation(val images: List<Uri>) : SelectImageEvent
+    data class NavigateToSelectLocation(
+        val images: List<Uri>,
+        val thumbnailImageRatio: Float
+    ) : SelectImageEvent
 }

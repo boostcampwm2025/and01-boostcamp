@@ -1,5 +1,7 @@
 package com.andone.memorip.presentation.screen.selectlocation.component
 
+import android.content.res.Configuration
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -27,7 +29,9 @@ fun LocationSelectionButton(
         enabled = enabled,
         colors = ButtonDefaults.buttonColors(
             containerColor = MemoripTheme.colors.primary,
-            contentColor = MemoripTheme.colors.onSurface
+            contentColor = MemoripTheme.colors.white,
+            disabledContainerColor = MemoripTheme.colors.lightGray,
+            disabledContentColor = MemoripTheme.colors.gray
         ),
         elevation = ButtonDefaults.buttonElevation(
             defaultElevation = MemoripShadow.Medium,
@@ -47,13 +51,30 @@ fun LocationSelectionButton(
     }
 }
 
-@Preview(showBackground = true)
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun LocationSelectionButtonPreview() {
+private fun LocationSelectionButtonEnableTruePreview() {
     MemoripTheme {
-        LocationSelectionButton(
-            onClick = {},
-            enabled = true
-        )
+        Column {
+            LocationSelectionButton(
+                enabled = true,
+                onClick = {}
+            )
+        }
+    }
+}
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun LocationSelectionButtonEnableFalsePreview() {
+    MemoripTheme {
+        Column {
+            LocationSelectionButton(
+                enabled = false,
+                onClick = {}
+            )
+        }
     }
 }

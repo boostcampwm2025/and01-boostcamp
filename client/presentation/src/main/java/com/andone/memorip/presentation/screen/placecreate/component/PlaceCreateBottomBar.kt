@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.screen.placecreate.component
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -19,7 +20,7 @@ fun PlaceCreateBottomBar(
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
-        HorizontalDivider(color = MemoripTheme.colors.gray2)
+        HorizontalDivider(color = MemoripTheme.colors.primaryContainer)
         Column(
             modifier = Modifier.padding(
                 horizontal = MemoripPadding.PaddingMedium,
@@ -38,12 +39,15 @@ fun PlaceCreateBottomBar(
     }
 }
 
-@Preview(showBackground = true)
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun PlaceCreateBottomBarPreview() {
-    PlaceCreateBottomBar(
-        value = "test",
-        onClick = {},
-        enabled = true
-    )
+    MemoripTheme {
+        PlaceCreateBottomBar(
+            value = "test",
+            onClick = {},
+            enabled = true
+        )
+    }
 }

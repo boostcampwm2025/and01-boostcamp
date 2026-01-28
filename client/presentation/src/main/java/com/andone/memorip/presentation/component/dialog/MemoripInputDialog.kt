@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.component.dialog
 
+import android.content.res.Configuration
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -54,9 +55,9 @@ fun MemoripInputDialog(
             trailingIcon = {
                 IconButton(onClick = { value = "" }) {
                     Icon(
-                        tint = MemoripTheme.colors.black,
                         imageVector = ImageVector.vectorResource(R.drawable.ic_close),
-                        contentDescription = stringResource(R.string.dialog_close_button_description)
+                        contentDescription = stringResource(R.string.dialog_close_button_description),
+                        tint = MemoripTheme.colors.onSurface
                     )
                 }
             },
@@ -75,8 +76,9 @@ fun MemoripInputDialog(
 }
 
 @Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun MemoripInputDialogPrev() {
+private fun MemoripInputDialogPreview() {
     MemoripTheme {
         MemoripInputDialog(
             title = "그룹 추가",

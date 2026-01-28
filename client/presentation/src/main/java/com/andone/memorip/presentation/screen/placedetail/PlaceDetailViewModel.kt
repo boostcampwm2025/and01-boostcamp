@@ -62,6 +62,7 @@ class PlaceDetailViewModel @AssistedInject constructor(
         when (action) {
             PlaceDetailAction.OnBackClick -> _event.trySend(PlaceDetailEvent.NavigateBack)
             PlaceDetailAction.OnAddToGroupClick -> _event.trySend(PlaceDetailEvent.NavigateToSelectGroup)
+            PlaceDetailAction.GroupClick -> _event.trySend(PlaceDetailEvent.NavigateToGroupList)
         }
     }
 

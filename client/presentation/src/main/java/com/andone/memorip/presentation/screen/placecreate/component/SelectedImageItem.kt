@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.screen.placecreate.component
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -76,6 +77,7 @@ fun SelectedImageItem(
 }
 
 @Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun SelectedImageItemPreview() {
     MemoripTheme {

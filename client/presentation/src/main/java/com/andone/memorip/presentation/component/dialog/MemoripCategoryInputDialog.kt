@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.component.dialog
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
@@ -61,27 +62,26 @@ fun MemoripCategoryInputDialog(
             trailingIcon = {
                 IconButton(onClick = { name = "" }) {
                     Icon(
-                        tint = MemoripTheme.colors.black,
                         imageVector = ImageVector.vectorResource(R.drawable.ic_close),
-                        contentDescription = stringResource(R.string.dialog_close_button_description)
+                        contentDescription = stringResource(R.string.dialog_close_button_description),
+                        tint = MemoripTheme.colors.onSurface
                     )
                 }
             },
             supportingText = {
-                if (name.isEmpty()) {
-                    Text(
-                        text = stringResource(R.string.category_dialog_empty_name_err_hint),
-                        style = MemoripTheme.typography.labelRegular12
-                    )
-                }
+                Text(
+                    text = if (name.isEmpty()) stringResource(R.string.category_dialog_empty_name_err_hint) else "",
+                    color = MemoripTheme.colors.error,
+                    style = MemoripTheme.typography.labelRegular12
+                )
             },
             isError = name.isEmpty(),
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = MemoripTheme.colors.primaryContainer,
                 unfocusedContainerColor = MemoripTheme.colors.primaryContainer,
                 errorContainerColor = MemoripTheme.colors.primaryContainer,
-                focusedTextColor = MemoripTheme.colors.black,
-                unfocusedTextColor = MemoripTheme.colors.black,
+                focusedTextColor = MemoripTheme.colors.onSurface,
+                unfocusedTextColor = MemoripTheme.colors.onSurface,
                 focusedPlaceholderColor = MemoripTheme.colors.primary,
                 unfocusedPlaceholderColor = MemoripTheme.colors.primary,
                 focusedLabelColor = MemoripTheme.colors.primary,
@@ -114,9 +114,9 @@ fun MemoripCategoryInputDialog(
                     onClick = { colorState.refreshColor() }
                 ) {
                     Icon(
-                        tint = MemoripTheme.colors.black,
                         imageVector = ImageVector.vectorResource(R.drawable.ic_refresh),
-                        contentDescription = stringResource(R.string.dialog_refresh_button_description)
+                        contentDescription = stringResource(R.string.dialog_refresh_button_description),
+                        tint = MemoripTheme.colors.onSurface
                     )
                 }
             },
@@ -134,8 +134,8 @@ fun MemoripCategoryInputDialog(
                 focusedContainerColor = MemoripTheme.colors.primaryContainer,
                 unfocusedContainerColor = MemoripTheme.colors.primaryContainer,
                 errorContainerColor = MemoripTheme.colors.primaryContainer,
-                focusedTextColor = MemoripTheme.colors.black,
-                unfocusedTextColor = MemoripTheme.colors.black,
+                focusedTextColor = MemoripTheme.colors.onSurface,
+                unfocusedTextColor = MemoripTheme.colors.onSurface,
                 errorTextColor = MemoripTheme.colors.error,
                 errorSupportingTextColor = MemoripTheme.colors.error
             )
@@ -144,9 +144,10 @@ fun MemoripCategoryInputDialog(
 }
 
 @Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun MemoripCategoryInputDialogPrev() {
-    MemoripTheme(darkTheme = false) {
+private fun MemoripCategoryInputDialogPreview() {
+    MemoripTheme {
         MemoripCategoryInputDialog(
             title = "카테고리 입력",
             onConfirmClick = { _, _ -> },
