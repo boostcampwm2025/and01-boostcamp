@@ -19,6 +19,7 @@ import com.andone.memorip.presentation.screen.placelist.model.RegionUiModel
 import com.andone.memorip.presentation.screen.placelist.model.SelectedRegionState
 import com.andone.memorip.presentation.screen.plan.model.DateUiModel
 import com.andone.memorip.domain.model.TimeBlock
+import com.andone.memorip.presentation.screen.user.model.UserUiModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.flowOf
 import java.time.LocalDate
@@ -194,6 +195,13 @@ object DummyData {
             )
         }
     }
+
+    val dummyUser = UserUiModel(
+        name = "홍길동",
+        id = "0",
+        profileImgUrl = "",
+        email = "asdfgqwe@naver.com"
+    )
 
     val dummyDate =
         DateUiModel(
