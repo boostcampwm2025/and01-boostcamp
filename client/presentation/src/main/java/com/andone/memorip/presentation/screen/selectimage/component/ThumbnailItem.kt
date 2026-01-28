@@ -19,6 +19,7 @@ import androidx.core.net.toUri
 import coil.compose.AsyncImage
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.screen.selectimage.component.ThumbnailItemDimens.imageSize
+import com.andone.memorip.presentation.theme.MemoripAlpha
 import com.andone.memorip.presentation.theme.MemoripLineWidth
 import com.andone.memorip.presentation.theme.MemoripTheme
 
@@ -56,7 +57,7 @@ fun ThumbnailItem(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(MemoripTheme.colors.gray),
+                    .background(MemoripTheme.colors.lightGray.copy(alpha = MemoripAlpha.IMAGE_OVERLAY)),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(

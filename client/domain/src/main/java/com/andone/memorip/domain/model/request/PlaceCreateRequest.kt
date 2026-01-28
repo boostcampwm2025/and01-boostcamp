@@ -12,5 +12,7 @@ data class PlaceCreateRequest(
     val latitude: Double,
     val longitude: Double,
     val address: Address,
-    val imageUrls: List<String>
+    val imageUrls: List<String>,
+//    val thumbnailImageRatio: Float,
+    val isPublic: Boolean
 )

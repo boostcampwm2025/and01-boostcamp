@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.screen.placecreate.component
 
+import android.content.res.Configuration
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -29,7 +30,13 @@ fun PlaceCreateTopBar(
     }
 
     CenterAlignedTopAppBar(
-        title = { Text(text = topBarText) },
+        title = {
+            Text(
+                text = topBarText,
+                style = MemoripTheme.typography.headlineBold20,
+                color = MemoripTheme.colors.onSurface
+            )
+        },
         navigationIcon = {
             IconButton(onClick = onBackClick) {
                 Icon(
@@ -42,7 +49,8 @@ fun PlaceCreateTopBar(
     )
 }
 
-@Preview
+@Preview(showBackground = true)
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun PlaceCreateTopBarPreview() {
     MemoripTheme {

@@ -49,7 +49,7 @@ fun CategoryItem(
             modifier = Modifier
                 .weight(1f)
                 .padding(start = PaddingXSmall),
-            style = MemoripTheme.typography.body2
+            style = MemoripTheme.typography.bodyBold16
         )
         Checkbox(
             checked = checked,
@@ -66,7 +66,7 @@ fun CategoryItem(
 
 @Preview(showBackground = true)
 @Composable
-private fun CategoryItemPrev() {
+private fun CategoryItemPreview() {
     MemoripTheme {
         var checked by remember { mutableStateOf(false) }
         CategoryItem(

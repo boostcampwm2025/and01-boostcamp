@@ -2,6 +2,7 @@ package com.andone.memorip.domain.repository
 
 import androidx.paging.PagingData
 import com.andone.memorip.domain.model.Group
+import com.andone.memorip.domain.model.GroupWithPlaceAdded
 import com.andone.memorip.domain.model.PlaceListItem
 import com.andone.memorip.domain.model.Visibility
 import kotlinx.coroutines.flow.Flow
@@ -9,6 +10,11 @@ import kotlinx.coroutines.flow.Flow
 interface GroupRepository {
     val myGroups: Flow<List<Group>>
     suspend fun fetchMyGroups(page: Int = 0, size: Int = 20): Result<Unit>
+    suspend fun fetchMyGroupsWithPlaceStatus(
+        page: Int = 0,
+        size: Int = 20,
+        placeId: String?
+    ): Result<List<GroupWithPlaceAdded>>
     suspend fun getPublicGroups(page: Int = 0, size: Int = 20): Result<List<Group>>
     suspend fun getGroupById(groupId: String): Result<Group>
     suspend fun createGroup(ownerId: String, title: String, visibility: Visibility): Result<Group>

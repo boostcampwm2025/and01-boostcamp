@@ -26,7 +26,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
-import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -41,11 +40,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import com.andone.memorip.domain.model.TimeBlock
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.screen.plan.component.TimeBlockItemConstants.SNAP_MINUTE_UNIT
 import com.andone.memorip.presentation.screen.plan.component.TimeTableConstant.DEFAULT_ALPHA
-import com.andone.memorip.presentation.screen.plan.component.TimeTableConstant.DEFAULT_DURATION
 import com.andone.memorip.presentation.screen.plan.component.TimeTableConstant.DEFAULT_ZINDEX
 import com.andone.memorip.presentation.screen.plan.component.TimeTableConstant.FULL_WEIGHT
 import com.andone.memorip.presentation.screen.plan.component.TimeTableConstant.PICKED_ALPHA
@@ -63,6 +60,8 @@ import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
 import com.andone.memorip.presentation.util.toPx
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
@@ -82,6 +81,7 @@ private object TimeTableConstant {
 fun TimeTable(
     totalMinutes: Int,
     currentDay: Int?,
+    places: ImmutableList<Place>,
     onBlockAdd: (Place, Int) -> Unit,
     onDayScrolled: (Int) -> Unit = {},
     content: @Composable (TimeLayoutEngine, ScrollState) -> Unit
@@ -92,7 +92,6 @@ fun TimeTable(
     val engine = remember(minuteHeightPx) {
         TimeLayoutEngine(minuteHeightPx)
     }
-    val places = remember { DummyData.places.toMutableStateList() }
     val backgroundShape = MemoripTheme.shapes.roundedMedium
     var rowTop by remember { mutableStateOf(0f) }
     var timeTableTop by remember { mutableStateOf(0f) }
@@ -229,7 +228,6 @@ fun TimeTable(
                                                     val snappedMinute =
                                                         ((newStartMinute + SNAP_MINUTE_UNIT / 2) / SNAP_MINUTE_UNIT) * SNAP_MINUTE_UNIT
                                                     onBlockAdd(place, snappedMinute)
-                                                    places.remove(place)
                                                 }
                                             }
                                             selectedPlace = null
@@ -283,7 +281,8 @@ private fun TimeTablePreview() {
     TimeTable(
         totalMinutes = MINUTES_PER_DAY,
         currentDay = 1,
-        onBlockAdd = {_, _ -> },
+        places = DummyData.places.toImmutableList(),
+        onBlockAdd = { _, _ -> },
         content = { _, _ -> },
     )
 }

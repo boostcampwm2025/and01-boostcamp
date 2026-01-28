@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.component
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,7 +30,7 @@ fun MemoripInputBox(
     onValueChange: (String) -> Unit,
     placeholder: String,
     modifier: Modifier = Modifier,
-    textStyle: TextStyle = MemoripTheme.typography.bodyMedium,
+    textStyle: TextStyle = MemoripTheme.typography.bodyMedium16,
     singleLine: Boolean = false,
     showValueLength: Boolean = true,
     height: Dp = MemoripHeight.TextBoxHigh
@@ -67,7 +68,7 @@ fun MemoripInputBox(
                         value.length, valueMaxLength
                     ),
                     color = MemoripTheme.colors.gray1,
-                    style = MemoripTheme.typography.caption1
+                    style = MemoripTheme.typography.labelRegular12
                 )
             }
         }
@@ -75,6 +76,7 @@ fun MemoripInputBox(
 }
 
 @Preview(showBackground = true)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun MemoripInputBoxPreview() {
     var text by remember { mutableStateOf("test") }
@@ -86,7 +88,6 @@ private fun MemoripInputBoxPreview() {
                 valueMaxLength = 30,
                 placeholder = "Input",
                 onValueChange = { text = it },
-                textStyle = MemoripTheme.typography.body2,
                 singleLine = true,
                 showValueLength = false,
                 height = OutlinedTextFieldDefaults.MinHeight

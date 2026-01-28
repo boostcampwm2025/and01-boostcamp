@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.component
 
+import android.content.res.Configuration
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -25,7 +26,7 @@ fun MemoripSearchBarInputField(
     onExpandedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    CompositionLocalProvider(value = LocalTextStyle provides MemoripTheme.typography.title2) {
+    CompositionLocalProvider(value = LocalTextStyle provides MemoripTheme.typography.bodyMedium14) {
         SearchBarDefaults.InputField(
             query = query,
             onQueryChange = { onQueryChange(it) },
@@ -36,7 +37,7 @@ fun MemoripSearchBarInputField(
             placeholder = {
                 Text(
                     text = stringResource(R.string.search_bar_placeholder),
-                    style = MemoripTheme.typography.title2,
+                    style = MemoripTheme.typography.labelMedium14,
                 )
             },
             leadingIcon = {
@@ -71,20 +72,23 @@ fun MemoripSearchBarInputField(
                 }
             },
             colors = TextFieldDefaults.colors(
-                focusedContainerColor = MemoripTheme.colors.white,
-                unfocusedContainerColor = MemoripTheme.colors.white
+                focusedContainerColor = MemoripTheme.colors.primaryContainer,
+                unfocusedContainerColor = MemoripTheme.colors.primaryContainer
             )
         )
     }
 }
 
-@Preview(showBackground = true)
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun SearchBarInputFieldPreview() {
-    MemoripSearchBarInputField(
-        query = "테스트 검색어",
-        expanded = true,
-        onQueryChange = {},
-        onExpandedChange = {}
-    )
+private fun SearchBarInputFieldPreview() {
+    MemoripTheme {
+        MemoripSearchBarInputField(
+            query = "테스트 검색어",
+            expanded = true,
+            onQueryChange = {},
+            onExpandedChange = {}
+        )
+    }
 }

@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.component
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
@@ -20,17 +21,20 @@ fun EmptyText(
     ) {
         Text(
             text = text,
-            color = MemoripTheme.colors.gray,
-            style = MemoripTheme.typography.bodyLarge
+            color = MemoripTheme.colors.onSurface,
+            style = MemoripTheme.typography.bodyBold16
         )
     }
 }
 
 @Preview(showBackground = true)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun EmptyTextPreview() {
-    EmptyText(
-        text = "결과가 없습니다.",
-        modifier = Modifier.fillMaxSize()
-    )
+private fun EmptyTextPreview() {
+    MemoripTheme {
+        EmptyText(
+            text = "결과가 없습니다.",
+            modifier = Modifier.fillMaxSize()
+        )
+    }
 }

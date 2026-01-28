@@ -1,7 +1,6 @@
 package com.andone.memorip.presentation.screen.plan.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -71,7 +70,8 @@ fun TimeAxis(
             ) {
                 Text(
                     text = stringResource(id = R.string.plan_time_axis_hour, hour),
-                    color = MemoripTheme.colors.onSurface
+                    color = MemoripTheme.colors.onSurface,
+                    style = MemoripTheme.typography.bodyRegular12
                 )
             }
         }

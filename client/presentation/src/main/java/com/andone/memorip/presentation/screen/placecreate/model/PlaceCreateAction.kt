@@ -2,6 +2,7 @@ package com.andone.memorip.presentation.screen.placecreate.model
 
 import android.content.Context
 import android.net.Uri
+import com.andone.memorip.presentation.model.GroupUiModel
 
 sealed interface PlaceCreateAction {
 
@@ -21,11 +22,15 @@ sealed interface PlaceCreateAction {
 
     data class OnImagesRemove(val imageUri: Uri) : PlaceCreateAction
 
+    data object OnLastImageRemove : PlaceCreateAction
+
     data class OnScrollPositionChange(val position: Int) : PlaceCreateAction
 
     data class OnPlaceCreate(val context: Context) : PlaceCreateAction
 
     data class OnSnackBarShow(val message: String) : PlaceCreateAction
+
+    data class OnGroupSelect(val group: GroupUiModel) : PlaceCreateAction
 
     data object OnCreateSuccess : PlaceCreateAction
 }

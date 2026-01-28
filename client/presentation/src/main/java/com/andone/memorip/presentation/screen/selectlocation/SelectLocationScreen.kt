@@ -125,39 +125,40 @@ private fun SelectLocationContent(
         onExpandedChange = { searchBarExpanded = it },
         modifier = modifier,
         colors = SearchBarDefaults.colors(
-            containerColor = MemoripTheme.colors.white,
+            containerColor = MemoripTheme.colors.background,
             dividerColor = MemoripTheme.colors.primary
         ),
         windowInsets = WindowInsets()
     ) {
-        MemoripPagingList(
-            pagingItems = locations,
-            itemKey = { it.id },
-            modifier = Modifier.fillMaxSize(),
-            initialContent = {
-                EmptyText(
-                    text = stringResource(R.string.search_bar_placeholder),
-                    modifier = Modifier.fillMaxSize()
-                )
-            },
-            emptyContent = {
-                EmptyText(
-                    text = stringResource(R.string.search_bar_empty_result),
-                    modifier = Modifier.fillMaxSize()
-                )
-            },
-            itemContent = { location ->
-                LocationItem(
-                    location = location,
-                    onClick = {
-                        onAction(SelectLocationAction.OnLocationClick(location))
-                        cameraPositionMove(LatLng(location.latitude, location.longitude))
-                        searchBarExpanded = false
-                    },
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
-        )
+        if (uiState.query.isEmpty()) {
+            EmptyText(
+                text = stringResource(R.string.search_bar_placeholder),
+                modifier = Modifier.fillMaxSize()
+            )
+        } else {
+            MemoripPagingList(
+                pagingItems = locations,
+                itemKey = { it.id },
+                modifier = Modifier.fillMaxSize(),
+                emptyContent = {
+                    EmptyText(
+                        text = stringResource(R.string.search_bar_empty_result),
+                        modifier = Modifier.fillMaxSize()
+                    )
+                },
+                itemContent = { location ->
+                    LocationItem(
+                        location = location,
+                        onClick = {
+                            onAction(SelectLocationAction.OnLocationClick(location))
+                            cameraPositionMove(LatLng(location.latitude, location.longitude))
+                            searchBarExpanded = false
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            )
+        }
     }
 
     Box(modifier = Modifier.fillMaxSize()) {

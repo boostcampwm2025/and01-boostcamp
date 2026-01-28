@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.component.dialog
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -42,7 +43,7 @@ internal fun DefaultDialog(
             modifier = modifier,
             shape = MemoripTheme.shapes.roundedXLarge,
             color = MemoripTheme.colors.primaryContainer,
-            contentColor = MemoripTheme.colors.black
+            contentColor = MemoripTheme.colors.onSurface
         ) {
             Column(
                 modifier = Modifier.padding(horizontal = INNER_PADDING),
@@ -52,7 +53,8 @@ internal fun DefaultDialog(
                 Text(
                     text = title,
                     modifier = Modifier.padding(vertical = INNER_PADDING),
-                    style = MemoripTheme.typography.headline2
+                    color = MemoripTheme.colors.onSurface,
+                    style = MemoripTheme.typography.headlineBold20
                 )
                 content()
                 Row(
@@ -67,8 +69,8 @@ internal fun DefaultDialog(
                     TextButton(onClick = onCancelClick) {
                         Text(
                             text = stringResource(R.string.dialog_cancel_message),
-                            color = MemoripTheme.colors.primary,
-                            style = MemoripTheme.typography.label1
+                            color = MemoripTheme.colors.onSurface,
+                            style = MemoripTheme.typography.bodyBold16
                         )
                     }
                     TextButton(
@@ -78,7 +80,7 @@ internal fun DefaultDialog(
                         Text(
                             text = stringResource(R.string.dialog_confirm_message),
                             color = MemoripTheme.colors.primary,
-                            style = MemoripTheme.typography.label1
+                            style = MemoripTheme.typography.bodyBold16
                         )
                     }
                 }
@@ -88,9 +90,10 @@ internal fun DefaultDialog(
 }
 
 @Preview(showBackground = true)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun DefaultDialogPrev() {
-    MemoripTheme(darkTheme = false) {
+private fun DefaultDialogPreview() {
+    MemoripTheme {
         DefaultDialog(
             title = "앱 확인 알림",
             onConfirmClick = {},
@@ -99,7 +102,7 @@ private fun DefaultDialogPrev() {
         ) {
             Text(
                 text = "테스트하고자 생성한 Preview 입니다.\n어쩌고 저쩌고",
-                style = MemoripTheme.typography.body1,
+                style = MemoripTheme.typography.bodyMedium16,
                 textAlign = TextAlign.Center
             )
         }

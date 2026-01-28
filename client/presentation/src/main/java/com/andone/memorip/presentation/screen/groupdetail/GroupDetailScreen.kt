@@ -1,6 +1,8 @@
 package com.andone.memorip.presentation.screen.groupdetail
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -19,6 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.LazyPagingItems
@@ -37,6 +40,7 @@ import com.andone.memorip.presentation.screen.placelist.PlaceListGrid
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.collectWithLifecycle
+import com.andone.memorip.presentation.util.DummyData
 
 @Composable
 fun GroupDetailScreen(
@@ -122,12 +126,13 @@ private fun GroupDetailScreenContent(
                 onSearchClick = { onAction(GroupDetailAction.OnSearchClick) }
             )
         },
+        contentWindowInsets = WindowInsets(),
         modifier = modifier
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
+                .padding(paddingValues = innerPadding)
         ) {
             SecondaryTabRow(
                 selectedTabIndex = currentPage,
@@ -176,5 +181,22 @@ private fun GroupDetailScreenContent(
                 )
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun GroupDetailScreenContentPreview() {
+    MemoripTheme {
+        GroupDetailScreenContent(
+            groupName = "그룹그룹그룹그룹그룹그룹그룹그룹그룹그룹",
+            currentPage = 0,
+            places = DummyData.places,
+            placesPagingItems = DummyData.getPlacePagingItems(),
+            mapSelectedPlace = null,
+            mapBottomSheetContent = MapBottomSheetStep.PlaceList,
+            onAction = {}
+        )
     }
 }

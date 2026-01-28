@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.screen.placecreate.component
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -45,23 +46,28 @@ fun ImageCountCard(
         Icon(
             painter = painterResource(R.drawable.ic_photo),
             contentDescription = null,
-            modifier = Modifier.size(MemoripIconSize.IconSizeXSmall)
+            modifier = Modifier.size(MemoripIconSize.IconSizeXSmall),
+            tint = MemoripTheme.colors.onSurface
         )
         Text(
             text = stringResource(
                 R.string.place_create_image_count_format,
                 currentImageIndex + 1, totalImageCount
             ),
-            style = MemoripTheme.typography.caption1
+            color = MemoripTheme.colors.onSurface,
+            style = MemoripTheme.typography.labelRegular12
         )
     }
 }
 
-@Preview(showBackground = true)
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun ImageCountCardPreview() {
-    ImageCountCard(
-        currentImageIndex = 3,
-        totalImageCount = 5
-    )
+private fun ImageCountCardPreview() {
+    MemoripTheme {
+        ImageCountCard(
+            currentImageIndex = 3,
+            totalImageCount = 5
+        )
+    }
 }

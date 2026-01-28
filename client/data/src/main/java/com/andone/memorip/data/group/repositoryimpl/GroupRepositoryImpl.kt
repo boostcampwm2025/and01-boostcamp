@@ -5,6 +5,7 @@ import com.andone.memorip.data.group.datasource.remote.GroupRemoteDataSource
 import com.andone.memorip.data.group.model.GroupCreateRequest
 import com.andone.memorip.data.group.model.GroupUpdateRequest
 import com.andone.memorip.domain.model.Group
+import com.andone.memorip.domain.model.GroupWithPlaceAdded
 import com.andone.memorip.domain.model.PlaceListItem
 import com.andone.memorip.domain.model.Visibility
 import com.andone.memorip.domain.repository.GroupRepository
@@ -29,6 +30,15 @@ class GroupRepositoryImpl @Inject constructor(
             .map { }
     }
 
+    override suspend fun fetchMyGroupsWithPlaceStatus(
+        page: Int,
+        size: Int,
+        placeId: String?
+    ): Result<List<GroupWithPlaceAdded>> {
+        return remoteDataSource.getMyGroups(page, size, placeId)
+            .map { dtoList -> dtoList.map { it.toDomainWithPlaceAdded() } }
+    }
+
     override suspend fun getPublicGroups(page: Int, size: Int): Result<List<Group>> {
         return remoteDataSource.getPublicGroups(page, size)
             .map { dtoList -> dtoList.map { it.toDomain() } }
@@ -50,7 +60,7 @@ class GroupRepositoryImpl @Inject constructor(
         )
         return remoteDataSource.createGroup(request)
             .onSuccess { createdGroup ->
-                _myGroups.value = _myGroups.value + createdGroup
+                _myGroups.value = listOf(createdGroup) + _myGroups.value
             }
     }
 

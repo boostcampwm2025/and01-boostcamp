@@ -29,7 +29,6 @@ import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.MemoripImage
 import com.andone.memorip.presentation.component.PlaceLocationText
-import com.andone.memorip.presentation.component.PlaceTimeText
 import com.andone.memorip.presentation.component.TagChipRow
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.theme.MemoripIconSize
@@ -111,12 +110,12 @@ private fun TextPlaceTimeCard(
                 modifier = Modifier.alignByBaseline(),
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
-                style = MemoripTheme.typography.title1,
+                style = MemoripTheme.typography.titleBold14,
             )
             Text(
                 text = place.address,
                 modifier = Modifier.alignByBaseline(),
-                style = MemoripTheme.typography.bodySmall,
+                style = MemoripTheme.typography.labelRegular12,
                 overflow = TextOverflow.Ellipsis,
             )
         }
@@ -158,7 +157,7 @@ private fun CompactPlaceTimeCard(
                     color = MemoripTheme.colors.onSurface,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
-                    style = MemoripTheme.typography.headline2
+                    style = MemoripTheme.typography.headlineBold24
                 )
 //                TagChipRow(tags = place.categories.toImmutableList())
                 PlaceLocationText(address = place.address, maxLines = 2)
@@ -206,7 +205,7 @@ private fun ExpandedPlaceTimeCard(
                     color = MemoripTheme.colors.onSurface,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
-                    style = MemoripTheme.typography.headline2,
+                    style = MemoripTheme.typography.headlineBold32,
                 )
                 TagChipRow(tags = place.categories.toImmutableList())
                 Row(horizontalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceSmall)) {

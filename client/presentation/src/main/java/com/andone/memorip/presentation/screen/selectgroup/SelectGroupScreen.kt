@@ -1,7 +1,9 @@
 package com.andone.memorip.presentation.screen.selectgroup
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -10,6 +12,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,11 +27,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.LoadingIndicatorScreen
 import com.andone.memorip.presentation.component.dialog.MemoripInputDialog
-import com.andone.memorip.presentation.screen.grouplist.model.GroupUiModel
 import com.andone.memorip.presentation.screen.selectgroup.component.GroupImageGridCard
 import com.andone.memorip.presentation.screen.selectgroup.component.SelectGroupTopBar
 import com.andone.memorip.presentation.screen.selectgroup.model.SelectGroupAction
 import com.andone.memorip.presentation.screen.selectgroup.model.SelectGroupEvent
+import com.andone.memorip.presentation.screen.selectgroup.model.SelectGroupUiModel
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace.SpaceLarge
 import com.andone.memorip.presentation.theme.MemoripSpace.SpaceXSmall
@@ -42,15 +45,25 @@ private object SelectGroupScreenDimens {
 
 @Composable
 fun SelectGroupScreen(
-    onGroupSelect: (GroupUiModel) -> Unit,
+    onGroupSelect: (SelectGroupUiModel) -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
     title: String = stringResource(R.string.select_group_title),
+    placeId: String? = null,
+    initialSelectedGroupId: String? = null,
     viewModel: SelectGroupViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
     var showDialog by remember { mutableStateOf(false) }
+
+    LaunchedEffect(placeId, initialSelectedGroupId) {
+        viewModel.onAction(
+            SelectGroupAction.OnInitialize(
+                placeId = placeId,
+                initialSelectedGroupId = initialSelectedGroupId
+            )
+        )
+    }
 
     viewModel.event.collectWithLifecycle { event ->
         when (event) {
@@ -60,6 +73,10 @@ fun SelectGroupScreen(
 
             is SelectGroupEvent.SelectGroup -> {
                 onGroupSelect(event.group)
+            }
+
+            SelectGroupEvent.PlaceGroupsUpdated -> {
+                onBackClick()
             }
 
             SelectGroupEvent.ShowDialog -> {
@@ -81,6 +98,8 @@ fun SelectGroupScreen(
     } else {
         SelectGroupContent(
             groups = uiState.groups,
+            selectedGroupIds = uiState.selectedGroupIds,
+            initialSelectedGroupIds = uiState.initialSelectedGroupIds,
             onAction = viewModel::onAction,
             title = title,
             modifier = modifier
@@ -103,16 +122,23 @@ fun SelectGroupScreen(
 
 @Composable
 private fun SelectGroupContent(
-    groups: List<GroupUiModel>,
+    groups: List<SelectGroupUiModel>,
+    selectedGroupIds: Set<String>,
+    initialSelectedGroupIds: Set<String>,
     onAction: (SelectGroupAction) -> Unit,
     modifier: Modifier = Modifier,
     title: String = stringResource(R.string.select_group_title),
 ) {
+    val hasChanges = selectedGroupIds != initialSelectedGroupIds
+    val isPlaceDetailScreen = groups.any { it.isPlaceAdded }
+
     Scaffold(
         topBar = {
             SelectGroupTopBar(
                 onBackClick = { onAction(SelectGroupAction.OnBackClick) },
-                title = title
+                onCheckClick = { onAction(SelectGroupAction.OnCheckClick) },
+                title = title,
+                hasChanges = hasChanges
             )
         },
         floatingActionButton = {
@@ -128,34 +154,62 @@ private fun SelectGroupContent(
             }
         },
     ) { innerPadding ->
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(minSize = SelectGroupScreenDimens.GridMinWidth),
-            modifier = modifier.padding(paddingValues = innerPadding),
-            contentPadding = PaddingValues(horizontal = MemoripPadding.AppHorizontalPadding),
-            horizontalArrangement = Arrangement.spacedBy(SpaceXSmall),
-            verticalArrangement = Arrangement.spacedBy(SpaceLarge)
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(paddingValues = innerPadding)
+                .padding(all = MemoripPadding.AppHorizontalPadding)
         ) {
-            items(
-                items = groups,
-                key = { it.id }
-            ) { group ->
-                GroupImageGridCard(
-                    name = group.name,
-                    images = group.images,
-                    onClick = { onAction(SelectGroupAction.OnGroupClick(group)) },
-                )
+            LazyVerticalGrid(
+                columns = GridCells.Adaptive(minSize = SelectGroupScreenDimens.GridMinWidth),
+                modifier = Modifier.fillMaxSize(),
+                horizontalArrangement = Arrangement.spacedBy(SpaceXSmall),
+                verticalArrangement = Arrangement.spacedBy(SpaceLarge)
+            ) {
+                items(
+                    items = groups,
+                    key = { it.id }
+                ) { group ->
+                    val isSelected = group.id in selectedGroupIds
+
+                    val shouldShowCheck = if (isPlaceDetailScreen) {
+                        if (hasChanges) isSelected else group.isPlaceAdded
+                    } else {
+                        isSelected
+                    }
+
+                    GroupImageGridCard(
+                        name = group.name,
+                        images = group.images,
+                        onClick = { onAction(SelectGroupAction.OnGroupClick(group)) },
+                        isPlaceAdded = shouldShowCheck,
+                    )
+                }
             }
         }
     }
 }
 
 @Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun SelectGroupScreenPrev() {
+private fun SelectGroupScreenPreview() {
     MemoripTheme {
+        val dummyGroups = DummyData.groups.map { group ->
+            SelectGroupUiModel(
+                id = group.id,
+                name = group.name,
+                images = group.images,
+                isPlaceAdded = false
+            )
+        }
+        val selectedIds = setOf(dummyGroups[0].id, dummyGroups[2].id)
         SelectGroupContent(
-            groups = DummyData.groups,
-            onAction = {}
+            groups = dummyGroups,
+            selectedGroupIds = selectedIds,
+            initialSelectedGroupIds = emptySet(),
+            onAction = {},
+            title = stringResource(R.string.select_group_title)
         )
     }
 }

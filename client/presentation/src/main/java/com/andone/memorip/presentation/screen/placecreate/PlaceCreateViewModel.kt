@@ -7,9 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.andone.memorip.domain.model.request.Address
 import com.andone.memorip.domain.model.request.PlaceCreateRequest
 import com.andone.memorip.domain.repository.PlaceRepository
+import com.andone.memorip.presentation.model.GroupUiModel
 import com.andone.memorip.presentation.model.LocationUiModel
 import com.andone.memorip.presentation.model.TagUiModel
-import com.andone.memorip.presentation.screen.grouplist.model.GroupUiModel
 import com.andone.memorip.presentation.screen.placecreate.model.PlaceCreateAction
 import com.andone.memorip.presentation.screen.placecreate.model.PlaceCreateEvent
 import com.andone.memorip.presentation.screen.placecreate.model.PlaceCreateUiState
@@ -75,6 +75,10 @@ class PlaceCreateViewModel @Inject constructor(
                 removeImage(action.imageUri)
             }
 
+            is PlaceCreateAction.OnLastImageRemove -> {
+                _event.trySend(PlaceCreateEvent.NavigateToHome)
+            }
+
             is PlaceCreateAction.OnScrollPositionChange -> {
                 _uiState.update { it.copy(scrollPosition = action.position) }
             }
@@ -87,14 +91,18 @@ class PlaceCreateViewModel @Inject constructor(
                 snackBarManager.show(SnackBarEvent.NETWORK_ERROR)
             }
 
+            is PlaceCreateAction.OnGroupSelect -> {
+                updateGroup(action.group)
+            }
+
             PlaceCreateAction.OnCreateSuccess -> {
                 _event.trySend(PlaceCreateEvent.NavigateToHome)
             }
         }
     }
 
-    fun updateImages(images: List<Uri>) {
-        _uiState.update { it.copy(images = images) }
+    fun updateImages(images: List<Uri>, thumbnailImageRatio: Float) {
+        _uiState.update { it.copy(images = images, thumbnailImageRatio = thumbnailImageRatio) }
     }
 
     fun updateLocation(location: LocationUiModel) {
@@ -148,7 +156,9 @@ class PlaceCreateViewModel @Inject constructor(
                     latitude = uiStateValue.location.latitude,
                     longitude = uiStateValue.location.longitude,
                     address = Address.from(uiStateValue.location.address),
-                    imageUrls = imageUrls
+                    imageUrls = imageUrls,
+//                    thumbnailImageRatio = uiStateValue.thumbnailImageRatio,
+                    isPublic = uiStateValue.isPublic
                 )
             ).onSuccess { data ->
                 onAction(PlaceCreateAction.OnCreateSuccess)
@@ -181,10 +191,9 @@ class PlaceCreateViewModel @Inject constructor(
         return try {
             val contentResolver = context.contentResolver
             val inputStream = contentResolver.openInputStream(uri) ?: return null
-
             val tempFile = File.createTempFile("upload_image", ".jpg", context.cacheDir)
-
             val outputStream = FileOutputStream(tempFile)
+
             inputStream.use { input ->
                 outputStream.use { output ->
                     input.copyTo(output)

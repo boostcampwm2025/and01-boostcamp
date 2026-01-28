@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.screen.placecreate.component
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,17 +18,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.R
-import com.andone.memorip.presentation.theme.MemoripLineWidth
+import com.andone.memorip.presentation.screen.placecreate.model.PlaceCreateStep
 import com.andone.memorip.presentation.theme.MemoripIconSize
+import com.andone.memorip.presentation.theme.MemoripLineWidth
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
 
 @Composable
 fun StepProgressBar(
-    currentStep: Int,
-    totalSteps: Int,
+    currentStep: Int?,
     modifier: Modifier = Modifier
 ) {
+    val totalSteps = PlaceCreateStep.entries.count { it.stepIndex != null }
+    val currentStep = currentStep ?: totalSteps
+
     val activeColor = MemoripTheme.colors.primary
     val inactiveColor = MemoripTheme.colors.lightGray
 
@@ -105,18 +109,20 @@ private fun StepCircle(
             Text(
                 text = step.toString(),
                 color = contentColor,
-                style = MemoripTheme.typography.label1
+                style = MemoripTheme.typography.bodyBold12
             )
         }
     }
 }
 
 @Preview(showBackground = true)
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun StepProgressBarPreview() {
-    StepProgressBar(
-        currentStep = 2,
-        totalSteps = 3,
-        modifier = Modifier.fillMaxWidth(0.5f)
-    )
+    MemoripTheme {
+        StepProgressBar(
+            currentStep = 2,
+            modifier = Modifier.fillMaxWidth(0.5f)
+        )
+    }
 }

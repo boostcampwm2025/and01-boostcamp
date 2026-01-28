@@ -11,6 +11,7 @@ import com.andone.memorip.domain.model.response.PlaceImageUploadResponse
 import com.andone.memorip.domain.repository.PlaceRepository
 import kotlinx.coroutines.flow.Flow
 import java.io.File
+import java.util.UUID
 import javax.inject.Inject
 
 class PlaceRepositoryImpl @Inject constructor(
@@ -20,8 +21,20 @@ class PlaceRepositoryImpl @Inject constructor(
         return placeRemoteDataSource.getPlaceDetail(placeId = placeId)
     }
 
-    override fun getPlaceList(): Flow<PagingData<PlaceListItem>> {
-        return placeRemoteDataSource.getPlaceList()
+    override fun getPlaceList(
+        query: String?,
+        tagIds: List<String>?,
+        region1Depth: String?,
+        region2Depth: List<String>?,
+        sort: List<String>?
+    ): Flow<PagingData<PlaceListItem>> {
+        return placeRemoteDataSource.getPlaceList(
+            query = query,
+            tagIds = tagIds,
+            region1Depth = region1Depth,
+            region2Depth = region2Depth,
+            sort = sort
+        )
     }
 
     override suspend fun uploadImage(file: File): Result<PlaceImageUploadResponse> {
@@ -30,6 +43,14 @@ class PlaceRepositoryImpl @Inject constructor(
 
     override suspend fun createPlace(place: PlaceCreateRequest): Result<PlaceCreateResponse> {
         return placeRemoteDataSource.createPlace(place)
+    }
+
+    override suspend fun updatePlaceGroups(
+        placeId: String,
+        addGroupIds: List<String>,
+        removeGroupIds: List<String>
+    ): Result<Unit> {
+        return placeRemoteDataSource.updatePlaceGroups(placeId, addGroupIds, removeGroupIds)
     }
 
     override fun loadRegions(): List<Region> {

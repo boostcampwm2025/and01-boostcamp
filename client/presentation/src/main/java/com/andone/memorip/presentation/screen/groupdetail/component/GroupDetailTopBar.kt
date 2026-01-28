@@ -24,7 +24,13 @@ fun GroupDetailTopBar(
     modifier: Modifier = Modifier
 ) {
     CenterAlignedTopAppBar(
-        title = { Text(text = title) },
+        title = {
+            Text(
+                text = title,
+                style = MemoripTheme.typography.headlineBold20,
+                color = MemoripTheme.colors.onSurface
+            )
+        },
         navigationIcon = {
             IconButton(onClick = onBackClick) {
                 Icon(

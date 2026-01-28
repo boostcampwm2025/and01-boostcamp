@@ -1,19 +1,21 @@
 package com.andone.memorip.presentation.screen.plan
 
 import androidx.lifecycle.ViewModel
-import com.andone.memorip.domain.model.TimeBlock
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.model.PlanBlockUiModel
 import com.andone.memorip.presentation.model.toTimeBlock
+import com.andone.memorip.presentation.screen.plan.PlanViewModelConstants.DAYS_LIMIT
 import com.andone.memorip.presentation.screen.plan.model.DateUiModel
 import com.andone.memorip.presentation.screen.plan.model.PlanAction
 import com.andone.memorip.presentation.screen.plan.model.PlanEvent
-import com.andone.memorip.presentation.screen.plan.model.PlanEvent.*
+import com.andone.memorip.presentation.screen.plan.model.PlanEvent.ShowDeleteDayDialog
 import com.andone.memorip.presentation.screen.plan.model.PlanUiState
 import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_DAY
 import com.andone.memorip.presentation.util.DummyData
-import com.andone.memorip.presentation.util.DummyData.place
+import com.andone.memorip.presentation.util.snackbar.SnackBarEvent
+import com.andone.memorip.presentation.util.snackbar.SnackBarManager
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,13 +23,23 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.days
+import kotlin.time.DurationUnit
+
+private object PlanViewModelConstants {
+    const val DAYS_LIMIT = 30
+}
 
 @HiltViewModel
-class PlanViewModel @Inject constructor() : ViewModel() {
+class PlanViewModel @Inject constructor(
+    private val snackBarManager: SnackBarManager
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
         value = PlanUiState(
+            places = DummyData.places.toImmutableList(),
 //            blocks = DummyData.places.mapNotNull { it.toTimeBlock(dayStart = DummyData.dummyDate.startDay!!.atStartOfDay()) },
             blocks = emptyList(),
 //            blockUiModels = DummyData.places.associateBy { it.id },
@@ -37,6 +49,8 @@ class PlanViewModel @Inject constructor() : ViewModel() {
     val uiState = _uiState.asStateFlow()
     private val _event = Channel<PlanEvent>(capacity = BUFFERED)
     val event = _event.receiveAsFlow()
+
+    private val originPlaces = uiState.value.places
 
     fun onAction(action: PlanAction) {
         when (action) {
@@ -51,44 +65,46 @@ class PlanViewModel @Inject constructor() : ViewModel() {
             }
 
             is PlanAction.RemoveDay -> {
-                _uiState.update { state ->
-                    val date = state.date
-                    val (newStart, newEnd) = date.deleteDay(dayIndex = action.day)
+                val date = uiState.value.date
+                val (newStart, newEnd) = date.deleteDay(dayIndex = action.day)
 
-                    val newCurrent = adjustCurrentDay(
-                        date = date,
-                        dayIndex = action.day,
-                        newStart = newStart,
-                        newEnd = newEnd
-                    )
+                val newCurrent = adjustCurrentDay(
+                    date = date,
+                    dayIndex = action.day,
+                    newStart = newStart,
+                    newEnd = newEnd
+                )
 
-                    val adjustedUiModels = adjustBlockUiModelsAfterDayRemoved(
-                        blockUiModels = state.blockUiModels,
-                        removedDayIndex = action.day,
-                        date = state.date
-                    )
-
-                    val newBlocks = newStart?.let { day ->
-                        adjustedUiModels.values
-                            .filterIsInstance<Place>()
-                            .mapNotNull { place ->
-                                place.startDateTime?.let {
-                                    place.toTimeBlock(dayStart = day.atStartOfDay())
+                adjustBlockUiModelsAfterDayRemoved(
+                    blockUiModels = uiState.value.blockUiModels,
+                    removedDayIndex = action.day,
+                    date = uiState.value.date,
+                    onUpdateState = { adjustedUiModels, value ->
+                        val newBlocks = newStart?.let {
+                            adjustedUiModels.values
+                                .filterIsInstance<Place>()
+                                .mapNotNull { place ->
+                                    place.startDateTime?.let {
+                                        place.toTimeBlock(dayStart = uiState.value.date.startDay!!.atStartOfDay())
+                                    }
                                 }
-                            }
-                    } ?: emptyList()
+                        } ?: emptyList()
 
-                    state.copy(
-                        date = date.copy(
-                            startDay = newStart,
-                            endDay = newEnd,
-                            currentDay = newCurrent,
-                            longClickedDay = null
-                        ),
-                        blockUiModels = adjustedUiModels,
-                        blocks = newBlocks
-                    )
-                }
+                        _uiState.update { state ->
+                            state.copy(
+                                date = date.copy(
+                                    startDay = newStart,
+                                    endDay = newEnd,
+                                    currentDay = newCurrent,
+                                    longClickedDay = null
+                                ),
+                                blockUiModels = adjustedUiModels,
+                                blocks = newBlocks,
+                                places = (uiState.value.places + value).toImmutableList()
+                            )
+                        }
+                    }
+                )
             }
 
 
@@ -117,6 +133,16 @@ class PlanViewModel @Inject constructor() : ViewModel() {
             }
 
             is PlanAction.DateSelected -> {
+                val dayDiff = ChronoUnit.DAYS.between(
+                    action.start,
+                    action.end
+                ).days.toInt(DurationUnit.DAYS)
+
+                if (dayDiff > DAYS_LIMIT) {
+                    snackBarManager.show(SnackBarEvent.PLAN_DAYS_VALIDATION_ERROR)
+                    return
+                }
+
                 _uiState.update {
                     it.copy(
                         date = it.date.copy(
@@ -140,7 +166,7 @@ class PlanViewModel @Inject constructor() : ViewModel() {
                 }
             }
 
-            is PlanAction.ItemDragStart -> {
+            is PlanAction.ItemDragEnd -> {
                 val date = _uiState.value.date
                 val baseDay = date.startDay ?: return
 
@@ -156,17 +182,33 @@ class PlanViewModel @Inject constructor() : ViewModel() {
 
                 val endDateTime = startDateTime.plusMinutes(action.item.durationMinutes)
 
+                val isDuplicated = uiState.value.blocks.any {
+                    val rangeBaseDay = baseDay.plusDays((it.day - 1).toLong())
+                    val startRange =
+                        rangeBaseDay.atStartOfDay().plusMinutes(it.startMinute.toLong())
+                    val endRange =
+                        rangeBaseDay.atStartOfDay().plusMinutes(it.endMinute.toLong())
+                    startDateTime in startRange..endRange.minusMinutes(1) || endDateTime in startRange.plusMinutes(1)..endRange
+                }
+                if (isDuplicated) {
+                    snackBarManager.show(SnackBarEvent.PLAN_INVALID_ERROR)
+                    return
+                }
+
                 val newPlace = action.item.copy(
                     startDateTime = startDateTime,
                     endDateTime = endDateTime
                 )
-
                 _uiState.update {
                     it.copy(
                         blockUiModels = it.blockUiModels + (action.item.id to newPlace),
-                        blocks = it.blocks + newPlace.toTimeBlock(dayStart = it.date.currentDay!!.atStartOfDay())!!
+                        blocks = uiState.value.blocks + newPlace.toTimeBlock(dayStart = uiState.value.date.startDay!!.atStartOfDay())!!,
+                        places = (it.places - action.item).toImmutableList()
                     )
                 }
+            }
+            PlanAction.ShowCalendarClick -> {
+                _event.trySend(element = PlanEvent.ShowCalendarDialog)
             }
         }
     }
@@ -224,8 +266,9 @@ class PlanViewModel @Inject constructor() : ViewModel() {
     private fun adjustBlockUiModelsAfterDayRemoved(
         blockUiModels: Map<String, PlanBlockUiModel>,
         removedDayIndex: Int,
-        date: DateUiModel
-    ): Map<String, PlanBlockUiModel> {
+        date: DateUiModel,
+        onUpdateState: (Map<String, PlanBlockUiModel>, List<Place>) -> Unit
+    ) {
 
         val removedDate = date.currentDayFromSelectedDay(removedDayIndex)
 
@@ -238,8 +281,9 @@ class PlanViewModel @Inject constructor() : ViewModel() {
             }
             .toSet()
 
-        return blockUiModels.mapNotNull { (id, uiModel) ->
+        val removedPlaces = originPlaces.filter { it.id in removedIds }
 
+        val blockUiModel = blockUiModels.mapNotNull { (id, uiModel) ->
             if (uiModel is Place && removedDate != null) {
                 val place = uiModel
 
@@ -269,5 +313,7 @@ class PlanViewModel @Inject constructor() : ViewModel() {
 
             id to uiModel
         }.toMap()
+
+        onUpdateState(blockUiModel, removedPlaces)
     }
 }

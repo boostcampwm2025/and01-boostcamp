@@ -3,12 +3,14 @@ package com.andone.memorip.presentation.screen.placelist.component
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,16 +34,30 @@ fun RegionSelectBottomSheet(
     selectedRegionState: SelectedRegionState = SelectedRegionState(),
     onConfirmClick: () -> Unit = {},
     onRegionChipClick: (regionUiModel: RegionUiModel) -> Unit = {},
+    onResetClick: () -> Unit = {},
 ) {
     Column(
         modifier = modifier.padding(horizontal = MemoripPadding.AppHorizontalPadding),
         verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceMedium)
     ) {
-        Text(
-            text = stringResource(R.string.place_list_bottom_sheet_title),
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            style = MemoripTheme.typography.title1
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = stringResource(R.string.place_list_bottom_sheet_title),
+                style = MemoripTheme.typography.headlineBold20
+            )
+
+            TextButton(onClick = onResetClick) {
+                Text(
+                    text = stringResource(R.string.place_list_reset),
+                    style = MemoripTheme.typography.labelMedium14,
+                    color = MemoripTheme.colors.primary
+                )
+            }
+        }
 
         RegionPathRow(
             selectedRegionState = selectedRegionState,
@@ -50,7 +66,7 @@ fun RegionSelectBottomSheet(
 
         HorizontalDivider()
 
-        RegionChipListSection(
+        TagListSection(
             regionList = currentRegionList,
             onChipClick = onRegionChipClick
         )
@@ -69,14 +85,14 @@ fun RegionSelectBottomSheet(
         ) {
             Text(
                 text = stringResource(R.string.place_list_bottom_sheet_confirm),
-                style = MemoripTheme.typography.title1
+                style = MemoripTheme.typography.labelBold16
             )
         }
     }
 }
 
 @Composable
-private fun RegionChipListSection(
+private fun TagListSection(
     modifier: Modifier = Modifier,
     regionList: List<RegionUiModel> = emptyList(),
     onChipClick: (regionUiModel: RegionUiModel) -> Unit = {}

@@ -85,7 +85,7 @@ fun BottomSheetPlaceListItem(
                         color = MemoripTheme.colors.onSurface,
                         overflow = TextOverflow.Ellipsis,
                         maxLines = 1,
-                        style = MemoripTheme.typography.bodyLarge
+                        style = MemoripTheme.typography.titleBold20
                     )
                     PlaceLocationText(
                         address = place.address,

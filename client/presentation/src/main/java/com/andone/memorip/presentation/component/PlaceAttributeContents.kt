@@ -19,10 +19,8 @@ import com.andone.memorip.presentation.theme.MemoripIconSize
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
-import com.andone.memorip.presentation.util.formatTimeRange
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
-import java.time.LocalDateTime
 
 @Composable
 fun TagChipRow(
@@ -58,27 +56,11 @@ fun PlaceLocationText(
         Text(
             text = address,
             color = MemoripTheme.colors.onSurface,
-            style = MemoripTheme.typography.bodySmall,
+            style = MemoripTheme.typography.bodyBold12,
             maxLines = maxLines,
             overflow = TextOverflow.Ellipsis
         )
     }
-}
-
-@Composable
-fun PlaceTimeText(
-    startDateTime: LocalDateTime,
-    endDateTime: LocalDateTime,
-    modifier: Modifier = Modifier
-) {
-    Text(
-        text = formatTimeRange(startDateTime, endDateTime),
-        color = MemoripTheme.colors.gray,
-        overflow = TextOverflow.Ellipsis,
-        maxLines = 1,
-        style = MemoripTheme.typography.bodySmall,
-        modifier = modifier
-    )
 }
 
 @Preview(showBackground = true)
@@ -96,15 +78,3 @@ private fun PlaceLocationTextPreview() {
         PlaceLocationText(address = "서울특별시 강남구")
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-private fun PlaceTimeTextPreview() {
-    MemoripTheme {
-        PlaceTimeText(
-            startDateTime = LocalDateTime.now(),
-            endDateTime = LocalDateTime.now().plusHours(1)
-        )
-    }
-}
-

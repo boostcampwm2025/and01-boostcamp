@@ -12,10 +12,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -59,12 +57,28 @@ fun BottomSheetPlaceDetailContent(
                 ),
             verticalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceMedium)
         ) {
-            Text(
-                text = place.name,
-                style = MemoripTheme.typography.headline2,
-                color = MemoripTheme.colors.onSurface,
-                modifier = Modifier.fillMaxWidth()
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = place.name,
+                    modifier = modifier.weight(1f),
+                    color = MemoripTheme.colors.onSurface,
+                    style = MemoripTheme.typography.titleBold16
+                )
+
+                IconButton(
+                    onClick = onCloseClick,
+                    modifier = modifier
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_close),
+                        contentDescription = stringResource(R.string.dialog_close_button_description),
+                        tint = MemoripTheme.colors.onSurface
+                    )
+                }
+            }
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -100,21 +114,6 @@ fun BottomSheetPlaceDetailContent(
                 }
             }
         }
-
-        IconButton(
-            onClick = onCloseClick,
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(MemoripPadding.PaddingSmall),
-            colors = IconButtonDefaults.iconButtonColors(
-                contentColor = MemoripTheme.colors.onSurface
-            )
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.ic_close),
-                contentDescription = stringResource(R.string.dialog_close_button_description)
-            )
-        }
     }
 }
 
@@ -123,7 +122,7 @@ fun BottomSheetPlaceDetailContent(
 private fun BottomSheetPlaceDetailContentPreview() {
     MemoripTheme {
         BottomSheetPlaceDetailContent(
-            place = DummyData.places.first(),
+            place = DummyData.places.last(),
             onCloseClick = {}
         )
     }

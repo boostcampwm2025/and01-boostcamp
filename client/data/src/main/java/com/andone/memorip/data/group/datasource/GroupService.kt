@@ -20,7 +20,8 @@ interface GroupService {
     suspend fun getMyGroups(
         @Query("page") page: Int,
         @Query("size") size: Int,
-        @Query("sort") sort: List<String>? = listOf("id,desc")
+        @Query("sort") sort: List<String>? = listOf("id,desc"),
+        @Query("placeId") placeId: String? = null
     ): ApiResult<List<GroupListResponse>>
 
     @GET("/api/public/groups")

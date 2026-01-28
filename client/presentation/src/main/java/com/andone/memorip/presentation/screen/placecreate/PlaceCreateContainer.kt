@@ -25,16 +25,18 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.andone.memorip.presentation.model.GroupUiModel
 import com.andone.memorip.presentation.model.LocationUiModel
 import com.andone.memorip.presentation.model.TagUiModel
-import com.andone.memorip.presentation.screen.grouplist.model.GroupUiModel
 import com.andone.memorip.presentation.screen.placecreate.PlaceCreateContainerDimens.BAR_WIDTH_FRACTION
-import com.andone.memorip.presentation.screen.placecreate.PlaceCreateNavGraphConstants.TOTAL_STEP_SIZE
 import com.andone.memorip.presentation.screen.placecreate.component.PlaceCreateTopBar
 import com.andone.memorip.presentation.screen.placecreate.component.StepProgressBar
+import com.andone.memorip.presentation.screen.placecreate.model.PlaceCreateAction
 import com.andone.memorip.presentation.screen.placecreate.model.PlaceCreateStep
 import com.andone.memorip.presentation.screen.selectcategory.SelectCategoryScreen
 import com.andone.memorip.presentation.screen.selectgroup.SelectGroupScreen
+import com.andone.memorip.presentation.screen.selectgroup.model.toGroupUiModel
 import com.andone.memorip.presentation.screen.selectimage.SelectImageScreen
 import com.andone.memorip.presentation.screen.selectlocation.SelectLocationScreen
 import com.andone.memorip.presentation.theme.MemoripSpace
@@ -83,7 +85,9 @@ fun PlaceCreateContainer(
         if (isMainStep) {
             PlaceCreateMainStep(
                 step = currentStep,
-                onImagesChange = viewModel::updateImages,
+                onImagesChange = { images, thumbnailImageRatio ->
+                    viewModel.updateImages(images, thumbnailImageRatio)
+                },
                 onLocationChange = viewModel::updateLocation,
                 onStepChange = { currentStep = it },
                 onNavigateToHome = onNavigateToHome,
@@ -91,11 +95,15 @@ fun PlaceCreateContainer(
                 viewModel = viewModel
             )
         } else {
+            val uiState by viewModel.uiState.collectAsStateWithLifecycle()
             PlaceCreateSubStep(
                 step = currentStep,
                 onCategoryChange = viewModel::updateCategory,
-                onGroupChange = viewModel::updateGroup,
-                onStepChange = { currentStep = it }
+                onGroupChange = { group ->
+                    viewModel.onAction(PlaceCreateAction.OnGroupSelect(group))
+                },
+                onStepChange = { currentStep = it },
+                currentGroup = uiState.group
             )
         }
     }
@@ -104,7 +112,7 @@ fun PlaceCreateContainer(
 @Composable
 fun PlaceCreateMainStep(
     step: PlaceCreateStep,
-    onImagesChange: (List<Uri>) -> Unit,
+    onImagesChange: (List<Uri>, Float) -> Unit,
     onLocationChange: (LocationUiModel) -> Unit,
     onStepChange: (PlaceCreateStep) -> Unit,
     onNavigateToHome: () -> Unit,
@@ -132,8 +140,7 @@ fun PlaceCreateMainStep(
                 horizontalArrangement = Arrangement.Center
             ) {
                 StepProgressBar(
-                    currentStep = step.stepIndex ?: TOTAL_STEP_SIZE,
-                    totalSteps = TOTAL_STEP_SIZE,
+                    currentStep = step.stepIndex,
                     modifier = Modifier.fillMaxWidth(BAR_WIDTH_FRACTION)
                 )
             }
@@ -153,8 +160,8 @@ fun PlaceCreateMainStep(
                     PlaceCreateStep.SelectImage -> {
                         SelectImageScreen(
                             onBack = onBackClick,
-                            onImageSelect = { images ->
-                                onImagesChange(images)
+                            onImageSelect = { images, thumbnailImageRatio ->
+                                onImagesChange(images, thumbnailImageRatio)
                                 onStepChange(PlaceCreateStep.SelectLocation)
                             }
                         )
@@ -174,7 +181,7 @@ fun PlaceCreateMainStep(
                             onCategoryClick = { onStepChange(PlaceCreateStep.SelectCategory) },
                             onLocationClick = { onStepChange(PlaceCreateStep.SelectLocation) },
                             onGroupClick = { onStepChange(PlaceCreateStep.SelectGroup) },
-                            onImageCreate = onNavigateToHome,
+                            onNavigateToHome = onNavigateToHome,
                             viewModel = viewModel
                         )
                     }
@@ -192,7 +199,8 @@ fun PlaceCreateSubStep(
     onCategoryChange: (List<TagUiModel>) -> Unit,
     onGroupChange: (GroupUiModel) -> Unit,
     onStepChange: (PlaceCreateStep) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    currentGroup: GroupUiModel? = null
 ) {
     when (step) {
         PlaceCreateStep.SelectCategory -> {
@@ -208,11 +216,13 @@ fun PlaceCreateSubStep(
 
         PlaceCreateStep.SelectGroup -> {
             SelectGroupScreen(
-                onGroupSelect = { group ->
-                    onGroupChange(group)
+                onGroupSelect = { selectGroup ->
+                    onGroupChange(selectGroup.toGroupUiModel())
                     onStepChange(PlaceCreateStep.PlaceCreate)
                 },
                 onBackClick = { onStepChange(PlaceCreateStep.PlaceCreate) },
+                placeId = null,
+                initialSelectedGroupId = currentGroup?.id,
                 modifier = modifier
             )
         }

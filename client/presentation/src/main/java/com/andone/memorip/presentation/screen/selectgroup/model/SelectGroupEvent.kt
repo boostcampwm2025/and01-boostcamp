@@ -1,16 +1,16 @@
 package com.andone.memorip.presentation.screen.selectgroup.model
 
-import com.andone.memorip.presentation.screen.grouplist.model.GroupUiModel
-
 sealed interface SelectGroupEvent {
 
     data object NavigateBack : SelectGroupEvent
 
-    data class SelectGroup(val group: GroupUiModel) : SelectGroupEvent
+    data class SelectGroup(val group: SelectGroupUiModel) : SelectGroupEvent
 
     data object ShowDialog : SelectGroupEvent
 
     data object DismissDialog : SelectGroupEvent
 
     data object ShowSnackBar : SelectGroupEvent
+
+    data object PlaceGroupsUpdated : SelectGroupEvent
 }

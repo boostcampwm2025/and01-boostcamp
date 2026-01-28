@@ -2,6 +2,7 @@ package com.andone.memorip.presentation.screen.selectimage
 
 import android.net.Uri
 import androidx.lifecycle.ViewModel
+import com.andone.memorip.presentation.screen.selectimage.model.CropTransformData
 import com.andone.memorip.presentation.screen.selectimage.model.SelectImageAction
 import com.andone.memorip.presentation.screen.selectimage.model.SelectImageEvent
 import com.andone.memorip.presentation.screen.selectimage.model.SelectImageUiState
@@ -30,7 +31,7 @@ class SelectImageViewModel @Inject constructor() : ViewModel() {
             }
 
             is SelectImageAction.OnImagesCrop -> {
-                addImages(action.images)
+                addImages(action.images, action.transformData)
             }
 
             SelectImageAction.OnBack -> {
@@ -43,8 +44,13 @@ class SelectImageViewModel @Inject constructor() : ViewModel() {
         _uiState.update { it.copy(selectedImages = images) }
     }
 
-    private fun addImages(images: List<Uri>) {
-        _uiState.update { it.copy(croppedImages = images) }
-        _event.trySend(SelectImageEvent.NavigateToSelectLocation(images))
+    private fun addImages(images: List<Uri>, transformData: Map<Uri, CropTransformData>) {
+        _uiState.update { it.copy(croppedImages = images, transformData = transformData) }
+        _event.trySend(
+            SelectImageEvent.NavigateToSelectLocation(
+                images = images,
+                thumbnailImageRatio = transformData.values.first().aspectRatio
+            )
+        )
     }
 }

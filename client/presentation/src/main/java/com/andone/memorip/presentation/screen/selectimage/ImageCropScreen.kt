@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.screen.selectimage
 
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.net.Uri
 import androidx.compose.foundation.Canvas
@@ -26,11 +27,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.core.graphics.withSave
+import com.andone.memorip.presentation.component.LoadingIndicatorScreen
 import com.andone.memorip.presentation.screen.selectimage.ImageCropScreenDimens.DRAW_RECT_ALPHA
 import com.andone.memorip.presentation.screen.selectimage.ImageCropScreenDimens.cropPadding
 import com.andone.memorip.presentation.screen.selectimage.ImageCropScreenDimens.touchTarget
 import com.andone.memorip.presentation.screen.selectimage.component.ImageCropBottomBar
 import com.andone.memorip.presentation.screen.selectimage.component.rememberCropImageState
+import com.andone.memorip.presentation.screen.selectimage.model.CropTransformData
 import com.andone.memorip.presentation.theme.MemoripIconSize
 import com.andone.memorip.presentation.theme.MemoripLineWidth
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -46,7 +49,8 @@ private object ImageCropScreenDimens {
 @Composable
 fun ImageCropScreen(
     imageUris: List<Uri>,
-    onImagesCrop: (List<Uri>) -> Unit,
+    transformData: Map<Uri, CropTransformData>,
+    onImagesCrop: (List<Uri>, Map<Uri, CropTransformData>) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -54,6 +58,7 @@ fun ImageCropScreen(
 
     val state = rememberCropImageState(
         imageUris = imageUris,
+        transformData = transformData,
         context = context,
         onImagesCrop = onImagesCrop,
         cropPadding = cropPadding.toPx(density)
@@ -64,32 +69,36 @@ fun ImageCropScreen(
     }
 
     Column(modifier = modifier.fillMaxSize()) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
-                .clip(RectangleShape)
-                .onGloballyPositioned { state.updateViewSize(it.size.toSize()) }
-                .detectEditorGestures(
-                    key = state.currentUri.toString(),
-                    onDragStart = { offset ->
-                        state.dragStart(
-                            offset = offset,
-                            touchTarget = touchTarget.toPx(density)
-                        )
-                    },
-                    onDrag = state::drag,
-                    onZoom = { pan, zoom -> state.zoom(pan, zoom) },
-                    onDragEnd = state::dragEnd
+        if (state.isLoading) {
+            LoadingIndicatorScreen(modifier = Modifier.weight(1f))
+        } else {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .clip(RectangleShape)
+                    .onGloballyPositioned { state.updateViewSize(it.size.toSize()) }
+                    .detectEditorGestures(
+                        key = state.currentUri.toString(),
+                        onDragStart = { offset ->
+                            state.dragStart(
+                                offset = offset,
+                                touchTarget = touchTarget.toPx(density)
+                            )
+                        },
+                        onDrag = state::drag,
+                        onZoom = { pan, zoom -> state.zoom(pan, zoom) },
+                        onDragEnd = state::dragEnd
+                    )
+            ) {
+                ImageCropSection(
+                    imageBitmap = state.imageBitmap,
+                    viewSize = state.viewSize,
+                    offset = state.offset,
+                    scale = state.scale,
+                    cropRect = state.cropRect
                 )
-        ) {
-            ImageCropSection(
-                imageBitmap = state.imageBitmap,
-                viewSize = state.viewSize,
-                offset = state.offset,
-                scale = state.scale,
-                cropRect = state.cropRect
-            )
+            }
         }
 
         ImageCropBottomBar(
@@ -173,10 +182,14 @@ private fun ImageCropSection(
 }
 
 @Preview(showBackground = true)
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun ImageCropScreenPreview() {
-    ImageCropScreen(
-        imageUris = emptyList(),
-        onImagesCrop = {}
-    )
+    MemoripTheme {
+        ImageCropScreen(
+            imageUris = emptyList(),
+            transformData = emptyMap(),
+            onImagesCrop = { _, _ -> },
+        )
+    }
 }

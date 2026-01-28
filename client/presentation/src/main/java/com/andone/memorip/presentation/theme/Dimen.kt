@@ -33,6 +33,7 @@ object MemoripIconSize {
 }
 
 object MemoripHeight {
+    val bottomBar = 60.dp
     val TextBoxHigh = 120.dp
     val SearchBoxHeight = 36.dp
 }
@@ -78,7 +79,7 @@ object MemoripAlpha {
 
     /* ---------- Image ---------- */
     const val IMAGE_PLACEHOLDER = 0.3f
-    const val IMAGE_OVERLAY = 0.68f
+    const val IMAGE_OVERLAY = 0.5f
 
 
     /* ---------- Divider / Border ---------- */

@@ -34,7 +34,8 @@ fun LocationCard(
     location: String,
     latitude: Double,
     longitude: Double,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigateToExternalMap: ((LocationUiModel) -> Unit)? = null,
 ) {
     Surface(
         modifier = modifier,
@@ -54,12 +55,12 @@ fun LocationCard(
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.ic_location_on),
-                tint = MemoripTheme.colors.green,
+                tint = MemoripTheme.colors.primary,
                 contentDescription = null
             )
             Text(
                 text = location,
-                style = MemoripTheme.typography.label1,
+                style = MemoripTheme.typography.bodyMedium16,
                 color = MemoripTheme.colors.black
             )
         }
@@ -73,7 +74,8 @@ fun LocationCard(
                     address = location,
                     latitude = latitude,
                     longitude = longitude
-                )
+                ),
+                onNavigateToExternalMap = onNavigateToExternalMap
             )
         }
     }
@@ -81,7 +83,7 @@ fun LocationCard(
 
 @Preview(showBackground = true)
 @Composable
-private fun LocationCardPrev() {
+private fun LocationCardPreview() {
     MemoripTheme {
         val place = place
         LocationCard(
