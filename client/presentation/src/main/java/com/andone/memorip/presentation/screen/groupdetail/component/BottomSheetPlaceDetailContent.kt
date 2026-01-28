@@ -107,7 +107,7 @@ fun BottomSheetPlaceDetailContent(
                 .align(Alignment.TopEnd)
                 .padding(MemoripPadding.PaddingSmall),
             colors = IconButtonDefaults.iconButtonColors(
-                contentColor = MemoripTheme.colors.black
+                contentColor = MemoripTheme.colors.onSurface
             )
         ) {
             Icon(
