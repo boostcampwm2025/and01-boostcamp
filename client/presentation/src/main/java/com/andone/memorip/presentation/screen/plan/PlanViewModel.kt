@@ -1,10 +1,18 @@
 package com.andone.memorip.presentation.screen.plan
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.BackoffPolicy
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequest
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.workDataOf
 import com.andone.memorip.domain.model.GroupListItem
 import com.andone.memorip.domain.model.TimeBlock
 import com.andone.memorip.domain.repository.GroupRepository
+import com.andone.memorip.presentation.model.Payload
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.model.PlanBlockUiModel
 import com.andone.memorip.presentation.model.toTimeBlock
@@ -22,16 +30,13 @@ import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_DAY
 import com.andone.memorip.presentation.util.snackbar.SnackBarEvent
 import com.andone.memorip.presentation.util.snackbar.SnackBarManager
 import com.andone.memorip.presentation.util.toRemoteString
+import com.andone.memorip.presentation.util.workmanager.PlanWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
@@ -43,6 +48,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
+import java.util.concurrent.CancellationException
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.days
 import kotlin.time.DurationUnit
@@ -55,7 +62,8 @@ private object PlanViewModelConstants {
 @HiltViewModel
 class PlanViewModel @Inject constructor(
     private val groupRepository: GroupRepository,
-    private val snackBarManager: SnackBarManager
+    private val snackBarManager: SnackBarManager,
+    private val workManager: WorkManager
 ) : ViewModel() {
     private val selectedGroupFlow = MutableStateFlow<GroupListUiModel?>(value = null)
     private val remoteGroupsFlow = flow {
@@ -130,6 +138,8 @@ class PlanViewModel @Inject constructor(
     val event = _event.receiveAsFlow()
 
     private val originPlaces = uiState.value.places
+
+    private val pendingUpdates = mutableMapOf<String, Payload>()
 
     fun onAction(action: PlanAction) {
         when (action) {
@@ -388,24 +398,76 @@ class PlanViewModel @Inject constructor(
         localDeletedPlacesFlow.update { (it + place).toImmutableList() }
     }
 
-    private fun savePlan() {
-        val job = CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
+    fun savePlan() {
+        Log.d("DEBUG TEST", "save plan call")
+        viewModelScope.launch {
+            Log.d("DEBUG TEST", "block ui models : ${uiState.value.blockUiModels}")
             uiState.value.blockUiModels.forEach { (groupPlaceId, place) ->
-                when(place) {
+                when (place) {
                     is Place -> {
-                        if (place != uiState.value.places.find{it.id == groupPlaceId}) {
+                        if (place != uiState.value.places.find { it.id == groupPlaceId }) {
+                            val startAt = place.startDateTime.toRemoteString()
+                            val endAt = place.endDateTime.toRemoteString()
+                            pendingUpdates[groupPlaceId] = Payload.PlaceTimeEditPayload(
+                                startAt = startAt,
+                                endAt = endAt
+                            )
                             groupRepository.updatePlaceTime(
                                 groupPlaceId = groupPlaceId,
-                                startAt = place.startDateTime.toRemoteString(),
-                                endAt = place.endDateTime.toRemoteString()
-                            )
+                                startAt = startAt,
+                                endAt = endAt
+                            ).onSuccess {
+                                Log.d("DEBUG TEST", "edit success")
+                                pendingUpdates.remove(groupPlaceId)
+                            }
+                                .onFailure {
+                                    if (it is CancellationException) throw it
+                                    Log.d("DEBUG TEST", "edit failure")
+                                    snackBarManager.show(SnackBarEvent.NETWORK_ERROR)
+                                }
                         }
-
                     }
+
                     else -> {}
                 }
             }
         }
-        job.start()
+    }
+
+    override fun onCleared() {
+        Log.d("DEBUG TEST", "onCleared call")
+        pendingUpdates.forEach { (id, update) ->
+            Log.d("DEBUG TEST", "pending update $id : $update")
+            val request = buildPendingUpdateWork(id, update)
+
+            workManager.enqueueUniqueWork(
+                uniqueWorkName = WORK_NAME + id,
+                ExistingWorkPolicy.APPEND_OR_REPLACE,
+                request
+            )
+        }
+        super.onCleared()
+    }
+
+    private fun buildPendingUpdateWork(id: String, payload: Payload): OneTimeWorkRequest {
+        val payload = payload as Payload.PlaceTimeEditPayload
+        val data = workDataOf(
+            PlanWorker.ID to id,
+            PlanWorker.START_AT to payload.startAt,
+            PlanWorker.END_AT to payload.startAt
+        )
+
+        return OneTimeWorkRequestBuilder<PlanWorker>()
+            .setInputData(data)
+            .setBackoffCriteria(
+                BackoffPolicy.EXPONENTIAL,
+                10,
+                TimeUnit.SECONDS
+            )
+            .build()
+    }
+
+    companion object {
+        const val WORK_NAME = "PLACE_TIME_EDIT"
     }
 }

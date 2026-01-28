@@ -54,12 +54,8 @@ fun GroupPlace.toUiModel(): Place = Place(
     latitude = this.latitude,
     longitude = this.longitude,
     address = this.address,
-    startDateTime = if (this.startAt != null) Instant.parse(this.startAt)
-        .atZone(ZoneId.systemDefault())
-        .toLocalDateTime() else null,
-    endDateTime = if (this.endAt != null) Instant.parse(this.endAt)
-        .atZone(ZoneId.systemDefault())
-        .toLocalDateTime() else null,
+    startDateTime = if (this.startAt != null) LocalDateTime.parse(this.startAt) else null,
+    endDateTime = if (this.endAt != null) LocalDateTime.parse(this.endAt) else null,
     categories = emptyList(),
     /** ImageItem 잘해봐야 함 */
     thumbnailImage = ImageItem(

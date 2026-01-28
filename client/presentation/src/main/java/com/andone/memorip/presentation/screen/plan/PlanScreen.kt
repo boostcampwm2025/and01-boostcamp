@@ -10,6 +10,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -66,6 +67,10 @@ fun PlanScreen(
         Log.d("DEBUG TEST", "uiState blocks : ${uiState.blocks}")
         Log.d("DEBUG TEST", "uiState groups : ${uiState.groups}")
         Log.d("DEBUG TEST", "uiState places : ${uiState.places}")
+    }
+
+    DisposableEffect(Unit) {
+        onDispose { viewModel.savePlan() }
     }
 
     deleteTargetDay?.let { day ->
@@ -138,7 +143,7 @@ fun PlanScreenContents(
         topBar = {
             PlanTopAppBar(
                 title = state.selectedGroup?.title,
-                groups= state.groups,
+                groups = state.groups,
                 isDeleteMode = state.date.longClickedDay != null,
                 onTitleClick = { onAction(PlanAction.GroupChoiceClick) },
                 onDeleteClick = { onAction(PlanAction.RemoveDayClick) },
