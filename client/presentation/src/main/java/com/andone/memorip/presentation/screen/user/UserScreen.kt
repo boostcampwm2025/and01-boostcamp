@@ -1,6 +1,7 @@
 package com.andone.memorip.presentation.screen.user
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -29,6 +30,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.presentation.BuildConfig
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.screen.user.UserScreenDimen.ACCOUNT_SECTION_HEIGHT
+import com.andone.memorip.presentation.screen.user.component.SettingSection
 import com.andone.memorip.presentation.screen.user.component.UserProfileSection
 import com.andone.memorip.presentation.screen.user.model.UserAction
 import com.andone.memorip.presentation.screen.user.model.UserEvent
@@ -36,6 +38,7 @@ import com.andone.memorip.presentation.screen.user.model.LoginMethod
 import com.andone.memorip.presentation.screen.user.model.UserUiModel
 import com.andone.memorip.presentation.screen.user.model.UserUiState
 import com.andone.memorip.presentation.theme.MemoripPadding
+import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.theme.memoripShapes
 import com.andone.memorip.presentation.util.DummyData
@@ -115,6 +118,7 @@ fun UserScreenContent(
                 .padding(paddingValues = innerPadding)
                 .padding(all = MemoripPadding.AppHorizontalPadding)
                 .verticalScroll(state = rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceMedium)
         ) {
             Surface(
                 modifier = Modifier
@@ -142,6 +146,11 @@ fun UserScreenContent(
                     }
                 }
             }
+
+            SettingSection(
+                title = "권한 설정",
+                items = DummyData.permissionItems,
+            )
         }
     }
 }

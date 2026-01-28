@@ -39,7 +39,7 @@ fun SettingSection(
                     SettingRowItem(item = item)
 
                     if (index != items.lastIndex) {
-                        HorizontalDivider()
+                        HorizontalDivider(color = MemoripTheme.colors.lightGray)
                     }
                 }
             }
