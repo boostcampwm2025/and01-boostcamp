@@ -261,31 +261,19 @@ object DummyData {
     val groupListItems = mutableStateListOf(
         GroupListUiModel(
             id = UUID.randomUUID().toString(),
-            title = "기본 그룹",
-            thumbnail = createRandomImageUrls(1, "group1").first(),
-            startDate = "2026-01-28",
-            endDate = "2026-01-30"
+            title = "기본 그룹"
         ),
         GroupListUiModel(
             id = UUID.randomUUID().toString(),
-            title = "부산",
-            thumbnail = createRandomImageUrls(1, "busan").first(),
-            startDate = "2026-01-28",
-            endDate = "2026-01-30"
+            title = "부산"
         ),
         GroupListUiModel(
             id = UUID.randomUUID().toString(),
-            title = "제주도",
-            thumbnail = createRandomImageUrls(1, "제주도").first(),
-            startDate = "2026-01-28",
-            endDate = "2026-01-30"
+            title = "제주도"
         ),
         GroupListUiModel(
             id = UUID.randomUUID().toString(),
-            title = "대구",
-            thumbnail = createRandomImageUrls(1, "대구").first(),
-            startDate = "2026-01-28",
-            endDate = "2026-01-30"
+            title = "대구"
         )
     )
 

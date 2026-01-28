@@ -4,6 +4,7 @@ import com.andone.memorip.data.common.ApiResult
 import com.andone.memorip.data.group.model.AddPlaceToGroupRequest
 import com.andone.memorip.data.group.model.GroupCreateRequest
 import com.andone.memorip.data.group.model.GroupListResponse
+import com.andone.memorip.data.group.model.GroupPlaceItem
 import com.andone.memorip.data.group.model.GroupUpdateRequest
 import com.andone.memorip.data.group.model.SimpleGroupItem
 import com.andone.memorip.data.place.model.PlaceListItemResponse
@@ -69,4 +70,9 @@ interface GroupService {
 
     @GET("/api/groups/simple")
     suspend fun getSimpleGroups(): ApiResult<List<SimpleGroupItem>>
+
+    @GET("/api/groups/{groupId}/plan/places")
+    suspend fun getPlaceByGroupId(
+        @Path("groupId") groupId: String
+    ): ApiResult<List<GroupPlaceItem>>
 }

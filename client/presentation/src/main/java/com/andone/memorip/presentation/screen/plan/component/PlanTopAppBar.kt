@@ -20,11 +20,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.screen.plan.model.GroupListUiModel
+import com.andone.memorip.presentation.util.DummyData
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlanTopAppBar(
     title: String?,
+    groups: ImmutableList<GroupListUiModel>,
     modifier: Modifier = Modifier,
     isDeleteMode: Boolean = false,
     onTitleClick: () -> Unit,
@@ -45,8 +50,10 @@ fun PlanTopAppBar(
                         expanded = expanded,
                         modifier = Modifier.clickable(
                             onClick = {
-                                expanded = !expanded
-                                onTitleClick()
+                                if (groups.isNotEmpty()) {
+                                    expanded = !expanded
+                                    onTitleClick()
+                                }
                             }
                         )
                     )
@@ -88,6 +95,7 @@ private fun PlanTopAppBarPreview() {
     MemoripTheme {
         PlanTopAppBar(
             title = "그룹 1",
+            groups = DummyData.groupListItems.toImmutableList(),
             onTitleClick = {  }
         )
     }

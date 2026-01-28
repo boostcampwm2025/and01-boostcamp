@@ -1,7 +1,9 @@
 package com.andone.memorip.presentation.screen.plan.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -9,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -17,12 +20,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.R
-import com.andone.memorip.presentation.component.MemoripImage
 import com.andone.memorip.presentation.screen.plan.model.GroupListUiModel
 import com.andone.memorip.presentation.theme.MemoripIconSize
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
+import com.andone.memorip.presentation.util.rememberColorState
 
 @Composable
 fun SelectGroupItem(
@@ -31,6 +34,12 @@ fun SelectGroupItem(
     onItemClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val colorState = rememberColorState()
+
+    LaunchedEffect(Unit) {
+        colorState.refreshColor()
+    }
+
     Row(
         modifier = modifier
             .clickable { onItemClick() }
@@ -42,13 +51,19 @@ fun SelectGroupItem(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            MemoripImage(
-                imageUrl = group.thumbnail ?: "",
-                contentDescription = stringResource(R.string.plan_group_thumbnail_description),
+            Box(
                 modifier = Modifier
                     .size(size = MemoripIconSize.IconSizeLarge)
-                    .clip(shape = MemoripTheme.shapes.roundedMedium)
-            )
+                    .background(color = colorState.color, shape = MemoripTheme.shapes.roundedMedium)
+                    .clip(shape = MemoripTheme.shapes.roundedMedium),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = group.title[0].toString(),
+                    style = MemoripTheme.typography.headlineBold20,
+                    color = MemoripTheme.colors.black
+                )
+            }
             Text(
                 text = group.title,
                 modifier = Modifier.padding(start = MemoripPadding.PaddingMedium),

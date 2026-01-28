@@ -1,11 +1,14 @@
 package com.andone.memorip.presentation.model
 
 import androidx.compose.runtime.Immutable
+import com.andone.memorip.domain.model.GroupPlace
 import com.andone.memorip.domain.model.PlaceListItem
 import com.andone.memorip.domain.model.TimeBlock
 import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_DAY
 import java.time.Duration
+import java.time.Instant
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 
 @Immutable
@@ -42,6 +45,29 @@ data class Place(
         )
     }
 }
+
+fun GroupPlace.toUiModel(): Place = Place(
+    id = this.placeId,
+    name = this.title,
+    latitude = this.latitude,
+    longitude = this.longitude,
+    address = this.address,
+    startDateTime = if (this.startAt != null) Instant.parse(this.startAt)
+        .atZone(ZoneId.systemDefault())
+        .toLocalDateTime() else null,
+    endDateTime = if (this.endAt != null) Instant.parse(this.endAt)
+        .atZone(ZoneId.systemDefault())
+        .toLocalDateTime() else null,
+    categories = emptyList(),
+    /** ImageItem 잘해봐야 함 */
+    thumbnailImage = ImageItem(
+        id = 0,
+        url = "",
+        width = 0,
+        height = 0
+    ),
+    images = emptyList()
+)
 
 fun PlaceListItem.toUiModel(): Place =
     Place(

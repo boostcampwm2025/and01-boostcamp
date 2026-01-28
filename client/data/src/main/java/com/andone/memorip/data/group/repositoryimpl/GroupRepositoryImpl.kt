@@ -6,6 +6,7 @@ import com.andone.memorip.data.group.model.GroupCreateRequest
 import com.andone.memorip.data.group.model.GroupUpdateRequest
 import com.andone.memorip.domain.model.Group
 import com.andone.memorip.domain.model.GroupListItem
+import com.andone.memorip.domain.model.GroupPlace
 import com.andone.memorip.domain.model.GroupWithPlaceAdded
 import com.andone.memorip.domain.model.PlaceListItem
 import com.andone.memorip.domain.model.Visibility
@@ -21,7 +22,7 @@ class GroupRepositoryImpl @Inject constructor(
 ) : GroupRepository {
 
     private val _myGroups = MutableStateFlow<List<Group>>(emptyList())
-    override val myGroups: Flow<List<Group>> = _myGroups.asStateFlow().onStart{
+    override val myGroups: Flow<List<Group>> = _myGroups.asStateFlow().onStart {
         fetchMyGroups()
     }
 
@@ -94,5 +95,9 @@ class GroupRepositoryImpl @Inject constructor(
 
     override suspend fun getSimpleGroups(): Result<List<GroupListItem>> {
         return remoteDataSource.getSimpleGroups()
+    }
+
+    override suspend fun getPlaceByGroupId(groupId: String): Result<List<GroupPlace>> {
+        return remoteDataSource.getPlaceByGroupId(groupId)
     }
 }

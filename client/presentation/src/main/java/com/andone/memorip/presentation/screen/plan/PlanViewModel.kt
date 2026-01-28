@@ -1,13 +1,10 @@
 package com.andone.memorip.presentation.screen.plan
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.andone.memorip.domain.model.GroupListItem
 import com.andone.memorip.domain.model.TimeBlock
 import com.andone.memorip.domain.repository.GroupRepository
-import com.andone.memorip.domain.repository.PlaceRepository
-import com.andone.memorip.presentation.model.GroupUiModel
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.model.PlanBlockUiModel
 import com.andone.memorip.presentation.model.toTimeBlock
@@ -27,17 +24,17 @@ import com.andone.memorip.presentation.util.snackbar.SnackBarManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
@@ -48,34 +45,53 @@ private object PlanViewModelConstants {
     const val DAYS_LIMIT = 30
 }
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class PlanViewModel @Inject constructor(
     private val groupRepository: GroupRepository,
-    private val placeRepository: PlaceRepository,
     private val snackBarManager: SnackBarManager
 ) : ViewModel() {
-
-    private val myGroupsFlow = flow{
+    private val selectedGroupFlow = MutableStateFlow<GroupListUiModel?>(value = null)
+    private val remoteGroupsFlow = flow {
         var result = emptyList<GroupListItem>()
         groupRepository.getSimpleGroups()
-            .onSuccess{ result = it }
-            .onFailure{ snackBarManager.show(event = SnackBarEvent.NETWORK_ERROR) }
+            .onSuccess { response ->
+                result = response
+                if (response.isNotEmpty()) selectedGroupFlow.update { GroupListUiModel.from(response.first()) }
+            }
+            .onFailure { snackBarManager.show(event = SnackBarEvent.NETWORK_ERROR) }
         emit(result)
     }
-    private val selectedGroupFlow = MutableStateFlow<GroupListUiModel?>(value = null)
-    private val groupFlow = combine(selectedGroupFlow, myGroupsFlow) { selectedGroup, myGroups ->
-        PlanGroupUiModel(
-            selectedGroup = selectedGroup,
-            groups = myGroups.map { GroupListUiModel.from(it) }.toImmutableList()
-        )
+    private val groupUiStateFlow =
+        combine(selectedGroupFlow, remoteGroupsFlow) { selectedGroup, remoteGroupsFlow ->
+            PlanGroupUiModel(
+                selectedGroup = selectedGroup,
+                groups = remoteGroupsFlow.map { GroupListUiModel.from(it) }.toImmutableList()
+            )
+        }
+
+    private val remotePlacesByGroupFlow = selectedGroupFlow.flatMapLatest { group ->
+        flow {
+            var result = emptyList<Place>()
+            if (group != null) {
+                groupRepository.getPlaceByGroupId(group.id)
+                    .onSuccess { success -> result = success.map { it.toUiModel() } }
+                    .onFailure { snackBarManager.show(SnackBarEvent.NETWORK_ERROR) }
+            }
+            emit(result)
+        }
     }
-    private val placesFlow = MutableStateFlow<List<Place>>(emptyList())
-    private val blocksFlow = MutableStateFlow(value = emptyList<TimeBlock>())
-    private val dateFlow = MutableStateFlow(value = DateUiModel())
+    private val localDeletedPlacesFlow = MutableStateFlow(value = emptyList<Place>())
+    private val visiblePlacesFlow =
+        combine(remotePlacesByGroupFlow, localDeletedPlacesFlow) { origin, deleted ->
+            origin.filter { it !in deleted }
+        }
+    private val timeBlocksFlow = MutableStateFlow(value = emptyList<TimeBlock>())
+    private val selectedDateFlow = MutableStateFlow(value = DateUiModel())
     private val blockUiModelsFlow = MutableStateFlow(value = emptyMap<String, PlanBlockUiModel>())
-    private val placeFlow = combine(
-        placesFlow,
-        blocksFlow,
+    private val planPlaceUiStateFlow = combine(
+        visiblePlacesFlow,
+        timeBlocksFlow,
         blockUiModelsFlow
     ) { places, blocks, blockUiModels ->
         PlanPlaceUiModel(
@@ -86,17 +102,17 @@ class PlanViewModel @Inject constructor(
     }
 
     val uiState = combine(
-        groupFlow,
-        dateFlow,
-        placeFlow
-    ) { groupModel, dateModel, placeModel ->
+        groupUiStateFlow,
+        selectedDateFlow,
+        planPlaceUiStateFlow
+    ) { groupUiState, dateUiState, planPlaceUiState ->
         PlanUiState(
-            groups = groupModel.groups,
-            selectedGroup = groupModel.selectedGroup,
-            places = placeModel.places,
-            blocks = placeModel.blocks,
-            blockUiModels = placeModel.blockUiModels,
-            date = dateModel
+            groups = groupUiState.groups,
+            selectedGroup = groupUiState.selectedGroup,
+            places = planPlaceUiState.places,
+            blocks = planPlaceUiState.blocks,
+            blockUiModels = planPlaceUiState.blockUiModels,
+            date = dateUiState
         )
     }.stateIn(
         scope = viewModelScope,
@@ -112,13 +128,11 @@ class PlanViewModel @Inject constructor(
     fun onAction(action: PlanAction) {
         when (action) {
             is PlanAction.BlockMoved -> {
-                Log.d("DEBUG TEST", "move before : ${uiState.value.blocks}")
                 moveBlock(action.id, action.newStartMinute)
-                Log.d("DEBUG TEST", "move after : ${uiState.value.blocks}")
             }
 
             PlanAction.AddDay -> {
-                dateFlow.update { it.copy(endDay = it.endDay?.plusDays(1)) }
+                selectedDateFlow.update { it.copy(endDay = it.endDay?.plusDays(1)) }
             }
 
             is PlanAction.RemoveDay -> {
@@ -147,7 +161,7 @@ class PlanViewModel @Inject constructor(
                                 }
                         } ?: emptyList()
 
-                        dateFlow.update {
+                        selectedDateFlow.update {
                             it.copy(
                                 startDay = newStart,
                                 endDay = newEnd,
@@ -156,19 +170,19 @@ class PlanViewModel @Inject constructor(
                             )
                         }
                         blockUiModelsFlow.update { adjustedUiModels }
-                        blocksFlow.update { newBlocks }
-                        placesFlow.update { (uiState.value.places + value).toImmutableList() }
+                        timeBlocksFlow.update { newBlocks }
+                        localDeletedPlacesFlow.update { (it - value).toImmutableList() }
                     }
                 )
             }
 
 
             is PlanAction.LongClick -> {
-                dateFlow.update { it.copy(longClickedDay = action.day) }
+                selectedDateFlow.update { it.copy(longClickedDay = action.day) }
             }
 
             is PlanAction.SelectDay -> {
-                dateFlow.update {
+                selectedDateFlow.update {
                     it.copy(currentDay = it.currentDayFromSelectedDay(selectedDay = action.day))
                 }
             }
@@ -178,7 +192,7 @@ class PlanViewModel @Inject constructor(
             }
 
             PlanAction.RemoveCancel -> {
-                dateFlow.update { it.copy(longClickedDay = null) }
+                selectedDateFlow.update { it.copy(longClickedDay = null) }
             }
 
             is PlanAction.DateSelected -> {
@@ -192,7 +206,7 @@ class PlanViewModel @Inject constructor(
                     return
                 }
 
-                dateFlow.update {
+                selectedDateFlow.update {
                     it.copy(
                         startDay = action.start,
                         endDay = action.end,
@@ -202,49 +216,13 @@ class PlanViewModel @Inject constructor(
             }
 
             is PlanAction.DayScrolled -> {
-                dateFlow.update {
+                selectedDateFlow.update {
                     it.copy(currentDay = it.currentDayFromSelectedDay(selectedDay = action.day))
                 }
             }
 
             is PlanAction.ItemDragEnd -> {
-                val date = uiState.value.date
-                val baseDay = date.startDay ?: return
-
-                val totalMinute = action.startMinute
-
-                val dayOffset = totalMinute / MINUTES_PER_DAY
-                val minuteInDay = totalMinute % MINUTES_PER_DAY
-
-                val targetDay = baseDay.plusDays(dayOffset.toLong())
-
-                val startDateTime = targetDay.atStartOfDay()
-                    .plusMinutes(minuteInDay.toLong())
-
-                val endDateTime = startDateTime.plusMinutes(action.item.durationMinutes)
-
-                val isDuplicated = uiState.value.blocks.any {
-                    val rangeBaseDay = baseDay.plusDays((it.day - 1).toLong())
-                    val startRange =
-                        rangeBaseDay.atStartOfDay().plusMinutes(it.startMinute.toLong())
-                    val endRange =
-                        rangeBaseDay.atStartOfDay().plusMinutes(it.endMinute.toLong())
-                    startDateTime in startRange..endRange.minusMinutes(1) || endDateTime in startRange.plusMinutes(
-                        1
-                    )..endRange
-                }
-                if (isDuplicated) {
-                    snackBarManager.show(SnackBarEvent.PLAN_INVALID_ERROR)
-                    return
-                }
-
-                val newPlace = action.item.copy(
-                    startDateTime = startDateTime,
-                    endDateTime = endDateTime
-                )
-                blockUiModelsFlow.update { it + (action.item.id to newPlace) }
-                blocksFlow.update { it + newPlace.toTimeBlock(dayStart = uiState.value.date.startDay!!.atStartOfDay())!! }
-                placesFlow.update { (it - action.item).toImmutableList() }
+                addPlaceToTimetable(startMinute = action.startMinute, place = action.item)
             }
 
             PlanAction.GroupChoiceClick -> {
@@ -253,16 +231,8 @@ class PlanViewModel @Inject constructor(
 
             is PlanAction.GroupChoiceConfirmClick -> {
                 selectedGroupFlow.update { action.selectedGroup }
-                viewModelScope.launch {
-                    placeRepository.getPlaceByGroupId(
-                        groupId = action.selectedGroup.id,
-                        page = 0,
-                        size = 20
-                    )
-                        .onSuccess { result -> placesFlow.update { result.map { it.toUiModel() } } }
-                        .onFailure { snackBarManager.show(SnackBarEvent.NETWORK_ERROR) }
-                }
             }
+
             PlanAction.ShowCalendarClick -> {
                 _event.trySend(element = PlanEvent.ShowCalendarDialog)
             }
@@ -270,9 +240,8 @@ class PlanViewModel @Inject constructor(
     }
 
     private fun moveBlock(id: String, newStartMinute: Int) {
-        blocksFlow.update {
+        timeBlocksFlow.update {
             val target = uiState.value.blocks.find { it.id == id } ?: return@update it
-            Log.d("DEBUG TEST", "target : $target")
             if (!target.canMoveTo(
                     newStartMinute = newStartMinute,
                     blocks = uiState.value.blocks,
@@ -283,14 +252,7 @@ class PlanViewModel @Inject constructor(
             }
 
             uiState.value.blocks.map { block ->
-                Log.d("DEBUG TEST", "block : $block")
                 if (block.id == id) {
-
-                    Log.d("DEBUG TEST", "moved to call")
-                    Log.d(
-                        "DEBUG TEST",
-                        "newStartMinute: $newStartMinute / totalMinutes: ${uiState.value.date.totalMinutes}"
-                    )
                     block.movedTo(newStartMinute, uiState.value.date.totalMinutes)
                 } else {
                     block
@@ -377,5 +339,45 @@ class PlanViewModel @Inject constructor(
         }.toMap()
 
         onUpdateState(blockUiModel, removedPlaces)
+    }
+
+    private fun addPlaceToTimetable(startMinute: Int, place: Place) {
+        val date = uiState.value.date
+        val baseDay = date.startDay ?: return
+
+        val totalMinute = startMinute
+
+        val dayOffset = totalMinute / MINUTES_PER_DAY
+        val minuteInDay = totalMinute % MINUTES_PER_DAY
+
+        val targetDay = baseDay.plusDays(dayOffset.toLong())
+
+        val startDateTime = targetDay.atStartOfDay()
+            .plusMinutes(minuteInDay.toLong())
+
+        val endDateTime = startDateTime.plusMinutes(place.durationMinutes)
+
+        val isDuplicated = uiState.value.blocks.any {
+            val rangeBaseDay = baseDay.plusDays((it.day - 1).toLong())
+            val startRange =
+                rangeBaseDay.atStartOfDay().plusMinutes(it.startMinute.toLong())
+            val endRange =
+                rangeBaseDay.atStartOfDay().plusMinutes(it.endMinute.toLong())
+            startDateTime in startRange..endRange.minusMinutes(1) || endDateTime in startRange.plusMinutes(
+                1
+            )..endRange
+        }
+        if (isDuplicated) {
+            snackBarManager.show(SnackBarEvent.PLAN_INVALID_ERROR)
+            return
+        }
+
+        val newPlace = place.copy(
+            startDateTime = startDateTime,
+            endDateTime = endDateTime
+        )
+        blockUiModelsFlow.update { it + (place.id to newPlace) }
+        timeBlocksFlow.update { it + newPlace.toTimeBlock(dayStart = uiState.value.date.startDay!!.atStartOfDay())!! }
+        localDeletedPlacesFlow.update { (it + place).toImmutableList() }
     }
 }
