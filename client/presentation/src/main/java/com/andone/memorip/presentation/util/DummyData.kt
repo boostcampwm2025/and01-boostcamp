@@ -19,6 +19,7 @@ import com.andone.memorip.presentation.screen.placedetail.model.PlaceUiModel
 import com.andone.memorip.presentation.screen.placelist.model.RegionUiModel
 import com.andone.memorip.presentation.screen.placelist.model.SelectedRegionState
 import com.andone.memorip.presentation.screen.plan.model.DateUiModel
+import com.andone.memorip.presentation.screen.plan.model.GroupListUiModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.flowOf
 import java.time.LocalDate
@@ -256,6 +257,37 @@ object DummyData {
     }
 
     val groupName = "Group1"
+
+    val groupListItems = mutableStateListOf(
+        GroupListUiModel(
+            id = UUID.randomUUID().toString(),
+            title = "기본 그룹",
+            thumbnail = createRandomImageUrls(1, "group1").first(),
+            startDate = "2026-01-28",
+            endDate = "2026-01-30"
+        ),
+        GroupListUiModel(
+            id = UUID.randomUUID().toString(),
+            title = "부산",
+            thumbnail = createRandomImageUrls(1, "busan").first(),
+            startDate = "2026-01-28",
+            endDate = "2026-01-30"
+        ),
+        GroupListUiModel(
+            id = UUID.randomUUID().toString(),
+            title = "제주도",
+            thumbnail = createRandomImageUrls(1, "제주도").first(),
+            startDate = "2026-01-28",
+            endDate = "2026-01-30"
+        ),
+        GroupListUiModel(
+            id = UUID.randomUUID().toString(),
+            title = "대구",
+            thumbnail = createRandomImageUrls(1, "대구").first(),
+            startDate = "2026-01-28",
+            endDate = "2026-01-30"
+        )
+    )
 
     val groups = mutableStateListOf(
         GroupUiModel(
