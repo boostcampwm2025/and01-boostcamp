@@ -71,7 +71,7 @@ fun SettingRowItem(
                         Text(
                             text = it,
                             style = MemoripTheme.typography.bodyRegular12,
-                            color = MemoripTheme.colors.primary
+                            color = if (trailing.isAllowed) MemoripTheme.colors.primary else MemoripTheme.colors.onSurface
                         )
                         Spacer(modifier = Modifier.width(6.dp))
                     }

@@ -7,10 +7,12 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.screen.user.model.SettingItemUiModel
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.theme.memoripShapes
+import com.andone.memorip.presentation.util.DummyData
 
 @Composable
 fun SettingSection(
@@ -29,7 +31,8 @@ fun SettingSection(
 
         Surface(
             shape = memoripShapes.roundedMedium,
-            color = MemoripTheme.colors.primaryContainer
+            color = MemoripTheme.colors.primaryContainer,
+            contentColor = MemoripTheme.colors.onSurface
         ) {
             Column {
                 items.forEachIndexed { index, item ->
@@ -41,5 +44,16 @@ fun SettingSection(
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun SettingSectionPreview(){
+    MemoripTheme {
+        SettingSection(
+            title = "권한 설정",
+            items = DummyData.permissionItems
+        )
     }
 }

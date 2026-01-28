@@ -211,14 +211,14 @@ object DummyData {
             iconRes = R.drawable.ic_baseline_camera_alt,
             title = "카메라",
             subtitle = "프로필 사진 변경",
-            trailing = SettingTrailing.Arrow(label = "허용됨"),
+            trailing = SettingTrailing.Arrow(label = "허용됨", isAllowed = true),
             onClick = { }
         ),
         SettingItemUiModel(
             iconRes = R.drawable.ic_outline_gallery_thumbnail,
             title = "사진 갤러리",
             subtitle = "이미지 업로드",
-            trailing = SettingTrailing.Arrow(label = "허용됨"),
+            trailing = SettingTrailing.Arrow(label = "허용됨", isAllowed = true),
             onClick = { }
         ),
         SettingItemUiModel(
@@ -232,10 +232,7 @@ object DummyData {
             iconRes = R.drawable.ic_outline_android_wifi_3_bar,
             title = "네트워크",
             subtitle = "네트워크 상태 변경 알림",
-            trailing = SettingTrailing.Toggle(
-                checked = false,
-                onCheckedChange = {}
-            )
+            trailing = SettingTrailing.Arrow(label = "거부됨")
         )
     )
 
