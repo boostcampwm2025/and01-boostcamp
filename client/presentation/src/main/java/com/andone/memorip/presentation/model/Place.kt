@@ -14,6 +14,7 @@ import java.time.temporal.ChronoUnit
 @Immutable
 data class Place(
     override val id: String,
+    val groupPlaceId: String,
     val name: String,
     val latitude: Double,
     val longitude: Double,
@@ -29,10 +30,10 @@ data class Place(
             Duration.between(startDateTime, endDateTime).toMinutes()
         else 60L
 
-
     companion object {
         fun empty(): Place = Place(
             id = "",
+            groupPlaceId = "",
             name = "",
             latitude = 0.0,
             longitude = 0.0,
@@ -48,6 +49,7 @@ data class Place(
 
 fun GroupPlace.toUiModel(): Place = Place(
     id = this.placeId,
+    groupPlaceId = this.groupPlaceId,
     name = this.title,
     latitude = this.latitude,
     longitude = this.longitude,
@@ -72,6 +74,7 @@ fun GroupPlace.toUiModel(): Place = Place(
 fun PlaceListItem.toUiModel(): Place =
     Place(
         id = id,
+        groupPlaceId = "",
         name = title,
         latitude = latitude,
         longitude = longitude,
