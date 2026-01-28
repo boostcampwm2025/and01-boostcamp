@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.R
@@ -78,14 +79,14 @@ fun SettingRowItem(
 
             is SettingTrailing.Arrow -> {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    trailing.label?.let {
-                        Text(
-                            text = it,
-                            style = MemoripTheme.typography.bodyRegular12,
-                            color = if (trailing.isAllowed) MemoripTheme.colors.primary else MemoripTheme.colors.onSurface
-                        )
-                        Spacer(modifier = Modifier.width(width = TRAILING_ICON_PADDING))
-                    }
+                    Text(
+                        text = if (trailing.isAllowed) stringResource(R.string.permission_allowed)
+                        else stringResource(R.string.permission_denied),
+                        style = MemoripTheme.typography.bodyRegular12,
+                        color = if (trailing.isAllowed) MemoripTheme.colors.primary else MemoripTheme.colors.onSurface
+                    )
+
+                    Spacer(modifier = Modifier.width(width = TRAILING_ICON_PADDING))
 
                     Icon(
                         painter = painterResource(R.drawable.ic_chevron_forward),
@@ -94,7 +95,14 @@ fun SettingRowItem(
                 }
             }
 
-            null -> Unit
+            is SettingTrailing.Text -> {
+                Text(
+                    text = trailing.text,
+                    style = MemoripTheme.typography.bodyRegular12,
+                )
+            }
+
+            else -> {}
         }
     }
 }

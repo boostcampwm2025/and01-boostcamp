@@ -164,6 +164,18 @@
     <string name="login_add_account">+ 계정을 추가하세요</string>
     <string name="login_show_places">올린 장소들</string>
     <string name="login_user_profile_change">프로필 변경</string>
+    <string name="permission_camera_title">카메라</string>
+    <string name="permission_camera_subtitle">프로필 사진 변경</string>
+    <string name="permission_gallery_title">사진 갤러리</string>
+    <string name="permission_gallery_subtitle">이미지 업로드</string>
+    <string name="permission_location_title">위치</string>
+    <string name="permission_location_subtitle">위치 기반 서비스</string>
+    <string name="permission_network_title">네트워크</string>
+    <string name="permission_network_subtitle">네트워크 상태 변경 알림</string>
+    <string name="permission_allowed">허용됨</string>
+    <string name="permission_denied">거부됨</string>
+    <string name="login_permission">권한 설정</string>
+
 
 
     <!-- PlanScreen -->

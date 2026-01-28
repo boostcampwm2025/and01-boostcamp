@@ -146,11 +146,6 @@ fun UserScreenContent(
                     }
                 }
             }
-
-            SettingSection(
-                title = "권한 설정",
-                items = DummyData.permissionItems,
-            )
         }
     }
 }
