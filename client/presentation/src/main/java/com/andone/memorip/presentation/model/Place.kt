@@ -14,7 +14,7 @@ import java.time.temporal.ChronoUnit
 @Immutable
 data class Place(
     override val id: String,
-    val groupPlaceId: String,
+    val placeId: String,
     val name: String,
     val latitude: Double,
     val longitude: Double,
@@ -33,7 +33,7 @@ data class Place(
     companion object {
         fun empty(): Place = Place(
             id = "",
-            groupPlaceId = "",
+            placeId = "",
             name = "",
             latitude = 0.0,
             longitude = 0.0,
@@ -48,8 +48,8 @@ data class Place(
 }
 
 fun GroupPlace.toUiModel(): Place = Place(
-    id = this.placeId,
-    groupPlaceId = this.groupPlaceId,
+    id = this.groupPlaceId,
+    placeId = this.placeId,
     name = this.title,
     latitude = this.latitude,
     longitude = this.longitude,
@@ -73,8 +73,8 @@ fun GroupPlace.toUiModel(): Place = Place(
 
 fun PlaceListItem.toUiModel(): Place =
     Place(
-        id = id,
-        groupPlaceId = "",
+        id = "",
+        placeId = id,
         name = title,
         latitude = latitude,
         longitude = longitude,

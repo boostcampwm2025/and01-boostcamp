@@ -44,7 +44,6 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.EmptyText
 import com.andone.memorip.presentation.component.MemoripPagingList
-import com.andone.memorip.presentation.screen.placelist.component.StaggeredImageItem
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.model.TagUiModel
 import com.andone.memorip.presentation.screen.placelist.MemoripMotion.AnimationDuration
@@ -52,6 +51,7 @@ import com.andone.memorip.presentation.screen.placelist.MemoripMotion.ScrollThre
 import com.andone.memorip.presentation.screen.placelist.component.PlaceListTopBar
 import com.andone.memorip.presentation.screen.placelist.component.RegionFilter
 import com.andone.memorip.presentation.screen.placelist.component.RegionSelectBottomSheet
+import com.andone.memorip.presentation.screen.placelist.component.StaggeredImageItem
 import com.andone.memorip.presentation.screen.placelist.component.TagFilter
 import com.andone.memorip.presentation.screen.placelist.component.TagSelectBottomSheet
 import com.andone.memorip.presentation.screen.placelist.model.PlaceListAction
@@ -270,7 +270,7 @@ fun PlaceListGrid(
     ) {
         MemoripPagingList(
             pagingItems = placePagingItems,
-            itemKey = { it.id },
+            itemKey = { it.placeId },
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = MemoripPadding.AppHorizontalPadding)

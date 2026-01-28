@@ -231,7 +231,8 @@ object DummyData {
         val images = createPlaceImages(id)
 
         return Place(
-            id = id,
+            id = "",
+            placeId = id,
             name = name,
             latitude = latitude,
             longitude = longitude,

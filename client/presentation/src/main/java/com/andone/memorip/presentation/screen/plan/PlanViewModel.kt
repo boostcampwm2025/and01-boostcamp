@@ -35,6 +35,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
@@ -230,6 +231,7 @@ class PlanViewModel @Inject constructor(
             }
 
             is PlanAction.GroupChoiceConfirmClick -> {
+                savePlan()
                 selectedGroupFlow.update { action.selectedGroup }
             }
 
@@ -379,5 +381,13 @@ class PlanViewModel @Inject constructor(
         blockUiModelsFlow.update { it + (place.id to newPlace) }
         timeBlocksFlow.update { it + newPlace.toTimeBlock(dayStart = uiState.value.date.startDay!!.atStartOfDay())!! }
         localDeletedPlacesFlow.update { (it + place).toImmutableList() }
+    }
+
+    private fun savePlan() {
+        viewModelScope.launch {
+            uiState.value.blockUiModels.forEach{ (placeId, place) ->
+                groupRepository.updatePlaceTime(groupPlaceId = place.id)
+            }
+        }
     }
 }
