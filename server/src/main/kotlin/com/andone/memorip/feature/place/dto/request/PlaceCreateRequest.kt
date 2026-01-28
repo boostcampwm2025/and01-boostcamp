@@ -32,6 +32,9 @@ data class PlaceCreateRequest(
     @field:NotBlank(message = "이미지는 필수입니다.")
     val imageUrls: List<String>,
 
+    @field:NotNull
+    val thumbnailImageRatio: Float,
+
     @field:NotBlank(message = "공개 여부는 필수입니다.")
     val isPublic: Boolean
 )

@@ -78,6 +78,7 @@ class PlaceService(
                 longitude = place.longitude,
                 address = place.address.fullAddress,
                 imageUrl = place.thumbnailUrl,
+                thumbnailImageRatio = place.thumbnailImageRatio,
                 isPublic = place.isPublic
             )
         }
@@ -107,6 +108,7 @@ class PlaceService(
             longitude = request.longitude,
             address = request.address,
             imageUrls = request.imageUrls,
+            thumbnailImageRatio = request.thumbnailImageRatio,
             isPublic = request.isPublic,
         )
 
@@ -137,6 +139,7 @@ class PlaceService(
                 longitude = place.longitude,
                 address = place.address.fullAddress,
                 imageUrl = place.thumbnailUrl,
+                thumbnailImageRatio = place.thumbnailImageRatio,
                 isPublic = place.isPublic
             )
         }
