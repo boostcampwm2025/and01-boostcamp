@@ -32,6 +32,7 @@ import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.screen.user.UserScreenDimen.ACCOUNT_SECTION_HEIGHT
 import com.andone.memorip.presentation.screen.user.component.AlarmSection
 import com.andone.memorip.presentation.screen.user.component.PermissionSection
+import com.andone.memorip.presentation.screen.user.component.PolicySection
 import com.andone.memorip.presentation.screen.user.component.SettingSection
 import com.andone.memorip.presentation.screen.user.component.UserProfileSection
 import com.andone.memorip.presentation.screen.user.model.UserAction
@@ -127,6 +128,8 @@ fun UserScreenContent(
             AlarmSection(state.alarmUiState, onAction = onAction)
 
             PermissionSection(state.permissionUiState, onAction = onAction)
+
+            PolicySection(onAction = onAction)
         }
     }
 }

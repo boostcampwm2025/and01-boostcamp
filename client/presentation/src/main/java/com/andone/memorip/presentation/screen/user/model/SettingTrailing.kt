@@ -7,7 +7,8 @@ sealed class SettingTrailing {
     ) : SettingTrailing()
 
     data class Arrow(
-        val isAllowed: Boolean = false
+        val isAllowed: Boolean = false,
+        val justArrow: Boolean = false
     ) : SettingTrailing()
 
     data class Text(
