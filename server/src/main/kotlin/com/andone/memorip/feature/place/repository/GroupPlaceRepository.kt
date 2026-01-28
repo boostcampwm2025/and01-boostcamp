@@ -16,11 +16,15 @@ interface GroupPlaceRepository : JpaRepository<GroupPlace, UUID> {
         @Param("groupIds") groupIds: List<UUID>,
         @Param("placeId") placeId: UUID
     ): List<GroupPlace>
-    
+
     @Modifying
     @Query("DELETE FROM GroupPlace gp WHERE gp.group.id IN :groupIds AND gp.place.id = :placeId")
     fun deleteByGroupIdsAndPlaceId(
         @Param("groupIds") groupIds: List<UUID>,
         @Param("placeId") placeId: UUID
     ): Int
+    @Query("SELECT gp FROM GroupPlace gp WHERE gp.group.id = :groupId ORDER BY gp.createdAt ASC")
+    fun findByGroupId(@Param("groupId") groupId: UUID): List<GroupPlace>
+
+    fun findAllByGroupId(groupId: UUID): List<GroupPlace>
 }

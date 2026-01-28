@@ -12,17 +12,17 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class TagRepositoryImpl @Inject constructor(
-    private val tagRemoteDataSourceImpl: TagRemoteDataSource
+    private val tagRemoteDataSource: TagRemoteDataSource
 ) : TagRepository {
     override fun loadTags(): Flow<PagingData<Tag>> {
-        return tagRemoteDataSourceImpl.loadTags()
+        return tagRemoteDataSource.loadTags()
             .map { pagingData ->
                 pagingData.map { it.toDomainModel() }
             }
     }
 
     override suspend fun addTags(tag: Tag): Result<Tag> {
-        return tagRemoteDataSourceImpl.addTags(tag.toDataModel())
+        return tagRemoteDataSource.addTags(tag.toDataModel())
             .map { it.toDomainModel() }
     }
 }

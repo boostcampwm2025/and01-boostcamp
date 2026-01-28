@@ -53,5 +53,5 @@ abstract class RepositoryModule {
     abstract fun bindTokenProvider(impl: FirebaseTokenRepositoryImpl): TokenProvider
 
     @Binds
-    abstract fun TokenRefresher(impl: FirebaseTokenRepositoryImpl): TokenRefresher
+    abstract fun bingTokenRefresher(impl: FirebaseTokenRepositoryImpl): TokenRefresher
 }

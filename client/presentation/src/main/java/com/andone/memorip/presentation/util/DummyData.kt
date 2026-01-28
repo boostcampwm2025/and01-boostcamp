@@ -342,6 +342,11 @@ object DummyData {
         return flowOf(PagingData.from(places)).collectAsLazyPagingItems()
     }
 
+    @Composable
+    fun getTagPagingItems(): LazyPagingItems<TagUiModel> {
+        return flowOf(PagingData.from(categories)).collectAsLazyPagingItems()
+    }
+
     private fun createRandomImageUrls(count: Int, seedKey: String): List<String> {
         return List(count) { index ->
             val height = Random.nextInt(200, 400)

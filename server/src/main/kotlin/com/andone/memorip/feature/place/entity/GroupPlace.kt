@@ -37,6 +37,22 @@ class GroupPlace protected constructor(
     var endAt: LocalDateTime? = null
         internal set
 
+    fun updatePeriod(startAt: LocalDateTime?, endAt: LocalDateTime?) {
+        if (startAt != null && endAt != null) {
+            require(!endAt.isBefore(startAt)) {
+                "종료 시간은 시작 시간보다 빠를 수 없습니다"
+            }
+        }
+
+        this.startAt = startAt
+        this.endAt = endAt
+    }
+
+    fun clearPeriod() {
+        this.startAt = null
+        this.endAt = null
+    }
+
     companion object {
         fun create(
             id: UUID? = null,

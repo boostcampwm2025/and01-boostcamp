@@ -78,7 +78,8 @@ fun StaggeredImageItem(
                 Text(
                     text = contentDescription?.takeIf { it.isNotBlank() }
                         ?: stringResource(R.string.place_list_no_title),
-                    style = MemoripTheme.typography.labelRegular10,
+                    style = MemoripTheme.typography.bodyBold14,
+                    maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
                 Spacer(modifier = Modifier.height(height = MemoripPadding.PaddingXXSmall))
@@ -98,7 +99,7 @@ private fun StaggeredImageItemPreview() {
         StaggeredImageItem(
             imageUrl = "https://picsum.photos/id/1/200/300",
             aspectRatio = 1f,
-            onImageClick = {}
+            onImageClick = {},
         )
     }
 }

@@ -53,6 +53,7 @@ import com.andone.memorip.presentation.screen.placelist.component.PlaceListTopBa
 import com.andone.memorip.presentation.screen.placelist.component.RegionFilter
 import com.andone.memorip.presentation.screen.placelist.component.RegionSelectBottomSheet
 import com.andone.memorip.presentation.screen.placelist.component.TagFilter
+import com.andone.memorip.presentation.screen.placelist.component.TagSelectBottomSheet
 import com.andone.memorip.presentation.screen.placelist.model.PlaceListAction
 import com.andone.memorip.presentation.screen.placelist.model.PlaceListEvent
 import com.andone.memorip.presentation.screen.placelist.model.PlaceListUiState
@@ -85,6 +86,8 @@ fun PlaceListScreen(
 
     val placesPagingItems = viewModel.placesPagingFlow.collectAsLazyPagingItems()
 
+    val tagPagingItems = viewModel.tagsPagingFlow.collectAsLazyPagingItems()
+
     viewModel.event.collectWithLifecycle { event ->
         when (event) {
             is PlaceListEvent.NavigateToPlaceCreate -> {
@@ -108,6 +111,7 @@ fun PlaceListScreen(
     PlaceListScreenContent(
         state = uiState,
         placePagingItems = placesPagingItems,
+        tagPagingItems = tagPagingItems,
         onAction = viewModel::onAction,
         modifier = modifier
     )
@@ -118,6 +122,7 @@ fun PlaceListScreen(
 fun PlaceListScreenContent(
     state: PlaceListUiState,
     placePagingItems: LazyPagingItems<Place>,
+    tagPagingItems: LazyPagingItems<TagUiModel>,
     onAction: (PlaceListAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -125,6 +130,7 @@ fun PlaceListScreenContent(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     var showRegionBottomSheet by remember { mutableStateOf(value = false) }
+    var showTagBottomSheet by remember { mutableStateOf(false) }
 
     var isFilterVisible by remember { mutableStateOf(value = true) }
     val clearFocusOnScroll = remember {
@@ -158,7 +164,25 @@ fun PlaceListScreenContent(
                 currentRegionList = state.currentRegionList,
                 selectedRegionState = state.selectedRegionState,
                 onConfirmClick = { showRegionBottomSheet = false },
-                onRegionChipClick = { onAction(PlaceListAction.OnRegionChipClick(region = it)) }
+                onRegionChipClick = { onAction(PlaceListAction.OnRegionChipClick(region = it)) },
+                onResetClick = { onAction(PlaceListAction.ClearRegionFilter) }
+            )
+        }
+    }
+
+    if (showTagBottomSheet) {
+        ModalBottomSheet(
+            onDismissRequest = { showTagBottomSheet = false },
+            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+            containerColor = MemoripTheme.colors.background,
+            contentColor = MemoripTheme.colors.onSurface
+        ) {
+            TagSelectBottomSheet(
+                tagPagingItems = tagPagingItems,
+                selectedTags = state.selectedTags,
+                onConfirmClick = { showTagBottomSheet = false },
+                onTagChipClick = { onAction(PlaceListAction.OnTagChipClick(tag = it)) },
+                onDeselectClick = { onAction(PlaceListAction.OnDeleteTagClick(tag = it)) }
             )
         }
     }
@@ -183,10 +207,11 @@ fun PlaceListScreenContent(
                 Column {
                     FilterSection(
                         onChangeRegionClick = { showRegionBottomSheet = true },
-                        onAddTagClick = {},
+                        onAddTagClick = { showTagBottomSheet = true },
                         modifier = Modifier.padding(horizontal = MemoripPadding.AppHorizontalPadding),
-                        tags = DummyData.categories.toImmutableList(),
-                        selectedRegionState = state.selectedRegionState
+                        tags = state.selectedTags.toImmutableList(),
+                        selectedRegionState = state.selectedRegionState,
+                        onChipClick = { onAction(PlaceListAction.OnDeleteTagClick(tag = it)) }
                     )
                     Spacer(modifier = Modifier.padding(vertical = MemoripPadding.PaddingXSmall))
                 }
@@ -211,6 +236,7 @@ private fun FilterSection(
     modifier: Modifier = Modifier,
     tags: ImmutableList<TagUiModel> = persistentListOf(),
     selectedRegionState: SelectedRegionState = SelectedRegionState(),
+    onChipClick: (tagUiModel: TagUiModel) -> Unit = {}
 ) {
     Column(modifier = modifier) {
         RegionFilter(
@@ -219,7 +245,8 @@ private fun FilterSection(
         )
         TagFilter(
             tags = tags,
-            onAddTagClick = onAddTagClick
+            onAddTagClick = onAddTagClick,
+            onChipClick = onChipClick
         )
     }
 }
@@ -284,6 +311,7 @@ private fun PlaceListScreenContentsPreview() {
         PlaceListScreenContent(
             state = PlaceListUiState(),
             placePagingItems = DummyData.getPlacePagingItems(),
+            tagPagingItems = DummyData.getTagPagingItems(),
             onAction = {},
         )
     }

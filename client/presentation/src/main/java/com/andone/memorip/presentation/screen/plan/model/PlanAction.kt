@@ -23,4 +23,5 @@ sealed interface PlanAction {
     data class DateSelected(val start: LocalDate, val end: LocalDate) : PlanAction
 
     data class DayScrolled(val day: Int) : PlanAction
+    data object ShowCalendarClick: PlanAction
 }

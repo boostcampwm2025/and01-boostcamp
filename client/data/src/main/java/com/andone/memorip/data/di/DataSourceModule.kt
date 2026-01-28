@@ -33,4 +33,8 @@ abstract class DataSourceModule {
     @Binds
     @Singleton
     abstract fun bindGroupDataSource(impl: GroupRemoteDataSourceImpl): GroupRemoteDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindTagDataSource(impl: TagRemoteDataSourceImpl): TagRemoteDataSource
 }

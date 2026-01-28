@@ -103,4 +103,15 @@ interface GroupRepository: JpaRepository<Group, UUID> {
         @Param("ownerId") ownerId: UUID?,
         @Param("visibility") visibility: String?
     ): Long
+
+    @Query("""
+    SELECT 
+        g.id as id,
+        g.title as title,
+        g.start_date as startDate,
+        g.end_date as endDate
+    FROM groups g
+    WHERE g.deleted_at IS NULL
+    """, nativeQuery = true)
+    fun findSimpleGroups(): List<GroupPeriodProjection>
 }

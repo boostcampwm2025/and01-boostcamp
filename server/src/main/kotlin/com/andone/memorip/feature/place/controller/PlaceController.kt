@@ -44,10 +44,10 @@ class PlaceController(
 
     @GetMapping("/places")
     fun getPlaceList(
-        @RequestParam(required = false) q: String?,
+        @RequestParam(required = false) query: String?,
         @RequestParam(required = false) tagIds: List<UUID>?,
         @RequestParam(required = false) region1Depth: String?,
-        @RequestParam(required = false) region2Depth: String?,
+        @RequestParam(required = false) region2Depth: List<String>?,
         @PageableDefault(
             page = 0,
             size = 20,
@@ -57,7 +57,7 @@ class PlaceController(
         pageable: Pageable
     ): ApiResult<List<PlaceListItemResponse>> {
         val result = placeService.getPlaceList(
-            q,
+            query,
             tagIds,
             region1Depth,
             region2Depth,

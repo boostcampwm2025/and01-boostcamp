@@ -1,17 +1,37 @@
 package com.andone.memorip.presentation.component.map
 
+import android.content.res.Configuration
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.model.LocationUiModel
+import com.andone.memorip.presentation.theme.MemoripPadding
+import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.size
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.res.stringResource
+import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.theme.MemoripIconSize
+import com.andone.memorip.presentation.theme.MemoripShadow
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
 import com.naver.maps.map.compose.ExperimentalNaverMapApi
@@ -39,7 +59,7 @@ fun ReadOnlyMapView(
     uiSettings: MapUiSettings = MemoripMapDefaults.readOnlyUiSettings,
     markerWidth: Dp = ReadOnlyMapViewConstants.DEFAULT_MARKER_WIDTH,
     markerHeight: Dp = ReadOnlyMapViewConstants.DEFAULT_MARKER_HEIGHT,
-    onClick: (() -> Unit)? = null
+    onNavigateToExternalMap: ((LocationUiModel) -> Unit)? = null,
 ) {
     val displayLocation = location ?: LocationUiModel(
         latitude = ReadOnlyMapViewConstants.DEFAULT_LATITUDE,
@@ -67,7 +87,6 @@ fun ReadOnlyMapView(
             cameraPositionState = cameraPositionState,
             properties = properties,
             uiSettings = uiSettings,
-            onMapClick = onClick?.let { { _, _ -> it() } } ?: { _, _ -> }
         ) {
             if (showMarker) {
                 Marker(
@@ -77,21 +96,62 @@ fun ReadOnlyMapView(
                 )
             }
         }
-        Box(
-            modifier = Modifier.fillMaxSize()
-                .pointerInput(key1 = Unit) {
-                    awaitPointerEventScope {
-                        while (true) {
-                            val event = awaitPointerEvent()
-                            event.changes.forEach { it.consume() }
-                        }
-                    }
-                }
-        )
+        if (location != null && onNavigateToExternalMap != null) {
+            MapExternalViewButton(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(
+                        end = MemoripPadding.PaddingSmall,
+                        bottom = MemoripPadding.PaddingSmall
+                    ),
+                onClick = { onNavigateToExternalMap(location) }
+            )
+        }
     }
 }
 
-@Preview(name = "ReadOnlyMapView", showBackground = true)
+@Composable
+private fun MapExternalViewButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(
+        horizontal = MemoripPadding.PaddingXSmall,
+        vertical = MemoripPadding.PaddingXXSmall
+    ),
+) {
+    val shape = MemoripTheme.shapes.roundedXXSmall
+
+    Surface(
+        modifier = modifier
+            .clip(shape)
+            .clickable(onClick = onClick),
+        shape = shape,
+        color = MemoripTheme.colors.background,
+        shadowElevation = MemoripShadow.Medium
+    ) {
+        Row(
+            modifier = Modifier
+                .background(Color.Transparent)
+                .padding(contentPadding),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXSmall)
+        ) {
+            Text(
+                text = stringResource(id = R.string.place_detail_view_in_map_app),
+                style = MemoripTheme.typography.bodyBold12,
+                color = MemoripTheme.colors.primary
+            )
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_launch),
+                contentDescription = null,
+                modifier = Modifier.size(MemoripIconSize.IconSizeXXSmall),
+                tint = MemoripTheme.colors.primary
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
 @Composable
 private fun ReadOnlyMapViewWithMarkerPreview() {
     MemoripTheme {
@@ -103,6 +163,17 @@ private fun ReadOnlyMapViewWithMarkerPreview() {
                 latitude = 37.5666805,
                 longitude = 126.9784147
             )
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun MapExternalViewButtonPreview() {
+    MemoripTheme {
+        MapExternalViewButton(
+            onClick = {}
         )
     }
 }

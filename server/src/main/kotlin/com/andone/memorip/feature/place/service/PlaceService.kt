@@ -54,11 +54,12 @@ class PlaceService(
         )
     }
 
+    @Transactional(readOnly = true)
     fun getPlaceList(
         query: String?,
         tagIds: List<UUID>?,
         region1Depth: String?,
-        region2Depth: String?,
+        region2Depth: List<String>?,
         pageable: Pageable
     ): PlaceListResult {
         val page = placeRepository.searchPlaces(
