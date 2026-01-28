@@ -17,10 +17,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.screen.user.component.SettingRowItemDimen.ROW_VERTICAL_PADDING
+import com.andone.memorip.presentation.screen.user.component.SettingRowItemDimen.TRAILING_ICON_PADDING
 import com.andone.memorip.presentation.screen.user.model.SettingItemUiModel
 import com.andone.memorip.presentation.screen.user.model.SettingTrailing
+import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
+
+private object SettingRowItemDimen {
+    val ROW_VERTICAL_PADDING = 14.dp
+    val TRAILING_ICON_PADDING = 6.dp
+}
 
 @Composable
 fun SettingRowItem(
@@ -31,7 +39,10 @@ fun SettingRowItem(
         modifier = modifier
             .fillMaxWidth()
             .clickable { item.onClick() }
-            .padding(horizontal = 16.dp, vertical = 14.dp),
+            .padding(
+                horizontal = MemoripPadding.AppHorizontalPadding,
+                vertical = ROW_VERTICAL_PADDING
+            ),
         verticalAlignment = Alignment.CenterVertically
     ) {
 
@@ -41,7 +52,7 @@ fun SettingRowItem(
             tint = MemoripTheme.colors.primary
         )
 
-        Spacer(modifier = Modifier.width(12.dp))
+        Spacer(modifier = Modifier.width(width = MemoripPadding.PaddingSmall))
 
         Column(modifier = Modifier.weight(1f)) {
             Text(
@@ -73,7 +84,7 @@ fun SettingRowItem(
                             style = MemoripTheme.typography.bodyRegular12,
                             color = if (trailing.isAllowed) MemoripTheme.colors.primary else MemoripTheme.colors.onSurface
                         )
-                        Spacer(modifier = Modifier.width(6.dp))
+                        Spacer(modifier = Modifier.width(width = TRAILING_ICON_PADDING))
                     }
 
                     Icon(
