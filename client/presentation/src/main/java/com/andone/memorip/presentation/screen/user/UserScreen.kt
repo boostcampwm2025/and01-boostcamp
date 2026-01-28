@@ -30,6 +30,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.presentation.BuildConfig
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.screen.user.UserScreenDimen.ACCOUNT_SECTION_HEIGHT
+import com.andone.memorip.presentation.screen.user.component.PermissionSection
 import com.andone.memorip.presentation.screen.user.component.SettingSection
 import com.andone.memorip.presentation.screen.user.component.UserProfileSection
 import com.andone.memorip.presentation.screen.user.model.UserAction
@@ -120,32 +121,9 @@ fun UserScreenContent(
                 .verticalScroll(state = rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceMedium)
         ) {
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(height = ACCOUNT_SECTION_HEIGHT)
-                    .clickable(
-                        enabled = !state.isLoggedIn,
-                        onClick = {
-                            onAction(UserAction.OnMethodClick(method = LoginMethod.GOOGLE))
-                        }
-                    ),
-                color = MemoripTheme.colors.primaryContainer,
-                shape = memoripShapes.roundedSmall,
-                contentColor = MemoripTheme.colors.onSurface
-            ) {
-                if (state.isLoggedIn) {
-                    UserProfileSection(
-                        user = state.user,
-                        onEditClick = {},
-                        onProfileImageClick = {}
-                    )
-                } else {
-                    Box(contentAlignment = Alignment.Center) {
-                        Text(text = stringResource(R.string.login_add_account))
-                    }
-                }
-            }
+            ProfileSection(state = state, onAction = onAction)
+
+            PermissionSection(state.permissionUiState, onAction = onAction)
         }
     }
 }
@@ -172,5 +150,39 @@ private fun UserScreenContentsLoginPreview() {
             ),
             onAction = {},
         )
+    }
+}
+
+@Composable
+private fun ProfileSection(
+    state: UserUiState,
+    onAction: (UserAction) -> Unit,
+    modifier: Modifier = Modifier
+){
+    Surface(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(height = ACCOUNT_SECTION_HEIGHT)
+            .clickable(
+                enabled = !state.isLoggedIn,
+                onClick = {
+                    onAction(UserAction.OnMethodClick(method = LoginMethod.GOOGLE))
+                }
+            ),
+        color = MemoripTheme.colors.primaryContainer,
+        shape = memoripShapes.roundedSmall,
+        contentColor = MemoripTheme.colors.onSurface
+    ) {
+        if (state.isLoggedIn) {
+            UserProfileSection(
+                user = state.user,
+                onEditClick = {},
+                onProfileImageClick = {}
+            )
+        } else {
+            Box(contentAlignment = Alignment.Center) {
+                Text(text = stringResource(R.string.login_add_account))
+            }
+        }
     }
 }

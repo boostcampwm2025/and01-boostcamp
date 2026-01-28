@@ -9,10 +9,12 @@ import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.screen.user.model.PermissionUiState
 import com.andone.memorip.presentation.screen.user.model.SettingItemUiModel
 import com.andone.memorip.presentation.screen.user.model.SettingTrailing
+import com.andone.memorip.presentation.screen.user.model.UserAction
 
 @Composable
 fun PermissionSection(
     permissionUiState: PermissionUiState,
+    onAction: (UserAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val items = listOf(
@@ -56,6 +58,9 @@ fun PermissionSection(
 @Composable
 private fun PermissionSectionPreview() {
     MemoripTheme {
-        PermissionSection(PermissionUiState())
+        PermissionSection(
+            PermissionUiState(),
+            onAction = {},
+        )
     }
 }

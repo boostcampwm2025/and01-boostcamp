@@ -5,5 +5,6 @@ data class UserUiState(
     val isLoading: Boolean = false,
     val isLoggedIn: Boolean = false,
     val selectedMethod: LoginMethod? = null,
-    val errorMessage: String? = null
+    val errorMessage: String? = null,
+    val permissionUiState: PermissionUiState = PermissionUiState()
 )
