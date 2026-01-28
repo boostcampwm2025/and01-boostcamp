@@ -234,6 +234,7 @@ class PlanViewModel @Inject constructor(
 
             is PlanAction.GroupChoiceConfirmClick -> {
                 savePlan()
+                fetchPlaces(groupId = action.selectedGroup.id)
                 selectedGroupFlow.update { action.selectedGroup }
             }
 
