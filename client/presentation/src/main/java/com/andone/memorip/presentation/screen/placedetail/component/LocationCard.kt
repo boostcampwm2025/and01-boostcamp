@@ -34,7 +34,8 @@ fun LocationCard(
     location: String,
     latitude: Double,
     longitude: Double,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigateToExternalMap: ((LocationUiModel) -> Unit)? = null,
 ) {
     Surface(
         modifier = modifier,
@@ -73,7 +74,8 @@ fun LocationCard(
                     address = location,
                     latitude = latitude,
                     longitude = longitude
-                )
+                ),
+                onNavigateToExternalMap = onNavigateToExternalMap
             )
         }
     }
@@ -81,7 +83,7 @@ fun LocationCard(
 
 @Preview(showBackground = true)
 @Composable
-private fun LocationCardPrev() {
+private fun LocationCardPreview() {
     MemoripTheme {
         val place = place
         LocationCard(
