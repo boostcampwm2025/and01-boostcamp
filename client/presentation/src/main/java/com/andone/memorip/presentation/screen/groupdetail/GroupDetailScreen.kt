@@ -41,6 +41,7 @@ import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.collectWithLifecycle
 import com.andone.memorip.presentation.util.DummyData
+import com.naver.maps.geometry.LatLng
 
 @Composable
 fun GroupDetailScreen(
@@ -189,11 +190,26 @@ private fun GroupDetailScreenContent(
 @Composable
 private fun GroupDetailScreenContentPreview() {
     MemoripTheme {
+        val clusteredItems = DummyData.places.map { place ->
+            MapClusterManager.ClusterItem(
+                position = LatLng(place.latitude, place.longitude),
+                places = listOf(
+                    MapClusterManager.PlaceClusterData(
+                        id = place.id,
+                        position = LatLng(place.latitude, place.longitude),
+                        imageUrl = place.thumbnailImage.url,
+                        placeData = place
+                    )
+                )
+            )
+        }
+
         GroupDetailScreenContent(
             groupName = "그룹그룹그룹그룹그룹그룹그룹그룹그룹그룹",
             currentPage = 0,
             places = DummyData.places,
             placesPagingItems = DummyData.getPlacePagingItems(),
+             clusteredItems = clusteredItems,
             mapSelectedPlace = null,
             mapBottomSheetContent = MapBottomSheetStep.PlaceList,
             onAction = {}
