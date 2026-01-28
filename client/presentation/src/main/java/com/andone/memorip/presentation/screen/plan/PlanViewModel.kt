@@ -207,6 +207,9 @@ class PlanViewModel @Inject constructor(
                     )
                 }
             }
+            PlanAction.ShowCalendarClick -> {
+                _event.trySend(element = PlanEvent.ShowCalendarDialog)
+            }
         }
     }
 
