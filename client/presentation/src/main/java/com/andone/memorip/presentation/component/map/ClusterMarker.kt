@@ -47,7 +47,7 @@ fun ClusterMarker(
             Text(
                 text = if (count > 99) "99+" else count.toString(),
                 color = MemoripTheme.colors.primary,
-                style = MemoripTheme.typography.label1
+                style = MemoripTheme.typography.labelMedium14
             )
         }
     }
