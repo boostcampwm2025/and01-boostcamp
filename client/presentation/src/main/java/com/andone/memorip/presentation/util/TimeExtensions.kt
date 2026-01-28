@@ -7,6 +7,8 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 
 /**
  * ex) 오후 03:00
@@ -45,3 +47,12 @@ fun millisToLocalDate(millis: Long): LocalDate =
     Instant.ofEpochMilli(millis)
         .atZone(ZoneId.systemDefault())
         .toLocalDate()
+
+fun LocalDateTime?.toRemoteString(): String {
+    if (this == null) return ""
+
+    return this
+        .atZone(ZoneId.systemDefault())
+        .withZoneSameInstant(ZoneOffset.UTC)
+        .format(DateTimeFormatter.ISO_INSTANT)
+}

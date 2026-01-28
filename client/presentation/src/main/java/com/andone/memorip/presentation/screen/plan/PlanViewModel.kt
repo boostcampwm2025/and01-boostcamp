@@ -21,12 +21,17 @@ import com.andone.memorip.presentation.screen.plan.model.PlanUiState
 import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_DAY
 import com.andone.memorip.presentation.util.snackbar.SnackBarEvent
 import com.andone.memorip.presentation.util.snackbar.SnackBarManager
+import com.andone.memorip.presentation.util.toRemoteString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
@@ -384,10 +389,23 @@ class PlanViewModel @Inject constructor(
     }
 
     private fun savePlan() {
-        viewModelScope.launch {
-            uiState.value.blockUiModels.forEach{ (placeId, place) ->
-                groupRepository.updatePlaceTime(groupPlaceId = place.id)
+        val job = CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
+            uiState.value.blockUiModels.forEach { (groupPlaceId, place) ->
+                when(place) {
+                    is Place -> {
+                        if (place != uiState.value.places.find{it.id == groupPlaceId}) {
+                            groupRepository.updatePlaceTime(
+                                groupPlaceId = groupPlaceId,
+                                startAt = place.startDateTime.toRemoteString(),
+                                endAt = place.endDateTime.toRemoteString()
+                            )
+                        }
+
+                    }
+                    else -> {}
+                }
             }
         }
+        job.start()
     }
 }
