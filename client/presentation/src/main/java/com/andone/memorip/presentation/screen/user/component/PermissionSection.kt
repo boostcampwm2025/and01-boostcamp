@@ -20,29 +20,29 @@ fun PermissionSection(
     val items = listOf(
         SettingItemUiModel(
             iconRes = R.drawable.ic_baseline_camera_alt,
-            title = stringResource(R.string.permission_camera_title),
-            subtitle = stringResource(R.string.permission_camera_subtitle),
+            title = stringResource(R.string.login_permission_camera_title),
+            subtitle = stringResource(R.string.login_permission_camera_subtitle),
             trailing = SettingTrailing.Arrow(isAllowed = permissionUiState.cameraPermission),
             onClick = {}
         ),
         SettingItemUiModel(
             iconRes = R.drawable.ic_outline_gallery_thumbnail,
-            title = stringResource(R.string.permission_gallery_title),
-            subtitle = stringResource(R.string.permission_gallery_subtitle),
+            title = stringResource(R.string.login_permission_gallery_title),
+            subtitle = stringResource(R.string.login_permission_gallery_subtitle),
             trailing = SettingTrailing.Arrow(isAllowed = permissionUiState.galleryPermission),
             onClick = {}
         ),
         SettingItemUiModel(
             iconRes = R.drawable.ic_location_on,
-            title = stringResource(R.string.permission_location_title),
-            subtitle = stringResource(R.string.permission_location_subtitle),
+            title = stringResource(R.string.login_permission_location_title),
+            subtitle = stringResource(R.string.login_permission_location_subtitle),
             trailing = SettingTrailing.Arrow(isAllowed = permissionUiState.locationPermission),
             onClick = {}
         ),
         SettingItemUiModel(
             iconRes = R.drawable.ic_outline_android_wifi_3_bar,
-            title = stringResource(R.string.permission_network_title),
-            subtitle = stringResource(R.string.permission_network_subtitle),
+            title = stringResource(R.string.login_permission_network_title),
+            subtitle = stringResource(R.string.login_permission_network_subtitle),
             trailing = SettingTrailing.Arrow(isAllowed = permissionUiState.networkPermission),
             onClick = {}
         )

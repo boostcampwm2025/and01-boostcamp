@@ -30,6 +30,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.presentation.BuildConfig
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.screen.user.UserScreenDimen.ACCOUNT_SECTION_HEIGHT
+import com.andone.memorip.presentation.screen.user.component.AlarmSection
 import com.andone.memorip.presentation.screen.user.component.PermissionSection
 import com.andone.memorip.presentation.screen.user.component.SettingSection
 import com.andone.memorip.presentation.screen.user.component.UserProfileSection
@@ -122,6 +123,8 @@ fun UserScreenContent(
             verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceMedium)
         ) {
             ProfileSection(state = state, onAction = onAction)
+
+            AlarmSection(state.alarmUiState, onAction = onAction)
 
             PermissionSection(state.permissionUiState, onAction = onAction)
         }

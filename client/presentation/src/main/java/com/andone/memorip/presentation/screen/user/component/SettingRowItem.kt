@@ -80,8 +80,8 @@ fun SettingRowItem(
             is SettingTrailing.Arrow -> {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
-                        text = if (trailing.isAllowed) stringResource(R.string.permission_allowed)
-                        else stringResource(R.string.permission_denied),
+                        text = if (trailing.isAllowed) stringResource(R.string.login_permission_allowed)
+                        else stringResource(R.string.login_permission_denied),
                         style = MemoripTheme.typography.bodyRegular12,
                         color = if (trailing.isAllowed) MemoripTheme.colors.primary else MemoripTheme.colors.onSurface
                     )
