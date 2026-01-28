@@ -2,6 +2,7 @@ package com.andone.memorip.presentation.screen.user
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -30,6 +32,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.credentials.CredentialManager
@@ -49,6 +52,7 @@ import com.andone.memorip.presentation.screen.user.model.UserEvent
 import com.andone.memorip.presentation.screen.user.model.LoginMethod
 import com.andone.memorip.presentation.screen.user.model.UserUiModel
 import com.andone.memorip.presentation.screen.user.model.UserUiState
+import com.andone.memorip.presentation.theme.MemoripIconSize
 import com.andone.memorip.presentation.theme.MemoripLineWidth
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
@@ -155,7 +159,15 @@ fun UserScreenContent(
                         modifier = Modifier.padding(horizontal = MemoripPadding.AppHorizontalPadding),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Box(modifier = Modifier.size(PROFILE_IMAGE_SIZE)) {
+                        Box(
+                            modifier = Modifier
+                                .size(PROFILE_IMAGE_SIZE)
+                                .clickable(
+                                    indication = null,
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    onClick = {}
+                                )
+                        ) {
                             Surface(
                                 modifier = Modifier.matchParentSize(),
                                 shape = CircleShape,
@@ -195,14 +207,27 @@ fun UserScreenContent(
                         }
                         Spacer(modifier = Modifier.width(width = MemoripSpace.SpaceXXXLarge))
                         Column(verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXSmall)) {
-                            Text(
-                                text = state.user.name,
-                                style = MemoripTheme.typography.bodyBold18
-                            )
+                            Row(verticalAlignment = Alignment.CenterVertically,) {
+                                Text(
+                                    text = state.user.name,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
+                                    style = MemoripTheme.typography.headlineBold24,
+                                )
+                                Spacer(modifier = Modifier.weight(weight = 1f))
+                                IconButton(onClick = {}) {
+                                    Icon(
+                                        painter = painterResource(R.drawable.ic_outline_edit),
+                                        contentDescription = null,
+                                    )
+                                }
+                            }
                             state.user.email?.let {
                                 Text(
                                     text = it,
-                                    style = MemoripTheme.typography.bodyBold14
+                                    style = MemoripTheme.typography.bodyBold14,
+                                    maxLines = 2,
+                                    overflow = TextOverflow.Ellipsis
                                 )
                             }
                         }
