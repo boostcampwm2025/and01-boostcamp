@@ -27,7 +27,7 @@ data class Place(
     val durationMinutes: Long
         get() = if (startDateTime != null && endDateTime != null)
             Duration.between(startDateTime, endDateTime).toMinutes()
-        else 0L
+        else 60L
 
 
     companion object {
