@@ -26,4 +26,5 @@ interface GroupRepository {
     fun getGroupPlaces(groupId: String): Flow<PagingData<PlaceListItem>>
     suspend fun getSimpleGroups(): Result<List<GroupListItem>>
     suspend fun getPlaceByGroupId(groupId: String): Result<List<GroupPlace>>
+    suspend fun updatePlaceTime(groupPlaceId: String, startAt: String, endAt: String): Result<Unit>
 }

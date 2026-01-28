@@ -11,6 +11,7 @@ import com.andone.memorip.data.group.model.GroupListResponse
 import com.andone.memorip.data.group.model.GroupPlaceItem
 import com.andone.memorip.data.group.model.GroupUpdateRequest
 import com.andone.memorip.data.group.model.SimpleGroupItem
+import com.andone.memorip.data.group.model.UpdatePlaceTimeRequest
 import com.andone.memorip.data.util.apiCall
 import com.andone.memorip.domain.model.Group
 import com.andone.memorip.domain.model.GroupListItem
@@ -80,6 +81,18 @@ class GroupRemoteDataSourceImpl @Inject constructor(
     override suspend fun getPlaceByGroupId(groupId: String): Result<List<GroupPlace>> {
         return apiCall { groupService.getPlaceByGroupId(groupId) }
             .map { dtoList -> dtoList.map { GroupPlaceItem.toDomain(it) } }
+    }
+
+    override suspend fun updatePlaceTime(
+        groupPlaceId: String,
+        request: UpdatePlaceTimeRequest
+    ): Result<Unit> {
+        return apiCall {
+            groupService.updatePlaceTime(
+                groupPlaceId = groupPlaceId,
+                request = request
+            )
+        }
     }
 
     companion object {

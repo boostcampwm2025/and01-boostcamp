@@ -4,6 +4,7 @@ import androidx.paging.PagingData
 import com.andone.memorip.data.group.datasource.remote.GroupRemoteDataSource
 import com.andone.memorip.data.group.model.GroupCreateRequest
 import com.andone.memorip.data.group.model.GroupUpdateRequest
+import com.andone.memorip.data.group.model.UpdatePlaceTimeRequest
 import com.andone.memorip.domain.model.Group
 import com.andone.memorip.domain.model.GroupListItem
 import com.andone.memorip.domain.model.GroupPlace
@@ -99,5 +100,17 @@ class GroupRepositoryImpl @Inject constructor(
 
     override suspend fun getPlaceByGroupId(groupId: String): Result<List<GroupPlace>> {
         return remoteDataSource.getPlaceByGroupId(groupId)
+    }
+
+    override suspend fun updatePlaceTime(
+        groupPlaceId: String,
+        startAt: String,
+        endAt: String
+    ): Result<Unit> {
+        val request = UpdatePlaceTimeRequest(
+            startAt = startAt,
+            endAt = endAt
+        )
+        return remoteDataSource.updatePlaceTime(groupPlaceId = groupPlaceId, request = request)
     }
 }
