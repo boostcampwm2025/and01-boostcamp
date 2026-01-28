@@ -9,6 +9,7 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import com.andone.memorip.presentation.screen.groupdetail.navigateToGroupDetail
 import com.andone.memorip.presentation.screen.placecreate.navigateToPlaceCreate
 import com.andone.memorip.presentation.screen.placedetail.navigateToPlaceDetail
+import com.andone.memorip.presentation.screen.placelist.navigateToPlaceList
 import kotlinx.collections.immutable.toImmutableList
 
 @Stable
@@ -32,10 +33,16 @@ class MemoripNavigator(
         if (currentTab == tab) return
 
         backStack.clear()
+
+        if (tab != MainBottomBarRoute.PLACE_LIST) {
+            navigateToPlaceList()
+        }
+
         backStack.add(tab.route)
     }
 
     fun navigateToGroupList() = backStack.add(MainBottomBarRoute.GROUP_LIST.route)
+    fun navigateToPlaceList() = backStack.navigateToPlaceList()
 
     fun navigateToPlaceCreate() = backStack.navigateToPlaceCreate()
 
