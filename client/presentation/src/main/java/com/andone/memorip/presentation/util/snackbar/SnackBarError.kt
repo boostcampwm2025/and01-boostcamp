@@ -4,12 +4,12 @@ import androidx.annotation.StringRes
 import com.andone.memorip.presentation.R
 
 data class SnackBarAction(
-    @StringRes val labelResId: Int,
+    @get:StringRes val labelResId: Int,
     val onAction: suspend () -> Unit
 )
 
 enum class SnackBarEvent(
-    @StringRes val messageResId: Int,
+    @get:StringRes val messageResId: Int,
     val action: SnackBarAction? = null
 ) {
     // 공통 에러
