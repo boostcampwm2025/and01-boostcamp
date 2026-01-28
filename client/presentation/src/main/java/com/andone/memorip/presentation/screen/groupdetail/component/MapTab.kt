@@ -12,7 +12,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,8 +22,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.component.LoadingIndicatorScreen
@@ -52,11 +49,8 @@ private object MapTabDimen {
 private object MapTabConstant {
     const val BOUND_PADDING = 200
     const val CAMERA_ANIMATION_DURATION = 500
-}
-
-enum class MapBottomSheetState {
-    Collapsed,
-    Expanded
+    const val MICRO_ANIMATION_DURATION = 1
+    const val MICRO_ZOOM_DELTA = 0.0001
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalNaverMapApi::class)
@@ -114,6 +108,11 @@ fun MapTab(
 
                     val cameraUpdate = CameraUpdate.fitBounds(bounds, MapTabConstant.BOUND_PADDING)
                     cameraPositionState.move(cameraUpdate)
+                    val microUpdate = CameraUpdate.zoomBy(MapTabConstant.MICRO_ZOOM_DELTA)
+                    cameraPositionState.animate(
+                        update = microUpdate,
+                        durationMs = MapTabConstant.MICRO_ANIMATION_DURATION
+                    )
                     onAction(GroupDetailAction.OnMapPlacesUpdate(currentPlaces))
 
                     isCameraInitialized = true
@@ -218,7 +217,8 @@ private fun MapBottomSheetContent(
     bottomSheetContent: MapBottomSheetStep,
     places: List<Place>,
     selectedPlace: Place?,
-    onAction: (GroupDetailAction) -> Unit
+    onAction: (GroupDetailAction) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val placeListState = rememberLazyListState()
 
