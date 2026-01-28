@@ -5,5 +5,6 @@ import com.andone.memorip.domain.model.Tag
 import kotlinx.coroutines.flow.Flow
 
 interface TagRepository {
-    fun getTagList(): Flow<PagingData<Tag>>
+    fun loadTags(): Flow<PagingData<Tag>>
+    suspend fun addTags(tag: Tag): Result<Tag>
 }

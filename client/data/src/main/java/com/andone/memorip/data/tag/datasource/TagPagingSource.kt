@@ -3,15 +3,14 @@ package com.andone.memorip.data.tag.datasource
 import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.andone.memorip.domain.model.Tag
-import com.andone.memorip.data.tag.model.toDomain
+import com.andone.memorip.data.tag.model.TagResponse
 
-class TagListPagingSource(
+class TagPagingSource(
     private val service: TagService,
     private val pageSize: Int,
-) : PagingSource<Int, Tag>() {
+) : PagingSource<Int, TagResponse>() {
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Tag> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, TagResponse> {
         val page = params.key ?: 0
 
         return try {
@@ -24,8 +23,7 @@ class TagListPagingSource(
                 return LoadResult.Error(IllegalStateException(response.error.message))
             }
 
-            val items = response.data.orEmpty().map { it.toDomain() }
-
+            val items = response.data.orEmpty()
             val hasNext = response.pagination?.hasNext ?: false
 
             LoadResult.Page(
@@ -39,7 +37,7 @@ class TagListPagingSource(
         }
     }
 
-    override fun getRefreshKey(state: PagingState<Int, Tag>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, TagResponse>): Int? {
         return state.anchorPosition?.let { anchor ->
             state.closestPageToPosition(anchor)?.prevKey?.plus(1)
                 ?: state.closestPageToPosition(anchor)?.nextKey?.minus(1)

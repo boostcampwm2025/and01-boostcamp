@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.screen.selectgroup
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -130,7 +131,7 @@ private fun SelectGroupContent(
 ) {
     val hasChanges = selectedGroupIds != initialSelectedGroupIds
     val isPlaceDetailScreen = groups.any { it.isPlaceAdded }
-    
+
     Scaffold(
         topBar = {
             SelectGroupTopBar(
@@ -190,6 +191,7 @@ private fun SelectGroupContent(
 }
 
 @Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun SelectGroupScreenPreview() {
     MemoripTheme {

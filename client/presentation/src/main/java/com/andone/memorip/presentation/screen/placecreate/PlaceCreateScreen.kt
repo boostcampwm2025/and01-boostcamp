@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.screen.placecreate
 
+import android.content.res.Configuration
 import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -40,9 +41,9 @@ import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.LoadingIndicatorScreen
 import com.andone.memorip.presentation.component.MemoripImage
 import com.andone.memorip.presentation.component.MemoripInputBox
+import com.andone.memorip.presentation.model.GroupUiModel
 import com.andone.memorip.presentation.model.LocationUiModel
 import com.andone.memorip.presentation.model.TagUiModel
-import com.andone.memorip.presentation.model.GroupUiModel
 import com.andone.memorip.presentation.screen.placecreate.PlaceCreateScreenConstant.CONTENT_MAX_LENGTH
 import com.andone.memorip.presentation.screen.placecreate.PlaceCreateScreenConstant.IMAGE_RATIO
 import com.andone.memorip.presentation.screen.placecreate.PlaceCreateScreenConstant.TITLE_MAX_LENGTH
@@ -344,17 +345,19 @@ private fun PublicCheckSection(
             checked = isPublic,
             onCheckedChange = { onCheckedChange() },
             colors = SwitchDefaults.colors(
+                checkedThumbColor = MemoripTheme.colors.white,
                 checkedTrackColor = MemoripTheme.colors.primary,
-                checkedBorderColor = MemoripTheme.colors.white,
+                checkedBorderColor = MemoripTheme.colors.background,
                 uncheckedThumbColor = MemoripTheme.colors.white,
                 uncheckedTrackColor = MemoripTheme.colors.gray1,
-                uncheckedBorderColor = MemoripTheme.colors.white
+                uncheckedBorderColor = MemoripTheme.colors.background
             )
         )
     }
 }
 
 @Preview(showBackground = true)
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun PlaceCreateScreenContentsPreview() {
     MemoripTheme {

@@ -4,15 +4,14 @@ import com.andone.memorip.domain.model.Tag
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class TagListItemResponse(
-    val id: String,
+data class TagRequest(
     val name: String,
     val colorHex: String
 )
 
-fun TagListItemResponse.toDomain(): Tag =
-    Tag(
-        id = id,
+fun Tag.toDataModel(): TagRequest {
+    return TagRequest(
         name = name,
-        color = colorHex
+        colorHex = color
     )
+}

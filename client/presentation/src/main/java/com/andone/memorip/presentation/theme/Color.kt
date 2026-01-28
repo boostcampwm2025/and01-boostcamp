@@ -1,6 +1,5 @@
 package com.andone.memorip.presentation.theme
 
-import androidx.compose.material3.adaptive.layout.ThreePaneScaffoldRole
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Immutable
@@ -20,14 +19,13 @@ val Black = Color(0xFF222222)
 val Gray = Color(0xFF73777C)
 val Gray1 = Color(0xFF9CA3AF)
 val Gray2 = Color(0xFFF3F4F6)
-val Gray3 = Color(0xFFD1D5DB)
-val Gray4 = Color(0xFFF9FAFB)
 val LightGray = Color(0xFFCCCCCC)
 val White = Color(0xFFFFFFFF)
 
 // Dark 테마용 색상
 val DarkPrimaryContainer = Color(0xFF444444)
 val DarkBackGround = Color(0xFF1A1A1A)
+val DarkGray2 = Color(0xFF2C2C2C)
 
 @Immutable
 data class MemoripColors(
@@ -37,8 +35,6 @@ data class MemoripColors(
     val gray: Color,
     val gray1: Color,
     val gray2: Color,
-    val gray3: Color,
-    val gray4: Color,
     val lightGray: Color,
     val onSurface: Color,
     val error: Color,
@@ -55,8 +51,6 @@ internal val lightMemoripColors = MemoripColors(
     gray = Gray,
     gray1 = Gray1,
     gray2 = Gray2,
-    gray3 = Gray3,
-    gray4 = Gray4,
     lightGray = LightGray,
     onSurface = Black,
     error = Red,
@@ -72,9 +66,7 @@ internal val darkMemoripColors = MemoripColors(
     background = DarkBackGround,
     gray = Gray,
     gray1 = Gray1,
-    gray2 = Gray2,
-    gray3 = Gray3,
-    gray4 = Gray4,
+    gray2 = DarkGray2,
     lightGray = LightGray,
     onSurface = White,
     error = Red,

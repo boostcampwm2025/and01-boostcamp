@@ -46,6 +46,11 @@ class SelectImageViewModel @Inject constructor() : ViewModel() {
 
     private fun addImages(images: List<Uri>, transformData: Map<Uri, CropTransformData>) {
         _uiState.update { it.copy(croppedImages = images, transformData = transformData) }
-        _event.trySend(SelectImageEvent.NavigateToSelectLocation(images))
+        _event.trySend(
+            SelectImageEvent.NavigateToSelectLocation(
+                images = images,
+                thumbnailImageRatio = transformData.values.first().aspectRatio
+            )
+        )
     }
 }
