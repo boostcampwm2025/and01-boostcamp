@@ -1,6 +1,5 @@
 package com.andone.memorip.presentation.screen.plan
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.BackoffPolicy
@@ -40,7 +39,6 @@ import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
@@ -71,7 +69,11 @@ class PlanViewModel @Inject constructor(
         groupRepository.getSimpleGroups()
             .onSuccess { response ->
                 result = response
-                if (response.isNotEmpty()) selectedGroupFlow.update { GroupListUiModel.from(response.first()) }
+                if (response.isNotEmpty()) {
+                    val defaultGroup = response.first()
+                    selectedGroupFlow.update { GroupListUiModel.from(group = defaultGroup) }
+                    fetchPlaces(groupId = defaultGroup.id)
+                }
             }
             .onFailure { snackBarManager.show(event = SnackBarEvent.NETWORK_ERROR) }
         emit(result)
@@ -84,27 +86,12 @@ class PlanViewModel @Inject constructor(
             )
         }
 
-    private val remotePlacesByGroupFlow = selectedGroupFlow.flatMapLatest { group ->
-        flow {
-            var result = emptyList<Place>()
-            if (group != null) {
-                groupRepository.getPlaceByGroupId(group.id)
-                    .onSuccess { success -> result = success.map { it.toUiModel() } }
-                    .onFailure { snackBarManager.show(SnackBarEvent.NETWORK_ERROR) }
-            }
-            emit(result)
-        }
-    }
-    private val localDeletedPlacesFlow = MutableStateFlow(value = emptyList<Place>())
-    private val visiblePlacesFlow =
-        combine(remotePlacesByGroupFlow, localDeletedPlacesFlow) { origin, deleted ->
-            origin.filter { it !in deleted }
-        }
+    private val placesFlow = MutableStateFlow(value = emptyList<Place>())
     private val timeBlocksFlow = MutableStateFlow(value = emptyList<TimeBlock>())
     private val selectedDateFlow = MutableStateFlow(value = DateUiModel())
     private val blockUiModelsFlow = MutableStateFlow(value = emptyMap<String, PlanBlockUiModel>())
     private val planPlaceUiStateFlow = combine(
-        visiblePlacesFlow,
+        placesFlow,
         timeBlocksFlow,
         blockUiModelsFlow
     ) { places, blocks, blockUiModels ->
@@ -187,7 +174,7 @@ class PlanViewModel @Inject constructor(
                         }
                         blockUiModelsFlow.update { adjustedUiModels }
                         timeBlocksFlow.update { newBlocks }
-                        localDeletedPlacesFlow.update { (it - value).toImmutableList() }
+                        placesFlow.update { (it + value).toImmutableList() }
                     }
                 )
             }
@@ -253,6 +240,43 @@ class PlanViewModel @Inject constructor(
             PlanAction.ShowCalendarClick -> {
                 _event.trySend(element = PlanEvent.ShowCalendarDialog)
             }
+        }
+    }
+
+    fun savePlan() {
+        viewModelScope.launch {
+            uiState.value.blockUiModels.forEach { (groupPlaceId, place) ->
+                when (place) {
+                    is Place -> {
+                        if (place != uiState.value.places.find { it.id == groupPlaceId }) {
+                            val startAt = place.startDateTime.toRemoteString()
+                            val endAt = place.endDateTime.toRemoteString()
+                            pendingUpdates[groupPlaceId] = Payload.PlaceTimeEditPayload(
+                                startAt = startAt,
+                                endAt = endAt
+                            )
+                            groupRepository.updatePlaceTime(
+                                groupPlaceId = groupPlaceId,
+                                startAt = startAt,
+                                endAt = endAt
+                            ).onSuccess {
+                                pendingUpdates.remove(groupPlaceId)
+                            }.onFailure {
+                                if (it is CancellationException) throw it
+                                snackBarManager.show(SnackBarEvent.NETWORK_ERROR)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun fetchPlaces(groupId: String) {
+        viewModelScope.launch {
+            groupRepository.getPlaceByGroupId(groupId = groupId)
+                .onSuccess { result -> placesFlow.update { result.map { place -> place.toUiModel() } } }
+                .onFailure { snackBarManager.show(SnackBarEvent.NETWORK_ERROR) }
         }
     }
 
@@ -395,58 +419,7 @@ class PlanViewModel @Inject constructor(
         )
         blockUiModelsFlow.update { it + (place.id to newPlace) }
         timeBlocksFlow.update { it + newPlace.toTimeBlock(dayStart = uiState.value.date.startDay!!.atStartOfDay())!! }
-        localDeletedPlacesFlow.update { (it + place).toImmutableList() }
-    }
-
-    fun savePlan() {
-        Log.d("DEBUG TEST", "save plan call")
-        viewModelScope.launch {
-            Log.d("DEBUG TEST", "block ui models : ${uiState.value.blockUiModels}")
-            uiState.value.blockUiModels.forEach { (groupPlaceId, place) ->
-                when (place) {
-                    is Place -> {
-                        if (place != uiState.value.places.find { it.id == groupPlaceId }) {
-                            val startAt = place.startDateTime.toRemoteString()
-                            val endAt = place.endDateTime.toRemoteString()
-                            pendingUpdates[groupPlaceId] = Payload.PlaceTimeEditPayload(
-                                startAt = startAt,
-                                endAt = endAt
-                            )
-                            groupRepository.updatePlaceTime(
-                                groupPlaceId = groupPlaceId,
-                                startAt = startAt,
-                                endAt = endAt
-                            ).onSuccess {
-                                Log.d("DEBUG TEST", "edit success")
-                                pendingUpdates.remove(groupPlaceId)
-                            }
-                                .onFailure {
-                                    if (it is CancellationException) throw it
-                                    Log.d("DEBUG TEST", "edit failure")
-                                    snackBarManager.show(SnackBarEvent.NETWORK_ERROR)
-                                }
-                        }
-                    }
-
-                    else -> {}
-                }
-            }
-        }
-    }
-
-    override fun onCleared() {
-        Log.d("DEBUG TEST", "onCleared call")
-        pendingUpdates.forEach { (id, update) ->
-            Log.d("DEBUG TEST", "pending update $id : $update")
-            val request = buildPendingUpdateWork(id, update)
-
-            workManager.enqueueUniqueWork(
-                uniqueWorkName = WORK_NAME + id,
-                ExistingWorkPolicy.APPEND_OR_REPLACE,
-                request
-            )
-        }
-        super.onCleared()
+        placesFlow.update { (it - place).toImmutableList() }
     }
 
     private fun buildPendingUpdateWork(id: String, payload: Payload): OneTimeWorkRequest {
@@ -465,6 +438,19 @@ class PlanViewModel @Inject constructor(
                 TimeUnit.SECONDS
             )
             .build()
+    }
+
+    override fun onCleared() {
+        pendingUpdates.forEach { (id, update) ->
+            val request = buildPendingUpdateWork(id, update)
+
+            workManager.enqueueUniqueWork(
+                uniqueWorkName = WORK_NAME + id,
+                ExistingWorkPolicy.APPEND_OR_REPLACE,
+                request
+            )
+        }
+        super.onCleared()
     }
 
     companion object {
