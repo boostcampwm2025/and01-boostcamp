@@ -16,6 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -24,6 +25,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.andone.memorip.navigation.GroupDetail
 import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.component.map.MapClusterManager
 import com.andone.memorip.presentation.component.map.rememberBitmapMarkerLoader
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.screen.groupdetail.component.GroupDetailTopBar
@@ -48,16 +50,20 @@ fun GroupDetailScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val placesPagingItems = viewModel.placesPagingFlow.collectAsLazyPagingItems()
+    val clusteredItems by viewModel.clusteredItemsStateFlow.collectAsStateWithLifecycle()
     var places by remember { mutableStateOf<List<Place>>(emptyList()) }
 
-    LaunchedEffect(placesPagingItems.itemCount) {
-        val newPlaces = mutableListOf<Place>()
-        for (i in 0 until placesPagingItems.itemCount) {
-            placesPagingItems[i]?.let { place ->
-                newPlaces.add(place)
+    LaunchedEffect(placesPagingItems) {
+        snapshotFlow { placesPagingItems.itemCount }
+            .collect { itemCount ->
+                val newPlaces = mutableListOf<Place>()
+                for (i in 0 until itemCount) {
+                    placesPagingItems[i]?.let { place ->
+                        newPlaces.add(place)
+                    }
+                }
+                places = newPlaces
             }
-        }
-        places = newPlaces
     }
 
     viewModel.event.collectWithLifecycle { event ->
@@ -77,6 +83,7 @@ fun GroupDetailScreen(
         currentPage = uiState.currentTab,
         places = places,
         placesPagingItems = placesPagingItems,
+        clusteredItems = clusteredItems,
         mapSelectedPlace = uiState.mapSelectedPlace,
         mapBottomSheetContent = uiState.mapBottomSheetContent,
         onAction = viewModel::onAction,
@@ -90,6 +97,7 @@ private fun GroupDetailScreenContent(
     currentPage: Int,
     places: List<Place>,
     placesPagingItems: LazyPagingItems<Place>,
+    clusteredItems: List<MapClusterManager.ClusterItem>,
     mapSelectedPlace: Place?,
     mapBottomSheetContent: MapBottomSheetStep,
     onAction: (GroupDetailAction) -> Unit,
@@ -157,6 +165,7 @@ private fun GroupDetailScreenContent(
 
                 1 -> MapTab(
                     places = places,
+                    clusteredItems = clusteredItems,
                     markerImages = markerImages,
                     mapBottomSheetContent = mapBottomSheetContent,
                     mapLoaded = mapLoaded,

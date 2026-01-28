@@ -17,4 +17,12 @@ sealed interface GroupDetailAction {
     data class OnMapPlaceClick(val place: Place) : GroupDetailAction
 
     data object OnMapPlaceClose : GroupDetailAction
+
+    // Map 관련 액션
+    data class OnMapPlacesUpdate(val places: List<Place>) : GroupDetailAction
+
+    data object OnMapInitialized : GroupDetailAction
+
+    data class OnMapCameraChange(val projection: com.naver.maps.map.Projection?, val zoom: Double) :
+        GroupDetailAction
 }
