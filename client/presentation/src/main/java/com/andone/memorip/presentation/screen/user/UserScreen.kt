@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.screen.user
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,7 +14,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -25,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,14 +40,16 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.presentation.BuildConfig
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.MemoripImage
-import com.andone.memorip.presentation.screen.user.UserScreenConstants.ACCOUNT_SECTION_HEIGHT
-import com.andone.memorip.presentation.screen.user.UserScreenConstants.PLACES_SECTION_HEIGHT
-import com.andone.memorip.presentation.screen.user.UserScreenConstants.PROFILE_IMAGE_SIZE
+import com.andone.memorip.presentation.screen.user.UserScreenDimen.ACCOUNT_SECTION_HEIGHT
+import com.andone.memorip.presentation.screen.user.UserScreenDimen.PROFILE_IMAGE_ICON_PADDING
+import com.andone.memorip.presentation.screen.user.UserScreenDimen.PROFILE_IMAGE_ICON_SIZE
+import com.andone.memorip.presentation.screen.user.UserScreenDimen.PROFILE_IMAGE_SIZE
 import com.andone.memorip.presentation.screen.user.model.UserAction
 import com.andone.memorip.presentation.screen.user.model.UserEvent
 import com.andone.memorip.presentation.screen.user.model.LoginMethod
 import com.andone.memorip.presentation.screen.user.model.UserUiModel
 import com.andone.memorip.presentation.screen.user.model.UserUiState
+import com.andone.memorip.presentation.theme.MemoripLineWidth
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -53,10 +59,13 @@ import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Companion.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
 
-private object UserScreenConstants {
+private object UserScreenDimen {
     val ACCOUNT_SECTION_HEIGHT = 120.dp
-    val PLACES_SECTION_HEIGHT = 800.dp
     val PROFILE_IMAGE_SIZE = 80.dp
+
+    val PROFILE_IMAGE_ICON_SIZE = 28.dp
+
+    val PROFILE_IMAGE_ICON_PADDING = 6.dp
 }
 
 @Composable
@@ -124,7 +133,7 @@ fun UserScreenContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues = innerPadding)
-                .padding(all = MemoripPadding.AppHorizontalPadding )
+                .padding(all = MemoripPadding.AppHorizontalPadding)
                 .verticalScroll(state = rememberScrollState()),
         ) {
             Surface(
@@ -146,34 +155,60 @@ fun UserScreenContent(
                         modifier = Modifier.padding(horizontal = MemoripPadding.AppHorizontalPadding),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Surface(
-                            modifier = Modifier
-                                .size(PROFILE_IMAGE_SIZE)
-                                .clip(shape = memoripShapes.roundedXLarge)
-                        ) {
-                            val imageUrl = state.user.profileImgUrl
-                            val pngUrl = imageUrl.replace("svg", "png")
+                        Box(modifier = Modifier.size(PROFILE_IMAGE_SIZE)) {
+                            Surface(
+                                modifier = Modifier.matchParentSize(),
+                                shape = CircleShape,
+                                border = BorderStroke(
+                                    width = MemoripLineWidth.Small,
+                                    color = MemoripTheme.colors.primary
+                                )
+                            ) {
+                                val imageUrl = state.user.profileImgUrl
+                                val pngUrl = imageUrl.replace("svg", "png")
 
-                            if (imageUrl.isNotBlank()) {
-                                MemoripImage(
-                                    imageUrl = pngUrl,
-                                    contentDescription = stringResource(R.string.login_user_profile_image),
-                                    modifier = Modifier.fillMaxSize(),
-                                    contentScale = ContentScale.Crop
+                                if (imageUrl.isNotBlank()) {
+                                    MemoripImage(
+                                        imageUrl = pngUrl,
+                                        contentDescription = stringResource(R.string.login_user_profile_image),
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .clip(CircleShape),
+                                        contentScale = ContentScale.Crop
+                                    )
+                                }
+                            }
+
+                            Surface(
+                                modifier = Modifier
+                                    .align(Alignment.BottomEnd)
+                                    .size(PROFILE_IMAGE_ICON_SIZE),
+                                shape = CircleShape,
+                                color = MemoripTheme.colors.primary,
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_baseline_camera_alt),
+                                    contentDescription = null,
+                                    modifier = Modifier.padding(all = PROFILE_IMAGE_ICON_PADDING)
                                 )
                             }
                         }
                         Spacer(modifier = Modifier.width(width = MemoripSpace.SpaceXXXLarge))
-                        Column(verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXXSmall)) {
+                        Column(verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXSmall)) {
                             Text(
                                 text = state.user.name,
                                 style = MemoripTheme.typography.bodyBold18
                             )
-                            state.user.email?.let { Text(text = it, style = MemoripTheme.typography.bodyBold14) }
+                            state.user.email?.let {
+                                Text(
+                                    text = it,
+                                    style = MemoripTheme.typography.bodyBold14
+                                )
+                            }
                         }
                     }
                 } else {
-                    Box(contentAlignment = Alignment.Center){
+                    Box(contentAlignment = Alignment.Center) {
                         Text(text = stringResource(R.string.login_add_account))
                     }
                 }
