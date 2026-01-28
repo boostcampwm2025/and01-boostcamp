@@ -77,6 +77,9 @@ dependencies {
     // Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
+    implementation(libs.work.runtime)
+    implementation(libs.hilt.work)
+    ksp(libs.hilt.work.compiler)
 
     // Java 8+ API desugaring (java.time 라이브러리 지원)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
