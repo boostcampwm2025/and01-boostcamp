@@ -7,4 +7,5 @@ data class SettingItemUiModel(
     val subtitle: String? = null,
     val trailing: SettingTrailing? = null,
     val onClick: () -> Unit = {},
+    val clickable: Boolean = true,
 )

@@ -26,7 +26,8 @@ fun AlarmSection(
                 checked = alarmUiState.pushAlarm,
                 onCheckedChange = {}
             ),
-            onClick = {}
+            onClick = {},
+            clickable = false
         ),
         SettingItemUiModel(
             iconRes = R.drawable.ic_outline_bookmark_add,
@@ -36,7 +37,8 @@ fun AlarmSection(
                 checked = alarmUiState.scrapAlarm,
                 onCheckedChange = {}
             ),
-            onClick = {}
+            onClick = {},
+            clickable = false
         ),
     )
     SettingSection(

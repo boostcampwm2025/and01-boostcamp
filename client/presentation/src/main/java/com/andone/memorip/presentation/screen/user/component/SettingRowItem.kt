@@ -43,7 +43,10 @@ fun SettingRowItem(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .clickable { item.onClick() }
+            .clickable(
+                enabled = item.clickable,
+                onClick = item.onClick
+            )
             .padding(
                 horizontal = MemoripPadding.AppHorizontalPadding,
                 vertical = ROW_VERTICAL_PADDING
