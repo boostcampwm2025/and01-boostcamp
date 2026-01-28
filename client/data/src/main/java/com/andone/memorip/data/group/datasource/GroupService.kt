@@ -5,6 +5,7 @@ import com.andone.memorip.data.group.model.AddPlaceToGroupRequest
 import com.andone.memorip.data.group.model.GroupCreateRequest
 import com.andone.memorip.data.group.model.GroupListResponse
 import com.andone.memorip.data.group.model.GroupUpdateRequest
+import com.andone.memorip.data.group.model.SimpleGroupItem
 import com.andone.memorip.data.place.model.PlaceListItemResponse
 import com.andone.memorip.domain.model.Group
 import retrofit2.http.Body
@@ -65,4 +66,7 @@ interface GroupService {
         @Query("size") size: Int,
         @Query("sort") sort: List<String>? = null
     ): ApiResult<List<PlaceListItemResponse>>
+
+    @GET("/api/groups/simple")
+    suspend fun getSimpleGroups(): ApiResult<List<SimpleGroupItem>>
 }

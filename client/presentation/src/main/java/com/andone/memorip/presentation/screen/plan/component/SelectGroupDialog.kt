@@ -17,8 +17,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.dialog.DefaultDialog
-import com.andone.memorip.presentation.model.GroupUiModel
 import com.andone.memorip.presentation.screen.plan.component.SelectGroupDialogDimen.DIALOG_ITEM_TOTAL_HEIGHT
+import com.andone.memorip.presentation.screen.plan.model.GroupListUiModel
 import com.andone.memorip.presentation.theme.MemoripLineWidth
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -32,9 +32,9 @@ private object SelectGroupDialogDimen {
 
 @Composable
 fun SelectGroupDialog(
-    groups: ImmutableList<GroupUiModel>,
+    groups: ImmutableList<GroupListUiModel>,
     onDismissRequest: () -> Unit,
-    onConfirmClick: (GroupUiModel) -> Unit,
+    onConfirmClick: (GroupListUiModel) -> Unit,
     onCancelClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -78,7 +78,7 @@ fun SelectGroupDialog(
 private fun SelectGroupDialogPreview() {
     MemoripTheme {
         SelectGroupDialog(
-            groups = DummyData.groups.toImmutableList(),
+            groups = DummyData.groupListItems.toImmutableList(),
             onDismissRequest = { },
             onConfirmClick = { },
             onCancelClick = { },

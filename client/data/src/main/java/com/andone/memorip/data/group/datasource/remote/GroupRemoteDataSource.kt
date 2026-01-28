@@ -4,7 +4,9 @@ import androidx.paging.PagingData
 import com.andone.memorip.data.group.model.GroupCreateRequest
 import com.andone.memorip.data.group.model.GroupListResponse
 import com.andone.memorip.data.group.model.GroupUpdateRequest
+import com.andone.memorip.data.group.model.SimpleGroupItem
 import com.andone.memorip.domain.model.Group
+import com.andone.memorip.domain.model.GroupListItem
 import com.andone.memorip.domain.model.PlaceListItem
 import kotlinx.coroutines.flow.Flow
 
@@ -17,4 +19,5 @@ interface GroupRemoteDataSource {
     suspend fun deleteGroup(groupId: String): Result<Unit>
     suspend fun addPlaceToGroup(groupId: String, placeId: String): Result<Unit>
     fun getGroupPlaces(groupId: String): Flow<PagingData<PlaceListItem>>
+    suspend fun getSimpleGroups(): Result<List<GroupListItem>>
 }

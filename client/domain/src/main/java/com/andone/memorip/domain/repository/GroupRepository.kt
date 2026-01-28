@@ -2,6 +2,7 @@ package com.andone.memorip.domain.repository
 
 import androidx.paging.PagingData
 import com.andone.memorip.domain.model.Group
+import com.andone.memorip.domain.model.GroupListItem
 import com.andone.memorip.domain.model.GroupWithPlaceAdded
 import com.andone.memorip.domain.model.PlaceListItem
 import com.andone.memorip.domain.model.Visibility
@@ -22,4 +23,5 @@ interface GroupRepository {
     suspend fun deleteGroup(groupId: String): Result<Unit>
     suspend fun addPlaceToGroup(groupId: String, placeId: String): Result<Unit>
     fun getGroupPlaces(groupId: String): Flow<PagingData<PlaceListItem>>
+    suspend fun getSimpleGroups(): Result<List<GroupListItem>>
 }

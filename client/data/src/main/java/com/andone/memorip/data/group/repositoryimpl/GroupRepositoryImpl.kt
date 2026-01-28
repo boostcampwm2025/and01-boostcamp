@@ -5,6 +5,7 @@ import com.andone.memorip.data.group.datasource.remote.GroupRemoteDataSource
 import com.andone.memorip.data.group.model.GroupCreateRequest
 import com.andone.memorip.data.group.model.GroupUpdateRequest
 import com.andone.memorip.domain.model.Group
+import com.andone.memorip.domain.model.GroupListItem
 import com.andone.memorip.domain.model.GroupWithPlaceAdded
 import com.andone.memorip.domain.model.PlaceListItem
 import com.andone.memorip.domain.model.Visibility
@@ -89,5 +90,9 @@ class GroupRepositoryImpl @Inject constructor(
 
     override fun getGroupPlaces(groupId: String): Flow<PagingData<PlaceListItem>> {
         return remoteDataSource.getGroupPlaces(groupId)
+    }
+
+    override suspend fun getSimpleGroups(): Result<List<GroupListItem>> {
+        return remoteDataSource.getSimpleGroups()
     }
 }

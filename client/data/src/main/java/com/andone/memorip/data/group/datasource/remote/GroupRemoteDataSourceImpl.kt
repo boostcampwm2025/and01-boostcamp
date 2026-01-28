@@ -9,8 +9,10 @@ import com.andone.memorip.data.group.model.AddPlaceToGroupRequest
 import com.andone.memorip.data.group.model.GroupCreateRequest
 import com.andone.memorip.data.group.model.GroupListResponse
 import com.andone.memorip.data.group.model.GroupUpdateRequest
+import com.andone.memorip.data.group.model.SimpleGroupItem
 import com.andone.memorip.data.util.apiCall
 import com.andone.memorip.domain.model.Group
+import com.andone.memorip.domain.model.GroupListItem
 import com.andone.memorip.domain.model.PlaceListItem
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -63,6 +65,11 @@ class GroupRemoteDataSourceImpl @Inject constructor(
                 )
             }
         ).flow
+
+    override suspend fun getSimpleGroups(): Result<List<GroupListItem>> {
+        return apiCall { groupService.getSimpleGroups() }
+            .map{ dtoList -> dtoList.map{ SimpleGroupItem.toDomain(it) } }
+    }
 
     companion object {
         private const val FIRST_PAGE_SIZE = 20

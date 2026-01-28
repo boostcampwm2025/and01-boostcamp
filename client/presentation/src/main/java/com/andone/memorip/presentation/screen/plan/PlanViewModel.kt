@@ -3,6 +3,7 @@ package com.andone.memorip.presentation.screen.plan
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.andone.memorip.domain.model.GroupListItem
 import com.andone.memorip.domain.model.TimeBlock
 import com.andone.memorip.domain.repository.GroupRepository
 import com.andone.memorip.domain.repository.PlaceRepository
@@ -13,6 +14,7 @@ import com.andone.memorip.presentation.model.toTimeBlock
 import com.andone.memorip.presentation.model.toUiModel
 import com.andone.memorip.presentation.screen.plan.PlanViewModelConstants.DAYS_LIMIT
 import com.andone.memorip.presentation.screen.plan.model.DateUiModel
+import com.andone.memorip.presentation.screen.plan.model.GroupListUiModel
 import com.andone.memorip.presentation.screen.plan.model.PlanAction
 import com.andone.memorip.presentation.screen.plan.model.PlanEvent
 import com.andone.memorip.presentation.screen.plan.model.PlanEvent.ShowDeleteDayDialog
@@ -30,6 +32,7 @@ import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
@@ -52,15 +55,18 @@ class PlanViewModel @Inject constructor(
     private val snackBarManager: SnackBarManager
 ) : ViewModel() {
 
-    private val selectedGroupFlow = MutableStateFlow<GroupUiModel?>(value = null)
-    private val myGroupsFlow = groupRepository.myGroups.onEach { groups ->
-        groupRepository.fetchMyGroups()
-        if (groups.isNotEmpty()) selectedGroupFlow.value = GroupUiModel.from(groups.first())
+    private val myGroupsFlow = flow{
+        var result = emptyList<GroupListItem>()
+        groupRepository.getSimpleGroups()
+            .onSuccess{ result = it }
+            .onFailure{ snackBarManager.show(event = SnackBarEvent.NETWORK_ERROR) }
+        emit(result)
     }
+    private val selectedGroupFlow = MutableStateFlow<GroupListUiModel?>(value = null)
     private val groupFlow = combine(selectedGroupFlow, myGroupsFlow) { selectedGroup, myGroups ->
         PlanGroupUiModel(
             selectedGroup = selectedGroup,
-            groups = myGroups.map { GroupUiModel.from(it) }.toImmutableList()
+            groups = myGroups.map { GroupListUiModel.from(it) }.toImmutableList()
         )
     }
     private val placesFlow = MutableStateFlow<List<Place>>(emptyList())

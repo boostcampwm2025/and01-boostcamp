@@ -21,6 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.andone.memorip.domain.model.GroupListItem
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.screen.plan.component.DateContextBar
@@ -33,6 +34,7 @@ import com.andone.memorip.presentation.screen.plan.component.PlanTopAppBar
 import com.andone.memorip.presentation.screen.plan.component.SelectGroupDialog
 import com.andone.memorip.presentation.screen.plan.component.TimeBlockItem
 import com.andone.memorip.presentation.screen.plan.component.TimeTable
+import com.andone.memorip.presentation.screen.plan.model.GroupListUiModel
 import com.andone.memorip.presentation.screen.plan.model.PlanAction
 import com.andone.memorip.presentation.screen.plan.model.PlanEvent
 import com.andone.memorip.presentation.screen.plan.model.PlanUiState
@@ -170,7 +172,7 @@ private fun PlanScreenContentsPreview() {
         PlanScreenContents(
             state = PlanUiState(
                 selectedGroup = DummyData.groups.first(),
-                groups = DummyData.groups.toImmutableList(),
+                groups = DummyData.groupListItems.toImmutableList(),
                 places = DummyData.places.toImmutableList(),
                 blocks = DummyData.timeBlocks
             ),

@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,7 +18,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.MemoripImage
-import com.andone.memorip.presentation.model.GroupUiModel
+import com.andone.memorip.presentation.screen.plan.model.GroupListUiModel
 import com.andone.memorip.presentation.theme.MemoripIconSize
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -27,7 +26,7 @@ import com.andone.memorip.presentation.util.DummyData
 
 @Composable
 fun SelectGroupItem(
-    group: GroupUiModel,
+    group: GroupListUiModel,
     selected: Boolean,
     onItemClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -44,14 +43,14 @@ fun SelectGroupItem(
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             MemoripImage(
-                imageUrl = group.images.first(),
+                imageUrl = group.thumbnail ?: "",
                 contentDescription = stringResource(R.string.plan_group_thumbnail_description),
                 modifier = Modifier
                     .size(size = MemoripIconSize.IconSizeLarge)
                     .clip(shape = MemoripTheme.shapes.roundedMedium)
             )
             Text(
-                text = group.name,
+                text = group.title,
                 modifier = Modifier.padding(start = MemoripPadding.PaddingMedium),
                 color = MemoripTheme.colors.onSurface,
                 style = MemoripTheme.typography.titleBold20
@@ -74,7 +73,7 @@ fun SelectGroupItem(
 private fun NotSelectGroupItemPreview() {
     MemoripTheme {
         SelectGroupItem(
-            group = DummyData.groups.first(),
+            group = DummyData.groupListItems.first(),
             selected = false,
             onItemClick = { },
             modifier = Modifier.fillMaxWidth()
@@ -87,9 +86,9 @@ private fun NotSelectGroupItemPreview() {
 private fun SelectGroupItemPreview() {
     MemoripTheme {
         SelectGroupItem(
-            group = DummyData.groups.first(),
+            group = DummyData.groupListItems.first(),
             selected = true,
-            onItemClick = {  },
+            onItemClick = { },
             modifier = Modifier.fillMaxWidth()
         )
     }
