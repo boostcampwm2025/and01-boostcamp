@@ -21,6 +21,7 @@ data class GroupPlaceItem(
             groupPlaceId = groupPlace.groupPlaceId,
             placeId = groupPlace.placeId,
             title = groupPlace.title,
+            thumbnail = groupPlace.thumbnailUrl,
             address = groupPlace.address,
             latitude = groupPlace.latitude,
             longitude = groupPlace.longitude,

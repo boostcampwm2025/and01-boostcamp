@@ -4,6 +4,7 @@ data class GroupPlace(
     val groupPlaceId: String,
     val placeId: String,
     val title: String,
+    val thumbnail: String? = null,
     val address: String,
     val latitude: Double,
     val longitude: Double,

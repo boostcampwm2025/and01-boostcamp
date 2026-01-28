@@ -62,7 +62,7 @@ fun GroupPlace.toUiModel(): Place = Place(
     /** ImageItem 잘해봐야 함 */
     thumbnailImage = ImageItem(
         id = 0,
-        url = "",
+        url = this.thumbnail ?: "",
         width = 0,
         height = 0
     ),
