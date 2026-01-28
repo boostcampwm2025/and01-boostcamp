@@ -4,6 +4,8 @@ interface AuthRepository {
 
     fun isLoggedIn(): Boolean
 
+    suspend fun getEmail(): Result<String>
+
     suspend fun signInWithGoogle(idToken: String): Result<Unit>
 
     suspend fun signInWithEmail(

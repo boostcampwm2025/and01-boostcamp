@@ -70,6 +70,22 @@ class UserViewModel @Inject constructor(
         }
     }
 
+    private fun updateEmail() {
+        viewModelScope.launch {
+            authRepository.getEmail()
+                .onSuccess { data ->
+                    _uiState.update {
+                        it.copy(user = it.user.copy(email = data))
+                    }
+                }
+                .onFailure { e ->
+                    _uiState.update {
+                        it.copy(errorMessage = e.message)
+                    }
+                }
+        }
+    }
+
     private fun updateUser() {
         viewModelScope.launch {
             userRepository.getMe()
@@ -77,6 +93,7 @@ class UserViewModel @Inject constructor(
                     _uiState.update {
                         it.copy(user = data.toUiModel())
                     }
+                    updateEmail()
                 }
                 .onFailure { e ->
                     _uiState.update {

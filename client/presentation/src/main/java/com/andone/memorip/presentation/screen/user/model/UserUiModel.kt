@@ -5,7 +5,8 @@ import com.andone.memorip.domain.model.User
 data class UserUiModel(
     val id: String,
     val name: String,
-    val profileImgUrl: String
+    val profileImgUrl: String,
+    val email: String? = null,
 ) {
     companion object {
         fun empty() = UserUiModel(

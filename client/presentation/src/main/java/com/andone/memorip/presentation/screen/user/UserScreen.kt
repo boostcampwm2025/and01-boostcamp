@@ -1,6 +1,7 @@
 package com.andone.memorip.presentation.screen.user
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -53,7 +54,7 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Companion.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
 
 private object UserScreenConstants {
-    val ACCOUNT_SECTION_HEIGHT = 180.dp
+    val ACCOUNT_SECTION_HEIGHT = 120.dp
     val PLACES_SECTION_HEIGHT = 800.dp
     val PROFILE_IMAGE_SIZE = 80.dp
 }
@@ -71,7 +72,6 @@ fun UserScreen(
     }
 
     val clientId = BuildConfig.LOGIN_WEB_CLIENT_ID
-
     val googleIdOption = remember {
         GetGoogleIdOption.Builder()
             .setServerClientId(clientId)
@@ -124,13 +124,13 @@ fun UserScreenContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues = innerPadding)
+                .padding(all = MemoripPadding.AppHorizontalPadding )
                 .verticalScroll(state = rememberScrollState()),
         ) {
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(height = ACCOUNT_SECTION_HEIGHT)
-                    .padding(all = MemoripPadding.AppHorizontalPadding)
                     .clickable(
                         enabled = !state.isLoggedIn,
                         onClick = {
@@ -138,49 +138,44 @@ fun UserScreenContent(
                         }
                     ),
                 color = MemoripTheme.colors.primaryContainer,
-                shape = memoripShapes.roundedSmall
+                shape = memoripShapes.roundedSmall,
+                contentColor = MemoripTheme.colors.onSurface
             ) {
-                Box(contentAlignment = Alignment.Center) {
-                    if (state.isLoggedIn) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Surface(
-                                modifier = Modifier
-                                    .size(PROFILE_IMAGE_SIZE)
-                                    .clip(memoripShapes.roundedXLarge)
-                            ) {
-                                val imageUrl = state.user.profileImgUrl
+                if (state.isLoggedIn) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = MemoripPadding.AppHorizontalPadding),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Surface(
+                            modifier = Modifier
+                                .size(PROFILE_IMAGE_SIZE)
+                                .clip(shape = memoripShapes.roundedXLarge)
+                        ) {
+                            val imageUrl = state.user.profileImgUrl
+                            val pngUrl = imageUrl.replace("svg", "png")
 
-                                if (imageUrl.isNotBlank()) {
-                                    MemoripImage(
-                                        imageUrl = imageUrl,
-                                        contentDescription = stringResource(R.string.login_user_profile_image),
-                                        modifier = Modifier.fillMaxSize(),
-                                        contentScale = ContentScale.Crop
-                                    )
-                                }
-                            }
-                            Spacer(modifier = Modifier.width(width = MemoripSpace.SpaceXXXLarge))
-                            Column {
-                                Text(text = state.user.id)
-                                Text(text = state.user.name)
+                            if (imageUrl.isNotBlank()) {
+                                MemoripImage(
+                                    imageUrl = pngUrl,
+                                    contentDescription = stringResource(R.string.login_user_profile_image),
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentScale = ContentScale.Crop
+                                )
                             }
                         }
-                    } else {
+                        Spacer(modifier = Modifier.width(width = MemoripSpace.SpaceXXXLarge))
+                        Column(verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXXSmall)) {
+                            Text(
+                                text = state.user.name,
+                                style = MemoripTheme.typography.bodyBold18
+                            )
+                            state.user.email?.let { Text(text = it, style = MemoripTheme.typography.bodyBold14) }
+                        }
+                    }
+                } else {
+                    Box(contentAlignment = Alignment.Center){
                         Text(text = stringResource(R.string.login_add_account))
                     }
-                }
-            }
-
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(height = PLACES_SECTION_HEIGHT)
-                    .padding(all = MemoripPadding.PaddingSmall),
-                color = MemoripTheme.colors.primaryContainer,
-                shape = memoripShapes.roundedSmall,
-            ) {
-                Box(contentAlignment = Alignment.Center) {
-                    Text(text = stringResource(R.string.login_show_places))
                 }
             }
         }
