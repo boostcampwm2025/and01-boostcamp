@@ -8,7 +8,7 @@ import kotlin.math.sqrt
 
 
 private object ClusterContant {
-    const val CLUSTER_RADIUS_DP = 60
+    const val CLUSTER_RADIUS_DP = 70
 }
 
 class MapClusterManager(private val context: Context) {
