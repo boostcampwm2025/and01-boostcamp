@@ -135,7 +135,9 @@ fun UserScreenContent(
 
             AppInfoSection(state.appVersion, onAction = onAction)
 
-            AccountSection(onAction = onAction)
+            if (state.isLoggedIn) {
+                AccountSection(onAction = onAction)
+            }
         }
     }
 }
@@ -170,7 +172,7 @@ private fun ProfileSection(
     state: UserUiState,
     onAction: (UserAction) -> Unit,
     modifier: Modifier = Modifier
-){
+) {
     Surface(
         modifier = modifier
             .fillMaxWidth()
