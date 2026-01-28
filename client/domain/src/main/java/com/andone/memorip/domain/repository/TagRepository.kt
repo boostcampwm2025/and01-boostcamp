@@ -7,5 +7,4 @@ import kotlinx.coroutines.flow.Flow
 interface TagRepository {
     fun loadTags(): Flow<PagingData<Tag>>
     suspend fun addTags(tag: Tag): Result<Tag>
-    fun getTagList(): Flow<PagingData<Tag>>
 }

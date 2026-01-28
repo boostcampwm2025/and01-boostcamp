@@ -17,14 +17,14 @@ class TagRemoteDataSourceImpl @Inject constructor(
     override fun loadTags(): Flow<PagingData<TagResponse>> {
         return Pager(
             config = PagingConfig(
-                pageSize = DEFAULT_PAGE_SIZE,
+                pageSize = PAGE_SIZE,
                 enablePlaceholders = false,
-                initialLoadSize = FIRST_PAGE_SIZE
+                initialLoadSize = PAGE_SIZE
             ),
             pagingSourceFactory = {
                 TagPagingSource(
                     service = tagService,
-                    pageSize = DEFAULT_PAGE_SIZE
+                    pageSize = PAGE_SIZE
                 )
             }
         ).flow
@@ -35,7 +35,6 @@ class TagRemoteDataSourceImpl @Inject constructor(
     }
 
     companion object {
-        private const val FIRST_PAGE_SIZE = 20
-        private const val DEFAULT_PAGE_SIZE = 10
+        private const val PAGE_SIZE = 20
     }
 }
