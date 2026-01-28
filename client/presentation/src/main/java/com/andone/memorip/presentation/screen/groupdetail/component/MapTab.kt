@@ -51,6 +51,7 @@ private object MapTabConstant {
     const val CAMERA_ANIMATION_DURATION = 500
     const val MICRO_ANIMATION_DURATION = 1
     const val MICRO_ZOOM_DELTA = 0.0001
+    const val CAMERA_UPDATE_DELAY = 100L
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalNaverMapApi::class)
@@ -108,11 +109,14 @@ fun MapTab(
 
                     val cameraUpdate = CameraUpdate.fitBounds(bounds, MapTabConstant.BOUND_PADDING)
                     cameraPositionState.move(cameraUpdate)
-                    val microUpdate = CameraUpdate.zoomBy(MapTabConstant.MICRO_ZOOM_DELTA)
-                    cameraPositionState.animate(
-                        update = microUpdate,
-                        durationMs = MapTabConstant.MICRO_ANIMATION_DURATION
-                    )
+                    scope.launch {
+                        kotlinx.coroutines.delay(MapTabConstant.CAMERA_UPDATE_DELAY)
+                        val microUpdate = CameraUpdate.zoomBy(MapTabConstant.MICRO_ZOOM_DELTA)
+                        cameraPositionState.animate(
+                            update = microUpdate,
+                            durationMs = MapTabConstant.MICRO_ANIMATION_DURATION
+                        )
+                    }
                     onAction(GroupDetailAction.OnMapPlacesUpdate(currentPlaces))
 
                     isCameraInitialized = true
