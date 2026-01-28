@@ -30,6 +30,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.presentation.BuildConfig
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.screen.user.UserScreenDimen.ACCOUNT_SECTION_HEIGHT
+import com.andone.memorip.presentation.screen.user.component.AccountSection
 import com.andone.memorip.presentation.screen.user.component.AlarmSection
 import com.andone.memorip.presentation.screen.user.component.AppInfoSection
 import com.andone.memorip.presentation.screen.user.component.PermissionSection
@@ -133,6 +134,8 @@ fun UserScreenContent(
             PolicySection(onAction = onAction)
 
             AppInfoSection(state.appVersion, onAction = onAction)
+
+            AccountSection(onAction = onAction)
         }
     }
 }
