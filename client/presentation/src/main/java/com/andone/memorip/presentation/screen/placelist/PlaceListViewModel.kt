@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import androidx.paging.map
 import com.andone.memorip.domain.repository.PlaceRepository
+import com.andone.memorip.domain.repository.TagRepository
 import com.andone.memorip.presentation.model.toUiModel
 import com.andone.memorip.presentation.screen.placelist.model.PlaceListAction
 import com.andone.memorip.presentation.screen.placelist.model.PlaceListEvent
@@ -13,23 +14,84 @@ import com.andone.memorip.presentation.screen.placelist.model.RegionUiModel
 import com.andone.memorip.presentation.screen.placelist.model.SelectedRegionState
 import com.andone.memorip.presentation.screen.placelist.model.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
-class PlaceListViewModel @Inject constructor(repository: PlaceRepository) : ViewModel() {
+class PlaceListViewModel @Inject constructor(
+    repository: PlaceRepository,
+    tagRepository: TagRepository
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(value = PlaceListUiState())
     val uiState = _uiState.asStateFlow()
 
     private val _event = Channel<PlaceListEvent>(capacity = BUFFERED)
     val event = _event.receiveAsFlow()
+
+    @OptIn(FlowPreview::class)
+    private val queryFlow = uiState
+        .map { it.query }
+        .debounce(timeoutMillis = QUERY_DEBOUNCE_TIME)
+        .distinctUntilChanged()
+
+    private val filterFlow = uiState
+        .map { state ->
+            val regionState = state.selectedRegionState
+            val parents = regionState.parents
+            val child = regionState.child
+
+            val depth1 = parents.firstOrNull()?.name
+
+            val depth2 = when {
+                child.isNotEmpty() -> child.map { it.name }
+                parents.size >= 2 -> listOf(parents.last().name)
+                else -> emptyList()
+            }
+
+            Triple(
+                state.selectedTags.map { it.id },
+                depth1,
+                depth2
+            )
+        }
+        .distinctUntilChanged()
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val placesPagingFlow =
+        combine(queryFlow, filterFlow) { query, (tagIds, region1Depth, region2Depth) ->
+            repository.getPlaceList(
+                query = query,
+                tagIds = tagIds,
+                region1Depth = region1Depth,
+                region2Depth = region2Depth
+            )
+        }
+            .flatMapLatest { it }
+            .map { pagingData ->
+                pagingData.map { it.toUiModel() }
+            }
+            .cachedIn(viewModelScope)
+
+    val tagsPagingFlow =
+        tagRepository.getTagList()
+            .map { pagingData ->
+                pagingData.map { it.toUiModel() }
+            }
+            .cachedIn(viewModelScope)
 
     init {
         val rootRegions = repository.loadRegions().map { it.toUiModel() }
@@ -38,13 +100,6 @@ class PlaceListViewModel @Inject constructor(repository: PlaceRepository) : View
             it.copy(rootRegions = rootRegions)
         }
     }
-
-    val placesPagingFlow =
-        repository.getPlaceList()
-            .map { pagingData ->
-                pagingData.map { it.toUiModel() }
-            }
-            .cachedIn(viewModelScope)
 
     fun onAction(action: PlaceListAction) {
         when (action) {
@@ -66,6 +121,20 @@ class PlaceListViewModel @Inject constructor(repository: PlaceRepository) : View
 
             is PlaceListAction.OnRegionChipClick -> {
                 onRegionClicked(region = action.region)
+            }
+
+            is PlaceListAction.OnTagChipClick -> {
+                _uiState.update { it.copy(selectedTags = it.selectedTags + action.tag) }
+            }
+
+            is PlaceListAction.OnDeleteTagClick -> {
+                _uiState.update { it.copy(selectedTags = it.selectedTags - action.tag) }
+            }
+
+            PlaceListAction.ClearRegionFilter -> {
+                _uiState.update {
+                    it.copy(selectedRegionState = SelectedRegionState())
+                }
             }
         }
     }
@@ -126,5 +195,9 @@ class PlaceListViewModel @Inject constructor(repository: PlaceRepository) : View
 
             state.copy(selectedRegionState = nextState)
         }
+    }
+
+    companion object {
+        private const val QUERY_DEBOUNCE_TIME = 300L
     }
 }

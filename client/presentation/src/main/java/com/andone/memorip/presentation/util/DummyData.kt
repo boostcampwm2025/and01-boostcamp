@@ -343,6 +343,11 @@ object DummyData {
     }
 
     @Composable
+    fun getTagPagingItems(): LazyPagingItems<TagUiModel> {
+        return flowOf(PagingData.from(categories)).collectAsLazyPagingItems()
+    }
+
+    @Composable
     fun getLocationPagingItems(): LazyPagingItems<LocationUiModel> {
         return flowOf(PagingData.from(locations)).collectAsLazyPagingItems()
     }
