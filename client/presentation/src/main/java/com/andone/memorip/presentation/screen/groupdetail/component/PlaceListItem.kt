@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.screen.groupdetail.component
 
+import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,6 +26,9 @@ import com.andone.memorip.presentation.component.MemoripImage
 import com.andone.memorip.presentation.component.PlaceLocationText
 import com.andone.memorip.presentation.component.TagChipRow
 import com.andone.memorip.presentation.model.Place
+import com.andone.memorip.presentation.screen.groupdetail.component.BottomSheetPlaceListItemDimen.CARD_ELEVATION
+import com.andone.memorip.presentation.screen.groupdetail.component.BottomSheetPlaceListItemDimen.IMAGE_CORNER_RADIUS
+import com.andone.memorip.presentation.screen.groupdetail.component.BottomSheetPlaceListItemDimen.IMAGE_SIZE
 import com.andone.memorip.presentation.theme.MemoripLineWidth
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
@@ -32,24 +36,24 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
 import kotlinx.collections.immutable.toImmutableList
 
-private object PlaceListItemDimen {
+private object BottomSheetPlaceListItemDimen {
     val IMAGE_SIZE = 80.dp
     val IMAGE_CORNER_RADIUS = 8.dp
     val CARD_ELEVATION = 2.dp
 }
 
 @Composable
-fun PlaceListItem(
+fun BottomSheetPlaceListItem(
     place: Place,
-    onClick: (String) -> Unit,
+    onClick: (Place) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Surface(
-        onClick = { onClick(place.id) },
+        onClick = { onClick(place) },
         modifier = modifier.fillMaxWidth(),
         shape = MemoripTheme.shapes.roundedMedium,
-        color = MemoripTheme.colors.white,
-        tonalElevation = PlaceListItemDimen.CARD_ELEVATION,
+        color = MemoripTheme.colors.background,
+        tonalElevation = CARD_ELEVATION,
         border = BorderStroke(
             width = MemoripLineWidth.Small,
             color = MemoripTheme.colors.primaryContainer
@@ -70,8 +74,8 @@ fun PlaceListItem(
                     imageUrl = place.thumbnailImage.url,
                     contentDescription = place.name,
                     modifier = Modifier
-                        .size(PlaceListItemDimen.IMAGE_SIZE)
-                        .clip(shape = RoundedCornerShape(size = PlaceListItemDimen.IMAGE_CORNER_RADIUS)),
+                        .size(size = IMAGE_SIZE)
+                        .clip(shape = RoundedCornerShape(size = IMAGE_CORNER_RADIUS)),
                     contentScale = ContentScale.Crop
                 )
 
@@ -101,10 +105,11 @@ fun PlaceListItem(
 }
 
 @Preview(showBackground = true)
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun PlaceListItemPreview() {
+private fun BottomSheetPlaceListItemPreview() {
     MemoripTheme {
-        PlaceListItem(
+        BottomSheetPlaceListItem(
             place = DummyData.places.first(),
             onClick = {}
         )
