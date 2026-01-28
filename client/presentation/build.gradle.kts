@@ -123,6 +123,9 @@ dependencies {
 
     // EXIF
     implementation(libs.androidx.exifinterface)
+
+    // WorkerManager
+    implementation(libs.work.runtime)
 }
 
 apply(from = providers.gradleProperty("DETEKT_IDE_SETUP_URL").get())
