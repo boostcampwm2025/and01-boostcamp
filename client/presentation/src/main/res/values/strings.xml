@@ -183,6 +183,9 @@
     <string name="login_policy">약관 및 정책</string>
     <string name="login_service_title">서비스 이용 약관</string>
     <string name="login_privacy_title">개인정보 처리방침</string>
+    <string name="login_app_info">앱 정보</string>
+    <string name="login_app_version">현재 버전</string>
+    <string name="login_app_version_check">업데이트 확인</string>
 
 
 

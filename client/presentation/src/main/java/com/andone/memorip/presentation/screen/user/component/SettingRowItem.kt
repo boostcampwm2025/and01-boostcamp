@@ -104,7 +104,7 @@ fun SettingRowItem(
             is SettingTrailing.Text -> {
                 Text(
                     text = trailing.text,
-                    style = MemoripTheme.typography.bodyRegular12,
+                    style = MemoripTheme.typography.bodyBold14,
                 )
             }
 

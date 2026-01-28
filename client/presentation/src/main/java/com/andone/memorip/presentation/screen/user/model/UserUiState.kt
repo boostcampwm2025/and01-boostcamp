@@ -8,4 +8,5 @@ data class UserUiState(
     val errorMessage: String? = null,
     val permissionUiState: PermissionUiState = PermissionUiState(),
     val alarmUiState: AlarmUiState = AlarmUiState(),
+    val appVersion: String = ""
 )
