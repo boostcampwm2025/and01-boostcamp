@@ -57,19 +57,9 @@ class UserViewModel @Inject constructor(
 
             is UserAction.GoogleLoginSuccess -> {
                 viewModelScope.launch {
-                    authRepository.signInWithGoogle(idToken = action.idToken)
-                        .onSuccess {
-                            _uiState.update {
-                                it.copy(isLoggedIn = true)
-                            }
-                            tokenRefresher.refreshToken(force = true)
-                            updateUser()
-                        }
-                        .onFailure { e ->
-                            _uiState.update {
-                                it.copy(errorMessage = e.message)
-                            }
-                        }
+                    authRepository.signInWithGoogle(action.idToken)
+                        .onSuccess { onAuthSuccess() }
+                        .onFailure { onAuthFailure(it) }
                 }
             }
 
@@ -86,9 +76,9 @@ class UserViewModel @Inject constructor(
             }
 
             is UserAction.UpdatePassword -> {
-               _uiState.update {
-                   it.copy(password = action.password)
-               }
+                _uiState.update {
+                    it.copy(password = action.password)
+                }
             }
 
             is UserAction.UpdatePasswordConfirm -> {
@@ -104,8 +94,26 @@ class UserViewModel @Inject constructor(
             }
 
             is UserAction.EmailLoginSubmit -> {
-
+                signInOrSignUpWithEmail(action.email, action.password)
             }
+        }
+    }
+
+    private fun signInOrSignUpWithEmail(email: String, password: String) {
+        viewModelScope.launch {
+            val authResult = if (_uiState.value.isNewAccount) {
+                authRepository.signUpWithEmail(email, password)
+            } else {
+                authRepository.signInWithEmail(email, password)
+            }
+
+            authResult
+                .onSuccess {
+                    onAuthSuccess()
+                }
+                .onFailure { e ->
+                    onAuthFailure(e)
+                }
         }
     }
 
@@ -122,6 +130,24 @@ class UserViewModel @Inject constructor(
                         it.copy(errorMessage = e.message)
                     }
                 }
+        }
+    }
+
+    private suspend fun onAuthSuccess() {
+        _uiState.update {
+            it.copy(
+                isLoggedIn = true,
+                errorMessage = null
+            )
+        }
+
+        tokenRefresher.refreshToken(force = true)
+        updateUser()
+    }
+
+    private fun onAuthFailure(e: Throwable) {
+        _uiState.update {
+            it.copy(errorMessage = e.message)
         }
     }
 

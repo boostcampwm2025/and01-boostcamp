@@ -37,6 +37,16 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                 .await()
         }
 
+    override suspend fun signUpWithEmail(
+        email: String,
+        password: String
+    ): Result<Unit> =
+        runCatching {
+            firebaseAuth
+                .createUserWithEmailAndPassword(email, password)
+                .await()
+        }
+
     override suspend fun signInWithPhone(
         verificationId: String,
         smsCode: String
