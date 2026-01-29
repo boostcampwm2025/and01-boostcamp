@@ -14,7 +14,8 @@ data class PlaceCreateUpdateRequest(
     val longitude: Double,
     val address: Address,
     val imageUrls: List<String>,
-    val isPublic: Boolean
+    val isPublic: Boolean,
+    val thumbnailImageRatio: Float
 )
 
 fun PlaceCreateUpdateRequest.toDomain(): PlaceCreateUpdate = PlaceCreateUpdate(
@@ -26,7 +27,8 @@ fun PlaceCreateUpdateRequest.toDomain(): PlaceCreateUpdate = PlaceCreateUpdate(
     longitude = this.longitude,
     address = this.address,
     imageUrls = this.imageUrls,
-    isPublic = this.isPublic
+    isPublic = this.isPublic,
+    thumbnailImageRatio = this.thumbnailImageRatio
 )
 
 fun PlaceCreateUpdate.toDomain(): PlaceCreateUpdateRequest = PlaceCreateUpdateRequest(
@@ -38,6 +40,7 @@ fun PlaceCreateUpdate.toDomain(): PlaceCreateUpdateRequest = PlaceCreateUpdateRe
     longitude = this.longitude,
     address = this.address,
     imageUrls = this.imageUrls,
-    isPublic = this.isPublic
+    isPublic = this.isPublic,
+    thumbnailImageRatio = this.thumbnailImageRatio
 )
 
