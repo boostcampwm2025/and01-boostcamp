@@ -7,6 +7,8 @@ data class TimeBlock(
     val day: Int = 1,
     val column: Int = 0
 ) {
+    val MINUTES_PER_DAY = 24 * 60
+
     init {
         require(durationMinute > 0)
     }
@@ -37,8 +39,8 @@ data class TimeBlock(
             .coerceIn(0, maxStart)
 
         return copy(
-            day = (start / 1440) + 1,
-            startMinute = start
+            day = (start / MINUTES_PER_DAY) + 1,
+            startMinute = start - ((day-1) * MINUTES_PER_DAY)
         )
     }
 }

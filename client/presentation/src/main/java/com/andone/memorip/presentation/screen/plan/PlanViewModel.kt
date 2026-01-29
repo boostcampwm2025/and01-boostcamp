@@ -255,8 +255,10 @@ class PlanViewModel @Inject constructor(
                     uiState.value.date.startDay!!.atStartOfDay().plusDays((block.day - 1).toLong())
                 val startAt =
                     startAtDate.plusMinutes((block.startMinute - (block.day - 1) * MINUTES_PER_DAY).toLong())
-                val endAtDate = uiState.value.date.startDay!!.atStartOfDay().plusDays((block.day - 1).toLong())
-                val endAt = endAtDate.plusMinutes((block.startMinute + block.durationMinute - (block.day - 1) * MINUTES_PER_DAY).toLong())
+                val endAtDate =
+                    uiState.value.date.startDay!!.atStartOfDay().plusDays((block.day - 1).toLong())
+                val endAt =
+                    endAtDate.plusMinutes((block.startMinute + block.durationMinute - (block.day - 1) * MINUTES_PER_DAY).toLong())
 
                 if (!(startAt.isEqual(originStartAt) && endAt.isEqual(originEndAt))) {
                     val startAtString = startAt.toRemoteString()
@@ -273,7 +275,9 @@ class PlanViewModel @Inject constructor(
                     ).onSuccess {
                         pendingUpdates.remove(block.id)
                     }.onFailure {
-                        if (it !is CancellationException) { snackBarManager.show(SnackBarEvent.NETWORK_ERROR) }
+                        if (it !is CancellationException) {
+                            snackBarManager.show(SnackBarEvent.NETWORK_ERROR)
+                        }
                     }
                 }
             }
