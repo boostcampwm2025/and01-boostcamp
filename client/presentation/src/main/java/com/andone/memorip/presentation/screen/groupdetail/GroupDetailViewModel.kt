@@ -91,7 +91,7 @@ class GroupDetailViewModel @AssistedInject constructor(
             withContext(Dispatchers.Default) {
                 val placeClusterData = places.map { place ->
                     MapClusterManager.PlaceClusterData(
-                        id = place.id,
+                        id = place.placeId,
                         position = LatLng(place.latitude, place.longitude),
                         imageUrl = place.thumbnailImage.url,
                         placeData = place

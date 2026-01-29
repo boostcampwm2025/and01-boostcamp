@@ -56,7 +56,7 @@ fun BottomSheetPlaceListContent(
         ) {
             items(
                 items = places,
-                key = { it.id }
+                key = { it.placeId }
             ) { place ->
                 BottomSheetPlaceListItem(
                     place = place,

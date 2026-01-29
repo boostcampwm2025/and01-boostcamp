@@ -38,6 +38,7 @@ import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.compose.CameraPositionState
 import com.naver.maps.map.compose.ExperimentalNaverMapApi
 import com.naver.maps.map.compose.rememberCameraPositionState
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 private object MapTabDimen {
@@ -110,7 +111,7 @@ fun MapTab(
                     val cameraUpdate = CameraUpdate.fitBounds(bounds, MapTabConstant.BOUND_PADDING)
                     cameraPositionState.move(cameraUpdate)
                     scope.launch {
-                        kotlinx.coroutines.delay(MapTabConstant.CAMERA_UPDATE_DELAY)
+                        delay(MapTabConstant.CAMERA_UPDATE_DELAY)
                         val microUpdate = CameraUpdate.zoomBy(MapTabConstant.MICRO_ZOOM_DELTA)
                         cameraPositionState.animate(
                             update = microUpdate,
@@ -128,8 +129,8 @@ fun MapTab(
                     onAction(GroupDetailAction.OnMapCameraChange(projection, zoom))
                 }
 
-                if (selectedPlace != null && selectedPlace.id != lastSelectedPlaceId) {
-                    lastSelectedPlaceId = selectedPlace.id
+                if (selectedPlace != null && selectedPlace.placeId != lastSelectedPlaceId) {
+                    lastSelectedPlaceId = selectedPlace.placeId
                     scope.launch {
                         val cameraUpdate = CameraUpdate.scrollTo(
                             LatLng(selectedPlace.latitude, selectedPlace.longitude)
@@ -260,7 +261,7 @@ private fun MapTabPreview() {
                 position = LatLng(place.latitude, place.longitude),
                 places = listOf(
                     MapClusterManager.PlaceClusterData(
-                        id = place.id,
+                        id = place.placeId,
                         position = LatLng(place.latitude, place.longitude),
                         imageUrl = place.thumbnailImage.url,
                         placeData = place
