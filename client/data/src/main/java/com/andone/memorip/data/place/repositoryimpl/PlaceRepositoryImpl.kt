@@ -2,23 +2,24 @@ package com.andone.memorip.data.place.repositoryimpl
 
 import androidx.paging.PagingData
 import com.andone.memorip.data.place.datasource.remote.PlaceRemoteDataSource
+import com.andone.memorip.data.place.model.toDomain
 import com.andone.memorip.domain.model.PlaceListItem
 import com.andone.memorip.domain.model.Region
-import com.andone.memorip.domain.model.request.PlaceCreateRequest
-import com.andone.memorip.domain.model.response.PlaceCreateResponse
-import com.andone.memorip.domain.model.response.PlaceDetailResponse
+import com.andone.memorip.domain.model.request.PlaceCreateUpdate
+import com.andone.memorip.domain.model.response.PlaceCreated
+import com.andone.memorip.domain.model.response.PlaceDetail
 import com.andone.memorip.domain.model.response.PlaceImageUploadResponse
 import com.andone.memorip.domain.repository.PlaceRepository
 import kotlinx.coroutines.flow.Flow
 import java.io.File
-import java.util.UUID
 import javax.inject.Inject
 
 class PlaceRepositoryImpl @Inject constructor(
     private val placeRemoteDataSource: PlaceRemoteDataSource
 ) : PlaceRepository {
-    override suspend fun getPlaceDetail(placeId: String): Result<PlaceDetailResponse> {
+    override suspend fun getPlaceDetail(placeId: String): Result<PlaceDetail> {
         return placeRemoteDataSource.getPlaceDetail(placeId = placeId)
+            .map { it.toDomain() }
     }
 
     override fun getPlaceList(
@@ -41,8 +42,13 @@ class PlaceRepositoryImpl @Inject constructor(
         return placeRemoteDataSource.uploadImage(file)
     }
 
-    override suspend fun createPlace(place: PlaceCreateRequest): Result<PlaceCreateResponse> {
-        return placeRemoteDataSource.createPlace(place)
+    override suspend fun createPlace(place: PlaceCreateUpdate): Result<PlaceCreated> {
+        return placeRemoteDataSource.createPlace(place.toDomain())
+            .map { it.toDomain() }
+    }
+
+    override suspend fun deletePlace(placeId: String): Result<Unit> {
+        return placeRemoteDataSource.deletePlace(placeId)
     }
 
     override suspend fun updatePlaceGroups(

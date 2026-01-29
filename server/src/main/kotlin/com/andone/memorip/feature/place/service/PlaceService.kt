@@ -3,10 +3,10 @@ package com.andone.memorip.feature.place.service
 import com.andone.memorip.common.exception.BusinessException
 import com.andone.memorip.common.exception.CommonExceptionCode
 import com.andone.memorip.common.response.ApiResult
-import com.andone.memorip.feature.group.dto.response.toGroupResponse
 import com.andone.memorip.feature.group.repository.GroupRepository
 import com.andone.memorip.feature.place.dto.PlaceListResult
-import com.andone.memorip.feature.place.dto.request.PlaceCreateRequest
+import com.andone.memorip.feature.place.dto.request.PlaceRequest
+import com.andone.memorip.feature.place.dto.response.GroupCompactResponse
 import com.andone.memorip.feature.place.dto.response.PlaceCreateResponse
 import com.andone.memorip.feature.place.dto.response.PlaceDetailResponse
 import com.andone.memorip.feature.place.dto.response.PlaceListItemResponse
@@ -31,14 +31,16 @@ class PlaceService(
     private val placeImageRepository: PlaceImageRepository,
     private val groupPlaceRepository: GroupPlaceRepository
 ) {
+
     @Transactional(readOnly = true)
-    fun getPlaceById(placeId: UUID): PlaceDetailResponse {
+    fun getPlaceById(placeId: UUID, userId: UUID): PlaceDetailResponse {
         val place = placeRepository.findByIdOrNull(placeId)
             ?: throw BusinessException(code = CommonExceptionCode.PLACE_NOT_FOUND)
-        val group = groupRepository.findByIdOrNull(place.groupId)
-            ?: throw BusinessException(code = CommonExceptionCode.GROUP_NOT_FOUND)
         val tags = placeTagRepository.findAllByPlaceId(id = placeId).map { it.toTagResponse() }
         val images = placeImageRepository.findAllByPlaceId(id = placeId).map { it.url }
+        val groups = groupPlaceRepository.findGroupProjectionsByPlaceId(placeId)
+
+        val isInMyGroup = groupPlaceRepository.existsByPlaceIdAndOwnerUserId(placeId, userId)
 
         return PlaceDetailResponse(
             placeId = place.id,
@@ -49,8 +51,10 @@ class PlaceService(
             content = place.content,
             latitude = place.latitude,
             longitude = place.longitude,
-            group = group.toGroupResponse(),
-            address = place.address
+            groups = groups.map { GroupCompactResponse(it.groupId, it.groupName) },
+            address = place.address,
+            isMine = place.writerId == userId,
+            isInMyGroup = isInMyGroup
         )
     }
 
@@ -94,13 +98,12 @@ class PlaceService(
     }
 
     @Transactional
-    fun createPlace(request: PlaceCreateRequest, userId: UUID): PlaceCreateResponse {
+    fun createPlace(request: PlaceRequest, userId: UUID): PlaceCreateResponse {
+        val groups = validateGroupOwnership(request.groupIds, userId)
 
-        val group = groupRepository.findByIdOrNull(request.groupId)
-            ?: throw BusinessException(code = CommonExceptionCode.GROUP_NOT_FOUND)
-
+        // todo: Place에서 Group 간의 단일 연결 끊으면 삭제 해야함.
         val place = Place.create(
-            groupId = request.groupId,
+            groupId = request.groupIds.first(),
             writerId = userId,
             title = request.title,
             content = request.content,
@@ -115,13 +118,90 @@ class PlaceService(
         // todo: 태그 연결
 
         val savedPlace = placeRepository.save(place)
-        val groupPlace = GroupPlace.create(
-            group = group,
-            place = savedPlace
-        )
-        groupPlaceRepository.save(groupPlace)
+
+        val groupPlaces = groups.map { group ->
+            GroupPlace.create(group = group, place = savedPlace)
+        }
+        groupPlaceRepository.saveAll(groupPlaces)
 
         return PlaceCreateResponse(savedPlace.id)
+    }
+
+    @Transactional
+    fun updatePlace(placeId: UUID, request: PlaceRequest, userId: UUID): PlaceDetailResponse {
+        val place = placeRepository.findByIdOrNull(placeId)
+            ?: throw BusinessException(code = CommonExceptionCode.PLACE_NOT_FOUND)
+
+        if (place.writerId != userId) {
+            throw BusinessException(code = CommonExceptionCode.PLACE_FORBIDDEN)
+        }
+
+        place.update(
+            title = request.title,
+            content = request.content,
+            latitude = request.latitude,
+            longitude = request.longitude,
+            newAddress = request.address,
+            imageUrls = request.imageUrls,
+            isPublic = request.isPublic
+        )
+
+        val existingGroupIds = groupPlaceRepository.findGroupIdsByPlaceId(placeId).toSet()
+        val requestedGroupIds = request.groupIds.toSet()
+
+        val groupIdsToAdd = requestedGroupIds - existingGroupIds
+        val groupIdsToRemove = existingGroupIds - requestedGroupIds
+
+        if (groupIdsToAdd.isNotEmpty()) {
+            val groups = validateGroupOwnership(groupIdsToAdd.toList(), userId)
+
+            val newGroupPlaces = groups.map { group ->
+                GroupPlace.create(group = group, place = place)
+            }
+            groupPlaceRepository.saveAll(newGroupPlaces)
+        }
+
+        if (groupIdsToRemove.isNotEmpty()) {
+            groupPlaceRepository.deleteByGroupIdsAndPlaceId(groupIdsToRemove.toList(), placeId)
+        }
+
+        // todo: Place에서 Group 간의 단일 연결 끊으면 삭제 해야함.
+        place.updateGroupId(request.groupIds.firstOrNull())
+
+        val tags = placeTagRepository.findAllByPlaceId(id = placeId).map { it.toTagResponse() }
+        val images = placeImageRepository.findAllByPlaceId(id = placeId).map { it.url }
+        val groups = groupPlaceRepository.findGroupProjectionsByPlaceId(placeId)
+            .map { GroupCompactResponse(it.groupId, it.groupName) }
+
+        return PlaceDetailResponse(
+            placeId = place.id,
+            writerId = place.writerId,
+            title = place.title,
+            tags = tags,
+            images = images,
+            content = place.content,
+            latitude = place.latitude,
+            longitude = place.longitude,
+            groups = groups,
+            address = place.address,
+            isMine = true,
+            isInMyGroup = true
+        )
+    }
+
+    @Transactional
+    fun deletePlace(placeId: UUID, userId: UUID) {
+        val place = placeRepository.findByIdOrNull(placeId)
+            ?: throw BusinessException(code = CommonExceptionCode.PLACE_NOT_FOUND)
+
+        if (place.writerId != userId) {
+            throw BusinessException(code = CommonExceptionCode.PLACE_FORBIDDEN)
+        }
+
+        groupPlaceRepository.deleteAllByPlaceId(placeId)
+        placeTagRepository.deleteByPlaceId(placeId)
+
+        placeRepository.delete(place)
     }
 
     @Transactional(readOnly = true)
@@ -152,5 +232,19 @@ class PlaceService(
         )
 
         return PlaceListResult(content, pagination)
+    }
+
+    private fun validateGroupOwnership(groupIds: List<UUID>, currentUserId: UUID): List<com.andone.memorip.feature.group.entity.Group> {
+        val groups = groupRepository.findAllById(groupIds)
+
+        if (groups.size != groupIds.size) {
+            throw BusinessException(code = CommonExceptionCode.GROUP_NOT_FOUND)
+        }
+        groups.forEach { group ->
+            if (!group.isOwnedBy(currentUserId)) {
+                throw BusinessException(code = CommonExceptionCode.GROUP_FORBIDDEN)
+            }
+        }
+        return groups
     }
 }

@@ -12,7 +12,8 @@ data class PlaceUiModel(
     val latitude: Double = 0.toDouble(),
     val longitude: Double = 0.toDouble(),
     val imageUrls: ImmutableList<String> = persistentListOf(),
-    val groupName: String = "",
+    val groups: ImmutableList<GroupCompactUiModel> = persistentListOf(),
     val content: String = "",
-    val isMine: Boolean = false
+    val isMine: Boolean = false,
+    val isInMyGroup: Boolean = false
 )

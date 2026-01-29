@@ -3,8 +3,8 @@ package com.andone.memorip.feature.place.controller
 import com.andone.memorip.common.response.ApiResult
 import com.andone.memorip.common.security.UserPrincipal
 import com.andone.memorip.feature.place.dto.request.PlaceGroupsUpdateRequest
+import com.andone.memorip.feature.place.dto.request.PlaceRequest
 import com.andone.memorip.feature.place.dto.response.PlaceDetailResponse
-import com.andone.memorip.feature.place.dto.request.PlaceCreateRequest
 import com.andone.memorip.feature.place.dto.response.PlaceCreateResponse
 import com.andone.memorip.feature.place.dto.response.PlaceListItemResponse
 import com.andone.memorip.feature.place.service.GroupPlaceService
@@ -38,9 +38,14 @@ class PlaceController(
         ]
     )
     fun getPlaceById(
-        @PathVariable("placeId") placeId: UUID
+        @Parameter(
+            description = "조회할 장소 ID",
+            example = "019bf896-de41-760a-a55b-4b92ce743d25"
+        )
+        @PathVariable("placeId") placeId: UUID,
+        @AuthenticationPrincipal principal: UserPrincipal
     ): ApiResult<PlaceDetailResponse> {
-        val result = placeService.getPlaceById(placeId = placeId)
+        val result = placeService.getPlaceById(placeId, principal.userId)
         return ApiResult.success(data = result)
     }
 
@@ -101,11 +106,69 @@ class PlaceController(
 
     @PostMapping("/places")
     fun createPlace(
-        @RequestBody request: PlaceCreateRequest,
+        @Valid @RequestBody request: PlaceRequest,
         @AuthenticationPrincipal principal: UserPrincipal
     ): ApiResult<PlaceCreateResponse> {
         val placeId = placeService.createPlace(request, principal.userId)
         return ApiResult.success(placeId)
+    }
+
+    @PatchMapping("/places/{placeId}")
+    @Operation(
+        summary = "장소 수정",
+        description = """
+            id를 제외한 장소의 모든 필드를 한 번에 수정합니다.
+            
+            권한: 장소 작성자만 수정할 수 있습니다.
+            
+            수정 가능 항목:
+            - title: 제목
+            - content: 내용
+            - groupIds: 장소가 속한 그룹 ID 목록 (전체 치환)
+            - latitude, longitude: 위치 좌표
+            - address: 주소
+            - imageUrls: 이미지 URL 목록
+            - isPublic: 공개 여부
+        """,
+        responses = [
+            ApiResponse(responseCode = "200", description = "성공 - 장소 수정 완료"),
+            ApiResponse(responseCode = "403", description = "권한 없음 - 장소/그룹의 권한이 없습니다"),
+            ApiResponse(responseCode = "404", description = "장소 또는 그룹을 찾을 수 없습니다")
+        ]
+    )
+    fun updatePlace(
+        @Parameter(
+            description = "수정할 장소 ID",
+            example = "019c07ae-5820-7ce4-acff-c7c379b1aa0a"
+        )
+        @PathVariable("placeId") placeId: UUID,
+        @Valid @RequestBody request: PlaceRequest,
+        @AuthenticationPrincipal principal: UserPrincipal
+    ): ApiResult<PlaceDetailResponse> {
+        val result = placeService.updatePlace(placeId, request, principal.userId)
+        return ApiResult.success(result)
+    }
+
+    @DeleteMapping("/places/{placeId}")
+    @Operation(
+        summary = "장소 삭제",
+        description = """
+            장소를 삭제합니다. (Soft Delete)
+            
+            권한: 장소 작성자만 삭제할 수 있습니다.
+        """,
+        responses = [
+            ApiResponse(responseCode = "200", description = "성공 - 장소 삭제 완료"),
+            ApiResponse(responseCode = "403", description = "권한 없음 - 장소 작성자가 아닙니다"),
+            ApiResponse(responseCode = "404", description = "장소를 찾을 수 없습니다")
+        ]
+    )
+    fun deletePlace(
+        @PathVariable("placeId") placeId: UUID,
+        @AuthenticationPrincipal principal: UserPrincipal
+    ): ApiResult<Unit> {
+        placeService.deletePlace(placeId, principal.userId)
+        return ApiResult.success(Unit)
     }
 
     @PatchMapping("/places/{placeId}/groups")

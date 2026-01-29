@@ -6,4 +6,6 @@ import java.util.UUID
 
 interface PlaceTagRepository : JpaRepository<PlaceTag, UUID> {
     fun findAllByPlaceId(id: UUID): List<PlaceTag>
+
+    fun deleteByPlaceId(placeId: UUID): Int
 }
