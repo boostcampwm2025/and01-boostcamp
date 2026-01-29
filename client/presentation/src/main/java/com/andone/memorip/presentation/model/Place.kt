@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.model
 
+import android.util.Log
 import androidx.compose.runtime.Immutable
 import com.andone.memorip.domain.model.GroupPlace
 import com.andone.memorip.domain.model.PlaceListItem
@@ -89,18 +90,25 @@ fun PlaceListItem.toUiModel(): Place =
 
 fun Place.toTimeBlock(dayStart: LocalDateTime): TimeBlock? {
     if (startDateTime == null || endDateTime == null) return null
+    Log.d("DEBUG TEST", "to time block call $this")
 
     val dayOffset = ChronoUnit.DAYS.between(
         dayStart.toLocalDate(),
         startDateTime.toLocalDate()
     ).toInt()
+    Log.d("DEBUG TEST", "day offset : $dayOffset")
 
     val dayIndex = dayOffset + 1
 
+    if (dayIndex < 0) return null
+
     val startMinute =
         Duration.between(dayStart, startDateTime).toMinutes().toInt() - dayOffset * MINUTES_PER_DAY
+    Log.d("DEBUG TEST", "start minutes: $startMinute")
 
     val durationMinute = durationMinutes.toInt()
+
+    Log.d("DEBUG TEST", "time block init ${durationMinutes}")
 
     return TimeBlock(
         id = id,

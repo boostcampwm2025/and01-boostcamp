@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.screen.plan
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.BackoffPolicy
@@ -276,8 +277,21 @@ class PlanViewModel @Inject constructor(
     private fun fetchPlaces(groupId: String) {
         viewModelScope.launch {
             groupRepository.getPlaceByGroupId(groupId = groupId)
-                .onSuccess { result -> placesFlow.update { result.map { place -> place.toUiModel() } } }
+                .onSuccess { result ->
+                    placesFlow.update { places ->
+                        val existPlaces = places.filter { it.startDateTime != null && it.endDateTime != null }
+                        val timeBlocks = existPlaces.mapNotNull { it.toTimeBlock(uiState.value.date.startDay?.atStartOfDay()!!) }
+                        val uiBlocks = existPlaces.associateBy { it.id }
+                        Log.d("DEBUG TEST", "exist places : $existPlaces")
+                        Log.d("DEBUG TEST", "time blocks : $timeBlocks")
+                        Log.d("DEBUG TEST", "exist places : $uiBlocks")
+                        timeBlocksFlow.update { timeBlocks }
+                        blockUiModelsFlow.update { uiBlocks }
+                        result.map { place -> place.toUiModel() }
+                    }
+                }
                 .onFailure { snackBarManager.show(SnackBarEvent.NETWORK_ERROR) }
+
         }
     }
 
