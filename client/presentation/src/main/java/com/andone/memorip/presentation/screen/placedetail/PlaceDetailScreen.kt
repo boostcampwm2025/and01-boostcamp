@@ -1,11 +1,6 @@
 package com.andone.memorip.presentation.screen.placedetail
 
-import androidx.activity.compose.BackHandler
 import androidx.annotation.DrawableRes
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -62,7 +57,6 @@ import com.andone.memorip.presentation.screen.placedetail.PlaceDetailScreenConst
 import com.andone.memorip.presentation.screen.placedetail.PlaceDetailScreenConstants.MIDDLE_ALPHA
 import com.andone.memorip.presentation.screen.placedetail.PlaceDetailScreenConstants.MIDDLE_RATIO
 import com.andone.memorip.presentation.screen.placedetail.PlaceDetailScreenConstants.MIN_HEIGHT_RATE
-import com.andone.memorip.presentation.screen.placedetail.PlaceDetailScreenConstants.PLACE_DETAIL_SCREEN_STEP_LABEL
 import com.andone.memorip.presentation.screen.placedetail.PlaceDetailScreenConstants.TOP_ALPHA
 import com.andone.memorip.presentation.screen.placedetail.PlaceDetailScreenConstants.TOP_RATIO
 import com.andone.memorip.presentation.screen.placedetail.PlaceDetailScreenDimens.OVERLAY_HEIGHT
@@ -72,9 +66,7 @@ import com.andone.memorip.presentation.screen.placedetail.component.LocationCard
 import com.andone.memorip.presentation.screen.placedetail.component.PlaceDetailTopBar
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceDetailAction
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceDetailEvent
-import com.andone.memorip.presentation.screen.placedetail.model.PlaceDetailScreenStep
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceUiModel
-import com.andone.memorip.presentation.screen.selectgroup.SelectGroupScreen
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -89,7 +81,6 @@ private object PlaceDetailScreenConstants {
     const val TOP_ALPHA = 0f
     const val MIDDLE_ALPHA = 0.8f
     const val BOTTOM_ALPHA = 1f
-    const val PLACE_DETAIL_SCREEN_STEP_LABEL = "PlaceDetailScreenStep"
     const val TOP_RATIO = 0f
     const val MIDDLE_RATIO = 0.5f
     const val BOTTOM_RATIO = 1f
@@ -112,13 +103,12 @@ fun PlaceDetailScreen(
     )
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    var currentStep by rememberSaveable { mutableStateOf(PlaceDetailScreenStep.PlaceDetail) }
+    val context = LocalContext.current
+
+    var imageDialogExpanded by rememberSaveable { mutableStateOf(value = false) }
+    var selectedImageUrl by rememberSaveable { mutableStateOf(value = "") }
     var showMoreMenu by rememberSaveable { mutableStateOf(false) }
     var showDeleteDialog by rememberSaveable { mutableStateOf(false) }
-
-    BackHandler(enabled = currentStep == PlaceDetailScreenStep.SelectGroup) {
-        currentStep = PlaceDetailScreenStep.PlaceDetail
-    }
 
     viewModel.event.collectWithLifecycle { event ->
         when (event) {
@@ -127,14 +117,13 @@ fun PlaceDetailScreen(
             }
 
             PlaceDetailEvent.NavigateToSelectGroup -> {
-                currentStep = PlaceDetailScreenStep.SelectGroup
             }
 
-            PlaceDetailEvent.PlaceAddToGroup -> {
-                currentStep = PlaceDetailScreenStep.PlaceDetail
             }
 
             PlaceDetailEvent.NavigateToGroupList -> {
+                showMoreMenu = false
+                showDeleteDialog = true
                 onNavigateGroupList()
             }
 
@@ -147,6 +136,7 @@ fun PlaceDetailScreen(
             }
 
             PlaceDetailEvent.ShowDeleteDialog -> {
+                showMoreMenu = false
                 showDeleteDialog = true
             }
 
@@ -156,41 +146,37 @@ fun PlaceDetailScreen(
         }
     }
 
-    AnimatedContent(
-        targetState = currentStep,
-        transitionSpec = {
-            if (targetState == PlaceDetailScreenStep.PlaceDetail) {
-                slideInHorizontally { -it } togetherWith slideOutHorizontally { it }
-            } else {
-                slideInHorizontally { it } togetherWith slideOutHorizontally { -it }
-            }
-        },
-        label = PLACE_DETAIL_SCREEN_STEP_LABEL
-    ) { step ->
-        when (step) {
-            PlaceDetailScreenStep.PlaceDetail -> {
-                PlaceDetailScreen(
-                    place = uiState.place,
-                    showMoreMenu = showMoreMenu,
-                    onAction = viewModel::onAction,
-                    modifier = modifier
+    if (uiState.isLoading) {
+        LoadingIndicatorScreen()
+    } else {
+        PlaceDetailContent(
+            place = uiState.place,
+            showMoreMenu = showMoreMenu,
+            onImageClick = {
+                imageDialogExpanded = true
+                selectedImageUrl = it
+            },
+            onAction = viewModel::onAction,
+            modifier = modifier
+                .fillMaxSize()
+                .background(color = MemoripTheme.colors.white),
+            onNavigateToExternalMap = { locationUiModel ->
+                context.openMapOrAskApp(
+                    location = locationUiModel,
                 )
+            },
+        )
+    }
 
-                if (uiState.isLoading) {
-                    LoadingIndicatorScreen()
-                }
-            }
-
-            PlaceDetailScreenStep.SelectGroup -> {
-                SelectGroupScreen(
-                    onGroupSelect = { },
-                    onBackClick = { currentStep = PlaceDetailScreenStep.PlaceDetail },
-                    title = stringResource(R.string.select_group_add_to_my_group_title),
-                    placeId = route.placeId,
-                    modifier = modifier
-                )
-            }
-        }
+    if (imageDialogExpanded) {
+        ImageDialog(
+            imageUrl = selectedImageUrl,
+            onDismissRequest = {
+                imageDialogExpanded = false
+                selectedImageUrl = ""
+            },
+            modifier = modifier.fillMaxSize()
+        )
     }
 
     if (showDeleteDialog) {
@@ -205,15 +191,30 @@ fun PlaceDetailScreen(
 }
 
 @Composable
-private fun PlaceDetailScreen(
+private fun PlaceDetailContent(
     place: PlaceUiModel,
     showMoreMenu: Boolean,
+    onImageClick: (String) -> Unit,
     onAction: (PlaceDetailAction) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigateToExternalMap: (LocationUiModel) -> Unit = {}
 ) {
-    var imageDialogExpanded by remember { mutableStateOf(value = false) }
-    var selectedImageUrl by remember { mutableStateOf(value = "") }
-    val context = LocalContext.current
+    val density = LocalDensity.current
+    val pagerState = rememberPagerState(pageCount = { place.imageUrls.size })
+    val scrollState = rememberScrollState()
+    val statusBarHeightDp = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+    val maxHeaderHeight = LocalWindowInfo.current.containerDpSize.height - statusBarHeightDp
+    val minHeaderHeight = maxHeaderHeight * MIN_HEIGHT_RATE
+    val maxHeaderPx = maxHeaderHeight.toPx(density = density)
+    val minHeaderPx = minHeaderHeight.toPx(density = density)
+    val collapseRangePx = maxHeaderPx - minHeaderPx
+    val headerHeightPx by remember {
+        derivedStateOf {
+            val collapseOffset = scrollState.value.toFloat()
+                .coerceIn(0f, collapseRangePx)
+            maxHeaderPx - collapseOffset
+        }
+    }
 
     Scaffold(
         modifier = modifier,
@@ -232,164 +233,107 @@ private fun PlaceDetailScreen(
         },
         contentWindowInsets = WindowInsets.navigationBars
     ) { innerPadding ->
-        PlaceDetailContent(
-            place = place,
-            onImageClick = {
-                imageDialogExpanded = true
-                selectedImageUrl = it
-            },
-            onAction = onAction,
-            modifier = Modifier
+        Column(
+            modifier = modifier
                 .fillMaxSize()
-                .background(color = MemoripTheme.colors.white)
-                .padding(bottom = innerPadding.calculateBottomPadding()),
-            onNavigateToExternalMap = { locationUiModel ->
-                context.openMapOrAskApp(
-                    location = locationUiModel,
-                )
-            },
-        )
-    }
-
-    if (imageDialogExpanded) {
-        ImageDialog(
-            imageUrl = selectedImageUrl,
-            onDismissRequest = {
-                imageDialogExpanded = false
-                selectedImageUrl = ""
-            },
-            modifier = Modifier.fillMaxSize()
-        )
-    }
-}
-
-@Composable
-private fun PlaceDetailContent(
-    place: PlaceUiModel,
-    onImageClick: (String) -> Unit,
-    onAction: (PlaceDetailAction) -> Unit,
-    modifier: Modifier = Modifier,
-    onNavigateToExternalMap: (LocationUiModel) -> Unit = {}
-) {
-    val density = LocalDensity.current
-    val pagerState = rememberPagerState(pageCount = { place.imageUrls.size })
-    val scrollState = rememberScrollState()
-    val statusBarHeightDp = WindowInsets.navigationBars
-        .asPaddingValues()
-        .calculateBottomPadding()
-    val maxHeaderHeight = LocalWindowInfo.current.containerDpSize.height - statusBarHeightDp
-    val minHeaderHeight = maxHeaderHeight * MIN_HEIGHT_RATE
-    val maxHeaderPx = maxHeaderHeight.toPx(density = density)
-    val minHeaderPx = minHeaderHeight.toPx(density = density)
-    val collapseRangePx = maxHeaderPx - minHeaderPx
-    val headerHeightPx by remember {
-        derivedStateOf {
-            val collapseOffset = scrollState.value.toFloat()
-                .coerceIn(0f, collapseRangePx)
-            maxHeaderPx - collapseOffset
-        }
-    }
-
-    Column(
-        modifier = modifier
-            .background(color = MemoripTheme.colors.background)
-            .verticalScroll(state = scrollState)
-            .padding(bottom = MemoripPadding.PaddingMedium),
-        verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXXXLarge)
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(height = headerHeightPx.toDp(density = density))
-                .clipToBounds()
-                .clickable { onImageClick(place.imageUrls[pagerState.currentPage]) },
-            contentAlignment = Alignment.BottomStart
+                .padding(bottom = innerPadding.calculateBottomPadding())
+                .background(color = MemoripTheme.colors.background)
+                .verticalScroll(state = scrollState),
+            verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXXXLarge)
         ) {
-            HorizontalPager(
-                modifier = Modifier.fillMaxSize(),
-                state = pagerState,
-                key = { idx -> place.imageUrls[idx] }
-            ) { idx ->
-                AsyncImage(
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(height = headerHeightPx.toDp(density = density))
+                    .clipToBounds()
+                    .clickable { onImageClick(place.imageUrls[pagerState.currentPage]) },
+                contentAlignment = Alignment.BottomStart
+            ) {
+                HorizontalPager(
                     modifier = Modifier.fillMaxSize(),
-                    model = place.imageUrls[idx],
-                    contentDescription = stringResource(R.string.place_detail_image_content_description),
-                    contentScale = ContentScale.Crop,
-                )
+                    state = pagerState,
+                    key = { idx -> place.imageUrls[idx] }
+                ) { idx ->
+                    AsyncImage(
+                        modifier = Modifier.fillMaxSize(),
+                        model = place.imageUrls[idx],
+                        contentDescription = stringResource(R.string.place_detail_image_content_description),
+                        contentScale = ContentScale.Crop,
+                    )
+                }
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(height = OVERLAY_HEIGHT)
+                        .padding(top = MemoripPadding.PaddingXXXLarge)
+                        .background(
+                            brush = Brush.verticalGradient(
+                                colorStops = arrayOf(
+                                    TOP_RATIO to MemoripTheme.colors.background.copy(alpha = TOP_ALPHA),
+                                    MIDDLE_RATIO to MemoripTheme.colors.background.copy(alpha = MIDDLE_ALPHA),
+                                    BOTTOM_RATIO to MemoripTheme.colors.background.copy(alpha = BOTTOM_ALPHA)
+                                )
+                            )
+                        )
+                        .padding(
+                            horizontal = MemoripPadding.AppHorizontalPadding,
+                            vertical = MemoripPadding.PaddingMedium
+                        ),
+                    verticalArrangement = Arrangement.spacedBy(
+                        alignment = Alignment.Bottom,
+                        space = MemoripSpace.SpaceXSmall
+                    )
+                ) {
+                    Text(
+                        text = place.title,
+                        color = MemoripTheme.colors.onSurface,
+                        style = MemoripTheme.typography.headlineBold32
+                    )
+                    Row(horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceMedium)) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_location_on),
+                            tint = MemoripTheme.colors.primary,
+                            contentDescription = null
+                        )
+                        Text(
+                            text = place.locationName,
+                            color = MemoripTheme.colors.onSurface,
+                            style = MemoripTheme.typography.bodyMedium14
+                        )
+                    }
+                    TagChipRow(tags = place.tags)
+                }
             }
 
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(height = OVERLAY_HEIGHT)
-                    .padding(top = MemoripPadding.PaddingXXXLarge)
-                    .background(
-                        brush = Brush.verticalGradient(
-                            colorStops = arrayOf(
-                                TOP_RATIO to MemoripTheme.colors.background.copy(alpha = TOP_ALPHA),
-                                MIDDLE_RATIO to MemoripTheme.colors.background.copy(alpha = MIDDLE_ALPHA),
-                                BOTTOM_RATIO to MemoripTheme.colors.background.copy(alpha = BOTTOM_ALPHA)
+                    .padding(horizontal = MemoripPadding.PaddingMedium),
+                verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceMedium)
+            ) {
+                if (place.content.isNotEmpty()) {
+                    ContentCard(content = place.content)
+                }
+                LocationCard(
+                    location = place.locationName,
+                    latitude = place.latitude,
+                    longitude = place.longitude,
+                    onNavigateToExternalMap = {
+                        onNavigateToExternalMap(
+                            LocationUiModel(
+                                id = "",
+                                name = place.locationName,
+                                category = "",
+                                address = place.locationName,
+                                roadAddress = "",
+                                latitude = place.latitude,
+                                longitude = place.longitude
                             )
                         )
-                    )
-                    .padding(
-                        horizontal = MemoripPadding.AppHorizontalPadding,
-                        vertical = MemoripPadding.PaddingMedium
-                    ),
-                verticalArrangement = Arrangement.spacedBy(
-                    alignment = Alignment.Bottom,
-                    space = MemoripSpace.SpaceXSmall
+                    }
                 )
-            ) {
-                Text(
-                    text = place.title,
-                    color = MemoripTheme.colors.onSurface,
-                    style = MemoripTheme.typography.headlineBold32
-                )
-                Row(horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceMedium)) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_location_on),
-                        tint = MemoripTheme.colors.primary,
-                        contentDescription = null
-                    )
-                    Text(
-                        text = place.locationName,
-                        color = MemoripTheme.colors.onSurface,
-                        style = MemoripTheme.typography.bodyMedium14
-                    )
-                }
-                TagChipRow(tags = place.tags)
-            }
-        }
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = MemoripPadding.PaddingMedium),
-            verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceMedium)
-        ) {
-            if (place.content.isNotEmpty()) {
-                ContentCard(content = place.content)
-            }
-            LocationCard(
-                location = place.locationName,
-                latitude = place.latitude,
-                longitude = place.longitude,
-                onNavigateToExternalMap = {
-                    onNavigateToExternalMap(
-                        LocationUiModel(
-                            id = "",
-                            name = place.locationName,
-                            category = "",
-                            address = place.locationName,
-                            roadAddress = "",
-                            latitude = place.latitude,
-                            longitude = place.longitude
-                        )
-                    )
-                }
-            )
-            if (place.groups.isNotEmpty()) {
+                /** TODO 로그인 기능 구현 시 나의 장소만 그룹 보이도록 수정하기 */
                 PlaceDetailInfoSection(
                     infoString = place.groups.joinToString(
                         separator = stringResource(R.string.place_detail_comma_separator)
@@ -436,9 +380,11 @@ private fun PlaceDetailInfoSection(
 private fun PlaceDetailScreenPreview() {
     MemoripTheme {
         PlaceDetailScreen(
-            place = DummyData.place,
-            showMoreMenu = false,
-            onAction = {}
+            route = PlaceDetail(""),
+            onNavigateBack = {},
+            onNavigateSelectGroup = {},
+            onNavigateToPlaceEdit = {},
+            onNavigateGroupList = {}
         )
     }
 }
@@ -448,9 +394,10 @@ private fun PlaceDetailScreenPreview() {
 private fun PlaceDetailContentPreview() {
     MemoripTheme {
         PlaceDetailContent(
-            place = PlaceUiModel(),
-            onAction = {},
-            onImageClick = {}
+            place = DummyData.place,
+            showMoreMenu = false,
+            onImageClick = {},
+            onAction = {}
         )
     }
 }

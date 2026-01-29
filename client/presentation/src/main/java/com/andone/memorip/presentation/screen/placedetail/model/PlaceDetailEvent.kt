@@ -8,7 +8,6 @@ sealed interface PlaceDetailEvent {
 
     data object NavigateToGroupList : PlaceDetailEvent
 
-    data object PlaceAddToGroup : PlaceDetailEvent
 
     data object ShowMoreMenu : PlaceDetailEvent
 

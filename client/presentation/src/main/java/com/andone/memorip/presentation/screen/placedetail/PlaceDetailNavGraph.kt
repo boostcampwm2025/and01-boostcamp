@@ -16,7 +16,7 @@ fun EntryProviderScope<NavKey>.placeDetail(
     modifier: Modifier = Modifier
 ) {
     entry<PlaceDetail> { route ->
-        PlaceDetailScreen(
+        PlaceDetailContainer(
             route = route,
             onNavigateBack = onNavigateBack,
             onNavigateGroupList = onNavigateGroupList,

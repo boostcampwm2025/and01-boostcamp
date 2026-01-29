@@ -104,7 +104,6 @@ private fun PlaceDetailActions(
                     )
                 },
                 onClick = {
-                    onMoreMenuDismiss()
                     onEditClick()
                 }
             )
@@ -116,7 +115,6 @@ private fun PlaceDetailActions(
                     )
                 },
                 onClick = {
-                    onMoreMenuDismiss()
                     onDeleteClick()
                 }
             )
