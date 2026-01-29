@@ -139,7 +139,8 @@ private fun BottomBarCenterButton(
     ) {
         Icon(
             painter = painterResource(R.drawable.ic_add),
-            contentDescription = stringResource(R.string.main_bottom_center_button_content_description)
+            contentDescription = stringResource(R.string.main_bottom_center_button_content_description),
+            tint = MemoripTheme.colors.background
         )
     }
 }
