@@ -94,14 +94,14 @@ class PlaceService(
     }
 
     @Transactional
-    fun createPlace(request: PlaceCreateRequest): PlaceCreateResponse {
+    fun createPlace(request: PlaceCreateRequest, userId: UUID): PlaceCreateResponse {
 
         val group = groupRepository.findByIdOrNull(request.groupId)
             ?: throw BusinessException(code = CommonExceptionCode.GROUP_NOT_FOUND)
 
         val place = Place.create(
             groupId = request.groupId,
-            writerId = request.writerId,
+            writerId = userId,
             title = request.title,
             content = request.content,
             latitude = request.latitude,

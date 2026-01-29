@@ -1,6 +1,7 @@
 package com.andone.memorip.feature.place.controller
 
 import com.andone.memorip.common.response.ApiResult
+import com.andone.memorip.common.security.UserPrincipal
 import com.andone.memorip.feature.place.dto.request.PlaceGroupsUpdateRequest
 import com.andone.memorip.feature.place.dto.response.PlaceDetailResponse
 import com.andone.memorip.feature.place.dto.request.PlaceCreateRequest
@@ -16,6 +17,7 @@ import jakarta.validation.Valid
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.data.web.PageableDefault
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
@@ -43,6 +45,10 @@ class PlaceController(
     }
 
     @GetMapping("/places")
+    @Operation(
+        summary = "장소 목록 조회",
+        description = "필터된 장소 목록을 조회합니다.",
+    )
     fun getPlaceList(
         @RequestParam(required = false) query: String?,
         @RequestParam(required = false) tagIds: List<UUID>?,
@@ -95,9 +101,10 @@ class PlaceController(
 
     @PostMapping("/places")
     fun createPlace(
-        @RequestBody request: PlaceCreateRequest
+        @RequestBody request: PlaceCreateRequest,
+        @AuthenticationPrincipal principal: UserPrincipal
     ): ApiResult<PlaceCreateResponse> {
-        val placeId = placeService.createPlace(request)
+        val placeId = placeService.createPlace(request, principal.userId)
         return ApiResult.success(placeId)
     }
 

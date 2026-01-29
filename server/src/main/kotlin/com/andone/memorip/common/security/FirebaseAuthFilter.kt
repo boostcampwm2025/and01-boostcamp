@@ -2,6 +2,7 @@ package com.andone.memorip.common.security
 
 import com.andone.memorip.common.exception.BusinessException
 import com.andone.memorip.common.exception.CommonExceptionCode
+import com.andone.memorip.feature.user.service.UserService
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
 import jakarta.servlet.FilterChain
@@ -12,7 +13,9 @@ import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 
 @Component
-class FirebaseAuthFilter : OncePerRequestFilter() {
+class FirebaseAuthFilter(
+    private val userService: UserService
+) : OncePerRequestFilter() {
 
     override fun doFilterInternal(
         request: HttpServletRequest,
@@ -27,9 +30,17 @@ class FirebaseAuthFilter : OncePerRequestFilter() {
             try {
                 val decodedToken = FirebaseAuth.getInstance().verifyIdToken(idToken)
 
-                val authentication = FirebaseAuthenticationToken(
-                    uid = decodedToken.uid
+                val user = userService.getOrCreateMe(
+                    firebaseUid = decodedToken.uid,
+                    nickname = null
                 )
+
+                val principal = UserPrincipal(
+                    userId = user.id,
+                    firebaseUid = decodedToken.uid
+                )
+
+                val authentication = FirebaseAuthenticationToken(principal)
 
                 SecurityContextHolder.getContext().authentication = authentication
 
