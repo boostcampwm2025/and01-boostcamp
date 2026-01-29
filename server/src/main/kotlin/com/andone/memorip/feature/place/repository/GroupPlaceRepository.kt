@@ -10,6 +10,18 @@ import java.util.UUID
 interface GroupPlaceRepository : JpaRepository<GroupPlace, UUID> {
     @Query("SELECT gp.group.id FROM GroupPlace gp WHERE gp.place.id = :placeId AND gp.deletedAt IS NULL")
     fun findGroupIdsByPlaceId(@Param("placeId") placeId: UUID): List<UUID>
+
+    @Query(
+        """
+        SELECT gp.group.title
+        FROM GroupPlace gp
+        WHERE gp.place.id = :placeId
+          AND gp.deletedAt IS NULL
+          AND gp.group.deletedAt IS NULL
+        ORDER BY gp.id DESC
+        """
+    )
+    fun findGroupTitlesByPlaceId(@Param("placeId") placeId: UUID): List<String>
     
     @Query("SELECT gp FROM GroupPlace gp WHERE gp.group.id IN :groupIds AND gp.place.id = :placeId AND gp.deletedAt IS NULL")
     fun findByGroupIdsAndPlaceId(
