@@ -59,15 +59,9 @@ fun GroupDetailScreen(
     var places by remember { mutableStateOf<List<Place>>(emptyList()) }
 
     LaunchedEffect(placesPagingItems) {
-        snapshotFlow { placesPagingItems.itemCount }
-            .collect { itemCount ->
-                val newPlaces = mutableListOf<Place>()
-                for (i in 0 until itemCount) {
-                    placesPagingItems[i]?.let { place ->
-                        newPlaces.add(place)
-                    }
-                }
-                places = newPlaces
+        snapshotFlow { placesPagingItems.itemSnapshotList.items }
+            .collect { items ->
+                places = items
             }
     }
 
@@ -165,7 +159,8 @@ private fun GroupDetailScreenContent(
                     placePagingItems = placesPagingItems,
                     onPlaceClick = { id -> onAction(GroupDetailAction.OnPlaceClick(id = id)) },
                     onRefresh = { /* GroupDetail에서는 refresh 불필요 */ },
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier
+                        .fillMaxSize()
                         .padding(vertical = MemoripPadding.AppHorizontalPadding)
                 )
 
@@ -209,7 +204,7 @@ private fun GroupDetailScreenContentPreview() {
             currentPage = 0,
             places = DummyData.places,
             placesPagingItems = DummyData.getPlacePagingItems(),
-             clusteredItems = clusteredItems,
+            clusteredItems = clusteredItems,
             mapSelectedPlace = null,
             mapBottomSheetContent = MapBottomSheetStep.PlaceList,
             onAction = {}
