@@ -33,6 +33,7 @@ import com.andone.memorip.presentation.screen.user.UserScreenDimen.ACCOUNT_SECTI
 import com.andone.memorip.presentation.screen.user.component.AccountSection
 import com.andone.memorip.presentation.screen.user.component.AlarmSection
 import com.andone.memorip.presentation.screen.user.component.AppInfoSection
+import com.andone.memorip.presentation.screen.user.component.LoginDialog
 import com.andone.memorip.presentation.screen.user.component.PermissionSection
 import com.andone.memorip.presentation.screen.user.component.PolicySection
 import com.andone.memorip.presentation.screen.user.component.SettingSection
@@ -119,10 +120,8 @@ fun UserScreenContent(
 ) {
     if (state.showLoginDialog) {
         LoginDialog(
-            isNewAccount = state.isNewAccount,
-            onDismiss = {
-                onAction(UserAction.CloseLoginDialog)
-            }
+            state = state,
+            onAction = onAction,
         )
     }
 

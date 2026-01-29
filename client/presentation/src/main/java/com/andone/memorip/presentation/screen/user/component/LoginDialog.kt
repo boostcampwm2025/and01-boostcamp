@@ -14,22 +14,20 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.Divider
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.screen.user.model.UserAction
 import com.andone.memorip.presentation.screen.user.model.UserUiState
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
+import com.andone.memorip.presentation.R
 
 @Composable
 fun LoginDialog(
     state: UserUiState,
-    onDismiss: () -> Unit,
     onAction: (UserAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -39,12 +37,13 @@ fun LoginDialog(
                 state.password != state.passwordConfirm
 
     AlertDialog(
-        onDismissRequest = onDismiss,
+        onDismissRequest = { onAction(UserAction.CloseLoginDialog) },
         confirmButton = {},
         modifier = modifier,
         title = {
             Text(
-                text = if (state.isNewAccount) "회원가입" else "로그인",
+                text = if (state.isNewAccount) stringResource(R.string.login_new_account)
+                else stringResource(R.string.login_login),
                 style = MemoripTheme.typography.titleBold18
             )
         },
@@ -59,7 +58,7 @@ fun LoginDialog(
                         onAction(UserAction.UpdateEmail(it))
                     },
                     modifier = Modifier.fillMaxWidth(),
-                    label = { Text("이메일") },
+                    label = { Text(text = stringResource(R.string.login_email)) },
                     singleLine = true
                 )
 
@@ -69,7 +68,7 @@ fun LoginDialog(
                         onAction(UserAction.UpdatePassword(it))
                     },
                     modifier = Modifier.fillMaxWidth(),
-                    label = { Text("비밀번호") },
+                    label = { Text(text = stringResource(R.string.login_password)) },
                     singleLine = true,
                     visualTransformation = PasswordVisualTransformation()
                 )
@@ -81,7 +80,7 @@ fun LoginDialog(
                             onAction(UserAction.UpdatePasswordConfirm(it))
                         },
                         modifier = Modifier.fillMaxWidth(),
-                        label = { Text("비밀번호 확인") },
+                        label = { Text(text = stringResource(R.string.login_password_confirm)) },
                         singleLine = true,
                         visualTransformation = PasswordVisualTransformation(),
                         isError = isPasswordMismatch
@@ -89,14 +88,14 @@ fun LoginDialog(
 
                     if (isPasswordMismatch) {
                         Text(
-                            text = "비밀번호가 일치하지 않습니다",
+                            text = stringResource(R.string.login_password_not_match),
                             color = MemoripTheme.colors.error,
                             style = MemoripTheme.typography.bodyBold12
                         )
                     }
                 }
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(height = MemoripSpace.SpaceXSmall))
 
                 Button(
                     onClick = {
@@ -108,7 +107,8 @@ fun LoginDialog(
                             && (!state.isNewAccount || !isPasswordMismatch)
                 ) {
                     Text(
-                        text = if (state.isNewAccount) "회원가입" else "이메일로 로그인"
+                        text = if (state.isNewAccount) stringResource(R.string.login_new_account)
+                        else stringResource(R.string.login_email_login)
                     )
                 }
 
@@ -120,9 +120,9 @@ fun LoginDialog(
                 ) {
                     Text(
                         text = if (state.isNewAccount)
-                            "이미 계정이 있나요? 로그인"
+                            stringResource(R.string.login_email_login_description)
                         else
-                            "계정이 없나요? 회원가입",
+                            stringResource(R.string.login_new_account_description),
                         style = MemoripTheme.typography.bodyMedium14,
                         modifier = Modifier.clickable {
                             onAction(UserAction.ToggleLoginMode)
@@ -140,7 +140,6 @@ private fun LoginDialogPreview() {
     MemoripTheme {
         LoginDialog(
             state = UserUiState(),
-            onDismiss = {},
             onAction = {}
         )
     }

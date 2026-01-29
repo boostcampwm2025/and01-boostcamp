@@ -192,6 +192,16 @@
     <string name="login_account">계정 관리</string>
     <string name="login_logout">로그아웃</string>
     <string name="login_delete_account">계정 삭제</string>
+    <string name="login_new_account">회원가입</string>
+    <string name="login_login">로그인</string>
+    <string name="login_email">이메일</string>
+    <string name="login_password">비밀번호</string>
+    <string name="login_password_confirm">비밀번호 확인</string>
+    <string name="login_password_not_match">비밀번호가 일치하지 않습니다.</string>
+    <string name="login_email_login">이메일로 로그인</string>
+    <string name="login_email_login_description">이미 계정이 있나요? 로그인</string>
+    <string name="login_new_account_description">계정이 없나요? 회원가입</string>
+
 
 
 
