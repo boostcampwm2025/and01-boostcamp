@@ -261,7 +261,7 @@ class PlanViewModel @Inject constructor(
                 val endAt =
                     endAtDate.plusMinutes((block.startMinute + block.durationMinute - (block.day - 1) * MINUTES_PER_DAY).toLong())
 
-                if (!(startAt.isEqual(originStartAt) && endAt.isEqual(originEndAt))) {
+                if (startAt != originStartAt || endAt != originEndAt) {
                     val startAtString = startAt.toRemoteString()
                     val endAtString = endAt.toRemoteString()
 
