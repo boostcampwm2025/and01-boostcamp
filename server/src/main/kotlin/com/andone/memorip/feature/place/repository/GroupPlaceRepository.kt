@@ -46,4 +46,18 @@ interface GroupPlaceRepository : JpaRepository<GroupPlace, UUID> {
     fun deleteAllByPlaceId(@Param("placeId") placeId: UUID): Int
 
     fun findAllByGroupId(groupId: UUID): List<GroupPlace>
+    
+    @Query("""
+        SELECT COUNT(gp) > 0 
+        FROM GroupPlace gp 
+        JOIN gp.group g 
+        WHERE gp.place.id = :placeId 
+          AND g.owner.id = :userId 
+          AND gp.deletedAt IS NULL 
+          AND g.deletedAt IS NULL
+    """)
+    fun existsByPlaceIdAndOwnerUserId(
+        @Param("placeId") placeId: UUID, 
+        @Param("userId") userId: UUID
+    ): Boolean
 }

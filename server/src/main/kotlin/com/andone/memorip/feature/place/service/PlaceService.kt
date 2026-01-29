@@ -51,6 +51,8 @@ class PlaceService(
         val images = placeImageRepository.findAllByPlaceId(id = placeId).map { it.url }
         val groups = groupPlaceRepository.findGroupProjectionsByPlaceId(placeId)
 
+        val isInMyGroup = groupPlaceRepository.existsByPlaceIdAndOwnerUserId(placeId, currentUserId)
+
         return PlaceDetailResponse(
             placeId = place.id,
             writerId = place.writerId,
@@ -62,7 +64,8 @@ class PlaceService(
             longitude = place.longitude,
             groups = groups.map { GroupCompactResponse(it.groupId, it.groupName) },
             address = place.address,
-            isMine = place.writerId == currentUserId
+            isMine = place.writerId == currentUserId,
+            isInMyGroup = isInMyGroup
         )
     }
 
@@ -194,7 +197,8 @@ class PlaceService(
             longitude = place.longitude,
             groups = groups,
             address = place.address,
-            isMine = true
+            isMine = true,
+            isInMyGroup = true
         )
     }
 

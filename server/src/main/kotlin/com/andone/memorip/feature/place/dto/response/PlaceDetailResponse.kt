@@ -17,7 +17,9 @@ data class PlaceDetailResponse(
     val groups: List<GroupCompactResponse>,
     val address: Address,
     @get:JsonProperty("isMine")
-    val isMine: Boolean
+    val isMine: Boolean,
+    @get:JsonProperty("isInMyGroup")
+    val isInMyGroup: Boolean
 )
 
 data class TagResponse(
