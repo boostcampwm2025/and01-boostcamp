@@ -43,6 +43,10 @@ data class PlaceRequest(
     )
     var imageUrls: List<String>,
 
+    @field:NotNull(message = "썸네일 이미지 비율은 필수입니다.")
+    @Schema(description = "썸네일 이미지 비율 (width / height)", example = "1.5", required = true)
+    var thumbnailImageRatio: Float,
+
     @get:JsonProperty("isPublic")
     @field:NotNull(message = "공개 여부는 필수입니다.")
     @Schema(description = "공개 여부", example = "true", required = true)

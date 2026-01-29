@@ -14,7 +14,7 @@ data class PlaceDetailResponse(
     val content: String?,
     val latitude: Double,
     val longitude: Double,
-    val groups: List<GroupSimpleResponse>,
+    val groups: List<GroupCompactResponse>,
     val address: Address,
     @get:JsonProperty("isMine")
     val isMine: Boolean

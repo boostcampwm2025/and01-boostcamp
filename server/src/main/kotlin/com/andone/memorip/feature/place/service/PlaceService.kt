@@ -6,7 +6,7 @@ import com.andone.memorip.common.response.ApiResult
 import com.andone.memorip.feature.group.repository.GroupRepository
 import com.andone.memorip.feature.place.dto.PlaceListResult
 import com.andone.memorip.feature.place.dto.request.PlaceRequest
-import com.andone.memorip.feature.place.dto.response.GroupSimpleResponse
+import com.andone.memorip.feature.place.dto.response.GroupCompactResponse
 import com.andone.memorip.feature.place.dto.response.PlaceCreateResponse
 import com.andone.memorip.feature.place.dto.response.PlaceDetailResponse
 import com.andone.memorip.feature.place.dto.response.PlaceListItemResponse
@@ -60,7 +60,7 @@ class PlaceService(
             content = place.content,
             latitude = place.latitude,
             longitude = place.longitude,
-            groups = groups.map { GroupSimpleResponse(it.groupId, it.groupName) },
+            groups = groups.map { GroupCompactResponse(it.groupId, it.groupName) },
             address = place.address,
             isMine = place.writerId == currentUserId
         )
@@ -181,7 +181,7 @@ class PlaceService(
         val tags = placeTagRepository.findAllByPlaceId(id = placeId).map { it.toTagResponse() }
         val images = placeImageRepository.findAllByPlaceId(id = placeId).map { it.url }
         val groups = groupPlaceRepository.findGroupProjectionsByPlaceId(placeId)
-            .map { GroupSimpleResponse(it.groupId, it.groupName) }
+            .map { GroupCompactResponse(it.groupId, it.groupName) }
 
         return PlaceDetailResponse(
             placeId = place.id,
