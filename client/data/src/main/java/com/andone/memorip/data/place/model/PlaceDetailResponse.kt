@@ -1,6 +1,5 @@
-package com.andone.memorip.domain.model.response
+package com.andone.memorip.data.place.model
 
-import com.andone.memorip.domain.model.Group
 import com.andone.memorip.domain.model.Tag
 import com.andone.memorip.domain.model.request.Address
 import kotlinx.serialization.Serializable
@@ -15,6 +14,13 @@ data class PlaceDetailResponse(
     val longitude: Double,
     val tags: List<Tag>,
     val images: List<String>,
-    val group: Group,
-    val address: Address
+    val groups: List<GroupCompactResponse>,
+    val address: Address,
+    val isMine: Boolean
+)
+
+@Serializable
+data class GroupCompactResponse(
+    val groupId: String,
+    val groupName: String
 )

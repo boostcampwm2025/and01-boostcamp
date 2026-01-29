@@ -1,4 +1,4 @@
-package com.andone.memorip.domain.model.response
+package com.andone.memorip.data.place.model
 
 import kotlinx.serialization.Serializable
 
