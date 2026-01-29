@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.screen.plan
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.BackoffPolicy
@@ -304,7 +305,7 @@ class PlanViewModel @Inject constructor(
                             val inDatePlaces = validPlaces.filter {
                                 it.startDateTime!!.toLocalDate() in uiState.value.date.startDay!!..uiState.value.date.endDay!!
                             }.map {
-                                val limitTime = uiState.value.date.endDay!!.atStartOfDay()
+                                val limitTime = uiState.value.date.endDay!!.plusDays(1).atStartOfDay()
                                 if (it.endDateTime!!.isAfter(limitTime)) {
                                     it.copy(endDateTime = limitTime)
                                 } else {
@@ -313,7 +314,10 @@ class PlanViewModel @Inject constructor(
                             }
 
                             val timeBlocks =
-                                inDatePlaces.mapNotNull { it.toTimeBlock(uiState.value.date.startDay?.atStartOfDay()!!) }
+                                inDatePlaces.mapNotNull {
+                                    Log.d("DEBUG TEST", "time block : $it")
+                                    it.toTimeBlock(uiState.value.date.startDay?.atStartOfDay()!!)
+                                }
                             val uiBlocks = inDatePlaces.associateBy { it.id }
                             timeBlocksFlow.update { timeBlocks }
                             blockUiModelsFlow.update { uiBlocks }
