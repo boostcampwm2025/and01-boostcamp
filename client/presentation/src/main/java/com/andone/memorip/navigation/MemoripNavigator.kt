@@ -51,6 +51,7 @@ class MemoripNavigator(
     fun navigateToGroupDetail(groupId: String) = backStack.navigateToGroupDetail(groupId)
 
     fun navigateToPlaceDetail(placeId: String) = backStack.navigateToPlaceDetail(placeId)
+
     fun popBackStack() = backStack.removeLastOrNull()
 }
 

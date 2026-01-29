@@ -90,6 +90,6 @@ fun MemoripNav(
                 onNavigateBack = navigator::popBackStack,
                 onNavigateGroupList = navigator::navigateToGroupList
             )
-        },
+        }
     )
 }
