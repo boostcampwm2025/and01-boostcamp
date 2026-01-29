@@ -295,7 +295,7 @@ fun PlaceListGrid(
                 StaggeredImageItem(
                     imageUrl = image.url,
                     aspectRatio = image.aspectRatio,
-                    onImageClick = { onPlaceClick(place.id) },
+                    onImageClick = { onPlaceClick(place.placeId) },
                     contentDescription = place.name,
                     location = place.address,
                 )
