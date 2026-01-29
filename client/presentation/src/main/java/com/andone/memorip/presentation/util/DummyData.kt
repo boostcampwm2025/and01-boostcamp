@@ -15,6 +15,7 @@ import com.andone.memorip.presentation.model.LocationUiModel
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.model.TagUiModel
 import com.andone.memorip.presentation.model.toUiModel
+import com.andone.memorip.presentation.screen.placedetail.model.GroupCompactUiModel
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceUiModel
 import com.andone.memorip.presentation.screen.placelist.model.RegionUiModel
 import com.andone.memorip.presentation.screen.placelist.model.SelectedRegionState
@@ -44,7 +45,12 @@ object DummyData {
             "https://picsum.photos/200/200",
             "https://picsum.photos/200/400"
         ),
-        groupName = "크리스마스",
+        groups = persistentListOf(
+            GroupCompactUiModel(
+                groupId = UUID.randomUUID().toString(),
+                groupName = "크리스마스"
+            )
+        ),
         content = "test content, test content, test content, test content\n test content, test content1\n test content, test content2\n test content, test content3\n test content, test content4\n test content, test content5\n test content, test content6\n test content, test content7\n test content, test content8\n test content, test content9\n test content, test content10\n test content, test content11\n test content, test content12\n test content, test content13\n test content, test content14\n test content, test content15"
     )
 
