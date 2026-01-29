@@ -58,7 +58,7 @@ fun SettingRowItem(
         Icon(
             painter = painterResource(item.iconRes),
             contentDescription = null,
-            tint = MemoripTheme.colors.primary
+            tint = MemoripTheme.colors.onSurface
         )
 
         Spacer(modifier = Modifier.width(width = MemoripPadding.PaddingSmall))
