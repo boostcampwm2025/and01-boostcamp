@@ -79,8 +79,8 @@ import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
-import com.andone.memorip.presentation.util.openMapOrAskApp
 import com.andone.memorip.presentation.util.collectWithLifecycle
+import com.andone.memorip.presentation.util.openMapOrAskApp
 import com.andone.memorip.presentation.util.toDp
 import com.andone.memorip.presentation.util.toPx
 
@@ -411,8 +411,9 @@ private fun PlaceDetailInfoSection(
     modifier: Modifier = Modifier
 ) {
     Surface(
+        onClick = { onAction(PlaceDetailAction.GroupClick) },
         modifier = modifier,
-        onClick = { onAction(PlaceDetailAction.GroupClick) }
+        color = MemoripTheme.colors.background
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXXSmall),
