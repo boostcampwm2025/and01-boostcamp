@@ -10,17 +10,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.R
-import com.andone.memorip.presentation.screen.grouplist.component.EmptyGroupPlaceholder
-import com.andone.memorip.presentation.screen.grouplist.component.GroupLayout
+import com.andone.memorip.presentation.screen.grouplist.component.EmptyTripPlaceholder
+import com.andone.memorip.presentation.screen.grouplist.component.TripLayout
 import com.andone.memorip.presentation.screen.grouplist.component.ImageCard
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.buildBento5x3Items
 
 @Composable
-fun GroupView(
+fun TripView(
     name: String,
-    onGroupClick: () -> Unit,
+    onTripClick: () -> Unit,
     onAddClick: () -> Unit,
     modifier: Modifier = Modifier,
     images: List<String> = emptyList()
@@ -29,18 +29,18 @@ fun GroupView(
         modifier = modifier.clickable(
             interactionSource = null,
             indication = null,
-            onClick = onGroupClick
+            onClick = onTripClick
         ),
     ) {
         Text(
-            text = name.ifBlank { stringResource(R.string.group_view_default_name) },
+            text = name.ifBlank { stringResource(R.string.trip_view_default_name) },
             modifier = Modifier.padding(all = MemoripSpace.SpaceXXSmall),
             style = MemoripTheme.typography.titleBold18
         )
         if (images.isEmpty()) {
-            EmptyGroupPlaceholder(onClick = onAddClick)
+            EmptyTripPlaceholder(onClick = onAddClick)
         } else {
-            GroupLayout(
+            TripLayout(
                 items = buildBento5x3Items(images),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -53,11 +53,11 @@ fun GroupView(
 
 @Preview(showBackground = true)
 @Composable
-private fun GroupViewPreview() {
+private fun TripViewPreview() {
     MemoripTheme {
-        GroupView(
+        TripView(
             name = "기본 그룹",
-            onGroupClick = {},
+            onTripClick = {},
             onAddClick = {},
             images = List(8) { "" }
         )
