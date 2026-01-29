@@ -1,16 +1,15 @@
 package com.andone.memorip.data.place.datasource.remote
 
 import androidx.paging.PagingData
+import com.andone.memorip.data.place.model.PlaceCreateResponse
+import com.andone.memorip.data.place.model.PlaceCreateUpdateRequest
+import com.andone.memorip.data.place.model.PlaceDetailResponse
 import com.andone.memorip.data.place.model.PlaceListItemResponse
 import com.andone.memorip.domain.model.PlaceListItem
 import com.andone.memorip.domain.model.Region
-import com.andone.memorip.domain.model.request.PlaceCreateRequest
-import com.andone.memorip.domain.model.response.PlaceCreateResponse
-import com.andone.memorip.domain.model.response.PlaceDetailResponse
 import com.andone.memorip.domain.model.response.PlaceImageUploadResponse
 import kotlinx.coroutines.flow.Flow
 import java.io.File
-import java.util.UUID
 
 interface PlaceRemoteDataSource {
     suspend fun getPlaceDetail(placeId: String): Result<PlaceDetailResponse>
@@ -23,7 +22,8 @@ interface PlaceRemoteDataSource {
     ): Flow<PagingData<PlaceListItem>>
 
     suspend fun uploadImage(file: File): Result<PlaceImageUploadResponse>
-    suspend fun createPlace(place: PlaceCreateRequest): Result<PlaceCreateResponse>
+    suspend fun createPlace(place: PlaceCreateUpdateRequest): Result<PlaceCreateResponse>
+    suspend fun deletePlace(placeId: String): Result<Unit>
     suspend fun updatePlaceGroups(
         placeId: String,
         addGroupIds: List<String>,

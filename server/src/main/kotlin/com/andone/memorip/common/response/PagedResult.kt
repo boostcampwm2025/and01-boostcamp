@@ -7,4 +7,3 @@ data class PagedResult<T>(
     val content: List<T>,
     val pagination: ApiResult.PaginationInfo
 )
-

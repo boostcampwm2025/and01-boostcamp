@@ -6,14 +6,14 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.andone.memorip.data.place.datasource.PlaceListPagingSource
 import com.andone.memorip.data.place.datasource.PlaceService
+import com.andone.memorip.data.place.model.PlaceCreateResponse
+import com.andone.memorip.data.place.model.PlaceCreateUpdateRequest
+import com.andone.memorip.data.place.model.PlaceDetailResponse
 import com.andone.memorip.data.place.model.PlaceGroupsUpdateRequest
 import com.andone.memorip.data.place.model.PlaceListItemResponse
 import com.andone.memorip.data.util.apiCall
 import com.andone.memorip.domain.model.PlaceListItem
 import com.andone.memorip.domain.model.Region
-import com.andone.memorip.domain.model.request.PlaceCreateRequest
-import com.andone.memorip.domain.model.response.PlaceCreateResponse
-import com.andone.memorip.domain.model.response.PlaceDetailResponse
 import com.andone.memorip.domain.model.response.PlaceImageUploadResponse
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
@@ -26,7 +26,6 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
-import java.util.UUID
 import javax.inject.Inject
 
 class PlaceRemoteDataSourceImpl @Inject constructor(
@@ -82,8 +81,12 @@ class PlaceRemoteDataSourceImpl @Inject constructor(
         return apiCall { placeService.uploadImage(body) }
     }
 
-    override suspend fun createPlace(place: PlaceCreateRequest): Result<PlaceCreateResponse> {
+    override suspend fun createPlace(place: PlaceCreateUpdateRequest): Result<PlaceCreateResponse> {
         return apiCall { placeService.createPlace(place) }
+    }
+
+    override suspend fun deletePlace(placeId: String): Result<Unit> {
+        return apiCall { placeService.deletePlace(placeId) }
     }
 
     override suspend fun updatePlaceGroups(

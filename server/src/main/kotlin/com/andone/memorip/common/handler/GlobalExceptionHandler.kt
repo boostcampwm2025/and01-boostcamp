@@ -34,6 +34,7 @@ class GlobalExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException::class)
     fun handleHttpMessageNotReadable(e: HttpMessageNotReadableException): ResponseEntity<ApiResult<Nothing>> {
         val code = CommonExceptionCode.INVALID_INPUT
+        logger.error(e.message, e)
         return ResponseEntity.status(code.status)
             .body(ApiResult.error(code.name, "잘못된 요청 형식입니다."))
     }

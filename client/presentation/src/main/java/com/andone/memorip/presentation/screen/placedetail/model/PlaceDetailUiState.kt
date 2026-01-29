@@ -1,6 +1,6 @@
 package com.andone.memorip.presentation.screen.placedetail.model
 
-import com.andone.memorip.domain.model.response.PlaceDetailResponse
+import com.andone.memorip.domain.model.response.PlaceDetail
 import com.andone.memorip.presentation.model.toUiModel
 import kotlinx.collections.immutable.toImmutableList
 
@@ -9,15 +9,21 @@ data class PlaceDetailUiState(
     val isLoading: Boolean = true
 )
 
-fun PlaceDetailResponse.toUiModel(): PlaceUiModel = PlaceUiModel(
+fun PlaceDetail.toUiModel(): PlaceUiModel = PlaceUiModel(
     id = this.placeId,
     title = this.title,
     tags = this.tags.map { it.toUiModel() }.toImmutableList(),
     locationName = this.address.fullAddress,
-    imageUrls = this.images.toImmutableList(),
-    groupName = this.group.title,
-    content = this.content ?: "",
-    isMine = false,
+    latitude = this.latitude,
     longitude = this.longitude,
-    latitude = this.latitude
+    imageUrls = this.images.toImmutableList(),
+    groups = this.groups.map {
+        GroupCompactUiModel(
+            groupId = it.groupId,
+            groupName = it.groupName
+        )
+    }.toImmutableList(),
+    content = this.content ?: "",
+    isMine = this.isMine,
+    isInMyGroup = this.isInMyGroup
 )
