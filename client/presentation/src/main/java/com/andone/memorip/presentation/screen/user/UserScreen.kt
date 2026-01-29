@@ -159,7 +159,7 @@ fun UserScreenContent(
 
             PolicySection(onAction = onAction)
 
-            AppInfoSection(state.appVersion, onAction = onAction)
+            AppInfoSection(onAction = onAction)
 
             if (state.isLoggedIn) {
                 AccountSection(onAction = onAction)

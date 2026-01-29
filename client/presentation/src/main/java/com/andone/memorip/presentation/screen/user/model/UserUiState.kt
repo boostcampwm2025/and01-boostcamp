@@ -8,7 +8,6 @@ data class UserUiState(
     val errorMessage: String? = null,
     val permissionUiState: PermissionUiState = PermissionUiState(),
     val alarmUiState: AlarmUiState = AlarmUiState(),
-    val appVersion: String = "",
 
     val showLoginDialog: Boolean = false,
     val isNewAccount: Boolean = false,
