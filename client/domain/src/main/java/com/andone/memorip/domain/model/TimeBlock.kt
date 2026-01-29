@@ -38,8 +38,10 @@ data class TimeBlock(
         val start = newStartMinute
             .coerceIn(0, maxStart)
 
+        val day = (start / MINUTES_PER_DAY) + 1
+
         return copy(
-            day = (start / MINUTES_PER_DAY) + 1,
+            day = day,
             startMinute = start - ((day-1) * MINUTES_PER_DAY)
         )
     }

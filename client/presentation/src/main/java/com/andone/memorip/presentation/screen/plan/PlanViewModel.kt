@@ -389,7 +389,9 @@ class PlanViewModel @Inject constructor(
 
             uiState.value.blocks.map { block ->
                 if (block.id == id) {
-                    block.movedTo(newStartMinute, uiState.value.date.totalMinutes)
+                    val result = block.movedTo(newStartMinute, uiState.value.date.totalMinutes)
+                    Log.d("DEBUG TEST", "result : $result")
+                    result
                 } else {
                     block
                 }
