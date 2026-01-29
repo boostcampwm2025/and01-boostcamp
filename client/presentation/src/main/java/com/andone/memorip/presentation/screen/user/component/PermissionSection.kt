@@ -26,9 +26,10 @@ fun PermissionSection(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
-    val locationPermissionLauncher = rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestPermission()) { granted ->
-        onAction(UserAction.OnLocationPermissionResult(granted))
-    }
+    val locationPermissionLauncher =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestPermission()) { granted ->
+            onAction(UserAction.OnLocationPermissionResult(granted))
+        }
 
     val items = listOf(
         SettingItemUiModel(
@@ -41,6 +42,9 @@ fun PermissionSection(
                     openAppSettings(context)
                 } else {
                     locationPermissionLauncher.launch(input = Manifest.permission.ACCESS_FINE_LOCATION)
+                }
+                if (!permissionUiState.locationPermission) {
+                    openAppSettings(context)
                 }
             }
         ),

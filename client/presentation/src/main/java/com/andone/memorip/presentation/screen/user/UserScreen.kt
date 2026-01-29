@@ -167,31 +167,6 @@ fun UserScreenContent(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-private fun UserScreenContentsPreview() {
-    MemoripTheme {
-        UserScreenContent(
-            state = UserUiState(),
-            onAction = {},
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun UserScreenContentsLoginPreview() {
-    MemoripTheme {
-        UserScreenContent(
-            state = UserUiState(
-                isLoggedIn = true,
-                user = DummyData.dummyUser
-            ),
-            onAction = {},
-        )
-    }
-}
-
 @Composable
 private fun ProfileSection(
     state: UserUiState,
@@ -223,5 +198,30 @@ private fun ProfileSection(
                 Text(text = stringResource(R.string.login_add_account))
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun UserScreenContentsPreview() {
+    MemoripTheme {
+        UserScreenContent(
+            state = UserUiState(),
+            onAction = {},
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun UserScreenContentsLoginPreview() {
+    MemoripTheme {
+        UserScreenContent(
+            state = UserUiState(
+                isLoggedIn = true,
+                user = DummyData.dummyUser
+            ),
+            onAction = {},
+        )
     }
 }
