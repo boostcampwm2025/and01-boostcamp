@@ -1,16 +1,13 @@
 package com.andone.memorip.presentation.screen.user
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
@@ -21,8 +18,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,10 +29,14 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.presentation.BuildConfig
 import com.andone.memorip.presentation.R
-import com.andone.memorip.presentation.component.MemoripImage
-import com.andone.memorip.presentation.screen.user.UserScreenConstants.ACCOUNT_SECTION_HEIGHT
-import com.andone.memorip.presentation.screen.user.UserScreenConstants.PLACES_SECTION_HEIGHT
-import com.andone.memorip.presentation.screen.user.UserScreenConstants.PROFILE_IMAGE_SIZE
+import com.andone.memorip.presentation.screen.user.UserScreenDimen.ACCOUNT_SECTION_HEIGHT
+import com.andone.memorip.presentation.screen.user.component.AccountSection
+import com.andone.memorip.presentation.screen.user.component.AlarmSection
+import com.andone.memorip.presentation.screen.user.component.AppInfoSection
+import com.andone.memorip.presentation.screen.user.component.PermissionSection
+import com.andone.memorip.presentation.screen.user.component.PolicySection
+import com.andone.memorip.presentation.screen.user.component.SettingSection
+import com.andone.memorip.presentation.screen.user.component.UserProfileSection
 import com.andone.memorip.presentation.screen.user.model.UserAction
 import com.andone.memorip.presentation.screen.user.model.UserEvent
 import com.andone.memorip.presentation.screen.user.model.LoginMethod
@@ -47,15 +46,14 @@ import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.theme.memoripShapes
+import com.andone.memorip.presentation.util.DummyData
 import com.andone.memorip.presentation.util.collectWithLifecycle
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Companion.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
 
-private object UserScreenConstants {
-    val ACCOUNT_SECTION_HEIGHT = 180.dp
-    val PLACES_SECTION_HEIGHT = 800.dp
-    val PROFILE_IMAGE_SIZE = 80.dp
+private object UserScreenDimen {
+    val ACCOUNT_SECTION_HEIGHT = 120.dp
 }
 
 @Composable
@@ -71,7 +69,6 @@ fun UserScreen(
     }
 
     val clientId = BuildConfig.LOGIN_WEB_CLIENT_ID
-
     val googleIdOption = remember {
         GetGoogleIdOption.Builder()
             .setServerClientId(clientId)
@@ -124,64 +121,22 @@ fun UserScreenContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues = innerPadding)
+                .padding(all = MemoripPadding.AppHorizontalPadding)
                 .verticalScroll(state = rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceMedium)
         ) {
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(height = ACCOUNT_SECTION_HEIGHT)
-                    .padding(all = MemoripPadding.AppHorizontalPadding)
-                    .clickable(
-                        enabled = !state.isLoggedIn,
-                        onClick = {
-                            onAction(UserAction.OnMethodClick(method = LoginMethod.GOOGLE))
-                        }
-                    ),
-                color = MemoripTheme.colors.primaryContainer,
-                shape = memoripShapes.roundedSmall
-            ) {
-                Box(contentAlignment = Alignment.Center) {
-                    if (state.isLoggedIn) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Surface(
-                                modifier = Modifier
-                                    .size(PROFILE_IMAGE_SIZE)
-                                    .clip(memoripShapes.roundedXLarge)
-                            ) {
-                                val imageUrl = state.user.profileImgUrl
+            ProfileSection(state = state, onAction = onAction)
 
-                                if (imageUrl.isNotBlank()) {
-                                    MemoripImage(
-                                        imageUrl = imageUrl,
-                                        contentDescription = stringResource(R.string.login_user_profile_image),
-                                        modifier = Modifier.fillMaxSize(),
-                                        contentScale = ContentScale.Crop
-                                    )
-                                }
-                            }
-                            Spacer(modifier = Modifier.width(width = MemoripSpace.SpaceXXXLarge))
-                            Column {
-                                Text(text = state.user.id)
-                                Text(text = state.user.name)
-                            }
-                        }
-                    } else {
-                        Text(text = stringResource(R.string.login_add_account))
-                    }
-                }
-            }
+            AlarmSection(state.alarmUiState, onAction = onAction)
 
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(height = PLACES_SECTION_HEIGHT)
-                    .padding(all = MemoripPadding.PaddingSmall),
-                color = MemoripTheme.colors.primaryContainer,
-                shape = memoripShapes.roundedSmall,
-            ) {
-                Box(contentAlignment = Alignment.Center) {
-                    Text(text = stringResource(R.string.login_show_places))
-                }
+            PermissionSection(state.permissionUiState, onAction = onAction)
+
+            PolicySection(onAction = onAction)
+
+            AppInfoSection(state.appVersion, onAction = onAction)
+
+            if (state.isLoggedIn) {
+                AccountSection(onAction = onAction)
             }
         }
     }
@@ -200,18 +155,48 @@ private fun UserScreenContentsPreview() {
 
 @Preview(showBackground = true)
 @Composable
-private fun UserScreenContentsLogedinPreview() {
+private fun UserScreenContentsLoginPreview() {
     MemoripTheme {
         UserScreenContent(
             state = UserUiState(
                 isLoggedIn = true,
-                user = UserUiModel(
-                    name = "홍길동",
-                    id = "0",
-                    profileImgUrl = ""
-                )
+                user = DummyData.dummyUser
             ),
             onAction = {},
         )
+    }
+}
+
+@Composable
+private fun ProfileSection(
+    state: UserUiState,
+    onAction: (UserAction) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(height = ACCOUNT_SECTION_HEIGHT)
+            .clickable(
+                enabled = !state.isLoggedIn,
+                onClick = {
+                    onAction(UserAction.OnMethodClick(method = LoginMethod.GOOGLE))
+                }
+            ),
+        color = MemoripTheme.colors.primaryContainer,
+        shape = memoripShapes.roundedSmall,
+        contentColor = MemoripTheme.colors.onSurface
+    ) {
+        if (state.isLoggedIn) {
+            UserProfileSection(
+                user = state.user,
+                onEditClick = {},
+                onProfileImageClick = {}
+            )
+        } else {
+            Box(contentAlignment = Alignment.Center) {
+                Text(text = stringResource(R.string.login_add_account))
+            }
+        }
     }
 }
