@@ -46,6 +46,7 @@ fun InteractiveMultiMarkerMapView(
             internalCameraState.move(cameraUpdate)
         }
     }
+
     MemoripNaverMap(
         modifier = modifier,
         cameraPositionState = cameraState,
