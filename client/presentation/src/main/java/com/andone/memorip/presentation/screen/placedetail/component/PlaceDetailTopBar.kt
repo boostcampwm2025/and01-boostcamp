@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.screen.placedetail.component
 
+import androidx.compose.foundation.background
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -14,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.theme.MemoripTheme
 
@@ -48,54 +50,120 @@ fun PlaceDetailTopBar(
             }
         },
         actions = {
-            if (isMine) {
-                IconButton(
-                    onClick = onMoreClick,
-                    colors = IconButtonDefaults.iconButtonColors(
-                        containerColor = MemoripTheme.colors.primaryContainer,
-                        contentColor = MemoripTheme.colors.onSurface
-                    )
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_more_vert),
-                        contentDescription = stringResource(R.string.place_detail_more_menu_content_description)
-                    )
-                }
-                DropdownMenu(
-                    expanded = showMoreMenu,
-                    onDismissRequest = onMoreMenuDismiss
-                ) {
-                    DropdownMenuItem(
-                        text = { Text(stringResource(R.string.place_detail_edit_menu_item)) },
-                        onClick = {
-                            onMoreMenuDismiss()
-                            onEditClick()
-                        }
-                    )
-                    DropdownMenuItem(
-                        text = { Text(stringResource(R.string.place_detail_delete_menu_item)) },
-                        onClick = {
-                            onMoreMenuDismiss()
-                            onDeleteClick()
-                        }
-                    )
-                }
-            } else {
-                // 남의 장소인 경우 북마크 버튼
-                IconButton(
-                    onClick = onActionIconClick,
-                    colors = IconButtonDefaults.iconButtonColors(
-                        containerColor = MemoripTheme.colors.primaryContainer,
-                        contentColor = MemoripTheme.colors.onSurface
-                    )
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_scrap),
-                        contentDescription = stringResource(R.string.place_detail_action_description)
-                    )
-                }
-            }
+            PlaceDetailActions(
+                isMine = isMine,
+                showMoreMenu = showMoreMenu,
+                onMoreClick = onMoreClick,
+                onMoreMenuDismiss = onMoreMenuDismiss,
+                onEditClick = onEditClick,
+                onDeleteClick = onDeleteClick,
+                onActionIconClick = onActionIconClick
+            )
         },
         colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
     )
+}
+
+@Composable
+private fun PlaceDetailActions(
+    isMine: Boolean,
+    showMoreMenu: Boolean,
+    onMoreClick: () -> Unit,
+    onMoreMenuDismiss: () -> Unit,
+    onEditClick: () -> Unit,
+    onDeleteClick: () -> Unit,
+    onActionIconClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    if (isMine) {
+        IconButton(
+            onClick = onMoreClick,
+            colors = IconButtonDefaults.iconButtonColors(
+                containerColor = MemoripTheme.colors.primaryContainer,
+                contentColor = MemoripTheme.colors.onSurface
+            )
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_more_vert),
+                contentDescription = stringResource(R.string.place_detail_more_menu_content_description)
+            )
+        }
+        DropdownMenu(
+            expanded = showMoreMenu,
+            onDismissRequest = onMoreMenuDismiss,
+            modifier = Modifier.background(MemoripTheme.colors.primaryContainer)
+        ) {
+            DropdownMenuItem(
+                text = {
+                    Text(
+                        text = stringResource(R.string.place_detail_edit_menu_item),
+                        color = MemoripTheme.colors.onSurface
+                    )
+                },
+                onClick = {
+                    onMoreMenuDismiss()
+                    onEditClick()
+                }
+            )
+            DropdownMenuItem(
+                text = {
+                    Text(
+                        text = stringResource(R.string.place_detail_delete_menu_item),
+                        color = MemoripTheme.colors.onSurface
+                    )
+                },
+                onClick = {
+                    onMoreMenuDismiss()
+                    onDeleteClick()
+                }
+            )
+        }
+    } else {
+        IconButton(
+            onClick = onActionIconClick,
+            colors = IconButtonDefaults.iconButtonColors(
+                containerColor = MemoripTheme.colors.primaryContainer,
+                contentColor = MemoripTheme.colors.onSurface
+            )
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_scrap),
+                contentDescription = stringResource(R.string.place_detail_action_description)
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun PlaceDetailTopBarPreview() {
+    MemoripTheme {
+        PlaceDetailTopBar(
+            isMine = false,
+            showMoreMenu = false,
+            onNavigationIconClick = {},
+            onActionIconClick = {},
+            onMoreClick = {},
+            onMoreMenuDismiss = {},
+            onEditClick = {},
+            onDeleteClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun PlaceDetailTopBarisMinePreview() {
+    MemoripTheme {
+        PlaceDetailTopBar(
+            isMine = true,
+            showMoreMenu = true,
+            onNavigationIconClick = {},
+            onActionIconClick = {},
+            onMoreClick = {},
+            onMoreMenuDismiss = {},
+            onEditClick = {},
+            onDeleteClick = {}
+        )
+    }
 }
