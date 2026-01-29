@@ -15,5 +15,6 @@ data class PlaceUiModel(
     val groups: ImmutableList<GroupCompactUiModel> = persistentListOf(),
     val content: String = "",
     val isMine: Boolean = false,
-    val isInMyGroup: Boolean = false
+    val isInMyGroup: Boolean = false,
+    val isPublic: Boolean = true
 )

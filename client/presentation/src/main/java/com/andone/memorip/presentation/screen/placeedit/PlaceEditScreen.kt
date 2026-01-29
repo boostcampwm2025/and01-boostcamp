@@ -34,7 +34,6 @@ import com.andone.memorip.presentation.screen.placeedit.model.PlaceEditUiState
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
-import com.andone.memorip.presentation.util.DummyData
 import com.andone.memorip.presentation.util.collectWithLifecycle
 
 @Composable
@@ -162,9 +161,10 @@ private fun PlaceEditScreenContent(
 @Composable
 private fun PlaceEditScreenPreview() {
     MemoripTheme {
-        PlaceEditContainer(
-            place = DummyData.place,
-            onNavigateBack = {}
+        PlaceEditScreenContent(
+            uiState = PlaceEditUiState(),
+            initUiState = PlaceEditUiState(),
+            onAction = {}
         )
     }
 }

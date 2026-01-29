@@ -15,5 +15,6 @@ data class PlaceDetail(
     val groups: List<GroupCompact>,
     val address: Address,
     val isMine: Boolean,
-    val isInMyGroup: Boolean
+    val isInMyGroup: Boolean,
+    val isPublic: Boolean
 )

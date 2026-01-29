@@ -25,5 +25,6 @@ fun PlaceDetail.toUiModel(): PlaceUiModel = PlaceUiModel(
     }.toImmutableList(),
     content = this.content ?: "",
     isMine = this.isMine,
-    isInMyGroup = this.isInMyGroup
+    isInMyGroup = this.isInMyGroup,
+    isPublic = this.isPublic
 )

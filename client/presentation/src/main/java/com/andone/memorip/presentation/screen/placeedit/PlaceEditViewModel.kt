@@ -46,7 +46,7 @@ class PlaceEditViewModel @AssistedInject constructor(
             ),
             groups = place.groups.map { it.toUiModel() },
             tags = place.tags,
-            isPublic = true,
+            isPublic = place.isPublic,
             isLoading = false
         )
     )
