@@ -1,3 +1,4 @@
+import com.android.build.gradle.ProguardFiles.getDefaultProguardFile
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -83,6 +84,8 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
     ksp(libs.hilt.compiler)
+    implementation(libs.hilt.work)
+    ksp(libs.hilt.work.compiler)
 
     // Navigation
     implementation(libs.bundles.navigation3)
@@ -120,6 +123,9 @@ dependencies {
 
     // EXIF
     implementation(libs.androidx.exifinterface)
+
+    // WorkerManager
+    implementation(libs.work.runtime)
 }
 
 apply(from = providers.gradleProperty("DETEKT_IDE_SETUP_URL").get())

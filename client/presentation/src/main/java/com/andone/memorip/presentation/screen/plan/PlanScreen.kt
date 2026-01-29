@@ -1,7 +1,6 @@
 package com.andone.memorip.presentation.screen.plan
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -10,6 +9,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -22,16 +22,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.presentation.R
-import com.andone.memorip.presentation.model.Place
-import com.andone.memorip.presentation.screen.plan.component.DateContextBar
 import com.andone.memorip.presentation.screen.plan.component.DateNotSelectedContent
 import com.andone.memorip.presentation.screen.plan.component.DateRangeCalendar
 import com.andone.memorip.presentation.screen.plan.component.DateSelectedContent
-import com.andone.memorip.presentation.screen.plan.component.DayChipRow
-import com.andone.memorip.presentation.screen.plan.component.PlaceTimeCard
 import com.andone.memorip.presentation.screen.plan.component.PlanTopAppBar
-import com.andone.memorip.presentation.screen.plan.component.TimeBlockItem
-import com.andone.memorip.presentation.screen.plan.component.TimeTable
+import com.andone.memorip.presentation.screen.plan.component.SelectGroupDialog
 import com.andone.memorip.presentation.screen.plan.model.PlanAction
 import com.andone.memorip.presentation.screen.plan.model.PlanEvent
 import com.andone.memorip.presentation.screen.plan.model.PlanUiState
@@ -47,6 +42,7 @@ fun PlanScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var deleteTargetDay by remember { mutableStateOf<Int?>(value = null) }
+    var showGroupChoice by remember { mutableStateOf(false) }
     var showCalendar by rememberSaveable { mutableStateOf(false) }
 
     viewModel.event.collectWithLifecycle { event ->
@@ -55,10 +51,18 @@ fun PlanScreen(
                 deleteTargetDay = event.day
             }
 
+            PlanEvent.ShowGroupChoiceDialog -> {
+                showGroupChoice = true
+            }
+
             PlanEvent.ShowCalendarDialog -> {
                 showCalendar = true
             }
         }
+    }
+
+    DisposableEffect(Unit) {
+        onDispose { viewModel.savePlan() }
     }
 
     deleteTargetDay?.let { day ->
@@ -88,6 +92,20 @@ fun PlanScreen(
         )
     }
 
+    if (showGroupChoice) {
+        SelectGroupDialog(
+            groups = uiState.groups,
+            selectedGroup = uiState.selectedGroup,
+            onDismissRequest = { showGroupChoice = false },
+            onConfirmClick = { group ->
+                viewModel.onAction(
+                    action = PlanAction.GroupChoiceConfirmClick(selectedGroup = group)
+                )
+            },
+            onCancelClick = { showGroupChoice = false }
+        )
+    }
+
     if (showCalendar) {
         DateRangeCalendar(
             initialStartDate = uiState.date.startDay,
@@ -102,6 +120,7 @@ fun PlanScreen(
 
     PlanScreenContents(
         state = uiState,
+        showGroupChoice = showGroupChoice,
         onAction = viewModel::onAction,
         modifier = modifier
     )
@@ -110,6 +129,7 @@ fun PlanScreen(
 @Composable
 fun PlanScreenContents(
     state: PlanUiState,
+    showGroupChoice: Boolean,
     onAction: (PlanAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -117,8 +137,11 @@ fun PlanScreenContents(
         modifier = modifier,
         topBar = {
             PlanTopAppBar(
-                title = stringResource(R.string.plan_default_group),
+                title = state.selectedGroup?.title,
+                groups = state.groups,
+                expanded = showGroupChoice,
                 isDeleteMode = state.date.longClickedDay != null,
+                onTitleClick = { onAction(PlanAction.GroupChoiceClick) },
                 onDeleteClick = { onAction(PlanAction.RemoveDayClick) },
                 onDismissClick = { onAction(PlanAction.RemoveCancel) }
             )
@@ -128,7 +151,9 @@ fun PlanScreenContents(
 
         if (state.date.startDay == null) {
             Box(
-                modifier = Modifier.fillMaxSize().padding(paddingValues = innerPadding),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues = innerPadding),
                 contentAlignment = Alignment.Center
             ) {
                 DateNotSelectedContent(onSelectDateClick = { onAction(PlanAction.ShowCalendarClick) })
@@ -149,9 +174,12 @@ private fun PlanScreenContentsPreview() {
     MemoripTheme {
         PlanScreenContents(
             state = PlanUiState(
+                selectedGroup = DummyData.groupListItems.first(),
+                groups = DummyData.groupListItems.toImmutableList(),
                 places = DummyData.places.toImmutableList(),
                 blocks = DummyData.timeBlocks
             ),
+            showGroupChoice = false,
             onAction = {},
         )
     }

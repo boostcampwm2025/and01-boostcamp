@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.R
@@ -17,7 +18,7 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 
 @Composable
 fun TopBarTitleButton(
-    title: String,
+    title: String?,
     expanded: Boolean,
     modifier: Modifier = Modifier
 ) {
@@ -26,7 +27,8 @@ fun TopBarTitleButton(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = title,
+            text = title ?: stringResource(R.string.plan_no_group),
+            color = MemoripTheme.colors.onSurface,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             style = MemoripTheme.typography.headlineBold18
@@ -34,13 +36,13 @@ fun TopBarTitleButton(
 
         Spacer(modifier = Modifier.width(width = MemoripSpace.SpaceXXSmall))
 
-        Icon(
-            painter = if (expanded)
-                painterResource(R.drawable.ic_outline_arrow_drop_up_24)
-            else
-                painterResource(R.drawable.ic_outline_arrow_drop_down_24),
-            contentDescription = null
-        )
+        if (title != null) {
+            Icon(
+                painter = if (expanded) painterResource(R.drawable.ic_outline_arrow_drop_up_24)
+                else painterResource(R.drawable.ic_outline_arrow_drop_down_24),
+                contentDescription = null
+            )
+        }
     }
 }
 

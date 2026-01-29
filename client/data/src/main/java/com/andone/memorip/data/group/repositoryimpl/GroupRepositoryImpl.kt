@@ -4,7 +4,10 @@ import androidx.paging.PagingData
 import com.andone.memorip.data.group.datasource.remote.GroupRemoteDataSource
 import com.andone.memorip.data.group.model.GroupCreateRequest
 import com.andone.memorip.data.group.model.GroupUpdateRequest
+import com.andone.memorip.data.group.model.UpdatePlaceTimeRequest
 import com.andone.memorip.domain.model.Group
+import com.andone.memorip.domain.model.GroupListItem
+import com.andone.memorip.domain.model.GroupPlace
 import com.andone.memorip.domain.model.GroupWithPlaceAdded
 import com.andone.memorip.domain.model.PlaceListItem
 import com.andone.memorip.domain.model.Visibility
@@ -12,6 +15,7 @@ import com.andone.memorip.domain.repository.GroupRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.onStart
 import javax.inject.Inject
 
 class GroupRepositoryImpl @Inject constructor(
@@ -19,7 +23,9 @@ class GroupRepositoryImpl @Inject constructor(
 ) : GroupRepository {
 
     private val _myGroups = MutableStateFlow<List<Group>>(emptyList())
-    override val myGroups: Flow<List<Group>> = _myGroups.asStateFlow()
+    override val myGroups: Flow<List<Group>> = _myGroups.asStateFlow().onStart {
+        fetchMyGroups()
+    }
 
     override suspend fun fetchMyGroups(page: Int, size: Int): Result<Unit> {
         return remoteDataSource.getMyGroups(page, size)
@@ -67,11 +73,15 @@ class GroupRepositoryImpl @Inject constructor(
     override suspend fun updateGroup(
         groupId: String,
         title: String,
-        visibility: Visibility
+        visibility: Visibility,
+        startDate: String?,
+        endDate: String?
     ): Result<Unit> {
         val request = GroupUpdateRequest(
             title = title,
-            visibility = visibility.name
+            visibility = visibility.name,
+            startDate = startDate,
+            endDate = endDate
         )
         return remoteDataSource.updateGroup(groupId, request)
     }
@@ -86,5 +96,25 @@ class GroupRepositoryImpl @Inject constructor(
 
     override fun getGroupPlaces(groupId: String): Flow<PagingData<PlaceListItem>> {
         return remoteDataSource.getGroupPlaces(groupId)
+    }
+
+    override suspend fun getSimpleGroups(): Result<List<GroupListItem>> {
+        return remoteDataSource.getSimpleGroups()
+    }
+
+    override suspend fun getPlaceByGroupId(groupId: String): Result<List<GroupPlace>> {
+        return remoteDataSource.getPlaceByGroupId(groupId)
+    }
+
+    override suspend fun updatePlaceTime(
+        groupPlaceId: String,
+        startAt: String,
+        endAt: String
+    ): Result<Unit> {
+        val request = UpdatePlaceTimeRequest(
+            startAt = startAt,
+            endAt = endAt
+        )
+        return remoteDataSource.updatePlaceTime(groupPlaceId = groupPlaceId, request = request)
     }
 }

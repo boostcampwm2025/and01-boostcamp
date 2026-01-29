@@ -62,4 +62,13 @@ class PlaceRepositoryImpl @Inject constructor(
     override fun loadRegions(): List<Region> {
         return placeRemoteDataSource.loadRegions()
     }
+
+    override suspend fun getPlaceByGroupId(
+        groupId: String,
+        page: Int,
+        size: Int
+    ): Result<List<PlaceListItem>> {
+        return placeRemoteDataSource.getPlaceByGroupId(groupId, page, size)
+            .map { dtoList -> dtoList.map { it.toDomain() } }
+    }
 }

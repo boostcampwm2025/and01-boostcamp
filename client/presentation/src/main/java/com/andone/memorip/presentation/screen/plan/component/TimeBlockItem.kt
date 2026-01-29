@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.screen.plan.component
 
+import android.util.Log
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
@@ -55,7 +56,7 @@ fun TimeBlockItem(
     content: @Composable BoxScope.() -> Unit
 ) {
     var dragOffsetY by remember { mutableFloatStateOf(value = 0f) }
-    val startYPx = engine.blockStartYPx(block)
+    val startYPx = remember(block) { engine.blockStartYPx(block) }
     var isDragging by remember { mutableStateOf(value = false) }
 
     Box(

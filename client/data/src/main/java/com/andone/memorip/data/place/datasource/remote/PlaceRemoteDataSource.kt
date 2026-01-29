@@ -4,6 +4,7 @@ import androidx.paging.PagingData
 import com.andone.memorip.data.place.model.PlaceCreateResponse
 import com.andone.memorip.data.place.model.PlaceCreateUpdateRequest
 import com.andone.memorip.data.place.model.PlaceDetailResponse
+import com.andone.memorip.data.place.model.PlaceListItemResponse
 import com.andone.memorip.domain.model.PlaceListItem
 import com.andone.memorip.domain.model.Region
 import com.andone.memorip.domain.model.response.PlaceImageUploadResponse
@@ -30,4 +31,9 @@ interface PlaceRemoteDataSource {
     ): Result<Unit>
 
     fun loadRegions(): List<Region>
+    suspend fun getPlaceByGroupId(
+        groupId: String,
+        page: Int,
+        size: Int
+    ): Result<List<PlaceListItemResponse>>
 }

@@ -24,6 +24,7 @@ import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.screen.user.model.SettingItemUiModel
 import com.andone.memorip.presentation.screen.user.model.SettingTrailing
 import com.andone.memorip.presentation.screen.user.model.UserUiModel
+import com.andone.memorip.presentation.screen.plan.model.GroupListUiModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.flowOf
 import java.time.LocalDate
@@ -277,7 +278,8 @@ object DummyData {
         val images = createPlaceImages(id)
 
         return Place(
-            id = id,
+            id = "",
+            placeId = id,
             name = name,
             latitude = latitude,
             longitude = longitude,
@@ -303,6 +305,25 @@ object DummyData {
     }
 
     val groupName = "Group1"
+
+    val groupListItems = mutableStateListOf(
+        GroupListUiModel(
+            id = UUID.randomUUID().toString(),
+            title = "기본 그룹"
+        ),
+        GroupListUiModel(
+            id = UUID.randomUUID().toString(),
+            title = "부산"
+        ),
+        GroupListUiModel(
+            id = UUID.randomUUID().toString(),
+            title = "제주도"
+        ),
+        GroupListUiModel(
+            id = UUID.randomUUID().toString(),
+            title = "대구"
+        )
+    )
 
     val groups = mutableStateListOf(
         GroupUiModel(

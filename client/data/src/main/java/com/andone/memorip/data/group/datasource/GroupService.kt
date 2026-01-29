@@ -4,7 +4,10 @@ import com.andone.memorip.data.common.ApiResult
 import com.andone.memorip.data.group.model.AddPlaceToGroupRequest
 import com.andone.memorip.data.group.model.GroupCreateRequest
 import com.andone.memorip.data.group.model.GroupListResponse
+import com.andone.memorip.data.group.model.GroupPlaceItem
 import com.andone.memorip.data.group.model.GroupUpdateRequest
+import com.andone.memorip.data.group.model.SimpleGroupItem
+import com.andone.memorip.data.group.model.UpdatePlaceTimeRequest
 import com.andone.memorip.data.place.model.PlaceListItemResponse
 import com.andone.memorip.domain.model.Group
 import retrofit2.http.Body
@@ -65,4 +68,18 @@ interface GroupService {
         @Query("size") size: Int,
         @Query("sort") sort: List<String>? = null
     ): ApiResult<List<PlaceListItemResponse>>
+
+    @GET("/api/groups/simple")
+    suspend fun getSimpleGroups(): ApiResult<List<SimpleGroupItem>>
+
+    @GET("/api/groups/{groupId}/plan/places")
+    suspend fun getPlaceByGroupId(
+        @Path("groupId") groupId: String
+    ): ApiResult<List<GroupPlaceItem>>
+
+    @PATCH("/api/groups/places/{groupPlaceId}/time")
+    suspend fun updatePlaceTime(
+        @Path("groupPlaceId") groupPlaceId: String,
+        @Body request: UpdatePlaceTimeRequest
+    ): ApiResult<Unit>
 }

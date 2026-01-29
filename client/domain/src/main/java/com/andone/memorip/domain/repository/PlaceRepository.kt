@@ -27,5 +27,12 @@ interface PlaceRepository {
         addGroupIds: List<String>,
         removeGroupIds: List<String>
     ): Result<Unit>
+
     fun loadRegions(): List<Region>
+
+    suspend fun getPlaceByGroupId(
+        groupId: String,
+        page: Int,
+        size: Int
+    ): Result<List<PlaceListItem>>
 }
