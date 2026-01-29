@@ -10,6 +10,8 @@ import com.andone.memorip.presentation.screen.user.model.UserEvent
 import com.andone.memorip.presentation.screen.user.model.LoginMethod
 import com.andone.memorip.presentation.screen.user.model.UserUiState
 import com.andone.memorip.presentation.screen.user.model.toUiModel
+import com.andone.memorip.presentation.util.snackbar.SnackBarEvent
+import com.andone.memorip.presentation.util.snackbar.SnackBarManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
@@ -24,7 +26,8 @@ import javax.inject.Inject
 class UserViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val tokenRefresher: TokenRefresher,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val snackBarManager: SnackBarManager
 ) : ViewModel() {
 
     private val _uiState =
@@ -114,6 +117,10 @@ class UserViewModel @Inject constructor(
                 .onFailure { e ->
                     onAuthFailure(e)
                 }
+
+            _uiState.update {
+                it.copy(showLoginDialog = false)
+            }
         }
     }
 
@@ -149,6 +156,7 @@ class UserViewModel @Inject constructor(
         _uiState.update {
             it.copy(errorMessage = e.message)
         }
+        snackBarManager.show(event = SnackBarEvent.UNKNOWN_ERROR)
     }
 
     private fun updateUser() {
