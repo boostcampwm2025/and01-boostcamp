@@ -1,5 +1,6 @@
 package com.andone.memorip.feature.place.entity
 
+import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.persistence.Column
 import jakarta.persistence.Embeddable
 
@@ -7,15 +8,19 @@ import jakarta.persistence.Embeddable
 class Address protected constructor() {
 
     @Column(name = "region_1depth", nullable = false, length = 20)
+    @Schema(description = "시/도", example = "서울특별시")
     lateinit var region1Depth: String // 시/도 (ex. 서울)
 
     @Column(name = "region_2depth", length = 20)
+    @Schema(description = "구/군", example = "성동구", nullable = true)
     var region2Depth: String? = null // 구/군 (ex. 강남구)
 
     @Column(name = "region_3depth", length = 20)
+    @Schema(description = "동/읍/면", example = "성수동", nullable = true)
     var region3Depth: String? = null // 동/읍/면 (ex. 역삼동)
 
     @Column(name = "full_address", nullable = false, length = 255)
+    @Schema(description = "전체 주소", example = "서울특별시 성동구 성수동 123-45")
     lateinit var fullAddress: String // 전체 주소
 
     companion object {
