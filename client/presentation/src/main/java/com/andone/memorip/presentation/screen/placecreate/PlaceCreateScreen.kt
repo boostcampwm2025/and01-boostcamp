@@ -299,7 +299,7 @@ private fun SelectSection(
         SelectRow(
             label = stringResource(R.string.place_create_group),
             value = groupValue,
-            leadingIcon = painterResource(R.drawable.ic_folder),
+            leadingIcon = painterResource(R.drawable.ic_outline_folder),
             onClick = onGroupClick,
             trailingIcon = painterResource(R.drawable.ic_chevron_forward)
         )
