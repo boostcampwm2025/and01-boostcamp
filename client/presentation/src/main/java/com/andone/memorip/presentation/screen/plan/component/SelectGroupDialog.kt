@@ -33,12 +33,13 @@ private object SelectGroupDialogDimen {
 @Composable
 fun SelectGroupDialog(
     groups: ImmutableList<GroupListUiModel>,
+    selectedGroup: GroupListUiModel?,
     onDismissRequest: () -> Unit,
     onConfirmClick: (GroupListUiModel) -> Unit,
     onCancelClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var selectedGroup by remember { mutableStateOf(groups.first()) }
+    var selectedGroup by remember { mutableStateOf(selectedGroup ?: groups.first()) }
 
     DefaultDialog(
         title = stringResource(R.string.select_group_dialog_title),
@@ -79,6 +80,7 @@ private fun SelectGroupDialogPreview() {
     MemoripTheme {
         SelectGroupDialog(
             groups = DummyData.groupListItems.toImmutableList(),
+            selectedGroup = DummyData.groupListItems.first(),
             onDismissRequest = { },
             onConfirmClick = { },
             onCancelClick = { },

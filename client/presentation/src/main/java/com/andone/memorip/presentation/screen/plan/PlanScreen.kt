@@ -105,6 +105,7 @@ fun PlanScreen(
     if (showGroupChoice) {
         SelectGroupDialog(
             groups = uiState.groups,
+            selectedGroup = uiState.selectedGroup,
             onDismissRequest = { showGroupChoice = false },
             onConfirmClick = { group ->
                 viewModel.onAction(
