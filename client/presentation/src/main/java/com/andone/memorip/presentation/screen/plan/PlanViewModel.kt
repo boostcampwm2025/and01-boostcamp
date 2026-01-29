@@ -178,7 +178,6 @@ class PlanViewModel @Inject constructor(
                 )
             }
 
-
             is PlanAction.LongClick -> {
                 selectedDateFlow.update { it.copy(longClickedDay = action.day) }
             }
@@ -237,8 +236,6 @@ class PlanViewModel @Inject constructor(
                 saveGroup(uiState.value.selectedGroup)
                 updateSelectedGroup(action.selectedGroup)
                 updatePlaces(groupId = action.selectedGroup.id)
-                Log.d("DEBUG TEST", "click date : ${uiState.value.date}")
-                Log.d("DEBUG TEST", "click group : ${uiState.value.selectedGroup}")
             }
 
             PlanAction.ShowCalendarClick -> {
@@ -314,6 +311,7 @@ class PlanViewModel @Inject constructor(
             )
         }
     }
+
     private fun updateGroup(startAt: LocalDate, endAt: LocalDate) {
         selectedGroupFlow.update {
             it?.copy(
@@ -334,9 +332,7 @@ class PlanViewModel @Inject constructor(
     }
 
     private fun saveGroup(targetGroup: GroupListUiModel?) {
-        Log.d("DEBUG TEST", "save group call")
         targetGroup?.let { group ->
-            Log.d("DEBUG TEST", "target group : $group")
             viewModelScope.launch {
                 groupRepository.updateGroup(
                     groupId = group.id,
