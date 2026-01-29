@@ -84,7 +84,7 @@ fun MainBottomBar(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(MemoripHeight.bottomBar + navigationBarPadding)
-                .background(MemoripTheme.colors.background),
+                .background(MemoripTheme.colors.transparent),
             contentAlignment = Alignment.TopCenter
         ) {
             BottomBarSurface(navigationBarPadding)
