@@ -1,6 +1,5 @@
 package com.andone.memorip.presentation.screen.plan
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.BackoffPolicy
@@ -215,6 +214,7 @@ class PlanViewModel @Inject constructor(
                     )
                 }
                 updateGroup(startAt = action.start, endAt = action.end)
+                updatePlaces(groupId = uiState.value.selectedGroup!!.id)
             }
 
             is PlanAction.DayScrolled -> {
@@ -280,15 +280,35 @@ class PlanViewModel @Inject constructor(
         viewModelScope.launch {
             groupRepository.getPlaceByGroupId(groupId = groupId)
                 .onSuccess { result ->
-                    placesFlow.update { places ->
-                        val existPlaces =
-                            places.filter { it.startDateTime != null && it.endDateTime != null }
-                        val timeBlocks =
-                            existPlaces.mapNotNull { it.toTimeBlock(uiState.value.date.startDay?.atStartOfDay()!!) }
-                        val uiBlocks = existPlaces.associateBy { it.id }
-                        timeBlocksFlow.update { timeBlocks }
-                        blockUiModelsFlow.update { uiBlocks }
-                        result.map { place -> place.toUiModel() }
+                    if (uiState.value.date.startDay != null && uiState.value.date.endDay != null) {
+                        placesFlow.update {
+                            val places = result.map{ it.toUiModel() }
+                            val noTimePlaces =
+                                places.filter { it.startDateTime == null || it.endDateTime == null }
+                            val validPlaces =
+                                places.filter { it.startDateTime != null && it.endDateTime != null }
+                            val outOfDatePlaces = validPlaces.filter {
+                                it.startDateTime!!.toLocalDate() !in uiState.value.date.startDay!!..uiState.value.date.endDay!!
+                            }.map {
+                                it.copy(startDateTime = null, endDateTime = null)
+                            }
+                            val inDatePlaces = validPlaces.filter {
+                                it.startDateTime!!.toLocalDate() in uiState.value.date.startDay!!..uiState.value.date.endDay!!
+                            }.map{
+                                val limitTime = uiState.value.date.endDay!!.atStartOfDay()
+                                if (it.endDateTime!!.isAfter(limitTime)) {
+                                    it.copy(endDateTime = limitTime)
+                                } else {
+                                    it
+                                }
+                            }
+
+                            val timeBlocks = inDatePlaces.mapNotNull { it.toTimeBlock(uiState.value.date.startDay?.atStartOfDay()!!) }
+                            val uiBlocks = inDatePlaces.associateBy { it.id }
+                            timeBlocksFlow.update { timeBlocks }
+                            blockUiModelsFlow.update { uiBlocks }
+                            (noTimePlaces + outOfDatePlaces).distinct()
+                        }
                     }
                 }
                 .onFailure { snackBarManager.show(SnackBarEvent.NETWORK_ERROR) }
@@ -488,7 +508,7 @@ class PlanViewModel @Inject constructor(
         val data = workDataOf(
             PlanWorker.ID to id,
             PlanWorker.START_AT to payload.startAt,
-            PlanWorker.END_AT to payload.startAt
+            PlanWorker.END_AT to payload.endAt
         )
 
         return OneTimeWorkRequestBuilder<PlanWorker>()
