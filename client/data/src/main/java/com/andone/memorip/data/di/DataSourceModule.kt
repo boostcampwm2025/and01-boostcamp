@@ -1,7 +1,7 @@
 package com.andone.memorip.data.di
 
-import com.andone.memorip.data.group.datasource.remote.GroupRemoteDataSource
-import com.andone.memorip.data.group.datasource.remote.GroupRemoteDataSourceImpl
+import com.andone.memorip.data.trip.datasource.remote.TripRemoteDataSource
+import com.andone.memorip.data.trip.datasource.remote.TripRemoteDataSourceImpl
 import com.andone.memorip.data.place.datasource.remote.PlaceRemoteDataSource
 import com.andone.memorip.data.place.datasource.remote.PlaceRemoteDataSourceImpl
 import com.andone.memorip.data.tag.datasource.remote.TagRemoteDataSource
@@ -32,5 +32,5 @@ abstract class DataSourceModule {
 
     @Binds
     @Singleton
-    abstract fun bindGroupDataSource(impl: GroupRemoteDataSourceImpl): GroupRemoteDataSource
+    abstract fun bindTripDataSource(impl: TripRemoteDataSourceImpl): TripRemoteDataSource
 }

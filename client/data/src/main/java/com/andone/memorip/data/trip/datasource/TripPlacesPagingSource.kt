@@ -1,13 +1,13 @@
-package com.andone.memorip.data.group.datasource
+package com.andone.memorip.data.trip.datasource
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.andone.memorip.data.place.model.toDomain
 import com.andone.memorip.domain.model.PlaceListItem
 
-class GroupPlacesPagingSource(
-    private val service: GroupService,
-    private val groupId: String,
+class TripPlacesPagingSource(
+    private val service: TripService,
+    private val tripId: String,
     private val pageSize: Int,
     private val sort: List<String>? = null
 ) : PagingSource<Int, PlaceListItem>() {
@@ -16,8 +16,8 @@ class GroupPlacesPagingSource(
         val page = params.key ?: 0
 
         return try {
-            val response = service.getGroupPlaces(
-                groupId = groupId,
+            val response = service.getTripPlaces(
+                tripId = tripId,
                 page = page,
                 size = pageSize,
                 sort = sort

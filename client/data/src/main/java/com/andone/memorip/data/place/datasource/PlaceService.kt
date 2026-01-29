@@ -53,14 +53,14 @@ interface PlaceService {
     ): ApiResult<Unit>
 
     @PATCH("/api/places/{placeId}/groups")
-    suspend fun updatePlaceGroups(
+    suspend fun updatePlaceTrips(
         @Path("placeId") placeId: String,
         @Body request: PlaceGroupsUpdateRequest
     ): ApiResult<Unit>
 
     @GET("/api/groups/{groupId}/places")
-    suspend fun getPlaceByGroupId(
-        @Path("groupId") groupId: String,
+    suspend fun getPlaceByTripId(
+        @Path("groupId") tripId: String,
         @Query("page") page: Int,
         @Query("size") size: Int,
         @Query("sort") sort: List<String>? = listOf("id,desc"),

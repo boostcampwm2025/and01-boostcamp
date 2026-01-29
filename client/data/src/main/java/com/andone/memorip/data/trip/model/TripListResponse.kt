@@ -1,14 +1,14 @@
-package com.andone.memorip.data.group.model
+package com.andone.memorip.data.trip.model
 
-import com.andone.memorip.domain.model.Group
-import com.andone.memorip.domain.model.GroupWithPlaceAdded
+import com.andone.memorip.domain.model.Trip
+import com.andone.memorip.domain.model.TripWithPlaceAdded
 import com.andone.memorip.domain.model.User
 import com.andone.memorip.domain.model.Visibility
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class GroupListResponse(
+data class TripListResponse(
     val id: String,
     val title: String,
     val visibility: GroupVisibility,
@@ -18,7 +18,7 @@ data class GroupListResponse(
     val updatedAt: String,
     val isPlaceAdded: Boolean = false,
 ) {
-    fun toDomain(): Group = Group(
+    fun toDomain(): Trip = Trip(
         id = id,
         owner = User.EMPTY,
         title = title,
@@ -28,8 +28,8 @@ data class GroupListResponse(
         updatedAt = updatedAt
     )
 
-    fun toDomainWithPlaceAdded(): GroupWithPlaceAdded = GroupWithPlaceAdded(
-        group = toDomain(),
+    fun toDomainWithPlaceAdded(): TripWithPlaceAdded = TripWithPlaceAdded(
+        trip = toDomain(),
         isPlaceAdded = isPlaceAdded
     )
 }

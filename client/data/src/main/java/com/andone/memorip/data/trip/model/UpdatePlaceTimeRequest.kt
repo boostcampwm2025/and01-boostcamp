@@ -1,4 +1,4 @@
-package com.andone.memorip.data.group.model
+package com.andone.memorip.data.trip.model
 
 import kotlinx.serialization.Serializable
 
