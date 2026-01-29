@@ -103,6 +103,20 @@ class UserViewModel @Inject constructor(
             UserAction.RefreshAuthState -> {
                 refreshAuthState()
             }
+
+            UserAction.SignOut -> {
+                viewModelScope.launch {
+                    authRepository.signOut()
+                    refreshAuthState()
+                }
+            }
+
+            UserAction.DeleteAccount -> {
+                viewModelScope.launch {
+                    authRepository.deleteAccount()
+                    refreshAuthState()
+                }
+            }
         }
     }
 

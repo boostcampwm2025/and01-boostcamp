@@ -20,7 +20,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -36,6 +38,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.presentation.BuildConfig
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.screen.user.UserScreenDimen.ACCOUNT_SECTION_HEIGHT
+import com.andone.memorip.presentation.screen.user.component.AccountDialog
 import com.andone.memorip.presentation.screen.user.component.AccountSection
 import com.andone.memorip.presentation.screen.user.component.AlarmSection
 import com.andone.memorip.presentation.screen.user.component.AppInfoSection
@@ -69,7 +72,6 @@ fun UserScreen(
     viewModel: UserViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
@@ -135,6 +137,17 @@ fun UserScreenContent(
     onAction: (UserAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    var showAccountDialog by remember { mutableStateOf(false) }
+    var isLogout by remember { mutableStateOf(true) }
+
+    if (showAccountDialog) {
+        AccountDialog(
+            onAction = onAction,
+            onDismiss = { showAccountDialog = false },
+            isLogout = isLogout
+        )
+    }
+
     if (state.showLoginDialog) {
         LoginDialog(
             state = state,
@@ -162,7 +175,16 @@ fun UserScreenContent(
             AppInfoSection(onAction = onAction)
 
             if (state.isLoggedIn) {
-                AccountSection(onAction = onAction)
+                AccountSection(
+                    showLogoutDialog = {
+                        isLogout = true
+                        showAccountDialog = true
+                    },
+                    showDeleteAccountDialog = {
+                        isLogout = false
+                        showAccountDialog = true
+                    }
+                )
             }
         }
     }

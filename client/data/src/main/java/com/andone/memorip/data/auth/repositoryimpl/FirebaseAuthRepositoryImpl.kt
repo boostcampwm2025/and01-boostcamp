@@ -63,4 +63,12 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
     override suspend fun signOut() {
         firebaseAuth.signOut()
     }
+
+    override suspend fun deleteAccount(): Result<Unit> =
+        runCatching {
+            val user = firebaseAuth.currentUser
+                ?: throw IllegalStateException()
+
+            user.delete().await()
+        }
 }

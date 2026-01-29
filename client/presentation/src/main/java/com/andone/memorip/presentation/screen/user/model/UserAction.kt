@@ -21,4 +21,8 @@ sealed interface UserAction {
     data class OnLocationPermissionResult(val granted: Boolean) : UserAction
 
     data object RefreshAuthState : UserAction
+
+    data object SignOut : UserAction
+
+    data object DeleteAccount : UserAction
 }
