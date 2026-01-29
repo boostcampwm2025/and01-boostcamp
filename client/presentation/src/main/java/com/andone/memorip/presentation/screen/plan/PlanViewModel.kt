@@ -9,7 +9,6 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
-import com.andone.memorip.domain.model.GroupListItem
 import com.andone.memorip.domain.model.TimeBlock
 import com.andone.memorip.domain.model.Visibility
 import com.andone.memorip.domain.repository.GroupRepository
@@ -41,7 +40,7 @@ import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -66,25 +65,12 @@ class PlanViewModel @Inject constructor(
     private val workManager: WorkManager
 ) : ViewModel() {
     private val selectedGroupFlow = MutableStateFlow<GroupListUiModel?>(value = null)
-    private val remoteGroupsFlow = flow {
-        var result = emptyList<GroupListItem>()
-        groupRepository.getSimpleGroups()
-            .onSuccess { response ->
-                result = response
-                if (response.isNotEmpty()) {
-                    val defaultGroup = response.first()
-                    updateSelectedGroup(GroupListUiModel.from(defaultGroup))
-                    updatePlaces(groupId = defaultGroup.id)
-                }
-            }
-            .onFailure { snackBarManager.show(event = SnackBarEvent.NETWORK_ERROR) }
-        emit(result)
-    }
+    private val groupsFlow = MutableStateFlow(value = emptyList<GroupListUiModel>())
     private val groupUiStateFlow =
-        combine(selectedGroupFlow, remoteGroupsFlow) { selectedGroup, remoteGroupsFlow ->
+        combine(selectedGroupFlow, groupsFlow) { selectedGroup, groupsFlow ->
             PlanGroupUiModel(
                 selectedGroup = selectedGroup,
-                groups = remoteGroupsFlow.map { GroupListUiModel.from(it) }.toImmutableList()
+                groups = groupsFlow.toImmutableList()
             )
         }
 
@@ -117,6 +103,17 @@ class PlanViewModel @Inject constructor(
             blockUiModels = planPlaceUiState.blockUiModels,
             date = dateUiState
         )
+    }.onStart {
+        groupRepository.getSimpleGroups()
+            .onSuccess { response ->
+                if (response.isNotEmpty()) {
+                    val defaultGroup = response.first()
+                    updateSelectedGroup(GroupListUiModel.from(defaultGroup))
+                    updatePlaces(groupId = defaultGroup.id)
+                }
+                groupsFlow.update { response.map { GroupListUiModel.from(it) } }
+            }
+            .onFailure { snackBarManager.show(event = SnackBarEvent.NETWORK_ERROR) }
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
@@ -238,7 +235,7 @@ class PlanViewModel @Inject constructor(
                 savePlan()
                 saveGroup(uiState.value.selectedGroup)
                 updatePlaces(groupId = action.selectedGroup.id)
-                selectedGroupFlow.update { action.selectedGroup }
+                updateSelectedGroup(action.selectedGroup)
             }
 
             PlanAction.ShowCalendarClick -> {
@@ -283,35 +280,35 @@ class PlanViewModel @Inject constructor(
         viewModelScope.launch {
             groupRepository.getPlaceByGroupId(groupId = groupId)
                 .onSuccess { result ->
-                    placesFlow.update { places ->
-                        val existPlaces = places.filter { it.startDateTime != null && it.endDateTime != null }
-                        val timeBlocks = existPlaces.mapNotNull { it.toTimeBlock(uiState.value.date.startDay?.atStartOfDay()!!) }
-                        val uiBlocks = existPlaces.associateBy { it.id }
-                        Log.d("DEBUG TEST", "exist places : $existPlaces")
-                        Log.d("DEBUG TEST", "time blocks : $timeBlocks")
-                        Log.d("DEBUG TEST", "exist places : $uiBlocks")
-                        timeBlocksFlow.update { timeBlocks }
-                        blockUiModelsFlow.update { uiBlocks }
-                        result.map { place -> place.toUiModel() }
+                    if (uiState.value.date.startDay != null && uiState.value.date.endDay != null) {
+                        placesFlow.update { places ->
+                            val existPlaces =
+                                places.filter { it.startDateTime != null && it.endDateTime != null }
+                            val timeBlocks =
+                                existPlaces.mapNotNull { it.toTimeBlock(uiState.value.date.startDay?.atStartOfDay()!!) }
+                            val uiBlocks = existPlaces.associateBy { it.id }
+                            Log.d("DEBUG TEST", "exist places : $existPlaces")
+                            Log.d("DEBUG TEST", "time blocks : $timeBlocks")
+                            Log.d("DEBUG TEST", "exist places : $uiBlocks")
+                            timeBlocksFlow.update { timeBlocks }
+                            blockUiModelsFlow.update { uiBlocks }
+                            result.map { place -> place.toUiModel() }
+                        }
                     }
                 }
                 .onFailure { snackBarManager.show(SnackBarEvent.NETWORK_ERROR) }
 
         }
     }
+
     private fun updateSelectedGroup(group: GroupListUiModel) {
         selectedGroupFlow.update { group }
         selectedDateFlow.update {
-            if (group.startDate != null && group.endDate != null) {
-                val newDate = DateUiModel(
-                    startDay = group.startDate,
-                    endDay = group.endDate,
-                    currentDay = group.startDate
-                )
-                newDate
-            } else {
-                it
-            }
+            DateUiModel(
+                startDay = group.startDate,
+                endDay = group.endDate,
+                currentDay = group.startDate
+            )
         }
     }
     private fun saveGroup(targetGroup: GroupListUiModel?) {
@@ -325,6 +322,15 @@ class PlanViewModel @Inject constructor(
                     /** TODO visibility 정보가 없어서 저장이 어려움 */
                     visibility = Visibility.PRIVATE
                 )
+                groupsFlow.update { groups ->
+                    groups.map {
+                        if (it.id == group.id) {
+                            it.copy(startDate = group.startDate, endDate = group.endDate)
+                        } else {
+                            it
+                        }
+                    }
+                }
             }
         }
     }
