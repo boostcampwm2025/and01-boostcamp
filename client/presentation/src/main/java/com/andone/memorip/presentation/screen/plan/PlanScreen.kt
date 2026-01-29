@@ -87,6 +87,7 @@ fun PlanScreen(
                     Text(stringResource(R.string.plan_cancel))
                 }
             },
+            containerColor = MemoripTheme.colors.background,
             title = { Text(stringResource(R.string.plan_day_delete)) },
             text = { Text(stringResource(R.string.plan_day_deleted_format, day)) }
         )
