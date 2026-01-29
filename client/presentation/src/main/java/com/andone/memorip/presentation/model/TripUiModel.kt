@@ -4,17 +4,17 @@ import androidx.compose.runtime.Immutable
 import com.andone.memorip.domain.model.Group
 
 @Immutable
-data class GroupUiModel(
+data class TripUiModel(
     val id: String,
     val name: String,
     val images: List<String>,
 ) {
     companion object {
-        fun from(group: Group): GroupUiModel {
-            return GroupUiModel(
-                id = group.id,
-                name = group.title,
-                images = group.images
+        fun from(trip: Group): TripUiModel {
+            return TripUiModel(
+                id = trip.id,
+                name = trip.title,
+                images = trip.images
             )
         }
     }
