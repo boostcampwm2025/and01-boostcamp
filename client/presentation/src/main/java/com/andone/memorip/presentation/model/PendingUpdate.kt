@@ -10,5 +10,5 @@ data class PendingUpdate(
 
 interface Payload {
     @Serializable
-    class PlaceTimeEditPayload(val startAt: String, val endAt: String) : Payload
+    class PlaceTimeEditPayload(val startAt: String?, val endAt: String?) : Payload
 }

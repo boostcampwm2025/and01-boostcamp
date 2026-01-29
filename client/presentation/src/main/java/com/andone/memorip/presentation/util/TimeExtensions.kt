@@ -48,11 +48,17 @@ fun millisToLocalDate(millis: Long): LocalDate =
         .atZone(ZoneId.systemDefault())
         .toLocalDate()
 
-fun LocalDateTime?.toRemoteString(): String {
-    if (this == null) return ""
+fun LocalDateTime?.toRemoteString(): String? {
+    if (this == null) return this
 
     return this
         .atZone(ZoneId.systemDefault())
         .withZoneSameInstant(ZoneOffset.UTC)
         .format(DateTimeFormatter.ISO_INSTANT)
+}
+
+fun LocalDate?.toRemoteString(): String? {
+    if (this == null) return this
+
+    return this.format(DateTimeFormatter.ISO_INSTANT)
 }

@@ -73,11 +73,15 @@ class GroupRepositoryImpl @Inject constructor(
     override suspend fun updateGroup(
         groupId: String,
         title: String,
-        visibility: Visibility
+        visibility: Visibility,
+        startDate: String?,
+        endDate: String?
     ): Result<Unit> {
         val request = GroupUpdateRequest(
             title = title,
-            visibility = visibility.name
+            visibility = visibility.name,
+            startDate = startDate,
+            endDate = endDate
         )
         return remoteDataSource.updateGroup(groupId, request)
     }

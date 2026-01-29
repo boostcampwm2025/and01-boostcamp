@@ -11,6 +11,7 @@ import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.andone.memorip.domain.model.GroupListItem
 import com.andone.memorip.domain.model.TimeBlock
+import com.andone.memorip.domain.model.Visibility
 import com.andone.memorip.domain.repository.GroupRepository
 import com.andone.memorip.presentation.model.Payload
 import com.andone.memorip.presentation.model.Place
@@ -235,6 +236,7 @@ class PlanViewModel @Inject constructor(
 
             is PlanAction.GroupChoiceConfirmClick -> {
                 savePlan()
+                saveGroup(uiState.value.selectedGroup)
                 updatePlaces(groupId = action.selectedGroup.id)
                 selectedGroupFlow.update { action.selectedGroup }
             }
@@ -253,19 +255,22 @@ class PlanViewModel @Inject constructor(
                         if (place != uiState.value.places.find { it.id == groupPlaceId }) {
                             val startAt = place.startDateTime.toRemoteString()
                             val endAt = place.endDateTime.toRemoteString()
-                            pendingUpdates[groupPlaceId] = Payload.PlaceTimeEditPayload(
-                                startAt = startAt,
-                                endAt = endAt
-                            )
-                            groupRepository.updatePlaceTime(
-                                groupPlaceId = groupPlaceId,
-                                startAt = startAt,
-                                endAt = endAt
-                            ).onSuccess {
-                                pendingUpdates.remove(groupPlaceId)
-                            }.onFailure {
-                                if (it is CancellationException) throw it
-                                snackBarManager.show(SnackBarEvent.NETWORK_ERROR)
+
+                            if (startAt != null && endAt != null) {
+                                pendingUpdates[groupPlaceId] = Payload.PlaceTimeEditPayload(
+                                    startAt = startAt,
+                                    endAt = endAt
+                                )
+                                groupRepository.updatePlaceTime(
+                                    groupPlaceId = groupPlaceId,
+                                    startAt = startAt,
+                                    endAt = endAt
+                                ).onSuccess {
+                                    pendingUpdates.remove(groupPlaceId)
+                                }.onFailure {
+                                    if (it is CancellationException) throw it
+                                    snackBarManager.show(SnackBarEvent.NETWORK_ERROR)
+                                }
                             }
                         }
                     }
@@ -306,6 +311,20 @@ class PlanViewModel @Inject constructor(
                 newDate
             } else {
                 it
+            }
+        }
+    }
+    private fun saveGroup(targetGroup: GroupListUiModel?) {
+        targetGroup?.let { group ->
+            viewModelScope.launch {
+                groupRepository.updateGroup(
+                    groupId = group.id,
+                    title = group.title,
+                    startDate = group.startDate.toRemoteString(),
+                    endDate = group.endDate.toRemoteString(),
+                    /** TODO visibility 정보가 없어서 저장이 어려움 */
+                    visibility = Visibility.PRIVATE
+                )
             }
         }
     }
