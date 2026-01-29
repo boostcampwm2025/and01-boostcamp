@@ -206,6 +206,9 @@ class PlaceService(
             throw BusinessException(code = CommonExceptionCode.PLACE_FORBIDDEN)
         }
 
+        groupPlaceRepository.deleteAllByPlaceId(placeId)
+        placeTagRepository.deleteByPlaceId(placeId)
+
         placeRepository.delete(place)
     }
 

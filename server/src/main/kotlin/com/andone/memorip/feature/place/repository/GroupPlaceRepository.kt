@@ -1,5 +1,6 @@
 package com.andone.memorip.feature.place.repository
 
+import com.andone.memorip.feature.group.entity.Group
 import com.andone.memorip.feature.place.entity.GroupPlace
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
@@ -39,6 +40,10 @@ interface GroupPlaceRepository : JpaRepository<GroupPlace, UUID> {
         @Param("groupIds") groupIds: List<UUID>,
         @Param("placeId") placeId: UUID
     ): Int
+    
+    @Modifying
+    @Query("DELETE FROM GroupPlace gp WHERE gp.place.id = :placeId")
+    fun deleteAllByPlaceId(@Param("placeId") placeId: UUID): Int
 
     fun findAllByGroupId(groupId: UUID): List<GroupPlace>
 }
