@@ -6,12 +6,16 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SimpleGroupItem(
     val id: String,
-    val title: String
+    val title: String,
+    val startDate: String? = null,
+    val endDate: String? = null
 ) {
     companion object {
         fun toDomain(groupItem: SimpleGroupItem): GroupListItem = GroupListItem(
             id = groupItem.id,
-            title = groupItem.title
+            title = groupItem.title,
+            startDate = groupItem.startDate,
+            endDate = groupItem.endDate
         )
     }
 }
