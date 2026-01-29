@@ -23,6 +23,7 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 @Composable
 fun PlaceDetailTopBar(
     isMine: Boolean,
+    isInMyGroup: Boolean,
     showMoreMenu: Boolean,
     onNavigationIconClick: () -> Unit,
     onActionIconClick: () -> Unit,
@@ -52,6 +53,7 @@ fun PlaceDetailTopBar(
         actions = {
             PlaceDetailActions(
                 isMine = isMine,
+                isInMyGroup = isInMyGroup,
                 showMoreMenu = showMoreMenu,
                 onMoreClick = onMoreClick,
                 onMoreMenuDismiss = onMoreMenuDismiss,
@@ -67,6 +69,7 @@ fun PlaceDetailTopBar(
 @Composable
 private fun PlaceDetailActions(
     isMine: Boolean,
+    isInMyGroup: Boolean,
     showMoreMenu: Boolean,
     onMoreClick: () -> Unit,
     onMoreMenuDismiss: () -> Unit,
@@ -119,6 +122,17 @@ private fun PlaceDetailActions(
             )
         }
     } else {
+        val iconRes = if (isInMyGroup) {
+            R.drawable.ic_bookmark
+        } else {
+            R.drawable.ic_scrap
+        }
+        val iconTint = if (isInMyGroup) {
+            MemoripTheme.colors.primary
+        } else {
+            MemoripTheme.colors.onSurface
+        }
+
         IconButton(
             onClick = onActionIconClick,
             colors = IconButtonDefaults.iconButtonColors(
@@ -127,8 +141,9 @@ private fun PlaceDetailActions(
             )
         ) {
             Icon(
-                painter = painterResource(R.drawable.ic_scrap),
-                contentDescription = stringResource(R.string.place_detail_action_description)
+                painter = painterResource(iconRes),
+                contentDescription = stringResource(R.string.place_detail_action_description),
+                tint = iconTint
             )
         }
     }
@@ -140,6 +155,7 @@ private fun PlaceDetailTopBarPreview() {
     MemoripTheme {
         PlaceDetailTopBar(
             isMine = false,
+            isInMyGroup = false,
             showMoreMenu = false,
             onNavigationIconClick = {},
             onActionIconClick = {},
@@ -157,6 +173,7 @@ private fun PlaceDetailTopBarisMinePreview() {
     MemoripTheme {
         PlaceDetailTopBar(
             isMine = true,
+            isInMyGroup = false,
             showMoreMenu = true,
             onNavigationIconClick = {},
             onActionIconClick = {},

@@ -14,5 +14,6 @@ data class PlaceDetail(
     val images: List<String>,
     val groups: List<GroupCompact>,
     val address: Address,
-    val isMine: Boolean
+    val isMine: Boolean,
+    val isInMyGroup: Boolean
 )

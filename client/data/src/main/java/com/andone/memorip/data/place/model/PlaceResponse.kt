@@ -18,7 +18,8 @@ data class PlaceDetailResponse(
     val images: List<String>,
     val groups: List<GroupCompactResponse>,
     val address: Address,
-    val isMine: Boolean
+    val isMine: Boolean,
+    val isInMyGroup: Boolean
 )
 
 @Serializable
@@ -38,7 +39,8 @@ fun PlaceDetailResponse.toDomain(): PlaceDetail = PlaceDetail(
     images = this.images,
     groups = this.groups.map { it.toDomain() },
     address = this.address,
-    isMine = this.isMine
+    isMine = this.isMine,
+    isInMyGroup = this.isInMyGroup
 )
 
 fun GroupCompactResponse.toDomain(): GroupCompact = GroupCompact(

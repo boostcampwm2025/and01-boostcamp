@@ -14,5 +14,6 @@ data class PlaceUiModel(
     val imageUrls: ImmutableList<String> = persistentListOf(),
     val groups: ImmutableList<GroupCompactUiModel> = persistentListOf(),
     val content: String = "",
-    val isMine: Boolean = false
+    val isMine: Boolean = false,
+    val isInMyGroup: Boolean = false
 )

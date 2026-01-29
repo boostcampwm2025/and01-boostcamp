@@ -220,6 +220,7 @@ private fun PlaceDetailScreen(
         topBar = {
             PlaceDetailTopBar(
                 isMine = place.isMine,
+                isInMyGroup = place.isInMyGroup,
                 showMoreMenu = showMoreMenu,
                 onNavigationIconClick = { onAction(PlaceDetailAction.OnBackClick) },
                 onActionIconClick = { onAction(PlaceDetailAction.OnAddToGroupClick) },
