@@ -8,7 +8,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.component.map.ClusterMarker
 import com.andone.memorip.presentation.component.map.ImageMarker
+import com.andone.memorip.presentation.component.map.MapClusterManager
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
@@ -20,21 +22,40 @@ import com.naver.maps.map.compose.rememberUpdatedMarkerState
 @OptIn(ExperimentalNaverMapApi::class)
 @Composable
 fun PlaceImageMarkers(
-    places: List<Place>,
+    clusteredItems: List<MapClusterManager.ClusterItem>,
     markerImages: Map<String, Bitmap>,
-    onMarkerClick: (Place) -> Unit
+    onMarkerClick: (Place) -> Unit,
+    onClusterClick: (MapClusterManager.ClusterItem) -> Unit
 ) {
-    places.forEach { place ->
+    // 클러스터 마커 렌더링
+    clusteredItems.filter { it.isCluster }.forEach { clusterItem ->
+        val clusterKey = "cluster_${clusterItem.position}_${clusterItem.count}"
+        key(clusterKey) {
+            MarkerComposable(
+                keys = arrayOf("cluster", clusterItem.position.toString(), clusterItem.count.toString()),
+                state = rememberUpdatedMarkerState(position = clusterItem.position),
+                onClick = {
+                    onClusterClick(clusterItem)
+                    true
+                }
+            ) {
+                ClusterMarker(count = clusterItem.count)
+            }
+        }
+    }
+
+    // 단일 마커 렌더링
+    clusteredItems.filter { !it.isCluster }.forEach { clusterItem ->
+        val placeData = clusterItem.places.firstOrNull() ?: return@forEach
+        val place = placeData.placeData as? Place ?: return@forEach
         key(place.id) {
-            val imageUrl = place.thumbnailImage.url
+            val imageUrl = placeData.imageUrl
             val bitmap = markerImages[imageUrl]
 
             if (bitmap != null) {
                 MarkerComposable(
                     keys = arrayOf(place.id, imageUrl),
-                    state = rememberUpdatedMarkerState(
-                        position = LatLng(place.latitude, place.longitude)
-                    ),
+                    state = rememberUpdatedMarkerState(position = clusterItem.position),
                     onClick = {
                         onMarkerClick(place)
                         true
@@ -60,10 +81,26 @@ private fun PlaceImageMarkersPreview() {
             emptyMap()
         }
 
+        val clusteredItems = DummyData.places.map { place ->
+            MapClusterManager.ClusterItem(
+                position = LatLng(place.latitude, place.longitude),
+                places = listOf(
+                    MapClusterManager.PlaceClusterData(
+                        id = place.id,
+                        position = LatLng(place.latitude, place.longitude),
+                        imageUrl = place.thumbnailImage.url,
+                        placeData = place
+                    )
+                ),
+                isCluster = false
+            )
+        }
+
         PlaceImageMarkers(
-            places = DummyData.places,
+            clusteredItems = clusteredItems,
             markerImages = markerImages,
-            onMarkerClick = {}
+            onMarkerClick = {},
+            onClusterClick = {}
         )
     }
 }
