@@ -1,6 +1,6 @@
 package com.andone.memorip.domain.model
 
-data class GroupListItem(
+data class TripListItem(
     val id: String,
     val title: String,
     val startDate: String? = null,

@@ -1,7 +1,7 @@
 package com.andone.memorip.domain.model
 
-data class GroupPlace(
-    val groupPlaceId: String,
+data class TripPlace(
+    val tripPlaceId: String,
     val placeId: String,
     val title: String,
     val thumbnail: String? = null,
