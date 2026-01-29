@@ -26,7 +26,7 @@ import com.andone.memorip.presentation.screen.plan.component.DateNotSelectedCont
 import com.andone.memorip.presentation.screen.plan.component.DateRangeCalendar
 import com.andone.memorip.presentation.screen.plan.component.DateSelectedContent
 import com.andone.memorip.presentation.screen.plan.component.PlanTopAppBar
-import com.andone.memorip.presentation.screen.plan.component.SelectGroupDialog
+import com.andone.memorip.presentation.screen.plan.component.SelectTripDialog
 import com.andone.memorip.presentation.screen.plan.model.PlanAction
 import com.andone.memorip.presentation.screen.plan.model.PlanEvent
 import com.andone.memorip.presentation.screen.plan.model.PlanUiState
@@ -42,7 +42,7 @@ fun PlanScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var deleteTargetDay by remember { mutableStateOf<Int?>(value = null) }
-    var showGroupChoice by remember { mutableStateOf(false) }
+    var showTripChoice by remember { mutableStateOf(false) }
     var showCalendar by rememberSaveable { mutableStateOf(false) }
 
     viewModel.event.collectWithLifecycle { event ->
@@ -51,8 +51,8 @@ fun PlanScreen(
                 deleteTargetDay = event.day
             }
 
-            PlanEvent.ShowGroupChoiceDialog -> {
-                showGroupChoice = true
+            PlanEvent.ShowTripChoiceDialog -> {
+                showTripChoice = true
             }
 
             PlanEvent.ShowCalendarDialog -> {
@@ -64,7 +64,7 @@ fun PlanScreen(
     DisposableEffect(Unit) {
         onDispose {
             viewModel.savePlan()
-            viewModel.saveGroup(uiState.selectedGroup)
+            viewModel.saveTrip(uiState.selectedTrip)
         }
     }
 
@@ -96,17 +96,17 @@ fun PlanScreen(
         )
     }
 
-    if (showGroupChoice) {
-        SelectGroupDialog(
-            groups = uiState.groups,
-            selectedGroup = uiState.selectedGroup,
-            onDismissRequest = { showGroupChoice = false },
-            onConfirmClick = { group ->
+    if (showTripChoice) {
+        SelectTripDialog(
+            trips = uiState.trips,
+            selectedTrip = uiState.selectedTrip,
+            onDismissRequest = { showTripChoice = false },
+            onConfirmClick = { trip ->
                 viewModel.onAction(
-                    action = PlanAction.GroupChoiceConfirmClick(selectedGroup = group)
+                    action = PlanAction.TripChoiceConfirmClick(selectedTrip = trip)
                 )
             },
-            onCancelClick = { showGroupChoice = false }
+            onCancelClick = { showTripChoice = false }
         )
     }
 
@@ -124,7 +124,7 @@ fun PlanScreen(
 
     PlanScreenContents(
         state = uiState,
-        showGroupChoice = showGroupChoice,
+        showTripChoice = showTripChoice,
         onAction = viewModel::onAction,
         modifier = modifier
     )
@@ -133,7 +133,7 @@ fun PlanScreen(
 @Composable
 fun PlanScreenContents(
     state: PlanUiState,
-    showGroupChoice: Boolean,
+    showTripChoice: Boolean,
     onAction: (PlanAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -141,11 +141,11 @@ fun PlanScreenContents(
         modifier = modifier,
         topBar = {
             PlanTopAppBar(
-                title = state.selectedGroup?.title,
-                groups = state.groups,
-                expanded = showGroupChoice,
+                title = state.selectedTrip?.title,
+                trips = state.trips,
+                expanded = showTripChoice,
                 isDeleteMode = state.date.longClickedDay != null,
-                onTitleClick = { onAction(PlanAction.GroupChoiceClick) },
+                onTitleClick = { onAction(PlanAction.TripChoiceClick) },
                 onDeleteClick = { onAction(PlanAction.RemoveDayClick) },
                 onDismissClick = { onAction(PlanAction.RemoveCancel) }
             )
@@ -178,12 +178,12 @@ private fun PlanScreenContentsPreview() {
     MemoripTheme {
         PlanScreenContents(
             state = PlanUiState(
-                selectedGroup = DummyData.groupListItems.first(),
-                groups = DummyData.groupListItems.toImmutableList(),
+                selectedTrip = DummyData.tripListItems.first(),
+                trips = DummyData.tripListItems.toImmutableList(),
                 places = DummyData.places.toImmutableList(),
                 blocks = DummyData.timeBlocks
             ),
-            showGroupChoice = false,
+            showTripChoice = false,
             onAction = {},
         )
     }

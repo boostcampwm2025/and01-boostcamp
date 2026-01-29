@@ -14,8 +14,8 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.andone.memorip.navigation.MemoripNavConstant.tabTransition
-import com.andone.memorip.presentation.screen.groupdetail.tripDetail
-import com.andone.memorip.presentation.screen.grouplist.tripList
+import com.andone.memorip.presentation.screen.tripdetail.tripDetail
+import com.andone.memorip.presentation.screen.triplist.tripList
 import com.andone.memorip.presentation.screen.placecreate.placeCreate
 import com.andone.memorip.presentation.screen.placedetail.placeDetail
 import com.andone.memorip.presentation.screen.placelist.placeList

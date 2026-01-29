@@ -8,13 +8,13 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.andone.memorip.domain.model.Tag
-import com.andone.memorip.presentation.model.GroupUiModel
+import com.andone.memorip.presentation.model.TripUiModel
 import com.andone.memorip.presentation.model.ImageItem
 import com.andone.memorip.presentation.model.LocationUiModel
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.model.TagUiModel
 import com.andone.memorip.presentation.model.toUiModel
-import com.andone.memorip.presentation.screen.placedetail.model.GroupCompactUiModel
+import com.andone.memorip.presentation.screen.placedetail.model.TripCompactUiModel
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceUiModel
 import com.andone.memorip.presentation.screen.placelist.model.RegionUiModel
 import com.andone.memorip.presentation.screen.placelist.model.SelectedRegionState
@@ -24,7 +24,7 @@ import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.screen.user.model.SettingItemUiModel
 import com.andone.memorip.presentation.screen.user.model.SettingTrailing
 import com.andone.memorip.presentation.screen.user.model.UserUiModel
-import com.andone.memorip.presentation.screen.plan.model.GroupListUiModel
+import com.andone.memorip.presentation.screen.plan.model.TripListUiModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.flowOf
 import java.time.LocalDate
@@ -50,10 +50,10 @@ object DummyData {
             "https://picsum.photos/200/200",
             "https://picsum.photos/200/400"
         ),
-        groups = persistentListOf(
-            GroupCompactUiModel(
-                groupId = UUID.randomUUID().toString(),
-                groupName = "크리스마스"
+        trips = persistentListOf(
+            TripCompactUiModel(
+                tripId = UUID.randomUUID().toString(),
+                tripName = "크리스마스"
             )
         ),
         content = "test content, test content, test content, test content\n test content, test content1\n test content, test content2\n test content, test content3\n test content, test content4\n test content, test content5\n test content, test content6\n test content, test content7\n test content, test content8\n test content, test content9\n test content, test content10\n test content, test content11\n test content, test content12\n test content, test content13\n test content, test content14\n test content, test content15"
@@ -300,42 +300,42 @@ object DummyData {
 
     val groupName = "Group1"
 
-    val groupListItems = mutableStateListOf(
-        GroupListUiModel(
+    val tripListItems = mutableStateListOf(
+        TripListUiModel(
             id = UUID.randomUUID().toString(),
             title = "기본 그룹"
         ),
-        GroupListUiModel(
+        TripListUiModel(
             id = UUID.randomUUID().toString(),
             title = "부산"
         ),
-        GroupListUiModel(
+        TripListUiModel(
             id = UUID.randomUUID().toString(),
             title = "제주도"
         ),
-        GroupListUiModel(
+        TripListUiModel(
             id = UUID.randomUUID().toString(),
             title = "대구"
         )
     )
 
-    val groups = mutableStateListOf(
-        GroupUiModel(
+    val trips = mutableStateListOf(
+        TripUiModel(
             id = UUID.randomUUID().toString(),
             name = "기본 그룹",
             images = createRandomImageUrls(8, "group1")
         ),
-        GroupUiModel(
+        TripUiModel(
             id = UUID.randomUUID().toString(),
             name = "부 산",
             images = createRandomImageUrls(4, "busan")
         ),
-        GroupUiModel(
+        TripUiModel(
             id = UUID.randomUUID().toString(),
             name = "제주도",
             images = createRandomImageUrls(5, "jeju")
         ),
-        GroupUiModel(
+        TripUiModel(
             id = UUID.randomUUID().toString(),
             name = "대구 ",
             images = createRandomImageUrls(1, "daegu")

@@ -10,9 +10,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.R
-import com.andone.memorip.presentation.screen.grouplist.component.EmptyTripPlaceholder
-import com.andone.memorip.presentation.screen.grouplist.component.TripLayout
-import com.andone.memorip.presentation.screen.grouplist.component.ImageCard
+import com.andone.memorip.presentation.screen.triplist.component.EmptyTripPlaceholder
+import com.andone.memorip.presentation.screen.triplist.component.TripLayout
+import com.andone.memorip.presentation.screen.triplist.component.ImageCard
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.buildBento5x3Items

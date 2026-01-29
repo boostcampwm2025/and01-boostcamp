@@ -27,7 +27,7 @@ fun TopBarTitleButton(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = title ?: stringResource(R.string.plan_no_group),
+            text = title ?: stringResource(R.string.plan_no_trip),
             color = MemoripTheme.colors.onSurface,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,

@@ -74,7 +74,7 @@ import com.andone.memorip.presentation.screen.placedetail.model.PlaceDetailActio
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceDetailEvent
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceDetailScreenStep
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceUiModel
-import com.andone.memorip.presentation.screen.selectgroup.SelectGroupScreen
+import com.andone.memorip.presentation.screen.selecttrip.SelectTripScreen
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -103,7 +103,7 @@ private object PlaceDetailScreenDimens {
 fun PlaceDetailScreen(
     route: PlaceDetail,
     onNavigateBack: () -> Unit,
-    onNavigateGroupList: () -> Unit,
+    onNavigateTripList: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PlaceDetailViewModel = hiltViewModel<PlaceDetailViewModel, PlaceDetailViewModel.Factory>(
         creationCallback = { factory ->
@@ -116,7 +116,7 @@ fun PlaceDetailScreen(
     var showMoreMenu by rememberSaveable { mutableStateOf(false) }
     var showDeleteDialog by rememberSaveable { mutableStateOf(false) }
 
-    BackHandler(enabled = currentStep == PlaceDetailScreenStep.SelectGroup) {
+    BackHandler(enabled = currentStep == PlaceDetailScreenStep.SelectTrip) {
         currentStep = PlaceDetailScreenStep.PlaceDetail
     }
 
@@ -126,16 +126,16 @@ fun PlaceDetailScreen(
                 onNavigateBack()
             }
 
-            PlaceDetailEvent.NavigateToSelectGroup -> {
-                currentStep = PlaceDetailScreenStep.SelectGroup
+            PlaceDetailEvent.NavigateToSelectTrip -> {
+                currentStep = PlaceDetailScreenStep.SelectTrip
             }
 
-            PlaceDetailEvent.PlaceAddToGroup -> {
+            PlaceDetailEvent.PlaceAddToTrip -> {
                 currentStep = PlaceDetailScreenStep.PlaceDetail
             }
 
-            PlaceDetailEvent.NavigateToGroupList -> {
-                onNavigateGroupList()
+            PlaceDetailEvent.NavigateToTripList -> {
+                onNavigateTripList()
             }
 
             PlaceDetailEvent.ShowMoreMenu -> {
@@ -181,11 +181,11 @@ fun PlaceDetailScreen(
                 }
             }
 
-            PlaceDetailScreenStep.SelectGroup -> {
-                SelectGroupScreen(
-                    onGroupSelect = { },
+            PlaceDetailScreenStep.SelectTrip -> {
+                SelectTripScreen(
+                    onTripSelect = { },
                     onBackClick = { currentStep = PlaceDetailScreenStep.PlaceDetail },
-                    title = stringResource(R.string.select_group_add_to_my_group_title),
+                    title = stringResource(R.string.select_trip_add_to_my_trip_title),
                     placeId = route.placeId,
                     modifier = modifier
                 )
@@ -220,10 +220,10 @@ private fun PlaceDetailScreen(
         topBar = {
             PlaceDetailTopBar(
                 isMine = place.isMine,
-                isInMyGroup = place.isInMyGroup,
+                isInMyTrip = place.isInMyTrip,
                 showMoreMenu = showMoreMenu,
                 onNavigationIconClick = { onAction(PlaceDetailAction.OnBackClick) },
-                onActionIconClick = { onAction(PlaceDetailAction.OnAddToGroupClick) },
+                onActionIconClick = { onAction(PlaceDetailAction.OnAddToTripClick) },
                 onMoreClick = { onAction(PlaceDetailAction.OnMoreClick) },
                 onMoreMenuDismiss = { onAction(PlaceDetailAction.OnMoreMenuDismiss) },
                 onEditClick = { onAction(PlaceDetailAction.OnEditClick) },
@@ -389,11 +389,11 @@ private fun PlaceDetailContent(
                     )
                 }
             )
-            if (place.groups.isNotEmpty()) {
+            if (place.trips.isNotEmpty()) {
                 PlaceDetailInfoSection(
-                    infoString = place.groups.joinToString(
+                    infoString = place.trips.joinToString(
                         separator = stringResource(R.string.place_detail_comma_separator)
-                    ) { it.groupName },
+                    ) { it.tripName },
                     iconRes = R.drawable.ic_outline_folder,
                     onAction = onAction,
                     modifier = Modifier.padding(start = MemoripPadding.PaddingXSmall)
@@ -411,7 +411,7 @@ private fun PlaceDetailInfoSection(
     modifier: Modifier = Modifier
 ) {
     Surface(
-        onClick = { onAction(PlaceDetailAction.GroupClick) },
+        onClick = { onAction(PlaceDetailAction.TripClick) },
         modifier = modifier,
         color = MemoripTheme.colors.background
     ) {

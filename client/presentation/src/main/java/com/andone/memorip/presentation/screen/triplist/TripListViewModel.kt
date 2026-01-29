@@ -1,0 +1,84 @@
+package com.andone.memorip.presentation.screen.triplist
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.andone.memorip.domain.repository.TripRepository
+import com.andone.memorip.presentation.screen.triplist.model.TripListAction
+import com.andone.memorip.presentation.screen.triplist.model.TripListEvent
+import com.andone.memorip.presentation.screen.triplist.model.TripListUiState
+import com.andone.memorip.presentation.model.TripUiModel
+import com.andone.memorip.presentation.util.snackbar.SnackBarEvent
+import com.andone.memorip.presentation.util.snackbar.SnackBarManager
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+@HiltViewModel
+class TripListViewModel @Inject constructor(
+    private val tripRepository: TripRepository,
+    private val snackBarManager: SnackBarManager
+) : ViewModel() {
+
+    private val _uiState = MutableStateFlow(TripListUiState())
+    val uiState: StateFlow<TripListUiState> = _uiState
+        .onStart {
+            observeTrips()
+            fetchInitialTrips()
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = TripListUiState(isLoading = true)
+        )
+
+    private val _event = Channel<TripListEvent>(capacity = BUFFERED)
+    val event = _event.receiveAsFlow()
+
+    private fun observeTrips() {
+        viewModelScope.launch {
+            tripRepository.myTrips.collect { trips ->
+                _uiState.update { current ->
+                    current.copy(
+                        trips = trips.map { TripUiModel.from(it) }.toImmutableList()
+                    )
+                }
+            }
+        }
+    }
+
+    private fun fetchInitialTrips() {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
+            tripRepository.fetchMyTrips()
+                .onSuccess {
+                    _uiState.update { it.copy(isLoading = false) }
+                }
+                .onFailure {
+                    _uiState.update { it.copy(isLoading = false) }
+                    snackBarManager.show(SnackBarEvent.NETWORK_ERROR)
+                }
+        }
+    }
+
+    fun onAction(action: TripListAction) {
+        when (action) {
+            TripListAction.OnFABClick -> {
+                _event.trySend(TripListEvent.NavigateToPlaceCreate)
+            }
+
+            is TripListAction.OnTripClick -> {
+                _event.trySend(TripListEvent.NavigateToTripDetail(tripId = action.tripId))
+            }
+        }
+    }
+}

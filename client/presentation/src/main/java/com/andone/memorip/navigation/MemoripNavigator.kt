@@ -6,8 +6,8 @@ import androidx.compose.runtime.remember
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.rememberNavBackStack
-import com.andone.memorip.presentation.screen.groupdetail.navigateToTripDetail
-import com.andone.memorip.presentation.screen.grouplist.navigateToTripList
+import com.andone.memorip.presentation.screen.tripdetail.navigateToTripDetail
+import com.andone.memorip.presentation.screen.triplist.navigateToTripList
 import com.andone.memorip.presentation.screen.placecreate.navigateToPlaceCreate
 import com.andone.memorip.presentation.screen.placedetail.navigateToPlaceDetail
 import com.andone.memorip.presentation.screen.placelist.navigateToPlaceList
