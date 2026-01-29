@@ -30,6 +30,7 @@ import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_DAY
 import com.andone.memorip.presentation.util.snackbar.SnackBarEvent
 import com.andone.memorip.presentation.util.snackbar.SnackBarManager
 import com.andone.memorip.presentation.util.toRemoteString
+import com.andone.memorip.presentation.util.workmanager.GroupWorker
 import com.andone.memorip.presentation.util.workmanager.PlanWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
@@ -280,6 +281,28 @@ class PlanViewModel @Inject constructor(
         }
     }
 
+    fun saveGroup(targetGroup: GroupListUiModel?) {
+        targetGroup?.let { group ->
+            viewModelScope.launch {
+                pendingUpdates[group.id] = Payload.GroupSavePayload(
+                    title = group.title,
+                    startAt = group.startDate.toRemoteString(),
+                    endAt = group.endDate.toRemoteString()
+                )
+                groupRepository.updateGroup(
+                    groupId = group.id,
+                    title = group.title,
+                    startDate = group.startDate.toRemoteString(),
+                    endDate = group.endDate.toRemoteString(),
+                    /** TODO visibility 정보가 없어서 저장이 어려움 */
+                    visibility = Visibility.PRIVATE
+                ).onSuccess {
+                    pendingUpdates.remove(group.id)
+                }
+            }
+        }
+    }
+
     private fun updatePlaces(groupId: String) {
         viewModelScope.launch {
             groupRepository.getPlaceByGroupId(groupId = groupId)
@@ -300,7 +323,8 @@ class PlanViewModel @Inject constructor(
                             val inDatePlaces = validPlaces.filter {
                                 it.startDateTime!!.toLocalDate() in uiState.value.date.startDay!!..uiState.value.date.endDay!!
                             }.map {
-                                val limitTime = uiState.value.date.endDay!!.plusDays(1).atStartOfDay()
+                                val limitTime =
+                                    uiState.value.date.endDay!!.plusDays(1).atStartOfDay()
                                 if (it.endDateTime!!.isAfter(limitTime)) {
                                     it.copy(endDateTime = limitTime)
                                 } else {
@@ -351,21 +375,6 @@ class PlanViewModel @Inject constructor(
                 } else {
                     it
                 }
-            }
-        }
-    }
-
-    private fun saveGroup(targetGroup: GroupListUiModel?) {
-        targetGroup?.let { group ->
-            viewModelScope.launch {
-                groupRepository.updateGroup(
-                    groupId = group.id,
-                    title = group.title,
-                    startDate = group.startDate.toRemoteString(),
-                    endDate = group.endDate.toRemoteString(),
-                    /** TODO visibility 정보가 없어서 저장이 어려움 */
-                    visibility = Visibility.PRIVATE
-                )
             }
         }
     }
@@ -513,29 +522,54 @@ class PlanViewModel @Inject constructor(
     }
 
     private fun buildPendingUpdateWork(id: String, payload: Payload): OneTimeWorkRequest {
-        val payload = payload as Payload.PlaceTimeEditPayload
-        val data = workDataOf(
-            PlanWorker.ID to id,
-            PlanWorker.START_AT to payload.startAt,
-            PlanWorker.END_AT to payload.endAt
-        )
+        return when (payload) {
+            is Payload.PlaceTimeEditPayload -> {
+                val data = workDataOf(
+                    PlanWorker.ID to id,
+                    PlanWorker.START_AT to payload.startAt,
+                    PlanWorker.END_AT to payload.endAt
+                )
 
-        return OneTimeWorkRequestBuilder<PlanWorker>()
-            .setInputData(data)
-            .setBackoffCriteria(
-                BackoffPolicy.EXPONENTIAL,
-                10,
-                TimeUnit.SECONDS
-            )
-            .build()
+                OneTimeWorkRequestBuilder<PlanWorker>()
+                    .setInputData(data)
+                    .setBackoffCriteria(
+                        BackoffPolicy.EXPONENTIAL,
+                        10,
+                        TimeUnit.SECONDS
+                    )
+                    .build()
+            }
+
+            is Payload.GroupSavePayload -> {
+                val data = workDataOf(
+                    GroupWorker.ID to id,
+                    GroupWorker.TITLE to payload.title,
+                    GroupWorker.START_AT to payload.startAt,
+                    GroupWorker.END_AT to payload.endAt
+                )
+
+                OneTimeWorkRequestBuilder<GroupWorker>()
+                    .setInputData(data)
+                    .setBackoffCriteria(
+                        BackoffPolicy.EXPONENTIAL,
+                        10,
+                        TimeUnit.SECONDS
+                    )
+                    .build()
+            }
+        }
     }
 
     override fun onCleared() {
-        pendingUpdates.forEach { (id, update) ->
-            val request = buildPendingUpdateWork(id, update)
+        pendingUpdates.forEach { (id, payload) ->
+            val request = buildPendingUpdateWork(id, payload)
+            val name = when (payload) {
+                is Payload.PlaceTimeEditPayload -> PLACE_WORK_NAME + id
+                is Payload.GroupSavePayload -> GROUP_WORK_NAME + id
+            }
 
             workManager.enqueueUniqueWork(
-                uniqueWorkName = WORK_NAME + id,
+                uniqueWorkName = name,
                 ExistingWorkPolicy.APPEND_OR_REPLACE,
                 request
             )
@@ -544,6 +578,7 @@ class PlanViewModel @Inject constructor(
     }
 
     companion object {
-        const val WORK_NAME = "PLACE_TIME_EDIT"
+        const val PLACE_WORK_NAME = "PLACE_TIME_EDIT"
+        const val GROUP_WORK_NAME = "GROUP_TIME_SAVE"
     }
 }

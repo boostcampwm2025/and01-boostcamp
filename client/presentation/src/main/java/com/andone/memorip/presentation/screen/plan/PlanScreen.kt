@@ -62,7 +62,10 @@ fun PlanScreen(
     }
 
     DisposableEffect(Unit) {
-        onDispose { viewModel.savePlan() }
+        onDispose {
+            viewModel.savePlan()
+            viewModel.saveGroup(uiState.selectedGroup)
+        }
     }
 
     deleteTargetDay?.let { day ->
