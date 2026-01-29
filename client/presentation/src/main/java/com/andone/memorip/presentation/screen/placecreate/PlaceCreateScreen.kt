@@ -93,13 +93,7 @@ fun PlaceCreateScreen(
         )
 
         if (uiState.isLoading) {
-            LoadingIndicatorScreen(
-                modifier = Modifier.clickable(
-                    interactionSource = null,
-                    indication = null,
-                    onClick = {}
-                )
-            )
+            LoadingIndicatorScreen()
         }
     }
 }
@@ -185,7 +179,7 @@ private fun PlaceCreateScreenContent(
 }
 
 @Composable
-private fun ImageRowSection(
+fun ImageRowSection(
     images: List<Uri>,
     selectedImage: Uri?,
     onImageSelect: (Uri) -> Unit,
@@ -235,7 +229,7 @@ private fun ImageRowSection(
 }
 
 @Composable
-private fun ContentSection(
+fun ContentSection(
     title: String,
     content: String,
     onTitleChange: (String) -> Unit,
@@ -266,7 +260,7 @@ private fun ContentSection(
 
 @OptIn(ExperimentalNaverMapApi::class)
 @Composable
-private fun SelectSection(
+fun SelectSection(
     category: List<TagUiModel>,
     location: LocationUiModel?,
     groups: List<GroupUiModel>,
@@ -315,7 +309,7 @@ private fun SelectSection(
 }
 
 @Composable
-private fun PublicCheckSection(
+fun PublicCheckSection(
     isPublic: Boolean,
     onCheckedChange: () -> Unit,
     modifier: Modifier = Modifier
