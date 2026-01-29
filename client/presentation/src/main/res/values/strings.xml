@@ -173,6 +173,34 @@
     <string name="login_user_profile_image">유저 프로필 이미지</string>
     <string name="login_add_account">+ 계정을 추가하세요</string>
     <string name="login_show_places">올린 장소들</string>
+    <string name="login_user_profile_change">프로필 변경</string>
+    <string name="login_permission_camera_title">카메라</string>
+    <string name="login_permission_camera_subtitle">프로필 사진 변경</string>
+    <string name="login_permission_gallery_title">사진 갤러리</string>
+    <string name="login_permission_gallery_subtitle">이미지 업로드</string>
+    <string name="login_permission_location_title">위치</string>
+    <string name="login_permission_location_subtitle">위치 기반 서비스</string>
+    <string name="login_permission_network_title">네트워크</string>
+    <string name="login_permission_network_subtitle">네트워크 상태 변경 알림</string>
+    <string name="login_permission_allowed">허용됨</string>
+    <string name="login_permission_denied">거부됨</string>
+    <string name="login_permission">권한 설정</string>
+    <string name="login_alarm">알람 설정</string>
+    <string name="login_push_alarm_title">푸시 알림</string>
+    <string name="login_push_alarm_sub_title">새 소식을 받아보세요</string>
+    <string name="login_scrap_alarm_title">스크랩 알림</string>
+    <string name="login_scrap_alarm_sub_title">내 장소가 스크랩 되면 알람이 가요</string>
+    <string name="login_policy">약관 및 정책</string>
+    <string name="login_service_title">서비스 이용 약관</string>
+    <string name="login_privacy_title">개인정보 처리방침</string>
+    <string name="login_app_info">앱 정보</string>
+    <string name="login_app_version">현재 버전</string>
+    <string name="login_app_version_check">업데이트 확인</string>
+    <string name="login_account">계정 관리</string>
+    <string name="login_logout">로그아웃</string>
+    <string name="login_delete_account">계정 삭제</string>
+
+
 
     <!-- PlanScreen -->
     <string name="plan_time_axis_hour">%1$02d:00</string>

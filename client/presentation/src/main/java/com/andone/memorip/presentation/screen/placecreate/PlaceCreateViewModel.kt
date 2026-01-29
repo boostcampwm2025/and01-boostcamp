@@ -157,6 +157,7 @@ class PlaceCreateViewModel @Inject constructor(
                     longitude = uiStateValue.location.longitude,
                     address = Address.from(uiStateValue.location.address),
                     imageUrls = imageUrls,
+                    thumbnailImageRatio = uiStateValue.thumbnailImageRatio,
                     isPublic = uiStateValue.isPublic
                 )
             ).onSuccess { data ->

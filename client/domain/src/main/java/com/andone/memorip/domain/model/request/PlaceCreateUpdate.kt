@@ -9,5 +9,6 @@ data class PlaceCreateUpdate(
     val longitude: Double,
     val address: Address,
     val imageUrls: List<String>,
+    val thumbnailImageRatio: Float,
     val isPublic: Boolean
 )

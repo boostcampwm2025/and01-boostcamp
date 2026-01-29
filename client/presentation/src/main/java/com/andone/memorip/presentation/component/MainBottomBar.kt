@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.component
 
+import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
@@ -19,6 +20,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -26,9 +28,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.andone.memorip.navigation.MainBottomBarRoute
 import com.andone.memorip.presentation.R
@@ -38,6 +42,7 @@ import com.andone.memorip.presentation.component.MainBottomBarDimens.centerButto
 import com.andone.memorip.presentation.component.MainBottomBarDimens.elevation
 import com.andone.memorip.presentation.theme.MemoripHeight
 import com.andone.memorip.presentation.theme.MemoripTheme
+import com.andone.memorip.presentation.util.toPx
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
@@ -60,7 +65,8 @@ fun MainBottomBar(
     onFabClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val bottomPadding = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+    val navigationBarPadding =
+        WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
 
     AnimatedVisibility(
         visible = visible,
@@ -77,14 +83,17 @@ fun MainBottomBar(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(MemoripHeight.bottomBar + bottomPadding)
+                .height(MemoripHeight.bottomBar + navigationBarPadding)
                 .background(MemoripTheme.colors.background),
             contentAlignment = Alignment.TopCenter
         ) {
+            BottomBarSurface(navigationBarPadding)
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(MemoripHeight.bottomBar),
+                    .height(MemoripHeight.bottomBar)
+                    .background(MemoripTheme.colors.transparent),
                 horizontalArrangement = Arrangement.SpaceAround,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -134,7 +143,61 @@ private fun BottomBarCenterButton(
     }
 }
 
-@Preview(showBackground = true)
+@Composable
+private fun BottomBarSurface(
+    navigationBarPadding: Dp,
+    modifier: Modifier = Modifier
+) {
+    val density = LocalDensity.current
+
+    val firstDpToPx = centerButtonSize.toPx(density)
+    val smoothing = (centerButtonSize * 2 / 3).toPx(density)
+    val depth = (MemoripHeight.bottomBar - buttonOffset).toPx(density)
+
+    val barShape = GenericShape { size, _ ->
+        val width = size.width
+        val height = size.height + navigationBarPadding.toPx(density)
+
+        moveTo(width * 0.5f - firstDpToPx, 0f)
+        lineTo(0f, 0f)
+        lineTo(0f, height)
+        lineTo(width, height)
+        lineTo(width, 0f)
+        lineTo(width * 0.5f + firstDpToPx, 0f)
+
+        cubicTo(
+            width * 0.5f + smoothing, 0f,
+            width * 0.5f + smoothing, depth,
+            width * 0.5f, depth
+        )
+
+        cubicTo(
+            width * 0.5f - smoothing, depth,
+            width * 0.5f - smoothing, 0f,
+            width * 0.5f - firstDpToPx, 0f
+        )
+
+        close()
+    }
+
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(MemoripHeight.bottomBar)
+            .shadow(
+                elevation = elevation,
+                shape = barShape,
+                spotColor = MemoripTheme.colors.onSurface
+            )
+            .background(
+                color = MemoripTheme.colors.background,
+                shape = barShape
+            )
+    )
+}
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun BottomBarPreview() {
     MemoripTheme {
