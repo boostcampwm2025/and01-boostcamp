@@ -102,15 +102,16 @@ fun MainBottomBar(
                         Spacer(modifier = Modifier.width(centerButtonSize))
                     }
 
-                    val iconColor =
-                        if (tab == currentTab) MemoripTheme.colors.primary else MemoripTheme.colors.gray
+                    val isSelected = tab == currentTab
+                    val iconId = if (isSelected) tab.selectedIconId else tab.unselectedIconId
+                    val iconColor = if (isSelected) MemoripTheme.colors.primary else MemoripTheme.colors.gray
 
                     IconButton(
                         onClick = { onTabSelected(tab) },
                         colors = IconButtonDefaults.iconButtonColors(contentColor = iconColor)
                     ) {
                         Icon(
-                            painter = painterResource(tab.selectedIconId),
+                            painter = painterResource(iconId),
                             contentDescription = stringResource(tab.titleTextId)
                         )
                     }

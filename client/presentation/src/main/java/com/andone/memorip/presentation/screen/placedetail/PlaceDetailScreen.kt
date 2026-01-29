@@ -394,7 +394,7 @@ private fun PlaceDetailContent(
                     infoString = place.groups.joinToString(
                         separator = stringResource(R.string.place_detail_comma_separator)
                     ) { it.groupName },
-                    iconRes = R.drawable.ic_folder,
+                    iconRes = R.drawable.ic_outline_folder,
                     onAction = onAction,
                     modifier = Modifier.padding(start = MemoripPadding.PaddingXSmall)
                 )
