@@ -1,7 +1,7 @@
 package com.andone.memorip.domain.repository
 
 import androidx.paging.PagingData
-import com.andone.memorip.domain.model.Group
+import com.andone.memorip.domain.model.Trip
 import com.andone.memorip.domain.model.TripListItem
 import com.andone.memorip.domain.model.TripPlace
 import com.andone.memorip.domain.model.TripWithPlaceAdded
@@ -10,7 +10,7 @@ import com.andone.memorip.domain.model.Visibility
 import kotlinx.coroutines.flow.Flow
 
 interface TripRepository {
-    val myTrips: Flow<List<Group>>
+    val myTrips: Flow<List<Trip>>
     suspend fun fetchMyTrips(page: Int = 0, size: Int = 20): Result<Unit>
     suspend fun fetchMyTripsWithPlaceStatus(
         page: Int = 0,
@@ -18,9 +18,9 @@ interface TripRepository {
         placeId: String?
     ): Result<List<TripWithPlaceAdded>>
 
-    suspend fun getPublicTrips(page: Int = 0, size: Int = 20): Result<List<Group>>
-    suspend fun getTripById(tripId: String): Result<Group>
-    suspend fun createTrip(ownerId: String, title: String, visibility: Visibility): Result<Group>
+    suspend fun getPublicTrips(page: Int = 0, size: Int = 20): Result<List<Trip>>
+    suspend fun getTripById(tripId: String): Result<Trip>
+    suspend fun createTrip(ownerId: String, title: String, visibility: Visibility): Result<Trip>
     suspend fun updateTrip(
         tripId: String,
         title: String,

@@ -1,6 +1,6 @@
 package com.andone.memorip.domain.model
 
 data class TripWithPlaceAdded(
-    val trip: Group,
+    val trip: Trip,
     val isPlaceAdded: Boolean
 )
