@@ -17,4 +17,6 @@ sealed interface UserAction {
     data class UpdatePasswordConfirm(val passwordConfirm: String) : UserAction
 
     data class EmailLoginSubmit(val email: String, val password: String) : UserAction
+
+    data class OnLocationPermissionResult(val granted: Boolean) : UserAction
 }

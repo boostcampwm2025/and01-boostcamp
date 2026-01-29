@@ -99,6 +99,12 @@ class UserViewModel @Inject constructor(
             is UserAction.EmailLoginSubmit -> {
                 signInOrSignUpWithEmail(action.email, action.password)
             }
+
+            is UserAction.OnLocationPermissionResult -> {
+                _uiState.update {
+                    it.copy(permissionUiState = it.permissionUiState.copy(locationPermission = action.granted))
+                }
+            }
         }
     }
 
