@@ -63,14 +63,6 @@ fun PlanScreen(
         }
     }
 
-    LaunchedEffect(uiState) {
-        Log.d("DEBUG TEST", "uiState blocks : ${uiState.blocks}")
-        Log.d("DEBUG TEST", "uiState groups : ${uiState.groups}")
-        Log.d("DEBUG TEST", "uiState places : ${uiState.places}")
-        Log.d("DEBUG TEST", "uiState date : ${uiState.date}")
-        Log.d("DEBUG TEST", "uiState selected group : ${uiState.selectedGroup}")
-    }
-
     DisposableEffect(Unit) {
         onDispose { viewModel.savePlan() }
     }

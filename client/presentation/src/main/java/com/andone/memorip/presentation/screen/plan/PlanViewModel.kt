@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.screen.plan
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.BackoffPolicy
@@ -26,6 +27,7 @@ import com.andone.memorip.presentation.screen.plan.model.PlanGroupUiModel
 import com.andone.memorip.presentation.screen.plan.model.PlanPlaceUiModel
 import com.andone.memorip.presentation.screen.plan.model.PlanUiState
 import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_DAY
+import com.andone.memorip.presentation.util.DummyData.place
 import com.andone.memorip.presentation.util.snackbar.SnackBarEvent
 import com.andone.memorip.presentation.util.snackbar.SnackBarManager
 import com.andone.memorip.presentation.util.toRemoteString
@@ -122,7 +124,7 @@ class PlanViewModel @Inject constructor(
     private val _event = Channel<PlanEvent>(capacity = BUFFERED)
     val event = _event.receiveAsFlow()
 
-    private val originPlaces = uiState.value.places
+    private var originPlaces: List<Place> = uiState.value.places
 
     private val pendingUpdates = mutableMapOf<String, Payload>()
 
@@ -246,30 +248,35 @@ class PlanViewModel @Inject constructor(
 
     fun savePlan() {
         viewModelScope.launch {
-            uiState.value.blockUiModels.forEach { (groupPlaceId, place) ->
-                when (place) {
-                    is Place -> {
-                        if (place != uiState.value.places.find { it.id == groupPlaceId }) {
-                            val startAt = place.startDateTime.toRemoteString()
-                            val endAt = place.endDateTime.toRemoteString()
+            uiState.value.blocks.forEach { block ->
+                val target = originPlaces.find { it.id == block.id }
+                val originStartAt = target?.startDateTime
+                val originEndAt = target?.endDateTime
 
-                            if (startAt != null && endAt != null) {
-                                pendingUpdates[groupPlaceId] = Payload.PlaceTimeEditPayload(
-                                    startAt = startAt,
-                                    endAt = endAt
-                                )
-                                groupRepository.updatePlaceTime(
-                                    groupPlaceId = groupPlaceId,
-                                    startAt = startAt,
-                                    endAt = endAt
-                                ).onSuccess {
-                                    pendingUpdates.remove(groupPlaceId)
-                                }.onFailure {
-                                    if (it is CancellationException) throw it
-                                    snackBarManager.show(SnackBarEvent.NETWORK_ERROR)
-                                }
-                            }
-                        }
+                val startAtDate =
+                    uiState.value.date.startDay!!.atStartOfDay().plusDays((block.day - 1).toLong())
+                val startAt =
+                    startAtDate.plusMinutes((block.startMinute - (block.day - 1) * MINUTES_PER_DAY).toLong())
+                val endAtDate = uiState.value.date.startDay!!.atStartOfDay().plusDays((block.day - 1).toLong())
+                val endAt = endAtDate.plusMinutes((block.startMinute + block.durationMinute - (block.day - 1) * MINUTES_PER_DAY).toLong())
+
+                if (!(startAt.isEqual(originStartAt) && endAt.isEqual(originEndAt))) {
+                    val startAtString = startAt.toRemoteString()
+                    val endAtString = endAt.toRemoteString()
+
+                    pendingUpdates[block.id] = Payload.PlaceTimeEditPayload(
+                        startAt = startAtString,
+                        endAt = endAtString
+                    )
+                    groupRepository.updatePlaceTime(
+                        groupPlaceId = block.id,
+                        startAt = startAtString!!,
+                        endAt = endAtString!!
+                    ).onSuccess {
+                        pendingUpdates.remove(block.id)
+                    }.onFailure {
+                        if (it is CancellationException) { throw it }
+                        else { snackBarManager.show(SnackBarEvent.NETWORK_ERROR) }
                     }
                 }
             }
@@ -280,9 +287,10 @@ class PlanViewModel @Inject constructor(
         viewModelScope.launch {
             groupRepository.getPlaceByGroupId(groupId = groupId)
                 .onSuccess { result ->
+                    originPlaces = result.map { it.toUiModel() }
                     if (uiState.value.date.startDay != null && uiState.value.date.endDay != null) {
                         placesFlow.update {
-                            val places = result.map{ it.toUiModel() }
+                            val places = result.map { it.toUiModel() }
                             val noTimePlaces =
                                 places.filter { it.startDateTime == null || it.endDateTime == null }
                             val validPlaces =
@@ -294,7 +302,7 @@ class PlanViewModel @Inject constructor(
                             }
                             val inDatePlaces = validPlaces.filter {
                                 it.startDateTime!!.toLocalDate() in uiState.value.date.startDay!!..uiState.value.date.endDay!!
-                            }.map{
+                            }.map {
                                 val limitTime = uiState.value.date.endDay!!.atStartOfDay()
                                 if (it.endDateTime!!.isAfter(limitTime)) {
                                     it.copy(endDateTime = limitTime)
@@ -303,7 +311,8 @@ class PlanViewModel @Inject constructor(
                                 }
                             }
 
-                            val timeBlocks = inDatePlaces.mapNotNull { it.toTimeBlock(uiState.value.date.startDay?.atStartOfDay()!!) }
+                            val timeBlocks =
+                                inDatePlaces.mapNotNull { it.toTimeBlock(uiState.value.date.startDay?.atStartOfDay()!!) }
                             val uiBlocks = inDatePlaces.associateBy { it.id }
                             timeBlocksFlow.update { timeBlocks }
                             blockUiModelsFlow.update { uiBlocks }
