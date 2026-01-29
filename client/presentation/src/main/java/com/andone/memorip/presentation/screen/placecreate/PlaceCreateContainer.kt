@@ -99,11 +99,11 @@ fun PlaceCreateContainer(
             PlaceCreateSubStep(
                 step = currentStep,
                 onCategoryChange = viewModel::updateCategory,
-                onGroupChange = { group ->
-                    viewModel.onAction(PlaceCreateAction.OnGroupSelect(group))
+                onGroupChange = { groups ->
+                    viewModel.onAction(PlaceCreateAction.OnGroupSelect(groups))
                 },
                 onStepChange = { currentStep = it },
-                currentGroup = uiState.group
+                currentGroups = uiState.groups
             )
         }
     }
@@ -197,10 +197,10 @@ fun PlaceCreateMainStep(
 fun PlaceCreateSubStep(
     step: PlaceCreateStep,
     onCategoryChange: (List<TagUiModel>) -> Unit,
-    onGroupChange: (GroupUiModel) -> Unit,
+    onGroupChange: (List<GroupUiModel>) -> Unit,
     onStepChange: (PlaceCreateStep) -> Unit,
     modifier: Modifier = Modifier,
-    currentGroup: GroupUiModel? = null
+    currentGroups: List<GroupUiModel>? = null
 ) {
     when (step) {
         PlaceCreateStep.SelectCategory -> {
@@ -217,12 +217,12 @@ fun PlaceCreateSubStep(
         PlaceCreateStep.SelectGroup -> {
             SelectGroupScreen(
                 onGroupSelect = { selectGroup ->
-                    onGroupChange(selectGroup.toGroupUiModel())
+                    onGroupChange(selectGroup.map { it.toGroupUiModel() })
                     onStepChange(PlaceCreateStep.PlaceCreate)
                 },
                 onBackClick = { onStepChange(PlaceCreateStep.PlaceCreate) },
                 placeId = null,
-                initialSelectedGroupId = currentGroup?.id,
+                initialSelectedGroupId = currentGroups?.map { it.id },
                 modifier = modifier
             )
         }

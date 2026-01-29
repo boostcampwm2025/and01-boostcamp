@@ -30,7 +30,7 @@ sealed interface PlaceCreateAction {
 
     data class OnSnackBarShow(val message: String) : PlaceCreateAction
 
-    data class OnGroupSelect(val group: GroupUiModel) : PlaceCreateAction
+    data class OnGroupSelect(val groups: List<GroupUiModel>) : PlaceCreateAction
 
     data object OnCreateSuccess : PlaceCreateAction
 }

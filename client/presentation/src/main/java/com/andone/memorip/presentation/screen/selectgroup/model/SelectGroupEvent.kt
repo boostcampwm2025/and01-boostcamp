@@ -4,7 +4,7 @@ sealed interface SelectGroupEvent {
 
     data object NavigateBack : SelectGroupEvent
 
-    data class SelectGroup(val group: SelectGroupUiModel) : SelectGroupEvent
+    data class SelectGroup(val groups: List<SelectGroupUiModel>) : SelectGroupEvent
 
     data object ShowDialog : SelectGroupEvent
 

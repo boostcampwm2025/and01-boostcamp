@@ -92,7 +92,7 @@ class PlaceCreateViewModel @Inject constructor(
             }
 
             is PlaceCreateAction.OnGroupSelect -> {
-                updateGroup(action.group)
+                updateGroup(action.groups)
             }
 
             PlaceCreateAction.OnCreateSuccess -> {
@@ -113,8 +113,8 @@ class PlaceCreateViewModel @Inject constructor(
         _uiState.update { it.copy(category = category) }
     }
 
-    fun updateGroup(group: GroupUiModel) {
-        _uiState.update { it.copy(group = group) }
+    fun updateGroup(groups: List<GroupUiModel>) {
+        _uiState.update { it.copy(groups = groups) }
     }
 
     private fun removeImage(imageUri: Uri) {
@@ -138,7 +138,7 @@ class PlaceCreateViewModel @Inject constructor(
         if (uiStateValue.images.isEmpty()
             || uiStateValue.location == null
             || uiStateValue.title.isBlank()
-            || uiStateValue.group == null
+            || uiStateValue.groups.isEmpty()
         ) return
 
         viewModelScope.launch {
@@ -148,8 +148,7 @@ class PlaceCreateViewModel @Inject constructor(
 
             placeRepository.createPlace(
                 PlaceCreateUpdate(
-                    // todo: groupIds 리스트로 uiState에서 관리하는 것으로 변경 필요.
-                    groupIds = listOf(uiStateValue.group.id),
+                    groupIds = uiStateValue.groups.map { it.id },
                     title = uiStateValue.title,
                     content = uiStateValue.content,
                     tags = uiStateValue.category.map { it.id },

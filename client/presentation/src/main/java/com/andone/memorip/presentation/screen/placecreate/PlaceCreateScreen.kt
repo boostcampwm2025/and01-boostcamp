@@ -118,7 +118,7 @@ private fun PlaceCreateScreenContent(
     val placeCreateEnable = uiState.images.isNotEmpty() &&
             uiState.location != null &&
             uiState.title.isNotBlank() &&
-            uiState.group != null
+            uiState.groups.isNotEmpty()
 
     LaunchedEffect(Unit) {
         onAction(PlaceCreateAction.OnImageSelect(uiState.images.first()))
@@ -170,7 +170,7 @@ private fun PlaceCreateScreenContent(
             SelectSection(
                 category = uiState.category,
                 location = uiState.location,
-                group = uiState.group,
+                groups = uiState.groups,
                 onCategoryClick = { onAction(PlaceCreateAction.OnCategoryClick) },
                 onLocationClick = { onAction(PlaceCreateAction.OnLocationClick) },
                 onGroupClick = { onAction(PlaceCreateAction.OnGroupClick) },
@@ -269,7 +269,7 @@ private fun ContentSection(
 private fun SelectSection(
     category: List<TagUiModel>,
     location: LocationUiModel?,
-    group: GroupUiModel?,
+    groups: List<GroupUiModel>,
     onCategoryClick: () -> Unit,
     onLocationClick: () -> Unit,
     onGroupClick: () -> Unit,
@@ -277,8 +277,9 @@ private fun SelectSection(
 ) {
     val locationValue = location?.name
         ?.ifBlank { null } ?: stringResource(R.string.place_create_location_placeholder)
-    val groupValue = group?.name
-        ?: stringResource(R.string.place_create_group_placeholder)
+    val groupValue = groups
+        .joinToString(stringResource(R.string.place_create_space)) { it.name }
+        .ifEmpty { stringResource(R.string.place_create_group_placeholder) }
     val categoryValue = category
         .joinToString(stringResource(R.string.place_create_space)) { it.name }
         .ifEmpty { stringResource(R.string.place_create_tag_placeholder) }

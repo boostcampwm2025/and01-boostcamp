@@ -4,7 +4,7 @@ sealed interface SelectGroupAction {
 
     data class OnInitialize(
         val placeId: String?,
-        val initialSelectedGroupId: String?
+        val initialSelectedGroupIds: List<String>?
     ) : SelectGroupAction
 
     data object OnFABClick : SelectGroupAction

@@ -45,12 +45,12 @@ private object SelectGroupScreenDimens {
 
 @Composable
 fun SelectGroupScreen(
-    onGroupSelect: (SelectGroupUiModel) -> Unit,
+    onGroupSelect: (List<SelectGroupUiModel>) -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
     title: String = stringResource(R.string.select_group_title),
     placeId: String? = null,
-    initialSelectedGroupId: String? = null,
+    initialSelectedGroupId: List<String>? = null,
     viewModel: SelectGroupViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -60,7 +60,7 @@ fun SelectGroupScreen(
         viewModel.onAction(
             SelectGroupAction.OnInitialize(
                 placeId = placeId,
-                initialSelectedGroupId = initialSelectedGroupId
+                initialSelectedGroupIds = initialSelectedGroupId
             )
         )
     }
@@ -72,7 +72,7 @@ fun SelectGroupScreen(
             }
 
             is SelectGroupEvent.SelectGroup -> {
-                onGroupSelect(event.group)
+                onGroupSelect(event.groups)
             }
 
             SelectGroupEvent.PlaceGroupsUpdated -> {
@@ -135,10 +135,10 @@ private fun SelectGroupContent(
     Scaffold(
         topBar = {
             SelectGroupTopBar(
+                enabled = hasChanges && selectedGroupIds.isNotEmpty(),
                 onBackClick = { onAction(SelectGroupAction.OnBackClick) },
                 onCheckClick = { onAction(SelectGroupAction.OnCheckClick) },
                 title = title,
-                hasChanges = hasChanges
             )
         },
         floatingActionButton = {

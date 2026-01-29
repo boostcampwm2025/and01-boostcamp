@@ -42,7 +42,7 @@ class SelectGroupViewModel @Inject constructor(
 ) : ViewModel() {
 
     private var placeId: String? = null
-    private var initialSelectedGroupId: String? = null
+    private var initialSelectedGroupIds: List<String>? = null
 
     private val _uiState = MutableStateFlow(SelectGroupUiState())
     val uiState: StateFlow<SelectGroupUiState> = _uiState
@@ -61,15 +61,15 @@ class SelectGroupViewModel @Inject constructor(
         this.placeId = placeId
         // placeId가 있으면 initialSelectedGroupId 초기화 (PlaceDetailScreen용)
         if (placeId != null) {
-            this.initialSelectedGroupId = null
+            this.initialSelectedGroupIds = null
         }
         resetAndFetchGroups()
     }
 
-    fun setInitialSelectedGroupId(groupId: String?) {
+    fun setInitialSelectedGroupId(groupIds: List<String>?) {
         // PlaceCreate 화면에서 선택된 그룹 ID를 설정
         // placeId가 null일 때만 사용됨
-        this.initialSelectedGroupId = groupId
+        this.initialSelectedGroupIds = groupIds
     }
 
     /**
@@ -94,7 +94,7 @@ class SelectGroupViewModel @Inject constructor(
             is SelectGroupAction.OnInitialize -> {
                 setPlaceId(action.placeId)
                 if (action.placeId == null) {
-                    setInitialSelectedGroupId(action.initialSelectedGroupId)
+                    setInitialSelectedGroupId(action.initialSelectedGroupIds)
                 }
             }
 
@@ -124,15 +124,12 @@ class SelectGroupViewModel @Inject constructor(
                     val selectedGroupIds = currentState.selectedGroupIds.toList()
 
                     if (selectedGroupIds.isNotEmpty()) {
-                        viewModelScope.launch {
-                            // PlaceCreateContainer에서는 placeId가 없으므로 실제 API 호출은 하지 않고
-                            // 선택된 그룹만 콜백으로 전달
-                            val selectedGroup = currentState.groups.firstOrNull {
-                                it.id in currentState.selectedGroupIds
-                            }
-                            if (selectedGroup != null) {
-                                _event.trySend(element = SelectGroupEvent.SelectGroup(group = selectedGroup))
-                            }
+                        // PlaceCreateContainer에서는 placeId가 없으므로 실제 API 호출은 하지 않고
+                        // 선택된 그룹만 콜백으로 전달
+                        val selectedGroups =
+                            currentState.groups.filter { it.id in currentState.selectedGroupIds }
+                        if (selectedGroups.isNotEmpty()) {
+                            _event.trySend(element = SelectGroupEvent.SelectGroup(groups = selectedGroups))
                         }
                     }
                 }
@@ -228,8 +225,8 @@ class SelectGroupViewModel @Inject constructor(
                 groupRepository.fetchMyGroups()
                     .onSuccess {
                         val groups = groupRepository.myGroups.first()
-                        val initiallySelectedIds = if (initialSelectedGroupId != null) {
-                            persistentSetOf(initialSelectedGroupId!!)
+                        val initiallySelectedIds = if (initialSelectedGroupIds != null) {
+                            initialSelectedGroupIds!!
                         } else {
                             persistentSetOf()
                         }
@@ -237,8 +234,8 @@ class SelectGroupViewModel @Inject constructor(
                             current.copy(
                                 groups = groups.map { SelectGroupUiModel.from(it) }
                                     .toImmutableList(),
-                                selectedGroupIds = initiallySelectedIds,
-                                initialSelectedGroupIds = initiallySelectedIds,
+                                selectedGroupIds = initiallySelectedIds.toImmutableSet(),
+                                initialSelectedGroupIds = initiallySelectedIds.toImmutableSet(),
                                 isLoading = false
                             )
                         }
