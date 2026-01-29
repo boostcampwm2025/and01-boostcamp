@@ -13,15 +13,19 @@ interface GroupPlaceRepository : JpaRepository<GroupPlace, UUID> {
 
     @Query(
         """
-        SELECT gp.group.title
-        FROM GroupPlace gp
-        WHERE gp.place.id = :placeId
-          AND gp.deletedAt IS NULL
-          AND gp.group.deletedAt IS NULL
+        SELECT new com.andone.memorip.feature.place.repository.GroupProjection(
+            g.id,
+            g.title
+        )
+        FROM GroupPlace gp 
+        JOIN gp.group g
+        WHERE gp.place.id = :placeId 
+          AND gp.deletedAt IS NULL 
+          AND g.deletedAt IS NULL
         ORDER BY gp.id DESC
         """
     )
-    fun findGroupTitlesByPlaceId(@Param("placeId") placeId: UUID): List<String>
+    fun findGroupProjectionsByPlaceId(@Param("placeId") placeId: UUID): List<GroupProjection>
     
     @Query("SELECT gp FROM GroupPlace gp WHERE gp.group.id IN :groupIds AND gp.place.id = :placeId AND gp.deletedAt IS NULL")
     fun findByGroupIdsAndPlaceId(
@@ -35,8 +39,6 @@ interface GroupPlaceRepository : JpaRepository<GroupPlace, UUID> {
         @Param("groupIds") groupIds: List<UUID>,
         @Param("placeId") placeId: UUID
     ): Int
-    @Query("SELECT gp FROM GroupPlace gp WHERE gp.group.id = :groupId ORDER BY gp.createdAt ASC")
-    fun findByGroupId(@Param("groupId") groupId: UUID): List<GroupPlace>
 
     fun findAllByGroupId(groupId: UUID): List<GroupPlace>
 }
