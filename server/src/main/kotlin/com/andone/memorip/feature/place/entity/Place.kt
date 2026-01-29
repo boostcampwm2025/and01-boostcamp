@@ -13,7 +13,7 @@ import java.util.*
 @SQLRestriction("deleted_at IS NULL")
 class Place protected constructor(
     id: UUID,
-    groupId: UUID,
+    groupId: UUID?,
     writerId: UUID,
     title: String,
     content: String? = null,
@@ -29,8 +29,8 @@ class Place protected constructor(
         this.id = id
     }
 
-    @Column(name = "group_id", nullable = false, columnDefinition = "UUID")
-    var groupId: UUID = groupId
+    @Column(name = "group_id", nullable = true, columnDefinition = "UUID")
+    var groupId: UUID? = groupId
         internal set
 
     @Column(name = "parent_place_id", columnDefinition = "UUID")
@@ -104,55 +104,49 @@ class Place protected constructor(
         return newImage
     }
 
-    fun updateImages(newUrls: List<String>) {
-        // todo: object storage의 사진들 삭제, 추가 로직 넣어서 사용해야 함. -> service에서 할 듯?
-        images.clear()
-        newUrls.forEach { addImage(it) }
-
-        // 이미지 업데이트 시 첫 번째 이미지를 대표 이미지로 설정
-        thumbnailUrl = newUrls.firstOrNull() ?: ""
-    }
-
     fun updateThumbnailUrl(url: String) {
         require(url.isNotBlank()) { "대표 이미지 URL은 필수입니다" }
         require(url.length <= 512) { "대표 이미지 URL은 512자 이하여야 합니다" }
         this.thumbnailUrl = url
     }
 
-    fun updateTitle(title: String) {
+    fun updateGroupId(groupId: UUID?) {
+        this.groupId = groupId
+    }
+
+    fun update(
+        title: String,
+        content: String?,
+        latitude: Double,
+        longitude: Double,
+        newAddress: Address,
+        imageUrls: List<String>,
+        isPublic: Boolean
+    ) {
         require(title.isNotBlank()) { "제목은 필수입니다" }
         require(title.length <= 30) { "제목은 30자 이하여야 합니다" }
         this.title = title
-    }
-
-    fun updateContent(content: String?) {
         this.content = content
-    }
 
-    private fun updateLocation(latitude: Double, longitude: Double) {
         require(latitude in -90.0..90.0) { "위도는 -90 ~ 90 범위여야 합니다" }
         require(longitude in -180.0..180.0) { "경도는 -180 ~ 180 범위여야 합니다" }
         this.latitude = latitude
         this.longitude = longitude
-    }
-
-    private fun updateAddress(newAddress: Address) {
         this.address = newAddress
-    }
 
-    fun updateLocationAndAddress(
-        latitude: Double,
-        longitude: Double,
-        newAddress: Address
-    ) {
-        updateLocation(latitude, longitude)
-        this.address = newAddress
+        // todo: object storage의 사진들 삭제, 추가 로직 넣어서 사용해야 함. -> service에서 할 듯?
+        require(imageUrls.isNotEmpty()) {"이미지는 1장 이상 필수입니다"}
+        images.clear()
+        imageUrls.forEach { addImage(it) }
+
+        this.thumbnailUrl = imageUrls.first()
+        this.isPublic = isPublic
     }
 
     companion object {
         fun create(
             id: UUID? = null,
-            groupId: UUID,
+            groupId: UUID?,
             writerId: UUID,
             title: String,
             latitude: Double,
