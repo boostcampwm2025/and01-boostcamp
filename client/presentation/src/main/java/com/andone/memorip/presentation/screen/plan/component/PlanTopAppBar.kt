@@ -30,14 +30,13 @@ import kotlinx.collections.immutable.toImmutableList
 fun PlanTopAppBar(
     title: String?,
     groups: ImmutableList<GroupListUiModel>,
+    expanded: Boolean,
+    onTitleClick: () -> Unit,
     modifier: Modifier = Modifier,
     isDeleteMode: Boolean = false,
-    onTitleClick: () -> Unit,
     onDeleteClick: () -> Unit = {},
     onDismissClick: () -> Unit = {},
 ) {
-    var expanded by remember { mutableStateOf(value = false) }
-
     CenterAlignedTopAppBar(
         title = {
             if (!isDeleteMode) {
@@ -51,7 +50,6 @@ fun PlanTopAppBar(
                         modifier = Modifier.clickable(
                             onClick = {
                                 if (groups.isNotEmpty()) {
-                                    expanded = !expanded
                                     onTitleClick()
                                 }
                             }
@@ -96,6 +94,7 @@ private fun PlanTopAppBarPreview() {
         PlanTopAppBar(
             title = "그룹 1",
             groups = DummyData.groupListItems.toImmutableList(),
+            expanded = false,
             onTitleClick = {  }
         )
     }

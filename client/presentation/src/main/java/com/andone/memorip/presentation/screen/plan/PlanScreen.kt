@@ -127,6 +127,7 @@ fun PlanScreen(
 
     PlanScreenContents(
         state = uiState,
+        showGroupChoice = showGroupChoice,
         onAction = viewModel::onAction,
         modifier = modifier
     )
@@ -135,6 +136,7 @@ fun PlanScreen(
 @Composable
 fun PlanScreenContents(
     state: PlanUiState,
+    showGroupChoice: Boolean,
     onAction: (PlanAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -144,6 +146,7 @@ fun PlanScreenContents(
             PlanTopAppBar(
                 title = state.selectedGroup?.title,
                 groups = state.groups,
+                expanded = showGroupChoice,
                 isDeleteMode = state.date.longClickedDay != null,
                 onTitleClick = { onAction(PlanAction.GroupChoiceClick) },
                 onDeleteClick = { onAction(PlanAction.RemoveDayClick) },
@@ -183,6 +186,7 @@ private fun PlanScreenContentsPreview() {
                 places = DummyData.places.toImmutableList(),
                 blocks = DummyData.timeBlocks
             ),
+            showGroupChoice = false,
             onAction = {},
         )
     }
