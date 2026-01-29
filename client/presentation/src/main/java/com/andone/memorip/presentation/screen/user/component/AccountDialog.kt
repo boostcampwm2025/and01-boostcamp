@@ -18,20 +18,9 @@ fun AccountDialog(
     modifier: Modifier = Modifier,
     isLogout: Boolean = true
 ) {
-    val titleRes = if (isLogout)
-        R.string.login_logout
-    else
-        R.string.login_delete_account
-
-    val descriptionRes = if (isLogout)
-        R.string.login_logout_description
-    else
-        R.string.login_delete_account_description
-
-    val confirmRes = if (isLogout)
-        R.string.login_logout
-    else
-        R.string.login_delete_account_confirm
+    val titleRes = if (isLogout) R.string.login_logout else R.string.login_delete_account
+    val descriptionRes = if (isLogout) R.string.login_logout_description else R.string.login_delete_account_description
+    val confirmRes = if (isLogout) R.string.login_logout else R.string.login_delete_account_confirm
 
     AlertDialog(
         modifier = modifier,
