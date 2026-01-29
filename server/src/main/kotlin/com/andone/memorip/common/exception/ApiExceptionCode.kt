@@ -26,6 +26,7 @@ enum class CommonExceptionCode(
     TAG_NOT_FOUND(HttpStatus.NOT_FOUND, "태그를 찾을 수 없습니다."),
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "인증에 실패했습니다."),
     GROUP_FORBIDDEN(HttpStatus.FORBIDDEN, "해당 그룹에 대한 권한이 없습니다."),
+    PLACE_FORBIDDEN(HttpStatus.FORBIDDEN, "해당 장소에 대한 권한이 없습니다."),
     GROUP_CANNOT_DELETE_DEFAULT(HttpStatus.BAD_REQUEST, "기본 그룹은 삭제할 수 없습니다."),
     TAG_CONFLICT(HttpStatus.CONFLICT, "이미 존재하는 태그명입니다")
 }
