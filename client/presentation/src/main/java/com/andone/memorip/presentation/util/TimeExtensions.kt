@@ -60,5 +60,5 @@ fun LocalDateTime?.toRemoteString(): String? {
 fun LocalDate?.toRemoteString(): String? {
     if (this == null) return this
 
-    return this.format(DateTimeFormatter.ISO_INSTANT)
+    return this.format(DateTimeFormatter.ISO_LOCAL_DATE)
 }

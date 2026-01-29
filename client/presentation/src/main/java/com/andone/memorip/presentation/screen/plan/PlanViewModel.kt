@@ -215,6 +215,7 @@ class PlanViewModel @Inject constructor(
                         currentDay = action.start
                     )
                 }
+                updateGroup(startAt = action.start, endAt = action.end)
             }
 
             is PlanAction.DayScrolled -> {
@@ -234,8 +235,10 @@ class PlanViewModel @Inject constructor(
             is PlanAction.GroupChoiceConfirmClick -> {
                 savePlan()
                 saveGroup(uiState.value.selectedGroup)
-                updatePlaces(groupId = action.selectedGroup.id)
                 updateSelectedGroup(action.selectedGroup)
+                updatePlaces(groupId = action.selectedGroup.id)
+                Log.d("DEBUG TEST", "click date : ${uiState.value.date}")
+                Log.d("DEBUG TEST", "click group : ${uiState.value.selectedGroup}")
             }
 
             PlanAction.ShowCalendarClick -> {
@@ -311,8 +314,29 @@ class PlanViewModel @Inject constructor(
             )
         }
     }
+    private fun updateGroup(startAt: LocalDate, endAt: LocalDate) {
+        selectedGroupFlow.update {
+            it?.copy(
+                startDate = startAt,
+                endDate = endAt
+            )
+        }
+
+        groupsFlow.update { groups ->
+            groups.map {
+                if (it.id == selectedGroupFlow.value!!.id) {
+                    it.copy(startDate = startAt, endDate = endAt)
+                } else {
+                    it
+                }
+            }
+        }
+    }
+
     private fun saveGroup(targetGroup: GroupListUiModel?) {
+        Log.d("DEBUG TEST", "save group call")
         targetGroup?.let { group ->
+            Log.d("DEBUG TEST", "target group : $group")
             viewModelScope.launch {
                 groupRepository.updateGroup(
                     groupId = group.id,
@@ -322,15 +346,6 @@ class PlanViewModel @Inject constructor(
                     /** TODO visibility 정보가 없어서 저장이 어려움 */
                     visibility = Visibility.PRIVATE
                 )
-                groupsFlow.update { groups ->
-                    groups.map {
-                        if (it.id == group.id) {
-                            it.copy(startDate = group.startDate, endDate = group.endDate)
-                        } else {
-                            it
-                        }
-                    }
-                }
             }
         }
     }
