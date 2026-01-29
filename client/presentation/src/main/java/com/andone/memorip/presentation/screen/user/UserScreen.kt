@@ -79,6 +79,7 @@ fun UserScreen(
         ) == PackageManager.PERMISSION_GRANTED
 
         viewModel.onAction(action = UserAction.OnLocationPermissionResult(granted))
+        viewModel.onAction(action = UserAction.RefreshAuthState)
     }
 
     val credentialManager = remember {

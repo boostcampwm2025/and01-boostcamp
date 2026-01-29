@@ -19,4 +19,6 @@ sealed interface UserAction {
     data class EmailLoginSubmit(val email: String, val password: String) : UserAction
 
     data class OnLocationPermissionResult(val granted: Boolean) : UserAction
+
+    data object RefreshAuthState : UserAction
 }

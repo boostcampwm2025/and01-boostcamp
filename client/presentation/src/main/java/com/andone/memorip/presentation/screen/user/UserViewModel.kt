@@ -37,12 +37,6 @@ class UserViewModel @Inject constructor(
     private val _event = Channel<UserEvent>(BUFFERED)
     val event = _event.receiveAsFlow()
 
-    init {
-        if (authRepository.isLoggedIn()) {
-            updateUser()
-        }
-    }
-
     fun onAction(action: UserAction) {
         when (action) {
             is UserAction.OnMethodClick -> {
@@ -105,6 +99,10 @@ class UserViewModel @Inject constructor(
                     it.copy(permissionUiState = it.permissionUiState.copy(locationPermission = action.granted))
                 }
             }
+
+            UserAction.RefreshAuthState -> {
+                refreshAuthState()
+            }
         }
     }
 
@@ -156,6 +154,21 @@ class UserViewModel @Inject constructor(
 
         tokenRefresher.refreshToken(force = true)
         updateUser()
+    }
+
+    private fun refreshAuthState() {
+        viewModelScope.launch {
+            val loggedIn = authRepository.isLoggedIn()
+
+            _uiState.update {
+                it.copy(isLoggedIn = loggedIn)
+            }
+
+            if (loggedIn) {
+                tokenRefresher.refreshToken(force = true)
+                updateUser()
+            }
+        }
     }
 
     private fun onAuthFailure(e: Throwable) {

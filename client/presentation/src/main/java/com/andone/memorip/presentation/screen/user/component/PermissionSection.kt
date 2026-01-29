@@ -1,6 +1,7 @@
 package com.andone.memorip.presentation.screen.user.component
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -17,6 +18,7 @@ import com.andone.memorip.presentation.screen.user.model.SettingTrailing
 import com.andone.memorip.presentation.screen.user.model.UserAction
 import android.provider.Settings
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.app.ActivityCompat
 import com.andone.memorip.presentation.util.openAppSettings
 
 @Composable
@@ -38,13 +40,19 @@ fun PermissionSection(
             subtitle = stringResource(R.string.login_permission_location_subtitle),
             trailing = SettingTrailing.Arrow(isAllowed = permissionUiState.locationPermission),
             onClick = {
-                if (permissionUiState.locationPermission) {
-                    openAppSettings(context)
-                } else {
-                    locationPermissionLauncher.launch(input = Manifest.permission.ACCESS_FINE_LOCATION)
-                }
-                if (!permissionUiState.locationPermission) {
-                    openAppSettings(context)
+                when {
+                    permissionUiState.locationPermission -> {
+                        openAppSettings(context)
+                    }
+
+                    ActivityCompat.shouldShowRequestPermissionRationale(
+                        context as Activity, Manifest.permission.ACCESS_FINE_LOCATION) -> {
+                        locationPermissionLauncher.launch(input = Manifest.permission.ACCESS_FINE_LOCATION)
+                    }
+
+                    else -> {
+                        openAppSettings(context)
+                    }
                 }
             }
         ),
