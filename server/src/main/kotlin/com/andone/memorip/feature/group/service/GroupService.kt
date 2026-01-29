@@ -37,9 +37,8 @@ class GroupService(
     }
 
     @Transactional
-    fun createGroup(request: GroupCreateRequest): GroupResponse {
-        val currentUserId = getCurrentUserId()
-        val owner = userRepository.findByIdOrNull(currentUserId)
+    fun createGroup(request: GroupCreateRequest, userId : UUID): GroupResponse {
+        val owner = userRepository.findByIdOrNull(userId)
             ?: throw BusinessException(code = CommonExceptionCode.USER_NOT_FOUND)
 
         val group = Group.create(
@@ -64,10 +63,9 @@ class GroupService(
     }
 
     @Transactional(readOnly = true)
-    fun getMyGroups(pageable: Pageable, placeId: UUID? = null): PagedResult<GroupListResponse> {
-        val currentUserId = getCurrentUserId()
+    fun getMyGroups(pageable: Pageable, placeId: UUID? = null, userId : UUID): PagedResult<GroupListResponse> {
         return getGroupListWithPagination(
-            ownerId = currentUserId,
+            ownerId = userId,
             placeId = placeId,
             visibility = null,
             pageable = pageable
@@ -100,12 +98,11 @@ class GroupService(
     }
 
     @Transactional
-    fun updateGroup(groupId: UUID, request: GroupUpdateRequest) {
-        val currentUserId = getCurrentUserId()
+    fun updateGroup(groupId: UUID, request: GroupUpdateRequest, userId : UUID) {
         val group = groupRepository.findByIdOrNull(groupId)
             ?: throw BusinessException(code = CommonExceptionCode.GROUP_NOT_FOUND)
 
-        if (!group.isOwnedBy(currentUserId)) {
+        if (!group.isOwnedBy(userId)) {
             throw BusinessException(code = CommonExceptionCode.GROUP_FORBIDDEN)
         }
 
@@ -115,12 +112,11 @@ class GroupService(
     }
 
     @Transactional
-    fun deleteGroup(groupId: UUID) {
-        val currentUserId = getCurrentUserId()
+    fun deleteGroup(groupId: UUID, userId: UUID) {
         val group = groupRepository.findByIdOrNull(groupId)
             ?: throw BusinessException(code = CommonExceptionCode.GROUP_NOT_FOUND)
 
-        if (!group.isOwnedBy(currentUserId)) {
+        if (!group.isOwnedBy(userId)) {
             throw BusinessException(code = CommonExceptionCode.GROUP_FORBIDDEN)
         }
 
@@ -136,8 +132,8 @@ class GroupService(
     }
 
     @Transactional(readOnly = true)
-    fun getSimpleGroupPeriods(): List<GroupPeriodResponse> {
-        return groupRepository.findSimpleGroups()
+    fun getSimpleGroupPeriods(userId: UUID): List<GroupPeriodResponse> {
+        return groupRepository.findSimpleGroups(ownerId = userId)
             .map {it.toGroupPeriodResponse()}
     }
 }

@@ -2,6 +2,7 @@ package com.andone.memorip.presentation.screen.user.component
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.R
@@ -12,16 +13,20 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 
 @Composable
 fun AppInfoSection(
-    appVersion: String,
     onAction: (UserAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val context = LocalContext.current
+    val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+    val versionName = packageInfo.versionName
+
     val items = listOf(
         SettingItemUiModel(
             iconRes = R.drawable.ic_baseline_phone_android,
             title = stringResource(R.string.login_app_version),
-            trailing = SettingTrailing.Text(text = appVersion),
-            onClick = {}
+            trailing = SettingTrailing.Text(text = versionName ?: ""),
+            onClick = {},
+            clickable = false
         ),
         SettingItemUiModel(
             iconRes = R.drawable.ic_baseline_autorenew,
@@ -42,7 +47,6 @@ fun AppInfoSection(
 private fun AppInfoSectionPreview() {
     MemoripTheme {
         AppInfoSection(
-            appVersion = "2.1.2",
             onAction = {},
         )
     }

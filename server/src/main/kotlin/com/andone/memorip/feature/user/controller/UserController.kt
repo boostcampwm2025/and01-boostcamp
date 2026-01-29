@@ -1,6 +1,7 @@
 package com.andone.memorip.feature.user.controller
 
 import com.andone.memorip.common.response.ApiResult
+import com.andone.memorip.common.security.UserPrincipal
 import com.andone.memorip.feature.user.dto.UpdateNicknameRequest
 import com.andone.memorip.feature.user.dto.UserMeResponse
 import com.andone.memorip.feature.user.service.UserService
@@ -24,29 +25,27 @@ class UserController(
     @GetMapping("/me")
     @Operation(summary = "계정 조회")
     fun me(
-        @AuthenticationPrincipal firebaseUid: String
+        @AuthenticationPrincipal principal: UserPrincipal
     ): ApiResult<UserMeResponse> {
 
-        val user = userService.getOrCreateMe(
-            firebaseUid = firebaseUid,
-            nickname = null
-        )
+        val user = userService.getById(principal.userId)
 
         return ApiResult.success(data = UserMeResponse.from(user))
     }
 
+
     @PutMapping("/me/nickname")
     @Operation(summary = "계정 닉네임 변경")
     fun updateNickname(
-        @AuthenticationPrincipal firebaseUid: String,
+        @AuthenticationPrincipal principal: UserPrincipal,
         @Valid @RequestBody request: UpdateNicknameRequest
     ): ApiResult<UserMeResponse> {
 
         val user = userService.updateNickname(
-            firebaseUid = firebaseUid,
+            userId = principal.userId,
             nickname = request.nickname
         )
 
-        return ApiResult.success(data = UserMeResponse.from(user))
+        return ApiResult.success(UserMeResponse.from(user))
     }
 }
