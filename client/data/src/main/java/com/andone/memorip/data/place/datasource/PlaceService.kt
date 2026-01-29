@@ -1,13 +1,13 @@
 package com.andone.memorip.data.place.datasource
 
 import com.andone.memorip.data.common.ApiResult
+import com.andone.memorip.data.place.model.PlaceCreateResponse
+import com.andone.memorip.data.place.model.PlaceCreateUpdateRequest
+import com.andone.memorip.data.place.model.PlaceDetailResponse
+import com.andone.memorip.data.place.model.PlaceGroupsUpdateRequest
 import com.andone.memorip.data.place.model.PlaceListItemResponse
-import com.andone.memorip.domain.model.request.PlaceCreateRequest
-import com.andone.memorip.domain.model.response.PlaceCreateResponse
-import com.andone.memorip.domain.model.response.PlaceDetailResponse
 import com.andone.memorip.domain.model.response.PlaceImageUploadResponse
 import okhttp3.MultipartBody
-import com.andone.memorip.data.place.model.PlaceGroupsUpdateRequest
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -44,7 +44,7 @@ interface PlaceService {
 
     @POST("/api/places")
     suspend fun createPlace(
-        @Body place: PlaceCreateRequest
+        @Body place: PlaceCreateUpdateRequest
     ): ApiResult<PlaceCreateResponse>
 
     @DELETE("/api/places/{placeId}")
