@@ -9,7 +9,6 @@ import com.andone.memorip.domain.model.response.PlaceDetailResponse
 import com.andone.memorip.domain.model.response.PlaceImageUploadResponse
 import kotlinx.coroutines.flow.Flow
 import java.io.File
-import java.util.UUID
 
 interface PlaceRemoteDataSource {
     suspend fun getPlaceDetail(placeId: String): Result<PlaceDetailResponse>
@@ -23,6 +22,7 @@ interface PlaceRemoteDataSource {
 
     suspend fun uploadImage(file: File): Result<PlaceImageUploadResponse>
     suspend fun createPlace(place: PlaceCreateRequest): Result<PlaceCreateResponse>
+    suspend fun deletePlace(placeId: String): Result<Unit>
     suspend fun updatePlaceGroups(
         placeId: String,
         addGroupIds: List<String>,

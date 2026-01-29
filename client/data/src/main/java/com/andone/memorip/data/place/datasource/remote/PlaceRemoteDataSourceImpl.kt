@@ -89,6 +89,10 @@ class PlaceRemoteDataSourceImpl @Inject constructor(
         return apiCall { placeService.createPlace(place) }
     }
 
+    override suspend fun deletePlace(placeId: String): Result<Unit> {
+        return apiCall { placeService.deletePlace(placeId) }
+    }
+
     override suspend fun updatePlaceGroups(
         placeId: String,
         addGroupIds: List<String>,
