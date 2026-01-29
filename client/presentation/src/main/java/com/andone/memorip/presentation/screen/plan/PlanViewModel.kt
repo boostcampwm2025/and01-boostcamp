@@ -1,6 +1,5 @@
 package com.andone.memorip.presentation.screen.plan
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.BackoffPolicy
@@ -27,7 +26,6 @@ import com.andone.memorip.presentation.screen.plan.model.PlanGroupUiModel
 import com.andone.memorip.presentation.screen.plan.model.PlanPlaceUiModel
 import com.andone.memorip.presentation.screen.plan.model.PlanUiState
 import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_DAY
-import com.andone.memorip.presentation.util.DummyData.place
 import com.andone.memorip.presentation.util.snackbar.SnackBarEvent
 import com.andone.memorip.presentation.util.snackbar.SnackBarManager
 import com.andone.memorip.presentation.util.toRemoteString
@@ -35,6 +33,7 @@ import com.andone.memorip.presentation.util.workmanager.PlanWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
@@ -48,7 +47,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
-import java.util.concurrent.CancellationException
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.days
@@ -275,8 +273,7 @@ class PlanViewModel @Inject constructor(
                     ).onSuccess {
                         pendingUpdates.remove(block.id)
                     }.onFailure {
-                        if (it is CancellationException) { throw it }
-                        else { snackBarManager.show(SnackBarEvent.NETWORK_ERROR) }
+                        if (it !is CancellationException) { snackBarManager.show(SnackBarEvent.NETWORK_ERROR) }
                     }
                 }
             }
