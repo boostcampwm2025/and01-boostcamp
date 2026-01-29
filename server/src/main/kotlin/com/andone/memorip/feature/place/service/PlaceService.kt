@@ -32,26 +32,15 @@ class PlaceService(
     private val groupPlaceRepository: GroupPlaceRepository
 ) {
 
-    /**
-     * 임시 인증 함수 - 실제 인증 구현 전까지 사용
-     * TODO: 실제 인증 구현 후 제거
-     */
-    private fun getCurrentUserId(): UUID {
-        val tempUserId = UUID.fromString("019b8be0-1fad-71e9-9da0-bc03ada63862")
-        return tempUserId
-    }
-
     @Transactional(readOnly = true)
-    fun getPlaceById(placeId: UUID): PlaceDetailResponse {
-        val currentUserId = getCurrentUserId()
-
+    fun getPlaceById(placeId: UUID, userId: UUID): PlaceDetailResponse {
         val place = placeRepository.findByIdOrNull(placeId)
             ?: throw BusinessException(code = CommonExceptionCode.PLACE_NOT_FOUND)
         val tags = placeTagRepository.findAllByPlaceId(id = placeId).map { it.toTagResponse() }
         val images = placeImageRepository.findAllByPlaceId(id = placeId).map { it.url }
         val groups = groupPlaceRepository.findGroupProjectionsByPlaceId(placeId)
 
-        val isInMyGroup = groupPlaceRepository.existsByPlaceIdAndOwnerUserId(placeId, currentUserId)
+        val isInMyGroup = groupPlaceRepository.existsByPlaceIdAndOwnerUserId(placeId, userId)
 
         return PlaceDetailResponse(
             placeId = place.id,
@@ -64,7 +53,7 @@ class PlaceService(
             longitude = place.longitude,
             groups = groups.map { GroupCompactResponse(it.groupId, it.groupName) },
             address = place.address,
-            isMine = place.writerId == currentUserId,
+            isMine = place.writerId == userId,
             isInMyGroup = isInMyGroup
         )
     }
@@ -139,12 +128,11 @@ class PlaceService(
     }
 
     @Transactional
-    fun updatePlace(placeId: UUID, request: PlaceRequest): PlaceDetailResponse {
+    fun updatePlace(placeId: UUID, request: PlaceRequest, userId: UUID): PlaceDetailResponse {
         val place = placeRepository.findByIdOrNull(placeId)
             ?: throw BusinessException(code = CommonExceptionCode.PLACE_NOT_FOUND)
 
-        val currentUserId = getCurrentUserId()
-        if (place.writerId != currentUserId) {
+        if (place.writerId != userId) {
             throw BusinessException(code = CommonExceptionCode.PLACE_FORBIDDEN)
         }
 
@@ -165,7 +153,7 @@ class PlaceService(
         val groupIdsToRemove = existingGroupIds - requestedGroupIds
 
         if (groupIdsToAdd.isNotEmpty()) {
-            val groups = validateGroupOwnership(groupIdsToAdd.toList(), currentUserId)
+            val groups = validateGroupOwnership(groupIdsToAdd.toList(), userId)
 
             val newGroupPlaces = groups.map { group ->
                 GroupPlace.create(group = group, place = place)
@@ -202,12 +190,11 @@ class PlaceService(
     }
 
     @Transactional
-    fun deletePlace(placeId: UUID) {
+    fun deletePlace(placeId: UUID, userId: UUID) {
         val place = placeRepository.findByIdOrNull(placeId)
             ?: throw BusinessException(code = CommonExceptionCode.PLACE_NOT_FOUND)
 
-        val currentUserId = getCurrentUserId()
-        if (place.writerId != currentUserId) {
+        if (place.writerId != userId) {
             throw BusinessException(code = CommonExceptionCode.PLACE_FORBIDDEN)
         }
 

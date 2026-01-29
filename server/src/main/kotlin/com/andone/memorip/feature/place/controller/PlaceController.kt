@@ -42,9 +42,10 @@ class PlaceController(
             description = "조회할 장소 ID",
             example = "019bf896-de41-760a-a55b-4b92ce743d25"
         )
-        @PathVariable("placeId") placeId: UUID
+        @PathVariable("placeId") placeId: UUID,
+        @AuthenticationPrincipal principal: UserPrincipal
     ): ApiResult<PlaceDetailResponse> {
-        val result = placeService.getPlaceById(placeId = placeId)
+        val result = placeService.getPlaceById(placeId, principal.userId)
         return ApiResult.success(data = result)
     }
 
@@ -105,7 +106,7 @@ class PlaceController(
 
     @PostMapping("/places")
     fun createPlace(
-        @Valid @RequestBody request: PlaceCreateRequest,
+        @Valid @RequestBody request: PlaceRequest,
         @AuthenticationPrincipal principal: UserPrincipal
     ): ApiResult<PlaceCreateResponse> {
         val placeId = placeService.createPlace(request, principal.userId)
@@ -141,9 +142,10 @@ class PlaceController(
             example = "019c07ae-5820-7ce4-acff-c7c379b1aa0a"
         )
         @PathVariable("placeId") placeId: UUID,
-        @Valid @RequestBody request: PlaceRequest
+        @Valid @RequestBody request: PlaceRequest,
+        @AuthenticationPrincipal principal: UserPrincipal
     ): ApiResult<PlaceDetailResponse> {
-        val result = placeService.updatePlace(placeId, request)
+        val result = placeService.updatePlace(placeId, request, principal.userId)
         return ApiResult.success(result)
     }
 
@@ -162,9 +164,10 @@ class PlaceController(
         ]
     )
     fun deletePlace(
-        @PathVariable("placeId") placeId: UUID
+        @PathVariable("placeId") placeId: UUID,
+        @AuthenticationPrincipal principal: UserPrincipal
     ): ApiResult<Unit> {
-        placeService.deletePlace(placeId)
+        placeService.deletePlace(placeId, principal.userId)
         return ApiResult.success(Unit)
     }
 
