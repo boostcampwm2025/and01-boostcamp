@@ -109,14 +109,13 @@ class PlaceService(
     }
 
     @Transactional
-    fun createPlace(request: PlaceRequest): PlaceCreateResponse {
-        val currentUserId = getCurrentUserId()
-        val groups = validateGroupOwnership(request.groupIds, currentUserId)
+    fun createPlace(request: PlaceRequest, userId: UUID): PlaceCreateResponse {
+        val groups = validateGroupOwnership(request.groupIds, userId)
 
         // todo: Place에서 Group 간의 단일 연결 끊으면 삭제 해야함.
         val place = Place.create(
             groupId = request.groupIds.first(),
-            writerId = currentUserId,
+            writerId = userId,
             title = request.title,
             content = request.content,
             latitude = request.latitude,

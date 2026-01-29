@@ -12,7 +12,8 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 
 @Composable
 fun AccountSection(
-    onAction: (UserAction) -> Unit,
+    showLogoutDialog: () -> Unit,
+    showDeleteAccountDialog: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val items = listOf(
@@ -20,13 +21,13 @@ fun AccountSection(
             iconRes = R.drawable.ic_baseline_logout,
             title = stringResource(R.string.login_logout),
             trailing = SettingTrailing.Arrow(justArrow = true),
-            onClick = {}
+            onClick = showLogoutDialog
         ),
         SettingItemUiModel(
             iconRes = R.drawable.ic_outline_person_cancel,
             title = stringResource(R.string.login_delete_account),
             trailing = SettingTrailing.Arrow(justArrow = true),
-            onClick = {}
+            onClick = showDeleteAccountDialog
         ),
     )
     SettingSection(
@@ -41,7 +42,8 @@ fun AccountSection(
 private fun AccountSectionPreview() {
     MemoripTheme {
         AccountSection(
-            onAction = {},
+            showLogoutDialog = {},
+            showDeleteAccountDialog = {},
         )
     }
 }

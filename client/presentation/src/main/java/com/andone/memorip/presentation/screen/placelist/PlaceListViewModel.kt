@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import androidx.paging.map
+import com.andone.memorip.domain.auth.TokenRefresher
+import com.andone.memorip.domain.repository.AuthRepository
 import com.andone.memorip.domain.repository.PlaceRepository
 import com.andone.memorip.domain.repository.TagRepository
 import com.andone.memorip.presentation.model.toUiModel
@@ -27,12 +29,15 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class PlaceListViewModel @Inject constructor(
     repository: PlaceRepository,
-    tagRepository: TagRepository
+    tagRepository: TagRepository,
+    authRepository: AuthRepository,
+    tokenRefresher: TokenRefresher
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(value = PlaceListUiState())
@@ -97,6 +102,14 @@ class PlaceListViewModel @Inject constructor(
 
         _uiState.update {
             it.copy(rootRegions = rootRegions)
+        }
+
+        viewModelScope.launch {
+            try {
+                tokenRefresher.refreshToken(force = true)
+            } catch (e: Exception) {
+                authRepository.signOut()
+            }
         }
     }
 
