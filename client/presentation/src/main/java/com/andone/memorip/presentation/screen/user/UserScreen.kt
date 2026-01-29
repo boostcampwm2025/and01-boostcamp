@@ -1,5 +1,9 @@
 package com.andone.memorip.presentation.screen.user
 
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,14 +18,18 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
@@ -30,9 +38,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.presentation.BuildConfig
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.screen.user.UserScreenDimen.ACCOUNT_SECTION_HEIGHT
+import com.andone.memorip.presentation.screen.user.component.AccountDialog
 import com.andone.memorip.presentation.screen.user.component.AccountSection
 import com.andone.memorip.presentation.screen.user.component.AlarmSection
 import com.andone.memorip.presentation.screen.user.component.AppInfoSection
+import com.andone.memorip.presentation.screen.user.component.LoginDialog
 import com.andone.memorip.presentation.screen.user.component.PermissionSection
 import com.andone.memorip.presentation.screen.user.component.PolicySection
 import com.andone.memorip.presentation.screen.user.component.SettingSection
@@ -62,8 +72,18 @@ fun UserScreen(
     viewModel: UserViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
     val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        val granted = ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+
+        viewModel.onAction(action = UserAction.OnLocationPermissionResult(granted))
+        viewModel.onAction(action = UserAction.RefreshAuthState)
+    }
+
     val credentialManager = remember {
         CredentialManager.create(context)
     }
@@ -98,6 +118,7 @@ fun UserScreen(
                         viewModel.onAction(action = UserAction.GoogleLoginSuccess(idToken = googleIdTokenCredential.idToken))
                     }
                 } catch (e: Exception) {
+                    viewModel.onAction(action = UserAction.OnMethodClick(method = LoginMethod.EMAIL))
                 }
             }
         }
@@ -116,6 +137,24 @@ fun UserScreenContent(
     onAction: (UserAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    var showAccountDialog by remember { mutableStateOf(false) }
+    var isLogout by remember { mutableStateOf(true) }
+
+    if (showAccountDialog) {
+        AccountDialog(
+            onAction = onAction,
+            onDismiss = { showAccountDialog = false },
+            isLogout = isLogout
+        )
+    }
+
+    if (state.showLoginDialog) {
+        LoginDialog(
+            state = state,
+            onAction = onAction,
+        )
+    }
+
     Scaffold(modifier = modifier) { innerPadding ->
         Column(
             modifier = Modifier
@@ -133,37 +172,21 @@ fun UserScreenContent(
 
             PolicySection(onAction = onAction)
 
-            AppInfoSection(state.appVersion, onAction = onAction)
+            AppInfoSection(onAction = onAction)
 
             if (state.isLoggedIn) {
-                AccountSection(onAction = onAction)
+                AccountSection(
+                    showLogoutDialog = {
+                        isLogout = true
+                        showAccountDialog = true
+                    },
+                    showDeleteAccountDialog = {
+                        isLogout = false
+                        showAccountDialog = true
+                    }
+                )
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun UserScreenContentsPreview() {
-    MemoripTheme {
-        UserScreenContent(
-            state = UserUiState(),
-            onAction = {},
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun UserScreenContentsLoginPreview() {
-    MemoripTheme {
-        UserScreenContent(
-            state = UserUiState(
-                isLoggedIn = true,
-                user = DummyData.dummyUser
-            ),
-            onAction = {},
-        )
     }
 }
 
@@ -198,5 +221,30 @@ private fun ProfileSection(
                 Text(text = stringResource(R.string.login_add_account))
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun UserScreenContentsPreview() {
+    MemoripTheme {
+        UserScreenContent(
+            state = UserUiState(),
+            onAction = {},
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun UserScreenContentsLoginPreview() {
+    MemoripTheme {
+        UserScreenContent(
+            state = UserUiState(
+                isLoggedIn = true,
+                user = DummyData.dummyUser
+            ),
+            onAction = {},
+        )
     }
 }

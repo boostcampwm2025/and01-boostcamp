@@ -11,23 +11,4 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltAndroidApp
-class MemoripApplication : Application() {
-
-    @Inject
-    lateinit var authRepository: AuthRepository
-
-    @Inject
-    lateinit var tokenRefresher: TokenRefresher
-
-    override fun onCreate() {
-        super.onCreate()
-
-        CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
-            try {
-                tokenRefresher.refreshToken(force = true)
-            } catch (e: Exception) {
-                authRepository.signOut()
-            }
-        }
-    }
-}
+class MemoripApplication : Application()

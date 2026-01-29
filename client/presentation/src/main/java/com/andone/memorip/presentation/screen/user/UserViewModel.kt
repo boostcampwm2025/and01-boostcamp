@@ -10,6 +10,8 @@ import com.andone.memorip.presentation.screen.user.model.UserEvent
 import com.andone.memorip.presentation.screen.user.model.LoginMethod
 import com.andone.memorip.presentation.screen.user.model.UserUiState
 import com.andone.memorip.presentation.screen.user.model.toUiModel
+import com.andone.memorip.presentation.util.snackbar.SnackBarEvent
+import com.andone.memorip.presentation.util.snackbar.SnackBarManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
@@ -24,7 +26,8 @@ import javax.inject.Inject
 class UserViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val tokenRefresher: TokenRefresher,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val snackBarManager: SnackBarManager
 ) : ViewModel() {
 
     private val _uiState =
@@ -34,38 +37,107 @@ class UserViewModel @Inject constructor(
     private val _event = Channel<UserEvent>(BUFFERED)
     val event = _event.receiveAsFlow()
 
-    init {
-        if (authRepository.isLoggedIn()) {
-            updateUser()
-        }
-    }
-
     fun onAction(action: UserAction) {
         when (action) {
             is UserAction.OnMethodClick -> {
                 when (action.method) {
                     LoginMethod.GOOGLE -> _event.trySend(element = UserEvent.RequestGoogleLogin)
-                    LoginMethod.EMAIL -> {}
+                    LoginMethod.EMAIL -> {
+                        _uiState.update {
+                            it.copy(showLoginDialog = true)
+                        }
+                    }
+
                     LoginMethod.PHONE -> {}
                 }
             }
 
             is UserAction.GoogleLoginSuccess -> {
                 viewModelScope.launch {
-                    authRepository.signInWithGoogle(idToken = action.idToken)
-                        .onSuccess {
-                            _uiState.update {
-                                it.copy(isLoggedIn = true)
-                            }
-                            tokenRefresher.refreshToken(force = true)
-                            updateUser()
-                        }
-                        .onFailure { e ->
-                            _uiState.update {
-                                it.copy(errorMessage = e.message)
-                            }
-                        }
+                    authRepository.signInWithGoogle(action.idToken)
+                        .onSuccess { onAuthSuccess() }
+                        .onFailure { onAuthFailure(it) }
                 }
+            }
+
+            UserAction.CloseLoginDialog -> {
+                _uiState.update {
+                    it.copy(showLoginDialog = false)
+                }
+            }
+
+            is UserAction.UpdateEmail -> {
+                _uiState.update {
+                    it.copy(email = action.email)
+                }
+            }
+
+            is UserAction.UpdatePassword -> {
+                _uiState.update {
+                    it.copy(password = action.password)
+                }
+            }
+
+            is UserAction.UpdatePasswordConfirm -> {
+                _uiState.update {
+                    it.copy(passwordConfirm = action.passwordConfirm)
+                }
+            }
+
+            UserAction.ToggleLoginMode -> {
+                _uiState.update {
+                    it.copy(isNewAccount = !it.isNewAccount)
+                }
+            }
+
+            is UserAction.EmailLoginSubmit -> {
+                signInOrSignUpWithEmail(action.email, action.password)
+            }
+
+            is UserAction.OnLocationPermissionResult -> {
+                _uiState.update {
+                    it.copy(permissionUiState = it.permissionUiState.copy(locationPermission = action.granted))
+                }
+            }
+
+            UserAction.RefreshAuthState -> {
+                refreshAuthState()
+            }
+
+            UserAction.SignOut -> {
+                viewModelScope.launch {
+                    authRepository.signOut()
+                    refreshAuthState()
+                }
+            }
+
+            UserAction.DeleteAccount -> {
+                viewModelScope.launch {
+                    authRepository.deleteAccount()
+                    refreshAuthState()
+                }
+            }
+        }
+    }
+
+    private fun signInOrSignUpWithEmail(email: String, password: String) {
+        viewModelScope.launch {
+            val authResult = if (_uiState.value.isNewAccount) {
+                authRepository.signUpWithEmail(email, password)
+            } else {
+                authRepository.signInWithEmail(email, password)
+            }
+
+            authResult
+                .onSuccess {
+                    onAuthSuccess()
+                }
+                .onFailure { e ->
+                    onAuthFailure(e)
+                }
+
+            _uiState.update {
+                it.copy(showLoginDialog = false)
             }
         }
     }
@@ -84,6 +156,40 @@ class UserViewModel @Inject constructor(
                     }
                 }
         }
+    }
+
+    private suspend fun onAuthSuccess() {
+        _uiState.update {
+            it.copy(
+                isLoggedIn = true,
+                errorMessage = null
+            )
+        }
+
+        tokenRefresher.refreshToken(force = true)
+        updateUser()
+    }
+
+    private fun refreshAuthState() {
+        viewModelScope.launch {
+            val loggedIn = authRepository.isLoggedIn()
+
+            _uiState.update {
+                it.copy(isLoggedIn = loggedIn)
+            }
+
+            if (loggedIn) {
+                tokenRefresher.refreshToken(force = true)
+                updateUser()
+            }
+        }
+    }
+
+    private fun onAuthFailure(e: Throwable) {
+        _uiState.update {
+            it.copy(errorMessage = e.message)
+        }
+        snackBarManager.show(event = SnackBarEvent.UNKNOWN_ERROR)
     }
 
     private fun updateUser() {

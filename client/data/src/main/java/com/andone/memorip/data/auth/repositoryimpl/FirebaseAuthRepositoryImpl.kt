@@ -37,6 +37,16 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                 .await()
         }
 
+    override suspend fun signUpWithEmail(
+        email: String,
+        password: String
+    ): Result<Unit> =
+        runCatching {
+            firebaseAuth
+                .createUserWithEmailAndPassword(email, password)
+                .await()
+        }
+
     override suspend fun signInWithPhone(
         verificationId: String,
         smsCode: String
@@ -53,4 +63,12 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
     override suspend fun signOut() {
         firebaseAuth.signOut()
     }
+
+    override suspend fun deleteAccount(): Result<Unit> =
+        runCatching {
+            val user = firebaseAuth.currentUser
+                ?: throw IllegalStateException()
+
+            user.delete().await()
+        }
 }

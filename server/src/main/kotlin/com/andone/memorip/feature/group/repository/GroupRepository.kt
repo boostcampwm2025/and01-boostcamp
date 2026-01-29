@@ -111,7 +111,8 @@ interface GroupRepository: JpaRepository<Group, UUID> {
         g.start_date as startDate,
         g.end_date as endDate
     FROM groups g
-    WHERE g.deleted_at IS NULL
+    WHERE (:ownerId IS NULL OR g.owner_id = :ownerId)
+      AND(g.deleted_at IS NULL)
     """, nativeQuery = true)
-    fun findSimpleGroups(): List<GroupPeriodProjection>
+    fun findSimpleGroups(@Param("ownerId") ownerId: UUID?): List<GroupPeriodProjection>
 }

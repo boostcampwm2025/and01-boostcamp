@@ -1,6 +1,7 @@
 package com.andone.memorip.feature.group.controller
 
 import com.andone.memorip.common.response.ApiResult
+import com.andone.memorip.common.security.UserPrincipal
 import com.andone.memorip.feature.group.dto.request.GroupCreateRequest
 import com.andone.memorip.feature.group.dto.request.GroupUpdateRequest
 import com.andone.memorip.feature.group.dto.request.GroupPlaceCreateRequest
@@ -19,6 +20,7 @@ import jakarta.validation.Valid
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.data.web.PageableDefault
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 import java.util.UUID
 
@@ -41,9 +43,10 @@ class GroupController(
         ]
     )
     fun createGroup(
-        @Valid @RequestBody request: GroupCreateRequest
+        @Valid @RequestBody request: GroupCreateRequest,
+        @AuthenticationPrincipal principal: UserPrincipal
     ): ApiResult<GroupResponse> {
-        val result = groupService.createGroup(request)
+        val result = groupService.createGroup(request, principal.userId)
         return ApiResult.success(result)
     }
 
@@ -136,9 +139,10 @@ class GroupController(
             sort = ["id"],
             direction = Sort.Direction.DESC
         )
-        pageable: Pageable
+        pageable: Pageable,
+        @AuthenticationPrincipal principal: UserPrincipal
     ): ApiResult<List<GroupListResponse>> {
-        val result = groupService.getMyGroups(pageable, placeId)
+        val result = groupService.getMyGroups(pageable, placeId, principal.userId)
         return ApiResult.success(result.content, result.pagination)
     }
 
@@ -163,9 +167,10 @@ class GroupController(
     )
     fun updateGroup(
         @PathVariable("groupId") groupId: UUID,
-        @Valid @RequestBody request: GroupUpdateRequest
+        @Valid @RequestBody request: GroupUpdateRequest,
+        @AuthenticationPrincipal principal: UserPrincipal
     ): ApiResult<Unit> {
-        groupService.updateGroup(groupId, request)
+        groupService.updateGroup(groupId, request, principal.userId)
         return ApiResult.success(Unit)
     }
 
@@ -188,9 +193,10 @@ class GroupController(
         ]
     )
     fun deleteGroup(
-        @PathVariable("groupId") groupId: UUID
+        @PathVariable("groupId") groupId: UUID,
+        @AuthenticationPrincipal principal: UserPrincipal
     ): ApiResult<Unit> {
-        groupService.deleteGroup(groupId)
+        groupService.deleteGroup(groupId, principal.userId)
         return ApiResult.success(Unit)
     }
 
@@ -290,8 +296,8 @@ class GroupController(
 
     @GetMapping("/groups/simple")
     @Operation(summary = "여행 시작, 종료 날짜를 포함한 그룹 리스트 조회")
-    fun getSimpleGroups(): ApiResult<List<GroupPeriodResponse>> {
-        val result = groupService.getSimpleGroupPeriods()
+    fun getSimpleGroups(@AuthenticationPrincipal principal: UserPrincipal): ApiResult<List<GroupPeriodResponse>> {
+        val result = groupService.getSimpleGroupPeriods(principal.userId)
         return ApiResult.success(result)
     }
 }
