@@ -10,6 +10,7 @@ data class PlaceListItemResponse(
     val longitude: Double,
     val address: String,
     val imageUrl: String?,
+    val thumbnailImageRatio: Float,
 
     @get:JsonProperty("isPublic")
     val isPublic: Boolean

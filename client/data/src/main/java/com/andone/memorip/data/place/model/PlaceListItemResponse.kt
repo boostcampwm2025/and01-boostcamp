@@ -11,6 +11,7 @@ data class PlaceListItemResponse(
     val longitude: Double,
     val address: String,
     val imageUrl: String? = null,
+    val thumbnailImageRatio: Float,
     val isPublic: Boolean
 )
 
@@ -22,6 +23,7 @@ fun PlaceListItemResponse.toDomain(): PlaceListItem =
         longitude = longitude,
         address = address,
         imageUrl = imageUrl ?: "",
+        thumbnailImageRatio = thumbnailImageRatio,
         isPublic = isPublic
     )
 
