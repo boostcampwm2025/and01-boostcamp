@@ -6,9 +6,7 @@ import kotlinx.collections.immutable.toImmutableList
 
 data class PlaceDetailUiState(
     val place: PlaceUiModel = PlaceUiModel(),
-    val isLoading: Boolean = true,
-    val showMoreMenu: Boolean = false,
-    val showDeleteDialog: Boolean = false
+    val isLoading: Boolean = true
 )
 
 fun PlaceDetail.toUiModel(): PlaceUiModel = PlaceUiModel(

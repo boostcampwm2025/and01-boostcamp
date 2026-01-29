@@ -1,6 +1,5 @@
 package com.andone.memorip.presentation.screen.placedetail
 
-
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.andone.memorip.domain.repository.GroupRepository
@@ -63,6 +62,27 @@ class PlaceDetailViewModel @AssistedInject constructor(
             PlaceDetailAction.OnBackClick -> _event.trySend(PlaceDetailEvent.NavigateBack)
             PlaceDetailAction.OnAddToGroupClick -> _event.trySend(PlaceDetailEvent.NavigateToSelectGroup)
             PlaceDetailAction.GroupClick -> _event.trySend(PlaceDetailEvent.NavigateToGroupList)
+            PlaceDetailAction.OnMoreClick -> {
+                _event.trySend(PlaceDetailEvent.ShowMoreMenu)
+            }
+            PlaceDetailAction.OnMoreMenuDismiss -> {
+                _event.trySend(PlaceDetailEvent.HideMoreMenu)
+            }
+            PlaceDetailAction.OnEditClick -> {
+                _event.trySend(PlaceDetailEvent.HideMoreMenu)
+                // Todo: 수정 연결
+            }
+            PlaceDetailAction.OnDeleteClick -> {
+                _event.trySend(PlaceDetailEvent.HideMoreMenu)
+                _event.trySend(PlaceDetailEvent.ShowDeleteDialog)
+            }
+            PlaceDetailAction.OnDeleteDismiss -> {
+                _event.trySend(PlaceDetailEvent.HideDeleteDialog)
+            }
+            PlaceDetailAction.OnDeleteConfirm -> {
+                _event.trySend(PlaceDetailEvent.HideDeleteDialog)
+                deletePlace()
+            }
         }
     }
 
@@ -75,6 +95,19 @@ class PlaceDetailViewModel @AssistedInject constructor(
                 }
                 .onFailure {
                     snackBarManager.show(event = SnackBarEvent.NETWORK_ERROR)
+                }
+        }
+    }
+
+    private fun deletePlace() {
+        viewModelScope.launch {
+            placeRepository.deletePlace(placeId)
+                .onSuccess {
+                    snackBarManager.show(event = SnackBarEvent.SUCCESS)
+                    _event.trySend(PlaceDetailEvent.NavigateBack)
+                }
+                .onFailure {
+                    snackBarManager.show(event = SnackBarEvent.UNKNOWN_ERROR)
                 }
         }
     }

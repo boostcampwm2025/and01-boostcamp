@@ -9,4 +9,12 @@ sealed interface PlaceDetailEvent {
     data object NavigateToGroupList : PlaceDetailEvent
 
     data object PlaceAddToGroup : PlaceDetailEvent
+
+    data object ShowMoreMenu : PlaceDetailEvent
+
+    data object HideMoreMenu : PlaceDetailEvent
+
+    data object ShowDeleteDialog : PlaceDetailEvent
+
+    data object HideDeleteDialog : PlaceDetailEvent
 }

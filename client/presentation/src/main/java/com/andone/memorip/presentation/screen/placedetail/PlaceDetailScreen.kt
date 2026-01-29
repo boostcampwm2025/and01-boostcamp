@@ -55,6 +55,7 @@ import com.andone.memorip.navigation.PlaceDetail
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.LoadingIndicatorScreen
 import com.andone.memorip.presentation.component.TagChipRow
+import com.andone.memorip.presentation.component.dialog.DeleteDialog
 import com.andone.memorip.presentation.model.LocationUiModel
 import com.andone.memorip.presentation.screen.placedetail.PlaceDetailScreenConstants.BOTTOM_ALPHA
 import com.andone.memorip.presentation.screen.placedetail.PlaceDetailScreenConstants.BOTTOM_RATIO
@@ -112,6 +113,8 @@ fun PlaceDetailScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var currentStep by rememberSaveable { mutableStateOf(PlaceDetailScreenStep.PlaceDetail) }
+    var showMoreMenu by rememberSaveable { mutableStateOf(false) }
+    var showDeleteDialog by rememberSaveable { mutableStateOf(false) }
 
     BackHandler(enabled = currentStep == PlaceDetailScreenStep.SelectGroup) {
         currentStep = PlaceDetailScreenStep.PlaceDetail
@@ -134,6 +137,22 @@ fun PlaceDetailScreen(
             PlaceDetailEvent.NavigateToGroupList -> {
                 onNavigateGroupList()
             }
+
+            PlaceDetailEvent.ShowMoreMenu -> {
+                showMoreMenu = true
+            }
+
+            PlaceDetailEvent.HideMoreMenu -> {
+                showMoreMenu = false
+            }
+
+            PlaceDetailEvent.ShowDeleteDialog -> {
+                showDeleteDialog = true
+            }
+
+            PlaceDetailEvent.HideDeleteDialog -> {
+                showDeleteDialog = false
+            }
         }
     }
 
@@ -152,6 +171,7 @@ fun PlaceDetailScreen(
             PlaceDetailScreenStep.PlaceDetail -> {
                 PlaceDetailScreen(
                     place = uiState.place,
+                    showMoreMenu = showMoreMenu,
                     onAction = viewModel::onAction,
                     modifier = modifier
                 )
@@ -172,11 +192,22 @@ fun PlaceDetailScreen(
             }
         }
     }
+
+    if (showDeleteDialog) {
+        DeleteDialog(
+            title = stringResource(R.string.place_detail_delete_dialog_title),
+            content = stringResource(R.string.place_detail_delete_dialog_message),
+            onDeleteClick = { viewModel.onAction(PlaceDetailAction.OnDeleteConfirm) },
+            onCancelClick = { viewModel.onAction(PlaceDetailAction.OnDeleteDismiss) },
+            onDismissRequest = { viewModel.onAction(PlaceDetailAction.OnDeleteDismiss) }
+        )
+    }
 }
 
 @Composable
 private fun PlaceDetailScreen(
     place: PlaceUiModel,
+    showMoreMenu: Boolean,
     onAction: (PlaceDetailAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -189,8 +220,13 @@ private fun PlaceDetailScreen(
         topBar = {
             PlaceDetailTopBar(
                 isMine = place.isMine,
+                showMoreMenu = showMoreMenu,
                 onNavigationIconClick = { onAction(PlaceDetailAction.OnBackClick) },
-                onActionIconClick = { onAction(PlaceDetailAction.OnAddToGroupClick) }
+                onActionIconClick = { onAction(PlaceDetailAction.OnAddToGroupClick) },
+                onMoreClick = { onAction(PlaceDetailAction.OnMoreClick) },
+                onMoreMenuDismiss = { onAction(PlaceDetailAction.OnMoreMenuDismiss) },
+                onEditClick = { onAction(PlaceDetailAction.OnEditClick) },
+                onDeleteClick = { onAction(PlaceDetailAction.OnDeleteClick) }
             )
         },
         contentWindowInsets = WindowInsets.navigationBars
@@ -352,13 +388,16 @@ private fun PlaceDetailContent(
                     )
                 }
             )
-            /** TODO 로그인 기능 구현 시 나의 장소만 그룹 보이도록 수정하기 */
-            PlaceDetailInfoSection(
-                infoString = place.groupName,
-                iconRes = R.drawable.ic_folder,
-                onAction = onAction,
-                modifier = Modifier.padding(start = MemoripPadding.PaddingXSmall)
-            )
+            if (place.groups.isNotEmpty()) {
+                PlaceDetailInfoSection(
+                    infoString = place.groups.joinToString(
+                        separator = stringResource(R.string.place_detail_comma_separator)
+                    ) { it.groupName },
+                    iconRes = R.drawable.ic_folder,
+                    onAction = onAction,
+                    modifier = Modifier.padding(start = MemoripPadding.PaddingXSmall)
+                )
+            }
         }
     }
 }
@@ -396,6 +435,7 @@ private fun PlaceDetailScreenPreview() {
     MemoripTheme {
         PlaceDetailScreen(
             place = DummyData.place,
+            showMoreMenu = false,
             onAction = {}
         )
     }
