@@ -71,6 +71,7 @@ class PlaceDetailViewModel @AssistedInject constructor(
             }
 
             PlaceDetailAction.OnEditClick -> {
+                _event.trySend(PlaceDetailEvent.NavigateToPlaceEdit)
             }
 
             PlaceDetailAction.OnDeleteClick -> {

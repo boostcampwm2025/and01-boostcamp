@@ -94,6 +94,8 @@ private object PlaceDetailScreenDimens {
 fun PlaceDetailScreen(
     route: PlaceDetail,
     onNavigateBack: () -> Unit,
+    onNavigateSelectGroup: () -> Unit,
+    onNavigateToPlaceEdit: (PlaceUiModel) -> Unit,
     onNavigateGroupList: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PlaceDetailViewModel = hiltViewModel<PlaceDetailViewModel, PlaceDetailViewModel.Factory>(
@@ -117,8 +119,12 @@ fun PlaceDetailScreen(
             }
 
             PlaceDetailEvent.NavigateToSelectGroup -> {
+                onNavigateSelectGroup()
             }
 
+            PlaceDetailEvent.NavigateToPlaceEdit -> {
+                showMoreMenu = false
+                onNavigateToPlaceEdit(uiState.place)
             }
 
             PlaceDetailEvent.NavigateToGroupList -> {
