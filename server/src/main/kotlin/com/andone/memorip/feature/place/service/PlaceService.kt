@@ -3,14 +3,11 @@ package com.andone.memorip.feature.place.service
 import com.andone.memorip.common.exception.BusinessException
 import com.andone.memorip.common.exception.CommonExceptionCode
 import com.andone.memorip.common.response.ApiResult
+import com.andone.memorip.feature.group.entity.Group
 import com.andone.memorip.feature.group.repository.GroupRepository
 import com.andone.memorip.feature.place.dto.PlaceListResult
 import com.andone.memorip.feature.place.dto.request.PlaceRequest
-import com.andone.memorip.feature.place.dto.response.GroupCompactResponse
-import com.andone.memorip.feature.place.dto.response.PlaceCreateResponse
-import com.andone.memorip.feature.place.dto.response.PlaceDetailResponse
-import com.andone.memorip.feature.place.dto.response.PlaceListItemResponse
-import com.andone.memorip.feature.place.dto.response.toTagResponse
+import com.andone.memorip.feature.place.dto.response.*
 import com.andone.memorip.feature.place.entity.GroupPlace
 import com.andone.memorip.feature.place.entity.Place
 import com.andone.memorip.feature.place.repository.GroupPlaceRepository
@@ -54,7 +51,8 @@ class PlaceService(
             groups = groups.map { GroupCompactResponse(it.groupId, it.groupName) },
             address = place.address,
             isMine = place.writerId == userId,
-            isInMyGroup = isInMyGroup
+            isInMyGroup = isInMyGroup,
+            isPublic = place.isPublic
         )
     }
 
@@ -185,7 +183,8 @@ class PlaceService(
             groups = groups,
             address = place.address,
             isMine = true,
-            isInMyGroup = true
+            isInMyGroup = true,
+            isPublic = place.isPublic
         )
     }
 
@@ -234,7 +233,7 @@ class PlaceService(
         return PlaceListResult(content, pagination)
     }
 
-    private fun validateGroupOwnership(groupIds: List<UUID>, currentUserId: UUID): List<com.andone.memorip.feature.group.entity.Group> {
+    private fun validateGroupOwnership(groupIds: List<UUID>, currentUserId: UUID): List<Group> {
         val groups = groupRepository.findAllById(groupIds)
 
         if (groups.size != groupIds.size) {
