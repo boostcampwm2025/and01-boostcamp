@@ -6,8 +6,8 @@ import androidx.compose.runtime.remember
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.rememberNavBackStack
-import com.andone.memorip.presentation.screen.groupdetail.navigateToGroupDetail
-import com.andone.memorip.presentation.screen.grouplist.navigateToGroupList
+import com.andone.memorip.presentation.screen.groupdetail.navigateToTripDetail
+import com.andone.memorip.presentation.screen.grouplist.navigateToTripList
 import com.andone.memorip.presentation.screen.placecreate.navigateToPlaceCreate
 import com.andone.memorip.presentation.screen.placedetail.navigateToPlaceDetail
 import com.andone.memorip.presentation.screen.placelist.navigateToPlaceList
@@ -44,11 +44,11 @@ class MemoripNavigator(
 
     fun navigateToPlaceList() = backStack.navigateToPlaceList()
 
-    fun navigateToGroupList() = backStack.navigateToGroupList()
+    fun navigateToTripList() = backStack.navigateToTripList()
 
     fun navigateToPlaceCreate() = backStack.navigateToPlaceCreate()
 
-    fun navigateToGroupDetail(groupId: String) = backStack.navigateToGroupDetail(groupId)
+    fun navigateToTripDetail(tripId: String) = backStack.navigateToTripDetail(tripId)
 
     fun navigateToPlaceDetail(placeId: String) = backStack.navigateToPlaceDetail(placeId)
     fun popBackStack() = backStack.removeLastOrNull()
