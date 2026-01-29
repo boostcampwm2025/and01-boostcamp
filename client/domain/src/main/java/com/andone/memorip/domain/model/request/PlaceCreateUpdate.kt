@@ -1,10 +1,6 @@
-package com.andone.memorip.data.place.model
+package com.andone.memorip.domain.model.request
 
-import com.andone.memorip.domain.model.request.Address
-import kotlinx.serialization.Serializable
-
-@Serializable
-data class PlaceRequest(
+data class PlaceCreateUpdate(
     val groupIds: List<String>,
     val title: String,
     val content: String? = null,
@@ -13,6 +9,5 @@ data class PlaceRequest(
     val longitude: Double,
     val address: Address,
     val imageUrls: List<String>,
-//    val thumbnailImageRatio: Float,
     val isPublic: Boolean
 )

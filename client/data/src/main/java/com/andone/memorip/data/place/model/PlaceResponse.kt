@@ -1,5 +1,7 @@
 package com.andone.memorip.data.place.model
 
+import com.andone.memorip.domain.model.response.GroupCompact
+import com.andone.memorip.domain.model.response.PlaceDetail
 import com.andone.memorip.domain.model.Tag
 import com.andone.memorip.domain.model.request.Address
 import kotlinx.serialization.Serializable
@@ -23,4 +25,23 @@ data class PlaceDetailResponse(
 data class GroupCompactResponse(
     val groupId: String,
     val groupName: String
+)
+
+fun PlaceDetailResponse.toDomain(): PlaceDetail = PlaceDetail(
+    placeId = this.placeId,
+    writerId = this.writerId,
+    title = this.title,
+    content = this.content,
+    latitude = this.latitude,
+    longitude = this.longitude,
+    tags = this.tags,
+    images = this.images,
+    groups = this.groups.map { it.toDomain() },
+    address = this.address,
+    isMine = this.isMine
+)
+
+fun GroupCompactResponse.toDomain(): GroupCompact = GroupCompact(
+    groupId = this.groupId,
+    groupName = this.groupName
 )
