@@ -275,10 +275,6 @@ class PlanViewModel @Inject constructor(
                         endAt = endAtString!!
                     ).onSuccess {
                         pendingUpdates.remove(block.id)
-                    }.onFailure {
-                        if (it !is CancellationException) {
-                            snackBarManager.show(SnackBarEvent.NETWORK_ERROR)
-                        }
                     }
                 }
             }
@@ -389,9 +385,7 @@ class PlanViewModel @Inject constructor(
 
             uiState.value.blocks.map { block ->
                 if (block.id == id) {
-                    val result = block.movedTo(newStartMinute, uiState.value.date.totalMinutes)
-                    Log.d("DEBUG TEST", "result : $result")
-                    result
+                    block.movedTo(newStartMinute, uiState.value.date.totalMinutes)
                 } else {
                     block
                 }
