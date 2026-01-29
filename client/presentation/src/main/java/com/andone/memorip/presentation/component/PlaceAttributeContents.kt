@@ -51,7 +51,7 @@ fun PlaceLocationText(
             painter = painterResource(R.drawable.ic_location_on),
             contentDescription = stringResource(R.string.plan_location_content_description),
             modifier = Modifier.size(MemoripIconSize.IconSizeXSmall),
-            tint = iconTint ?: Color.Unspecified,
+            tint = iconTint ?: MemoripTheme.colors.onSurface,
         )
         Text(
             text = address,
