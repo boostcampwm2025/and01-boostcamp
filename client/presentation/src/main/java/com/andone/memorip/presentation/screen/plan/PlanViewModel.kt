@@ -72,8 +72,8 @@ class PlanViewModel @Inject constructor(
                 result = response
                 if (response.isNotEmpty()) {
                     val defaultGroup = response.first()
-                    selectedGroupFlow.update { GroupListUiModel.from(group = defaultGroup) }
-                    fetchPlaces(groupId = defaultGroup.id)
+                    updateSelectedGroup(GroupListUiModel.from(defaultGroup))
+                    updatePlaces(groupId = defaultGroup.id)
                 }
             }
             .onFailure { snackBarManager.show(event = SnackBarEvent.NETWORK_ERROR) }
@@ -235,7 +235,7 @@ class PlanViewModel @Inject constructor(
 
             is PlanAction.GroupChoiceConfirmClick -> {
                 savePlan()
-                fetchPlaces(groupId = action.selectedGroup.id)
+                updatePlaces(groupId = action.selectedGroup.id)
                 selectedGroupFlow.update { action.selectedGroup }
             }
 
@@ -274,7 +274,7 @@ class PlanViewModel @Inject constructor(
         }
     }
 
-    private fun fetchPlaces(groupId: String) {
+    private fun updatePlaces(groupId: String) {
         viewModelScope.launch {
             groupRepository.getPlaceByGroupId(groupId = groupId)
                 .onSuccess { result ->
@@ -292,6 +292,21 @@ class PlanViewModel @Inject constructor(
                 }
                 .onFailure { snackBarManager.show(SnackBarEvent.NETWORK_ERROR) }
 
+        }
+    }
+    private fun updateSelectedGroup(group: GroupListUiModel) {
+        selectedGroupFlow.update { group }
+        selectedDateFlow.update {
+            if (group.startDate != null && group.endDate != null) {
+                val newDate = DateUiModel(
+                    startDay = group.startDate,
+                    endDay = group.endDate,
+                    currentDay = group.startDate
+                )
+                newDate
+            } else {
+                it
+            }
         }
     }
 
