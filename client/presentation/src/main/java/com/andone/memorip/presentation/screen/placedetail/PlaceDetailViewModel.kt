@@ -2,7 +2,6 @@ package com.andone.memorip.presentation.screen.placedetail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.andone.memorip.domain.repository.GroupRepository
 import com.andone.memorip.domain.repository.PlaceRepository
 import com.andone.memorip.navigation.PlaceDetail
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceDetailAction
@@ -27,7 +26,6 @@ import kotlinx.coroutines.launch
 class PlaceDetailViewModel @AssistedInject constructor(
     @Assisted route: PlaceDetail,
     private val placeRepository: PlaceRepository,
-    private val groupRepository: GroupRepository,
     private val snackBarManager: SnackBarManager
 ) : ViewModel() {
 
@@ -86,19 +84,6 @@ class PlaceDetailViewModel @AssistedInject constructor(
                 _event.trySend(PlaceDetailEvent.HideDeleteDialog)
                 deletePlace()
             }
-        }
-    }
-
-    fun addPlaceToGroup(groupId: String) {
-        viewModelScope.launch {
-            groupRepository.addPlaceToGroup(groupId, placeId)
-                .onSuccess {
-                    snackBarManager.show(event = SnackBarEvent.SUCCESS)
-                    _event.trySend(PlaceDetailEvent.PlaceAddToGroup)
-                }
-                .onFailure {
-                    snackBarManager.show(event = SnackBarEvent.NETWORK_ERROR)
-                }
         }
     }
 
