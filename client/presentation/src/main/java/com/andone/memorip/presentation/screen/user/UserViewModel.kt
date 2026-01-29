@@ -45,7 +45,12 @@ class UserViewModel @Inject constructor(
             is UserAction.OnMethodClick -> {
                 when (action.method) {
                     LoginMethod.GOOGLE -> _event.trySend(element = UserEvent.RequestGoogleLogin)
-                    LoginMethod.EMAIL -> {}
+                    LoginMethod.EMAIL -> {
+                        _uiState.update {
+                            it.copy(showLoginDialog = true)
+                        }
+                    }
+
                     LoginMethod.PHONE -> {}
                 }
             }
@@ -66,6 +71,40 @@ class UserViewModel @Inject constructor(
                             }
                         }
                 }
+            }
+
+            UserAction.CloseLoginDialog -> {
+                _uiState.update {
+                    it.copy(showLoginDialog = false)
+                }
+            }
+
+            is UserAction.UpdateEmail -> {
+                _uiState.update {
+                    it.copy(email = action.email)
+                }
+            }
+
+            is UserAction.UpdatePassword -> {
+               _uiState.update {
+                   it.copy(password = action.password)
+               }
+            }
+
+            is UserAction.UpdatePasswordConfirm -> {
+                _uiState.update {
+                    it.copy(passwordConfirm = action.passwordConfirm)
+                }
+            }
+
+            UserAction.ToggleLoginMode -> {
+                _uiState.update {
+                    it.copy(isNewAccount = !it.isNewAccount)
+                }
+            }
+
+            is UserAction.EmailLoginSubmit -> {
+
             }
         }
     }

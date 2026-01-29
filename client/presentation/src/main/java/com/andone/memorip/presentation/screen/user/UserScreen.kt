@@ -98,6 +98,7 @@ fun UserScreen(
                         viewModel.onAction(action = UserAction.GoogleLoginSuccess(idToken = googleIdTokenCredential.idToken))
                     }
                 } catch (e: Exception) {
+                    viewModel.onAction(action = UserAction.OnMethodClick(method = LoginMethod.EMAIL))
                 }
             }
         }
@@ -116,6 +117,15 @@ fun UserScreenContent(
     onAction: (UserAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    if (state.showLoginDialog) {
+        LoginDialog(
+            isNewAccount = state.isNewAccount,
+            onDismiss = {
+                onAction(UserAction.CloseLoginDialog)
+            }
+        )
+    }
+
     Scaffold(modifier = modifier) { innerPadding ->
         Column(
             modifier = Modifier
