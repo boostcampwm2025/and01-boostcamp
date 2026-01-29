@@ -1,7 +1,7 @@
 package com.andone.memorip.presentation.model
 
 import androidx.compose.runtime.Immutable
-import com.andone.memorip.domain.model.Group
+import com.andone.memorip.domain.model.Trip
 
 @Immutable
 data class TripUiModel(
@@ -10,7 +10,7 @@ data class TripUiModel(
     val images: List<String>,
 ) {
     companion object {
-        fun from(trip: Group): TripUiModel {
+        fun from(trip: Trip): TripUiModel {
             return TripUiModel(
                 id = trip.id,
                 name = trip.title,

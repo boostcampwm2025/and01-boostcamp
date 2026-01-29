@@ -1,7 +1,7 @@
 package com.andone.memorip.presentation.screen.selecttrip.model
 
 import androidx.compose.runtime.Immutable
-import com.andone.memorip.domain.model.Group
+import com.andone.memorip.domain.model.Trip
 import com.andone.memorip.domain.model.TripWithPlaceAdded
 import com.andone.memorip.presentation.model.TripUiModel
 
@@ -23,7 +23,7 @@ data class SelectTripUiModel(
             )
         }
 
-        fun from(trip: Group): SelectTripUiModel {
+        fun from(trip: Trip): SelectTripUiModel {
             return SelectTripUiModel(
                 id = trip.id,
                 name = trip.title,
