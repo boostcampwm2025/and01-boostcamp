@@ -5,7 +5,7 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.andone.memorip.domain.model.request.Address
-import com.andone.memorip.domain.model.request.PlaceCreateRequest
+import com.andone.memorip.domain.model.request.PlaceCreateUpdate
 import com.andone.memorip.domain.repository.PlaceRepository
 import com.andone.memorip.presentation.model.GroupUiModel
 import com.andone.memorip.presentation.model.LocationUiModel
@@ -147,17 +147,16 @@ class PlaceCreateViewModel @Inject constructor(
             val imageUrls = uploadImages(context, uiStateValue.images)
 
             placeRepository.createPlace(
-                PlaceCreateRequest(
-                    writerId = "019b8be0-1fad-71e9-9da0-bc03ada63862", // TODO: 실제 유저 ID로 변경 필요
-                    groupId = uiStateValue.group.id,
+                PlaceCreateUpdate(
+                    // todo: groupIds 리스트로 uiState에서 관리하는 것으로 변경 필요.
+                    groupIds = listOf(uiStateValue.group.id),
                     title = uiStateValue.title,
                     content = uiStateValue.content,
-                    tag = uiStateValue.category.map { it.id },
+                    tags = uiStateValue.category.map { it.id },
                     latitude = uiStateValue.location.latitude,
                     longitude = uiStateValue.location.longitude,
                     address = Address.from(uiStateValue.location.address),
                     imageUrls = imageUrls,
-//                    thumbnailImageRatio = uiStateValue.thumbnailImageRatio,
                     isPublic = uiStateValue.isPublic
                 )
             ).onSuccess { data ->
