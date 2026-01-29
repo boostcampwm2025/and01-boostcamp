@@ -59,8 +59,6 @@ fun GroupPlace.toUiModel(): Place = Place(
     thumbnailImage = ImageItem(
         id = 0,
         url = this.thumbnail ?: "",
-        width = 0,
-        height = 0
     ),
     images = emptyList()
 )
@@ -79,8 +77,7 @@ fun PlaceListItem.toUiModel(): Place =
         thumbnailImage = ImageItem(
             id = 0,
             url = imageUrl,
-            width = 1,
-            height = 1
+            aspectRatio = thumbnailImageRatio
         ),
         images = emptyList()
     )

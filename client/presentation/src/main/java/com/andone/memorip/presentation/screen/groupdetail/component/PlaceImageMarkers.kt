@@ -48,13 +48,13 @@ fun PlaceImageMarkers(
     clusteredItems.filter { !it.isCluster }.forEach { clusterItem ->
         val placeData = clusterItem.places.firstOrNull() ?: return@forEach
         val place = placeData.placeData as? Place ?: return@forEach
-        key(place.id) {
+        key(place.placeId) {
             val imageUrl = placeData.imageUrl
             val bitmap = markerImages[imageUrl]
 
             if (bitmap != null) {
                 MarkerComposable(
-                    keys = arrayOf(place.id, imageUrl),
+                    keys = arrayOf(place.placeId, imageUrl),
                     state = rememberUpdatedMarkerState(position = clusterItem.position),
                     onClick = {
                         onMarkerClick(place)
@@ -86,7 +86,7 @@ private fun PlaceImageMarkersPreview() {
                 position = LatLng(place.latitude, place.longitude),
                 places = listOf(
                     MapClusterManager.PlaceClusterData(
-                        id = place.id,
+                        id = place.placeId,
                         position = LatLng(place.latitude, place.longitude),
                         imageUrl = place.thumbnailImage.url,
                         placeData = place

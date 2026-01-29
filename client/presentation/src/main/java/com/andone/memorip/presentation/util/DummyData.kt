@@ -63,8 +63,6 @@ object DummyData {
         ImageItem(
             id = index + 1,
             url = "https://picsum.photos/seed/${index + 1}/800/800",
-            width = 800,
-            height = 800
         )
     }
 
@@ -259,8 +257,6 @@ object DummyData {
             ImageItem(
                 id = count + imageIndex,
                 url = "https://picsum.photos/id/$photoId/$fixedWidth/$randomHeight",
-                width = fixedWidth,
-                height = randomHeight
             )
         }
     }
@@ -299,8 +295,6 @@ object DummyData {
         ImageItem(
             id = id,
             url = "https://picsum.photos/id/$id/$fixedWidth/$randomHeight",
-            width = fixedWidth,
-            height = randomHeight
         )
     }
 
