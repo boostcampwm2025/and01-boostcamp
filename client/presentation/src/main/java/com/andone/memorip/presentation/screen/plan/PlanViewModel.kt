@@ -34,7 +34,6 @@ import com.andone.memorip.presentation.util.workmanager.PlanWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
@@ -255,11 +254,11 @@ class PlanViewModel @Inject constructor(
                 val startAtDate =
                     uiState.value.date.startDay!!.atStartOfDay().plusDays((block.day - 1).toLong())
                 val startAt =
-                    startAtDate.plusMinutes((block.startMinute - (block.day - 1) * MINUTES_PER_DAY).toLong())
+                    startAtDate.plusMinutes((block.startMinute % MINUTES_PER_DAY).toLong())
                 val endAtDate =
                     uiState.value.date.startDay!!.atStartOfDay().plusDays((block.day - 1).toLong())
                 val endAt =
-                    endAtDate.plusMinutes((block.startMinute + block.durationMinute - (block.day - 1) * MINUTES_PER_DAY).toLong())
+                    endAtDate.plusMinutes((block.endMinute % MINUTES_PER_DAY).toLong())
 
                 if (startAt != originStartAt || endAt != originEndAt) {
                     val startAtString = startAt.toRemoteString()
