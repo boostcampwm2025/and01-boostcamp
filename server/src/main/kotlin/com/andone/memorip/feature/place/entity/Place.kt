@@ -22,6 +22,7 @@ class Place protected constructor(
     address: Address,
     thumbnailUrl: String,
     imageUrls: List<String>,
+    thumbnailImageRatio: Float = 1f,
     isPublic: Boolean
 ) : BaseTimeSyncEntity() {
 
@@ -66,6 +67,10 @@ class Place protected constructor(
         internal set
 
     @Column(nullable = false)
+    var thumbnailImageRatio: Float = thumbnailImageRatio
+        internal set
+
+    @Column(nullable = false)
     var isPublic: Boolean = isPublic
         internal set
 
@@ -96,10 +101,6 @@ class Place protected constructor(
     fun addImage(url: String, id: UUID? = null): PlaceImage {
         val newImage = PlaceImage.create(id = id, place = this, url = url)
         images.add(newImage)
-
-        if (thumbnailUrl == null) {
-            thumbnailUrl = url
-        }
 
         return newImage
     }
@@ -160,6 +161,7 @@ class Place protected constructor(
             address: Address,
             content: String? = null,
             imageUrls: List<String>,
+            thumbnailImageRatio: Float,
             isPublic: Boolean,
             parentPlaceId: UUID? = null
         ): Place {
@@ -180,6 +182,7 @@ class Place protected constructor(
                 address = address,
                 thumbnailUrl = imageUrls.firstOrNull() ?: "",
                 imageUrls = imageUrls,
+                thumbnailImageRatio = thumbnailImageRatio,
                 isPublic = isPublic
             ).apply {
                 this.content = content

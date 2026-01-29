@@ -27,9 +27,9 @@ import com.andone.memorip.presentation.theme.MemoripLineWidth
 import com.andone.memorip.presentation.theme.MemoripTheme
 
 private object ImageMarkerDimen {
-    val ImageSize: Dp = 64.dp
+    val ImageSize: Dp = 48.dp
     val BorderWidth: Dp = MemoripLineWidth.Medium
-    val CornerRadius: Dp = 8.dp
+    val CornerRadius: Dp = 6.dp
 }
 
 @Composable

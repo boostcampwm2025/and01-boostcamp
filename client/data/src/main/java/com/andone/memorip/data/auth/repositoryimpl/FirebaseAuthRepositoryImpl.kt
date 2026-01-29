@@ -14,6 +14,12 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
     override fun isLoggedIn(): Boolean =
         firebaseAuth.currentUser != null
 
+    override suspend fun getEmail(): Result<String> =
+        runCatching {
+            firebaseAuth.currentUser?.email
+                ?: throw IllegalStateException()
+        }
+
     override suspend fun signInWithGoogle(idToken: String): Result<Unit> =
         runCatching {
             val credential =

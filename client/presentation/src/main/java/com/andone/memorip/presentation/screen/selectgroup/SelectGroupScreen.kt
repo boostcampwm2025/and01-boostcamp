@@ -145,7 +145,7 @@ private fun SelectGroupContent(
             FloatingActionButton(
                 onClick = { onAction(SelectGroupAction.OnFABClick) },
                 containerColor = MemoripTheme.colors.primary,
-                contentColor = MemoripTheme.colors.black
+                contentColor = MemoripTheme.colors.onSurface
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_add),

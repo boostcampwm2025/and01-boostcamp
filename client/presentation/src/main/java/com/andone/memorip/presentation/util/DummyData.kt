@@ -8,7 +8,6 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.andone.memorip.domain.model.Tag
-import com.andone.memorip.domain.model.TimeBlock
 import com.andone.memorip.presentation.model.GroupUiModel
 import com.andone.memorip.presentation.model.ImageItem
 import com.andone.memorip.presentation.model.LocationUiModel
@@ -19,6 +18,11 @@ import com.andone.memorip.presentation.screen.placedetail.model.PlaceUiModel
 import com.andone.memorip.presentation.screen.placelist.model.RegionUiModel
 import com.andone.memorip.presentation.screen.placelist.model.SelectedRegionState
 import com.andone.memorip.presentation.screen.plan.model.DateUiModel
+import com.andone.memorip.domain.model.TimeBlock
+import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.screen.user.model.SettingItemUiModel
+import com.andone.memorip.presentation.screen.user.model.SettingTrailing
+import com.andone.memorip.presentation.screen.user.model.UserUiModel
 import com.andone.memorip.presentation.screen.plan.model.GroupListUiModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.flowOf
@@ -195,6 +199,43 @@ object DummyData {
             )
         }
     }
+
+    val dummyUser = UserUiModel(
+        name = "홍길동",
+        id = "0",
+        profileImgUrl = "",
+        email = "asdfgqwe@naver.com"
+    )
+
+    val permissionItems = listOf(
+        SettingItemUiModel(
+            iconRes = R.drawable.ic_baseline_camera_alt,
+            title = "카메라",
+            subtitle = "프로필 사진 변경",
+            trailing = SettingTrailing.Arrow(isAllowed = true),
+            onClick = { }
+        ),
+        SettingItemUiModel(
+            iconRes = R.drawable.ic_outline_gallery_thumbnail,
+            title = "사진 갤러리",
+            subtitle = "이미지 업로드",
+            trailing = SettingTrailing.Arrow(isAllowed = true),
+            onClick = { }
+        ),
+        SettingItemUiModel(
+            iconRes = R.drawable.ic_location_on,
+            title = "위치",
+            subtitle = "위치 기반 서비스",
+            trailing = SettingTrailing.Arrow(),
+            onClick = { }
+        ),
+        SettingItemUiModel(
+            iconRes = R.drawable.ic_outline_android_wifi_3_bar,
+            title = "네트워크",
+            subtitle = "네트워크 상태 변경 알림",
+            trailing = SettingTrailing.Arrow()
+        )
+    )
 
     val dummyDate =
         DateUiModel(

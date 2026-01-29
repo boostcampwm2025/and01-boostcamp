@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -24,8 +26,9 @@ import com.andone.memorip.presentation.util.DummyData
 @Composable
 fun BottomSheetPlaceListContent(
     places: List<Place>,
+    listState: LazyListState,
     onAction: (GroupDetailAction) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier.fillMaxSize()
@@ -44,6 +47,7 @@ fun BottomSheetPlaceListContent(
 
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
+            state = listState,
             verticalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceSmall),
             contentPadding = PaddingValues(
                 horizontal = MemoripPadding.PaddingMedium,
@@ -54,7 +58,7 @@ fun BottomSheetPlaceListContent(
                 items = places,
                 key = { it.id }
             ) { place ->
-                PlaceListItem(
+                BottomSheetPlaceListItem(
                     place = place,
                     onClick = {
                         onAction(GroupDetailAction.OnMapPlaceClick(place))
@@ -69,8 +73,10 @@ fun BottomSheetPlaceListContent(
 @Composable
 private fun BottomSheetPlaceListContentPreview() {
     MemoripTheme {
+        val listState = rememberLazyListState()
         BottomSheetPlaceListContent(
             places = DummyData.places,
+            listState = listState,
             onAction = {}
         )
     }
