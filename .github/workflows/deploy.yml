@@ -5,7 +5,7 @@ on:
     branches:
       - main
       - dev  # TODO: 백엔드 v1.0 이후, main 만 남길 예정.
-      - release
+      - release/**
     paths:
       - 'server/**'
       - '.github/workflows/deploy.yml'

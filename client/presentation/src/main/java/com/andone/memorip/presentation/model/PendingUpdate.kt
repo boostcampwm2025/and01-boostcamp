@@ -8,7 +8,10 @@ data class PendingUpdate(
     val payload: Payload
 )
 
-interface Payload {
+sealed interface Payload {
     @Serializable
     class PlaceTimeEditPayload(val startAt: String?, val endAt: String?) : Payload
+
+    @Serializable
+    class TripSavePayload(val title: String, val startAt: String?, val endAt: String?) : Payload
 }

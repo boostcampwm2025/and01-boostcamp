@@ -11,7 +11,7 @@ import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.andone.memorip.domain.model.TimeBlock
 import com.andone.memorip.domain.model.Visibility
-import com.andone.memorip.domain.repository.GroupRepository
+import com.andone.memorip.domain.repository.TripRepository
 import com.andone.memorip.presentation.model.Payload
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.model.PlanBlockUiModel
@@ -19,22 +19,22 @@ import com.andone.memorip.presentation.model.toTimeBlock
 import com.andone.memorip.presentation.model.toUiModel
 import com.andone.memorip.presentation.screen.plan.PlanViewModelConstants.DAYS_LIMIT
 import com.andone.memorip.presentation.screen.plan.model.DateUiModel
-import com.andone.memorip.presentation.screen.plan.model.GroupListUiModel
+import com.andone.memorip.presentation.screen.plan.model.TripListUiModel
 import com.andone.memorip.presentation.screen.plan.model.PlanAction
 import com.andone.memorip.presentation.screen.plan.model.PlanEvent
 import com.andone.memorip.presentation.screen.plan.model.PlanEvent.ShowDeleteDayDialog
-import com.andone.memorip.presentation.screen.plan.model.PlanGroupUiModel
+import com.andone.memorip.presentation.screen.plan.model.PlanTripUiModel
 import com.andone.memorip.presentation.screen.plan.model.PlanPlaceUiModel
 import com.andone.memorip.presentation.screen.plan.model.PlanUiState
 import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_DAY
 import com.andone.memorip.presentation.util.snackbar.SnackBarEvent
 import com.andone.memorip.presentation.util.snackbar.SnackBarManager
 import com.andone.memorip.presentation.util.toRemoteString
+import com.andone.memorip.presentation.util.workmanager.TripWorker
 import com.andone.memorip.presentation.util.workmanager.PlanWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
@@ -60,17 +60,17 @@ private object PlanViewModelConstants {
 @OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class PlanViewModel @Inject constructor(
-    private val groupRepository: GroupRepository,
+    private val tripRepository: TripRepository,
     private val snackBarManager: SnackBarManager,
     private val workManager: WorkManager
 ) : ViewModel() {
-    private val selectedGroupFlow = MutableStateFlow<GroupListUiModel?>(value = null)
-    private val groupsFlow = MutableStateFlow(value = emptyList<GroupListUiModel>())
-    private val groupUiStateFlow =
-        combine(selectedGroupFlow, groupsFlow) { selectedGroup, groupsFlow ->
-            PlanGroupUiModel(
-                selectedGroup = selectedGroup,
-                groups = groupsFlow.toImmutableList()
+    private val selectedTripFlow = MutableStateFlow<TripListUiModel?>(value = null)
+    private val tripsFlow = MutableStateFlow(value = emptyList<TripListUiModel>())
+    private val tripUiStateFlow =
+        combine(selectedTripFlow, tripsFlow) { selectedTrip, tripsFlow ->
+            PlanTripUiModel(
+                selectedTrip = selectedTrip,
+                trips = tripsFlow.toImmutableList()
             )
         }
 
@@ -91,27 +91,27 @@ class PlanViewModel @Inject constructor(
     }
 
     val uiState = combine(
-        groupUiStateFlow,
+        tripUiStateFlow,
         selectedDateFlow,
         planPlaceUiStateFlow
-    ) { groupUiState, dateUiState, planPlaceUiState ->
+    ) { tripUiState, dateUiState, planPlaceUiState ->
         PlanUiState(
-            groups = groupUiState.groups,
-            selectedGroup = groupUiState.selectedGroup,
+            trips = tripUiState.trips,
+            selectedTrip = tripUiState.selectedTrip,
             places = planPlaceUiState.places,
             blocks = planPlaceUiState.blocks,
             blockUiModels = planPlaceUiState.blockUiModels,
             date = dateUiState
         )
     }.onStart {
-        groupRepository.getSimpleGroups()
+        tripRepository.getSimpleTrips()
             .onSuccess { response ->
                 if (response.isNotEmpty()) {
-                    val defaultGroup = response.first()
-                    updateSelectedGroup(GroupListUiModel.from(defaultGroup))
-                    updatePlaces(groupId = defaultGroup.id)
+                    val defaultTrip = response.first()
+                    updateSelectedTrip(TripListUiModel.from(defaultTrip))
+                    updatePlaces(tripId = defaultTrip.id)
                 }
-                groupsFlow.update { response.map { GroupListUiModel.from(it) } }
+                tripsFlow.update { response.map { TripListUiModel.from(it) } }
             }
             .onFailure { snackBarManager.show(event = SnackBarEvent.NETWORK_ERROR) }
     }.stateIn(
@@ -214,8 +214,8 @@ class PlanViewModel @Inject constructor(
                         currentDay = action.start
                     )
                 }
-                updateGroup(startAt = action.start, endAt = action.end)
-                updatePlaces(groupId = uiState.value.selectedGroup!!.id)
+                updateTrip(startAt = action.start, endAt = action.end)
+                updatePlaces(tripId = uiState.value.selectedTrip!!.id)
             }
 
             is PlanAction.DayScrolled -> {
@@ -228,15 +228,15 @@ class PlanViewModel @Inject constructor(
                 addPlaceToTimetable(startMinute = action.startMinute, place = action.item)
             }
 
-            PlanAction.GroupChoiceClick -> {
-                _event.trySend(element = PlanEvent.ShowGroupChoiceDialog)
+            PlanAction.TripChoiceClick -> {
+                _event.trySend(element = PlanEvent.ShowTripChoiceDialog)
             }
 
-            is PlanAction.GroupChoiceConfirmClick -> {
+            is PlanAction.TripChoiceConfirmClick -> {
                 savePlan()
-                saveGroup(uiState.value.selectedGroup)
-                updateSelectedGroup(action.selectedGroup)
-                updatePlaces(groupId = action.selectedGroup.id)
+                saveTrip(uiState.value.selectedTrip)
+                updateSelectedTrip(action.selectedTrip)
+                updatePlaces(tripId = action.selectedTrip.id)
             }
 
             PlanAction.ShowCalendarClick -> {
@@ -247,37 +247,31 @@ class PlanViewModel @Inject constructor(
 
     fun savePlan() {
         viewModelScope.launch {
-            uiState.value.blocks.forEach { block ->
-                val target = originPlaces.find { it.id == block.id }
-                val originStartAt = target?.startDateTime
-                val originEndAt = target?.endDateTime
+            uiState.value.date.startDay?.let { date ->
+                uiState.value.blocks.forEach { block ->
+                    val target = originPlaces.find { it.id == block.id }
+                    val originStartAt = target?.startDateTime
+                    val originEndAt = target?.endDateTime
 
-                val startAtDate =
-                    uiState.value.date.startDay!!.atStartOfDay().plusDays((block.day - 1).toLong())
-                val startAt =
-                    startAtDate.plusMinutes((block.startMinute - (block.day - 1) * MINUTES_PER_DAY).toLong())
-                val endAtDate =
-                    uiState.value.date.startDay!!.atStartOfDay().plusDays((block.day - 1).toLong())
-                val endAt =
-                    endAtDate.plusMinutes((block.startMinute + block.durationMinute - (block.day - 1) * MINUTES_PER_DAY).toLong())
+                    val startAtDate = date.atStartOfDay().plusDays((block.day - 1).toLong())
+                    val startAt = startAtDate.plusMinutes((block.startMinute % MINUTES_PER_DAY).toLong())
+                    val endAtDate = date.atStartOfDay().plusDays((block.day - 1).toLong())
+                    val endAt = endAtDate.plusMinutes((block.endMinute % MINUTES_PER_DAY).toLong())
 
-                if (!(startAt.isEqual(originStartAt) && endAt.isEqual(originEndAt))) {
-                    val startAtString = startAt.toRemoteString()
-                    val endAtString = endAt.toRemoteString()
+                    if (startAt != originStartAt || endAt != originEndAt) {
+                        val startAtString = startAt.toRemoteString()
+                        val endAtString = endAt.toRemoteString()
 
-                    pendingUpdates[block.id] = Payload.PlaceTimeEditPayload(
-                        startAt = startAtString,
-                        endAt = endAtString
-                    )
-                    groupRepository.updatePlaceTime(
-                        groupPlaceId = block.id,
-                        startAt = startAtString!!,
-                        endAt = endAtString!!
-                    ).onSuccess {
-                        pendingUpdates.remove(block.id)
-                    }.onFailure {
-                        if (it !is CancellationException) {
-                            snackBarManager.show(SnackBarEvent.NETWORK_ERROR)
+                        pendingUpdates[block.id] = Payload.PlaceTimeEditPayload(
+                            startAt = startAtString,
+                            endAt = endAtString
+                        )
+                        tripRepository.updatePlaceTime(
+                            tripPlaceId = block.id,
+                            startAt = startAtString!!,
+                            endAt = endAtString!!
+                        ).onSuccess {
+                            pendingUpdates.remove(block.id)
                         }
                     }
                 }
@@ -285,9 +279,31 @@ class PlanViewModel @Inject constructor(
         }
     }
 
-    private fun updatePlaces(groupId: String) {
+    fun saveTrip(targetTrip: TripListUiModel?) {
+        targetTrip?.let { trip ->
+            viewModelScope.launch {
+                pendingUpdates[trip.id] = Payload.TripSavePayload(
+                    title = trip.title,
+                    startAt = trip.startDate.toRemoteString(),
+                    endAt = trip.endDate.toRemoteString()
+                )
+                tripRepository.updateTrip(
+                    tripId = trip.id,
+                    title = trip.title,
+                    startDate = trip.startDate.toRemoteString(),
+                    endDate = trip.endDate.toRemoteString(),
+                    /** TODO visibility 정보가 없어서 저장이 어려움 */
+                    visibility = Visibility.PRIVATE
+                ).onSuccess {
+                    pendingUpdates.remove(trip.id)
+                }
+            }
+        }
+    }
+
+    private fun updatePlaces(tripId: String) {
         viewModelScope.launch {
-            groupRepository.getPlaceByGroupId(groupId = groupId)
+            tripRepository.getPlaceByTripId(tripId = tripId)
                 .onSuccess { result ->
                     originPlaces = result.map { it.toUiModel() }
                     if (uiState.value.date.startDay != null && uiState.value.date.endDay != null) {
@@ -305,7 +321,8 @@ class PlanViewModel @Inject constructor(
                             val inDatePlaces = validPlaces.filter {
                                 it.startDateTime!!.toLocalDate() in uiState.value.date.startDay!!..uiState.value.date.endDay!!
                             }.map {
-                                val limitTime = uiState.value.date.endDay!!.plusDays(1).atStartOfDay()
+                                val limitTime =
+                                    uiState.value.date.endDay!!.plusDays(1).atStartOfDay()
                                 if (it.endDateTime!!.isAfter(limitTime)) {
                                     it.copy(endDateTime = limitTime)
                                 } else {
@@ -330,47 +347,32 @@ class PlanViewModel @Inject constructor(
         }
     }
 
-    private fun updateSelectedGroup(group: GroupListUiModel) {
-        selectedGroupFlow.update { group }
+    private fun updateSelectedTrip(trip: TripListUiModel) {
+        selectedTripFlow.update { trip }
         selectedDateFlow.update {
             DateUiModel(
-                startDay = group.startDate,
-                endDay = group.endDate,
-                currentDay = group.startDate
+                startDay = trip.startDate,
+                endDay = trip.endDate,
+                currentDay = trip.startDate
             )
         }
     }
 
-    private fun updateGroup(startAt: LocalDate, endAt: LocalDate) {
-        selectedGroupFlow.update {
+    private fun updateTrip(startAt: LocalDate, endAt: LocalDate) {
+        selectedTripFlow.update {
             it?.copy(
                 startDate = startAt,
                 endDate = endAt
             )
         }
 
-        groupsFlow.update { groups ->
-            groups.map {
-                if (it.id == selectedGroupFlow.value!!.id) {
+        tripsFlow.update { trips ->
+            trips.map {
+                if (it.id == selectedTripFlow.value!!.id) {
                     it.copy(startDate = startAt, endDate = endAt)
                 } else {
                     it
                 }
-            }
-        }
-    }
-
-    private fun saveGroup(targetGroup: GroupListUiModel?) {
-        targetGroup?.let { group ->
-            viewModelScope.launch {
-                groupRepository.updateGroup(
-                    groupId = group.id,
-                    title = group.title,
-                    startDate = group.startDate.toRemoteString(),
-                    endDate = group.endDate.toRemoteString(),
-                    /** TODO visibility 정보가 없어서 저장이 어려움 */
-                    visibility = Visibility.PRIVATE
-                )
             }
         }
     }
@@ -518,29 +520,54 @@ class PlanViewModel @Inject constructor(
     }
 
     private fun buildPendingUpdateWork(id: String, payload: Payload): OneTimeWorkRequest {
-        val payload = payload as Payload.PlaceTimeEditPayload
-        val data = workDataOf(
-            PlanWorker.ID to id,
-            PlanWorker.START_AT to payload.startAt,
-            PlanWorker.END_AT to payload.endAt
-        )
+        return when (payload) {
+            is Payload.PlaceTimeEditPayload -> {
+                val data = workDataOf(
+                    PlanWorker.ID to id,
+                    PlanWorker.START_AT to payload.startAt,
+                    PlanWorker.END_AT to payload.endAt
+                )
 
-        return OneTimeWorkRequestBuilder<PlanWorker>()
-            .setInputData(data)
-            .setBackoffCriteria(
-                BackoffPolicy.EXPONENTIAL,
-                10,
-                TimeUnit.SECONDS
-            )
-            .build()
+                OneTimeWorkRequestBuilder<PlanWorker>()
+                    .setInputData(data)
+                    .setBackoffCriteria(
+                        BackoffPolicy.EXPONENTIAL,
+                        10,
+                        TimeUnit.SECONDS
+                    )
+                    .build()
+            }
+
+            is Payload.TripSavePayload -> {
+                val data = workDataOf(
+                    TripWorker.ID to id,
+                    TripWorker.TITLE to payload.title,
+                    TripWorker.START_AT to payload.startAt,
+                    TripWorker.END_AT to payload.endAt
+                )
+
+                OneTimeWorkRequestBuilder<TripWorker>()
+                    .setInputData(data)
+                    .setBackoffCriteria(
+                        BackoffPolicy.EXPONENTIAL,
+                        10,
+                        TimeUnit.SECONDS
+                    )
+                    .build()
+            }
+        }
     }
 
     override fun onCleared() {
-        pendingUpdates.forEach { (id, update) ->
-            val request = buildPendingUpdateWork(id, update)
+        pendingUpdates.forEach { (id, payload) ->
+            val request = buildPendingUpdateWork(id, payload)
+            val name = when (payload) {
+                is Payload.PlaceTimeEditPayload -> PLACE_WORK_NAME + id
+                is Payload.TripSavePayload -> GROUP_WORK_NAME + id
+            }
 
             workManager.enqueueUniqueWork(
-                uniqueWorkName = WORK_NAME + id,
+                uniqueWorkName = name,
                 ExistingWorkPolicy.APPEND_OR_REPLACE,
                 request
             )
@@ -549,6 +576,7 @@ class PlanViewModel @Inject constructor(
     }
 
     companion object {
-        const val WORK_NAME = "PLACE_TIME_EDIT"
+        const val PLACE_WORK_NAME = "PLACE_TIME_EDIT"
+        const val GROUP_WORK_NAME = "GROUP_TIME_SAVE"
     }
 }

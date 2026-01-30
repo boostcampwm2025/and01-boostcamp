@@ -1,6 +1,5 @@
 package com.andone.memorip.presentation.screen.user.component
 
-import androidx.compose.foundation.background
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -24,8 +23,9 @@ fun AccountDialog(
     val confirmRes = if (isLogout) R.string.login_logout else R.string.login_delete_account_confirm
 
     AlertDialog(
-        modifier = modifier.background(color = MemoripTheme.colors.background),
+        modifier = modifier,
         onDismissRequest = onDismiss,
+        containerColor = MemoripTheme.colors.background,
         title = {
             Text(text = stringResource(id = titleRes))
         },

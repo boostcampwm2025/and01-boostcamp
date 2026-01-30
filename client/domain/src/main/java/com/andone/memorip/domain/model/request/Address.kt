@@ -8,7 +8,7 @@ data class Address(
     val region1Depth: String,
     val region2Depth: String? = null,
     val region3Depth: String? = null,
-){
+) {
     companion object {
         fun from(fullAddress: String): Address {
             val parts = fullAddress.trim().split("\\s+".toRegex())

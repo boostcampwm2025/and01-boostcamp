@@ -1,14 +1,14 @@
 package com.andone.memorip.presentation.util
 
-import com.andone.memorip.presentation.screen.grouplist.model.GroupItem
-import com.andone.memorip.presentation.screen.grouplist.model.LayoutBlock
+import com.andone.memorip.presentation.screen.triplist.model.TripItem
+import com.andone.memorip.presentation.screen.triplist.model.LayoutBlock
 import com.andone.memorip.presentation.util.BENTO5x3.VISIBLE
 
 private object BENTO5x3 {
     const val VISIBLE = 7
 }
 
-fun buildBento5x3Items(images: List<String>): List<GroupItem> {
+fun buildBento5x3Items(images: List<String>): List<TripItem> {
     val visible = images.take(VISIBLE)
     val overflowCount = (images.size - VISIBLE).coerceAtLeast(0)
 
@@ -16,7 +16,7 @@ fun buildBento5x3Items(images: List<String>): List<GroupItem> {
         ?: return emptyList()
 
     return patterns.map { pattern ->
-        GroupItem(
+        TripItem(
             colSpan = pattern.colSpan,
             rowSpan = pattern.rowSpan,
             imageUrl = visible[pattern.index],

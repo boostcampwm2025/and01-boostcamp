@@ -6,18 +6,13 @@ import androidx.compose.runtime.Immutable
 data class ImageItem(
     val id: Int,
     val url: String,
-    val width: Int,
-    val height: Int
+    val aspectRatio: Float = 1f
 ) {
-    val aspectRatio: Float
-        get() = width.toFloat() / height.toFloat()
 
     companion object {
         fun empty(): ImageItem = ImageItem(
             id = 0,
             url = "",
-            width = 1,
-            height = 1
         )
     }
 }

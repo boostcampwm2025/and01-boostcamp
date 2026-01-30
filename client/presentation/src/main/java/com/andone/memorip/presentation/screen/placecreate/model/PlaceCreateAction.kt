@@ -2,7 +2,7 @@ package com.andone.memorip.presentation.screen.placecreate.model
 
 import android.content.Context
 import android.net.Uri
-import com.andone.memorip.presentation.model.GroupUiModel
+import com.andone.memorip.presentation.model.TripUiModel
 
 sealed interface PlaceCreateAction {
 
@@ -10,7 +10,7 @@ sealed interface PlaceCreateAction {
 
     data object OnLocationClick : PlaceCreateAction
 
-    data object OnGroupClick : PlaceCreateAction
+    data object OnTripClick : PlaceCreateAction
 
     data class OnTitleChange(val title: String) : PlaceCreateAction
 
@@ -30,7 +30,7 @@ sealed interface PlaceCreateAction {
 
     data class OnSnackBarShow(val message: String) : PlaceCreateAction
 
-    data class OnGroupSelect(val group: GroupUiModel) : PlaceCreateAction
+    data class OnTripSelect(val trip: TripUiModel) : PlaceCreateAction
 
     data object OnCreateSuccess : PlaceCreateAction
 }

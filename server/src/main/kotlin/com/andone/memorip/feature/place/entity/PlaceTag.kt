@@ -10,8 +10,6 @@ import java.util.UUID
 
 @Entity
 @Table(name = "place_tags")
-@SQLDelete(sql = "UPDATE place_tags SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
-@SQLRestriction("deleted_at IS NULL")
 class PlaceTag protected constructor(
     id: UUID,
     place: Place,

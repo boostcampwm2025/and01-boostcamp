@@ -26,10 +26,10 @@
     <!-- StaggeredGrid-->
     <string name="staggered_grid_image_content_description">장소 이미지</string>
 
-    <!-- GroupListScreen -->
-    <string name="group_list_search_content_description">Search</string>
-    <string name="group_list_add_content_description">Add</string>
-    <string name="group_list_overflow_count">+%1$d</string>
+    <!-- TripListScreen -->
+    <string name="trip_list_search_content_description">Search</string>
+    <string name="trip_list_add_content_description">Add</string>
+    <string name="trip_list_overflow_count">+%1$d</string>
 
     <!-- SelectImageScreen -->
     <string name="select_image_cancel">취소</string>
@@ -39,38 +39,38 @@
 
     <!-- SelectCategoryScreen -->
     <string name="select_category_back_button_description">뒤로 가기 버튼</string>
-    <string name="select_category_title">카테고리 선택</string>
-    <string name="select_category_dialog_title">카테고리 생성</string>
-    <string name="select_category_confirm_button_description">카테고리 추가 확인 버튼</string>
-    <string name="select_category_create_category_button_description">카테고리 추가 버튼</string>
-    <string name="select_category_max_category_over_err_message">카테고리는 최대 3개까지 선택 가능합니다.</string>
-    <string name="group_image_grid_empty_message">아직 비어있어요</string>
+    <string name="select_category_title">태그 선택</string>
+    <string name="select_category_dialog_title">태그 생성</string>
+    <string name="select_category_confirm_button_description">태그 추가 확인 버튼</string>
+    <string name="select_category_create_category_button_description">태그 추가 버튼</string>
+    <string name="select_category_max_category_over_err_message">태그는 최대 3개까지 선택 가능합니다.</string>
+    <string name="trip_image_grid_empty_message">아직 비어있어요</string>
 
-    <!-- GroupView-->
-    <string name="group_view_default_name">기본 그룹</string>
-    <string name="group_view_add_place">장소를 추가해주세요</string>
+    <!-- TripView-->
+    <string name="trip_view_default_name">기본 여행</string>
+    <string name="trip_view_add_place">장소를 추가해주세요</string>
 
-    <!-- SelectGroupScreen -->
-    <string name="select_group_back_button_description">뒤로 가기 버튼</string>
-    <string name="select_group_check_button_description">그룹 선택 확인 버튼</string>
-    <string name="select_group_title">그룹 선택</string>
-    <string name="select_group_add_to_my_group_title">내 그룹에 추가</string>
-    <string name="select_group_dialog_title">그룹 추가</string>
-    <string name="select_group_dialog_label">이름</string>
-    <string name="select_group_dialog_hint">그룹 이름</string>
+    <!-- SelectTripScreen -->
+    <string name="select_trip_back_button_description">뒤로 가기 버튼</string>
+    <string name="select_trip_check_button_description">여행 선택 확인 버튼</string>
+    <string name="select_trip_title">여행 선택</string>
+    <string name="select_trip_add_to_my_trip_title">내 여행에 추가</string>
+    <string name="select_trip_dialog_title">여행 추가</string>
+    <string name="select_trip_dialog_label">이름</string>
+    <string name="select_trip_dialog_hint">여행 이름</string>
 
     <!-- SelectLocationScreen -->
     <string name="select_location_title">위치 선택</string>
     <string name="select_location_button">이 위치로 결정</string>
 
-    <!-- GroupDetailScreen-->
-    <string name="groupdetail_tab_gallery">갤러리</string>
-    <string name="groupdetail_tab_map">사진 지도</string>
-    <string name="groupdetail_map_placeholder">사진 지도 기능은 추후 구현 예정입니다</string>
-    <string name="groupdetail_back_button_content_description">뒤로 가기</string>
-    <string name="groupdetail_menu_button_content_description">메뉴</string>
-    <string name="groupdetail_search_button_content_description">검색</string>
-    <string name="groupdetail_place_list_title">장소 목록</string>
+    <!-- TripDetailScreen-->
+    <string name="trip_detail_tab_gallery">갤러리</string>
+    <string name="trip_detail_tab_map">사진 지도</string>
+    <string name="trip_detail_map_placeholder">사진 지도 기능은 추후 구현 예정입니다</string>
+    <string name="trip_detail_back_button_content_description">뒤로 가기</string>
+    <string name="trip_detail_menu_button_content_description">메뉴</string>
+    <string name="trip_detail_search_button_content_description">검색</string>
+    <string name="trip_detail_place_list_title">장소 목록</string>
 
     <!-- PlaceCreateScreen -->
     <string name="place_create_title">장소 추가</string>
@@ -85,21 +85,21 @@
     <string name="place_create_title_input">제목을 입력해주세요</string>
     <string name="place_create_tag">태그</string>
     <string name="place_create_location">위치</string>
-    <string name="place_create_group">그룹</string>
+    <string name="place_create_trip">여행</string>
     <string name="place_delete_image">사진 삭제</string>
     <string name="place_create_location_placeholder">사용자 지정</string>
     <string name="place_create_space">" "</string>
-    <string name="place_create_snack_bar_input_message">사진, 제목, 위치, 그룹을 입력해주세요.</string>
+    <string name="place_create_snack_bar_input_message">사진, 제목, 위치, 여행을 입력해주세요.</string>
     <string name="place_create_open_to_everyone">모두에게 공개하기</string>
     <string name="place_create_value_length_format">%1$d/%2$d</string>
     <string name="place_create_button_text">장소 추가하기</string>
-    <string name="place_create_group_placeholder">그룹을 선택하세요</string>
+    <string name="place_create_trip_placeholder">여행을 선택하세요</string>
     <string name="place_create_tag_placeholder">태그를 선택하세요</string>
 
     <!-- MainBottomBar -->
     <string name="main_bottom_bar_place_list">장소</string>
     <string name="main_bottom_bar_user">마이페이지</string>
-    <string name="main_bottom_bar_group">그룹</string>
+    <string name="main_bottom_bar_trip">여행</string>
     <string name="main_bottom_bar_plan">계획</string>
     <string name="main_bottom_center_button_content_description">추가</string>
 
@@ -213,15 +213,11 @@
     <string name="login_delete_account_confirm">삭제</string>
     <string name="login_cancel">취소</string>
 
-
-
-
-
     <!-- PlanScreen -->
     <string name="plan_time_axis_hour">%1$02d:00</string>
     <string name="plan_day_format">Day %1$d</string>
     <string name="plan_add_day">날 추가</string>
-    <string name="plan_default_group">기본 그룹</string>
+    <string name="plan_default_trip">기본 여행</string>
     <string name="plan_delete">삭제</string>
     <string name="plan_cancel">취소</string>
     <string name="plan_day_delete">Day 삭제</string>
@@ -232,9 +228,9 @@
     <string name="plan_select_date">날짜 선택하기</string>
     <string name="plan_not_select_date_title">날짜가 선택되지 않았어요</string>
     <string name="plan_not_select_date_description">일정이 정해지지 않았나요?\n날짜를 선택하고 새로운 추억을 계획해보세요.</string>
-    <string name="plan_group_thumbnail_description">그룹 썸네일 이미지</string>
-    <string name="plan_group_select_btn_description">그룹 선택 버튼</string>
-    <string name="plan_no_group">그룹이 존재하지 않습니다</string>
+    <string name="plan_trip_thumbnail_description">여행 썸네일 이미지</string>
+    <string name="plan_trip_select_btn_description">여행 선택 버튼</string>
+    <string name="plan_no_trip">여행이 존재하지 않습니다</string>
 
     <!-- PlacePickerItem -->
     <string name="place_picker_item_image_description">장소에 대한 이미지</string>

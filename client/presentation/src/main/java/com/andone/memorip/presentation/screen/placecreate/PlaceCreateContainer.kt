@@ -26,7 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.andone.memorip.presentation.model.GroupUiModel
+import com.andone.memorip.presentation.model.TripUiModel
 import com.andone.memorip.presentation.model.LocationUiModel
 import com.andone.memorip.presentation.model.TagUiModel
 import com.andone.memorip.presentation.screen.placecreate.PlaceCreateContainerDimens.BAR_WIDTH_FRACTION
@@ -35,10 +35,10 @@ import com.andone.memorip.presentation.screen.placecreate.component.StepProgress
 import com.andone.memorip.presentation.screen.placecreate.model.PlaceCreateAction
 import com.andone.memorip.presentation.screen.placecreate.model.PlaceCreateStep
 import com.andone.memorip.presentation.screen.selectcategory.SelectCategoryScreen
-import com.andone.memorip.presentation.screen.selectgroup.SelectGroupScreen
-import com.andone.memorip.presentation.screen.selectgroup.model.toGroupUiModel
+import com.andone.memorip.presentation.screen.selecttrip.SelectTripScreen
 import com.andone.memorip.presentation.screen.selectimage.SelectImageScreen
 import com.andone.memorip.presentation.screen.selectlocation.SelectLocationScreen
+import com.andone.memorip.presentation.screen.selecttrip.model.toTripUiModel
 import com.andone.memorip.presentation.theme.MemoripSpace
 
 private object PlaceCreateContainerDimens {
@@ -65,7 +65,7 @@ fun PlaceCreateContainer(
             PlaceCreateStep.SelectLocation -> currentStep = PlaceCreateStep.SelectImage
             PlaceCreateStep.PlaceCreate -> currentStep = PlaceCreateStep.SelectLocation
             PlaceCreateStep.SelectCategory -> currentStep = PlaceCreateStep.PlaceCreate
-            PlaceCreateStep.SelectGroup -> currentStep = PlaceCreateStep.PlaceCreate
+            PlaceCreateStep.SelectTrip -> currentStep = PlaceCreateStep.PlaceCreate
         }
     }
 
@@ -99,11 +99,11 @@ fun PlaceCreateContainer(
             PlaceCreateSubStep(
                 step = currentStep,
                 onCategoryChange = viewModel::updateCategory,
-                onGroupChange = { group ->
-                    viewModel.onAction(PlaceCreateAction.OnGroupSelect(group))
+                onTripChange = { trip ->
+                    viewModel.onAction(PlaceCreateAction.OnTripSelect(trip))
                 },
                 onStepChange = { currentStep = it },
-                currentGroup = uiState.group
+                currentTrip = uiState.trip
             )
         }
     }
@@ -180,7 +180,7 @@ fun PlaceCreateMainStep(
                         PlaceCreateScreen(
                             onCategoryClick = { onStepChange(PlaceCreateStep.SelectCategory) },
                             onLocationClick = { onStepChange(PlaceCreateStep.SelectLocation) },
-                            onGroupClick = { onStepChange(PlaceCreateStep.SelectGroup) },
+                            onTripClick = { onStepChange(PlaceCreateStep.SelectTrip) },
                             onNavigateToHome = onNavigateToHome,
                             viewModel = viewModel
                         )
@@ -197,10 +197,10 @@ fun PlaceCreateMainStep(
 fun PlaceCreateSubStep(
     step: PlaceCreateStep,
     onCategoryChange: (List<TagUiModel>) -> Unit,
-    onGroupChange: (GroupUiModel) -> Unit,
+    onTripChange: (TripUiModel) -> Unit,
     onStepChange: (PlaceCreateStep) -> Unit,
     modifier: Modifier = Modifier,
-    currentGroup: GroupUiModel? = null
+    currentTrip: TripUiModel? = null
 ) {
     when (step) {
         PlaceCreateStep.SelectCategory -> {
@@ -214,15 +214,15 @@ fun PlaceCreateSubStep(
             )
         }
 
-        PlaceCreateStep.SelectGroup -> {
-            SelectGroupScreen(
-                onGroupSelect = { selectGroup ->
-                    onGroupChange(selectGroup.toGroupUiModel())
+        PlaceCreateStep.SelectTrip -> {
+            SelectTripScreen(
+                onTripSelect = { selectTrip ->
+                    onTripChange(selectTrip.toTripUiModel())
                     onStepChange(PlaceCreateStep.PlaceCreate)
                 },
                 onBackClick = { onStepChange(PlaceCreateStep.PlaceCreate) },
                 placeId = null,
-                initialSelectedGroupId = currentGroup?.id,
+                initialSelectedTripId = currentTrip?.id,
                 modifier = modifier
             )
         }

@@ -23,7 +23,7 @@ sealed interface PlanAction {
     data class DateSelected(val start: LocalDate, val end: LocalDate) : PlanAction
 
     data class DayScrolled(val day: Int) : PlanAction
-    data object GroupChoiceClick : PlanAction
-    data class GroupChoiceConfirmClick(val selectedGroup: GroupListUiModel) : PlanAction
+    data object TripChoiceClick : PlanAction
+    data class TripChoiceConfirmClick(val selectedTrip: TripListUiModel) : PlanAction
     data object ShowCalendarClick : PlanAction
 }

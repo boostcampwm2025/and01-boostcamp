@@ -1,6 +1,6 @@
 package com.andone.memorip.data.place.model
 
-import com.andone.memorip.domain.model.response.GroupCompact
+import com.andone.memorip.domain.model.response.TripCompact
 import com.andone.memorip.domain.model.response.PlaceDetail
 import com.andone.memorip.domain.model.Tag
 import com.andone.memorip.domain.model.request.Address
@@ -37,13 +37,13 @@ fun PlaceDetailResponse.toDomain(): PlaceDetail = PlaceDetail(
     longitude = this.longitude,
     tags = this.tags,
     images = this.images,
-    groups = this.groups.map { it.toDomain() },
+    trips = this.groups.map { it.toDomain() },
     address = this.address,
     isMine = this.isMine,
-    isInMyGroup = this.isInMyGroup
+    isInMyTrip = this.isInMyGroup
 )
 
-fun GroupCompactResponse.toDomain(): GroupCompact = GroupCompact(
-    groupId = this.groupId,
-    groupName = this.groupName
+fun GroupCompactResponse.toDomain(): TripCompact = TripCompact(
+    tripId = this.groupId,
+    tripName = this.groupName
 )
