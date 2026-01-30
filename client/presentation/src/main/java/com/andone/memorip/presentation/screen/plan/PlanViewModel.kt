@@ -133,6 +133,11 @@ class PlanViewModel @Inject constructor(
                 moveBlock(action.id, action.newStartMinute)
             }
 
+            is PlanAction.BlockClick -> {
+                val targetBlock = uiState.value.blockUiModels[action.id]
+                _event.trySend(element = PlanEvent.ShowPlaceEditDialog(targetBlock))
+            }
+
             PlanAction.AddDay -> {
                 selectedDateFlow.update { it.copy(endDay = it.endDay?.plusDays(1)) }
             }
