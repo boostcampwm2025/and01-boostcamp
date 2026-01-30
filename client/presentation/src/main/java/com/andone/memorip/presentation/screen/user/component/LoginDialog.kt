@@ -1,6 +1,5 @@
 package com.andone.memorip.presentation.screen.user.component
 
-import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,7 +39,8 @@ fun LoginDialog(
     AlertDialog(
         onDismissRequest = { onAction(UserAction.CloseLoginDialog) },
         confirmButton = {},
-        modifier = modifier.background(color = MemoripTheme.colors.background),
+        modifier = modifier,
+        containerColor = MemoripTheme.colors.background,
         title = {
             Text(
                 text = if (state.isNewAccount) stringResource(R.string.login_new_account)

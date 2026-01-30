@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -81,7 +82,15 @@ fun SettingRowItem(
             is SettingTrailing.Toggle -> {
                 Switch(
                     checked = trailing.checked,
-                    onCheckedChange = trailing.onCheckedChange
+                    onCheckedChange = trailing.onCheckedChange,
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = MemoripTheme.colors.white,
+                        checkedTrackColor = MemoripTheme.colors.primary,
+                        checkedBorderColor = MemoripTheme.colors.background,
+                        uncheckedThumbColor = MemoripTheme.colors.white,
+                        uncheckedTrackColor = MemoripTheme.colors.gray1,
+                        uncheckedBorderColor = MemoripTheme.colors.background
+                    )
                 )
             }
 

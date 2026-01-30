@@ -17,13 +17,13 @@ fun PlaceDetail.toUiModel(): PlaceUiModel = PlaceUiModel(
     latitude = this.latitude,
     longitude = this.longitude,
     imageUrls = this.images.toImmutableList(),
-    groups = this.groups.map {
-        GroupCompactUiModel(
-            groupId = it.groupId,
-            groupName = it.groupName
+    trips = this.trips.map {
+        TripCompactUiModel(
+            tripId = it.tripId,
+            tripName = it.tripName
         )
     }.toImmutableList(),
     content = this.content ?: "",
     isMine = this.isMine,
-    isInMyGroup = this.isInMyGroup
+    isInMyTrip = this.isInMyTrip
 )

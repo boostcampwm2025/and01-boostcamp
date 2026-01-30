@@ -9,10 +9,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -20,7 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.R
-import com.andone.memorip.presentation.screen.plan.model.GroupListUiModel
+import com.andone.memorip.presentation.screen.plan.model.TripListUiModel
 import com.andone.memorip.presentation.util.DummyData
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -29,7 +25,7 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 fun PlanTopAppBar(
     title: String?,
-    groups: ImmutableList<GroupListUiModel>,
+    trips: ImmutableList<TripListUiModel>,
     expanded: Boolean,
     onTitleClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -49,7 +45,7 @@ fun PlanTopAppBar(
                         expanded = expanded,
                         modifier = Modifier.clickable(
                             onClick = {
-                                if (groups.isNotEmpty()) {
+                                if (trips.isNotEmpty()) {
                                     onTitleClick()
                                 }
                             }
@@ -93,9 +89,9 @@ private fun PlanTopAppBarPreview() {
     MemoripTheme {
         PlanTopAppBar(
             title = "그룹 1",
-            groups = DummyData.groupListItems.toImmutableList(),
+            trips = DummyData.tripListItems.toImmutableList(),
             expanded = false,
-            onTitleClick = {  }
+            onTitleClick = { }
         )
     }
 }

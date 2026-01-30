@@ -13,10 +13,12 @@ import com.andone.memorip.feature.place.dto.response.PlaceListItemResponse
 import com.andone.memorip.feature.place.dto.response.toTagResponse
 import com.andone.memorip.feature.place.entity.GroupPlace
 import com.andone.memorip.feature.place.entity.Place
+import com.andone.memorip.feature.place.entity.PlaceTag
 import com.andone.memorip.feature.place.repository.GroupPlaceRepository
 import com.andone.memorip.feature.place.repository.PlaceImageRepository
 import com.andone.memorip.feature.place.repository.PlaceRepository
 import com.andone.memorip.feature.place.repository.PlaceTagRepository
+import com.andone.memorip.feature.tag.repository.TagRepository
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -27,9 +29,10 @@ import java.util.*
 class PlaceService(
     private val placeRepository: PlaceRepository,
     private val groupRepository: GroupRepository,
-    private val placeTagRepository: PlaceTagRepository,
     private val placeImageRepository: PlaceImageRepository,
-    private val groupPlaceRepository: GroupPlaceRepository
+    private val groupPlaceRepository: GroupPlaceRepository,
+    private val tagRepository: TagRepository,
+    private val placeTagRepository: PlaceTagRepository
 ) {
 
     @Transactional(readOnly = true)
@@ -115,9 +118,20 @@ class PlaceService(
             isPublic = request.isPublic,
         )
 
-        // todo: 태그 연결
-
         val savedPlace = placeRepository.save(place)
+
+        // 태그 연결
+        if (!request.tags.isNullOrEmpty()) {
+            val tags = tagRepository.findAllById(request.tags)
+            if (tags.size != request.tags.size) {
+                throw BusinessException(code = CommonExceptionCode.TAG_NOT_FOUND)
+            }
+            
+            val placeTags = tags.map { tag ->
+                PlaceTag.create(place = savedPlace, tag = tag)
+            }
+            placeTagRepository.saveAll(placeTags)
+        }
 
         val groupPlaces = groups.map { group ->
             GroupPlace.create(group = group, place = savedPlace)
@@ -167,6 +181,20 @@ class PlaceService(
 
         // todo: Place에서 Group 간의 단일 연결 끊으면 삭제 해야함.
         place.updateGroupId(request.groupIds.firstOrNull())
+
+        // 태그 업데이트 (전체 치환)
+        placeTagRepository.deleteByPlaceId(placeId)
+        if (!request.tags.isNullOrEmpty()) {
+            val tags = tagRepository.findAllById(request.tags)
+            if (tags.size != request.tags.size) {
+                throw BusinessException(code = CommonExceptionCode.TAG_NOT_FOUND)
+            }
+            
+            val placeTags = tags.map { tag ->
+                PlaceTag.create(place = place, tag = tag)
+            }
+            placeTagRepository.saveAll(placeTags)
+        }
 
         val tags = placeTagRepository.findAllByPlaceId(id = placeId).map { it.toTagResponse() }
         val images = placeImageRepository.findAllByPlaceId(id = placeId).map { it.url }

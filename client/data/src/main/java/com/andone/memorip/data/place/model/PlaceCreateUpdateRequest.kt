@@ -19,7 +19,7 @@ data class PlaceCreateUpdateRequest(
 )
 
 fun PlaceCreateUpdateRequest.toDomain(): PlaceCreateUpdate = PlaceCreateUpdate(
-    groupIds = this.groupIds,
+    tripIds = this.groupIds,
     title = this.title,
     content = this.content,
     tags = this.tags,
@@ -32,7 +32,7 @@ fun PlaceCreateUpdateRequest.toDomain(): PlaceCreateUpdate = PlaceCreateUpdate(
 )
 
 fun PlaceCreateUpdate.toDomain(): PlaceCreateUpdateRequest = PlaceCreateUpdateRequest(
-    groupIds = this.groupIds,
+    groupIds = this.tripIds,
     title = this.title,
     content = this.content,
     tags = this.tags,

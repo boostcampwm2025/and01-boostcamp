@@ -89,16 +89,16 @@ class PlaceRemoteDataSourceImpl @Inject constructor(
         return apiCall { placeService.deletePlace(placeId) }
     }
 
-    override suspend fun updatePlaceGroups(
+    override suspend fun updatePlaceTrips(
         placeId: String,
-        addGroupIds: List<String>,
-        removeGroupIds: List<String>
+        addTripIds: List<String>,
+        removeTripIds: List<String>
     ): Result<Unit> {
         val request = PlaceGroupsUpdateRequest(
-            addGroupIds = addGroupIds,
-            removeGroupIds = removeGroupIds
+            addGroupIds = addTripIds,
+            removeGroupIds = removeTripIds
         )
-        return apiCall { placeService.updatePlaceGroups(placeId, request) }
+        return apiCall { placeService.updatePlaceTrips(placeId, request) }
     }
 
     private fun parseRegionNode(
@@ -167,12 +167,12 @@ class PlaceRemoteDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun getPlaceByGroupId(
-        groupId: String,
+    override suspend fun getPlaceByTripId(
+        tripId: String,
         page: Int,
         size: Int
     ): Result<List<PlaceListItemResponse>> {
-        return apiCall { placeService.getPlaceByGroupId(groupId = groupId, page, size) }
+        return apiCall { placeService.getPlaceByTripId(tripId = tripId, page, size) }
     }
 
     companion object {
