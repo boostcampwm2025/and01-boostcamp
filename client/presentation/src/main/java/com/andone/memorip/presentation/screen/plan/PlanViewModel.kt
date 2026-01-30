@@ -267,7 +267,7 @@ class PlanViewModel @Inject constructor(
                             endAt = endAtString
                         )
                         tripRepository.updatePlaceTime(
-                            groupPlaceId = block.id,
+                            tripPlaceId = block.id,
                             startAt = startAtString!!,
                             endAt = endAtString!!
                         ).onSuccess {
