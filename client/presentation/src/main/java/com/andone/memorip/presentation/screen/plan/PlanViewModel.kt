@@ -134,7 +134,7 @@ class PlanViewModel @Inject constructor(
             }
 
             is PlanAction.BlockClick -> {
-                val targetBlock = uiState.value.blockUiModels[action.id]
+                val targetBlock = uiState.value.blockUiModels[action.id] ?: return
                 _event.trySend(element = PlanEvent.ShowPlaceEditDialog(targetBlock))
             }
 

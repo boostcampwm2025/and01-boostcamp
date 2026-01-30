@@ -58,6 +58,10 @@ fun PlanScreen(
             PlanEvent.ShowCalendarDialog -> {
                 showCalendar = true
             }
+
+            is PlanEvent.ShowPlaceEditDialog -> {
+                
+            }
         }
     }
 
