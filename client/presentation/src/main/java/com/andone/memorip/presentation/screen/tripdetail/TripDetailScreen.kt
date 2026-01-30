@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
@@ -121,7 +122,7 @@ private fun TripDetailScreenContent(
                 onSearchClick = { onAction(TripDetailAction.OnSearchClick) }
             )
         },
-        contentWindowInsets = WindowInsets(),
+        contentWindowInsets = WindowInsets.navigationBars,
         modifier = modifier
     ) { innerPadding ->
         Column(
@@ -161,7 +162,10 @@ private fun TripDetailScreenContent(
                     onRefresh = { /* TripDetail에서는 refresh 불필요 */ },
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(vertical = MemoripPadding.AppHorizontalPadding)
+                        .padding(
+                            top = MemoripPadding.AppHorizontalPadding,
+                            bottom = MemoripPadding.AppHorizontalPadding
+                        )
                 )
 
                 1 -> MapTab(
