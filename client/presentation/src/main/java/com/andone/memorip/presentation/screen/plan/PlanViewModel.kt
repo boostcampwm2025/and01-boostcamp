@@ -247,34 +247,32 @@ class PlanViewModel @Inject constructor(
 
     fun savePlan() {
         viewModelScope.launch {
-            uiState.value.blocks.forEach { block ->
-                val target = originPlaces.find { it.id == block.id }
-                val originStartAt = target?.startDateTime
-                val originEndAt = target?.endDateTime
+            uiState.value.date.startDay?.let { date ->
+                uiState.value.blocks.forEach { block ->
+                    val target = originPlaces.find { it.id == block.id }
+                    val originStartAt = target?.startDateTime
+                    val originEndAt = target?.endDateTime
 
-                val startAtDate =
-                    uiState.value.date.startDay!!.atStartOfDay().plusDays((block.day - 1).toLong())
-                val startAt =
-                    startAtDate.plusMinutes((block.startMinute % MINUTES_PER_DAY).toLong())
-                val endAtDate =
-                    uiState.value.date.startDay!!.atStartOfDay().plusDays((block.day - 1).toLong())
-                val endAt =
-                    endAtDate.plusMinutes((block.endMinute % MINUTES_PER_DAY).toLong())
+                    val startAtDate = date.atStartOfDay().plusDays((block.day - 1).toLong())
+                    val startAt = startAtDate.plusMinutes((block.startMinute % MINUTES_PER_DAY).toLong())
+                    val endAtDate = date.atStartOfDay().plusDays((block.day - 1).toLong())
+                    val endAt = endAtDate.plusMinutes((block.endMinute % MINUTES_PER_DAY).toLong())
 
-                if (startAt != originStartAt || endAt != originEndAt) {
-                    val startAtString = startAt.toRemoteString()
-                    val endAtString = endAt.toRemoteString()
+                    if (startAt != originStartAt || endAt != originEndAt) {
+                        val startAtString = startAt.toRemoteString()
+                        val endAtString = endAt.toRemoteString()
 
-                    pendingUpdates[block.id] = Payload.PlaceTimeEditPayload(
-                        startAt = startAtString,
-                        endAt = endAtString
-                    )
-                    groupRepository.updatePlaceTime(
-                        groupPlaceId = block.id,
-                        startAt = startAtString!!,
-                        endAt = endAtString!!
-                    ).onSuccess {
-                        pendingUpdates.remove(block.id)
+                        pendingUpdates[block.id] = Payload.PlaceTimeEditPayload(
+                            startAt = startAtString,
+                            endAt = endAtString
+                        )
+                        groupRepository.updatePlaceTime(
+                            groupPlaceId = block.id,
+                            startAt = startAtString!!,
+                            endAt = endAtString!!
+                        ).onSuccess {
+                            pendingUpdates.remove(block.id)
+                        }
                     }
                 }
             }
