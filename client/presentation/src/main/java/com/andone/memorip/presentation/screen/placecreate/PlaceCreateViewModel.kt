@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.andone.memorip.domain.model.request.Address
 import com.andone.memorip.domain.model.request.PlaceCreateUpdate
 import com.andone.memorip.domain.repository.PlaceRepository
-import com.andone.memorip.presentation.model.GroupUiModel
+import com.andone.memorip.presentation.model.TripUiModel
 import com.andone.memorip.presentation.model.LocationUiModel
 import com.andone.memorip.presentation.model.TagUiModel
 import com.andone.memorip.presentation.screen.placecreate.model.PlaceCreateAction
@@ -51,8 +51,8 @@ class PlaceCreateViewModel @Inject constructor(
                 _event.trySend(PlaceCreateEvent.NavigateToLocation)
             }
 
-            PlaceCreateAction.OnGroupClick -> {
-                _event.trySend(PlaceCreateEvent.NavigateToGroup)
+            PlaceCreateAction.OnTripClick -> {
+                _event.trySend(PlaceCreateEvent.NavigateToTrip)
             }
 
             is PlaceCreateAction.OnTitleChange -> {
@@ -91,8 +91,8 @@ class PlaceCreateViewModel @Inject constructor(
                 snackBarManager.show(SnackBarEvent.NETWORK_ERROR)
             }
 
-            is PlaceCreateAction.OnGroupSelect -> {
-                updateGroup(action.group)
+            is PlaceCreateAction.OnTripSelect -> {
+                updateTrip(action.trip)
             }
 
             PlaceCreateAction.OnCreateSuccess -> {
@@ -113,8 +113,8 @@ class PlaceCreateViewModel @Inject constructor(
         _uiState.update { it.copy(category = category) }
     }
 
-    fun updateGroup(group: GroupUiModel) {
-        _uiState.update { it.copy(group = group) }
+    fun updateTrip(trip: TripUiModel) {
+        _uiState.update { it.copy(trip = trip) }
     }
 
     private fun removeImage(imageUri: Uri) {
@@ -138,7 +138,7 @@ class PlaceCreateViewModel @Inject constructor(
         if (uiStateValue.images.isEmpty()
             || uiStateValue.location == null
             || uiStateValue.title.isBlank()
-            || uiStateValue.group == null
+            || uiStateValue.trip == null
         ) return
 
         viewModelScope.launch {
@@ -148,8 +148,8 @@ class PlaceCreateViewModel @Inject constructor(
 
             placeRepository.createPlace(
                 PlaceCreateUpdate(
-                    // todo: groupIds 리스트로 uiState에서 관리하는 것으로 변경 필요.
-                    groupIds = listOf(uiStateValue.group.id),
+                    // todo: tripIds 리스트로 uiState에서 관리하는 것으로 변경 필요.
+                    tripIds = listOf(uiStateValue.trip.id),
                     title = uiStateValue.title,
                     content = uiStateValue.content,
                     tags = uiStateValue.category.map { it.id },

@@ -2,7 +2,7 @@ package com.andone.memorip.presentation.screen.placedetail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.andone.memorip.domain.repository.GroupRepository
+import com.andone.memorip.domain.repository.TripRepository
 import com.andone.memorip.domain.repository.PlaceRepository
 import com.andone.memorip.navigation.PlaceDetail
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceDetailAction
@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
 class PlaceDetailViewModel @AssistedInject constructor(
     @Assisted route: PlaceDetail,
     private val placeRepository: PlaceRepository,
-    private val groupRepository: GroupRepository,
+    private val tripRepository: TripRepository,
     private val snackBarManager: SnackBarManager
 ) : ViewModel() {
 
@@ -60,8 +60,8 @@ class PlaceDetailViewModel @AssistedInject constructor(
     fun onAction(action: PlaceDetailAction) {
         when (action) {
             PlaceDetailAction.OnBackClick -> _event.trySend(PlaceDetailEvent.NavigateBack)
-            PlaceDetailAction.OnAddToGroupClick -> _event.trySend(PlaceDetailEvent.NavigateToSelectGroup)
-            PlaceDetailAction.GroupClick -> _event.trySend(PlaceDetailEvent.NavigateToGroupList)
+            PlaceDetailAction.OnAddToTripClick -> _event.trySend(PlaceDetailEvent.NavigateToSelectTrip)
+            PlaceDetailAction.TripClick -> _event.trySend(PlaceDetailEvent.NavigateToTripList)
             PlaceDetailAction.OnMoreClick -> {
                 _event.trySend(PlaceDetailEvent.ShowMoreMenu)
             }
@@ -86,12 +86,12 @@ class PlaceDetailViewModel @AssistedInject constructor(
         }
     }
 
-    fun addPlaceToGroup(groupId: String) {
+    fun addPlaceToTrip(tripId: String) {
         viewModelScope.launch {
-            groupRepository.addPlaceToGroup(groupId, placeId)
+            tripRepository.addPlaceToTrip(tripId, placeId)
                 .onSuccess {
                     snackBarManager.show(event = SnackBarEvent.SUCCESS)
-                    _event.trySend(PlaceDetailEvent.PlaceAddToGroup)
+                    _event.trySend(PlaceDetailEvent.PlaceAddToTrip)
                 }
                 .onFailure {
                     snackBarManager.show(event = SnackBarEvent.NETWORK_ERROR)

@@ -2,7 +2,7 @@ package com.andone.memorip.data.di
 
 import com.andone.memorip.data.BuildConfig
 import com.andone.memorip.data.auth.AuthInterceptor
-import com.andone.memorip.data.group.datasource.GroupService
+import com.andone.memorip.data.trip.datasource.TripService
 import com.andone.memorip.data.place.datasource.PlaceService
 import com.andone.memorip.data.tag.datasource.TagService
 import com.andone.memorip.data.user.datasource.UserService
@@ -82,7 +82,7 @@ object ServerNetworkModule {
 
     @Provides
     @Singleton
-    fun provideGroupService(@ServerRetrofit retrofit: Retrofit): GroupService {
-        return retrofit.create(GroupService::class.java)
+    fun provideTripService(@ServerRetrofit retrofit: Retrofit): TripService {
+        return retrofit.create(TripService::class.java)
     }
 }

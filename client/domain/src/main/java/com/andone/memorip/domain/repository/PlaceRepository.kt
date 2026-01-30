@@ -22,16 +22,16 @@ interface PlaceRepository {
     suspend fun uploadImage(file: File): Result<PlaceImageUploadResponse>
     suspend fun createPlace(place: PlaceCreateUpdate): Result<PlaceCreated>
     suspend fun deletePlace(placeId: String): Result<Unit>
-    suspend fun updatePlaceGroups(
+    suspend fun updatePlaceTrips(
         placeId: String,
-        addGroupIds: List<String>,
-        removeGroupIds: List<String>
+        addTripIds: List<String>,
+        removeTripIds: List<String>
     ): Result<Unit>
 
     fun loadRegions(): List<Region>
 
-    suspend fun getPlaceByGroupId(
-        groupId: String,
+    suspend fun getPlaceByTripId(
+        tripId: String,
         page: Int,
         size: Int
     ): Result<List<PlaceListItem>>

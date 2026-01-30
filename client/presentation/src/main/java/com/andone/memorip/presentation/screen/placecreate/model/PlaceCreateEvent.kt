@@ -8,5 +8,5 @@ sealed interface PlaceCreateEvent {
 
     data object NavigateToLocation : PlaceCreateEvent
 
-    data object NavigateToGroup : PlaceCreateEvent
+    data object NavigateToTrip : PlaceCreateEvent
 }

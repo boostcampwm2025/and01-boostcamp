@@ -41,7 +41,7 @@ import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.LoadingIndicatorScreen
 import com.andone.memorip.presentation.component.MemoripImage
 import com.andone.memorip.presentation.component.MemoripInputBox
-import com.andone.memorip.presentation.model.GroupUiModel
+import com.andone.memorip.presentation.model.TripUiModel
 import com.andone.memorip.presentation.model.LocationUiModel
 import com.andone.memorip.presentation.model.TagUiModel
 import com.andone.memorip.presentation.screen.placecreate.PlaceCreateScreenConstant.CONTENT_MAX_LENGTH
@@ -71,7 +71,7 @@ private object PlaceCreateScreenConstant {
 fun PlaceCreateScreen(
     onCategoryClick: () -> Unit,
     onLocationClick: () -> Unit,
-    onGroupClick: () -> Unit,
+    onTripClick: () -> Unit,
     onNavigateToHome: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PlaceCreateViewModel = hiltViewModel()
@@ -83,7 +83,7 @@ fun PlaceCreateScreen(
             PlaceCreateEvent.NavigateToHome -> onNavigateToHome()
             PlaceCreateEvent.NavigateToCategory -> onCategoryClick()
             PlaceCreateEvent.NavigateToLocation -> onLocationClick()
-            PlaceCreateEvent.NavigateToGroup -> onGroupClick()
+            PlaceCreateEvent.NavigateToTrip -> onTripClick()
         }
     }
 
@@ -119,7 +119,7 @@ private fun PlaceCreateScreenContent(
     val placeCreateEnable = uiState.images.isNotEmpty() &&
             uiState.location != null &&
             uiState.title.isNotBlank() &&
-            uiState.group != null
+            uiState.trip != null
 
     LaunchedEffect(Unit) {
         onAction(PlaceCreateAction.OnImageSelect(uiState.images.first()))
@@ -171,10 +171,10 @@ private fun PlaceCreateScreenContent(
             SelectSection(
                 category = uiState.category,
                 location = uiState.location,
-                group = uiState.group,
+                trip = uiState.trip,
                 onCategoryClick = { onAction(PlaceCreateAction.OnCategoryClick) },
                 onLocationClick = { onAction(PlaceCreateAction.OnLocationClick) },
-                onGroupClick = { onAction(PlaceCreateAction.OnGroupClick) },
+                onTripClick = { onAction(PlaceCreateAction.OnTripClick) },
             )
 
             PublicCheckSection(
@@ -270,16 +270,16 @@ private fun ContentSection(
 private fun SelectSection(
     category: List<TagUiModel>,
     location: LocationUiModel?,
-    group: GroupUiModel?,
+    trip: TripUiModel?,
     onCategoryClick: () -> Unit,
     onLocationClick: () -> Unit,
-    onGroupClick: () -> Unit,
+    onTripClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val locationValue = location?.name
         ?.ifBlank { null } ?: stringResource(R.string.place_create_location_placeholder)
-    val groupValue = group?.name
-        ?: stringResource(R.string.place_create_group_placeholder)
+    val tripValue = trip?.name
+        ?: stringResource(R.string.place_create_trip_placeholder)
     val categoryValue = category
         .joinToString(stringResource(R.string.place_create_space)) { it.name }
         .ifEmpty { stringResource(R.string.place_create_tag_placeholder) }
@@ -297,10 +297,10 @@ private fun SelectSection(
         )
 
         SelectRow(
-            label = stringResource(R.string.place_create_group),
-            value = groupValue,
+            label = stringResource(R.string.place_create_trip),
+            value = tripValue,
             leadingIcon = painterResource(R.drawable.ic_outline_folder),
-            onClick = onGroupClick,
+            onClick = onTripClick,
             trailingIcon = painterResource(R.drawable.ic_chevron_forward)
         )
 
@@ -364,7 +364,7 @@ private fun PlaceCreateScreenContentsPreview() {
         Column {
             PlaceCreateScreenContent(
                 uiState = PlaceCreateUiState(
-                    images = DummyData.groups.first().images.take(3).map { it.toUri() }
+                    images = DummyData.trips.first().images.take(3).map { it.toUri() }
                 ),
                 onAction = {}
             )

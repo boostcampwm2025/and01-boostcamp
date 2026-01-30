@@ -4,9 +4,9 @@ sealed interface PlaceDetailAction {
 
     data object OnBackClick : PlaceDetailAction
 
-    data object OnAddToGroupClick : PlaceDetailAction
+    data object OnAddToTripClick : PlaceDetailAction
 
-    data object GroupClick : PlaceDetailAction
+    data object TripClick : PlaceDetailAction
 
     data object OnMoreClick : PlaceDetailAction
 

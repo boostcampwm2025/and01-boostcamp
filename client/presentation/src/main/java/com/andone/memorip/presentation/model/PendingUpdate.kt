@@ -13,5 +13,5 @@ sealed interface Payload {
     class PlaceTimeEditPayload(val startAt: String?, val endAt: String?) : Payload
 
     @Serializable
-    class GroupSavePayload(val title: String, val startAt: String?, val endAt: String?) : Payload
+    class TripSavePayload(val title: String, val startAt: String?, val endAt: String?) : Payload
 }

@@ -33,7 +33,7 @@ fun SelectCategoryTopBar(
             IconButton(onClick = onBackClick) {
                 Icon(
                     imageVector = ImageVector.vectorResource(R.drawable.ic_back),
-                    contentDescription = stringResource(R.string.select_group_back_button_description)
+                    contentDescription = stringResource(R.string.select_trip_back_button_description)
                 )
             }
         },

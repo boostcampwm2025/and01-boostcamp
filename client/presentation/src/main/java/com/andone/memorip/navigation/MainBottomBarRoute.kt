@@ -17,11 +17,11 @@ enum class MainBottomBarRoute(
         titleTextId = R.string.main_bottom_bar_place_list,
         route = PlaceList
     ),
-    GROUP_LIST(
+    TRIP_LIST(
         selectedIconId = R.drawable.ic_twotone_folder,
         unselectedIconId = R.drawable.ic_outline_folder,
-        titleTextId = R.string.main_bottom_bar_group,
-        route = GroupList
+        titleTextId = R.string.main_bottom_bar_trip,
+        route = TripList
     ),
     PLAN(
         selectedIconId = R.drawable.ic_twotone_calendar_month,
