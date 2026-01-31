@@ -15,7 +15,7 @@
 장소를 기록하고, 공유하고, 계획까지 이어질 수 있도록 돕는 것을 목표로 합니다.
 
 
-
+<img width="1100" alt="image" src="https://github.com/user-attachments/assets/22a4b0cc-be77-42a2-9147-9bf7d8c15b64" />
 
 
 ## 정적 데이터 생성 자동화
