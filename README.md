@@ -14,7 +14,8 @@
 이 서비스는 사용자들의 실제 경험을 기반으로
 장소를 기록하고, 공유하고, 계획까지 이어질 수 있도록 돕는 것을 목표로 합니다.
 
-<img width="1200" src="https://github.com/user-attachments/assets/f15caefd-627f-4603-866e-26e422e41566"/>
+
+
 
 
 ## 정적 데이터 생성 자동화
@@ -22,7 +23,7 @@
 > 변경 빈도가 낮은 지역/행정구역 데이터를 서버 API 대신 정적 리소스로 관리하여  
 > 네트워크 의존도를 제거하고 즉시 응답 가능한 구조 설계
 
-<img width="1742" height="592" alt="image" src="https://github.com/user-attachments/assets/17e18058-f5c9-489e-8ffb-75a21c008fae" />
+<img width="1867" height="641" alt="image" src="https://github.com/user-attachments/assets/6c20e42c-b5e2-496d-9da5-6b596ce4fd36" />
 
 
 
@@ -37,7 +38,8 @@
 ### 해결
 행정구역 데이터를 JSON 정적 리소스로 내장하고, 스크립트 기반 자동 생성으로 빌드 시점에 포함
 
-**<img width="1267" height="792" alt="image" src="https://github.com/user-attachments/assets/760bf465-3dd1-49be-8dc4-6374a8380f29" />**
+<img width="1190" height="750" alt="image" src="https://github.com/user-attachments/assets/dfa35a47-50da-49e6-a3eb-b6dfd8cf2730" />
+
 
 
 ---
