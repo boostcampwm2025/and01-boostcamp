@@ -29,9 +29,15 @@
 ### 문제
 지역 필터링 시 매번 서버 API 호출이 발생하여 응답 지연과 불필요한 트래픽 비용 증가
 
+<img width="1200" alt="image" src="https://github.com/user-attachments/assets/ae3fffa1-332d-453f-8918-bfa2b4bad21a" />
+
+
 ### 해결
 행정구역 데이터를 JSON 정적 리소스로 내장하고, 스크립트 기반 자동 생성으로 빌드 시점에 포함
 대한민국 행정구역에 변경이 있을 경우 변환 Script를 이용해 json 파일 재생성 혹은 변환 Script부분만 수정
+
+<img width="1267" height="792" alt="image" src="https://github.com/user-attachments/assets/760bf465-3dd1-49be-8dc4-6374a8380f29" />
+
 
 ---
 
