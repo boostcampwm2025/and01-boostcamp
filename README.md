@@ -92,10 +92,11 @@ JSON 자동 생성
 ![Android](https://img.shields.io/badge/Android-3DDC84?logo=android&logoColor=white)
 ![Kotlin](https://img.shields.io/badge/Kotlin-7F52FF?logo=kotlin&logoColor=white)
 ![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-4285F4?logo=android&logoColor=white)
-![MVVM](https://img.shields.io/badge/MVVM-000000)
+![MVI](https://img.shields.io/badge/MVI-000000)
 
 ![Coroutines](https://img.shields.io/badge/Coroutines-0095D5)
 ![Flow](https://img.shields.io/badge/Flow-0095D5)
 ![Hilt](https://img.shields.io/badge/Hilt-59666C)
 
 ![Firebase](https://img.shields.io/badge/Firebase%20App%20Distribution-FFCA28?logo=firebase&logoColor=black)
+![Naver Map](https://img.shields.io/badge/Naver%20Map-03C75A?logo=naver&logoColor=white)
