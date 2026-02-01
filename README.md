@@ -73,29 +73,11 @@ JSON 자동 생성
 
 
 ## 주요 기능
-:one: **원하는 장소 사진들을 한눈에**
-  
-사용자가 원하는 장소를 쉽게 찾을 수 있도록 검색과 필터링 기능을 제공합니다.
-위치 필터는 원하는 세부 항목을 점점 쌓아가는 방식입니다.
-
-https://github.com/user-attachments/assets/48233bf5-9203-4cd3-a09d-aee7e7f990d8
-
-https://github.com/user-attachments/assets/7f4c526e-19b3-4a1b-aab1-8ae79ce71669
-
-
-:two: **간편한 앱 사용**
-
-기존 앱들의 UI와 달리 텍스트를 최소화하여 간단한 인터랙션으로 동작합니다.
-
-https://github.com/user-attachments/assets/bdda5a38-d1ab-48f2-a387-9b7a88dc0fc7
-
-
-
-:three: **취향에 맞게 가져와 사용하는 장소 경험 공유 시스템**
-
-익명 공유를 통해 개인정보 노출 부담 없이 순수하게 장소에 대한 경험을 공유할 수 있습니다.
-
-https://github.com/user-attachments/assets/6e4fda34-6480-432a-bfd0-b13d3ffda09f
+| 기능 | 설명 | 영상 |
+| --- | --- | --- |
+| **원하는 장소 사진들을 한눈에** | 사용자가 원하는 장소를 쉽게 찾을 수 있는 검색과 필터링 기능 | <img src="https://github.com/user-attachments/assets/0d79dd02-5585-44ea-a434-c969b604406a" width="150" /> <img src="https://github.com/user-attachments/assets/b1e9013c-0b97-400f-85cc-231f4f67044b" width="150" /> |
+| **간편한 앱 사용** | 기존 앱들의 UI와 달리 텍스트를 최소화하여 간단한 인터랙션으로 동작 | <img src="https://github.com/user-attachments/assets/79a85ad2-7995-40a2-a474-9010203f195f" width="150" /> |
+| **취향에 맞게 가져와 사용하는 장소 경험 공유 시스템** | 익명 공유를 통해 개인정보 노출 부담 없이 순수하게 장소에 대한 경험을 공유 | <img src="https://github.com/user-attachments/assets/1a705c9f-a12d-496b-aed1-b6e46f0eb42f" width="150" /> |
 
 ## 프로젝트 구조
 
