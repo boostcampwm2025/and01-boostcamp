@@ -1,3 +1,5 @@
+<img width="1100" alt="image" src="https://github.com/user-attachments/assets/22a4b0cc-be77-42a2-9147-9bf7d8c15b64" />
+
 # Memorip
 나만의 장소 저장 및 공유 서비스
 
@@ -14,16 +16,14 @@
 이 서비스는 사용자들의 실제 경험을 기반으로
 장소를 기록하고, 공유하고, 계획까지 이어질 수 있도록 돕는 것을 목표로 합니다.
 
-
-<img width="1100" alt="image" src="https://github.com/user-attachments/assets/22a4b0cc-be77-42a2-9147-9bf7d8c15b64" />
-
-
-## 주요 기능
-| 기능 | 설명 | 영상 |
-| --- | --- | --- |
-| **원하는 장소 사진들을 한눈에** | 사용자가 원하는 장소를 쉽게 찾을 수 있는 검색과 필터링 기능 | <img src="https://github.com/user-attachments/assets/0d79dd02-5585-44ea-a434-c969b604406a" width="150" /> <img src="https://github.com/user-attachments/assets/b1e9013c-0b97-400f-85cc-231f4f67044b" width="150" /> |
-| **간편한 앱 사용** | 기존 앱들의 UI와 달리 텍스트를 최소화하여 간단한 인터랙션으로 동작 | <img src="https://github.com/user-attachments/assets/79a85ad2-7995-40a2-a474-9010203f195f" width="150" /> |
-| **취향에 맞게 가져와 사용하는 장소 경험 공유 시스템** | 익명 공유를 통해 개인정보 노출 부담 없이 순수하게 장소에 대한 경험을 공유 | <img src="https://github.com/user-attachments/assets/1a705c9f-a12d-496b-aed1-b6e46f0eb42f" width="150" /> |
+## ✨ 주요 기능
+| 기능                      | 설명 | 미리보기 |
+|:------------------------| :-- | :--: |
+| **🔍 원하는 장소를 한눈에**      | 검색과 지역·태그 필터링으로 수많은 장소 중 목적지를 빠르게 탐색 | <img src="https://github.com/user-attachments/assets/99473c41-9e3c-4ba1-955d-aab9671e8afa" width="140" /> |
+| **📍 장소 상세 및 유연한 관리**   | 장소의 상세 정보를 확인하고 여행 그룹에 추가<br/>직접 등록한 장소 수정 및 삭제 가능 | <img src="https://github.com/user-attachments/assets/291c6296-9710-450d-a61e-31d71f8f34b1" width="140" /> |
+| **➕ 직관적인 3-Step 장소 추가** | 사진 크롭 → 위치 검색 → 추가 정보 입력<br/>단계별 플로우로 손쉬운 장소 등록 | <img src="https://github.com/user-attachments/assets/d224eaa5-eb5f-47e0-9d08-0eea99981251" width="140" /> |
+| **🗺️ 지도 기반 여행 시각화**    | 갤러리 뷰와 지도 클러스터링을 통해<br/>여행 동선을 한눈에 파악 | <img src="https://github.com/user-attachments/assets/57d9a5a0-ea1c-4874-bb90-595c30cb679a" width="140" /> |
+| **📅 드래그 앤 드롭 일정 계획**   | 날짜별 타임라인에 장소를 드래그하여<br/>복잡한 여행 일정을 직관적으로 구성 | <img src="https://github.com/user-attachments/assets/0a2344c1-3d64-4adc-a802-36744e7b8470" width="140" /> |
 
 ## 프로젝트 구조
 
