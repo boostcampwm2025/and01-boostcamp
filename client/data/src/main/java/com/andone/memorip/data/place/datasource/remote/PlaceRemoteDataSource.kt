@@ -23,6 +23,11 @@ interface PlaceRemoteDataSource {
 
     suspend fun uploadImage(file: File): Result<PlaceImageUploadResponse>
     suspend fun createPlace(place: PlaceCreateUpdateRequest): Result<PlaceCreateResponse>
+    suspend fun updatePlace(
+        placeId: String,
+        place: PlaceCreateUpdateRequest
+    ): Result<PlaceDetailResponse>
+
     suspend fun deletePlace(placeId: String): Result<Unit>
     suspend fun updatePlaceTrips(
         placeId: String,

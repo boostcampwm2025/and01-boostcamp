@@ -1,11 +1,11 @@
 package com.andone.memorip.domain.repository
 
 import androidx.paging.PagingData
-import com.andone.memorip.domain.model.response.PlaceDetail
 import com.andone.memorip.domain.model.PlaceListItem
 import com.andone.memorip.domain.model.Region
 import com.andone.memorip.domain.model.request.PlaceCreateUpdate
 import com.andone.memorip.domain.model.response.PlaceCreated
+import com.andone.memorip.domain.model.response.PlaceDetail
 import com.andone.memorip.domain.model.response.PlaceImageUploadResponse
 import kotlinx.coroutines.flow.Flow
 import java.io.File
@@ -19,8 +19,10 @@ interface PlaceRepository {
         region2Depth: List<String>? = null,
         sort: List<String>? = null
     ): Flow<PagingData<PlaceListItem>>
+
     suspend fun uploadImage(file: File): Result<PlaceImageUploadResponse>
     suspend fun createPlace(place: PlaceCreateUpdate): Result<PlaceCreated>
+    suspend fun updatePlace(placeId: String, place: PlaceCreateUpdate): Result<PlaceDetail>
     suspend fun deletePlace(placeId: String): Result<Unit>
     suspend fun updatePlaceTrips(
         placeId: String,
