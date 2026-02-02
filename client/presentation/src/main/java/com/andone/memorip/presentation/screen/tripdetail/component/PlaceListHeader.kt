@@ -116,7 +116,10 @@ private fun ViewModeToggleSegment(
         .clip(RoundedCornerShape(PlaceListHeaderDimen.INNER_RADIUS))
     val selectedBoxModifier = Modifier
         .size(PlaceListHeaderDimen.SEGMENT_SIZE)
-        .shadow(elevation = PlaceListHeaderDimen.TOGGLE_INNER_OFFSET, shape = RoundedCornerShape(PlaceListHeaderDimen.INNER_RADIUS))
+        .shadow(
+            elevation = PlaceListHeaderDimen.TOGGLE_INNER_OFFSET,
+            shape = RoundedCornerShape(PlaceListHeaderDimen.INNER_RADIUS)
+        )
         .clip(RoundedCornerShape(PlaceListHeaderDimen.INNER_RADIUS))
         .background(MemoripTheme.colors.white)
 
@@ -170,7 +173,6 @@ private fun ViewModeTogglePreview() {
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
