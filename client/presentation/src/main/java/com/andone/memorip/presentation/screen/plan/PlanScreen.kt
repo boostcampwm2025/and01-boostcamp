@@ -23,6 +23,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.model.Place
+import com.andone.memorip.presentation.screen.plan.PlanScreenConstant.MINUTE_STEP
 import com.andone.memorip.presentation.screen.plan.component.DateNotSelectedContent
 import com.andone.memorip.presentation.screen.plan.component.DateRangeCalendar
 import com.andone.memorip.presentation.screen.plan.component.DateSelectedContent
@@ -36,6 +37,10 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
 import com.andone.memorip.presentation.util.collectWithLifecycle
 import kotlinx.collections.immutable.toImmutableList
+
+private object PlanScreenConstant {
+    const val MINUTE_STEP = 10
+}
 
 @Composable
 fun PlanScreen(
@@ -128,8 +133,8 @@ fun PlanScreen(
         when (block) {
             is Place -> {
                 PlanEditDialog(
-                    defaultStartTime = block.startDateTime!!,
-                    defaultEndTime = block.endDateTime!!,
+                    defaultStartTime = block.startDateTime!!.withMinute(block.startDateTime.minute - (block.startDateTime.minute % MINUTE_STEP)),
+                    defaultEndTime = block.endDateTime!!.withMinute(block.endDateTime.minute - (block.endDateTime.minute % MINUTE_STEP)),
                     onConfirmClick = { startTime, endTime ->
                         viewModel.onAction(
                             PlanAction.PlanEditConfirmClick(

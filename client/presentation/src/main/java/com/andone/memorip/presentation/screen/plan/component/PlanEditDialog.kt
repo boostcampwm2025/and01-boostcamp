@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.screen.plan.component
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -21,6 +22,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
@@ -52,8 +54,10 @@ import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.toPx
 import com.andone.memorip.presentation.util.toTimeString
+import com.google.common.collect.Multimaps.index
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
 private object PlanEditDialogDimen {
@@ -86,17 +90,10 @@ fun PlanEditDialog(
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var startTime by remember {
-        mutableStateOf(
-            value = defaultStartTime.withMinute(defaultStartTime.minute - defaultStartTime.minute % MINUTE_STEP)
-        )
-    }
-    var endTime by remember {
-        mutableStateOf(
-            value = defaultEndTime.withMinute(defaultEndTime.minute - defaultEndTime.minute % MINUTE_STEP)
-        )
-    }
+    var startTime by remember { mutableStateOf(value = defaultStartTime) }
+    var endTime by remember { mutableStateOf(value = defaultEndTime) }
     var selectedTime by remember { mutableStateOf(value = PlanTimeType.START) }
+    var flag by remember{ mutableStateOf(value = false) }
 
     DefaultDialog(
         title = stringResource(R.string.plan_edit_dialog_title),
@@ -118,6 +115,7 @@ fun PlanEditDialog(
                     .clip(shape = MemoripTheme.shapes.roundedMedium)
                     .clickable {
                         selectedTime = PlanTimeType.START
+                        flag = !flag
                     },
                 text = startTime.toTimeString(),
                 color = MemoripTheme.colors.onSurface,
@@ -137,6 +135,7 @@ fun PlanEditDialog(
                     .clip(shape = MemoripTheme.shapes.roundedMedium)
                     .clickable {
                         selectedTime = PlanTimeType.END
+                        flag = !flag
                     },
                 text = endTime.toTimeString(),
                 color = MemoripTheme.colors.onSurface,
@@ -147,17 +146,15 @@ fun PlanEditDialog(
         HorizontalDivider(thickness = MemoripLineWidth.Thin, color = MemoripTheme.colors.lightGray)
 
         TimeSpinner(
+            flag = flag,
             time = if (selectedTime == PlanTimeType.START) startTime else endTime,
             onTimeChange = {
                 if (selectedTime == PlanTimeType.START) {
-                    if (!startTime.isBefore(endTime)) {
-                        startTime = it
-
-                    }
+                    startTime = it
+                    if (startTime.isAfter(endTime)) { endTime = it }
                 } else {
-                    if (endTime.isBefore(startTime)) {
-                        endTime = it
-                    }
+                    endTime = it
+                    if (endTime.isBefore(startTime)) { startTime = it }
                 }
             }
         )
@@ -166,6 +163,7 @@ fun PlanEditDialog(
 
 @Composable
 private fun TimeSpinner(
+    flag: Boolean,
     time: LocalDateTime,
     onTimeChange: (LocalDateTime) -> Unit,
     modifier: Modifier = Modifier
@@ -185,8 +183,9 @@ private fun TimeSpinner(
     val density = LocalDensity.current
     val centerOffset = (SPINNER_MAX_HEIGHT - SPINNER_ITEM_HEIGHT) / 2
     val centerOffsetPx = centerOffset.toPx(density).toInt()
+    val coroutineScope = rememberCoroutineScope()
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(flag) {
         val targetMinute = minutes.indexOf(time.minute - time.minute % MINUTE_STEP)
         minuteScrollState.scrollToItem(targetMinute, -centerOffsetPx)
 
@@ -279,9 +278,7 @@ private fun TimeSpinner(
                 if (selectedAmPm != EMPTY_VALUE.toString()) {
                     val newTime =
                         if (closestItem.index == AM_IDX) lastestTime.withHour(lastestTime.hour % AM_PM_THRESHOLD)
-                        else if (closestItem.index == PM_IDX && lastestTime.hour <= AM_PM_THRESHOLD) lastestTime.withHour(
-                            lastestTime.hour + AM_PM_THRESHOLD
-                        )
+                        else if (closestItem.index == PM_IDX && lastestTime.hour < AM_PM_THRESHOLD) lastestTime.withHour(lastestTime.hour + AM_PM_THRESHOLD)
                         else lastestTime
 
                     onTimeChange(newTime)
@@ -305,7 +302,7 @@ private fun TimeSpinner(
         ) {
             itemsIndexed(items = amPm) { idx, amPm ->
                 val isSelected =
-                    (idx == 1 && lastestTime.hour < AM_PM_THRESHOLD) || (idx == 2 && lastestTime.hour >= AM_PM_THRESHOLD)
+                    (idx == AM_IDX && time.hour < AM_PM_THRESHOLD) || (idx == PM_IDX && time.hour >= AM_PM_THRESHOLD)
                 Box(
                     modifier = Modifier.height(height = SPINNER_ITEM_HEIGHT),
                     contentAlignment = Alignment.Center
@@ -313,9 +310,16 @@ private fun TimeSpinner(
                     if (amPm != EMPTY_VALUE.toString()) {
                         TextButton(
                             onClick = {
+                                coroutineScope.launch {
+                                    amPmScrollState.animateScrollToItem(
+                                        index = idx,
+                                        scrollOffset = -centerOffsetPx
+                                    )
+                                }
+
                                 val newTime =
-                                    if (idx == 1) lastestTime.withHour(lastestTime.hour)
-                                    else lastestTime.withHour(lastestTime.hour + AM_PM_THRESHOLD)
+                                    if (idx == AM_IDX) lastestTime.withHour(lastestTime.hour % AM_PM_THRESHOLD)
+                                    else lastestTime.withHour(if (lastestTime.hour >= AM_PM_THRESHOLD) lastestTime.hour else lastestTime.hour + AM_PM_THRESHOLD)
                                 onTimeChange(newTime)
                             }
                         ) {
@@ -350,10 +354,15 @@ private fun TimeSpinner(
                     if (hour != EMPTY_VALUE) {
                         TextButton(
                             onClick = {
-                                val newTime =
-                                    if (lastestTime.hour > AM_PM_THRESHOLD) lastestTime.withHour(
-                                        AM_PM_THRESHOLD + hour
+                                coroutineScope.launch {
+                                    val idx = hours.indexOf(hour)
+                                    hourScrollState.animateScrollToItem(
+                                        index = idx,
+                                        scrollOffset = -centerOffsetPx
                                     )
+                                }
+
+                                val newTime = if (lastestTime.hour > AM_PM_THRESHOLD) lastestTime.withHour(AM_PM_THRESHOLD + hour)
                                     else lastestTime.withHour(hour)
                                 onTimeChange(newTime)
                             }
@@ -389,6 +398,13 @@ private fun TimeSpinner(
                     if (minute != EMPTY_MINUTE_VALUE) {
                         TextButton(
                             onClick = {
+                                coroutineScope.launch {
+                                    val idx = minutes.indexOf(minute)
+                                    minuteScrollState.animateScrollToItem(
+                                        index = idx,
+                                        scrollOffset = -centerOffsetPx
+                                    )
+                                }
                                 val newTime = lastestTime.withMinute(minute)
                                 onTimeChange(newTime)
                             }

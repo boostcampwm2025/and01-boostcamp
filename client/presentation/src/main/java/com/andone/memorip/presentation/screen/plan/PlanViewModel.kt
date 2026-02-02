@@ -262,6 +262,7 @@ class PlanViewModel @Inject constructor(
                     startDateTime = action.startDateTime,
                     endDateTime = action.endDateTime
                 )
+                selectedBlockFlow.update { null }
             }
         }
     }
