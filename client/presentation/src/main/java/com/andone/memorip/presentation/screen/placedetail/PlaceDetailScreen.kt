@@ -94,9 +94,9 @@ private object PlaceDetailScreenDimens {
 fun PlaceDetailScreen(
     route: PlaceDetail,
     onNavigateBack: () -> Unit,
-    onNavigateSelectTrip: () -> Unit,
+    onNavigateToSelectTrip: () -> Unit,
     onNavigateToPlaceEdit: (PlaceUiModel) -> Unit,
-    onNavigateTripList: () -> Unit,
+    onNavigateToTripList: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PlaceDetailViewModel = hiltViewModel<PlaceDetailViewModel, PlaceDetailViewModel.Factory>(
         creationCallback = { factory ->
@@ -119,7 +119,7 @@ fun PlaceDetailScreen(
             }
 
             PlaceDetailEvent.NavigateToSelectTrip -> {
-                onNavigateTripList()
+                onNavigateToTripList()
             }
 
             PlaceDetailEvent.NavigateToPlaceEdit -> {
@@ -130,7 +130,7 @@ fun PlaceDetailScreen(
             PlaceDetailEvent.NavigateToTripList -> {
                 showMoreMenu = false
                 showDeleteDialog = true
-                onNavigateTripList()
+                onNavigateToTripList()
             }
 
             PlaceDetailEvent.ShowMoreMenu -> {
@@ -388,9 +388,9 @@ private fun PlaceDetailScreenPreview() {
         PlaceDetailScreen(
             route = PlaceDetail(""),
             onNavigateBack = {},
-            onNavigateSelectTrip = {},
+            onNavigateToSelectTrip = {},
             onNavigateToPlaceEdit = {},
-            onNavigateTripList = {}
+            onNavigateToTripList = {}
         )
     }
 }
