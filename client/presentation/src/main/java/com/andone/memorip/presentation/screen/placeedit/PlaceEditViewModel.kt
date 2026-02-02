@@ -1,17 +1,19 @@
 package com.andone.memorip.presentation.screen.placeedit
 
+import android.content.Context
 import android.net.Uri
-import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.andone.memorip.domain.model.request.Address
+import com.andone.memorip.domain.model.request.PlaceCreateUpdate
 import com.andone.memorip.domain.repository.PlaceRepository
-import com.andone.memorip.presentation.model.LocationUiModel
 import com.andone.memorip.presentation.model.TagUiModel
 import com.andone.memorip.presentation.model.TripUiModel
-import com.andone.memorip.presentation.model.toUiModel
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceUiModel
 import com.andone.memorip.presentation.screen.placeedit.model.PlaceEditAction
 import com.andone.memorip.presentation.screen.placeedit.model.PlaceEditEvent
-import com.andone.memorip.presentation.screen.placeedit.model.PlaceEditUiState
+import com.andone.memorip.presentation.screen.placeedit.model.toUiState
+import com.andone.memorip.presentation.util.BitmapCropUtil.getAspectRatioFromUrl
 import com.andone.memorip.presentation.util.snackbar.SnackBarManager
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -20,9 +22,13 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 @HiltViewModel(assistedFactory = PlaceEditViewModel.Factory::class)
 class PlaceEditViewModel @AssistedInject constructor(
@@ -31,31 +37,27 @@ class PlaceEditViewModel @AssistedInject constructor(
     private val snackBarManager: SnackBarManager
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(
-        PlaceEditUiState(
-            id = place.id,
-            title = place.title,
-            content = place.content,
-            images = place.imageUrls.map { it.toUri() },
-            location = LocationUiModel(
-                name = place.locationName,
-                address = place.locationName,
-                roadAddress = place.locationName,
-                latitude = place.latitude,
-                longitude = place.longitude
-            ),
-            trips = place.trips.map { it.toUiModel() },
-            tags = place.tags,
-            isPublic = place.isPublic,
-            isLoading = false
-        )
-    )
+    private val _uiState = MutableStateFlow(place.toUiState())
     val uiState = _uiState.asStateFlow()
 
     private val _event = Channel<PlaceEditEvent>(capacity = BUFFERED)
     val event = _event.receiveAsFlow()
 
-    val initUiState = _uiState
+    val isUpdateEnabled = _uiState.map {
+        val isValueRequired = it.images.isNotEmpty() &&
+                it.location != null &&
+                it.title.isNotBlank() &&
+                it.trips.isNotEmpty()
+
+        val isChanged = it.copy(selectedImage = null, scrollPosition = 0, isLoading = false) !=
+                place.toUiState().copy(selectedImage = null, scrollPosition = 0, isLoading = false)
+
+        isValueRequired && isChanged
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = false
+    )
 
     fun onAction(action: PlaceEditAction) {
         when (action) {
@@ -91,16 +93,12 @@ class PlaceEditViewModel @AssistedInject constructor(
                 removeImage(action.imageUri)
             }
 
-            PlaceEditAction.OnLastImageRemove -> {
-                _event.trySend(PlaceEditEvent.NavigateBack)
-            }
-
             is PlaceEditAction.OnScrollPositionChange -> {
                 _uiState.update { it.copy(scrollPosition = action.position) }
             }
 
-            PlaceEditAction.OnPlaceUpdate -> {
-                updatePlace()
+            is PlaceEditAction.OnPlaceUpdate -> {
+                updatePlace(action.context)
             }
 
             is PlaceEditAction.OnSnackBarShow -> {
@@ -115,6 +113,10 @@ class PlaceEditViewModel @AssistedInject constructor(
 
     private fun removeImage(imageUri: Uri) {
         _uiState.update {
+            if (it.images.size == 1) {
+                return
+            }
+
             val imageUrls = it.images - imageUri
             val selectedImage = if (it.selectedImage == imageUri) {
                 imageUrls.firstOrNull()
@@ -129,8 +131,39 @@ class PlaceEditViewModel @AssistedInject constructor(
         }
     }
 
-    private fun updatePlace() {
+    private fun updatePlace(context: Context) {
+        val uiStateValue = _uiState.value
+        if (uiStateValue.images.isEmpty()
+            || uiStateValue.location == null
+            || uiStateValue.title.isBlank()
+            || uiStateValue.trips.isEmpty()
+        ) return
 
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
+            placeRepository.updatePlace(
+                placeId = uiStateValue.id,
+                place = PlaceCreateUpdate(
+                    tripIds = uiStateValue.trips.map { it.id },
+                    title = uiStateValue.title,
+                    content = uiStateValue.content,
+                    tags = uiStateValue.tags.map { it.id },
+                    latitude = uiStateValue.location.latitude,
+                    longitude = uiStateValue.location.longitude,
+                    address = Address.from(uiStateValue.location.address),
+                    imageUrls = uiStateValue.images.map { it.toString() },
+                    thumbnailImageRatio = getAspectRatioFromUrl(
+                        context = context,
+                        imageUrl = uiStateValue.images.first().toString()
+                    ),
+                    isPublic = uiStateValue.isPublic
+                )
+            ).onSuccess {
+                _event.trySend(PlaceEditEvent.NavigateBack)
+            }.onFailure {
+            }
+            _uiState.update { it.copy(isLoading = false) }
+        }
     }
 
     fun updateTrip(trips: List<TripUiModel>) {
