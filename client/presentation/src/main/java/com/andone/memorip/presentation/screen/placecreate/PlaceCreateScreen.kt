@@ -156,7 +156,7 @@ private fun PlaceCreateScreenContent(
             )
 
             SelectSection(
-                category = uiState.category,
+                category = uiState.tags,
                 location = uiState.location,
                 trips = uiState.trips,
                 onCategoryClick = { onAction(PlaceCreateAction.OnCategoryClick) },
