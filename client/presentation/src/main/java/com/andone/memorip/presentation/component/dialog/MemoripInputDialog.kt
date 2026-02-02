@@ -1,6 +1,7 @@
 package com.andone.memorip.presentation.component.dialog
 
 import android.content.res.Configuration
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -15,6 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -27,9 +30,26 @@ fun MemoripInputDialog(
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
     hint: String? = null,
-    label: String? = null
+    label: String? = null,
+    maxLength: Int? = null,
+    maxLengthError: String? = null
 ) {
     var value by remember { mutableStateOf("") }
+    var validationError by remember { mutableStateOf<String?>(null) }
+    val defaultMaxLengthError = if (maxLength != null) {
+        stringResource(R.string.input_dialog_max_length_error_format, maxLength)
+    } else null
+
+    fun onValueChange(newValue: String) {
+        var validatedValue = newValue.replace("\n", "")
+        var hadOverflow = false
+        if (maxLength != null && validatedValue.length > maxLength) {
+            hadOverflow = true
+            validatedValue = validatedValue.take(maxLength)
+        }
+        validationError = if (hadOverflow) maxLengthError ?: defaultMaxLengthError else null
+        value = validatedValue
+    }
 
     DefaultDialog(
         title = title,
@@ -41,7 +61,7 @@ fun MemoripInputDialog(
     ) {
         TextField(
             value = value,
-            onValueChange = { value = it },
+            onValueChange = { onValueChange(it) },
             label = {
                 if (label != null) {
                     Text(text = label)
@@ -61,6 +81,13 @@ fun MemoripInputDialog(
                     )
                 }
             },
+            supportingText = validationError?.let { { Text(text = it) } },
+            isError = validationError != null,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Done
+            ),
+            singleLine = true,
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = MemoripTheme.colors.primaryContainer,
                 unfocusedContainerColor = MemoripTheme.colors.primaryContainer,
@@ -70,6 +97,8 @@ fun MemoripInputDialog(
                 unfocusedPlaceholderColor = MemoripTheme.colors.primary,
                 focusedLabelColor = MemoripTheme.colors.primary,
                 unfocusedLabelColor = MemoripTheme.colors.primary,
+                errorSupportingTextColor = MemoripTheme.colors.error,
+                errorLabelColor = MemoripTheme.colors.error,
             )
         )
     }
@@ -85,8 +114,8 @@ private fun MemoripInputDialogPreview() {
             onConfirmClick = {},
             onCancelClick = {},
             onDismissRequest = {},
-            hint = "input",
-            label = "이름"
+            hint = stringResource(R.string.select_trip_dialog_preview_hint),
+            label = stringResource(R.string.select_trip_dialog_preview_label)
         )
     }
 }
