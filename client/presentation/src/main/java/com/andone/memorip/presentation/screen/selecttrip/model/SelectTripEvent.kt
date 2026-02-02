@@ -4,7 +4,7 @@ sealed interface SelectTripEvent {
 
     data object NavigateBack : SelectTripEvent
 
-    data class SelectTrip(val trip: SelectTripUiModel) : SelectTripEvent
+    data class SelectTrip(val trips: List<SelectTripUiModel>) : SelectTripEvent
 
     data object ShowDialog : SelectTripEvent
 

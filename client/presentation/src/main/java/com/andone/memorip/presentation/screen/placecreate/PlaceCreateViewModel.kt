@@ -92,7 +92,7 @@ class PlaceCreateViewModel @Inject constructor(
             }
 
             is PlaceCreateAction.OnTripSelect -> {
-                updateTrip(action.trip)
+                updateTrip(action.trips)
             }
 
             PlaceCreateAction.OnCreateSuccess -> {
@@ -113,8 +113,8 @@ class PlaceCreateViewModel @Inject constructor(
         _uiState.update { it.copy(category = category) }
     }
 
-    fun updateTrip(trip: TripUiModel) {
-        _uiState.update { it.copy(trip = trip) }
+    fun updateTrip(trips: List<TripUiModel>) {
+        _uiState.update { it.copy(trips = trips) }
     }
 
     private fun removeImage(imageUri: Uri) {

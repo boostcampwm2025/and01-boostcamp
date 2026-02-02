@@ -197,10 +197,10 @@ fun PlaceCreateMainStep(
 fun PlaceCreateSubStep(
     step: PlaceCreateStep,
     onCategoryChange: (List<TagUiModel>) -> Unit,
-    onTripChange: (TripUiModel) -> Unit,
+    onTripChange: (List<TripUiModel>) -> Unit,
     onStepChange: (PlaceCreateStep) -> Unit,
     modifier: Modifier = Modifier,
-    currentTrip: TripUiModel? = null
+    currentTrip: List<TripUiModel>? = null
 ) {
     when (step) {
         PlaceCreateStep.SelectCategory -> {
@@ -217,12 +217,12 @@ fun PlaceCreateSubStep(
         PlaceCreateStep.SelectTrip -> {
             SelectTripScreen(
                 onTripSelect = { selectTrip ->
-                    onTripChange(selectTrip.toTripUiModel())
+                    onTripChange(selectTrip.map { it.toTripUiModel() })
                     onStepChange(PlaceCreateStep.PlaceCreate)
                 },
                 onBackClick = { onStepChange(PlaceCreateStep.PlaceCreate) },
                 placeId = null,
-                initialSelectedTripId = currentTrip?.id,
+                initialSelectedTripIds = currentTrip?.map { it.id },
                 modifier = modifier
             )
         }

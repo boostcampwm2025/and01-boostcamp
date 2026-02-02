@@ -273,7 +273,7 @@ fun SelectSection(
         ?.ifBlank { null } ?: stringResource(R.string.place_create_location_placeholder)
     val tripValue = trips
         .joinToString(stringResource(R.string.place_create_space)) { it.name }
-        .ifEmpty { stringResource(R.string.place_create_trup_placeholder) }
+        .ifEmpty { stringResource(R.string.place_create_trip_placeholder) }
     val categoryValue = category
         .joinToString(stringResource(R.string.place_create_space)) { it.name }
         .ifEmpty { stringResource(R.string.place_create_tag_placeholder) }

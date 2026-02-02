@@ -42,7 +42,7 @@ private object SelectGroupScreenDimens {
 
 @Composable
 fun SelectTripScreen(
-    onTripSelect: (SelectTripUiModel) -> Unit,
+    onTripSelect: (List<SelectTripUiModel>) -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
     title: String = stringResource(R.string.select_trip_title),
@@ -69,7 +69,7 @@ fun SelectTripScreen(
             }
 
             is SelectTripEvent.SelectTrip -> {
-                onTripSelect(event.trip)
+                onTripSelect(event.trips)
             }
 
             SelectTripEvent.PlaceTripsUpdated -> {
