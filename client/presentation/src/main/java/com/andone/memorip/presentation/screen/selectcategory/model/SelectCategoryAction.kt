@@ -5,6 +5,8 @@ import com.andone.memorip.presentation.model.TagUiModel
 
 sealed interface SelectCategoryAction {
 
+    data class OnInitialTags(val tags: List<TagUiModel>) : SelectCategoryAction
+
     data class OnCategoryItemClick(
         val tagUiModel: TagUiModel,
         val checked: Boolean
