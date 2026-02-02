@@ -45,8 +45,8 @@ private object TripScheduleCardDimen {
 @Composable
 fun TripScheduleCard(
     tripName: String,
-    startDate: String?,
-    endDate: String?,
+    startDate: String,
+    endDate: String,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -114,15 +114,13 @@ fun TripScheduleCard(
                         color = MemoripTheme.colors.primary
                     )
 
-                    if (startDate != null) {
-                        val dDay = calculateDDay(startDate)
-                        if (dDay.isNotEmpty()) {
-                            Text(
-                                text = dDay,
-                                style = MemoripTheme.typography.titleBold16,
-                                color = MemoripTheme.colors.primary
-                            )
-                        }
+                    val dDay = calculateDDay(startDate)
+                    if (dDay.isNotEmpty()) {
+                        Text(
+                            text = dDay,
+                            style = MemoripTheme.typography.titleBold16,
+                            color = MemoripTheme.colors.primary
+                        )
                     }
                 }
 
