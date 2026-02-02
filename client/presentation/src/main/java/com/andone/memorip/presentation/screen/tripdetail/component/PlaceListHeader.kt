@@ -78,13 +78,12 @@ fun ViewModeToggle(
     onViewModeToggle: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val d = PlaceListHeaderDimen
     Row(
         modifier = modifier
-            .size(width = d.TOTAL_WIDTH, height = d.TOTAL_HEIGHT)
-            .clip(RoundedCornerShape(d.OUTER_RADIUS))
+            .size(width = PlaceListHeaderDimen.TOTAL_WIDTH, height = PlaceListHeaderDimen.TOTAL_HEIGHT)
+            .clip(RoundedCornerShape(PlaceListHeaderDimen.OUTER_RADIUS))
             .background(MemoripTheme.colors.gray2)
-            .padding(d.TOGGLE_PADDING),
+            .padding(PlaceListHeaderDimen.TOGGLE_PADDING),
         horizontalArrangement = Arrangement.spacedBy(0.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -111,28 +110,28 @@ private fun ViewModeToggleSegment(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val segmentModifier = Modifier
-        .size(PlaceListHeaderDimen.SEGMENT_SIZE)
-        .clip(RoundedCornerShape(PlaceListHeaderDimen.INNER_RADIUS))
-    val selectedBoxModifier = Modifier
-        .size(PlaceListHeaderDimen.SEGMENT_SIZE)
-        .shadow(
-            elevation = PlaceListHeaderDimen.TOGGLE_INNER_OFFSET,
-            shape = RoundedCornerShape(PlaceListHeaderDimen.INNER_RADIUS)
-        )
-        .clip(RoundedCornerShape(PlaceListHeaderDimen.INNER_RADIUS))
-        .background(MemoripTheme.colors.white)
-
     Box(
-        modifier = segmentModifier.clickable(
-            interactionSource = remember { MutableInteractionSource() },
-            indication = null,
-            onClick = onClick
-        ),
+        modifier = Modifier
+            .size(PlaceListHeaderDimen.SEGMENT_SIZE)
+            .clip(RoundedCornerShape(PlaceListHeaderDimen.INNER_RADIUS))
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = onClick
+            ),
         contentAlignment = Alignment.Center
     ) {
         if (isSelected) {
-            Box(modifier = selectedBoxModifier, contentAlignment = Alignment.Center) {
+            Box(
+                modifier = Modifier
+                    .size(PlaceListHeaderDimen.SEGMENT_SIZE)
+                    .shadow(
+                        elevation = PlaceListHeaderDimen.TOGGLE_INNER_OFFSET,
+                        shape = RoundedCornerShape(PlaceListHeaderDimen.INNER_RADIUS)
+                    )
+                    .background(MemoripTheme.colors.background),
+                contentAlignment = Alignment.Center
+            ) {
                 Icon(
                     painter = painterResource(iconRes),
                     contentDescription = contentDescription,
