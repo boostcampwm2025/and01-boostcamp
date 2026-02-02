@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.component.LoadingIndicatorScreen
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.screen.plan.PlanScreenConstant.MINUTE_STEP
 import com.andone.memorip.presentation.screen.plan.component.DateNotSelectedContent
@@ -149,6 +150,10 @@ fun PlanScreen(
                 )
             }
         }
+    }
+
+    if (uiState.isLoading) {
+        LoadingIndicatorScreen()
     }
 
     PlanScreenContents(
