@@ -326,17 +326,26 @@ class PlanViewModel @Inject constructor(
 
     private fun updatePlan(id: String, startDateTime: LocalDateTime, endDateTime: LocalDateTime) {
         timeBlocksFlow.update {
-            // 만약 시간 변경 시 해당 위치에 이미 아이템이 존재한다면 snackbar 띄우고 실패로 되돌리기
-            it.map { block ->
-                if (block.id == id) {
+            it.map { targetBlock ->
+                if (targetBlock.id == id) {
+                    // 만약 시간 변경 시 해당 위치에 이미 아이템이 존재한다면 snackbar 띄우고 실패로 되돌리기
+                    val isDuplicated = placesFlow.value.filter{it.startDateTime != null && it.endDateTime != null}
+                        .any {
+                            val block = it.toTimeBlock(selectedDateFlow.value.currentDay!!.atStartOfDay())!!
+
+                            block.startMinute in targetBlock.startMinute..targetBlock.endMinute
+                                || (block.startMinute < targetBlock.startMinute && block.endMinute >= targetBlock.startMinute)
+                        }
+                    if (isDuplicated) return@update it
+
                     val duration = ChronoUnit.MINUTES.between(startDateTime, endDateTime).toInt()
                     val startMinute = ChronoUnit.HOURS.between(
                         startDateTime.withHour(0).withMinute(0),
                         startDateTime
                     ).toInt()
-                    block.copy(startMinute = startMinute, durationMinute = duration)
+                    targetBlock.copy(startMinute = startMinute, durationMinute = duration)
                 } else {
-                    block
+                    targetBlock
                 }
             }
         }
