@@ -8,13 +8,17 @@ data class TripUiModel(
     val id: String,
     val name: String,
     val images: List<String>,
+    val startDate: String? = null,
+    val endDate: String? = null
 ) {
     companion object {
         fun from(trip: Trip): TripUiModel {
             return TripUiModel(
                 id = trip.id,
                 name = trip.title,
-                images = trip.images
+                images = trip.images,
+                startDate = null,
+                endDate = null
             )
         }
     }
