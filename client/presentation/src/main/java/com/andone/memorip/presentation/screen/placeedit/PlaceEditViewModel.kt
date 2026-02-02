@@ -14,6 +14,7 @@ import com.andone.memorip.presentation.screen.placeedit.model.PlaceEditAction
 import com.andone.memorip.presentation.screen.placeedit.model.PlaceEditEvent
 import com.andone.memorip.presentation.screen.placeedit.model.toUiState
 import com.andone.memorip.presentation.util.BitmapCropUtil.getAspectRatioFromUrl
+import com.andone.memorip.presentation.util.snackbar.SnackBarEvent
 import com.andone.memorip.presentation.util.snackbar.SnackBarManager
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -114,6 +115,7 @@ class PlaceEditViewModel @AssistedInject constructor(
     private fun removeImage(imageUri: Uri) {
         _uiState.update {
             if (it.images.size == 1) {
+                snackBarManager.show(SnackBarEvent.IMAGE_COUNT_ERROR)
                 return
             }
 
@@ -161,6 +163,7 @@ class PlaceEditViewModel @AssistedInject constructor(
             ).onSuccess {
                 _event.trySend(PlaceEditEvent.NavigateBack)
             }.onFailure {
+                snackBarManager.show(SnackBarEvent.NETWORK_ERROR)
             }
             _uiState.update { it.copy(isLoading = false) }
         }

@@ -171,6 +171,7 @@
     <string name="snackbar_unknown_error">오류가 발생했습니다. 다시 시도해주세요</string>
     <string name="snackbar_plan_days_validation_error">날짜는 최대 1달까지 지정 가능합니다</string>
     <string name="snackbar_plan_invalid_error">다른 계획과 중복 배치는 지원하지 않습니다</string>
+    <string name="snackbar_image_count_error">이미지는 최소 1개 이상 있어야 합니다.</string>
     <string name="snackbar_success">성공적으로 완료되었습니다</string>
 
     <!-- UserScreen -->
