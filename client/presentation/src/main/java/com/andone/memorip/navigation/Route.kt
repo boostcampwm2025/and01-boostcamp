@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 data object PlaceList : NavKey
 
 @Serializable
-data object GroupList : NavKey
+data object TripList : NavKey
 
 @Serializable
 data object User : NavKey
@@ -19,7 +19,7 @@ data object Plan : NavKey
 data object PlaceCreate : NavKey
 
 @Serializable
-data class GroupDetail(val groupId: String) : NavKey
+data class TripDetail(val tripId: String) : NavKey
 
 @Serializable
 data class PlaceDetail(val placeId: String) : NavKey

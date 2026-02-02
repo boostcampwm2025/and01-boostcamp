@@ -7,27 +7,32 @@ import com.andone.memorip.presentation.R
 
 enum class MainBottomBarRoute(
     @param:DrawableRes val selectedIconId: Int,
+    @param:DrawableRes val unselectedIconId: Int,
     @param:StringRes val titleTextId: Int,
     val route: NavKey
 ) {
     PLACE_LIST(
-        R.drawable.ic_home,
-        R.string.main_bottom_bar_place_list,
-        PlaceList
+        selectedIconId = R.drawable.ic_twotone_home,
+        unselectedIconId = R.drawable.ic_outline_home,
+        titleTextId = R.string.main_bottom_bar_place_list,
+        route = PlaceList
     ),
-    GROUP_LIST(
-        R.drawable.ic_folder,
-        R.string.main_bottom_bar_group,
-        GroupList
+    TRIP_LIST(
+        selectedIconId = R.drawable.ic_twotone_folder,
+        unselectedIconId = R.drawable.ic_outline_folder,
+        titleTextId = R.string.main_bottom_bar_trip,
+        route = TripList
     ),
     PLAN(
-        R.drawable.ic_calendar_today,
-        R.string.main_bottom_bar_plan,
-        Plan
+        selectedIconId = R.drawable.ic_twotone_calendar_month,
+        unselectedIconId = R.drawable.ic_outline_calendar_month,
+        titleTextId = R.string.main_bottom_bar_plan,
+        route = Plan
     ),
     USER(
-        R.drawable.ic_account_circle,
-        R.string.main_bottom_bar_user,
-        User
+        selectedIconId = R.drawable.ic_twotone_account_circle,
+        unselectedIconId = R.drawable.ic_outline_account_circle,
+        titleTextId = R.string.main_bottom_bar_user,
+        route = User
     )
 }

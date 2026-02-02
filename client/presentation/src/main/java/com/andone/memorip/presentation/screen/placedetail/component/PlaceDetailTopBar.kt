@@ -23,7 +23,7 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 @Composable
 fun PlaceDetailTopBar(
     isMine: Boolean,
-    isInMyGroup: Boolean,
+    isInMyTrip: Boolean,
     showMoreMenu: Boolean,
     onNavigationIconClick: () -> Unit,
     onActionIconClick: () -> Unit,
@@ -53,7 +53,7 @@ fun PlaceDetailTopBar(
         actions = {
             PlaceDetailActions(
                 isMine = isMine,
-                isInMyGroup = isInMyGroup,
+                isInMyTrip = isInMyTrip,
                 showMoreMenu = showMoreMenu,
                 onMoreClick = onMoreClick,
                 onMoreMenuDismiss = onMoreMenuDismiss,
@@ -69,7 +69,7 @@ fun PlaceDetailTopBar(
 @Composable
 private fun PlaceDetailActions(
     isMine: Boolean,
-    isInMyGroup: Boolean,
+    isInMyTrip: Boolean,
     showMoreMenu: Boolean,
     onMoreClick: () -> Unit,
     onMoreMenuDismiss: () -> Unit,
@@ -120,12 +120,12 @@ private fun PlaceDetailActions(
             )
         }
     } else {
-        val iconRes = if (isInMyGroup) {
+        val iconRes = if (isInMyTrip) {
             R.drawable.ic_bookmark
         } else {
             R.drawable.ic_scrap
         }
-        val iconTint = if (isInMyGroup) {
+        val iconTint = if (isInMyTrip) {
             MemoripTheme.colors.primary
         } else {
             MemoripTheme.colors.onSurface
@@ -153,7 +153,7 @@ private fun PlaceDetailTopBarPreview() {
     MemoripTheme {
         PlaceDetailTopBar(
             isMine = false,
-            isInMyGroup = false,
+            isInMyTrip = false,
             showMoreMenu = false,
             onNavigationIconClick = {},
             onActionIconClick = {},
@@ -171,7 +171,7 @@ private fun PlaceDetailTopBarisMinePreview() {
     MemoripTheme {
         PlaceDetailTopBar(
             isMine = true,
-            isInMyGroup = false,
+            isInMyTrip = false,
             showMoreMenu = true,
             onNavigationIconClick = {},
             onActionIconClick = {},

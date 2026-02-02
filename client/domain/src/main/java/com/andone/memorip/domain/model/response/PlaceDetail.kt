@@ -12,7 +12,7 @@ data class PlaceDetail(
     val longitude: Double,
     val tags: List<Tag>,
     val images: List<String>,
-    val groups: List<GroupCompact>,
+    val trips: List<TripCompact>,
     val address: Address,
     val isMine: Boolean,
     val isInMyGroup: Boolean,

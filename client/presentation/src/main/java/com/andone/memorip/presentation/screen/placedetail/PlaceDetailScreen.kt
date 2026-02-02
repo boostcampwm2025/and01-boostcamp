@@ -94,9 +94,9 @@ private object PlaceDetailScreenDimens {
 fun PlaceDetailScreen(
     route: PlaceDetail,
     onNavigateBack: () -> Unit,
-    onNavigateSelectGroup: () -> Unit,
+    onNavigateSelectTrip: () -> Unit,
     onNavigateToPlaceEdit: (PlaceUiModel) -> Unit,
-    onNavigateGroupList: () -> Unit,
+    onNavigateTripList: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PlaceDetailViewModel = hiltViewModel<PlaceDetailViewModel, PlaceDetailViewModel.Factory>(
         creationCallback = { factory ->
@@ -118,8 +118,8 @@ fun PlaceDetailScreen(
                 onNavigateBack()
             }
 
-            PlaceDetailEvent.NavigateToSelectGroup -> {
-                onNavigateSelectGroup()
+            PlaceDetailEvent.NavigateToSelectTrip -> {
+                onNavigateTripList()
             }
 
             PlaceDetailEvent.NavigateToPlaceEdit -> {
@@ -127,10 +127,10 @@ fun PlaceDetailScreen(
                 onNavigateToPlaceEdit(uiState.place)
             }
 
-            PlaceDetailEvent.NavigateToGroupList -> {
+            PlaceDetailEvent.NavigateToTripList -> {
                 showMoreMenu = false
                 showDeleteDialog = true
-                onNavigateGroupList()
+                onNavigateTripList()
             }
 
             PlaceDetailEvent.ShowMoreMenu -> {
@@ -341,10 +341,10 @@ private fun PlaceDetailContent(
                 )
                 /** TODO 로그인 기능 구현 시 나의 장소만 그룹 보이도록 수정하기 */
                 PlaceDetailInfoSection(
-                    infoString = place.groups.joinToString(
+                    infoString = place.trips.joinToString(
                         separator = stringResource(R.string.place_detail_comma_separator)
-                    ) { it.groupName },
-                    iconRes = R.drawable.ic_folder,
+                    ) { it.tripName },
+                    iconRes = R.drawable.ic_outline_folder,
                     onAction = onAction,
                     modifier = Modifier.padding(start = MemoripPadding.PaddingXSmall)
                 )
@@ -361,7 +361,7 @@ private fun PlaceDetailInfoSection(
     modifier: Modifier = Modifier
 ) {
     Surface(
-        onClick = { onAction(PlaceDetailAction.GroupClick) },
+        onClick = { onAction(PlaceDetailAction.TripClick) },
         modifier = modifier,
         color = MemoripTheme.colors.background
     ) {
@@ -388,9 +388,9 @@ private fun PlaceDetailScreenPreview() {
         PlaceDetailScreen(
             route = PlaceDetail(""),
             onNavigateBack = {},
-            onNavigateSelectGroup = {},
+            onNavigateSelectTrip = {},
             onNavigateToPlaceEdit = {},
-            onNavigateGroupList = {}
+            onNavigateTripList = {}
         )
     }
 }

@@ -7,9 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.andone.memorip.domain.model.request.Address
 import com.andone.memorip.domain.model.request.PlaceCreateUpdate
 import com.andone.memorip.domain.repository.PlaceRepository
-import com.andone.memorip.presentation.model.GroupUiModel
 import com.andone.memorip.presentation.model.LocationUiModel
 import com.andone.memorip.presentation.model.TagUiModel
+import com.andone.memorip.presentation.model.TripUiModel
 import com.andone.memorip.presentation.screen.placecreate.model.PlaceCreateAction
 import com.andone.memorip.presentation.screen.placecreate.model.PlaceCreateEvent
 import com.andone.memorip.presentation.screen.placecreate.model.PlaceCreateUiState
@@ -51,8 +51,8 @@ class PlaceCreateViewModel @Inject constructor(
                 _event.trySend(PlaceCreateEvent.NavigateToLocation)
             }
 
-            PlaceCreateAction.OnGroupClick -> {
-                _event.trySend(PlaceCreateEvent.NavigateToGroup)
+            PlaceCreateAction.OnTripClick -> {
+                _event.trySend(PlaceCreateEvent.NavigateToTrip)
             }
 
             is PlaceCreateAction.OnTitleChange -> {
@@ -91,8 +91,8 @@ class PlaceCreateViewModel @Inject constructor(
                 snackBarManager.show(SnackBarEvent.NETWORK_ERROR)
             }
 
-            is PlaceCreateAction.OnGroupSelect -> {
-                updateGroup(action.groups)
+            is PlaceCreateAction.OnTripSelect -> {
+                updateTrip(action.trip)
             }
 
             PlaceCreateAction.OnCreateSuccess -> {
@@ -113,8 +113,8 @@ class PlaceCreateViewModel @Inject constructor(
         _uiState.update { it.copy(category = category) }
     }
 
-    fun updateGroup(groups: List<GroupUiModel>) {
-        _uiState.update { it.copy(groups = groups) }
+    fun updateTrip(trip: TripUiModel) {
+        _uiState.update { it.copy(trip = trip) }
     }
 
     private fun removeImage(imageUri: Uri) {
@@ -138,7 +138,7 @@ class PlaceCreateViewModel @Inject constructor(
         if (uiStateValue.images.isEmpty()
             || uiStateValue.location == null
             || uiStateValue.title.isBlank()
-            || uiStateValue.groups.isEmpty()
+            || uiStateValue.trips.isEmpty()
         ) return
 
         viewModelScope.launch {
@@ -148,7 +148,7 @@ class PlaceCreateViewModel @Inject constructor(
 
             placeRepository.createPlace(
                 PlaceCreateUpdate(
-                    groupIds = uiStateValue.groups.map { it.id },
+                    tripIds = uiStateValue.trips.map { it.id },
                     title = uiStateValue.title,
                     content = uiStateValue.content,
                     tags = uiStateValue.category.map { it.id },

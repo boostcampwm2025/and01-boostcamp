@@ -4,9 +4,9 @@ sealed interface PlaceDetailEvent {
 
     data object NavigateBack : PlaceDetailEvent
 
-    data object NavigateToSelectGroup : PlaceDetailEvent
+    data object NavigateToSelectTrip : PlaceDetailEvent
 
-    data object NavigateToGroupList : PlaceDetailEvent
+    data object NavigateToTripList : PlaceDetailEvent
 
     data object NavigateToPlaceEdit : PlaceDetailEvent
 

@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.andone.memorip.domain.repository.GroupRepository
+import com.andone.memorip.domain.repository.TripRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CancellationException
@@ -14,7 +14,7 @@ import java.io.IOException
 class PlanWorker @AssistedInject constructor(
     @Assisted applicationContext: Context,
     @Assisted params: WorkerParameters,
-    private val repository: GroupRepository
+    private val repository: TripRepository
 ) : CoroutineWorker(applicationContext, params) {
 
     override suspend fun doWork(): Result {

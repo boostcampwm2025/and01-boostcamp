@@ -26,7 +26,7 @@ fun PlaceCreateTopBar(
         PlaceCreateStep.SelectLocation -> stringResource(R.string.select_location_title)
         PlaceCreateStep.PlaceCreate -> stringResource(R.string.place_create_title)
         PlaceCreateStep.SelectCategory -> stringResource(R.string.select_category_title)
-        PlaceCreateStep.SelectGroup -> stringResource(R.string.select_group_title)
+        PlaceCreateStep.SelectTrip -> stringResource(R.string.select_trip_title)
     }
 
     CenterAlignedTopAppBar(

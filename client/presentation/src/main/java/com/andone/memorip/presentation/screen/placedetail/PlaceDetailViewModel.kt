@@ -3,6 +3,7 @@ package com.andone.memorip.presentation.screen.placedetail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.andone.memorip.domain.repository.PlaceRepository
+import com.andone.memorip.domain.repository.TripRepository
 import com.andone.memorip.navigation.PlaceDetail
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceDetailAction
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceDetailEvent
@@ -26,6 +27,7 @@ import kotlinx.coroutines.launch
 class PlaceDetailViewModel @AssistedInject constructor(
     @Assisted route: PlaceDetail,
     private val placeRepository: PlaceRepository,
+    private val tripRepository: TripRepository,
     private val snackBarManager: SnackBarManager
 ) : ViewModel() {
 
@@ -58,27 +60,32 @@ class PlaceDetailViewModel @AssistedInject constructor(
     fun onAction(action: PlaceDetailAction) {
         when (action) {
             PlaceDetailAction.OnBackClick -> _event.trySend(PlaceDetailEvent.NavigateBack)
-            PlaceDetailAction.OnAddToGroupClick -> _event.trySend(PlaceDetailEvent.NavigateToSelectGroup)
-            PlaceDetailAction.GroupClick -> _event.trySend(PlaceDetailEvent.NavigateToGroupList)
+            PlaceDetailAction.OnAddToTripClick -> _event.trySend(PlaceDetailEvent.NavigateToSelectTrip)
+            PlaceDetailAction.TripClick -> _event.trySend(PlaceDetailEvent.NavigateToTripList)
             PlaceDetailAction.OnMoreClick -> {
                 _event.trySend(PlaceDetailEvent.ShowMoreMenu)
             }
+
 
             PlaceDetailAction.OnMoreMenuDismiss -> {
                 _event.trySend(PlaceDetailEvent.HideMoreMenu)
             }
 
+
             PlaceDetailAction.OnEditClick -> {
                 _event.trySend(PlaceDetailEvent.NavigateToPlaceEdit)
             }
+
 
             PlaceDetailAction.OnDeleteClick -> {
                 _event.trySend(PlaceDetailEvent.ShowDeleteDialog)
             }
 
+
             PlaceDetailAction.OnDeleteDismiss -> {
                 _event.trySend(PlaceDetailEvent.HideDeleteDialog)
             }
+
 
             PlaceDetailAction.OnDeleteConfirm -> {
                 _event.trySend(PlaceDetailEvent.HideDeleteDialog)

@@ -1,7 +1,7 @@
 package com.andone.memorip.presentation.model
 
 import androidx.compose.runtime.Immutable
-import com.andone.memorip.domain.model.GroupPlace
+import com.andone.memorip.domain.model.TripPlace
 import com.andone.memorip.domain.model.PlaceListItem
 import com.andone.memorip.domain.model.TimeBlock
 import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_DAY
@@ -45,8 +45,8 @@ data class Place(
     }
 }
 
-fun GroupPlace.toUiModel(): Place = Place(
-    id = this.groupPlaceId,
+fun TripPlace.toUiModel(): Place = Place(
+    id = this.tripPlaceId,
     placeId = this.placeId,
     name = this.title,
     latitude = this.latitude,

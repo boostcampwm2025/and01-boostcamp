@@ -5,5 +5,5 @@ enum class PlaceCreateStep(val stepIndex: Int? = null) {
     SelectLocation(2),
     PlaceCreate(3),
     SelectCategory,
-    SelectGroup
+    SelectTrip
 }

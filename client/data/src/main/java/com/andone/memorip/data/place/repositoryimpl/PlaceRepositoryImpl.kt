@@ -51,24 +51,24 @@ class PlaceRepositoryImpl @Inject constructor(
         return placeRemoteDataSource.deletePlace(placeId)
     }
 
-    override suspend fun updatePlaceGroups(
+    override suspend fun updatePlaceTrips(
         placeId: String,
-        addGroupIds: List<String>,
-        removeGroupIds: List<String>
+        addTripIds: List<String>,
+        removeTripIds: List<String>
     ): Result<Unit> {
-        return placeRemoteDataSource.updatePlaceGroups(placeId, addGroupIds, removeGroupIds)
+        return placeRemoteDataSource.updatePlaceTrips(placeId, addTripIds, removeTripIds)
     }
 
     override fun loadRegions(): List<Region> {
         return placeRemoteDataSource.loadRegions()
     }
 
-    override suspend fun getPlaceByGroupId(
-        groupId: String,
+    override suspend fun getPlaceByTripId(
+        tripId: String,
         page: Int,
         size: Int
     ): Result<List<PlaceListItem>> {
-        return placeRemoteDataSource.getPlaceByGroupId(groupId, page, size)
+        return placeRemoteDataSource.getPlaceByTripId(tripId, page, size)
             .map { dtoList -> dtoList.map { it.toDomain() } }
     }
 }

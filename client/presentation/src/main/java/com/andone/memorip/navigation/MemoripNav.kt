@@ -14,8 +14,8 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.andone.memorip.navigation.MemoripNavConstant.tabTransition
-import com.andone.memorip.presentation.screen.groupdetail.groupDetail
-import com.andone.memorip.presentation.screen.grouplist.groupList
+import com.andone.memorip.presentation.screen.tripdetail.tripDetail
+import com.andone.memorip.presentation.screen.triplist.tripList
 import com.andone.memorip.presentation.screen.placecreate.placeCreate
 import com.andone.memorip.presentation.screen.placedetail.placeDetail
 import com.andone.memorip.presentation.screen.placelist.placeList
@@ -59,9 +59,9 @@ fun MemoripNav(
                 modifier = modifier.padding(paddingValues = innerPadding)
             )
 
-            groupList(
+            tripList(
                 metadata = tabTransition,
-                onGroupClick = { groupId -> navigator.navigateToGroupDetail(groupId) },
+                onTripClick = { tripId -> navigator.navigateToTripDetail(tripId) },
                 onCreatePlaceClick = navigator::navigateToPlaceCreate,
                 modifier = modifier.padding(paddingValues = innerPadding),
             )
@@ -81,14 +81,14 @@ fun MemoripNav(
                 onBackClick = navigator::popBackStack
             )
 
-            groupDetail(
+            tripDetail(
                 onNavigateBack = navigator::popBackStack,
                 onImageClick = navigator::navigateToPlaceDetail
             )
 
             placeDetail(
                 onNavigateBack = navigator::popBackStack,
-                onNavigateGroupList = navigator::navigateToGroupList
+                onNavigateTripList = navigator::navigateToTripList
             )
         }
     )

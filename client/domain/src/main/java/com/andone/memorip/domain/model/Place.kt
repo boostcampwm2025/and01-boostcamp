@@ -8,7 +8,7 @@ data class Place(
     val address: Address,
     val createdAt: String,
     val deleted: Boolean,
-    val groupId: String,
+    val tripId: String,
     val id: String,
     val images: List<String>,
     val latitude: Double,
