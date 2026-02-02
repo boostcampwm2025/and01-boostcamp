@@ -2,8 +2,13 @@ package com.andone.memorip.presentation.screen.tripdetail.component
 
 import android.graphics.Bitmap
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -19,18 +24,29 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.component.LoadingIndicatorScreen
 import com.andone.memorip.presentation.component.map.InteractiveMultiMarkerMapView
 import com.andone.memorip.presentation.component.map.MapClusterManager
 import com.andone.memorip.presentation.model.Place
+import com.andone.memorip.presentation.screen.placelist.PlaceListGrid
+import com.andone.memorip.presentation.screen.tripdetail.model.PlaceViewMode
 import com.andone.memorip.presentation.screen.tripdetail.model.TripDetailAction
 import com.andone.memorip.presentation.screen.tripdetail.model.MapBottomSheetStep
+import com.andone.memorip.presentation.theme.MemoripLineWidth
+import com.andone.memorip.presentation.theme.MemoripPadding
+import com.andone.memorip.presentation.theme.MemoripShadow
+import com.andone.memorip.presentation.theme.MemoripSpace
+import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.theme.MemoripTheme
+import androidx.compose.ui.Alignment
+import androidx.compose.foundation.layout.padding
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.andone.memorip.presentation.util.DummyData
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.geometry.LatLngBounds
@@ -41,10 +57,9 @@ import com.naver.maps.map.compose.rememberCameraPositionState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+
 private object MapTabDimen {
     val SHEET_PEEK_HEIGHT = 200.dp
-    val SHEET_TONAL_ELEVATION = 8.dp
-    val SHEET_SHADOW_ELEVATION = 8.dp
 }
 
 private object MapTabConstant {
@@ -66,7 +81,11 @@ fun MapTab(
     onMapLoaded: () -> Unit,
     onAction: (TripDetailAction) -> Unit,
     modifier: Modifier = Modifier,
-    mapSelectedPlace: Place? = null
+    mapSelectedPlace: Place? = null,
+    tripName: String? = null,
+    startDate: String? = null,
+    endDate: String? = null,
+    viewMode: PlaceViewMode = PlaceViewMode.LIST
 ) {
     val scaffoldState = rememberBottomSheetScaffoldState()
     val scope = rememberCoroutineScope()
@@ -178,6 +197,7 @@ fun MapTab(
                     bottomSheetContent = mapBottomSheetContent,
                     places = places,
                     selectedPlace = mapSelectedPlace,
+                    viewMode = viewMode,
                     onAction = onAction
                 )
             },
@@ -203,7 +223,10 @@ fun MapTab(
                         onClusterClick = { clusterItem ->
                             scope.launch {
                                 val cameraUpdate = CameraUpdate
-                                    .scrollAndZoomTo(clusterItem.position, cameraPositionState.position.zoom + 1)
+                                    .scrollAndZoomTo(
+                                        clusterItem.position,
+                                        cameraPositionState.position.zoom + 1
+                                    )
                                 cameraPositionState.animate(
                                     update = cameraUpdate,
                                     durationMs = MapTabConstant.CAMERA_ANIMATION_DURATION
@@ -214,6 +237,21 @@ fun MapTab(
                 }
             }
         }
+
+        if (startDate != null && endDate != null && tripName != null) {
+            TripScheduleCard(
+                tripName = tripName,
+                startDate = startDate,
+                endDate = endDate,
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .padding(
+                        top = MemoripPadding.PaddingMedium,
+                        start = MemoripPadding.PaddingMedium,
+                        end = MemoripPadding.PaddingMedium
+                    )
+            )
+        }
     }
 }
 
@@ -222,37 +260,75 @@ private fun MapBottomSheetContent(
     bottomSheetContent: MapBottomSheetStep,
     places: List<Place>,
     selectedPlace: Place?,
+    viewMode: PlaceViewMode,
     onAction: (TripDetailAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val placeListState = rememberLazyListState()
 
     Surface(
-        tonalElevation = MapTabDimen.SHEET_TONAL_ELEVATION,
-        shadowElevation = MapTabDimen.SHEET_SHADOW_ELEVATION,
+        tonalElevation = MemoripShadow.Large,
+        shadowElevation = MemoripShadow.Large,
         color = MemoripTheme.colors.background
     ) {
-        when (bottomSheetContent) {
-            MapBottomSheetStep.PlaceList -> {
-                BottomSheetPlaceListContent(
-                    places = places,
-                    listState = placeListState,
-                    onAction = onAction
-                )
-            }
-            MapBottomSheetStep.PlaceDetail -> {
-                selectedPlace?.let { place ->
-                    BottomSheetPlaceDetailContent(
-                        place = place,
-                        onCloseClick = { onAction(TripDetailAction.OnMapPlaceClose) }
-                    )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = MemoripPadding.PaddingSmall),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Box(
+                modifier = Modifier
+                    .width(MemoripPadding.PaddingXXXLarge)
+                    .height(MemoripSpace.SpaceXXSmall)
+                    .clip(RoundedCornerShape(MemoripLineWidth.Small))
+                    .background(MemoripTheme.colors.gray1)
+            )
+            Spacer(modifier = Modifier.height(MemoripPadding.PaddingXSmall))
+            when (bottomSheetContent) {
+                MapBottomSheetStep.PlaceList -> {
+                    Column(
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        PlaceListHeader(
+                            placeCount = places.size,
+                            viewMode = viewMode,
+                            onViewModeToggle = { onAction(TripDetailAction.OnViewModeToggle) }
+                        )
+
+                        when (viewMode) {
+                            PlaceViewMode.LIST -> {
+                                BottomSheetPlaceListContent(
+                                    places = places,
+                                    listState = placeListState,
+                                    onAction = onAction
+                                )
+                            }
+
+                            PlaceViewMode.GRID -> {
+                                BottomSheetPlaceGridContent(
+                                    places = places,
+                                    onAction = onAction
+                                )
+                            }
+                        }
+                    }
+                }
+
+                MapBottomSheetStep.PlaceDetail -> {
+                    selectedPlace?.let { place ->
+                        BottomSheetPlaceDetailContent(
+                            place = place,
+                            onCloseClick = { onAction(TripDetailAction.OnMapPlaceClose) }
+                        )
+                    }
                 }
             }
         }
     }
 }
 
-@Preview(name = "지도탭 프리뷰", showBackground = true)
+@Preview(showBackground = true)
 @Composable
 private fun MapTabPreview() {
     MemoripTheme {

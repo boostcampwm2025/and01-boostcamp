@@ -1,6 +1,5 @@
 package com.andone.memorip.presentation.screen.tripdetail.component
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -13,7 +12,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.screen.tripdetail.model.TripDetailAction
 import com.andone.memorip.presentation.theme.MemoripPadding
-import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
 
@@ -27,7 +25,6 @@ fun BottomSheetPlaceListContent(
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         state = listState,
-        verticalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceSmall),
         contentPadding = PaddingValues(
             horizontal = MemoripPadding.PaddingMedium,
             vertical = MemoripPadding.PaddingXSmall
