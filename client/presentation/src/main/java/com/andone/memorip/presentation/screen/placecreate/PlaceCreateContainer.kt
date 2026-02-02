@@ -45,10 +45,6 @@ private object PlaceCreateContainerDimens {
     const val BAR_WIDTH_FRACTION = 0.4f
 }
 
-private object PlaceCreateNavGraphConstants {
-    const val TOTAL_STEP_SIZE = 3
-}
-
 @Composable
 fun PlaceCreateContainer(
     onNavigateToHome: () -> Unit,
@@ -103,7 +99,8 @@ fun PlaceCreateContainer(
                     viewModel.onAction(PlaceCreateAction.OnTripSelect(trips))
                 },
                 onStepChange = { currentStep = it },
-                currentTrip = uiState.trips
+                selectedTags = uiState.tags,
+                selectedTrips = uiState.trips
             )
         }
     }
@@ -200,7 +197,8 @@ fun PlaceCreateSubStep(
     onTripChange: (List<TripUiModel>) -> Unit,
     onStepChange: (PlaceCreateStep) -> Unit,
     modifier: Modifier = Modifier,
-    currentTrip: List<TripUiModel>? = null
+    selectedTags: List<TagUiModel>? = null,
+    selectedTrips: List<TripUiModel>? = null
 ) {
     when (step) {
         PlaceCreateStep.SelectCategory -> {
@@ -210,6 +208,7 @@ fun PlaceCreateSubStep(
                     onStepChange(PlaceCreateStep.PlaceCreate)
                 },
                 onBackClick = { onStepChange(PlaceCreateStep.PlaceCreate) },
+                selectedTags = selectedTags ?: emptyList(),
                 modifier = modifier
             )
         }
@@ -222,7 +221,7 @@ fun PlaceCreateSubStep(
                 },
                 onBackClick = { onStepChange(PlaceCreateStep.PlaceCreate) },
                 placeId = null,
-                initialSelectedTripIds = currentTrip?.map { it.id },
+                initialSelectedTripIds = selectedTrips?.map { it.id },
                 modifier = modifier
             )
         }

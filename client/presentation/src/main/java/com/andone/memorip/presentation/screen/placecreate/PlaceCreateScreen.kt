@@ -263,8 +263,8 @@ fun SelectSection(
     onTripClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val locationValue = location?.name
-        ?.ifBlank { null } ?: stringResource(R.string.place_create_location_placeholder)
+    val locationValue = location?.name?.ifBlank { null } ?: location?.address
+    ?: stringResource(R.string.place_create_location_placeholder)
     val tripValue = trips
         .joinToString(stringResource(R.string.place_create_space)) { it.name }
         .ifEmpty { stringResource(R.string.place_create_trip_placeholder) }
