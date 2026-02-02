@@ -18,60 +18,6 @@
 <img width="1100" alt="image" src="https://github.com/user-attachments/assets/22a4b0cc-be77-42a2-9147-9bf7d8c15b64" />
 
 
-## 정적 데이터 생성 자동화
-
-> 변경 빈도가 낮은 지역/행정구역 데이터를 서버 API 대신 정적 리소스로 관리하여  
-> 네트워크 의존도를 제거하고 즉시 응답 가능한 구조 설계
-
-<img width="1867" height="641" alt="image" src="https://github.com/user-attachments/assets/6c20e42c-b5e2-496d-9da5-6b596ce4fd36" />
-
-
-
-
-### 문제
-지역 필터링 시 매번 서버 API 호출이 발생하여 응답 지연과 불필요한 트래픽 비용 증가
-
-<img width="953" height="781" alt="image" src="https://github.com/user-attachments/assets/2f152e11-a246-41be-a797-aa899f5cd54e" />
-
-
-
-### 해결
-행정구역 데이터를 JSON 정적 리소스로 내장하고, 스크립트 기반 자동 생성으로 빌드 시점에 포함
-
-<img width="1190" height="750" alt="image" src="https://github.com/user-attachments/assets/dfa35a47-50da-49e6-a3eb-b6dfd8cf2730" />
-
-
-
----
-
-### 데이터 구조 설계
-
-> 지역 depth(시/도/구/동 등)를 고정하지 않고 트리 구조로 표현하여 단계 수와 무관하게 확장 가능한 구조 설계
-
-| 항목 | 설명 |
-| --- | --- |
-| Tree 기반 파싱 | JSON → Tree 재귀 탐색으로 변환|
-| Depth 자유도 | 행정 단계 추가 시 변환 코드 수정 불필요 |
-| 재사용성 | 해외 지역/다른 카테고리 데이터에도 동일 구조 적용 가능 |
-
----
-
-### 처리 흐름
-
-```
-원본 데이터
-   ↓
-변환 스크립트
-   ↓
-JSON 자동 생성
-   ↓
-앱 빌드 시 포함
-   ↓
-클라이언트 지역 필터 기능에 사용
-```
-
-
-
 ## 주요 기능
 | 기능 | 설명 | 영상 |
 | --- | --- | --- |
