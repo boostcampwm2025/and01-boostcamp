@@ -81,10 +81,7 @@ fun MemoripNav(
                 onBackClick = navigator::popBackStack
             )
 
-            tripDetail(
-                onNavigateBack = navigator::popBackStack,
-                onImageClick = navigator::navigateToPlaceDetail
-            )
+            tripDetail(onNavigateBack = navigator::popBackStack)
 
             placeDetail(
                 onNavigateBack = navigator::popBackStack,

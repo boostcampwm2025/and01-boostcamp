@@ -12,14 +12,12 @@ fun NavBackStack<NavKey>.navigateToTripDetail(tripId: String) {
 
 fun EntryProviderScope<NavKey>.tripDetail(
     onNavigateBack: () -> Unit,
-    onImageClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     entry<TripDetail> { route ->
         TripDetailScreen(
             route = route,
             onBackClick = onNavigateBack,
-            onImageClick = onImageClick,
             modifier = modifier
         )
     }
