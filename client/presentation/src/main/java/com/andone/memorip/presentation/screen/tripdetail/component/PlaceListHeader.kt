@@ -78,100 +78,72 @@ fun ViewModeToggle(
     onViewModeToggle: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val d = PlaceListHeaderDimen
     Row(
         modifier = modifier
-            .size(width = PlaceListHeaderDimen.TOTAL_WIDTH, height = PlaceListHeaderDimen.TOTAL_HEIGHT)
-            .clip(RoundedCornerShape(PlaceListHeaderDimen.OUTER_RADIUS))
+            .size(width = d.TOTAL_WIDTH, height = d.TOTAL_HEIGHT)
+            .clip(RoundedCornerShape(d.OUTER_RADIUS))
             .background(MemoripTheme.colors.gray2)
-            .padding(
-                horizontal = PlaceListHeaderDimen.TOGGLE_PADDING,
-                vertical = PlaceListHeaderDimen.TOGGLE_PADDING
-            ),
+            .padding(d.TOGGLE_PADDING),
         horizontalArrangement = Arrangement.spacedBy(0.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Box(
-            modifier = Modifier
-                .size(PlaceListHeaderDimen.SEGMENT_SIZE)
-                .clip(RoundedCornerShape(PlaceListHeaderDimen.INNER_RADIUS))
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null,
-                    onClick = {
-                        if (viewMode != PlaceViewMode.LIST) onViewModeToggle()
-                    }
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-            if (viewMode == PlaceViewMode.LIST) {
-                Box(
-                    modifier = Modifier
-                        .size(PlaceListHeaderDimen.SEGMENT_SIZE)
-                        .shadow(
-                            elevation = PlaceListHeaderDimen.TOGGLE_INNER_OFFSET,
-                            shape = RoundedCornerShape(PlaceListHeaderDimen.INNER_RADIUS)
-                        )
-                        .clip(RoundedCornerShape(PlaceListHeaderDimen.INNER_RADIUS))
-                        .background(MemoripTheme.colors.white),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_format_list_bulleted),
-                        contentDescription = stringResource(R.string.trip_detail_view_list_description),
-                        tint = MemoripTheme.colors.primary,
-                        modifier = Modifier.size(MemoripIconSize.IconSizeMedium)
-                    )
-                }
-            } else {
-                Icon(
-                    painter = painterResource(R.drawable.ic_format_list_bulleted),
-                    contentDescription = stringResource(R.string.trip_detail_view_list_description),
-                    tint = MemoripTheme.colors.gray,
-                    modifier = Modifier.size(MemoripIconSize.IconSizeMedium)
-                )
-            }
-        }
+        ViewModeToggleSegment(
+            isSelected = viewMode == PlaceViewMode.LIST,
+            iconRes = R.drawable.ic_format_list_bulleted,
+            contentDescription = stringResource(R.string.trip_detail_view_list_description),
+            onClick = { if (viewMode != PlaceViewMode.LIST) onViewModeToggle() }
+        )
+        ViewModeToggleSegment(
+            isSelected = viewMode == PlaceViewMode.GRID,
+            iconRes = R.drawable.ic_grid_view,
+            contentDescription = stringResource(R.string.trip_detail_view_grid_description),
+            onClick = { if (viewMode != PlaceViewMode.GRID) onViewModeToggle() }
+        )
+    }
+}
 
-        Box(
-            modifier = Modifier
-                .size(PlaceListHeaderDimen.SEGMENT_SIZE)
-                .clip(RoundedCornerShape(PlaceListHeaderDimen.INNER_RADIUS))
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null,
-                    onClick = {
-                        if (viewMode != PlaceViewMode.GRID) onViewModeToggle()
-                    }
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-            if (viewMode == PlaceViewMode.GRID) {
-                Box(
-                    modifier = Modifier
-                        .size(PlaceListHeaderDimen.SEGMENT_SIZE)
-                        .shadow(
-                            elevation = PlaceListHeaderDimen.TOGGLE_INNER_OFFSET,
-                            shape = RoundedCornerShape(PlaceListHeaderDimen.INNER_RADIUS)
-                        )
-                        .clip(RoundedCornerShape(PlaceListHeaderDimen.INNER_RADIUS))
-                        .background(MemoripTheme.colors.white),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_grid_view),
-                        contentDescription = stringResource(R.string.trip_detail_view_grid_description),
-                        tint = MemoripTheme.colors.primary,
-                        modifier = Modifier.size(MemoripIconSize.IconSizeMedium)
-                    )
-                }
-            } else {
+@Composable
+private fun ViewModeToggleSegment(
+    isSelected: Boolean,
+    iconRes: Int,
+    contentDescription: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val segmentModifier = Modifier
+        .size(PlaceListHeaderDimen.SEGMENT_SIZE)
+        .clip(RoundedCornerShape(PlaceListHeaderDimen.INNER_RADIUS))
+    val selectedBoxModifier = Modifier
+        .size(PlaceListHeaderDimen.SEGMENT_SIZE)
+        .shadow(elevation = PlaceListHeaderDimen.TOGGLE_INNER_OFFSET, shape = RoundedCornerShape(PlaceListHeaderDimen.INNER_RADIUS))
+        .clip(RoundedCornerShape(PlaceListHeaderDimen.INNER_RADIUS))
+        .background(MemoripTheme.colors.white)
+
+    Box(
+        modifier = segmentModifier.clickable(
+            interactionSource = remember { MutableInteractionSource() },
+            indication = null,
+            onClick = onClick
+        ),
+        contentAlignment = Alignment.Center
+    ) {
+        if (isSelected) {
+            Box(modifier = selectedBoxModifier, contentAlignment = Alignment.Center) {
                 Icon(
-                    painter = painterResource(R.drawable.ic_grid_view),
-                    contentDescription = stringResource(R.string.trip_detail_view_grid_description),
-                    tint = MemoripTheme.colors.gray,
+                    painter = painterResource(iconRes),
+                    contentDescription = contentDescription,
+                    tint = MemoripTheme.colors.primary,
                     modifier = Modifier.size(MemoripIconSize.IconSizeMedium)
                 )
             }
+        } else {
+            Icon(
+                painter = painterResource(iconRes),
+                contentDescription = contentDescription,
+                tint = MemoripTheme.colors.gray,
+                modifier = Modifier.size(MemoripIconSize.IconSizeMedium)
+            )
         }
     }
 }
@@ -200,8 +172,8 @@ private fun ViewModeTogglePreview() {
 }
 
 
-@Preview(showBackground = true, name = "PlaceListHeader - Light")
-@Preview(showBackground = true, name = "PlaceListHeader - Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(showBackground = true)
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun PlaceListHeaderPreview() {
     MemoripTheme {
@@ -211,11 +183,6 @@ private fun PlaceListHeaderPreview() {
             PlaceListHeader(
                 placeCount = 4,
                 viewMode = PlaceViewMode.LIST,
-                onViewModeToggle = {}
-            )
-            PlaceListHeader(
-                placeCount = 12,
-                viewMode = PlaceViewMode.GRID,
                 onViewModeToggle = {}
             )
         }
