@@ -33,31 +33,31 @@
 |:---:|:---:|:---:|:---:|
 | <img src="https://github.com/GwonDongHyeon21.png" width="150" height="150" style="border-radius:100%" > | <img src="https://github.com/uselessnaming.png" width="150" height="150" style="border-radius:100%" > | <img src="https://github.com/HJunng.png" width="150" height="150" style="border-radius:100%" > | <img src="https://github.com/hoyadong1.png" width="150" height="150" style="border-radius:100%" > |
 | [@GwonDongHyeon21](https://github.com/GwonDongHyeon21) | [@uselessnaming](https://github.com/uselessnaming) | [@HJunng](https://github.com/HJunng) | [@hoyadong1](https://github.com/hoyadong1) |
-| **장소 추가 화면**<br/>&nbsp;&nbsp;<sub>🔗 <a href="https://github.com/boostcampwm2025/and01-boostcamp/wiki/Image-Crop-System">이미지 편집 시스템</a></sub><br/>&nbsp;&nbsp;<sub>🔗 화면 전환 구조</sub><br/>**컨벤션 라이브러리**<br/>&nbsp;&nbsp;<sub>🔗 <a href="https://github.com/boostcampwm2025/and01-boostcamp/wiki/커스텀-린트-라이브러리">커스텀 린트 라이브러리</a></sub> | a링크 <br/> b링크| **여행** <br/> <sub>🔗 [여행 상세 지도](https://github.com/boostcampwm2025/and01-boostcamp/wiki/%EC%A7%80%EB%8F%84-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EB%A7%88%EC%BB%A4-%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%EB%A7%81-UX)</sub>|[장소 리스트](https://github.com/boostcampwm2025/and01-boostcamp/wiki/%EC%9E%A5%EC%86%8C-%EB%A6%AC%EC%8A%A4%ED%8A%B8-%ED%99%94%EB%A9%B4-%EA%B5%AC%ED%98%84%EA%B3%BC-%EC%84%A4%EA%B3%84) <br>[시간표 기능](https://github.com/boostcampwm2025/and01-boostcamp/wiki/%EA%B3%84%ED%9A%8D-%ED%99%94%EB%A9%B4-%EA%B5%AC%EC%A1%B0-%EC%84%A4%EA%B3%84)|
+| **장소 추가 화면**<br/>&nbsp;&nbsp;<sub>🔗 <a href="https://github.com/boostcampwm2025/and01-boostcamp/wiki/Image-Crop-System">이미지 편집 시스템</a></sub><br/>&nbsp;&nbsp;<sub>🔗 화면 전환 구조</sub><br/>**컨벤션 라이브러리**<br/>&nbsp;&nbsp;<sub>🔗 <a href="https://github.com/boostcampwm2025/and01-boostcamp/wiki/커스텀-린트-라이브러리">커스텀 린트 라이브러리</a></sub> | a링크 <br/> b링크| **여행** <br/> <sub>🔗 [여행 상세 지도](https://github.com/boostcampwm2025/and01-boostcamp/wiki/%EC%A7%80%EB%8F%84-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EB%A7%88%EC%BB%A4-%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%EB%A7%81-UX)</sub>|**장소 추가 화면**<br/><sub>🔗 <a href="https://github.com/boostcampwm2025/and01-boostcamp/wiki/%EC%9E%A5%EC%86%8C-%EB%A6%AC%EC%8A%A4%ED%8A%B8-%ED%99%94%EB%A9%B4-UX-%EA%B0%9C%EC%84%A0">장소 리스트 UX 개선</a><br/>🔗 <a href="https://github.com/boostcampwm2025/and01-boostcamp/wiki/%EC%A0%95%EC%A0%81-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EC%83%9D%EC%84%B1-%EC%9E%90%EB%8F%99%ED%99%94">지역 데이터 관리</a><br></sub><br>**계획 화면**<br/><sub>🔗 <a href="https://github.com/boostcampwm2025/and01-boostcamp/wiki/%EC%8B%9C%EA%B0%84%ED%91%9C-%EA%B5%AC%EC%A1%B0-%EC%84%A4%EA%B3%84">시간표 구조 설계</a></sub>|
 
 ## 기술 스택
 
 ### 📱 Android
-![Android](https://img.shields.io/badge/Android-3DDC84?logo=android&logoColor=white)
-![Kotlin](https://img.shields.io/badge/Kotlin-7F52FF?logo=kotlin&logoColor=white)
-![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-4285F4?logo=android&logoColor=white)
-![MVI](https://img.shields.io/badge/MVI-000000)
+![Android](https://img.shields.io/badge/Android-3DDC84?logo=android&logoColor=white&style=for-the-badge)
+![Kotlin](https://img.shields.io/badge/Kotlin-7F52FF?logo=kotlin&logoColor=white&style=for-the-badge)
+![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-4285F4?logo=android&logoColor=white&style=for-the-badge)
+![MVI](https://img.shields.io/badge/MVI-000000?style=for-the-badge)
 
-![Coroutines](https://img.shields.io/badge/Coroutines-0095D5)
-![Flow](https://img.shields.io/badge/Flow-0095D5)
-![Hilt](https://img.shields.io/badge/Hilt-59666C)
+![Coroutines](https://img.shields.io/badge/Coroutines-0095D5?style=for-the-badge)
+![Flow](https://img.shields.io/badge/Flow-0095D5?style=for-the-badge)
+![Hilt](https://img.shields.io/badge/Hilt-59666C?style=for-the-badge)
 
-![Firebase](https://img.shields.io/badge/Firebase%20App%20Distribution-FFCA28?logo=firebase&logoColor=black)
-![Naver Map](https://img.shields.io/badge/Naver%20Map-03C75A?logo=naver&logoColor=white)
+![Firebase](https://img.shields.io/badge/Firebase%20App%20Distribution-FFCA28?logo=firebase&logoColor=black&style=for-the-badge)
+![Naver Map](https://img.shields.io/badge/Naver%20Map-03C75A?logo=naver&logoColor=white&style=for-the-badge)
+
 
 ### 💾 Server
-![Kotlin](https://img.shields.io/badge/Kotlin-7F52FF?logo=kotlin&logoColor=white)
-![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?logo=springboot&logoColor=white)
-![Spring Data JPA](https://img.shields.io/badge/Spring_Data_JPA-6DB33F?logo=jpa&logoColor=white)
-![Hibernate](https://img.shields.io/badge/Hibernate-59666C?logo=hibernate&logoColor=white)
-![Spring Security](https://img.shields.io/badge/Spring_Security-6DB33F?logo=springsecurity&logoColor=white)
+![Kotlin](https://img.shields.io/badge/Kotlin-7F52FF?logo=kotlin&logoColor=white&style=for-the-badge)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?logo=springboot&logoColor=white&style=for-the-badge)
+![Spring Data JPA](https://img.shields.io/badge/Spring_Data_JPA-6DB33F?logo=jpa&logoColor=white&style=for-the-badge)
+![Hibernate](https://img.shields.io/badge/Hibernate-59666C?logo=hibernate&logoColor=white&style=for-the-badge)
+![Spring Security](https://img.shields.io/badge/Spring_Security-6DB33F?logo=springsecurity&logoColor=white&style=for-the-badge)
 
-![Naver NCloud](https://img.shields.io/badge/Naver_NCloud-03C75A?logo=naver&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white)
-![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)
-
+![Naver NCloud](https://img.shields.io/badge/Naver_NCloud-03C75A?logo=naver&logoColor=white&style=for-the-badge)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white&style=for-the-badge)
+![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white&style=for-the-badge)
