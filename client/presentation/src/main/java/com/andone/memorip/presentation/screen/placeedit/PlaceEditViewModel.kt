@@ -133,7 +133,7 @@ class PlaceEditViewModel @AssistedInject constructor(
 
     }
 
-    fun updateGroup(trips: List<TripUiModel>) {
+    fun updateTrip(trips: List<TripUiModel>) {
         _uiState.update { it.copy(trips = trips) }
     }
 

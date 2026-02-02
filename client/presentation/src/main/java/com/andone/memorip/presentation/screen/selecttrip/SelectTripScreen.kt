@@ -96,10 +96,10 @@ fun SelectTripScreen(
     if (uiState.isLoading) {
         LoadingIndicatorScreen()
     } else {
-        SelectGroupContent(
-            groups = uiState.trips,
-            selectedGroupIds = uiState.selectedTripIds,
-            initialSelectedGroupIds = uiState.initialSelectedTripIds,
+        SelectTripContent(
+            trips = uiState.trips,
+            selectedTripIds = uiState.selectedTripIds,
+            initialSelectedTripIds = uiState.initialSelectedTripIds,
             onAction = viewModel::onAction,
             title = title,
             modifier = modifier
@@ -109,8 +109,8 @@ fun SelectTripScreen(
     if (showDialog) {
         MemoripInputDialog(
             title = stringResource(R.string.select_trip_dialog_title),
-            onConfirmClick = { groupName ->
-                viewModel.onAction(action = SelectTripAction.OnDialogConfirmClick(groupName))
+            onConfirmClick = { tripName ->
+                viewModel.onAction(action = SelectTripAction.OnDialogConfirmClick(tripName))
             },
             onCancelClick = { viewModel.onAction(action = SelectTripAction.OnDialogCancelClick) },
             onDismissRequest = { viewModel.onAction(action = SelectTripAction.OnDialogCancelClick) },
@@ -121,21 +121,21 @@ fun SelectTripScreen(
 }
 
 @Composable
-private fun SelectGroupContent(
-    groups: List<SelectTripUiModel>,
-    selectedGroupIds: Set<String>,
-    initialSelectedGroupIds: Set<String>,
+private fun SelectTripContent(
+    trips: List<SelectTripUiModel>,
+    selectedTripIds: Set<String>,
+    initialSelectedTripIds: Set<String>,
     onAction: (SelectTripAction) -> Unit,
     modifier: Modifier = Modifier,
     title: String = stringResource(R.string.select_trip_title),
 ) {
-    val hasChanges = selectedGroupIds != initialSelectedGroupIds
-    val isPlaceDetailScreen = groups.any { it.isPlaceAdded }
+    val hasChanges = selectedTripIds != initialSelectedTripIds
+    val isPlaceDetailScreen = trips.any { it.isPlaceAdded }
 
     Scaffold(
         topBar = {
             SelectTripTopBar(
-                enabled = hasChanges && selectedGroupIds.isNotEmpty(),
+                enabled = hasChanges && selectedTripIds.isNotEmpty(),
                 onBackClick = { onAction(SelectTripAction.OnBackClick) },
                 onCheckClick = { onAction(SelectTripAction.OnCheckClick) },
                 title = title
@@ -167,21 +167,21 @@ private fun SelectGroupContent(
                 verticalArrangement = Arrangement.spacedBy(SpaceLarge)
             ) {
                 items(
-                    items = groups,
+                    items = trips,
                     key = { it.id }
-                ) { group ->
-                    val isSelected = group.id in selectedGroupIds
+                ) { trip ->
+                    val isSelected = trip.id in selectedTripIds
 
                     val shouldShowCheck = if (isPlaceDetailScreen) {
-                        if (hasChanges) isSelected else group.isPlaceAdded
+                        if (hasChanges) isSelected else trip.isPlaceAdded
                     } else {
                         isSelected
                     }
 
                     TripImageGridCard(
-                        name = group.name,
-                        images = group.images,
-                        onClick = { onAction(SelectTripAction.OnTripClick(group)) },
+                        name = trip.name,
+                        images = trip.images,
+                        onClick = { onAction(SelectTripAction.OnTripClick(trip)) },
                         isPlaceAdded = shouldShowCheck,
                     )
                 }
@@ -193,9 +193,9 @@ private fun SelectGroupContent(
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun SelectGroupScreenPreview() {
+private fun SelectTripScreenPreview() {
     MemoripTheme {
-        val dummyGroups = DummyData.trips.map { trip ->
+        val dummyTrips = DummyData.trips.map { trip ->
             SelectTripUiModel(
                 id = trip.id,
                 name = trip.name,
@@ -203,11 +203,11 @@ private fun SelectGroupScreenPreview() {
                 isPlaceAdded = false
             )
         }
-        val selectedIds = setOf(dummyGroups[0].id, dummyGroups[2].id)
-        SelectGroupContent(
-            groups = dummyGroups,
-            selectedGroupIds = selectedIds,
-            initialSelectedGroupIds = emptySet(),
+        val selectedIds = setOf(dummyTrips[0].id, dummyTrips[2].id)
+        SelectTripContent(
+            trips = dummyTrips,
+            selectedTripIds = selectedIds,
+            initialSelectedTripIds = emptySet(),
             onAction = {},
             title = stringResource(R.string.select_trip_title)
         )

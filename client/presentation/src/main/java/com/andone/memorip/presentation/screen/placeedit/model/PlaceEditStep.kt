@@ -4,5 +4,5 @@ enum class PlaceEditStep {
     PlaceEdit,
     SelectLocation,
     SelectCategory,
-    SelectGroup
+    SelectTrip
 }

@@ -54,7 +54,7 @@ fun PlaceEditContainer(
                 PlaceEditScreen(
                     onCategoryClick = { currentStep = PlaceEditStep.SelectCategory },
                     onLocationClick = { currentStep = PlaceEditStep.SelectLocation },
-                    onTripClick = { currentStep = PlaceEditStep.SelectGroup },
+                    onTripClick = { currentStep = PlaceEditStep.SelectTrip },
                     onNavigateBack = onNavigateBack,
                     viewModel = viewModel
                 )
@@ -74,10 +74,10 @@ fun PlaceEditContainer(
                 )
             }
 
-            PlaceEditStep.SelectGroup -> {
+            PlaceEditStep.SelectTrip -> {
                 SelectTripScreen(
                     onTripSelect = { trips ->
-                        viewModel.updateGroup(trips = trips.map { it.toTripUiModel() })
+                        viewModel.updateTrip(trips = trips.map { it.toTripUiModel() })
                         currentStep = PlaceEditStep.PlaceEdit
                     },
                     onBackClick = { currentStep = PlaceEditStep.PlaceEdit },
