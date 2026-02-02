@@ -11,19 +11,24 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -31,19 +36,24 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.dialog.DefaultDialog
+import com.andone.memorip.presentation.screen.plan.component.PlanEditDialogConstant.AM_IDX
 import com.andone.memorip.presentation.screen.plan.component.PlanEditDialogConstant.AM_PM_THRESHOLD
 import com.andone.memorip.presentation.screen.plan.component.PlanEditDialogConstant.EMPTY_MINUTE_VALUE
 import com.andone.memorip.presentation.screen.plan.component.PlanEditDialogConstant.EMPTY_VALUE
 import com.andone.memorip.presentation.screen.plan.component.PlanEditDialogConstant.FILL_CHAR
 import com.andone.memorip.presentation.screen.plan.component.PlanEditDialogConstant.MINUTE_LENGTH
+import com.andone.memorip.presentation.screen.plan.component.PlanEditDialogConstant.MINUTE_STEP
+import com.andone.memorip.presentation.screen.plan.component.PlanEditDialogConstant.PM_IDX
 import com.andone.memorip.presentation.screen.plan.component.PlanEditDialogDimen.ITEM_SPACE
 import com.andone.memorip.presentation.screen.plan.component.PlanEditDialogDimen.SPINNER_ITEM_HEIGHT
 import com.andone.memorip.presentation.screen.plan.component.PlanEditDialogDimen.SPINNER_MAX_HEIGHT
 import com.andone.memorip.presentation.theme.MemoripLineWidth
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
+import com.andone.memorip.presentation.util.toPx
 import com.andone.memorip.presentation.util.toTimeString
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.filter
 import java.time.LocalDateTime
 
 private object PlanEditDialogDimen {
@@ -58,6 +68,9 @@ private object PlanEditDialogConstant {
     const val FILL_CHAR = '0'
     const val EMPTY_VALUE = -1
     const val EMPTY_MINUTE_VALUE = -10
+    const val AM_IDX = 1
+    const val PM_IDX = 2
+    const val MINUTE_STEP = 10
 }
 
 enum class PlanTimeType {
@@ -68,6 +81,9 @@ enum class PlanTimeType {
 fun PlanEditDialog(
     defaultStartTime: LocalDateTime,
     defaultEndTime: LocalDateTime,
+    onConfirmClick: (LocalDateTime, LocalDateTime) -> Unit,
+    onCancelClick: () -> Unit,
+    onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var startTime by remember { mutableStateOf(value = defaultStartTime) }
@@ -77,9 +93,9 @@ fun PlanEditDialog(
     DefaultDialog(
         title = stringResource(R.string.plan_edit_dialog_title),
         modifier = modifier,
-        onConfirmClick = {},
-        onCancelClick = {},
-        onDismissRequest = {},
+        onConfirmClick = { onConfirmClick(startTime, endTime) },
+        onCancelClick = onCancelClick,
+        onDismissRequest = onDismissRequest,
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -134,17 +150,118 @@ fun PlanEditDialog(
 @Composable
 private fun TimeSpinner(
     time: LocalDateTime,
-    onTimeChange: (LocalDateTime) -> Unit
+    onTimeChange: (LocalDateTime) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    val amPm =
-        listOf(EMPTY_VALUE.toString()) + stringArrayResource(R.array.plan_edit_dialog_am_pm).toList() + listOf(
-            EMPTY_VALUE.toString()
-        )
-    val hours = (EMPTY_VALUE..11).plus(EMPTY_VALUE).toImmutableList()
-    val minutes = (EMPTY_VALUE..5).plus(EMPTY_VALUE).map { it * 10 }.toImmutableList()
+    val lastestTime by rememberUpdatedState(time)
+    val amPmList = stringArrayResource(R.array.plan_edit_dialog_am_pm).toList()
+    val amPm = remember{ listOf(EMPTY_VALUE.toString()) + amPmList + listOf(EMPTY_VALUE.toString()) }
+    val hours = remember{ listOf(EMPTY_VALUE) + (0..11).plus(EMPTY_VALUE).toImmutableList() }
+    val minutes = remember{ (EMPTY_VALUE..5).plus(EMPTY_VALUE).map { it * 10 }.toImmutableList() }
+    val firstIndex = remember{ if (time.hour > AM_PM_THRESHOLD) PM_IDX else AM_IDX }
+    val amPmScrollState = rememberLazyListState(initialFirstVisibleItemIndex = firstIndex)
+    val hourScrollState = rememberLazyListState(initialFirstVisibleItemIndex = hours.indexOf(time.hour % AM_PM_THRESHOLD))
+    val minuteScrollState = rememberLazyListState(initialFirstVisibleItemIndex = minutes.indexOf(time.minute - time.minute % MINUTE_STEP))
+    val density = LocalDensity.current
+    val centerOffset = (SPINNER_MAX_HEIGHT - SPINNER_ITEM_HEIGHT) / 2
+    val centerOffsetPx = centerOffset.toPx(density).toInt()
+
+    LaunchedEffect(Unit) {
+        val targetMinute = minutes.indexOf(time.minute - time.minute % MINUTE_STEP)
+        minuteScrollState.scrollToItem(targetMinute, -centerOffsetPx)
+
+        val targetHour = hours.indexOf(time.hour % AM_PM_THRESHOLD)
+        hourScrollState.scrollToItem(targetHour, -centerOffsetPx)
+
+        val targetAmPm = if (time.hour > AM_PM_THRESHOLD) PM_IDX else AM_IDX
+        amPmScrollState.scrollToItem(targetAmPm, -centerOffsetPx)
+    }
+
+    LaunchedEffect(hourScrollState) {
+        snapshotFlow { hourScrollState.isScrollInProgress }
+            .filter { !it }
+            .collect {
+                val layoutInfo = hourScrollState.layoutInfo
+                val viewportCenter = (layoutInfo.viewportStartOffset + layoutInfo.viewportEndOffset) / 2
+
+                val closestItem = layoutInfo.visibleItemsInfo.filter { it.key != EMPTY_VALUE }
+                    .minByOrNull { item ->
+                        kotlin.math.abs(
+                            (item.offset + item.size / 2) - viewportCenter
+                        )
+                    } ?: return@collect
+
+                hourScrollState.animateScrollToItem(
+                    index = closestItem.index,
+                    scrollOffset = -centerOffsetPx
+                )
+
+                val selectedHour = hours[closestItem.index]
+                if (selectedHour != EMPTY_VALUE) {
+                    val newTime = if (lastestTime.hour > AM_PM_THRESHOLD) lastestTime.withHour(AM_PM_THRESHOLD + selectedHour)
+                        else lastestTime.withHour(selectedHour)
+
+                    onTimeChange(newTime)
+                }
+            }
+    }
+
+    LaunchedEffect(minuteScrollState) {
+        snapshotFlow { minuteScrollState.isScrollInProgress }
+            .filter { !it }
+            .collect {
+                val layoutInfo = minuteScrollState.layoutInfo
+                val viewportCenter = (layoutInfo.viewportStartOffset + layoutInfo.viewportEndOffset) / 2
+
+                val closestItem = layoutInfo.visibleItemsInfo.filter { it.key != EMPTY_MINUTE_VALUE }
+                    .minByOrNull { item ->
+                        kotlin.math.abs((item.offset + item.size / 2) - viewportCenter)
+                    } ?: return@collect
+
+                minuteScrollState.animateScrollToItem(
+                    index = closestItem.index,
+                    scrollOffset = -centerOffsetPx
+                )
+
+                val selectedMinute = minutes[closestItem.index]
+                if (selectedMinute != EMPTY_MINUTE_VALUE) {
+                    val newTime = lastestTime.withMinute(selectedMinute)
+
+                    onTimeChange(newTime)
+                }
+            }
+    }
+
+    LaunchedEffect(amPmScrollState) {
+        snapshotFlow { amPmScrollState.isScrollInProgress }
+            .filter { !it }
+            .collect {
+                val layoutInfo = amPmScrollState.layoutInfo
+                val viewportCenter = (layoutInfo.viewportStartOffset + layoutInfo.viewportEndOffset) / 2
+
+                val closestItem = layoutInfo.visibleItemsInfo.filter { it.key != EMPTY_VALUE.toString() }
+                    .minByOrNull { item ->
+                        kotlin.math.abs((item.offset + item.size / 2) - viewportCenter)
+                    } ?: return@collect
+
+                amPmScrollState.animateScrollToItem(
+                    index = closestItem.index,
+                    scrollOffset = -centerOffsetPx
+                )
+
+                val selectedAmPm = amPm[closestItem.index]
+                if (selectedAmPm != EMPTY_VALUE.toString()) {
+                    val newTime = if (closestItem.index == AM_IDX) lastestTime.withHour(lastestTime.hour % AM_PM_THRESHOLD)
+                        else if (closestItem.index == PM_IDX && lastestTime.hour <= AM_PM_THRESHOLD) lastestTime.withHour(lastestTime.hour + AM_PM_THRESHOLD)
+                        else lastestTime
+
+                    onTimeChange(newTime)
+                }
+            }
+    }
 
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(all = MemoripPadding.PaddingMedium),
         verticalAlignment = Alignment.CenterVertically
@@ -154,11 +271,12 @@ private fun TimeSpinner(
                 .height(height = SPINNER_MAX_HEIGHT)
                 .weight(3f),
             verticalArrangement = Arrangement.spacedBy(space = ITEM_SPACE),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            state = amPmScrollState
         ) {
             itemsIndexed(items = amPm) { idx, amPm ->
                 val isSelected =
-                    (idx == 1 && time.hour < AM_PM_THRESHOLD) || (idx == 2 && time.hour >= AM_PM_THRESHOLD)
+                    (idx == 1 && lastestTime.hour < AM_PM_THRESHOLD) || (idx == 2 && lastestTime.hour >= AM_PM_THRESHOLD)
                 Box(
                     modifier = Modifier.height(height = SPINNER_ITEM_HEIGHT),
                     contentAlignment = Alignment.Center
@@ -167,8 +285,8 @@ private fun TimeSpinner(
                         TextButton(
                             onClick = {
                                 val newTime =
-                                    if (idx == 1) time.withHour(time.hour)
-                                    else time.withHour(time.hour + AM_PM_THRESHOLD)
+                                    if (idx == 1) lastestTime.withHour(lastestTime.hour)
+                                    else lastestTime.withHour(lastestTime.hour + AM_PM_THRESHOLD)
                                 onTimeChange(newTime)
                             }
                         ) {
@@ -192,7 +310,8 @@ private fun TimeSpinner(
                 .height(height = SPINNER_MAX_HEIGHT)
                 .weight(2f),
             verticalArrangement = Arrangement.spacedBy(space = ITEM_SPACE),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            state = hourScrollState
         ) {
             items(items = hours) { hour ->
                 Box(
@@ -203,15 +322,15 @@ private fun TimeSpinner(
                         TextButton(
                             onClick = {
                                 val newTime =
-                                    if (time.hour > AM_PM_THRESHOLD) time.withHour(AM_PM_THRESHOLD + hour)
-                                    else time.withHour(hour)
+                                    if (lastestTime.hour > AM_PM_THRESHOLD) lastestTime.withHour(AM_PM_THRESHOLD + hour)
+                                    else lastestTime.withHour(hour)
                                 onTimeChange(newTime)
                             }
                         ) {
                             Text(
                                 text = hour.toString(),
-                                color = if (time.hour % AM_PM_THRESHOLD == hour) MemoripTheme.colors.onSurface else MemoripTheme.colors.lightGray,
-                                style = if (time.hour % AM_PM_THRESHOLD == hour) MemoripTheme.typography.bodyBold16 else MemoripTheme.typography.bodyMedium14
+                                color = if (lastestTime.hour % AM_PM_THRESHOLD == hour) MemoripTheme.colors.onSurface else MemoripTheme.colors.lightGray,
+                                style = if (lastestTime.hour % AM_PM_THRESHOLD == hour) MemoripTheme.typography.bodyBold16 else MemoripTheme.typography.bodyMedium14
                             )
                         }
                     }
@@ -228,7 +347,8 @@ private fun TimeSpinner(
                 .height(height = SPINNER_MAX_HEIGHT)
                 .weight(2f),
             verticalArrangement = Arrangement.spacedBy(space = ITEM_SPACE),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            state = minuteScrollState
         ) {
             items(items = minutes) { minute ->
                 Box(
@@ -238,15 +358,14 @@ private fun TimeSpinner(
                     if (minute != EMPTY_MINUTE_VALUE) {
                         TextButton(
                             onClick = {
-                                val newTime = time.withMinute(minute)
+                                val newTime = lastestTime.withMinute(minute)
                                 onTimeChange(newTime)
                             }
                         ) {
                             Text(
-                                text = minute.toString()
-                                    .padStart(length = MINUTE_LENGTH, padChar = FILL_CHAR),
-                                color = if (time.minute == minute) MemoripTheme.colors.onSurface else MemoripTheme.colors.lightGray,
-                                style = if (time.minute == minute) MemoripTheme.typography.bodyBold16 else MemoripTheme.typography.bodyMedium14
+                                text = minute.toString().padStart(length = MINUTE_LENGTH, padChar = FILL_CHAR),
+                                color = if (lastestTime.minute == minute) MemoripTheme.colors.onSurface else MemoripTheme.colors.lightGray,
+                                style = if (lastestTime.minute == minute) MemoripTheme.typography.bodyBold16 else MemoripTheme.typography.bodyMedium14
                             )
                         }
                     }
@@ -261,10 +380,13 @@ private fun TimeSpinner(
 private fun PlanEditDialogPreview() {
     MemoripTheme {
         val today = LocalDateTime.now()
-        val time = today.withMinute(today.minute - today.minute % 5)
+        val time = today.withMinute(today.minute - today.minute % 10)
         PlanEditDialog(
             defaultStartTime = time,
-            defaultEndTime = time
+            defaultEndTime = time,
+            onConfirmClick = { _, _ -> },
+            onCancelClick = { },
+            onDismissRequest = { }
         )
     }
 }
