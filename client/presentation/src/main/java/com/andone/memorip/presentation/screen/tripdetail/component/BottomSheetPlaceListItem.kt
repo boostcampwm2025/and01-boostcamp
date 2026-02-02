@@ -1,7 +1,7 @@
 package com.andone.memorip.presentation.screen.tripdetail.component
 
 import android.content.res.Configuration
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,8 +9,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -20,16 +20,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.MemoripImage
 import com.andone.memorip.presentation.component.PlaceLocationText
 import com.andone.memorip.presentation.component.TagChipRow
 import com.andone.memorip.presentation.model.Place
-import com.andone.memorip.presentation.screen.tripdetail.component.BottomSheetPlaceListItemDimen.CARD_ELEVATION
-import com.andone.memorip.presentation.screen.tripdetail.component.BottomSheetPlaceListItemDimen.IMAGE_CORNER_RADIUS
-import com.andone.memorip.presentation.screen.tripdetail.component.BottomSheetPlaceListItemDimen.IMAGE_SIZE
-import com.andone.memorip.presentation.theme.MemoripLineWidth
+import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -39,7 +35,6 @@ import kotlinx.collections.immutable.toImmutableList
 private object BottomSheetPlaceListItemDimen {
     val IMAGE_SIZE = 80.dp
     val IMAGE_CORNER_RADIUS = 8.dp
-    val CARD_ELEVATION = 2.dp
 }
 
 @Composable
@@ -48,21 +43,12 @@ fun BottomSheetPlaceListItem(
     onClick: (Place) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Surface(
-        onClick = { onClick(place) },
-        modifier = modifier.fillMaxWidth(),
-        shape = MemoripTheme.shapes.roundedMedium,
-        color = MemoripTheme.colors.background,
-        tonalElevation = CARD_ELEVATION,
-        border = BorderStroke(
-            width = MemoripLineWidth.Small,
-            color = MemoripTheme.colors.primaryContainer
-        )
-    ) {
+    Column(modifier = modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(all = MemoripPadding.PaddingMedium),
+                .clickable { onClick(place) }
+                .padding(vertical = MemoripPadding.PaddingMedium),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -74,8 +60,8 @@ fun BottomSheetPlaceListItem(
                     imageUrl = place.thumbnailImage.url,
                     contentDescription = place.name,
                     modifier = Modifier
-                        .size(size = IMAGE_SIZE)
-                        .clip(shape = RoundedCornerShape(size = IMAGE_CORNER_RADIUS)),
+                        .size(size = BottomSheetPlaceListItemDimen.IMAGE_SIZE)
+                        .clip(shape = RoundedCornerShape(size = BottomSheetPlaceListItemDimen.IMAGE_CORNER_RADIUS)),
                     contentScale = ContentScale.Crop
                 )
 
@@ -85,7 +71,7 @@ fun BottomSheetPlaceListItem(
                         color = MemoripTheme.colors.onSurface,
                         overflow = TextOverflow.Ellipsis,
                         maxLines = 1,
-                        style = MemoripTheme.typography.titleBold20
+                        style = MemoripTheme.typography.titleBold16
                     )
                     PlaceLocationText(
                         address = place.address,
@@ -101,6 +87,7 @@ fun BottomSheetPlaceListItem(
                 tint = MemoripTheme.colors.gray
             )
         }
+        HorizontalDivider(color = MemoripTheme.colors.gray2)
     }
 }
 
