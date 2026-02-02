@@ -236,21 +236,20 @@ fun MapTab(
             }
         }
 
-        // todo: TripScheduleCard 추가
-//        if (startDate != null && endDate != null && tripName != null) {
-//            TripScheduleCard(
-//                tripName = tripName,
-//                startDate = startDate,
-//                endDate = endDate,
-//                modifier = Modifier
-//                    .align(Alignment.TopCenter)
-//                    .padding(
-//                        top = MemoripPadding.PaddingMedium,
-//                        start = MemoripPadding.PaddingMedium,
-//                        end = MemoripPadding.PaddingMedium
-//                    )
-//            )
-//        }
+        if (startDate != null && endDate != null && tripName != null) {
+            TripScheduleCard(
+                tripName = tripName,
+                startDate = startDate,
+                endDate = endDate,
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .padding(
+                        top = MemoripPadding.PaddingMedium,
+                        start = MemoripPadding.PaddingMedium,
+                        end = MemoripPadding.PaddingMedium
+                    )
+            )
+        }
     }
 }
 
