@@ -75,10 +75,6 @@ class PlaceCreateViewModel @Inject constructor(
                 removeImage(action.imageUri)
             }
 
-            is PlaceCreateAction.OnLastImageRemove -> {
-                _event.trySend(PlaceCreateEvent.NavigateToHome)
-            }
-
             is PlaceCreateAction.OnScrollPositionChange -> {
                 _uiState.update { it.copy(scrollPosition = action.position) }
             }
@@ -119,6 +115,11 @@ class PlaceCreateViewModel @Inject constructor(
 
     private fun removeImage(imageUri: Uri) {
         _uiState.update {
+            if (it.images.size == 1) {
+                snackBarManager.show(SnackBarEvent.IMAGE_COUNT_ERROR)
+                return
+            }
+
             val images = it.images - imageUri
             val selectedImage = if (it.selectedImage == imageUri) {
                 images.firstOrNull()

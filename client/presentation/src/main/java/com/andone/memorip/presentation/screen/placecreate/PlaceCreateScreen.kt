@@ -118,12 +118,6 @@ private fun PlaceCreateScreenContent(
         onAction(PlaceCreateAction.OnImageSelect(uiState.images.first()))
     }
 
-    LaunchedEffect(uiState.images) {
-        if (uiState.images.isEmpty()) {
-            onAction(PlaceCreateAction.OnLastImageRemove)
-        }
-    }
-
     DisposableEffect(Unit) {
         onDispose {
             onAction(PlaceCreateAction.OnScrollPositionChange(scrollState.value))
