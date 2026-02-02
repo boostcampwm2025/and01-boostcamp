@@ -22,7 +22,7 @@
     <string name="category_dialog_max_length_err_hint">6글자만 입력해주세요(# 제외)</string>
     <string name="category_dialog_valid_color_err_hint">0~9, A~F까지의 값만 입력해주세요</string>
     <string name="category_dialog_empty_name_err_hint">이름을 입력해주세요</string>
-    <string name="input_dialog_max_length_error_format">%1$d자를 초과할 수 없습니다</string>
+    <string name="input_dialog_char_count_format">(%1$d/%2$d)</string>
 
     <!-- Loading Indicator -->
     <string name="loading_indicator_message">로딩 중...</string>

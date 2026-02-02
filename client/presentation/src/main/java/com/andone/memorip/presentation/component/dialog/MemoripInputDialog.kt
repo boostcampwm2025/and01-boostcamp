@@ -31,24 +31,30 @@ fun MemoripInputDialog(
     modifier: Modifier = Modifier,
     hint: String? = null,
     label: String? = null,
-    maxLength: Int? = null,
-    maxLengthError: String? = null
+    maxLength: Int? = null
 ) {
     var value by remember { mutableStateOf("") }
-    var validationError by remember { mutableStateOf<String?>(null) }
-    val defaultMaxLengthError = if (maxLength != null) {
-        stringResource(R.string.input_dialog_max_length_error_format, maxLength)
-    } else null
 
     fun onValueChange(newValue: String) {
-        var validatedValue = newValue.replace("\n", "")
-        var hadOverflow = false
-        if (maxLength != null && validatedValue.length > maxLength) {
-            hadOverflow = true
-            validatedValue = validatedValue.take(maxLength)
+        value = newValue.replace("\n", "").let {
+            if (maxLength != null && it.length > maxLength) it.take(maxLength) else it
         }
-        validationError = if (hadOverflow) maxLengthError ?: defaultMaxLengthError else null
-        value = validatedValue
+    }
+
+    val supportingText: (@Composable () -> Unit)? = when {
+        maxLength != null -> {
+            {
+                Text(
+                    text = stringResource(
+                        R.string.input_dialog_char_count_format,
+                        value.length,
+                        maxLength
+                    )
+                )
+            }
+        }
+
+        else -> null
     }
 
     DefaultDialog(
@@ -81,8 +87,7 @@ fun MemoripInputDialog(
                     )
                 }
             },
-            supportingText = validationError?.let { { Text(text = it) } },
-            isError = validationError != null,
+            supportingText = supportingText,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Done
@@ -115,7 +120,8 @@ private fun MemoripInputDialogPreview() {
             onCancelClick = {},
             onDismissRequest = {},
             hint = stringResource(R.string.select_trip_dialog_preview_hint),
-            label = stringResource(R.string.select_trip_dialog_preview_label)
+            label = stringResource(R.string.select_trip_dialog_preview_label),
+            maxLength = 20
         )
     }
 }
