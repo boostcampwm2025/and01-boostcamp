@@ -1,7 +1,5 @@
 package com.andone.memorip.presentation.util
 
-import android.content.res.Resources
-import com.andone.memorip.presentation.R
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
@@ -16,22 +14,18 @@ object DateFormatters {
         DateTimeFormatter.ofPattern("yyyy.MM.dd", Locale.KOREAN)
 }
 
-fun formatDateRange(resources: Resources, startDate: String?, endDate: String?): String {
+fun formatDateRange(startDate: String?, endDate: String?): String {
     if (startDate == null || endDate == null) return ""
     return try {
         val start = LocalDate.parse(startDate)
         val end = LocalDate.parse(endDate)
-        resources.getString(
-            R.string.range_format,
-            start.format(DateFormatters.DAY_SHORT),
-            end.format(DateFormatters.DAY_SHORT)
-        )
+        "${start.format(DateFormatters.DAY_SHORT)} - ${end.format(DateFormatters.DAY_SHORT)}"
     } catch (e: Exception) {
         ""
     }
 }
 
-fun calculateDDay(resources: Resources, targetDate: String?): String {
+fun calculateDDay(targetDate: String?): String {
     if (targetDate == null) return ""
 
     return try {
@@ -40,9 +34,9 @@ fun calculateDDay(resources: Resources, targetDate: String?): String {
         val daysDiff = ChronoUnit.DAYS.between(today, target).toInt()
 
         when {
-            daysDiff > 0 -> resources.getString(R.string.d_day_minus_format, daysDiff)
-            daysDiff == 0 -> resources.getString(R.string.d_day)
-            else -> resources.getString(R.string.d_day_plus_format, -daysDiff)
+            daysDiff > 0 -> "D-$daysDiff"
+            daysDiff == 0 -> "D-Day"
+            else -> "D+${-daysDiff}"
         }
     } catch (e: Exception) {
         ""
