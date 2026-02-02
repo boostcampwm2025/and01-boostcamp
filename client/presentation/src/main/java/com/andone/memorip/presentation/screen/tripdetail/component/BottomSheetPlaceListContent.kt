@@ -37,7 +37,7 @@ fun BottomSheetPlaceListContent(
             BottomSheetPlaceListItem(
                 place = place,
                 onClick = {
-                    onAction(TripDetailAction.OnMapPlaceClick(place))
+                    onAction(TripDetailAction.OnPlaceClick(place))
                 }
             )
         }

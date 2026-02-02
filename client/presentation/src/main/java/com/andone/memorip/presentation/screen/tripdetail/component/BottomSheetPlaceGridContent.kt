@@ -53,7 +53,7 @@ fun BottomSheetPlaceGridContent(
             StaggeredImageItem(
                 imageUrl = image.url,
                 aspectRatio = image.aspectRatio,
-                onImageClick = { onAction(TripDetailAction.OnMapPlaceClick(place)) },
+                onImageClick = { onAction(TripDetailAction.OnPlaceClick(place)) },
                 contentDescription = place.name,
                 location = place.address,
             )

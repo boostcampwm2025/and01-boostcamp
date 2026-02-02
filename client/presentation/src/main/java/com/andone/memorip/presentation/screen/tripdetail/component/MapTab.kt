@@ -34,7 +34,6 @@ import com.andone.memorip.presentation.component.LoadingIndicatorScreen
 import com.andone.memorip.presentation.component.map.InteractiveMultiMarkerMapView
 import com.andone.memorip.presentation.component.map.MapClusterManager
 import com.andone.memorip.presentation.model.Place
-import com.andone.memorip.presentation.screen.placelist.PlaceListGrid
 import com.andone.memorip.presentation.screen.tripdetail.model.PlaceViewMode
 import com.andone.memorip.presentation.screen.tripdetail.model.TripDetailAction
 import com.andone.memorip.presentation.screen.tripdetail.model.MapBottomSheetStep
@@ -46,7 +45,6 @@ import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.theme.MemoripTheme
 import androidx.compose.ui.Alignment
 import androidx.compose.foundation.layout.padding
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.andone.memorip.presentation.util.DummyData
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.geometry.LatLngBounds
@@ -182,7 +180,7 @@ fun MapTab(
     }
 
     BackHandler(enabled = mapBottomSheetContent == MapBottomSheetStep.PlaceDetail) {
-        onAction(TripDetailAction.OnMapPlaceClose)
+        onAction(TripDetailAction.OnPlaceDetailBottomSheetClose)
     }
 
     Box(modifier = modifier) {
@@ -218,7 +216,7 @@ fun MapTab(
                         clusteredItems = clusteredItems,
                         markerImages = markerImages,
                         onMarkerClick = { place ->
-                            onAction(TripDetailAction.OnMapPlaceClick(place = place))
+                            onAction(TripDetailAction.OnPlaceClick(place = place))
                         },
                         onClusterClick = { clusterItem ->
                             scope.launch {
@@ -319,7 +317,7 @@ private fun MapBottomSheetContent(
                     selectedPlace?.let { place ->
                         BottomSheetPlaceDetailContent(
                             place = place,
-                            onCloseClick = { onAction(TripDetailAction.OnMapPlaceClose) }
+                            onCloseClick = { onAction(TripDetailAction.OnPlaceDetailBottomSheetClose) }
                         )
                     }
                 }
