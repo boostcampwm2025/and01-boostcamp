@@ -2,6 +2,7 @@ package com.andone.memorip.presentation.screen.plan.model
 
 import com.andone.memorip.presentation.model.Place
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 sealed interface PlanAction {
     data class BlockMoved(val id: String, val newStartMinute: Int) : PlanAction
@@ -27,4 +28,6 @@ sealed interface PlanAction {
     data object TripChoiceClick : PlanAction
     data class TripChoiceConfirmClick(val selectedTrip: TripListUiModel) : PlanAction
     data object ShowCalendarClick : PlanAction
+    data class PlanEditConfirmClick(val id: String, val startDateTime: LocalDateTime, val endDateTime: LocalDateTime) : PlanAction
+    data object PlanEditCancelClick : PlanAction
 }

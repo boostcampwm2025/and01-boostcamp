@@ -46,7 +46,7 @@ fun DateSelectedContent(
                         is Place -> {
                             PlaceTimeCard(
                                 place = uiModel,
-                                onClick = {}
+                                onClick = { onAction(PlanAction.BlockClick(block.id)) }
                             )
                         }
 

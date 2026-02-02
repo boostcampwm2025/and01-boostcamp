@@ -22,9 +22,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.screen.plan.component.DateNotSelectedContent
 import com.andone.memorip.presentation.screen.plan.component.DateRangeCalendar
 import com.andone.memorip.presentation.screen.plan.component.DateSelectedContent
+import com.andone.memorip.presentation.screen.plan.component.PlanEditDialog
 import com.andone.memorip.presentation.screen.plan.component.PlanTopAppBar
 import com.andone.memorip.presentation.screen.plan.component.SelectTripDialog
 import com.andone.memorip.presentation.screen.plan.model.PlanAction
@@ -42,7 +44,7 @@ fun PlanScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var deleteTargetDay by remember { mutableStateOf<Int?>(value = null) }
-    var showTripChoice by remember { mutableStateOf(false) }
+    var showTripChoice by rememberSaveable { mutableStateOf(false) }
     var showCalendar by rememberSaveable { mutableStateOf(false) }
 
     viewModel.event.collectWithLifecycle { event ->
@@ -57,10 +59,6 @@ fun PlanScreen(
 
             PlanEvent.ShowCalendarDialog -> {
                 showCalendar = true
-            }
-
-            is PlanEvent.ShowPlaceEditDialog -> {
-                
             }
         }
     }
@@ -124,6 +122,28 @@ fun PlanScreen(
             },
             onDismiss = { showCalendar = false }
         )
+    }
+
+    uiState.updatedBlock?.let { block ->
+        when (block) {
+            is Place -> {
+                PlanEditDialog(
+                    defaultStartTime = block.startDateTime!!,
+                    defaultEndTime = block.endDateTime!!,
+                    onConfirmClick = { startTime, endTime ->
+                        viewModel.onAction(
+                            PlanAction.PlanEditConfirmClick(
+                                id = block.id,
+                                startDateTime = startTime,
+                                endDateTime = endTime
+                            )
+                        )
+                    },
+                    onCancelClick = { viewModel.onAction(PlanAction.PlanEditCancelClick) },
+                    onDismissRequest = { viewModel.onAction(PlanAction.PlanEditCancelClick) }
+                )
+            }
+        }
     }
 
     PlanScreenContents(

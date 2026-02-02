@@ -19,19 +19,19 @@ import com.andone.memorip.presentation.model.toTimeBlock
 import com.andone.memorip.presentation.model.toUiModel
 import com.andone.memorip.presentation.screen.plan.PlanViewModelConstants.DAYS_LIMIT
 import com.andone.memorip.presentation.screen.plan.model.DateUiModel
-import com.andone.memorip.presentation.screen.plan.model.TripListUiModel
 import com.andone.memorip.presentation.screen.plan.model.PlanAction
 import com.andone.memorip.presentation.screen.plan.model.PlanEvent
 import com.andone.memorip.presentation.screen.plan.model.PlanEvent.ShowDeleteDayDialog
-import com.andone.memorip.presentation.screen.plan.model.PlanTripUiModel
 import com.andone.memorip.presentation.screen.plan.model.PlanPlaceUiModel
+import com.andone.memorip.presentation.screen.plan.model.PlanTripUiModel
 import com.andone.memorip.presentation.screen.plan.model.PlanUiState
+import com.andone.memorip.presentation.screen.plan.model.TripListUiModel
 import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_DAY
 import com.andone.memorip.presentation.util.snackbar.SnackBarEvent
 import com.andone.memorip.presentation.util.snackbar.SnackBarManager
 import com.andone.memorip.presentation.util.toRemoteString
-import com.andone.memorip.presentation.util.workmanager.TripWorker
 import com.andone.memorip.presentation.util.workmanager.PlanWorker
+import com.andone.memorip.presentation.util.workmanager.TripWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
@@ -47,6 +47,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -89,19 +90,22 @@ class PlanViewModel @Inject constructor(
             blockUiModels = blockUiModels.toImmutableMap()
         )
     }
+    private val selectedBlockFlow = MutableStateFlow<PlanBlockUiModel?>(null)
 
     val uiState = combine(
         tripUiStateFlow,
         selectedDateFlow,
-        planPlaceUiStateFlow
-    ) { tripUiState, dateUiState, planPlaceUiState ->
+        planPlaceUiStateFlow,
+        selectedBlockFlow
+    ) { tripUiState, dateUiState, planPlaceUiState, selectedBlock ->
         PlanUiState(
             trips = tripUiState.trips,
             selectedTrip = tripUiState.selectedTrip,
             places = planPlaceUiState.places,
             blocks = planPlaceUiState.blocks,
             blockUiModels = planPlaceUiState.blockUiModels,
-            date = dateUiState
+            date = dateUiState,
+            updatedBlock = selectedBlock
         )
     }.onStart {
         tripRepository.getSimpleTrips()
@@ -135,7 +139,7 @@ class PlanViewModel @Inject constructor(
 
             is PlanAction.BlockClick -> {
                 val targetBlock = uiState.value.blockUiModels[action.id] ?: return
-                _event.trySend(element = PlanEvent.ShowPlaceEditDialog(targetBlock))
+                selectedBlockFlow.update { targetBlock }
             }
 
             PlanAction.AddDay -> {
@@ -247,6 +251,18 @@ class PlanViewModel @Inject constructor(
             PlanAction.ShowCalendarClick -> {
                 _event.trySend(element = PlanEvent.ShowCalendarDialog)
             }
+
+            PlanAction.PlanEditCancelClick -> {
+                selectedBlockFlow.update { null }
+            }
+
+            is PlanAction.PlanEditConfirmClick -> {
+                updatePlan(
+                    id = action.id,
+                    startDateTime = action.startDateTime,
+                    endDateTime = action.endDateTime
+                )
+            }
         }
     }
 
@@ -259,7 +275,8 @@ class PlanViewModel @Inject constructor(
                     val originEndAt = target?.endDateTime
 
                     val startAtDate = date.atStartOfDay().plusDays((block.day - 1).toLong())
-                    val startAt = startAtDate.plusMinutes((block.startMinute % MINUTES_PER_DAY).toLong())
+                    val startAt =
+                        startAtDate.plusMinutes((block.startMinute % MINUTES_PER_DAY).toLong())
                     val endAtDate = date.atStartOfDay().plusDays((block.day - 1).toLong())
                     val endAt = endAtDate.plusMinutes((block.endMinute % MINUTES_PER_DAY).toLong())
 
@@ -301,6 +318,23 @@ class PlanViewModel @Inject constructor(
                     visibility = Visibility.PRIVATE
                 ).onSuccess {
                     pendingUpdates.remove(trip.id)
+                }
+            }
+        }
+    }
+
+    private fun updatePlan(id: String, startDateTime: LocalDateTime, endDateTime: LocalDateTime) {
+        timeBlocksFlow.update {
+            it.map { block ->
+                if (block.id == id) {
+                    val duration = ChronoUnit.MINUTES.between(startDateTime, endDateTime).toInt()
+                    val startMinute = ChronoUnit.HOURS.between(
+                        startDateTime.withHour(0).withMinute(0),
+                        startDateTime
+                    ).toInt()
+                    block.copy(startMinute = startMinute, durationMinute = duration)
+                } else {
+                    block
                 }
             }
         }
