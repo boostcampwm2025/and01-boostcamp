@@ -86,8 +86,16 @@ fun PlanEditDialog(
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var startTime by remember { mutableStateOf(value = defaultStartTime) }
-    var endTime by remember { mutableStateOf(value = defaultEndTime) }
+    var startTime by remember {
+        mutableStateOf(
+            value = defaultStartTime.withMinute(defaultStartTime.minute - defaultStartTime.minute % MINUTE_STEP)
+        )
+    }
+    var endTime by remember {
+        mutableStateOf(
+            value = defaultEndTime.withMinute(defaultEndTime.minute - defaultEndTime.minute % MINUTE_STEP)
+        )
+    }
     var selectedTime by remember { mutableStateOf(value = PlanTimeType.START) }
 
     DefaultDialog(
@@ -141,7 +149,16 @@ fun PlanEditDialog(
         TimeSpinner(
             time = if (selectedTime == PlanTimeType.START) startTime else endTime,
             onTimeChange = {
-                if (selectedTime == PlanTimeType.START) startTime = it else endTime = it
+                if (selectedTime == PlanTimeType.START) {
+                    if (!startTime.isBefore(endTime)) {
+                        startTime = it
+
+                    }
+                } else {
+                    if (endTime.isBefore(startTime)) {
+                        endTime = it
+                    }
+                }
             }
         )
     }
@@ -155,13 +172,16 @@ private fun TimeSpinner(
 ) {
     val lastestTime by rememberUpdatedState(time)
     val amPmList = stringArrayResource(R.array.plan_edit_dialog_am_pm).toList()
-    val amPm = remember{ listOf(EMPTY_VALUE.toString()) + amPmList + listOf(EMPTY_VALUE.toString()) }
-    val hours = remember{ listOf(EMPTY_VALUE) + (0..11).plus(EMPTY_VALUE).toImmutableList() }
-    val minutes = remember{ (EMPTY_VALUE..5).plus(EMPTY_VALUE).map { it * 10 }.toImmutableList() }
-    val firstIndex = remember{ if (time.hour > AM_PM_THRESHOLD) PM_IDX else AM_IDX }
+    val amPm =
+        remember { listOf(EMPTY_VALUE.toString()) + amPmList + listOf(EMPTY_VALUE.toString()) }
+    val hours = remember { listOf(EMPTY_VALUE) + (0..11).plus(EMPTY_VALUE).toImmutableList() }
+    val minutes = remember { (EMPTY_VALUE..5).plus(EMPTY_VALUE).map { it * 10 }.toImmutableList() }
+    val firstIndex = remember { if (time.hour > AM_PM_THRESHOLD) PM_IDX else AM_IDX }
     val amPmScrollState = rememberLazyListState(initialFirstVisibleItemIndex = firstIndex)
-    val hourScrollState = rememberLazyListState(initialFirstVisibleItemIndex = hours.indexOf(time.hour % AM_PM_THRESHOLD))
-    val minuteScrollState = rememberLazyListState(initialFirstVisibleItemIndex = minutes.indexOf(time.minute - time.minute % MINUTE_STEP))
+    val hourScrollState =
+        rememberLazyListState(initialFirstVisibleItemIndex = hours.indexOf(time.hour % AM_PM_THRESHOLD))
+    val minuteScrollState =
+        rememberLazyListState(initialFirstVisibleItemIndex = minutes.indexOf(time.minute - time.minute % MINUTE_STEP))
     val density = LocalDensity.current
     val centerOffset = (SPINNER_MAX_HEIGHT - SPINNER_ITEM_HEIGHT) / 2
     val centerOffsetPx = centerOffset.toPx(density).toInt()
@@ -182,7 +202,8 @@ private fun TimeSpinner(
             .filter { !it }
             .collect {
                 val layoutInfo = hourScrollState.layoutInfo
-                val viewportCenter = (layoutInfo.viewportStartOffset + layoutInfo.viewportEndOffset) / 2
+                val viewportCenter =
+                    (layoutInfo.viewportStartOffset + layoutInfo.viewportEndOffset) / 2
 
                 val closestItem = layoutInfo.visibleItemsInfo.filter { it.key != EMPTY_VALUE }
                     .minByOrNull { item ->
@@ -198,7 +219,8 @@ private fun TimeSpinner(
 
                 val selectedHour = hours[closestItem.index]
                 if (selectedHour != EMPTY_VALUE) {
-                    val newTime = if (lastestTime.hour > AM_PM_THRESHOLD) lastestTime.withHour(AM_PM_THRESHOLD + selectedHour)
+                    val newTime =
+                        if (lastestTime.hour > AM_PM_THRESHOLD) lastestTime.withHour(AM_PM_THRESHOLD + selectedHour)
                         else lastestTime.withHour(selectedHour)
 
                     onTimeChange(newTime)
@@ -211,12 +233,14 @@ private fun TimeSpinner(
             .filter { !it }
             .collect {
                 val layoutInfo = minuteScrollState.layoutInfo
-                val viewportCenter = (layoutInfo.viewportStartOffset + layoutInfo.viewportEndOffset) / 2
+                val viewportCenter =
+                    (layoutInfo.viewportStartOffset + layoutInfo.viewportEndOffset) / 2
 
-                val closestItem = layoutInfo.visibleItemsInfo.filter { it.key != EMPTY_MINUTE_VALUE }
-                    .minByOrNull { item ->
-                        kotlin.math.abs((item.offset + item.size / 2) - viewportCenter)
-                    } ?: return@collect
+                val closestItem =
+                    layoutInfo.visibleItemsInfo.filter { it.key != EMPTY_MINUTE_VALUE }
+                        .minByOrNull { item ->
+                            kotlin.math.abs((item.offset + item.size / 2) - viewportCenter)
+                        } ?: return@collect
 
                 minuteScrollState.animateScrollToItem(
                     index = closestItem.index,
@@ -237,12 +261,14 @@ private fun TimeSpinner(
             .filter { !it }
             .collect {
                 val layoutInfo = amPmScrollState.layoutInfo
-                val viewportCenter = (layoutInfo.viewportStartOffset + layoutInfo.viewportEndOffset) / 2
+                val viewportCenter =
+                    (layoutInfo.viewportStartOffset + layoutInfo.viewportEndOffset) / 2
 
-                val closestItem = layoutInfo.visibleItemsInfo.filter { it.key != EMPTY_VALUE.toString() }
-                    .minByOrNull { item ->
-                        kotlin.math.abs((item.offset + item.size / 2) - viewportCenter)
-                    } ?: return@collect
+                val closestItem =
+                    layoutInfo.visibleItemsInfo.filter { it.key != EMPTY_VALUE.toString() }
+                        .minByOrNull { item ->
+                            kotlin.math.abs((item.offset + item.size / 2) - viewportCenter)
+                        } ?: return@collect
 
                 amPmScrollState.animateScrollToItem(
                     index = closestItem.index,
@@ -251,8 +277,11 @@ private fun TimeSpinner(
 
                 val selectedAmPm = amPm[closestItem.index]
                 if (selectedAmPm != EMPTY_VALUE.toString()) {
-                    val newTime = if (closestItem.index == AM_IDX) lastestTime.withHour(lastestTime.hour % AM_PM_THRESHOLD)
-                        else if (closestItem.index == PM_IDX && lastestTime.hour <= AM_PM_THRESHOLD) lastestTime.withHour(lastestTime.hour + AM_PM_THRESHOLD)
+                    val newTime =
+                        if (closestItem.index == AM_IDX) lastestTime.withHour(lastestTime.hour % AM_PM_THRESHOLD)
+                        else if (closestItem.index == PM_IDX && lastestTime.hour <= AM_PM_THRESHOLD) lastestTime.withHour(
+                            lastestTime.hour + AM_PM_THRESHOLD
+                        )
                         else lastestTime
 
                     onTimeChange(newTime)
@@ -322,7 +351,9 @@ private fun TimeSpinner(
                         TextButton(
                             onClick = {
                                 val newTime =
-                                    if (lastestTime.hour > AM_PM_THRESHOLD) lastestTime.withHour(AM_PM_THRESHOLD + hour)
+                                    if (lastestTime.hour > AM_PM_THRESHOLD) lastestTime.withHour(
+                                        AM_PM_THRESHOLD + hour
+                                    )
                                     else lastestTime.withHour(hour)
                                 onTimeChange(newTime)
                             }
@@ -363,7 +394,8 @@ private fun TimeSpinner(
                             }
                         ) {
                             Text(
-                                text = minute.toString().padStart(length = MINUTE_LENGTH, padChar = FILL_CHAR),
+                                text = minute.toString()
+                                    .padStart(length = MINUTE_LENGTH, padChar = FILL_CHAR),
                                 color = if (lastestTime.minute == minute) MemoripTheme.colors.onSurface else MemoripTheme.colors.lightGray,
                                 style = if (lastestTime.minute == minute) MemoripTheme.typography.bodyBold16 else MemoripTheme.typography.bodyMedium14
                             )

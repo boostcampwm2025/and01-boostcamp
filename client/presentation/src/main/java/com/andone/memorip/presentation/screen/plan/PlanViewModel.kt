@@ -325,6 +325,7 @@ class PlanViewModel @Inject constructor(
 
     private fun updatePlan(id: String, startDateTime: LocalDateTime, endDateTime: LocalDateTime) {
         timeBlocksFlow.update {
+            // 만약 시간 변경 시 해당 위치에 이미 아이템이 존재한다면 snackbar 띄우고 실패로 되돌리기
             it.map { block ->
                 if (block.id == id) {
                     val duration = ChronoUnit.MINUTES.between(startDateTime, endDateTime).toInt()
