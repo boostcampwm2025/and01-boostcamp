@@ -8,7 +8,7 @@ sealed interface PlaceEditAction {
 
     data object OnLocationClick : PlaceEditAction
 
-    data object OnGroupClick : PlaceEditAction
+    data object OnTripClick : PlaceEditAction
 
     data class OnTitleChange(val title: String) : PlaceEditAction
 

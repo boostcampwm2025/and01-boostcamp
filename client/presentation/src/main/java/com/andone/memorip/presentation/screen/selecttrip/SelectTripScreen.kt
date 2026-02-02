@@ -27,7 +27,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.LoadingIndicatorScreen
 import com.andone.memorip.presentation.component.dialog.MemoripInputDialog
+import com.andone.memorip.presentation.screen.selecttrip.component.SelectTripTopBar
+import com.andone.memorip.presentation.screen.selecttrip.component.TripImageGridCard
 import com.andone.memorip.presentation.screen.selecttrip.model.SelectTripAction
+import com.andone.memorip.presentation.screen.selecttrip.model.SelectTripEvent
 import com.andone.memorip.presentation.screen.selecttrip.model.SelectTripUiModel
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace.SpaceLarge
@@ -36,7 +39,7 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
 import com.andone.memorip.presentation.util.collectWithLifecycle
 
-private object SelectGroupScreenDimens {
+private object SelectTripScreenDimens {
     val GridMinWidth = 160.dp
 }
 
@@ -158,7 +161,7 @@ private fun SelectGroupContent(
                 .padding(all = MemoripPadding.AppHorizontalPadding)
         ) {
             LazyVerticalGrid(
-                columns = GridCells.Adaptive(minSize = SelectGroupScreenDimens.GridMinWidth),
+                columns = GridCells.Adaptive(minSize = SelectTripScreenDimens.GridMinWidth),
                 modifier = Modifier.fillMaxSize(),
                 horizontalArrangement = Arrangement.spacedBy(SpaceXSmall),
                 verticalArrangement = Arrangement.spacedBy(SpaceLarge)
@@ -192,11 +195,11 @@ private fun SelectGroupContent(
 @Composable
 private fun SelectGroupScreenPreview() {
     MemoripTheme {
-        val dummyGroups = DummyData.groups.map { group ->
-            SelectGroupUiModel(
-                id = group.id,
-                name = group.name,
-                images = group.images,
+        val dummyGroups = DummyData.trips.map { trip ->
+            SelectTripUiModel(
+                id = trip.id,
+                name = trip.name,
+                images = trip.images,
                 isPlaceAdded = false
             )
         }
@@ -206,7 +209,7 @@ private fun SelectGroupScreenPreview() {
             selectedGroupIds = selectedIds,
             initialSelectedGroupIds = emptySet(),
             onAction = {},
-            title = stringResource(R.string.select_group_title)
+            title = stringResource(R.string.select_trip_title)
         )
     }
 }

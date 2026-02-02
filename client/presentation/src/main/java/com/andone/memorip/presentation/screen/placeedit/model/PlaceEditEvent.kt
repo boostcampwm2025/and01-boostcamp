@@ -8,5 +8,5 @@ sealed interface PlaceEditEvent {
 
     data object NavigateToLocation : PlaceEditEvent
 
-    data object NavigateToGroup : PlaceEditEvent
+    data object NavigateToTrip : PlaceEditEvent
 }

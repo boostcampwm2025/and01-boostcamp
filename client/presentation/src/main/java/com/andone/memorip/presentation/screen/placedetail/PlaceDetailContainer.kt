@@ -20,13 +20,13 @@ import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceDetailStep
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceUiModel
 import com.andone.memorip.presentation.screen.placeedit.PlaceEditContainer
-import com.andone.memorip.presentation.screen.selectgroup.SelectGroupScreen
+import com.andone.memorip.presentation.screen.selecttrip.SelectTripScreen
 
 @Composable
 fun PlaceDetailContainer(
     route: PlaceDetail,
     onNavigateBack: () -> Unit,
-    onNavigateGroupList: () -> Unit,
+    onNavigateToTripList: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var currentStep by rememberSaveable { mutableStateOf(PlaceDetailStep.PlaceDetail) }
@@ -53,14 +53,14 @@ fun PlaceDetailContainer(
                 PlaceDetailScreen(
                     route = route,
                     onNavigateBack = onNavigateBack,
-                    onNavigateSelectGroup = {
-                        currentStep = PlaceDetailStep.SelectGroup
+                    onNavigateToSelectTrip = {
+                        currentStep = PlaceDetailStep.SelectTrip
                     },
                     onNavigateToPlaceEdit = {
                         place = it
                         currentStep = PlaceDetailStep.PlaceEdit
                     },
-                    onNavigateGroupList = onNavigateGroupList,
+                    onNavigateToTripList = onNavigateToTripList,
                     modifier = Modifier,
                 )
             }
@@ -72,11 +72,11 @@ fun PlaceDetailContainer(
                 )
             }
 
-            PlaceDetailStep.SelectGroup -> {
-                SelectGroupScreen(
-                    onGroupSelect = { },
+            PlaceDetailStep.SelectTrip -> {
+                SelectTripScreen(
+                    onTripSelect = { },
                     onBackClick = { currentStep = PlaceDetailStep.PlaceDetail },
-                    title = stringResource(R.string.select_group_add_to_my_group_title),
+                    title = stringResource(R.string.select_trip_add_to_my_trip_title),
                     placeId = route.placeId,
                     modifier = modifier
                 )

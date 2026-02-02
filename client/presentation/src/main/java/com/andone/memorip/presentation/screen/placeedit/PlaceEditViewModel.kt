@@ -4,9 +4,9 @@ import android.net.Uri
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import com.andone.memorip.domain.repository.PlaceRepository
-import com.andone.memorip.presentation.model.GroupUiModel
 import com.andone.memorip.presentation.model.LocationUiModel
 import com.andone.memorip.presentation.model.TagUiModel
+import com.andone.memorip.presentation.model.TripUiModel
 import com.andone.memorip.presentation.model.toUiModel
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceUiModel
 import com.andone.memorip.presentation.screen.placeedit.model.PlaceEditAction
@@ -44,7 +44,7 @@ class PlaceEditViewModel @AssistedInject constructor(
                 latitude = place.latitude,
                 longitude = place.longitude
             ),
-            groups = place.groups.map { it.toUiModel() },
+            trips = place.trips.map { it.toUiModel() },
             tags = place.tags,
             isPublic = place.isPublic,
             isLoading = false
@@ -67,8 +67,8 @@ class PlaceEditViewModel @AssistedInject constructor(
                 _event.trySend(PlaceEditEvent.NavigateToLocation)
             }
 
-            PlaceEditAction.OnGroupClick -> {
-                _event.trySend(PlaceEditEvent.NavigateToGroup)
+            PlaceEditAction.OnTripClick -> {
+                _event.trySend(PlaceEditEvent.NavigateToTrip)
             }
 
             is PlaceEditAction.OnTitleChange -> {
@@ -133,8 +133,8 @@ class PlaceEditViewModel @AssistedInject constructor(
 
     }
 
-    fun updateGroup(groups: List<GroupUiModel>) {
-        _uiState.update { it.copy(groups = groups) }
+    fun updateGroup(trips: List<TripUiModel>) {
+        _uiState.update { it.copy(trips = trips) }
     }
 
     fun updateTag(tags: List<TagUiModel>) {

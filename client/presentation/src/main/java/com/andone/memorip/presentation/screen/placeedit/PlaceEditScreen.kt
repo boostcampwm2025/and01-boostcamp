@@ -40,7 +40,7 @@ import com.andone.memorip.presentation.util.collectWithLifecycle
 fun PlaceEditScreen(
     onCategoryClick: () -> Unit,
     onLocationClick: () -> Unit,
-    onGroupClick: () -> Unit,
+    onTripClick: () -> Unit,
     onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PlaceEditViewModel = hiltViewModel()
@@ -53,7 +53,7 @@ fun PlaceEditScreen(
             PlaceEditEvent.NavigateBack -> onNavigateBack()
             PlaceEditEvent.NavigateToCategory -> onCategoryClick()
             PlaceEditEvent.NavigateToLocation -> onLocationClick()
-            PlaceEditEvent.NavigateToGroup -> onGroupClick()
+            PlaceEditEvent.NavigateToTrip -> onTripClick()
         }
     }
 
@@ -83,7 +83,7 @@ private fun PlaceEditScreenContent(
     val placeEditEnable = (uiState.images.isNotEmpty() &&
             uiState.location != null &&
             uiState.title.isNotBlank() &&
-            uiState.groups.isNotEmpty()) &&
+            uiState.trips.isNotEmpty()) &&
             uiState != initUiState
 
     LaunchedEffect(Unit) {
@@ -142,10 +142,10 @@ private fun PlaceEditScreenContent(
             SelectSection(
                 category = uiState.tags,
                 location = uiState.location,
-                groups = uiState.groups,
+                trips = uiState.trips,
                 onCategoryClick = { onAction(PlaceEditAction.OnCategoryClick) },
                 onLocationClick = { onAction(PlaceEditAction.OnLocationClick) },
-                onGroupClick = { onAction(PlaceEditAction.OnGroupClick) },
+                onTripClick = { onAction(PlaceEditAction.OnTripClick) },
             )
 
             PublicCheckSection(

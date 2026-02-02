@@ -15,6 +15,6 @@ data class PlaceUiModel(
     val trips: ImmutableList<TripCompactUiModel> = persistentListOf(),
     val content: String = "",
     val isMine: Boolean = false,
-    val isInMyGroup: Boolean = false,
+    val isInMyTrip: Boolean = false,
     val isPublic: Boolean = true
 )

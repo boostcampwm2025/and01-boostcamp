@@ -17,8 +17,8 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceUiModel
 import com.andone.memorip.presentation.screen.placeedit.model.PlaceEditStep
 import com.andone.memorip.presentation.screen.selectcategory.SelectCategoryScreen
-import com.andone.memorip.presentation.screen.selectgroup.SelectGroupScreen
-import com.andone.memorip.presentation.screen.selectgroup.model.toGroupUiModel
+import com.andone.memorip.presentation.screen.selecttrip.SelectTripScreen
+import com.andone.memorip.presentation.screen.selecttrip.model.toTripUiModel
 
 @Composable
 fun PlaceEditContainer(
@@ -54,7 +54,7 @@ fun PlaceEditContainer(
                 PlaceEditScreen(
                     onCategoryClick = { currentStep = PlaceEditStep.SelectCategory },
                     onLocationClick = { currentStep = PlaceEditStep.SelectLocation },
-                    onGroupClick = { currentStep = PlaceEditStep.SelectGroup },
+                    onTripClick = { currentStep = PlaceEditStep.SelectGroup },
                     onNavigateBack = onNavigateBack,
                     viewModel = viewModel
                 )
@@ -75,9 +75,9 @@ fun PlaceEditContainer(
             }
 
             PlaceEditStep.SelectGroup -> {
-                SelectGroupScreen(
-                    onGroupSelect = { groups ->
-                        viewModel.updateGroup(groups = groups.map { it.toGroupUiModel() })
+                SelectTripScreen(
+                    onTripSelect = { trips ->
+                        viewModel.updateGroup(trips = trips.map { it.toTripUiModel() })
                         currentStep = PlaceEditStep.PlaceEdit
                     },
                     onBackClick = { currentStep = PlaceEditStep.PlaceEdit },

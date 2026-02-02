@@ -227,10 +227,10 @@ private fun PlaceDetailContent(
         topBar = {
             PlaceDetailTopBar(
                 isMine = place.isMine,
-                isInMyGroup = place.isInMyGroup,
+                isInMyTrip = place.isInMyTrip,
                 showMoreMenu = showMoreMenu,
                 onNavigationIconClick = { onAction(PlaceDetailAction.OnBackClick) },
-                onActionIconClick = { onAction(PlaceDetailAction.OnAddToGroupClick) },
+                onActionIconClick = { onAction(PlaceDetailAction.OnAddToTripClick) },
                 onMoreClick = { onAction(PlaceDetailAction.OnMoreClick) },
                 onMoreMenuDismiss = { onAction(PlaceDetailAction.OnMoreMenuDismiss) },
                 onEditClick = { onAction(PlaceDetailAction.OnEditClick) },
