@@ -39,6 +39,7 @@ import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.dialog.DefaultDialog
 import com.andone.memorip.presentation.screen.plan.component.PlanEditDialogConstant.AM_IDX
 import com.andone.memorip.presentation.screen.plan.component.PlanEditDialogConstant.AM_PM_THRESHOLD
+import com.andone.memorip.presentation.screen.plan.component.PlanEditDialogConstant.DECO_ALPHA
 import com.andone.memorip.presentation.screen.plan.component.PlanEditDialogConstant.EMPTY_MINUTE_VALUE
 import com.andone.memorip.presentation.screen.plan.component.PlanEditDialogConstant.EMPTY_VALUE
 import com.andone.memorip.presentation.screen.plan.component.PlanEditDialogConstant.FILL_CHAR
@@ -53,7 +54,6 @@ import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.toPx
 import com.andone.memorip.presentation.util.toTimeString
-import com.google.common.collect.Multimaps.index
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
@@ -74,6 +74,7 @@ private object PlanEditDialogConstant {
     const val AM_IDX = 1
     const val PM_IDX = 2
     const val MINUTE_STEP = 10
+    const val DECO_ALPHA = 0.5f
 }
 
 enum class PlanTimeType {
@@ -92,7 +93,7 @@ fun PlanEditDialog(
     var startTime by remember { mutableStateOf(value = defaultStartTime) }
     var endTime by remember { mutableStateOf(value = defaultEndTime) }
     var selectedTime by remember { mutableStateOf(value = PlanTimeType.START) }
-    var flag by remember{ mutableStateOf(value = false) }
+    var flag by remember { mutableStateOf(value = false) }
 
     DefaultDialog(
         title = stringResource(R.string.plan_edit_dialog_title),
@@ -144,19 +145,37 @@ fun PlanEditDialog(
 
         HorizontalDivider(thickness = MemoripLineWidth.Thin, color = MemoripTheme.colors.lightGray)
 
-        TimeSpinner(
-            flag = flag,
-            time = if (selectedTime == PlanTimeType.START) startTime else endTime,
-            onTimeChange = {
-                if (selectedTime == PlanTimeType.START) {
-                    startTime = it
-                    if (startTime.isAfter(endTime)) { endTime = it }
-                } else {
-                    endTime = it
-                    if (endTime.isBefore(startTime)) { startTime = it }
+        Box(
+            contentAlignment = Alignment.Center
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(height = SPINNER_ITEM_HEIGHT)
+                    .background(
+                        color = MemoripTheme.colors.lightGray.copy(alpha = DECO_ALPHA),
+                        shape = MemoripTheme.shapes.roundedMedium
+                    ),
+            )
+
+            TimeSpinner(
+                flag = flag,
+                time = if (selectedTime == PlanTimeType.START) startTime else endTime,
+                onTimeChange = {
+                    if (selectedTime == PlanTimeType.START) {
+                        startTime = it
+                        if (startTime.isAfter(endTime)) {
+                            endTime = it
+                        }
+                    } else {
+                        endTime = it
+                        if (endTime.isBefore(startTime)) {
+                            startTime = it
+                        }
+                    }
                 }
-            }
-        )
+            )
+        }
     }
 }
 
@@ -277,7 +296,9 @@ private fun TimeSpinner(
                 if (selectedAmPm != EMPTY_VALUE.toString()) {
                     val newTime =
                         if (closestItem.index == AM_IDX) lastestTime.withHour(lastestTime.hour % AM_PM_THRESHOLD)
-                        else if (closestItem.index == PM_IDX && lastestTime.hour < AM_PM_THRESHOLD) lastestTime.withHour(lastestTime.hour + AM_PM_THRESHOLD)
+                        else if (closestItem.index == PM_IDX && lastestTime.hour < AM_PM_THRESHOLD) lastestTime.withHour(
+                            lastestTime.hour + AM_PM_THRESHOLD
+                        )
                         else lastestTime
 
                     onTimeChange(newTime)
@@ -361,7 +382,8 @@ private fun TimeSpinner(
                                     )
                                 }
 
-                                val newTime = if (lastestTime.hour > AM_PM_THRESHOLD) lastestTime.withHour(AM_PM_THRESHOLD + hour)
+                                val newTime =
+                                    if (lastestTime.hour > AM_PM_THRESHOLD) lastestTime.withHour(AM_PM_THRESHOLD + hour)
                                     else lastestTime.withHour(hour)
                                 onTimeChange(newTime)
                             }
