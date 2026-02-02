@@ -35,6 +35,8 @@
 | [@GwonDongHyeon21](https://github.com/GwonDongHyeon21) | [@uselessnaming](https://github.com/uselessnaming) | [@HJunng](https://github.com/HJunng) | [@hoyadong1](https://github.com/hoyadong1) |
 
 ## 기술 스택
+
+### 📱 Android
 ![Android](https://img.shields.io/badge/Android-3DDC84?logo=android&logoColor=white)
 ![Kotlin](https://img.shields.io/badge/Kotlin-7F52FF?logo=kotlin&logoColor=white)
 ![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-4285F4?logo=android&logoColor=white)
@@ -46,3 +48,15 @@
 
 ![Firebase](https://img.shields.io/badge/Firebase%20App%20Distribution-FFCA28?logo=firebase&logoColor=black)
 ![Naver Map](https://img.shields.io/badge/Naver%20Map-03C75A?logo=naver&logoColor=white)
+
+### 💾 Server
+![Kotlin](https://img.shields.io/badge/Kotlin-7F52FF?logo=kotlin&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?logo=springboot&logoColor=white)
+![Spring Data JPA](https://img.shields.io/badge/Spring_Data_JPA-6DB33F?logo=jpa&logoColor=white)
+![Hibernate](https://img.shields.io/badge/Hibernate-59666C?logo=hibernate&logoColor=white)
+![Spring Security](https://img.shields.io/badge/Spring_Security-6DB33F?logo=springsecurity&logoColor=white)
+
+![Naver NCloud](https://img.shields.io/badge/Naver_NCloud-03C75A?logo=naver&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)
+
