@@ -33,7 +33,7 @@
 |:---:|:---:|:---:|:---:|
 | <img src="https://github.com/GwonDongHyeon21.png" width="150" height="150" style="border-radius:100%" > | <img src="https://github.com/uselessnaming.png" width="150" height="150" style="border-radius:100%" > | <img src="https://github.com/HJunng.png" width="150" height="150" style="border-radius:100%" > | <img src="https://github.com/hoyadong1.png" width="150" height="150" style="border-radius:100%" > |
 | [@GwonDongHyeon21](https://github.com/GwonDongHyeon21) | [@uselessnaming](https://github.com/uselessnaming) | [@HJunng](https://github.com/HJunng) | [@hoyadong1](https://github.com/hoyadong1) |
-|내용|내용|내용|내용|
+|내용|내용|내용|[시간표](https://github.com/boostcampwm2025/and01-boostcamp/wiki/%EA%B3%84%ED%9A%8D-%ED%99%94%EB%A9%B4-%EA%B5%AC%EC%A1%B0-%EC%84%A4%EA%B3%84), [홈화면](https://github.com/boostcampwm2025/and01-boostcamp/wiki/%ED%99%88-%ED%99%94%EB%A9%B4-%EA%B5%AC%ED%98%84%EA%B3%BC-%EC%84%A4%EA%B3%84)|
 
 ## 기술 스택
 
