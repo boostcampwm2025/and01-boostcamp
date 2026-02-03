@@ -1,5 +1,8 @@
 package com.andone.memorip.presentation.screen.placedetail
 
+import android.annotation.SuppressLint
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.LocalOverscrollFactory
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -41,7 +44,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.fontscaling.MathUtils.lerp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
@@ -78,8 +80,8 @@ import com.andone.memorip.presentation.util.toDp
 import com.andone.memorip.presentation.util.toPx
 
 private object PlaceDetailScreenConstants {
-    const val MIN_HEIGHT_RATE = 0.5f
-    const val MAX_HEIGHT_RATE = 0.5f
+    const val MIN_HEIGHT_RATE = 0.7f
+    const val MAX_HEIGHT_RATE = 1f
     const val TOP_ALPHA = 0f
     const val MIDDLE_ALPHA = 0.8f
     const val BOTTOM_ALPHA = 1f
@@ -199,6 +201,7 @@ fun PlaceDetailScreen(
     }
 }
 
+@SuppressLint("FrequentlyChangingValue")
 @Composable
 private fun PlaceDetailContent(
     place: PlaceUiModel,
@@ -246,10 +249,10 @@ private fun PlaceDetailContent(
                 item {
                     val scrollOffset = lazyListState.firstVisibleItemScrollOffset.toFloat()
 
-                    val heightFraction = lerp(
+                    val heightFraction = heightLerp(
                         start = MAX_HEIGHT_RATE,
                         stop = MIN_HEIGHT_RATE,
-                        amount = (scrollOffset / SCROLL_SPEED).coerceIn(0f, 1f)
+                        fraction = (scrollOffset / SCROLL_SPEED).coerceIn(0f, 1f)
                     )
 
                     Box(
@@ -282,8 +285,12 @@ private fun PlaceDetailContent(
                                     brush = Brush.verticalGradient(
                                         colorStops = arrayOf(
                                             TOP_RATIO to MemoripTheme.colors.background.copy(alpha = TOP_ALPHA),
-                                            MIDDLE_RATIO to MemoripTheme.colors.background.copy(alpha = MIDDLE_ALPHA),
-                                            BOTTOM_RATIO to MemoripTheme.colors.background.copy(alpha = BOTTOM_ALPHA)
+                                            MIDDLE_RATIO to MemoripTheme.colors.background.copy(
+                                                alpha = MIDDLE_ALPHA
+                                            ),
+                                            BOTTOM_RATIO to MemoripTheme.colors.background.copy(
+                                                alpha = BOTTOM_ALPHA
+                                            )
                                         )
                                     )
                                 )
@@ -350,6 +357,10 @@ private fun PlaceDetailContent(
             }
         }
     }
+}
+
+fun heightLerp(start: Float, stop: Float, fraction: Float): Float {
+    return start + fraction * (stop - start)
 }
 
 @Preview(showBackground = true)
