@@ -14,6 +14,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceUiModel
 import com.andone.memorip.presentation.screen.placeedit.model.PlaceEditStep
 import com.andone.memorip.presentation.screen.selectcategory.SelectCategoryScreen
@@ -29,10 +30,12 @@ fun PlaceEditContainer(
     var currentStep by rememberSaveable { mutableStateOf(PlaceEditStep.PlaceEdit) }
 
     val viewModel = hiltViewModel<PlaceEditViewModel, PlaceEditViewModel.Factory>(
+        key = place.hashCode().toString(),
         creationCallback = { factory ->
             factory.create(place)
         }
     )
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     BackHandler(enabled = currentStep != PlaceEditStep.PlaceEdit) {
         currentStep = PlaceEditStep.PlaceEdit
@@ -64,16 +67,6 @@ fun PlaceEditContainer(
 
             }
 
-            PlaceEditStep.SelectCategory -> {
-                SelectCategoryScreen(
-                    onCategorySelect = { tags ->
-                        viewModel.updateTag(tags = tags)
-                        currentStep = PlaceEditStep.PlaceEdit
-                    },
-                    onBackClick = { currentStep = PlaceEditStep.PlaceEdit },
-                )
-            }
-
             PlaceEditStep.SelectTrip -> {
                 SelectTripScreen(
                     onTripSelect = { trips ->
@@ -81,6 +74,18 @@ fun PlaceEditContainer(
                         currentStep = PlaceEditStep.PlaceEdit
                     },
                     onBackClick = { currentStep = PlaceEditStep.PlaceEdit },
+                    initialSelectedTripIds = uiState.trips.map { it.id }
+                )
+            }
+
+            PlaceEditStep.SelectCategory -> {
+                SelectCategoryScreen(
+                    onCategorySelect = { tags ->
+                        viewModel.updateTag(tags = tags)
+                        currentStep = PlaceEditStep.PlaceEdit
+                    },
+                    onBackClick = { currentStep = PlaceEditStep.PlaceEdit },
+                    selectedTags = uiState.tags
                 )
             }
         }

@@ -124,7 +124,7 @@ class PlaceService(
             if (tags.size != request.tags.size) {
                 throw BusinessException(code = CommonExceptionCode.TAG_NOT_FOUND)
             }
-            
+
             val placeTags = tags.map { tag ->
                 PlaceTag.create(place = savedPlace, tag = tag)
             }
@@ -182,12 +182,13 @@ class PlaceService(
 
         // 태그 업데이트 (전체 치환)
         placeTagRepository.deleteByPlaceId(placeId)
+        placeTagRepository.flush()
         if (!request.tags.isNullOrEmpty()) {
             val tags = tagRepository.findAllById(request.tags)
             if (tags.size != request.tags.size) {
                 throw BusinessException(code = CommonExceptionCode.TAG_NOT_FOUND)
             }
-            
+
             val placeTags = tags.map { tag ->
                 PlaceTag.create(place = place, tag = tag)
             }

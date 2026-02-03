@@ -118,12 +118,6 @@ private fun PlaceCreateScreenContent(
         onAction(PlaceCreateAction.OnImageSelect(uiState.images.first()))
     }
 
-    LaunchedEffect(uiState.images) {
-        if (uiState.images.isEmpty()) {
-            onAction(PlaceCreateAction.OnLastImageRemove)
-        }
-    }
-
     DisposableEffect(Unit) {
         onDispose {
             onAction(PlaceCreateAction.OnScrollPositionChange(scrollState.value))
@@ -159,10 +153,11 @@ private fun PlaceCreateScreenContent(
                 content = uiState.content,
                 onTitleChange = { onAction(PlaceCreateAction.OnTitleChange(it)) },
                 onContentChange = { onAction(PlaceCreateAction.OnContentChange(it)) },
+                contentErrorLabel = uiState.contentErrorLabel
             )
 
             SelectSection(
-                category = uiState.category,
+                category = uiState.tags,
                 location = uiState.location,
                 trips = uiState.trips,
                 onCategoryClick = { onAction(PlaceCreateAction.OnCategoryClick) },
@@ -234,7 +229,8 @@ fun ContentSection(
     content: String,
     onTitleChange: (String) -> Unit,
     onContentChange: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    contentErrorLabel: String? = null,
 ) {
     Column(modifier = modifier) {
         MemoripInputBox(
@@ -255,6 +251,15 @@ fun ContentSection(
             placeholder = stringResource(R.string.place_create_content_input),
             onValueChange = onContentChange,
         )
+        if (contentErrorLabel != null) {
+            Text(
+                text = stringResource(
+                    R.string.place_create_snackbar_inappropriate_content_error,
+                    contentErrorLabel
+                ),
+                color = MemoripTheme.colors.error,
+            )
+        }
     }
 }
 
@@ -269,8 +274,8 @@ fun SelectSection(
     onTripClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val locationValue = location?.name
-        ?.ifBlank { null } ?: stringResource(R.string.place_create_location_placeholder)
+    val locationValue = location?.name?.ifBlank { null } ?: location?.address
+    ?: stringResource(R.string.place_create_location_placeholder)
     val tripValue = trips
         .joinToString(stringResource(R.string.place_create_space)) { it.name }
         .ifEmpty { stringResource(R.string.place_create_trip_placeholder) }

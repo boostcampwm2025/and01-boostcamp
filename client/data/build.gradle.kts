@@ -83,6 +83,9 @@ dependencies {
     // Auth
     implementation(platform(libs.firebase))
     implementation(libs.firebase.auth)
+
+    // AI
+    implementation(libs.tensorflow.lite)
 }
 
 fun getLocalProperty(propertyKey: String): String {

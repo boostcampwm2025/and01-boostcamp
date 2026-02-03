@@ -40,7 +40,7 @@ class Group protected constructor(
     var owner: User = owner
         internal set
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 20)
     var title: String = title
         internal set
 

@@ -7,6 +7,9 @@
     <string name="date_time_format">%1$d월 %2$d일 %3$s %4$d:%5$02d</string>
     <string name="time_format">%1$s %2$d:%3$02d</string>
     <string name="range_format">%1$s - %2$s</string>
+    <string name="d_day_minus_format">D-%1$d</string>
+    <string name="d_day">D-Day</string>
+    <string name="d_day_plus_format">D+%1$d</string>
 
     <!-- Dialog -->
     <string name="dialog_cancel_message">취소</string>
@@ -25,6 +28,7 @@
         <item>오후</item>
     </string-array>
     <string name="plan_edit_dialog_divider">:</string>
+    <string name="input_dialog_char_count_format">(%1$d/%2$d)</string>
 
     <!-- Loading Indicator -->
     <string name="loading_indicator_message">로딩 중...</string>
@@ -64,6 +68,9 @@
     <string name="select_trip_dialog_title">여행 추가</string>
     <string name="select_trip_dialog_label">이름</string>
     <string name="select_trip_dialog_hint">여행 이름</string>
+    <string name="select_trip_dialog_group_add_title">그룹 추가</string>
+    <string name="select_trip_dialog_preview_hint">input</string>
+    <string name="select_trip_dialog_preview_label">이름</string>
 
     <!-- SelectLocationScreen -->
     <string name="select_location_title">위치 선택</string>
@@ -77,6 +84,12 @@
     <string name="trip_detail_menu_button_content_description">메뉴</string>
     <string name="trip_detail_search_button_content_description">검색</string>
     <string name="trip_detail_place_list_title">장소 목록</string>
+    <string name="trip_detail_place_list_count_format">장소 목록 %1$d</string>
+    <string name="trip_detail_schedule_upcoming">다가오는 일정</string>
+    <string name="trip_detail_schedule_trip_format">%1$s 여행</string>
+    <string name="trip_detail_view_list_description">리스트 뷰</string>
+    <string name="trip_detail_view_grid_description">그리드 뷰</string>
+    <string name="trip_detail_map_tab_preview">지도탭 프리뷰</string>
 
     <!-- PlaceCreateScreen -->
     <string name="place_create_title">장소 추가</string>
@@ -101,6 +114,8 @@
     <string name="place_create_button_text">장소 추가하기</string>
     <string name="place_create_trip_placeholder">여행을 선택하세요</string>
     <string name="place_create_tag_placeholder">태그를 선택하세요</string>
+    <string name="place_create_snackbar_inappropriate_content_error">%1$s 관련 부적절한 표현이 포함되어 수정이 필요합니다</string>
+
 
     <!-- MainBottomBar -->
     <string name="main_bottom_bar_place_list">장소</string>
@@ -177,6 +192,7 @@
     <string name="snackbar_unknown_error">오류가 발생했습니다. 다시 시도해주세요</string>
     <string name="snackbar_plan_days_validation_error">날짜는 최대 1달까지 지정 가능합니다</string>
     <string name="snackbar_plan_invalid_error">다른 계획과 중복 배치는 지원하지 않습니다</string>
+    <string name="snackbar_image_count_error">이미지는 최소 1개 이상 있어야 합니다.</string>
     <string name="snackbar_plan_date_invalid_error">시작 날짜와 종료 날짜는 동일할 수 없습니다</string>
     <string name="snackbar_success">성공적으로 완료되었습니다</string>
 
@@ -212,8 +228,8 @@
     <string name="login_delete_account">계정 삭제</string>
     <string name="login_new_account">회원가입</string>
     <string name="login_login">로그인</string>
-    <string name="login_email">이메일</string>
-    <string name="login_password">비밀번호</string>
+    <string name="login_email">이메일(올바른 이메일 형식)</string>
+    <string name="login_password">비밀번호(영문 + 숫자)</string>
     <string name="login_password_confirm">비밀번호 확인</string>
     <string name="login_password_not_match">비밀번호가 일치하지 않습니다.</string>
     <string name="login_email_login">이메일로 로그인</string>

@@ -119,7 +119,7 @@ fun PlaceDetailScreen(
             }
 
             PlaceDetailEvent.NavigateToSelectTrip -> {
-                onNavigateToTripList()
+                onNavigateToSelectTrip()
             }
 
             PlaceDetailEvent.NavigateToPlaceEdit -> {

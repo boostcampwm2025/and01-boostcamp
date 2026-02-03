@@ -21,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.presentation.R
@@ -35,12 +34,18 @@ import com.andone.memorip.presentation.screen.selecttrip.model.SelectTripUiModel
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace.SpaceLarge
 import com.andone.memorip.presentation.theme.MemoripSpace.SpaceXSmall
+import androidx.compose.ui.unit.dp
+import com.andone.memorip.presentation.screen.selecttrip.SelectTripScreenConstant.INPUT_DIALOG_MAX_LENGTH
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
 import com.andone.memorip.presentation.util.collectWithLifecycle
 
-private object SelectTripScreenDimens {
+private object SelectGroupScreenDimen {
     val GridMinWidth = 160.dp
+}
+
+private object SelectTripScreenConstant {
+    const val INPUT_DIALOG_MAX_LENGTH = 20
 }
 
 @Composable
@@ -55,6 +60,11 @@ fun SelectTripScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var showDialog by remember { mutableStateOf(false) }
+    var dialogInputValue by remember { mutableStateOf("") }
+
+    LaunchedEffect(showDialog) {
+        if (showDialog) dialogInputValue = ""
+    }
 
     LaunchedEffect(placeId, initialSelectedTripIds) {
         viewModel.onAction(
@@ -108,6 +118,13 @@ fun SelectTripScreen(
 
     if (showDialog) {
         MemoripInputDialog(
+            value = dialogInputValue,
+            onValueChange = { newValue ->
+                val filtered = newValue.replace("\n", "").let {
+                    if (it.length > INPUT_DIALOG_MAX_LENGTH) it.take(n = INPUT_DIALOG_MAX_LENGTH) else it
+                }
+                dialogInputValue = filtered
+            },
             title = stringResource(R.string.select_trip_dialog_title),
             onConfirmClick = { tripName ->
                 viewModel.onAction(action = SelectTripAction.OnDialogConfirmClick(tripName))
@@ -115,7 +132,8 @@ fun SelectTripScreen(
             onCancelClick = { viewModel.onAction(action = SelectTripAction.OnDialogCancelClick) },
             onDismissRequest = { viewModel.onAction(action = SelectTripAction.OnDialogCancelClick) },
             hint = stringResource(R.string.select_trip_dialog_hint),
-            label = stringResource(R.string.select_trip_dialog_label)
+            label = stringResource(R.string.select_trip_dialog_label),
+            maxLength = INPUT_DIALOG_MAX_LENGTH
         )
     }
 }
@@ -161,7 +179,7 @@ private fun SelectTripContent(
                 .padding(all = MemoripPadding.AppHorizontalPadding)
         ) {
             LazyVerticalGrid(
-                columns = GridCells.Adaptive(minSize = SelectTripScreenDimens.GridMinWidth),
+                columns = GridCells.Adaptive(minSize = SelectGroupScreenDimen.GridMinWidth),
                 modifier = Modifier.fillMaxSize(),
                 horizontalArrangement = Arrangement.spacedBy(SpaceXSmall),
                 verticalArrangement = Arrangement.spacedBy(SpaceLarge)
