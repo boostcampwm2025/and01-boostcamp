@@ -95,9 +95,9 @@ class TripRemoteDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun deletePlaceTime(tripPlaceId: String): Result<Unit> {
+    override suspend fun deleteGroupPlace(tripPlaceId: String): Result<Unit> {
         return apiCall {
-            tripService.deletePlaceTime(tripPlaceId = tripPlaceId)
+            tripService.deleteGroupPlace(tripPlaceId = tripPlaceId)
         }
     }
 

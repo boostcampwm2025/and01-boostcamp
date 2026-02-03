@@ -84,7 +84,7 @@ interface TripService {
     ): ApiResult<Unit>
 
     @DELETE("/api/groups/places/{groupPlaceId}")
-    suspend fun deletePlaceTime(
+    suspend fun deleteGroupPlace(
         @Path("groupPlaceId") tripPlaceId: String
     ): ApiResult<Unit>
 
