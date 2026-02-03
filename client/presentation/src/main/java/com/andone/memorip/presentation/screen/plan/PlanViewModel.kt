@@ -485,30 +485,6 @@ class PlanViewModel @Inject constructor(
                 }
             }
         }
-//        blockUiModelsFlow.update { blocks ->
-//            val target = uiState.value.places.find{ it.id == id } ?: return@update blocks
-//            when(target) {
-//                is Place -> {
-//                    val timeBlock = target.toTimeBlock(uiState.value.date.startDay!!.atStartOfDay()) ?: return@update blocks
-//                    val maxStart = uiState.value.date.totalMinutes - timeBlock.durationMinute
-//                    val start = newStartMinute.coerceIn(0, maxStart)
-//
-//                    val day = newStartMinute / MINUTES_PER_DAY
-//                    val startMinute = start - (day * MINUTES_PER_DAY)
-//                    val hour =  startMinute / MINUTES_PER_HOUR
-//                    val minute = startMinute % MINUTES_PER_HOUR
-//                    val startDateTime = uiState.value.date.startDay!!.atStartOfDay().plusDays(day.toLong()).plusHours(hour.toLong()).plusMinutes(minute.toLong())
-//
-//                    val endTotalMinute = newStartMinute + timeBlock.durationMinute
-//                    val endDay = endTotalMinute / MINUTES_PER_DAY
-//                    val endHour = endTotalMinute / MINUTES_PER_HOUR
-//                    val endMinute = startMinute % MINUTES_PER_DAY
-//                    val endDateTime = uiState.value.date.startDay!!.atStartOfDay().plusDays(endDay.toLong()).plusHours(endHour.toLong()).plusMinutes(endMinute.toLong())
-//
-//                    blocks + (id to target.copy(startDateTime = startDateTime, endDateTime = endDateTime))
-//                }
-//            }
-//        }
     }
 
     private fun deleteBlock(id: String) {
