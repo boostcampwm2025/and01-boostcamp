@@ -47,6 +47,14 @@ class PlaceRepositoryImpl @Inject constructor(
             .map { it.toDomain() }
     }
 
+    override suspend fun updatePlace(
+        placeId: String,
+        place: PlaceCreateUpdate
+    ): Result<PlaceDetail> {
+        return placeRemoteDataSource.updatePlace(placeId, place.toDomain())
+            .map { it.toDomain() }
+    }
+
     override suspend fun deletePlace(placeId: String): Result<Unit> {
         return placeRemoteDataSource.deletePlace(placeId)
     }

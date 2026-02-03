@@ -49,6 +49,10 @@ class SelectCategoryViewModel @Inject constructor(
 
     fun onAction(action: SelectCategoryAction) {
         when (action) {
+            is SelectCategoryAction.OnInitialTags -> {
+                _uiState.update { it.copy(checkedCategories = action.tags) }
+            }
+
             SelectCategoryAction.OnBackClick -> {
                 _event.trySend(element = SelectCategoryEvent.NavigateBack)
             }

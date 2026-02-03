@@ -13,5 +13,6 @@ data class PlanUiState(
     val blocks: List<TimeBlock> = emptyList(),
     val blockUiModels: Map<String, PlanBlockUiModel> = emptyMap(),
     val date: DateUiModel = DateUiModel(),
+    val updatedBlock: PlanBlockUiModel? = null,
     val isLoading: Boolean = false
 )

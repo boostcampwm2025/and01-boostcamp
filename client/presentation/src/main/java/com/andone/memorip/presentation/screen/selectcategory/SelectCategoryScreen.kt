@@ -8,6 +8,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,6 +42,7 @@ fun SelectCategoryScreen(
     onCategorySelect: (List<TagUiModel>) -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
+    selectedTags: List<TagUiModel> = emptyList(),
     viewModel: SelectCategoryViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
@@ -75,6 +77,10 @@ fun SelectCategoryScreen(
                 )
             }
         }
+    }
+
+    LaunchedEffect(selectedTags) {
+        viewModel.onAction(SelectCategoryAction.OnInitialTags(selectedTags))
     }
 
     SelectCategoryContent(
@@ -112,7 +118,6 @@ private fun SelectCategoryContent(
         modifier = modifier,
         topBar = {
             SelectCategoryTopBar(
-                checkEnabled = checkedCategories.isNotEmpty(),
                 onConfirmClick = { onAction(SelectCategoryAction.OnConfirmClick) },
                 onBackClick = { onAction(SelectCategoryAction.OnBackClick) }
             )
@@ -167,6 +172,7 @@ private fun SelectCategoryContent(
 private fun SelectCategoryPreview() {
     MemoripTheme {
         SelectCategoryScreen(
+            selectedTags = emptyList(),
             onCategorySelect = {},
             onBackClick = {}
         )

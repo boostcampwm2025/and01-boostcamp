@@ -28,4 +28,6 @@ interface TripRemoteDataSource {
     suspend fun getSimpleTrips(): Result<List<TripListItem>>
     suspend fun getPlaceByTripId(tripId: String): Result<List<TripPlace>>
     suspend fun updatePlaceTime(tripPlaceId: String, request: UpdatePlaceTimeRequest): Result<Unit>
+    suspend fun deleteGroupPlace(tripPlaceId: String): Result<Unit>
+    suspend fun clearPlaceTime(tripPlaceId: String): Result<Unit>
 }

@@ -55,12 +55,10 @@ class TripRepositoryImpl @Inject constructor(
     }
 
     override suspend fun createTrip(
-        ownerId: String,
         title: String,
         visibility: Visibility
     ): Result<Trip> {
         val request = TripCreateRequest(
-            ownerId = ownerId,
             title = title,
             visibility = visibility.name
         )
@@ -116,5 +114,13 @@ class TripRepositoryImpl @Inject constructor(
             endAt = endAt
         )
         return remoteDataSource.updatePlaceTime(tripPlaceId = tripPlaceId, request = request)
+    }
+
+    override suspend fun deleteGroupPlace(tripPlaceId: String): Result<Unit> {
+        return remoteDataSource.deleteGroupPlace(tripPlaceId = tripPlaceId)
+    }
+
+    override suspend fun clearPlaceTime(tripPlaceId: String): Result<Unit> {
+        return remoteDataSource.clearPlaceTime(tripPlaceId = tripPlaceId)
     }
 }

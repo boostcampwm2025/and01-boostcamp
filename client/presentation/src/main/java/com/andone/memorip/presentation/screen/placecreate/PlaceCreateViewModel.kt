@@ -77,10 +77,6 @@ class PlaceCreateViewModel @Inject constructor(
                 removeImage(action.imageUri)
             }
 
-            is PlaceCreateAction.OnLastImageRemove -> {
-                _event.trySend(PlaceCreateEvent.NavigateToHome)
-            }
-
             is PlaceCreateAction.OnScrollPositionChange -> {
                 _uiState.update { it.copy(scrollPosition = action.position) }
             }
@@ -112,7 +108,7 @@ class PlaceCreateViewModel @Inject constructor(
     }
 
     fun updateCategory(category: List<TagUiModel>) {
-        _uiState.update { it.copy(category = category) }
+        _uiState.update { it.copy(tags = category) }
     }
 
     fun updateTrip(trips: List<TripUiModel>) {
@@ -121,6 +117,11 @@ class PlaceCreateViewModel @Inject constructor(
 
     private fun removeImage(imageUri: Uri) {
         _uiState.update {
+            if (it.images.size == 1) {
+                snackBarManager.show(SnackBarEvent.IMAGE_COUNT_ERROR)
+                return
+            }
+
             val images = it.images - imageUri
             val selectedImage = if (it.selectedImage == imageUri) {
                 images.firstOrNull()
@@ -172,7 +173,7 @@ class PlaceCreateViewModel @Inject constructor(
                     tripIds = uiStateValue.trips.map { it.id },
                     title = uiStateValue.title,
                     content = uiStateValue.content,
-                    tags = uiStateValue.category.map { it.id },
+                    tags = uiStateValue.tags.map { it.id },
                     latitude = uiStateValue.location.latitude,
                     longitude = uiStateValue.location.longitude,
                     address = Address.from(uiStateValue.location.address),

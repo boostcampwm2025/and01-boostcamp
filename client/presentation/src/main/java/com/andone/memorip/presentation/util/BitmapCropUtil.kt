@@ -19,6 +19,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChanged
 import androidx.core.graphics.createBitmap
+import androidx.core.net.toUri
 import androidx.exifinterface.media.ExifInterface
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -228,5 +229,25 @@ object BitmapCropUtil {
         }
 
         Uri.fromFile(file)
+    }
+
+    /** 이미지의 비율 계산 **/
+    suspend fun getAspectRatioFromUrl(
+        context: Context,
+        imageUrl: String
+    ): Float = withContext(Dispatchers.IO) {
+        runCatching {
+            val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+
+            context.contentResolver.openInputStream(imageUrl.toUri()).use { stream ->
+                BitmapFactory.decodeStream(stream, null, options)
+            }
+
+            if (options.outHeight != 0) {
+                options.outWidth.toFloat() / options.outHeight.toFloat()
+            } else {
+                1f
+            }
+        }.getOrDefault(1f)
     }
 }

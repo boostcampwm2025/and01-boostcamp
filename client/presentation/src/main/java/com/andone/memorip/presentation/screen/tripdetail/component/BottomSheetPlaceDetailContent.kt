@@ -20,14 +20,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.MemoripImage
 import com.andone.memorip.presentation.component.PlaceLocationText
 import com.andone.memorip.presentation.component.TagChipRow
 import com.andone.memorip.presentation.model.Place
-import com.andone.memorip.presentation.screen.tripdetail.component.BottomSheetPlaceDetailContentDimen.IMAGE_CORNER_RADIUS
-import com.andone.memorip.presentation.screen.tripdetail.component.BottomSheetPlaceDetailContentDimen.IMAGE_SIZE
+import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -88,9 +86,9 @@ fun BottomSheetPlaceDetailContent(
                     imageUrl = place.thumbnailImage.url,
                     contentDescription = stringResource(R.string.place_detail_image_content_description),
                     modifier = Modifier
-                        .size(IMAGE_SIZE)
+                        .size(BottomSheetPlaceDetailContentDimen.IMAGE_SIZE)
                         .aspectRatio(1f)
-                        .clip(RoundedCornerShape(IMAGE_CORNER_RADIUS)),
+                        .clip(RoundedCornerShape(BottomSheetPlaceDetailContentDimen.IMAGE_CORNER_RADIUS)),
                     contentScale = ContentScale.Crop
                 )
                 Column(
