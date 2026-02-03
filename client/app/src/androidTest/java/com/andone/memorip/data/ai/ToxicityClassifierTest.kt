@@ -30,7 +30,9 @@ class ToxicityClassifierTest {
             "니가 제일 멍청함",
             "쓰레기 같은 인간",
             "뒤져라",
-            "개같은 놈"
+            "개같은 놈",
+            "씨@발",
+            ""
         )
 
         toxicSamples.forEach {
@@ -52,7 +54,8 @@ class ToxicityClassifierTest {
             "정말 친절하시네요",
             "도움이 많이 됐어요",
             "천천히 해도 괜찮아요",
-            "착한 말"
+            "착한 말",
+            "데이트 하기 좋은 곳입니다"
         )
 
         cleanSamples.forEach {
