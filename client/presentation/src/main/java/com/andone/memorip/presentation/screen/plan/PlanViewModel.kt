@@ -349,19 +349,11 @@ class PlanViewModel @Inject constructor(
                     }
 
                     val duration = ChronoUnit.MINUTES.between(startDateTime, endDateTime).toInt()
-                    val startMinute = ChronoUnit.HOURS.between(
+                    val startMinute = ChronoUnit.MINUTES.between(
                         startDateTime.withHour(0).withMinute(0),
                         startDateTime
                     ).toInt()
-                    placesFlow.update { places ->
-                        places.map { place ->
-                            if (place.id == targetBlock.id) {
-                                place.copy(startDateTime = startDateTime, endDateTime = endDateTime)
-                            } else {
-                                place
-                            }
-                        }
-                    }
+
                     targetBlock.copy(startMinute = startMinute, durationMinute = duration)
                 } else {
                     targetBlock
