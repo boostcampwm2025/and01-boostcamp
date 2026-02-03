@@ -159,6 +159,7 @@ private fun PlaceCreateScreenContent(
                 content = uiState.content,
                 onTitleChange = { onAction(PlaceCreateAction.OnTitleChange(it)) },
                 onContentChange = { onAction(PlaceCreateAction.OnContentChange(it)) },
+                contentErrorLabel = uiState.contentErrorLabel
             )
 
             SelectSection(
@@ -234,7 +235,8 @@ fun ContentSection(
     content: String,
     onTitleChange: (String) -> Unit,
     onContentChange: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    contentErrorLabel: String? = null,
 ) {
     Column(modifier = modifier) {
         MemoripInputBox(
@@ -255,6 +257,15 @@ fun ContentSection(
             placeholder = stringResource(R.string.place_create_content_input),
             onValueChange = onContentChange,
         )
+        if (contentErrorLabel != null) {
+            Text(
+                text = stringResource(
+                    R.string.place_create_snackbar_inappropriate_content_error,
+                    contentErrorLabel
+                ),
+                color = MemoripTheme.colors.error,
+            )
+        }
     }
 }
 

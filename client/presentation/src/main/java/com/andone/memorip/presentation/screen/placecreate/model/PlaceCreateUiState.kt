@@ -16,5 +16,6 @@ data class PlaceCreateUiState(
     val trips: List<TripUiModel> = emptyList(),
     val scrollPosition: Int = 0,
     val isPublic: Boolean = false,
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val contentErrorLabel: String? = null,
 )

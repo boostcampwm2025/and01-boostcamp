@@ -95,6 +95,8 @@
     <string name="place_create_button_text">장소 추가하기</string>
     <string name="place_create_trip_placeholder">여행을 선택하세요</string>
     <string name="place_create_tag_placeholder">태그를 선택하세요</string>
+    <string name="place_create_snackbar_inappropriate_content_error">%1$s 관련 부적절한 표현이 포함되어 수정이 필요합니다</string>
+
 
     <!-- MainBottomBar -->
     <string name="main_bottom_bar_place_list">장소</string>
@@ -205,8 +207,8 @@
     <string name="login_delete_account">계정 삭제</string>
     <string name="login_new_account">회원가입</string>
     <string name="login_login">로그인</string>
-    <string name="login_email">이메일</string>
-    <string name="login_password">비밀번호</string>
+    <string name="login_email">이메일(올바른 이메일 형식)</string>
+    <string name="login_password">비밀번호(영문 + 숫자)</string>
     <string name="login_password_confirm">비밀번호 확인</string>
     <string name="login_password_not_match">비밀번호가 일치하지 않습니다.</string>
     <string name="login_email_login">이메일로 로그인</string>
