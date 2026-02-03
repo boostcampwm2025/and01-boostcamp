@@ -563,7 +563,7 @@ class PlanViewModel @Inject constructor(
             val request = buildPendingUpdateWork(id, payload)
             val name = when (payload) {
                 is Payload.PlaceTimeEditPayload -> PLACE_WORK_NAME + id
-                is Payload.TripSavePayload -> GROUP_WORK_NAME + id
+                is Payload.TripSavePayload -> TRIP_WORK_NAME + id
             }
 
             workManager.enqueueUniqueWork(
@@ -577,6 +577,6 @@ class PlanViewModel @Inject constructor(
 
     companion object {
         const val PLACE_WORK_NAME = "PLACE_TIME_EDIT"
-        const val GROUP_WORK_NAME = "GROUP_TIME_SAVE"
+        const val TRIP_WORK_NAME = "TRIP_TIME_SAVE"
     }
 }

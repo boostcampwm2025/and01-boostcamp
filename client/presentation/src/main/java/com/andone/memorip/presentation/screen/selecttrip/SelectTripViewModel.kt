@@ -3,8 +3,8 @@ package com.andone.memorip.presentation.screen.selecttrip
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.andone.memorip.domain.model.Visibility
-import com.andone.memorip.domain.repository.TripRepository
 import com.andone.memorip.domain.repository.PlaceRepository
+import com.andone.memorip.domain.repository.TripRepository
 import com.andone.memorip.presentation.screen.selecttrip.model.SelectTripAction
 import com.andone.memorip.presentation.screen.selecttrip.model.SelectTripAction.OnAddTripClick
 import com.andone.memorip.presentation.screen.selecttrip.model.SelectTripAction.OnBackClick
@@ -42,7 +42,7 @@ class SelectTripViewModel @Inject constructor(
 ) : ViewModel() {
 
     private var placeId: String? = null
-    private var initialSelectedTripId: String? = null
+    private var initialSelectedTripIds: List<String>? = null
 
     private val _uiState = MutableStateFlow(SelectTripUiState())
     val uiState: StateFlow<SelectTripUiState> = _uiState
@@ -61,13 +61,13 @@ class SelectTripViewModel @Inject constructor(
         this.placeId = placeId
         // placeId가 있으면 initialSelectedTripId 초기화 (PlaceDetailScreen용)
         if (placeId != null) {
-            this.initialSelectedTripId = null
+            this.initialSelectedTripIds = null
         }
         resetAndFetchTrips()
     }
 
-    fun setInitialSelectedTripId(tripId: String?) {
-        this.initialSelectedTripId = tripId
+    fun setInitialSelectedTripIds(tripIds: List<String>?) {
+        this.initialSelectedTripIds = tripIds
     }
 
     /**
@@ -92,7 +92,7 @@ class SelectTripViewModel @Inject constructor(
             is SelectTripAction.OnInitialize -> {
                 setPlaceId(action.placeId)
                 if (action.placeId == null) {
-                    setInitialSelectedTripId(action.initialSelectedTripId)
+                    setInitialSelectedTripIds(action.initialSelectedTripIds)
                 }
             }
 
@@ -123,11 +123,10 @@ class SelectTripViewModel @Inject constructor(
 
                     if (selectedTripIds.isNotEmpty()) {
                         viewModelScope.launch {
-                            val selectedTrip = currentState.trips.firstOrNull {
-                                it.id in currentState.selectedTripIds
-                            }
-                            if (selectedTrip != null) {
-                                _event.trySend(element = SelectTripEvent.SelectTrip(trip = selectedTrip))
+                            val selectedTrips =
+                                currentState.trips.filter { it.id in currentState.selectedTripIds }
+                            if (selectedTrips.isNotEmpty()) {
+                                _event.trySend(element = SelectTripEvent.SelectTrip(trips = selectedTrips))
                             }
                         }
                     }
@@ -224,8 +223,8 @@ class SelectTripViewModel @Inject constructor(
                 tripRepository.fetchMyTrips()
                     .onSuccess {
                         val trips = tripRepository.myTrips.first()
-                        val initiallySelectedIds = if (initialSelectedTripId != null) {
-                            persistentSetOf(initialSelectedTripId!!)
+                        val initiallySelectedIds = if (initialSelectedTripIds != null) {
+                            initialSelectedTripIds!!
                         } else {
                             persistentSetOf()
                         }
@@ -233,8 +232,8 @@ class SelectTripViewModel @Inject constructor(
                             current.copy(
                                 trips = trips.map { SelectTripUiModel.from(it) }
                                     .toImmutableList(),
-                                selectedTripIds = initiallySelectedIds,
-                                initialSelectedTripIds = initiallySelectedIds,
+                                selectedTripIds = initiallySelectedIds.toImmutableSet(),
+                                initialSelectedTripIds = initiallySelectedIds.toImmutableSet(),
                                 isLoading = false
                             )
                         }

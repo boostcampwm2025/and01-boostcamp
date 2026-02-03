@@ -2,7 +2,6 @@ package com.andone.memorip.presentation.screen.placecreate
 
 import android.content.res.Configuration
 import android.net.Uri
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -41,9 +40,9 @@ import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.LoadingIndicatorScreen
 import com.andone.memorip.presentation.component.MemoripImage
 import com.andone.memorip.presentation.component.MemoripInputBox
-import com.andone.memorip.presentation.model.TripUiModel
 import com.andone.memorip.presentation.model.LocationUiModel
 import com.andone.memorip.presentation.model.TagUiModel
+import com.andone.memorip.presentation.model.TripUiModel
 import com.andone.memorip.presentation.screen.placecreate.PlaceCreateScreenConstant.CONTENT_MAX_LENGTH
 import com.andone.memorip.presentation.screen.placecreate.PlaceCreateScreenConstant.IMAGE_RATIO
 import com.andone.memorip.presentation.screen.placecreate.PlaceCreateScreenConstant.TITLE_MAX_LENGTH
@@ -94,13 +93,7 @@ fun PlaceCreateScreen(
         )
 
         if (uiState.isLoading) {
-            LoadingIndicatorScreen(
-                modifier = Modifier.clickable(
-                    interactionSource = null,
-                    indication = null,
-                    onClick = {}
-                )
-            )
+            LoadingIndicatorScreen()
         }
     }
 }
@@ -119,7 +112,7 @@ private fun PlaceCreateScreenContent(
     val placeCreateEnable = uiState.images.isNotEmpty() &&
             uiState.location != null &&
             uiState.title.isNotBlank() &&
-            uiState.trip != null
+            uiState.trips.isNotEmpty()
 
     LaunchedEffect(Unit) {
         onAction(PlaceCreateAction.OnImageSelect(uiState.images.first()))
@@ -171,7 +164,7 @@ private fun PlaceCreateScreenContent(
             SelectSection(
                 category = uiState.category,
                 location = uiState.location,
-                trip = uiState.trip,
+                trips = uiState.trips,
                 onCategoryClick = { onAction(PlaceCreateAction.OnCategoryClick) },
                 onLocationClick = { onAction(PlaceCreateAction.OnLocationClick) },
                 onTripClick = { onAction(PlaceCreateAction.OnTripClick) },
@@ -186,7 +179,7 @@ private fun PlaceCreateScreenContent(
 }
 
 @Composable
-private fun ImageRowSection(
+fun ImageRowSection(
     images: List<Uri>,
     selectedImage: Uri?,
     onImageSelect: (Uri) -> Unit,
@@ -236,7 +229,7 @@ private fun ImageRowSection(
 }
 
 @Composable
-private fun ContentSection(
+fun ContentSection(
     title: String,
     content: String,
     onTitleChange: (String) -> Unit,
@@ -267,10 +260,10 @@ private fun ContentSection(
 
 @OptIn(ExperimentalNaverMapApi::class)
 @Composable
-private fun SelectSection(
+fun SelectSection(
     category: List<TagUiModel>,
     location: LocationUiModel?,
-    trip: TripUiModel?,
+    trips: List<TripUiModel>,
     onCategoryClick: () -> Unit,
     onLocationClick: () -> Unit,
     onTripClick: () -> Unit,
@@ -278,8 +271,9 @@ private fun SelectSection(
 ) {
     val locationValue = location?.name
         ?.ifBlank { null } ?: stringResource(R.string.place_create_location_placeholder)
-    val tripValue = trip?.name
-        ?: stringResource(R.string.place_create_trip_placeholder)
+    val tripValue = trips
+        .joinToString(stringResource(R.string.place_create_space)) { it.name }
+        .ifEmpty { stringResource(R.string.place_create_trip_placeholder) }
     val categoryValue = category
         .joinToString(stringResource(R.string.place_create_space)) { it.name }
         .ifEmpty { stringResource(R.string.place_create_tag_placeholder) }
@@ -315,7 +309,7 @@ private fun SelectSection(
 }
 
 @Composable
-private fun PublicCheckSection(
+fun PublicCheckSection(
     isPublic: Boolean,
     onCheckedChange: () -> Unit,
     modifier: Modifier = Modifier

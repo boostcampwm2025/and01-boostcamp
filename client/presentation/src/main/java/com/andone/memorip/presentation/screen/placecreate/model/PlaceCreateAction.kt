@@ -30,7 +30,7 @@ sealed interface PlaceCreateAction {
 
     data class OnSnackBarShow(val message: String) : PlaceCreateAction
 
-    data class OnTripSelect(val trip: TripUiModel) : PlaceCreateAction
+    data class OnTripSelect(val trips: List<TripUiModel>) : PlaceCreateAction
 
     data object OnCreateSuccess : PlaceCreateAction
 }
