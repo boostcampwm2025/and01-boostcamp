@@ -38,6 +38,7 @@ fun DateSelectedContent(
                     block = block,
                     engine = engine,
                     scrollState = scrollState,
+                    onSlide = { id -> onAction(PlanAction.BlockSlide(id)) },
                     onMoved = { id, newStartMinute ->
                         onAction(PlanAction.BlockMoved(id, newStartMinute))
                     }

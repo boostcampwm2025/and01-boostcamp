@@ -6,7 +6,8 @@ import java.time.LocalDateTime
 
 sealed interface PlanAction {
     data class BlockMoved(val id: String, val newStartMinute: Int) : PlanAction
-    data class BlockClick(val id: String): PlanAction
+    data class BlockClick(val id: String) : PlanAction
+    data class BlockSlide(val id: String) : PlanAction
 
     data class ItemDragEnd(val item: Place, val startMinute: Int) : PlanAction
 

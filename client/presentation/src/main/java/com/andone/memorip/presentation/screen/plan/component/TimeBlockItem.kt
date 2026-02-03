@@ -3,6 +3,7 @@ package com.andone.memorip.presentation.screen.plan.component
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,6 +15,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -27,6 +29,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.andone.memorip.domain.model.TimeBlock
+import com.andone.memorip.presentation.screen.plan.component.TimeBlockItemConstants.DELETE_THRESHOLD
 import com.andone.memorip.presentation.screen.plan.component.TimeBlockItemConstants.SNAP_MINUTE_UNIT
 import com.andone.memorip.presentation.screen.plan.utill.MINUTE_HEIGHT_DP
 import com.andone.memorip.presentation.screen.plan.utill.TimeLayoutEngine
@@ -41,7 +44,8 @@ import com.andone.memorip.presentation.util.toPx
 import kotlin.math.roundToInt
 
 object TimeBlockItemConstants {
-    val SNAP_MINUTE_UNIT = 60
+    const val SNAP_MINUTE_UNIT = 60
+    const val DELETE_THRESHOLD = 200
 }
 
 @Composable
@@ -50,9 +54,11 @@ fun TimeBlockItem(
     engine: TimeLayoutEngine,
     scrollState: ScrollState,
     onMoved: (String, Int) -> Unit,
+    onSlide: (String) -> Unit,
     content: @Composable BoxScope.() -> Unit
 ) {
     var dragOffsetY by remember { mutableFloatStateOf(value = 0f) }
+    var dragOffsetX by remember { mutableFloatStateOf(value = 0f) }
     val startYPx = remember(block) { engine.blockStartYPx(block) }
     var isDragging by remember { mutableStateOf(value = false) }
 
@@ -60,7 +66,7 @@ fun TimeBlockItem(
         modifier = Modifier
             .offset {
                 IntOffset(
-                    x = 0,
+                    x = dragOffsetX.roundToInt(),
                     y = (startYPx + dragOffsetY).roundToInt()
                 )
             }
@@ -86,6 +92,19 @@ fun TimeBlockItem(
             modifier = Modifier
                 .fillMaxSize()
                 .pointerInput(startYPx) {
+                    detectHorizontalDragGestures(
+                        onHorizontalDrag = { change, dragAmount ->
+                            change.consume()
+                            if (dragAmount > 0) dragOffsetX += dragAmount
+                        },
+                        onDragEnd = {
+                            if (dragOffsetX > DELETE_THRESHOLD) {
+                                onSlide(block.id)
+                            } else {
+                                dragOffsetX = 0f
+                            }
+                        }
+                    )
                     detectDragGesturesAfterLongPress(
                         onDragStart = {
                             isDragging = true
@@ -135,6 +154,7 @@ private fun TimeBlockItemPreview() {
         engine = engine,
         scrollState = rememberScrollState(),
         onMoved = { _, _ -> },
+        onSlide = {},
         content = {}
     )
 }

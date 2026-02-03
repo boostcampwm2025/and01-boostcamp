@@ -141,6 +141,10 @@ class PlanViewModel @Inject constructor(
                 selectedBlockFlow.update { targetBlock }
             }
 
+            is PlanAction.BlockSlide -> {
+                deleteBlock(action.id)
+            }
+
             PlanAction.AddDay -> {
                 selectedDateFlow.update { it.copy(endDay = it.endDay?.plusDays(1)) }
             }
@@ -455,6 +459,12 @@ class PlanViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun deleteBlock(id: String) {
+        val block = blockUiModelsFlow.value[id]
+        timeBlocksFlow.update { it.filter{ it.id != id } }
+        if (block is Place) { placesFlow.update { it + block } }
     }
 
     private fun adjustCurrentDay(
