@@ -90,6 +90,7 @@ private fun TripDetailScreenContent(
     modifier: Modifier = Modifier
 ) {
     var mapLoaded by rememberSaveable { mutableStateOf(false) }
+    var isBottomSheetExpanded by remember { mutableStateOf(false) }
     val markerImages = rememberBitmapMarkerLoader(
         imageUrls = places.map { it.thumbnailImage.url }
     )
@@ -99,8 +100,7 @@ private fun TripDetailScreenContent(
             TripDetailTopBar(
                 title = tripName,
                 onBackClick = { onAction(TripDetailAction.OnBackClick) },
-                onMenuClick = { onAction(TripDetailAction.OnMenuClick) },
-                onSearchClick = { onAction(TripDetailAction.OnSearchClick) }
+                isBottomSheetExpanded = isBottomSheetExpanded
             )
         },
         contentWindowInsets = WindowInsets.navigationBars,
@@ -119,6 +119,9 @@ private fun TripDetailScreenContent(
             startDate = tripInfo?.startDate,
             endDate = tripInfo?.endDate,
             viewMode = viewMode,
+            onBottomSheetExpandedChange = { isExpanded ->
+                isBottomSheetExpanded = isExpanded
+            },
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues = innerPadding)

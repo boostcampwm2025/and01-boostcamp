@@ -17,6 +17,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,6 +46,8 @@ import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.theme.MemoripTheme
 import androidx.compose.ui.Alignment
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.BottomSheetDefaults
+import androidx.compose.ui.graphics.RectangleShape
 import com.andone.memorip.presentation.util.DummyData
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.geometry.LatLngBounds
@@ -83,12 +86,27 @@ fun MapTab(
     tripName: String? = null,
     startDate: String? = null,
     endDate: String? = null,
-    viewMode: PlaceViewMode = PlaceViewMode.LIST
+    viewMode: PlaceViewMode = PlaceViewMode.LIST,
+    onBottomSheetExpandedChange: (Boolean) -> Unit = {}
 ) {
     val scaffoldState = rememberBottomSheetScaffoldState()
     val scope = rememberCoroutineScope()
     val cameraPositionState: CameraPositionState = rememberCameraPositionState()
     var savedPlaceListSheetValue by remember { mutableStateOf<SheetValue?>(null) }
+
+    val isBottomSheetExpanded by remember {
+        derivedStateOf {
+            try {
+                scaffoldState.bottomSheetState.requireOffset() <= 0.5f
+            } catch (e: IllegalStateException) {
+                false
+            }
+        }
+    }
+
+    LaunchedEffect(isBottomSheetExpanded) {
+        onBottomSheetExpandedChange(isBottomSheetExpanded)
+    }
 
     LaunchedEffect(Unit) {
         scaffoldState.bottomSheetState.partialExpand()
@@ -189,17 +207,19 @@ fun MapTab(
         }
 
         BottomSheetScaffold(
-            scaffoldState = scaffoldState,
             sheetContent = {
                 MapBottomSheetContent(
                     bottomSheetContent = mapBottomSheetContent,
                     places = places,
                     selectedPlace = mapSelectedPlace,
                     viewMode = viewMode,
-                    onAction = onAction
+                    onAction = onAction,
+                    isExpanded = isBottomSheetExpanded
                 )
             },
+            scaffoldState = scaffoldState,
             sheetPeekHeight = MapTabDimen.SHEET_PEEK_HEIGHT,
+            sheetShape = if (isBottomSheetExpanded) RectangleShape else BottomSheetDefaults.ExpandedShape,
             sheetContainerColor = MemoripTheme.colors.background,
             sheetDragHandle = null,
             sheetSwipeEnabled = mapBottomSheetContent != MapBottomSheetStep.PlaceDetail,
@@ -261,29 +281,41 @@ private fun MapBottomSheetContent(
     selectedPlace: Place?,
     viewMode: PlaceViewMode,
     onAction: (TripDetailAction) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isExpanded: Boolean = false
 ) {
     val placeListState = rememberLazyListState()
 
     Surface(
         tonalElevation = MemoripShadow.Large,
         shadowElevation = MemoripShadow.Large,
-        color = MemoripTheme.colors.background
+        color = MemoripTheme.colors.background,
+        shape = if (isExpanded) {
+            RoundedCornerShape(0.dp)
+        } else {
+            RoundedCornerShape(
+                topStart = 16.dp,
+                topEnd = 16.dp
+            )
+        }
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = MemoripPadding.PaddingSmall),
+                .padding(top = if (isExpanded) 0.dp else MemoripPadding.PaddingSmall),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Box(
-                modifier = Modifier
-                    .width(MemoripPadding.PaddingXXXLarge)
-                    .height(MemoripSpace.SpaceXXSmall)
-                    .clip(RoundedCornerShape(MemoripLineWidth.Small))
-                    .background(MemoripTheme.colors.gray1)
-            )
-            Spacer(modifier = Modifier.height(MemoripPadding.PaddingXSmall))
+            // expanded 상태일 때 핸들 제거
+            if (!isExpanded) {
+                Box(
+                    modifier = Modifier
+                        .width(MemoripPadding.PaddingXXXLarge)
+                        .height(MemoripSpace.SpaceXXSmall)
+                        .clip(RoundedCornerShape(MemoripLineWidth.Small))
+                        .background(MemoripTheme.colors.gray1)
+                )
+                Spacer(modifier = Modifier.height(MemoripPadding.PaddingXSmall))
+            }
             Box(modifier = Modifier.weight(1f)) {
                 when (bottomSheetContent) {
                     MapBottomSheetStep.PlaceList -> {
