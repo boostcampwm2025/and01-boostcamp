@@ -2,8 +2,8 @@ package com.andone.memorip.presentation.screen.placedetail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.andone.memorip.domain.repository.TripRepository
 import com.andone.memorip.domain.repository.PlaceRepository
+import com.andone.memorip.domain.repository.TripRepository
 import com.andone.memorip.navigation.PlaceDetail
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceDetailAction
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceDetailEvent
@@ -65,37 +65,32 @@ class PlaceDetailViewModel @AssistedInject constructor(
             PlaceDetailAction.OnMoreClick -> {
                 _event.trySend(PlaceDetailEvent.ShowMoreMenu)
             }
+
+
             PlaceDetailAction.OnMoreMenuDismiss -> {
                 _event.trySend(PlaceDetailEvent.HideMoreMenu)
             }
+
+
             PlaceDetailAction.OnEditClick -> {
-                _event.trySend(PlaceDetailEvent.HideMoreMenu)
-                // Todo: 수정 연결
+                _event.trySend(PlaceDetailEvent.NavigateToPlaceEdit)
             }
+
+
             PlaceDetailAction.OnDeleteClick -> {
-                _event.trySend(PlaceDetailEvent.HideMoreMenu)
                 _event.trySend(PlaceDetailEvent.ShowDeleteDialog)
             }
+
+
             PlaceDetailAction.OnDeleteDismiss -> {
                 _event.trySend(PlaceDetailEvent.HideDeleteDialog)
             }
+
+
             PlaceDetailAction.OnDeleteConfirm -> {
                 _event.trySend(PlaceDetailEvent.HideDeleteDialog)
                 deletePlace()
             }
-        }
-    }
-
-    fun addPlaceToTrip(tripId: String) {
-        viewModelScope.launch {
-            tripRepository.addPlaceToTrip(tripId, placeId)
-                .onSuccess {
-                    snackBarManager.show(event = SnackBarEvent.SUCCESS)
-                    _event.trySend(PlaceDetailEvent.PlaceAddToTrip)
-                }
-                .onFailure {
-                    snackBarManager.show(event = SnackBarEvent.NETWORK_ERROR)
-                }
         }
     }
 

@@ -8,23 +8,23 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.andone.memorip.domain.model.Tag
-import com.andone.memorip.presentation.model.TripUiModel
+import com.andone.memorip.domain.model.TimeBlock
+import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.model.ImageItem
 import com.andone.memorip.presentation.model.LocationUiModel
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.model.TagUiModel
+import com.andone.memorip.presentation.model.TripUiModel
 import com.andone.memorip.presentation.model.toUiModel
-import com.andone.memorip.presentation.screen.placedetail.model.TripCompactUiModel
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceUiModel
+import com.andone.memorip.presentation.screen.placedetail.model.TripCompactUiModel
 import com.andone.memorip.presentation.screen.placelist.model.RegionUiModel
 import com.andone.memorip.presentation.screen.placelist.model.SelectedRegionState
 import com.andone.memorip.presentation.screen.plan.model.DateUiModel
-import com.andone.memorip.domain.model.TimeBlock
-import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.screen.plan.model.TripListUiModel
 import com.andone.memorip.presentation.screen.user.model.SettingItemUiModel
 import com.andone.memorip.presentation.screen.user.model.SettingTrailing
 import com.andone.memorip.presentation.screen.user.model.UserUiModel
-import com.andone.memorip.presentation.screen.plan.model.TripListUiModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.flowOf
 import java.time.LocalDate
@@ -298,8 +298,6 @@ object DummyData {
         )
     }
 
-    val groupName = "Group1"
-
     val tripListItems = mutableStateListOf(
         TripListUiModel(
             id = UUID.randomUUID().toString(),
@@ -323,7 +321,7 @@ object DummyData {
         TripUiModel(
             id = UUID.randomUUID().toString(),
             name = "기본 그룹",
-            images = createRandomImageUrls(8, "group1")
+            images = createRandomImageUrls(8, "trip1")
         ),
         TripUiModel(
             id = UUID.randomUUID().toString(),

@@ -65,7 +65,7 @@ class TripWorker @AssistedInject constructor(
     }
 
     companion object {
-        const val ID = "GROUP_ID"
+        const val ID = "TRIP_ID"
         const val TITLE = "title"
         const val START_AT = "START_AT"
         const val END_AT = "END_AT"

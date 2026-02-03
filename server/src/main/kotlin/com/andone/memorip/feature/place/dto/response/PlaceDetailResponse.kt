@@ -3,7 +3,7 @@ package com.andone.memorip.feature.place.dto.response
 import com.andone.memorip.feature.place.entity.Address
 import com.andone.memorip.feature.place.entity.PlaceTag
 import com.fasterxml.jackson.annotation.JsonProperty
-import java.util.UUID
+import java.util.*
 
 data class PlaceDetailResponse(
     val placeId: UUID,
@@ -19,7 +19,9 @@ data class PlaceDetailResponse(
     @get:JsonProperty("isMine")
     val isMine: Boolean,
     @get:JsonProperty("isInMyGroup")
-    val isInMyGroup: Boolean
+    val isInMyGroup: Boolean,
+    @get:JsonProperty("isPublic")
+    val isPublic: Boolean
 )
 
 data class TagResponse(
