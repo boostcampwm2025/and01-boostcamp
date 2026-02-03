@@ -20,7 +20,7 @@ interface TripRepository {
 
     suspend fun getPublicTrips(page: Int = 0, size: Int = 20): Result<List<Trip>>
     suspend fun getTripById(tripId: String): Result<Trip>
-    suspend fun createTrip(ownerId: String, title: String, visibility: Visibility): Result<Trip>
+    suspend fun createTrip(title: String, visibility: Visibility): Result<Trip>
     suspend fun updateTrip(
         tripId: String,
         title: String,

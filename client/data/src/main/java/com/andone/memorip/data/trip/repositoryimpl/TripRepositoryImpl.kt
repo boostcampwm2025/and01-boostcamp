@@ -55,12 +55,10 @@ class TripRepositoryImpl @Inject constructor(
     }
 
     override suspend fun createTrip(
-        ownerId: String,
         title: String,
         visibility: Visibility
     ): Result<Trip> {
         val request = TripCreateRequest(
-            ownerId = ownerId,
             title = title,
             visibility = visibility.name
         )
