@@ -246,7 +246,6 @@ private fun PlaceDetailContent(
                 modifier = modifier
                     .fillMaxSize()
                     .padding(bottom = innerPadding.calculateBottomPadding())
-                    .padding(bottom = MemoripPadding.PaddingMedium)
                     .background(color = MemoripTheme.colors.background),
                 verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXXXLarge)
             ) {
@@ -319,7 +318,8 @@ private fun PlaceDetailContent(
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = MemoripPadding.PaddingMedium),
+                            .padding(horizontal = MemoripPadding.PaddingMedium)
+                            .padding(bottom = MemoripPadding.PaddingMedium),
                         verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceMedium)
                     ) {
                         if (place.content.isNotEmpty()) {
