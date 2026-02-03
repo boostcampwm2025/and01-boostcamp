@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.andone.memorip.navigation.TripDetail
 import com.andone.memorip.presentation.component.map.MapClusterManager
@@ -49,6 +50,8 @@ fun TripDetailScreen(
     val placesPagingItems = viewModel.placesPagingFlow.collectAsLazyPagingItems()
     val clusteredItems by viewModel.clusteredItemsStateFlow.collectAsStateWithLifecycle()
     var places by remember { mutableStateOf<List<Place>>(emptyList()) }
+    val hasMorePages = (placesPagingItems.loadState.append as? LoadState.NotLoading)
+        ?.endOfPaginationReached == false
 
     LaunchedEffect(placesPagingItems) {
         snapshotFlow { placesPagingItems.itemSnapshotList.items }
@@ -72,6 +75,7 @@ fun TripDetailScreen(
         mapBottomSheetContent = uiState.mapBottomSheetContent,
         tripInfo = uiState.tripInfo,
         viewMode = uiState.placeViewMode,
+        hasMorePages = hasMorePages,
         onAction = viewModel::onAction,
         modifier = modifier
     )
@@ -86,6 +90,7 @@ private fun TripDetailScreenContent(
     mapBottomSheetContent: MapBottomSheetStep,
     tripInfo: TripUiModel?,
     viewMode: PlaceViewMode,
+    hasMorePages: Boolean,
     onAction: (TripDetailAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -119,6 +124,7 @@ private fun TripDetailScreenContent(
             startDate = tripInfo?.startDate,
             endDate = tripInfo?.endDate,
             viewMode = viewMode,
+            hasMorePages = hasMorePages,
             onBottomSheetExpandedChange = { isExpanded ->
                 isBottomSheetExpanded = isExpanded
             },
@@ -162,6 +168,7 @@ private fun TripDetailScreenContentPreview() {
                 endDate = "2026-02-07"
             ),
             viewMode = PlaceViewMode.LIST,
+            hasMorePages = false,
             onAction = {}
         )
     }

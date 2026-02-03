@@ -87,6 +87,7 @@ fun MapTab(
     startDate: String? = null,
     endDate: String? = null,
     viewMode: PlaceViewMode = PlaceViewMode.LIST,
+    hasMorePages: Boolean = false,
     onBottomSheetExpandedChange: (Boolean) -> Unit = {}
 ) {
     val scaffoldState = rememberBottomSheetScaffoldState()
@@ -213,6 +214,7 @@ fun MapTab(
                     places = places,
                     selectedPlace = mapSelectedPlace,
                     viewMode = viewMode,
+                    hasMorePages = hasMorePages,
                     onAction = onAction,
                     isExpanded = isBottomSheetExpanded
                 )
@@ -282,6 +284,7 @@ private fun MapBottomSheetContent(
     viewMode: PlaceViewMode,
     onAction: (TripDetailAction) -> Unit,
     modifier: Modifier = Modifier,
+    hasMorePages: Boolean = false,
     isExpanded: Boolean = false
 ) {
     val placeListState = rememberLazyListState()
@@ -290,14 +293,14 @@ private fun MapBottomSheetContent(
         tonalElevation = MemoripShadow.Large,
         shadowElevation = MemoripShadow.Large,
         color = MemoripTheme.colors.background,
-        shape = if (isExpanded) {
-            RoundedCornerShape(0.dp)
-        } else {
-            RoundedCornerShape(
-                topStart = 16.dp,
-                topEnd = 16.dp
-            )
-        }
+//        shape = if (isExpanded) {
+//            RoundedCornerShape(0.dp)
+//        } else {
+//            RoundedCornerShape(
+//                topStart = 16.dp,
+//                topEnd = 16.dp
+//            )
+//        }
     ) {
         Column(
             modifier = Modifier
@@ -305,7 +308,6 @@ private fun MapBottomSheetContent(
                 .padding(top = if (isExpanded) 0.dp else MemoripPadding.PaddingSmall),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // expanded 상태일 때 핸들 제거
             if (!isExpanded) {
                 Box(
                     modifier = Modifier
@@ -322,9 +324,10 @@ private fun MapBottomSheetContent(
                         Column(
                             modifier = Modifier.fillMaxSize()
                         ) {
-                            PlaceListHeader(
+                            BottomSheetPlaceListHeader(
                                 placeCount = places.size,
                                 viewMode = viewMode,
+                                hasMorePages = hasMorePages,
                                 onViewModeToggle = { onAction(TripDetailAction.OnViewModeToggle) }
                             )
 
