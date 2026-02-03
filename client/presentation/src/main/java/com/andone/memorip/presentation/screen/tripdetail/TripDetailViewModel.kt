@@ -155,6 +155,16 @@ class TripDetailViewModel @AssistedInject constructor(
                 }
             }
 
+            is TripDetailAction.OnNavigateToPlaceDetail -> {
+                _uiState.update {
+                    it.copy(
+                        mapSelectedPlace = null,
+                        mapBottomSheetContent = MapBottomSheetStep.PlaceList
+                    )
+                }
+                _event.trySend(element = TripDetailEvent.NavigateToPlaceDetail(id = action.placeId))
+            }
+
             is TripDetailAction.OnMapPlacesUpdate -> {
                 updatePlacesList(action.places)
             }

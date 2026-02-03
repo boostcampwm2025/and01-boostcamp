@@ -85,6 +85,7 @@
     <string name="trip_detail_search_button_content_description">검색</string>
     <string name="trip_detail_place_list_title">장소 목록</string>
     <string name="trip_detail_place_list_count_format">장소 목록 %1$d</string>
+    <string name="trip_detail_place_list_count_format_more">장소 목록 %1$d+</string>
     <string name="trip_detail_schedule_upcoming">다가오는 일정</string>
     <string name="trip_detail_schedule_trip_format">%1$s 여행</string>
     <string name="trip_detail_view_list_description">리스트 뷰</string>
@@ -138,6 +139,7 @@
     <string name="place_detail_view_in_map_app">지도 앱에서 보기</string>
     <string name="place_detail_chooser_title">지도 앱에서 위치 보기</string>
     <string name="place_detail_comma_separator">, </string>
+    <string name="place_detail_bottom_sheet_go_to_detail">상세 화면으로 이동하기</string>
 
     <!-- PlaceEdit -->
     <string name="place_edit_title">장소 수정</string>
@@ -261,5 +263,8 @@
 
     <!-- PlacePickerItem -->
     <string name="place_picker_item_image_description">장소에 대한 이미지</string>
+
+    <!-- Map Cluster Marker -->
+    <string name="map_cluster_marker_max_count">99+</string>
 
 </resources>
