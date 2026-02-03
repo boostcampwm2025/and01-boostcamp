@@ -30,7 +30,6 @@ import java.io.File
 import java.io.FileOutputStream
 import javax.inject.Inject
 import com.andone.memorip.domain.ai.ToxicityAnalyzer
-import kotlinx.coroutines.Dispatchers
 
 @HiltViewModel
 class PlaceCreateViewModel @Inject constructor(
@@ -147,18 +146,23 @@ class PlaceCreateViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
 
-            val labels = toxicityAnalyzer.predict(text = _uiState.value.title) + toxicityAnalyzer.predict(text = _uiState.value.content)
+            val sentences =
+                splitSentences(_uiState.value.title) +
+                        splitSentences(_uiState.value.content)
 
-            val label = labels.firstOrNull()?.first
+            for (sentence in sentences) {
+                val result = toxicityAnalyzer.predict(sentence)
+                val label = result.firstOrNull()?.first
 
-            if (label != null) {
-                _uiState.update {
-                    it.copy(
-                        contentErrorLabel = label,
-                        isLoading = false
-                    )
+                if (label != null) {
+                    _uiState.update {
+                        it.copy(
+                            contentErrorLabel = label,
+                            isLoading = false
+                        )
+                    }
+                    return@launch
                 }
-                return@launch
             }
 
             val imageUrls = uploadImages(context, uiStateValue.images)
@@ -220,5 +224,12 @@ class PlaceCreateViewModel @Inject constructor(
             e.printStackTrace()
             null
         }
+    }
+
+    private fun splitSentences(text: String): List<String> {
+        return text
+            .split(Regex("[.!?。！？\n]"))
+            .map { it.trim() }
+            .filter { it.isNotEmpty() }
     }
 }
