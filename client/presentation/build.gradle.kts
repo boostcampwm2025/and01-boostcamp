@@ -1,4 +1,3 @@
-import com.android.build.gradle.ProguardFiles.getDefaultProguardFile
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -116,7 +115,7 @@ dependencies {
 
     // Google Identity (ID Token 발급용)
     implementation(libs.googleid)
-    
+
     // Convention
     detektPlugins(libs.compose.convention)
     implementation(libs.compose.convention)

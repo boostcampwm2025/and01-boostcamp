@@ -7,9 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.andone.memorip.domain.model.request.Address
 import com.andone.memorip.domain.model.request.PlaceCreateUpdate
 import com.andone.memorip.domain.repository.PlaceRepository
-import com.andone.memorip.presentation.model.TripUiModel
 import com.andone.memorip.presentation.model.LocationUiModel
 import com.andone.memorip.presentation.model.TagUiModel
+import com.andone.memorip.presentation.model.TripUiModel
 import com.andone.memorip.presentation.screen.placecreate.model.PlaceCreateAction
 import com.andone.memorip.presentation.screen.placecreate.model.PlaceCreateEvent
 import com.andone.memorip.presentation.screen.placecreate.model.PlaceCreateUiState
@@ -92,7 +92,7 @@ class PlaceCreateViewModel @Inject constructor(
             }
 
             is PlaceCreateAction.OnTripSelect -> {
-                updateTrip(action.trip)
+                updateTrip(action.trips)
             }
 
             PlaceCreateAction.OnCreateSuccess -> {
@@ -113,8 +113,8 @@ class PlaceCreateViewModel @Inject constructor(
         _uiState.update { it.copy(category = category) }
     }
 
-    fun updateTrip(trip: TripUiModel) {
-        _uiState.update { it.copy(trip = trip) }
+    fun updateTrip(trips: List<TripUiModel>) {
+        _uiState.update { it.copy(trips = trips) }
     }
 
     private fun removeImage(imageUri: Uri) {
@@ -138,7 +138,7 @@ class PlaceCreateViewModel @Inject constructor(
         if (uiStateValue.images.isEmpty()
             || uiStateValue.location == null
             || uiStateValue.title.isBlank()
-            || uiStateValue.trip == null
+            || uiStateValue.trips.isEmpty()
         ) return
 
         viewModelScope.launch {
@@ -148,8 +148,7 @@ class PlaceCreateViewModel @Inject constructor(
 
             placeRepository.createPlace(
                 PlaceCreateUpdate(
-                    // todo: tripIds 리스트로 uiState에서 관리하는 것으로 변경 필요.
-                    tripIds = listOf(uiStateValue.trip.id),
+                    tripIds = uiStateValue.trips.map { it.id },
                     title = uiStateValue.title,
                     content = uiStateValue.content,
                     tags = uiStateValue.category.map { it.id },

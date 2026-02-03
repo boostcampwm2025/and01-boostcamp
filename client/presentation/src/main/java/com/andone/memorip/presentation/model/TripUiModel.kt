@@ -2,6 +2,7 @@ package com.andone.memorip.presentation.model
 
 import androidx.compose.runtime.Immutable
 import com.andone.memorip.domain.model.Trip
+import com.andone.memorip.presentation.screen.placedetail.model.TripCompactUiModel
 
 @Immutable
 data class TripUiModel(
@@ -18,4 +19,12 @@ data class TripUiModel(
             )
         }
     }
+}
+
+fun TripCompactUiModel.toUiModel(): TripUiModel {
+    return TripUiModel(
+        id = tripId,
+        name = tripName,
+        images = emptyList()
+    )
 }

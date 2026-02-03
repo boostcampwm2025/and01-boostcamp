@@ -15,5 +15,6 @@ data class PlaceDetail(
     val trips: List<TripCompact>,
     val address: Address,
     val isMine: Boolean,
-    val isInMyTrip: Boolean
+    val isInMyGroup: Boolean,
+    val isPublic: Boolean
 )

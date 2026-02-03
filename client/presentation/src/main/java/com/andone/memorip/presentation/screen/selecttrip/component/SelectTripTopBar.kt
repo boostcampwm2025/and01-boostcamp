@@ -18,11 +18,11 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SelectTripTopBar(
+    enabled: Boolean,
     onBackClick: () -> Unit,
     onCheckClick: () -> Unit,
     modifier: Modifier = Modifier,
-    title: String = stringResource(R.string.select_trip_title),
-    hasChanges: Boolean = false
+    title: String = stringResource(R.string.select_trip_title)
 ) {
     TopAppBar(
         title = {
@@ -40,11 +40,14 @@ fun SelectTripTopBar(
             }
         },
         actions = {
-            IconButton(onClick = onCheckClick) {
+            IconButton(
+                onClick = onCheckClick,
+                enabled = enabled
+            ) {
                 Icon(
                     imageVector = ImageVector.vectorResource(R.drawable.ic_check),
                     contentDescription = stringResource(R.string.select_trip_check_button_description),
-                    tint = if (hasChanges) {
+                    tint = if (enabled) {
                         MemoripTheme.colors.primary
                     } else {
                         MemoripTheme.colors.lightGray
@@ -65,9 +68,9 @@ fun SelectTripTopBar(
 private fun SelectTripTopBarPreview() {
     MemoripTheme {
         SelectTripTopBar(
+            enabled = true,
             onBackClick = {},
-            onCheckClick = {},
-            hasChanges = false
+            onCheckClick = {}
         )
     }
 }

@@ -8,7 +8,7 @@ sealed interface PlaceDetailEvent {
 
     data object NavigateToTripList : PlaceDetailEvent
 
-    data object PlaceAddToTrip : PlaceDetailEvent
+    data object NavigateToPlaceEdit : PlaceDetailEvent
 
     data object ShowMoreMenu : PlaceDetailEvent
 
