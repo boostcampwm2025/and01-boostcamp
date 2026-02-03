@@ -59,7 +59,6 @@ fun BottomSheetPlaceListHeader(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // 다음 페이지 여부에 따라 다른 문자열 리소스 사용
         Text(
             text = if (hasMorePages) {
                 stringResource(R.string.trip_detail_place_list_count_format_more, placeCount)
