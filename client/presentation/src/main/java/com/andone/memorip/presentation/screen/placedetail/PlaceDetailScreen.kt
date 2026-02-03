@@ -1,6 +1,5 @@
 package com.andone.memorip.presentation.screen.placedetail
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -20,7 +19,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -38,9 +36,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -294,6 +292,7 @@ private fun PlaceDetailContent(
                     Text(
                         text = place.title,
                         color = MemoripTheme.colors.onSurface,
+                        overflow = TextOverflow.Ellipsis,
                         style = MemoripTheme.typography.headlineBold32
                     )
                     Row(horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceMedium)) {
@@ -339,44 +338,7 @@ private fun PlaceDetailContent(
                         )
                     }
                 )
-                /** TODO 로그인 기능 구현 시 나의 장소만 그룹 보이도록 수정하기 */
-                PlaceDetailInfoSection(
-                    infoString = place.trips.joinToString(
-                        separator = stringResource(R.string.place_detail_comma_separator)
-                    ) { it.tripName },
-                    iconRes = R.drawable.ic_outline_folder,
-                    onAction = onAction,
-                    modifier = Modifier.padding(start = MemoripPadding.PaddingXSmall)
-                )
             }
-        }
-    }
-}
-
-@Composable
-private fun PlaceDetailInfoSection(
-    infoString: String,
-    @DrawableRes iconRes: Int,
-    onAction: (PlaceDetailAction) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Surface(
-        onClick = { onAction(PlaceDetailAction.TripClick) },
-        modifier = modifier,
-        color = MemoripTheme.colors.background
-    ) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXXSmall),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                painter = painterResource(iconRes),
-                contentDescription = null
-            )
-            Text(
-                text = infoString,
-                style = MemoripTheme.typography.bodyMedium16
-            )
         }
     }
 }
