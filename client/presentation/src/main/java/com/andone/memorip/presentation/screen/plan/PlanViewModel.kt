@@ -328,21 +328,36 @@ class PlanViewModel @Inject constructor(
         timeBlocksFlow.update {
             it.map { targetBlock ->
                 if (targetBlock.id == id) {
-                    // 만약 시간 변경 시 해당 위치에 이미 아이템이 존재한다면 snackbar 띄우고 실패로 되돌리기
-                    val isDuplicated = placesFlow.value.filter{it.startDateTime != null && it.endDateTime != null}
-                        .any {
-                            val block = it.toTimeBlock(selectedDateFlow.value.currentDay!!.atStartOfDay())!!
-
-                            block.startMinute in targetBlock.startMinute..targetBlock.endMinute
-                                || (block.startMinute < targetBlock.startMinute && block.endMinute >= targetBlock.startMinute)
+                    val filteredPlaces = blockUiModelsFlow.value.filter { it.value is Place }
+                        .map { it.value as Place }
+                        .filter { it.startDateTime != null && it.endDateTime != null }
+                    val isDuplicated =
+                        filteredPlaces.any {
+                            it.startDateTime!! in startDateTime..endDateTime
+                                    || (it.startDateTime.isBefore(startDateTime) && !it.endDateTime!!.isBefore(
+                                startDateTime
+                            ))
                         }
-                    if (isDuplicated) return@update it
+
+                    if (isDuplicated) {
+                        snackBarManager.show(SnackBarEvent.PLAN_INVALID_ERROR)
+                        return@update it
+                    }
 
                     val duration = ChronoUnit.MINUTES.between(startDateTime, endDateTime).toInt()
                     val startMinute = ChronoUnit.HOURS.between(
                         startDateTime.withHour(0).withMinute(0),
                         startDateTime
                     ).toInt()
+                    placesFlow.update { places ->
+                        places.map { place ->
+                            if (place.id == targetBlock.id) {
+                                place.copy(startDateTime = startDateTime, endDateTime = endDateTime)
+                            } else {
+                                place
+                            }
+                        }
+                    }
                     targetBlock.copy(startMinute = startMinute, durationMinute = duration)
                 } else {
                     targetBlock
@@ -381,10 +396,7 @@ class PlanViewModel @Inject constructor(
                             }
 
                             val timeBlocks =
-                                inDatePlaces.mapNotNull {
-                                    Log.d("DEBUG TEST", "time block : $it")
-                                    it.toTimeBlock(uiState.value.date.startDay?.atStartOfDay()!!)
-                                }
+                                inDatePlaces.mapNotNull { it.toTimeBlock(uiState.value.date.startDay?.atStartOfDay()!!) }
                             val uiBlocks = inDatePlaces.associateBy { it.id }
                             timeBlocksFlow.update { timeBlocks }
                             blockUiModelsFlow.update { uiBlocks }
