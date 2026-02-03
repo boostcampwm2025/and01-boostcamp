@@ -2,6 +2,7 @@ package com.andone.memorip.presentation.screen.placecreate
 
 import android.content.res.Configuration
 import android.net.Uri
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -93,7 +94,15 @@ fun PlaceCreateScreen(
         )
 
         if (uiState.isLoading) {
-            LoadingIndicatorScreen()
+            LoadingIndicatorScreen(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clickable(
+                        interactionSource = null,
+                        indication = null,
+                        onClick = {}
+                    )
+            )
         }
     }
 }
