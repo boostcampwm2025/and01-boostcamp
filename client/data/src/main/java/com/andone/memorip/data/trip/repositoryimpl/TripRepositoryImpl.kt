@@ -115,4 +115,12 @@ class TripRepositoryImpl @Inject constructor(
         )
         return remoteDataSource.updatePlaceTime(tripPlaceId = tripPlaceId, request = request)
     }
+
+    override suspend fun deleteGroupPlace(tripPlaceId: String): Result<Unit> {
+        return remoteDataSource.deleteGroupPlace(tripPlaceId = tripPlaceId)
+    }
+
+    override suspend fun clearPlaceTime(tripPlaceId: String): Result<Unit> {
+        return remoteDataSource.clearPlaceTime(tripPlaceId = tripPlaceId)
+    }
 }
