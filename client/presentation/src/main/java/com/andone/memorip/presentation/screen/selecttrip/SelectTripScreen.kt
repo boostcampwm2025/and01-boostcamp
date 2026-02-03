@@ -35,12 +35,17 @@ import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace.SpaceLarge
 import com.andone.memorip.presentation.theme.MemoripSpace.SpaceXSmall
 import androidx.compose.ui.unit.dp
+import com.andone.memorip.presentation.screen.selecttrip.SelectTripScreenConstant.INPUT_DIALOG_MAX_LENGTH
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
 import com.andone.memorip.presentation.util.collectWithLifecycle
 
-private object SelectGroupScreenDimens {
+private object SelectGroupScreenDimen {
     val GridMinWidth = 160.dp
+}
+
+private object SelectTripScreenConstant {
+    const val INPUT_DIALOG_MAX_LENGTH = 20
 }
 
 @Composable
@@ -55,6 +60,11 @@ fun SelectTripScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var showDialog by remember { mutableStateOf(false) }
+    var dialogInputValue by remember { mutableStateOf("") }
+
+    LaunchedEffect(showDialog) {
+        if (showDialog) dialogInputValue = ""
+    }
 
     LaunchedEffect(placeId, initialSelectedTripId) {
         viewModel.onAction(
@@ -108,15 +118,22 @@ fun SelectTripScreen(
 
     if (showDialog) {
         MemoripInputDialog(
+            value = dialogInputValue,
+            onValueChange = { newValue ->
+                val filtered = newValue.replace("\n", "").let {
+                    if (it.length > INPUT_DIALOG_MAX_LENGTH) it.take(n = INPUT_DIALOG_MAX_LENGTH) else it
+                }
+                dialogInputValue = filtered
+            },
             title = stringResource(R.string.select_trip_dialog_title),
-            onConfirmClick = { groupName ->
-                viewModel.onAction(action = SelectTripAction.OnDialogConfirmClick(groupName))
+            onConfirmClick = { tripName ->
+                viewModel.onAction(action = SelectTripAction.OnDialogConfirmClick(tripName))
             },
             onCancelClick = { viewModel.onAction(action = SelectTripAction.OnDialogCancelClick) },
             onDismissRequest = { viewModel.onAction(action = SelectTripAction.OnDialogCancelClick) },
             hint = stringResource(R.string.select_trip_dialog_hint),
             label = stringResource(R.string.select_trip_dialog_label),
-            maxLength = 20
+            maxLength = INPUT_DIALOG_MAX_LENGTH
         )
     }
 }
@@ -162,7 +179,7 @@ private fun SelectGroupContent(
                 .padding(all = MemoripPadding.AppHorizontalPadding)
         ) {
             LazyVerticalGrid(
-                columns = GridCells.Adaptive(minSize = SelectGroupScreenDimens.GridMinWidth),
+                columns = GridCells.Adaptive(minSize = SelectGroupScreenDimen.GridMinWidth),
                 modifier = Modifier.fillMaxSize(),
                 horizontalArrangement = Arrangement.spacedBy(SpaceXSmall),
                 verticalArrangement = Arrangement.spacedBy(SpaceLarge)

@@ -25,22 +25,16 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 @Composable
 fun MemoripInputDialog(
     title: String,
+    value: String,
+    onValueChange: (String) -> Unit,
     onConfirmClick: (value: String) -> Unit,
     onCancelClick: () -> Unit,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
     hint: String? = null,
     label: String? = null,
-    maxLength: Int? = null
+    maxLength: Int? = null,
 ) {
-    var value by remember { mutableStateOf("") }
-
-    fun onValueChange(newValue: String) {
-        value = newValue.replace("\n", "").let {
-            if (maxLength != null && it.length > maxLength) it.take(maxLength) else it
-        }
-    }
-
     val supportingText: (@Composable () -> Unit)? = when {
         maxLength != null -> {
             {
@@ -67,7 +61,7 @@ fun MemoripInputDialog(
     ) {
         TextField(
             value = value,
-            onValueChange = { onValueChange(it) },
+            onValueChange = onValueChange,
             label = {
                 if (label != null) {
                     Text(text = label)
@@ -79,7 +73,7 @@ fun MemoripInputDialog(
                 }
             },
             trailingIcon = {
-                IconButton(onClick = { value = "" }) {
+                IconButton(onClick = { onValueChange("") }) {
                     Icon(
                         imageVector = ImageVector.vectorResource(R.drawable.ic_close),
                         contentDescription = stringResource(R.string.dialog_close_button_description),
@@ -113,8 +107,11 @@ fun MemoripInputDialog(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun MemoripInputDialogPreview() {
+    var value by remember { mutableStateOf("") }
     MemoripTheme {
         MemoripInputDialog(
+            value = value,
+            onValueChange = { value = it },
             title = "그룹 추가",
             onConfirmClick = {},
             onCancelClick = {},
