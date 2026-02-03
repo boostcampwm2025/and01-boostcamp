@@ -65,15 +65,16 @@ fun TimeBlockItem(
     scrollState: ScrollState,
     onMoved: (String, Int) -> Unit,
     onSlide: (String) -> Unit,
+    modifier: Modifier = Modifier,
     content: @Composable BoxScope.() -> Unit
 ) {
     var dragOffsetY by remember { mutableFloatStateOf(value = 0f) }
-    var dragOffsetX by remember { mutableFloatStateOf(value = 0f) }
+    var dragOffsetX by remember(block) { mutableFloatStateOf(value = 0f) }
     val startYPx = remember(block) { engine.blockStartYPx(block) }
     var isDragging by remember { mutableStateOf(value = false) }
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .offset {
                 IntOffset(
                     x = dragOffsetX.roundToInt(),
