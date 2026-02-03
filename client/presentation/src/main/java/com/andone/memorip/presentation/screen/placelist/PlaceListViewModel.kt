@@ -34,7 +34,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PlaceListViewModel @Inject constructor(
-    repository: PlaceRepository,
+    placeRepository: PlaceRepository,
     tagRepository: TagRepository,
     authRepository: AuthRepository,
     tokenRefresher: TokenRefresher
@@ -77,7 +77,7 @@ class PlaceListViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     val placesPagingFlow =
         combine(queryFlow, filterFlow) { query, (tagIds, region1Depth, region2Depth) ->
-            repository.getPlaceList(
+            placeRepository.getPlaceList(
                 query = query,
                 tagIds = tagIds,
                 region1Depth = region1Depth,
@@ -98,7 +98,7 @@ class PlaceListViewModel @Inject constructor(
             .cachedIn(viewModelScope)
 
     init {
-        val rootRegions = repository.loadRegions().map { it.toUiModel() }
+        val rootRegions = placeRepository.loadRegions().map { it.toUiModel() }
 
         _uiState.update {
             it.copy(rootRegions = rootRegions)
@@ -144,9 +144,7 @@ class PlaceListViewModel @Inject constructor(
             }
 
             PlaceListAction.ClearRegionFilter -> {
-                _uiState.update {
-                    it.copy(selectedRegionState = SelectedRegionState())
-                }
+                _uiState.update { it.copy(selectedRegionState = SelectedRegionState()) }
             }
         }
     }
