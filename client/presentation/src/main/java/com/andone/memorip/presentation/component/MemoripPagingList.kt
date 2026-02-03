@@ -30,7 +30,10 @@ fun <T : Any> MemoripPagingList(
     itemContent: @Composable (T) -> Unit
 ) {
     val loadState = pagingItems.loadState
-    val refreshState = loadState.refresh
+    val isRefreshing =
+        loadState.mediator?.refresh is LoadState.Loading || loadState.refresh is LoadState.Loading
+    val errorState =
+        loadState.mediator?.refresh as? LoadState.Error ?: loadState.refresh as? LoadState.Error
 
     if (pagingItems.itemCount > 0) {
         staggeredCells?.let { columns ->
@@ -82,20 +85,20 @@ fun <T : Any> MemoripPagingList(
         return
     }
 
-    when (refreshState) {
-        is LoadState.Loading -> {
+    when {
+        isRefreshing -> {
             LoadingIndicatorScreen(modifier = Modifier.fillMaxSize())
         }
 
-        is LoadState.Error -> {
+        errorState != null -> {
             ErrorScreen(
                 onRetry = { pagingItems.retry() },
                 modifier = Modifier.fillMaxSize(),
-                message = refreshState.error.localizedMessage
+                message = errorState.error.localizedMessage
             )
         }
 
-        is LoadState.NotLoading -> {
+        loadState.append.endOfPaginationReached && pagingItems.itemCount == 0 -> {
             emptyContent()
         }
     }
