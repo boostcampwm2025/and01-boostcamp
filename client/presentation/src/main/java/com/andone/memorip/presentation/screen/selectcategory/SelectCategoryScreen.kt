@@ -118,7 +118,6 @@ private fun SelectCategoryContent(
         modifier = modifier,
         topBar = {
             SelectCategoryTopBar(
-                checkEnabled = checkedCategories.isNotEmpty(),
                 onConfirmClick = { onAction(SelectCategoryAction.OnConfirmClick) },
                 onBackClick = { onAction(SelectCategoryAction.OnBackClick) }
             )

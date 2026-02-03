@@ -18,7 +18,6 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SelectCategoryTopBar(
-    checkEnabled: Boolean,
     onConfirmClick: () -> Unit,
     onBackClick: () -> Unit
 ) {
@@ -38,18 +37,11 @@ fun SelectCategoryTopBar(
             }
         },
         actions = {
-            IconButton(
-                onClick = onConfirmClick,
-                enabled = checkEnabled,
-            ) {
+            IconButton(onClick = onConfirmClick) {
                 Icon(
                     imageVector = ImageVector.vectorResource(R.drawable.ic_check),
                     contentDescription = stringResource(R.string.select_category_confirm_button_description),
-                    tint = if (checkEnabled) {
-                        MemoripTheme.colors.primary
-                    } else {
-                        MemoripTheme.colors.lightGray
-                    }
+                    tint = MemoripTheme.colors.primary
                 )
             }
         },
