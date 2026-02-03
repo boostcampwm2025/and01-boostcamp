@@ -14,12 +14,12 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.andone.memorip.navigation.MemoripNavConstant.tabTransition
-import com.andone.memorip.presentation.screen.tripdetail.tripDetail
-import com.andone.memorip.presentation.screen.triplist.tripList
 import com.andone.memorip.presentation.screen.placecreate.placeCreate
 import com.andone.memorip.presentation.screen.placedetail.placeDetail
 import com.andone.memorip.presentation.screen.placelist.placeList
 import com.andone.memorip.presentation.screen.plan.plan
+import com.andone.memorip.presentation.screen.tripdetail.tripDetail
+import com.andone.memorip.presentation.screen.triplist.tripList
 import com.andone.memorip.presentation.screen.user.user
 
 private object MemoripNavConstant {
@@ -77,7 +77,7 @@ fun MemoripNav(
             )
 
             placeCreate(
-                onNavigateToHome = { navigator.navigateToTab(MainBottomBarRoute.PLACE_LIST) },
+                onNavigateToHome = navigator::navigateToPlaceList,
                 onBackClick = navigator::popBackStack
             )
 
