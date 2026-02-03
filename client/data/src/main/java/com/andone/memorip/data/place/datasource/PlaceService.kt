@@ -47,6 +47,12 @@ interface PlaceService {
         @Body place: PlaceCreateUpdateRequest
     ): ApiResult<PlaceCreateResponse>
 
+    @PATCH("/api/places/{placeId}")
+    suspend fun updatePlace(
+        @Path("placeId") placeId: String,
+        @Body place: PlaceCreateUpdateRequest
+    ): ApiResult<PlaceDetailResponse>
+
     @DELETE("/api/places/{placeId}")
     suspend fun deletePlace(
         @Path("placeId") placeId: String

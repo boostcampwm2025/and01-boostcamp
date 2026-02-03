@@ -118,12 +118,6 @@ private fun PlaceCreateScreenContent(
         onAction(PlaceCreateAction.OnImageSelect(uiState.images.first()))
     }
 
-    LaunchedEffect(uiState.images) {
-        if (uiState.images.isEmpty()) {
-            onAction(PlaceCreateAction.OnLastImageRemove)
-        }
-    }
-
     DisposableEffect(Unit) {
         onDispose {
             onAction(PlaceCreateAction.OnScrollPositionChange(scrollState.value))
@@ -162,7 +156,7 @@ private fun PlaceCreateScreenContent(
             )
 
             SelectSection(
-                category = uiState.category,
+                category = uiState.tags,
                 location = uiState.location,
                 trips = uiState.trips,
                 onCategoryClick = { onAction(PlaceCreateAction.OnCategoryClick) },
@@ -269,8 +263,8 @@ fun SelectSection(
     onTripClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val locationValue = location?.name
-        ?.ifBlank { null } ?: stringResource(R.string.place_create_location_placeholder)
+    val locationValue = location?.name?.ifBlank { null } ?: location?.address
+    ?: stringResource(R.string.place_create_location_placeholder)
     val tripValue = trips
         .joinToString(stringResource(R.string.place_create_space)) { it.name }
         .ifEmpty { stringResource(R.string.place_create_trip_placeholder) }

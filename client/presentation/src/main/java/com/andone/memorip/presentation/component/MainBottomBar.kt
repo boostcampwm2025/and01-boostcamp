@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
@@ -29,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -65,8 +67,10 @@ fun MainBottomBar(
     onFabClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val navigationBarPadding =
-        WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+    val windowInsetsPadding = WindowInsets.navigationBars.asPaddingValues()
+    val leftPadding = windowInsetsPadding.calculateLeftPadding(LocalLayoutDirection.current)
+    val rightPadding = windowInsetsPadding.calculateRightPadding(LocalLayoutDirection.current)
+    val bottomPadding = windowInsetsPadding.calculateBottomPadding()
 
     AnimatedVisibility(
         visible = visible,
@@ -83,15 +87,20 @@ fun MainBottomBar(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(MemoripHeight.bottomBar + navigationBarPadding)
+                .height(MemoripHeight.bottomBar + bottomPadding)
                 .background(MemoripTheme.colors.transparent),
             contentAlignment = Alignment.TopCenter
         ) {
-            BottomBarSurface(navigationBarPadding)
+            BottomBarSurface(
+                leftPadding = leftPadding,
+                rightPadding = rightPadding,
+                bottomPadding = bottomPadding
+            )
 
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(start = leftPadding, end = rightPadding)
                     .height(MemoripHeight.bottomBar)
                     .background(MemoripTheme.colors.transparent),
                 horizontalArrangement = Arrangement.SpaceAround,
@@ -104,7 +113,8 @@ fun MainBottomBar(
 
                     val isSelected = tab == currentTab
                     val iconId = if (isSelected) tab.selectedIconId else tab.unselectedIconId
-                    val iconColor = if (isSelected) MemoripTheme.colors.primary else MemoripTheme.colors.gray
+                    val iconColor =
+                        if (isSelected) MemoripTheme.colors.primary else MemoripTheme.colors.gray
 
                     IconButton(
                         onClick = { onTabSelected(tab) },
@@ -147,36 +157,42 @@ private fun BottomBarCenterButton(
 
 @Composable
 private fun BottomBarSurface(
-    navigationBarPadding: Dp,
+    leftPadding: Dp,
+    rightPadding: Dp,
+    bottomPadding: Dp,
     modifier: Modifier = Modifier
 ) {
     val density = LocalDensity.current
+    val leftPx = with(density) { leftPadding.toPx() }
+    val rightPx = with(density) { rightPadding.toPx() }
+    val bottomPx = with(density) { bottomPadding.toPx() }
 
     val firstDpToPx = centerButtonSize.toPx(density)
     val smoothing = (centerButtonSize * 2 / 3).toPx(density)
     val depth = (MemoripHeight.bottomBar - buttonOffset).toPx(density)
 
     val barShape = GenericShape { size, _ ->
-        val width = size.width
-        val height = size.height + navigationBarPadding.toPx(density)
+        val contentWidth = size.width - leftPx - rightPx
+        val centerX = leftPx + contentWidth * 0.5f
+        val height = size.height + bottomPx
 
-        moveTo(width * 0.5f - firstDpToPx, 0f)
-        lineTo(0f, 0f)
-        lineTo(0f, height)
-        lineTo(width, height)
-        lineTo(width, 0f)
-        lineTo(width * 0.5f + firstDpToPx, 0f)
+        moveTo(centerX - firstDpToPx, 0f)
+        lineTo(leftPx, 0f)
+        lineTo(leftPx, height)
+        lineTo(size.width - rightPx, height)
+        lineTo(size.width - rightPx, 0f)
+        lineTo(centerX + firstDpToPx, 0f)
 
         cubicTo(
-            width * 0.5f + smoothing, 0f,
-            width * 0.5f + smoothing, depth,
-            width * 0.5f, depth
+            centerX + smoothing, 0f,
+            centerX + smoothing, depth,
+            centerX, depth
         )
 
         cubicTo(
-            width * 0.5f - smoothing, depth,
-            width * 0.5f - smoothing, 0f,
-            width * 0.5f - firstDpToPx, 0f
+            centerX - smoothing, depth,
+            centerX - smoothing, 0f,
+            centerX - firstDpToPx, 0f
         )
 
         close()

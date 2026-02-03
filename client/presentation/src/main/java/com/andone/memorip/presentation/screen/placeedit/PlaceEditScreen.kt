@@ -16,6 +16,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -46,7 +47,7 @@ fun PlaceEditScreen(
     viewModel: PlaceEditViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val initUiState by viewModel.initUiState.collectAsStateWithLifecycle()
+    val isUpdateEnabled by viewModel.isUpdateEnabled.collectAsStateWithLifecycle()
 
     viewModel.event.collectWithLifecycle { event ->
         when (event) {
@@ -60,7 +61,7 @@ fun PlaceEditScreen(
     Box(modifier = modifier.fillMaxSize()) {
         PlaceEditScreenContent(
             uiState = uiState,
-            initUiState = initUiState,
+            isUpdateEnabled = isUpdateEnabled,
             onAction = viewModel::onAction
         )
 
@@ -74,26 +75,16 @@ fun PlaceEditScreen(
 @Composable
 private fun PlaceEditScreenContent(
     uiState: PlaceEditUiState,
-    initUiState: PlaceEditUiState,
+    isUpdateEnabled: Boolean,
     onAction: (PlaceEditAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val scrollState = rememberScrollState(uiState.scrollPosition)
+    val context = LocalContext.current
 
-    val placeEditEnable = (uiState.images.isNotEmpty() &&
-            uiState.location != null &&
-            uiState.title.isNotBlank() &&
-            uiState.trips.isNotEmpty()) &&
-            uiState != initUiState
+    val scrollState = rememberScrollState(uiState.scrollPosition)
 
     LaunchedEffect(Unit) {
         onAction(PlaceEditAction.OnImageSelect(uiState.images.first()))
-    }
-
-    LaunchedEffect(uiState.images) {
-        if (uiState.images.isEmpty()) {
-            onAction(PlaceEditAction.OnLastImageRemove)
-        }
     }
 
     DisposableEffect(Unit) {
@@ -112,8 +103,8 @@ private fun PlaceEditScreenContent(
         bottomBar = {
             PlaceEditBottomBar(
                 value = stringResource(R.string.place_edit_title),
-                onClick = { },
-                enabled = placeEditEnable
+                onClick = { onAction(PlaceEditAction.OnPlaceUpdate(context)) },
+                enabled = isUpdateEnabled
             )
         },
         contentWindowInsets = WindowInsets()
@@ -163,7 +154,7 @@ private fun PlaceEditScreenPreview() {
     MemoripTheme {
         PlaceEditScreenContent(
             uiState = PlaceEditUiState(),
-            initUiState = PlaceEditUiState(),
+            isUpdateEnabled = true,
             onAction = {}
         )
     }
