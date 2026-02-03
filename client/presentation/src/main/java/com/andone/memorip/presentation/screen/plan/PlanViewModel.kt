@@ -1,6 +1,5 @@
 package com.andone.memorip.presentation.screen.plan
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.BackoffPolicy
@@ -257,6 +256,11 @@ class PlanViewModel @Inject constructor(
             }
 
             is PlanAction.PlanEditConfirmClick -> {
+                if (action.startDateTime.isEqual(action.endDateTime)) {
+                    snackBarManager.show(SnackBarEvent.PLAN_DATE_INVALID_ERROR)
+                    return
+                }
+
                 updatePlan(
                     id = action.id,
                     startDateTime = action.startDateTime,

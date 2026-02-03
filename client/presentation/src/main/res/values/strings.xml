@@ -173,6 +173,7 @@
     <string name="snackbar_unknown_error">오류가 발생했습니다. 다시 시도해주세요</string>
     <string name="snackbar_plan_days_validation_error">날짜는 최대 1달까지 지정 가능합니다</string>
     <string name="snackbar_plan_invalid_error">다른 계획과 중복 배치는 지원하지 않습니다</string>
+    <string name="snackbar_plan_date_invalid_error">시작 날짜와 종료 날짜는 동일할 수 없습니다</string>
     <string name="snackbar_success">성공적으로 완료되었습니다</string>
 
     <!-- UserScreen -->
