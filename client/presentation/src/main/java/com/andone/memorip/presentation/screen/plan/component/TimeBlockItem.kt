@@ -168,6 +168,9 @@ fun TimeBlockItem(
                             } else {
                                 dragOffsetX = 0f
                             }
+                        },
+                        onDragCancel = {
+                            dragOffsetX = 0f
                         }
                     )
                 },

@@ -27,7 +27,6 @@ import com.andone.memorip.presentation.screen.plan.model.PlanTripUiModel
 import com.andone.memorip.presentation.screen.plan.model.PlanUiState
 import com.andone.memorip.presentation.screen.plan.model.TripListUiModel
 import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_DAY
-import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_HOUR
 import com.andone.memorip.presentation.util.snackbar.SnackBarEvent
 import com.andone.memorip.presentation.util.snackbar.SnackBarManager
 import com.andone.memorip.presentation.util.toRemoteString
@@ -357,7 +356,7 @@ class PlanViewModel @Inject constructor(
 
                     isDup = filteredPlaces.any {
                         it.startDateTime!! in startDateTime..endDateTime.minusMinutes(1)
-                            || (it.startDateTime < startDateTime && it.endDateTime!! >= startDateTime)
+                                || (it.startDateTime < startDateTime && it.endDateTime!! >= startDateTime)
                     }
 
                     if (isDup) {
@@ -612,7 +611,7 @@ class PlanViewModel @Inject constructor(
         )
         blockUiModelsFlow.update { it + (place.id to newPlace) }
         timeBlocksFlow.update { it + newPlace.toTimeBlock(dayStart = uiState.value.date.startDay!!.atStartOfDay())!! }
-        placesFlow.update { (it - place).toImmutableList() }
+        placesFlow.update { it.filter { it.id != place.id }.toImmutableList() }
     }
 
     private fun buildPendingUpdateWork(id: String, payload: Payload): OneTimeWorkRequest {
