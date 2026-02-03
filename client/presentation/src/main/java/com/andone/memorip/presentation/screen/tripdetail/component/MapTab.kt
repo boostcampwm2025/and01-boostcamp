@@ -97,7 +97,7 @@ fun MapTab(
     val isBottomSheetExpanded by remember {
         derivedStateOf {
             try {
-                scaffoldState.bottomSheetState.requireOffset() <= 0.5f
+                scaffoldState.bottomSheetState.requireOffset() <= 20f
             } catch (e: IllegalStateException) {
                 false
             }
