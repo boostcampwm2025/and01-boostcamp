@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.screen.plan
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.BackoffPolicy
@@ -26,6 +27,7 @@ import com.andone.memorip.presentation.screen.plan.model.PlanTripUiModel
 import com.andone.memorip.presentation.screen.plan.model.PlanUiState
 import com.andone.memorip.presentation.screen.plan.model.TripListUiModel
 import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_DAY
+import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_HOUR
 import com.andone.memorip.presentation.util.snackbar.SnackBarEvent
 import com.andone.memorip.presentation.util.snackbar.SnackBarManager
 import com.andone.memorip.presentation.util.toRemoteString
@@ -344,21 +346,21 @@ class PlanViewModel @Inject constructor(
     }
 
     private fun updatePlan(id: String, startDateTime: LocalDateTime, endDateTime: LocalDateTime) {
+        var isDup = false
         timeBlocksFlow.update {
             it.map { targetBlock ->
                 if (targetBlock.id == id) {
                     val filteredPlaces = blockUiModelsFlow.value.filter { it.value is Place }
                         .map { it.value as Place }
                         .filter { it.startDateTime != null && it.endDateTime != null }
-                    val isDuplicated =
-                        filteredPlaces.any {
-                            it.startDateTime!! in startDateTime..endDateTime.minusMinutes(1)
-                                    || (it.startDateTime.isBefore(startDateTime) && !it.endDateTime!!.isBefore(
-                                startDateTime
-                            ))
-                        }
+                        .filterNot { it.id == id }
 
-                    if (isDuplicated) {
+                    isDup = filteredPlaces.any {
+                        it.startDateTime!! in startDateTime..endDateTime.minusMinutes(1)
+                            || (it.startDateTime < startDateTime && it.endDateTime!! >= startDateTime)
+                    }
+
+                    if (isDup) {
                         snackBarManager.show(SnackBarEvent.PLAN_INVALID_ERROR)
                         return@update it
                     }
@@ -375,14 +377,16 @@ class PlanViewModel @Inject constructor(
                 }
             }
         }
-        blockUiModelsFlow.update { blocks ->
-            val oldBlock = blocks[id] ?: return@update blocks
-            when (oldBlock) {
-                is Place -> {
-                    blocks + (id to oldBlock.copy(
-                        startDateTime = startDateTime,
-                        endDateTime = endDateTime
-                    ))
+        if (!isDup) {
+            blockUiModelsFlow.update { blocks ->
+                val oldBlock = blocks[id] ?: return@update blocks
+                when (oldBlock) {
+                    is Place -> {
+                        blocks + (id to oldBlock.copy(
+                            startDateTime = startDateTime,
+                            endDateTime = endDateTime
+                        ))
+                    }
                 }
             }
         }
@@ -481,6 +485,30 @@ class PlanViewModel @Inject constructor(
                 }
             }
         }
+//        blockUiModelsFlow.update { blocks ->
+//            val target = uiState.value.places.find{ it.id == id } ?: return@update blocks
+//            when(target) {
+//                is Place -> {
+//                    val timeBlock = target.toTimeBlock(uiState.value.date.startDay!!.atStartOfDay()) ?: return@update blocks
+//                    val maxStart = uiState.value.date.totalMinutes - timeBlock.durationMinute
+//                    val start = newStartMinute.coerceIn(0, maxStart)
+//
+//                    val day = newStartMinute / MINUTES_PER_DAY
+//                    val startMinute = start - (day * MINUTES_PER_DAY)
+//                    val hour =  startMinute / MINUTES_PER_HOUR
+//                    val minute = startMinute % MINUTES_PER_HOUR
+//                    val startDateTime = uiState.value.date.startDay!!.atStartOfDay().plusDays(day.toLong()).plusHours(hour.toLong()).plusMinutes(minute.toLong())
+//
+//                    val endTotalMinute = newStartMinute + timeBlock.durationMinute
+//                    val endDay = endTotalMinute / MINUTES_PER_DAY
+//                    val endHour = endTotalMinute / MINUTES_PER_HOUR
+//                    val endMinute = startMinute % MINUTES_PER_DAY
+//                    val endDateTime = uiState.value.date.startDay!!.atStartOfDay().plusDays(endDay.toLong()).plusHours(endHour.toLong()).plusMinutes(endMinute.toLong())
+//
+//                    blocks + (id to target.copy(startDateTime = startDateTime, endDateTime = endDateTime))
+//                }
+//            }
+//        }
     }
 
     private fun deleteBlock(id: String) {
