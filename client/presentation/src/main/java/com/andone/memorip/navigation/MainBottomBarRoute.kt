@@ -18,8 +18,8 @@ enum class MainBottomBarRoute(
         route = PlaceList
     ),
     TRIP_LIST(
-        selectedIconId = R.drawable.ic_twotone_folder,
-        unselectedIconId = R.drawable.ic_outline_folder,
+        selectedIconId = R.drawable.ic_twotone_trip,
+        unselectedIconId = R.drawable.ic_outline_trip,
         titleTextId = R.string.main_bottom_bar_trip,
         route = TripList
     ),

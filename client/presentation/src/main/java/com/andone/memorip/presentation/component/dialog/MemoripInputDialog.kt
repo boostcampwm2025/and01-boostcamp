@@ -1,6 +1,7 @@
 package com.andone.memorip.presentation.component.dialog
 
 import android.content.res.Configuration
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -15,6 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -22,14 +25,31 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 @Composable
 fun MemoripInputDialog(
     title: String,
+    value: String,
+    onValueChange: (String) -> Unit,
     onConfirmClick: (value: String) -> Unit,
     onCancelClick: () -> Unit,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
     hint: String? = null,
-    label: String? = null
+    label: String? = null,
+    maxLength: Int? = null,
 ) {
-    var value by remember { mutableStateOf("") }
+    val supportingText: (@Composable () -> Unit)? = when {
+        maxLength != null -> {
+            {
+                Text(
+                    text = stringResource(
+                        R.string.input_dialog_char_count_format,
+                        value.length,
+                        maxLength
+                    )
+                )
+            }
+        }
+
+        else -> null
+    }
 
     DefaultDialog(
         title = title,
@@ -41,7 +61,7 @@ fun MemoripInputDialog(
     ) {
         TextField(
             value = value,
-            onValueChange = { value = it },
+            onValueChange = onValueChange,
             label = {
                 if (label != null) {
                     Text(text = label)
@@ -53,7 +73,7 @@ fun MemoripInputDialog(
                 }
             },
             trailingIcon = {
-                IconButton(onClick = { value = "" }) {
+                IconButton(onClick = { onValueChange("") }) {
                     Icon(
                         imageVector = ImageVector.vectorResource(R.drawable.ic_close),
                         contentDescription = stringResource(R.string.dialog_close_button_description),
@@ -61,6 +81,12 @@ fun MemoripInputDialog(
                     )
                 }
             },
+            supportingText = supportingText,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Done
+            ),
+            singleLine = true,
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = MemoripTheme.colors.primaryContainer,
                 unfocusedContainerColor = MemoripTheme.colors.primaryContainer,
@@ -70,6 +96,8 @@ fun MemoripInputDialog(
                 unfocusedPlaceholderColor = MemoripTheme.colors.primary,
                 focusedLabelColor = MemoripTheme.colors.primary,
                 unfocusedLabelColor = MemoripTheme.colors.primary,
+                errorSupportingTextColor = MemoripTheme.colors.error,
+                errorLabelColor = MemoripTheme.colors.error,
             )
         )
     }
@@ -79,14 +107,18 @@ fun MemoripInputDialog(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun MemoripInputDialogPreview() {
+    var value by remember { mutableStateOf("") }
     MemoripTheme {
         MemoripInputDialog(
+            value = value,
+            onValueChange = { value = it },
             title = "그룹 추가",
             onConfirmClick = {},
             onCancelClick = {},
             onDismissRequest = {},
-            hint = "input",
-            label = "이름"
+            hint = stringResource(R.string.select_trip_dialog_preview_hint),
+            label = stringResource(R.string.select_trip_dialog_preview_label),
+            maxLength = 20
         )
     }
 }

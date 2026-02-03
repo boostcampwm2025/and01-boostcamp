@@ -11,6 +11,8 @@ import com.andone.memorip.navigation.TripDetail
 import com.andone.memorip.presentation.component.map.MapClusterManager
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.model.toUiModel
+import com.andone.memorip.presentation.model.TripUiModel
+import com.andone.memorip.presentation.screen.tripdetail.model.PlaceViewMode
 import com.andone.memorip.presentation.screen.tripdetail.model.TripDetailAction
 import com.andone.memorip.presentation.screen.tripdetail.model.TripDetailEvent
 import com.andone.memorip.presentation.screen.tripdetail.model.TripDetailUiState
@@ -113,7 +115,10 @@ class TripDetailViewModel @AssistedInject constructor(
     init {
         viewModelScope.launch {
             repository.getTripById(tripId).onSuccess { trip ->
-                _uiState.update { it.copy(tripName = trip.title) }
+                val tripUiModel = TripUiModel.from(trip)
+                _uiState.update {
+                    it.copy(tripInfo = tripUiModel)
+                }
             }
         }
     }
@@ -128,19 +133,11 @@ class TripDetailViewModel @AssistedInject constructor(
                 _event.trySend(element = TripDetailEvent.NavigateBack)
             }
 
-            is TripDetailAction.OnPlaceClick -> {
-                _event.trySend(element = TripDetailEvent.NavigateToPlaceDetail(id = action.id))
-            }
-
             TripDetailAction.OnSearchClick -> {
                 /** Search 버튼 눌렀을 때의 event 처리 */
             }
 
-            is TripDetailAction.OnTabClick -> {
-                _uiState.update { it.copy(currentTab = action.currentTab) }
-            }
-
-            is TripDetailAction.OnMapPlaceClick -> {
+            is TripDetailAction.OnPlaceClick -> {
                 _uiState.update {
                     it.copy(
                         mapSelectedPlace = action.place,
@@ -149,7 +146,7 @@ class TripDetailViewModel @AssistedInject constructor(
                 }
             }
 
-            TripDetailAction.OnMapPlaceClose -> {
+            TripDetailAction.OnPlaceDetailBottomSheetClose -> {
                 _uiState.update {
                     it.copy(
                         mapSelectedPlace = null,
@@ -168,6 +165,17 @@ class TripDetailViewModel @AssistedInject constructor(
 
             is TripDetailAction.OnMapCameraChange -> {
                 onCameraChange(action.projection, action.zoom)
+            }
+
+            TripDetailAction.OnViewModeToggle -> {
+                _uiState.update {
+                    it.copy(
+                        placeViewMode = when (it.placeViewMode) {
+                            PlaceViewMode.LIST -> PlaceViewMode.GRID
+                            PlaceViewMode.GRID -> PlaceViewMode.LIST
+                        }
+                    )
+                }
             }
         }
     }
