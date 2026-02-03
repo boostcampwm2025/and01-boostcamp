@@ -16,8 +16,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.map.ClusterMarkerDimen.BorderWidth
 import com.andone.memorip.presentation.component.map.ClusterMarkerDimen.CornerRadius
 import com.andone.memorip.presentation.component.map.ClusterMarkerDimen.InnerSize
@@ -29,6 +31,10 @@ private object ClusterMarkerDimen {
     val InnerSize = 48.dp
     val BorderWidth: Dp = MemoripLineWidth.Small
     val CornerRadius: Dp = 6.dp
+}
+
+private object ClusterMarkerConstant {
+    const val MAX_DISPLAY_COUNT = 99
 }
 
 @Composable
@@ -66,7 +72,11 @@ fun ClusterMarker(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = if (count > 99) "99+" else count.toString(),
+                    text = if (count > ClusterMarkerConstant.MAX_DISPLAY_COUNT) {
+                        stringResource(R.string.map_cluster_marker_max_count)
+                    } else {
+                        count.toString()
+                    },
                     color = MemoripTheme.colors.background,
                     style = MemoripTheme.typography.labelMedium14
                 )

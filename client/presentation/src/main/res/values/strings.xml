@@ -257,4 +257,7 @@
     <!-- PlacePickerItem -->
     <string name="place_picker_item_image_description">장소에 대한 이미지</string>
 
+    <!-- Map Cluster Marker -->
+    <string name="map_cluster_marker_max_count">99+</string>
+
 </resources>
