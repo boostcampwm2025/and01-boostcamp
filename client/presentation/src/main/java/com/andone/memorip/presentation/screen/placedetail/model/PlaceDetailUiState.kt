@@ -1,0 +1,30 @@
+package com.andone.memorip.presentation.screen.placedetail.model
+
+import com.andone.memorip.domain.model.response.PlaceDetail
+import com.andone.memorip.presentation.model.toUiModel
+import kotlinx.collections.immutable.toImmutableList
+
+data class PlaceDetailUiState(
+    val place: PlaceUiModel = PlaceUiModel(),
+    val isLoading: Boolean = true
+)
+
+fun PlaceDetail.toUiModel(): PlaceUiModel = PlaceUiModel(
+    id = this.placeId,
+    title = this.title,
+    tags = this.tags.map { it.toUiModel() }.toImmutableList(),
+    locationName = this.address.fullAddress,
+    latitude = this.latitude,
+    longitude = this.longitude,
+    imageUrls = this.images.toImmutableList(),
+    trips = this.trips.map {
+        TripCompactUiModel(
+            tripId = it.tripId,
+            tripName = it.tripName
+        )
+    }.toImmutableList(),
+    content = this.content ?: "",
+    isMine = this.isMine,
+    isInMyTrip = this.isInMyGroup,
+    isPublic = this.isPublic
+)

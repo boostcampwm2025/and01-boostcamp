@@ -1,0 +1,12 @@
+package com.andone.memorip.presentation.screen.placelist.model
+
+sealed interface PlaceListEvent {
+
+    data object NavigateToPlaceCreate : PlaceListEvent
+
+    data class NavigateToPlaceDetail(val id: String) : PlaceListEvent
+
+    data object ShowSnackBar : PlaceListEvent
+
+    data object RefreshPagingData: PlaceListEvent
+}

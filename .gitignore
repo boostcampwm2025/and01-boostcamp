@@ -1,0 +1,63 @@
+*.iml
+.gradle
+client/local.properties
+client/.idea/caches
+client/.idea/libraries
+client/.idea/modules.xml
+client/.idea/workspace.xml
+client/.idea/navEditor.xml
+client/.idea/assetWizardSettings.xml
+.DS_Store
+client/build
+client/captures
+client/app/google-services
+.externalNativeBuild
+.cxx
+local.properties
+client/app/release/
+client/app/google-services.json
+client/app/src/main/res/xml/network_security_config.xml
+client/config
+
+HELP.md
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+server/.env
+server/firebase-service-account.json
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### NetBeans ###
+server/nbproject/private/
+server/nbbuild/
+server/dist/
+server/nbdist/
+server/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+### Kotlin ###
+.kotlin
+

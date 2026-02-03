@@ -1,0 +1,82 @@
+package com.andone.memorip.presentation.screen.selectimage.component
+
+import android.net.Uri
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Icon
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
+import coil.compose.AsyncImage
+import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.screen.selectimage.component.ThumbnailItemDimens.imageSize
+import com.andone.memorip.presentation.theme.MemoripAlpha
+import com.andone.memorip.presentation.theme.MemoripLineWidth
+import com.andone.memorip.presentation.theme.MemoripTheme
+
+private object ThumbnailItemDimens {
+    val imageSize = 60.dp
+}
+
+@Composable
+fun ThumbnailItem(
+    imageUri: Uri,
+    isSelected: Boolean,
+    isDone: Boolean,
+    onClick: () -> Unit
+) {
+    val borderColor = if (isSelected) MemoripTheme.colors.primary else MemoripTheme.colors.gray
+
+    Box(
+        modifier = Modifier
+            .size(imageSize)
+            .clip(MemoripTheme.shapes.roundedXSmall)
+            .border(
+                width = MemoripLineWidth.Small,
+                color = borderColor,
+                shape = MemoripTheme.shapes.roundedXSmall
+            )
+            .clickable { onClick() }
+    ) {
+        AsyncImage(
+            model = imageUri,
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize()
+        )
+
+        if (isDone) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MemoripTheme.colors.lightGray.copy(alpha = MemoripAlpha.IMAGE_OVERLAY)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_check),
+                    contentDescription = "Done",
+                    tint = MemoripTheme.colors.white,
+                )
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ThumbnailsItemPreview() {
+    ThumbnailItem(
+        imageUri = "".toUri(),
+        isSelected = true,
+        isDone = true,
+        onClick = {}
+    )
+}

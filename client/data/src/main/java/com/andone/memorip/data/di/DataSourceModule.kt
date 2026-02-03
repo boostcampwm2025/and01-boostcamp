@@ -1,0 +1,38 @@
+package com.andone.memorip.data.di
+
+import com.andone.memorip.data.ai.ToxicityClassifier
+import com.andone.memorip.data.trip.datasource.remote.TripRemoteDataSource
+import com.andone.memorip.data.trip.datasource.remote.TripRemoteDataSourceImpl
+import com.andone.memorip.data.place.datasource.remote.PlaceRemoteDataSource
+import com.andone.memorip.data.place.datasource.remote.PlaceRemoteDataSourceImpl
+import com.andone.memorip.data.tag.datasource.remote.TagRemoteDataSource
+import com.andone.memorip.data.tag.datasource.remote.TagRemoteDataSourceImpl
+import com.andone.memorip.data.user.datasource.remote.UserRemoteDataSource
+import com.andone.memorip.data.user.datasource.remote.UserRemoteDataSourceImpl
+import com.andone.memorip.domain.ai.ToxicityAnalyzer
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import jakarta.inject.Singleton
+
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class DataSourceModule {
+
+    @Binds
+    @Singleton
+    abstract fun bindPlaceDataSource(impl: PlaceRemoteDataSourceImpl): PlaceRemoteDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindTagDataSource(impl: TagRemoteDataSourceImpl): TagRemoteDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindUserDataSource(impl: UserRemoteDataSourceImpl): UserRemoteDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindTripDataSource(impl: TripRemoteDataSourceImpl): TripRemoteDataSource
+}

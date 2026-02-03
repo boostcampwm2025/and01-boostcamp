@@ -1,0 +1,244 @@
+<resources>
+    <string name="app_name">Memorip</string>
+
+    <!-- Time Format -->
+    <string name="time_am">오전</string>
+    <string name="time_pm">오후</string>
+    <string name="date_time_format">%1$d월 %2$d일 %3$s %4$d:%5$02d</string>
+    <string name="time_format">%1$s %2$d:%3$02d</string>
+    <string name="range_format">%1$s - %2$s</string>
+
+    <!-- Dialog -->
+    <string name="dialog_cancel_message">취소</string>
+    <string name="dialog_confirm_message">확인</string>
+    <string name="dialog_delete_message">삭제</string>
+    <string name="dialog_close_button_description">입력 초기화 버튼</string>
+    <string name="dialog_refresh_button_description">색상 값 갱신 버튼</string>
+    <string name="dialog_name_place_holder">이름</string>
+    <string name="category_dialog_color_format">#%s</string>
+    <string name="category_dialog_max_length_err_hint">6글자만 입력해주세요(# 제외)</string>
+    <string name="category_dialog_valid_color_err_hint">0~9, A~F까지의 값만 입력해주세요</string>
+    <string name="category_dialog_empty_name_err_hint">이름을 입력해주세요</string>
+
+    <!-- Loading Indicator -->
+    <string name="loading_indicator_message">로딩 중...</string>
+
+    <!-- StaggeredGrid-->
+    <string name="staggered_grid_image_content_description">장소 이미지</string>
+
+    <!-- TripListScreen -->
+    <string name="trip_list_search_content_description">Search</string>
+    <string name="trip_list_add_content_description">Add</string>
+    <string name="trip_list_overflow_count">+%1$d</string>
+
+    <!-- SelectImageScreen -->
+    <string name="select_image_cancel">취소</string>
+    <string name="select_image_done">확인</string>
+    <string name="select_image_image_count_format">%1$d / %2$d</string>
+    <string name="select_image_title">사진 선택</string>
+
+    <!-- SelectCategoryScreen -->
+    <string name="select_category_back_button_description">뒤로 가기 버튼</string>
+    <string name="select_category_title">태그 선택</string>
+    <string name="select_category_dialog_title">태그 생성</string>
+    <string name="select_category_confirm_button_description">태그 추가 확인 버튼</string>
+    <string name="select_category_create_category_button_description">태그 추가 버튼</string>
+    <string name="select_category_max_category_over_err_message">태그는 최대 3개까지 선택 가능합니다.</string>
+    <string name="trip_image_grid_empty_message">아직 비어있어요</string>
+
+    <!-- TripView-->
+    <string name="trip_view_default_name">기본 여행</string>
+    <string name="trip_view_add_place">장소를 추가해주세요</string>
+
+    <!-- SelectTripScreen -->
+    <string name="select_trip_back_button_description">뒤로 가기 버튼</string>
+    <string name="select_trip_check_button_description">여행 선택 확인 버튼</string>
+    <string name="select_trip_title">여행 선택</string>
+    <string name="select_trip_add_to_my_trip_title">내 여행에 추가</string>
+    <string name="select_trip_dialog_title">여행 추가</string>
+    <string name="select_trip_dialog_label">이름</string>
+    <string name="select_trip_dialog_hint">여행 이름</string>
+
+    <!-- SelectLocationScreen -->
+    <string name="select_location_title">위치 선택</string>
+    <string name="select_location_button">이 위치로 결정</string>
+
+    <!-- TripDetailScreen-->
+    <string name="trip_detail_tab_gallery">갤러리</string>
+    <string name="trip_detail_tab_map">사진 지도</string>
+    <string name="trip_detail_map_placeholder">사진 지도 기능은 추후 구현 예정입니다</string>
+    <string name="trip_detail_back_button_content_description">뒤로 가기</string>
+    <string name="trip_detail_menu_button_content_description">메뉴</string>
+    <string name="trip_detail_search_button_content_description">검색</string>
+    <string name="trip_detail_place_list_title">장소 목록</string>
+
+    <!-- PlaceCreateScreen -->
+    <string name="place_create_title">장소 추가</string>
+    <string name="place_create_back_content_description">뒤로가기</string>
+    <string name="place_create_check_content_description">확인</string>
+    <string name="place_create_image_count_format">%1$d/%2$d</string>
+    <string name="place_create_add_image_content_description">사진추가</string>
+    <string name="place_create_content_title">제목</string>
+    <string name="place_create_content">내용</string>
+    <string name="place_create_clear">지우기</string>
+    <string name="place_create_content_input">내용을 입력해주세요</string>
+    <string name="place_create_title_input">제목을 입력해주세요</string>
+    <string name="place_create_tag">태그</string>
+    <string name="place_create_location">위치</string>
+    <string name="place_create_trip">여행</string>
+    <string name="place_delete_image">사진 삭제</string>
+    <string name="place_create_location_placeholder">사용자 지정</string>
+    <string name="place_create_space">" "</string>
+    <string name="place_create_snack_bar_input_message">사진, 제목, 위치, 여행을 입력해주세요.</string>
+    <string name="place_create_open_to_everyone">모두에게 공개하기</string>
+    <string name="place_create_value_length_format">%1$d/%2$d</string>
+    <string name="place_create_button_text">장소 추가하기</string>
+    <string name="place_create_trip_placeholder">여행을 선택하세요</string>
+    <string name="place_create_tag_placeholder">태그를 선택하세요</string>
+    <string name="place_create_snackbar_inappropriate_content_error">%1$s 관련 부적절한 표현이 포함되어 수정이 필요합니다</string>
+
+
+    <!-- MainBottomBar -->
+    <string name="main_bottom_bar_place_list">장소</string>
+    <string name="main_bottom_bar_user">마이페이지</string>
+    <string name="main_bottom_bar_trip">여행</string>
+    <string name="main_bottom_bar_plan">계획</string>
+    <string name="main_bottom_center_button_content_description">추가</string>
+
+    <!-- PlaceDetail -->
+    <string name="place_detail_image_content_description">장소 이미지</string>
+    <string name="place_detail_action_description">장소 스크랩 버튼</string>
+    <string name="place_detail_more_menu_content_description">더보기</string>
+    <string name="place_detail_edit_menu_item">수정</string>
+    <string name="place_detail_delete_menu_item">삭제</string>
+    <string name="place_detail_delete_dialog_title">장소 삭제</string>
+    <string name="place_detail_delete_dialog_message">이 장소를 삭제하시겠습니까?</string>
+    <string name="place_detail_image_count">%1$d/%2$d</string>
+    <string name="place_detail_tag">태그</string>
+    <string name="place_detail_image_cnt">%d/%d</string>
+    <string name="place_detail_view_in_map_app">지도 앱에서 보기</string>
+    <string name="place_detail_chooser_title">지도 앱에서 위치 보기</string>
+    <string name="place_detail_comma_separator">, </string>
+
+    <!-- PlaceEdit -->
+    <string name="place_edit_title">장소 수정</string>
+    <string name="place_edit_button_text">장소 수정하기</string>
+
+    <!-- PlaceImagesBottomSheet -->
+    <string name="placeimagebottomsheet_unknown_place">알 수 없는 장소</string>
+    <string name="placeimagebottomsheet_place_image_count">사진 %d장</string>
+
+    <!-- ErrorFullScreen -->
+    <string name="errorfullscreen_retry_button">다시 시도</string>
+    <string name="errorfullscreen_error_default_message">잠시 후 다시 시도해주세요.</string>
+    <string name="errorfullscreen_error_map_message">지도를 불러올 수 없습니다.</string>
+
+    <!-- SearchBar -->
+    <string name="search_bar_placeholder">검색어를 입력하세요.</string>
+    <string name="search_bar_go_back_content_description">뒤로 가기</string>
+    <string name="search_bar_close_content_description">검색어 삭제</string>
+    <string name="search_bar_empty_result">검색 결과가 없습니다.</string>
+
+    <!-- PlaceList -->
+    <string name="place_list_search">검색</string>
+    <string name="place_list_region">지역 :</string>
+    <string name="place_list_region_change">변경</string>
+    <string name="place_list_region_default">전체</string>
+    <string name="place_list_region_hierarchy">%1$s &gt; %2$s</string>
+    <string name="place_list_empty">장소가 없습니다.</string>
+    <string name="place_list_region_divider">&gt;</string>
+    <string name="place_list_bottom_sheet_title">지역 선택</string>
+    <string name="place_list_bottom_sheet_confirm">확인</string>
+    <string name="place_list_comma_separator">, </string>
+    <string name="place_list_add_tag">태그 추가</string>
+    <string name="place_list_no_address_title">사용자 지정</string>
+    <string name="place_list_no_title">제목 없음</string>
+    <string name="place_list_reset">초기화</string>
+
+    <!-- PlanScreen -->
+    <string name="plan_location_content_description">위치</string>
+
+    <!-- NetworkStatusBanner -->
+    <string name="network_status_disconnected">네트워크 연결이 끊어졌습니다</string>
+    <string name="network_status_weak_signal">네트워크 연결 신호가 약합니다</string>
+    <string name="network_status_connected">네트워크가 연결되었습니다</string>
+
+    <!-- SnackBar Messages -->
+    <string name="snackbar_network_error">네트워크 연결을 확인해주세요</string>
+    <string name="snackbar_validation_error">입력값을 확인해주세요</string>
+    <string name="snackbar_not_found_error">찾으시는 화면을 표시할 수 없습니다.</string>
+    <string name="snackbar_data_load_failed">데이터를 불러오지 못했습니다</string>
+    <string name="snackbar_data_save_failed">데이터를 저장하지 못했습니다</string>
+    <string name="snackbar_image_upload_failed">이미지 업로드에 실패했습니다</string>
+    <string name="snackbar_unknown_error">오류가 발생했습니다. 다시 시도해주세요</string>
+    <string name="snackbar_plan_days_validation_error">날짜는 최대 1달까지 지정 가능합니다</string>
+    <string name="snackbar_plan_invalid_error">다른 계획과 중복 배치는 지원하지 않습니다</string>
+    <string name="snackbar_success">성공적으로 완료되었습니다</string>
+
+    <!-- UserScreen -->
+    <string name="login_user_profile_image">유저 프로필 이미지</string>
+    <string name="login_add_account">+ 계정을 추가하세요</string>
+    <string name="login_show_places">올린 장소들</string>
+    <string name="login_user_profile_change">프로필 변경</string>
+    <string name="login_permission_camera_title">카메라</string>
+    <string name="login_permission_camera_subtitle">프로필 사진 변경</string>
+    <string name="login_permission_gallery_title">사진 갤러리</string>
+    <string name="login_permission_gallery_subtitle">이미지 업로드</string>
+    <string name="login_permission_location_title">위치</string>
+    <string name="login_permission_location_subtitle">위치 기반 서비스</string>
+    <string name="login_permission_network_title">네트워크</string>
+    <string name="login_permission_network_subtitle">네트워크 상태 변경 알림</string>
+    <string name="login_permission_allowed">허용됨</string>
+    <string name="login_permission_denied">거부됨</string>
+    <string name="login_permission">권한 설정</string>
+    <string name="login_alarm">알람 설정</string>
+    <string name="login_push_alarm_title">푸시 알림</string>
+    <string name="login_push_alarm_sub_title">새 소식을 받아보세요</string>
+    <string name="login_scrap_alarm_title">스크랩 알림</string>
+    <string name="login_scrap_alarm_sub_title">내 장소가 스크랩 되면 알람이 가요</string>
+    <string name="login_policy">약관 및 정책</string>
+    <string name="login_service_title">서비스 이용 약관</string>
+    <string name="login_privacy_title">개인정보 처리방침</string>
+    <string name="login_app_info">앱 정보</string>
+    <string name="login_app_version">현재 버전</string>
+    <string name="login_app_version_check">업데이트 확인</string>
+    <string name="login_account">계정 관리</string>
+    <string name="login_logout">로그아웃</string>
+    <string name="login_delete_account">계정 삭제</string>
+    <string name="login_new_account">회원가입</string>
+    <string name="login_login">로그인</string>
+    <string name="login_email">이메일(올바른 이메일 형식)</string>
+    <string name="login_password">비밀번호(영문 + 숫자)</string>
+    <string name="login_password_confirm">비밀번호 확인</string>
+    <string name="login_password_not_match">비밀번호가 일치하지 않습니다.</string>
+    <string name="login_email_login">이메일로 로그인</string>
+    <string name="login_email_login_description">이미 계정이 있나요? 로그인</string>
+    <string name="login_new_account_description">계정이 없나요? 회원가입</string>
+    <string name="login_logout_description">정말 로그아웃 하시겠습니까?</string>
+    <string name="login_delete_account_description">계정을 삭제하면 모든 데이터가 영구적으로 삭제됩니다.\n되돌릴 수 없습니다.</string>
+    <string name="login_delete_account_confirm">삭제</string>
+    <string name="login_cancel">취소</string>
+
+    <!-- PlanScreen -->
+    <string name="plan_time_axis_hour">%1$02d:00</string>
+    <string name="plan_day_format">Day %1$d</string>
+    <string name="plan_add_day">날 추가</string>
+    <string name="plan_default_trip">기본 여행</string>
+    <string name="plan_delete">삭제</string>
+    <string name="plan_cancel">취소</string>
+    <string name="plan_day_delete">Day 삭제</string>
+    <string name="plan_day_deleted_format">Day %1$d를 삭제하시겠습니까? 삭제 시 해당 날짜에 포함된 모든 계획이 사라집니다.</string>
+    <string name="plan_empty_day">날짜를 선택해주세요</string>
+    <string name="plan_confirm">확인</string>
+    <string name="plan_date_range_format">%1$s ~ %2$s</string>
+    <string name="plan_select_date">날짜 선택하기</string>
+    <string name="plan_not_select_date_title">날짜가 선택되지 않았어요</string>
+    <string name="plan_not_select_date_description">일정이 정해지지 않았나요?\n날짜를 선택하고 새로운 추억을 계획해보세요.</string>
+    <string name="plan_trip_thumbnail_description">여행 썸네일 이미지</string>
+    <string name="plan_trip_select_btn_description">여행 선택 버튼</string>
+    <string name="plan_no_trip">여행이 존재하지 않습니다</string>
+
+    <!-- PlacePickerItem -->
+    <string name="place_picker_item_image_description">장소에 대한 이미지</string>
+
+</resources>

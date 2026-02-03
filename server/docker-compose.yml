@@ -1,0 +1,70 @@
+services:
+  backend:
+    image: hjunng/memorip-backend:latest  # Docker Hub 이미지 사용
+    container_name: memorip-backend
+    restart: unless-stopped
+    labels:
+      - "autoheal=true"
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    environment:
+      FIREBASE_CREDENTIALS: /app/firebase.json
+    volumes:
+      - ./firebase-service-account.json:/app/firebase.json
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - memorip-network
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8080/actuator/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  db:
+    image: postgres:15-alpine
+    container_name: memorip-db
+    restart: unless-stopped
+    labels:
+      - "autoheal=true"
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: ${DB_NAME:?DB_NAME is required}
+      POSTGRES_USER: ${DB_USER:?DB_USER is required}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD is required}
+      TZ: Asia/Seoul
+      PGTZ: Asia/Seoul
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - memorip-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-memorip}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  autoheal:
+    image: willfarrell/autoheal:latest
+    container_name: memorip-autoheal
+    restart: unless-stopped
+    environment:
+      AUTOHEAL_CONTAINER_LABEL: "autoheal"
+      AUTOHEAL_INTERVAL: 300  # 체크
+      AUTOHEAL_START_PERIOD: 600  # 시작 후 10분은 재시작 안함
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+volumes:
+  postgres_data:
+
+networks:
+  memorip-network:
+    name: memorip-network
+    driver: bridge

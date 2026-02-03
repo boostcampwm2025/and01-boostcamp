@@ -1,0 +1,158 @@
+package com.andone.memorip.presentation.component.dialog
+
+import android.content.res.Configuration
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.component.dialog.DialogConstants.LEADING_ICON_SIZE
+import com.andone.memorip.presentation.component.dialog.DialogConstants.MAX_LENGTH
+import com.andone.memorip.presentation.theme.MemoripTheme
+import com.andone.memorip.presentation.util.rememberColorState
+
+private object DialogConstants {
+    val MAX_LENGTH = 6
+    val LEADING_ICON_SIZE = 36.dp
+}
+
+@Composable
+fun MemoripCategoryInputDialog(
+    title: String,
+    onConfirmClick: (name: String, color: Color) -> Unit,
+    onCancelClick: () -> Unit,
+    onDismissRequest: () -> Unit,
+) {
+    var name by remember { mutableStateOf("") }
+    val colorState = rememberColorState()
+
+    DefaultDialog(
+        title = title,
+        onConfirmClick = { onConfirmClick(name, colorState.color) },
+        onCancelClick = onCancelClick,
+        onDismissRequest = onDismissRequest,
+        confirmEnabled = name.isNotEmpty() && colorState.isValidColorInput()
+    ) {
+        TextField(
+            value = name,
+            onValueChange = { name = it },
+            textStyle = MemoripTheme.typography.bodyMedium16,
+            label = {
+                Text(text = stringResource(R.string.dialog_name_place_holder))
+            },
+            placeholder = {
+                Text(text = stringResource(R.string.dialog_name_place_holder))
+            },
+            trailingIcon = {
+                IconButton(onClick = { name = "" }) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_close),
+                        contentDescription = stringResource(R.string.dialog_close_button_description),
+                        tint = MemoripTheme.colors.onSurface
+                    )
+                }
+            },
+            supportingText = {
+                Text(
+                    text = if (name.isEmpty()) stringResource(R.string.category_dialog_empty_name_err_hint) else "",
+                    color = MemoripTheme.colors.error,
+                    style = MemoripTheme.typography.labelRegular12
+                )
+            },
+            isError = name.isEmpty(),
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = MemoripTheme.colors.primaryContainer,
+                unfocusedContainerColor = MemoripTheme.colors.primaryContainer,
+                errorContainerColor = MemoripTheme.colors.primaryContainer,
+                focusedTextColor = MemoripTheme.colors.onSurface,
+                unfocusedTextColor = MemoripTheme.colors.onSurface,
+                focusedPlaceholderColor = MemoripTheme.colors.primary,
+                unfocusedPlaceholderColor = MemoripTheme.colors.primary,
+                focusedLabelColor = MemoripTheme.colors.primary,
+                unfocusedLabelColor = MemoripTheme.colors.primary,
+                errorTextColor = MemoripTheme.colors.error,
+                errorSupportingTextColor = MemoripTheme.colors.error
+            )
+        )
+        TextField(
+            value = stringResource(R.string.category_dialog_color_format, colorState.inputColor),
+            onValueChange = { value ->
+                if (value.length <= MAX_LENGTH + 1) {
+                    colorState.updateColor(value)
+                }
+            },
+            textStyle = MemoripTheme.typography.bodyMedium16,
+            leadingIcon = {
+                Box(
+                    modifier = Modifier
+                        .size(LEADING_ICON_SIZE)
+                        .background(
+                            color = colorState.color,
+                            shape = MemoripTheme.shapes.roundedSmall
+                        )
+                )
+            },
+            trailingIcon = {
+                IconButton(
+                    enabled = colorState.inputColor.length == MAX_LENGTH,
+                    onClick = { colorState.refreshColor() }
+                ) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_refresh),
+                        contentDescription = stringResource(R.string.dialog_refresh_button_description),
+                        tint = MemoripTheme.colors.onSurface
+                    )
+                }
+            },
+            supportingText = {
+                if (!colorState.isValidColorInput()) {
+                    Text(
+                        text = stringResource(colorState.getErrMsg()),
+                        style = MemoripTheme.typography.labelRegular12
+                    )
+                }
+            },
+            isError = !colorState.isValidColorInput(),
+            maxLines = 1,
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = MemoripTheme.colors.primaryContainer,
+                unfocusedContainerColor = MemoripTheme.colors.primaryContainer,
+                errorContainerColor = MemoripTheme.colors.primaryContainer,
+                focusedTextColor = MemoripTheme.colors.onSurface,
+                unfocusedTextColor = MemoripTheme.colors.onSurface,
+                errorTextColor = MemoripTheme.colors.error,
+                errorSupportingTextColor = MemoripTheme.colors.error
+            )
+        )
+    }
+}
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun MemoripCategoryInputDialogPreview() {
+    MemoripTheme {
+        MemoripCategoryInputDialog(
+            title = "카테고리 입력",
+            onConfirmClick = { _, _ -> },
+            onCancelClick = {},
+            onDismissRequest = {}
+        )
+    }
+}
