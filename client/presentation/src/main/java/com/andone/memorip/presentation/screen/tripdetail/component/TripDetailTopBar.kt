@@ -39,14 +39,6 @@ fun TripDetailTopBar(
                 )
             }
         },
-        actions = {
-            IconButton(onClick = onSearchClick) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_search),
-                    contentDescription = stringResource(R.string.trip_detail_search_button_content_description)
-                )
-            }
-        },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MemoripTheme.colors.background,
             navigationIconContentColor = MemoripTheme.colors.onSurface,
