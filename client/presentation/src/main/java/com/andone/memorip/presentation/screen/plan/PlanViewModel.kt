@@ -352,7 +352,7 @@ class PlanViewModel @Inject constructor(
                         .filter { it.startDateTime != null && it.endDateTime != null }
                     val isDuplicated =
                         filteredPlaces.any {
-                            it.startDateTime!! in startDateTime..endDateTime
+                            it.startDateTime!! in startDateTime..endDateTime.minusMinutes(1)
                                     || (it.startDateTime.isBefore(startDateTime) && !it.endDateTime!!.isBefore(
                                 startDateTime
                             ))
