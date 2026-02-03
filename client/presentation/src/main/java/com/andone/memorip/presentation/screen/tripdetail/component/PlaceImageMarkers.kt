@@ -30,6 +30,9 @@ fun PlaceImageMarkers(
     // 클러스터 마커 렌더링
     clusteredItems.filter { it.isCluster }.forEach { clusterItem ->
         val clusterKey = "cluster_${clusterItem.position}_${clusterItem.count}"
+        val firstImageUrl = clusterItem.places.firstOrNull()?.imageUrl
+        val clusterImageBitmap = firstImageUrl?.let { markerImages[it] }
+        
         key(clusterKey) {
             MarkerComposable(
                 keys = arrayOf("cluster", clusterItem.position.toString(), clusterItem.count.toString()),
@@ -39,7 +42,10 @@ fun PlaceImageMarkers(
                     true
                 }
             ) {
-                ClusterMarker(count = clusterItem.count)
+                ClusterMarker(
+                    count = clusterItem.count,
+                    imageBitmap = clusterImageBitmap
+                )
             }
         }
     }

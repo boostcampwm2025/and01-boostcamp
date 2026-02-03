@@ -28,7 +28,7 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 
 private object ImageMarkerDimen {
     val ImageSize: Dp = 48.dp
-    val BorderWidth: Dp = MemoripLineWidth.Medium
+    val BorderWidth: Dp = MemoripLineWidth.Small
     val CornerRadius: Dp = 6.dp
 }
 
@@ -36,7 +36,7 @@ private object ImageMarkerDimen {
 fun ImageMarker(
     imageBitmap: Bitmap,
     modifier: Modifier = Modifier,
-    borderColor: Color = MemoripTheme.colors.primaryContainer
+    borderColor: Color = MemoripTheme.colors.primary
 ) {
     Box(
         modifier = modifier
