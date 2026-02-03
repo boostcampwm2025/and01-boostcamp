@@ -292,15 +292,7 @@ private fun MapBottomSheetContent(
     Surface(
         tonalElevation = MemoripShadow.Large,
         shadowElevation = MemoripShadow.Large,
-        color = MemoripTheme.colors.background,
-//        shape = if (isExpanded) {
-//            RoundedCornerShape(0.dp)
-//        } else {
-//            RoundedCornerShape(
-//                topStart = 16.dp,
-//                topEnd = 16.dp
-//            )
-//        }
+        color = MemoripTheme.colors.background
     ) {
         Column(
             modifier = Modifier
