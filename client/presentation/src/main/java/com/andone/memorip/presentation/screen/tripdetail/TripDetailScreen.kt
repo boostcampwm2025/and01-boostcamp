@@ -39,6 +39,7 @@ import com.naver.maps.geometry.LatLng
 fun TripDetailScreen(
     route: TripDetail,
     onBackClick: () -> Unit,
+    onNavigateToPlaceDetail: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: TripDetailViewModel = hiltViewModel<TripDetailViewModel, TripDetailViewModel.Factory>(
         creationCallback = { factory -> factory.create(route) }
@@ -59,6 +60,7 @@ fun TripDetailScreen(
     viewModel.event.collectWithLifecycle { event ->
         when (event) {
             TripDetailEvent.NavigateBack -> onBackClick()
+            is TripDetailEvent.NavigateToPlaceDetail -> onNavigateToPlaceDetail(event.id)
         }
     }
 
