@@ -18,6 +18,8 @@ client/app/release/
 client/app/google-services.json
 client/app/src/main/res/xml/network_security_config.xml
 client/config
+client/app/src/main/assets/toxicity.tflite
+client/app/src/main/assets/vocab.txt
 
 HELP.md
 build/

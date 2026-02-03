@@ -29,11 +29,14 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 import javax.inject.Inject
+import com.andone.memorip.domain.ai.ToxicityAnalyzer
+import kotlinx.coroutines.Dispatchers
 
 @HiltViewModel
 class PlaceCreateViewModel @Inject constructor(
     private val placeRepository: PlaceRepository,
-    private val snackBarManager: SnackBarManager
+    private val snackBarManager: SnackBarManager,
+    private val toxicityAnalyzer: ToxicityAnalyzer
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(PlaceCreateUiState())
     val uiState = _uiState.asStateFlow()
@@ -144,6 +147,20 @@ class PlaceCreateViewModel @Inject constructor(
 
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
+
+            val labels = toxicityAnalyzer.predict(text = _uiState.value.title) + toxicityAnalyzer.predict(text = _uiState.value.content)
+
+            val label = labels.firstOrNull()?.first
+
+            if (label != null) {
+                _uiState.update {
+                    it.copy(
+                        contentErrorLabel = label,
+                        isLoading = false
+                    )
+                }
+                return@launch
+            }
 
             val imageUrls = uploadImages(context, uiStateValue.images)
 
