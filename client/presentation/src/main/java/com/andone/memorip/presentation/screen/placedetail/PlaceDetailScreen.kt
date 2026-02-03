@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.screen.placedetail
 
+import androidx.compose.foundation.LocalOverscrollFactory
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -13,14 +14,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -220,124 +222,129 @@ private fun PlaceDetailContent(
         }
     }
 
-    Scaffold(
-        modifier = modifier,
-        topBar = {
-            PlaceDetailTopBar(
-                isMine = place.isMine,
-                isInMyTrip = place.isInMyTrip,
-                showMoreMenu = showMoreMenu,
-                onNavigationIconClick = { onAction(PlaceDetailAction.OnBackClick) },
-                onActionIconClick = { onAction(PlaceDetailAction.OnAddToTripClick) },
-                onMoreClick = { onAction(PlaceDetailAction.OnMoreClick) },
-                onMoreMenuDismiss = { onAction(PlaceDetailAction.OnMoreMenuDismiss) },
-                onEditClick = { onAction(PlaceDetailAction.OnEditClick) },
-                onDeleteClick = { onAction(PlaceDetailAction.OnDeleteClick) }
-            )
-        },
-        contentWindowInsets = WindowInsets.navigationBars
-    ) { innerPadding ->
-        Column(
-            modifier = modifier
-                .fillMaxSize()
-                .padding(bottom = innerPadding.calculateBottomPadding())
-                .background(color = MemoripTheme.colors.background)
-                .verticalScroll(state = scrollState),
-            verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXXXLarge)
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(height = headerHeightPx.toDp(density = density))
-                    .clipToBounds()
-                    .clickable { onImageClick(place.imageUrls[pagerState.currentPage]) },
-                contentAlignment = Alignment.BottomStart
-            ) {
-                HorizontalPager(
-                    modifier = Modifier.fillMaxSize(),
-                    state = pagerState,
-                    key = { idx -> place.imageUrls[idx] }
-                ) { idx ->
-                    AsyncImage(
-                        modifier = Modifier.fillMaxSize(),
-                        model = place.imageUrls[idx],
-                        contentDescription = stringResource(R.string.place_detail_image_content_description),
-                        contentScale = ContentScale.Crop,
-                    )
-                }
-
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(height = OVERLAY_HEIGHT)
-                        .padding(top = MemoripPadding.PaddingXXXLarge)
-                        .background(
-                            brush = Brush.verticalGradient(
-                                colorStops = arrayOf(
-                                    TOP_RATIO to MemoripTheme.colors.background.copy(alpha = TOP_ALPHA),
-                                    MIDDLE_RATIO to MemoripTheme.colors.background.copy(alpha = MIDDLE_ALPHA),
-                                    BOTTOM_RATIO to MemoripTheme.colors.background.copy(alpha = BOTTOM_ALPHA)
-                                )
-                            )
-                        )
-                        .padding(
-                            horizontal = MemoripPadding.AppHorizontalPadding,
-                            vertical = MemoripPadding.PaddingMedium
-                        ),
-                    verticalArrangement = Arrangement.spacedBy(
-                        alignment = Alignment.Bottom,
-                        space = MemoripSpace.SpaceXSmall
-                    )
-                ) {
-                    Text(
-                        text = place.title,
-                        color = MemoripTheme.colors.onSurface,
-                        overflow = TextOverflow.Ellipsis,
-                        style = MemoripTheme.typography.headlineBold32
-                    )
-                    Row(horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceMedium)) {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(R.drawable.ic_location_on),
-                            tint = MemoripTheme.colors.primary,
-                            contentDescription = null
-                        )
-                        Text(
-                            text = place.locationName,
-                            color = MemoripTheme.colors.onSurface,
-                            style = MemoripTheme.typography.bodyMedium14
-                        )
-                    }
-                    TagChipRow(tags = place.tags)
-                }
-            }
-
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = MemoripPadding.PaddingMedium),
-                verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceMedium)
-            ) {
-                if (place.content.isNotEmpty()) {
-                    ContentCard(content = place.content)
-                }
-                LocationCard(
-                    location = place.locationName,
-                    latitude = place.latitude,
-                    longitude = place.longitude,
-                    onNavigateToExternalMap = {
-                        onNavigateToExternalMap(
-                            LocationUiModel(
-                                id = "",
-                                name = place.locationName,
-                                category = "",
-                                address = place.locationName,
-                                roadAddress = "",
-                                latitude = place.latitude,
-                                longitude = place.longitude
-                            )
-                        )
-                    }
+    CompositionLocalProvider(
+        LocalOverscrollFactory provides null
+    ) {
+        Scaffold(
+            modifier = modifier,
+            topBar = {
+                PlaceDetailTopBar(
+                    isMine = place.isMine,
+                    isInMyTrip = place.isInMyTrip,
+                    showMoreMenu = showMoreMenu,
+                    onNavigationIconClick = { onAction(PlaceDetailAction.OnBackClick) },
+                    onActionIconClick = { onAction(PlaceDetailAction.OnAddToTripClick) },
+                    onMoreClick = { onAction(PlaceDetailAction.OnMoreClick) },
+                    onMoreMenuDismiss = { onAction(PlaceDetailAction.OnMoreMenuDismiss) },
+                    onEditClick = { onAction(PlaceDetailAction.OnEditClick) },
+                    onDeleteClick = { onAction(PlaceDetailAction.OnDeleteClick) }
                 )
+            },
+            contentWindowInsets = WindowInsets.navigationBars
+        ) { innerPadding ->
+            LazyColumn(
+                modifier = modifier
+                    .fillMaxSize()
+                    .padding(bottom = innerPadding.calculateBottomPadding())
+                    .padding(bottom = MemoripPadding.PaddingMedium)
+                    .background(color = MemoripTheme.colors.background),
+                verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXXXLarge)
+            ) {
+                item {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(height = headerHeightPx.toDp(density = density))
+                            .clipToBounds()
+                            .clickable { onImageClick(place.imageUrls[pagerState.currentPage]) },
+                        contentAlignment = Alignment.BottomStart
+                    ) {
+                        HorizontalPager(
+                            modifier = Modifier.fillMaxSize(),
+                            state = pagerState,
+                            key = { idx -> place.imageUrls[idx] }
+                        ) { idx ->
+                            AsyncImage(
+                                modifier = Modifier.fillMaxSize(),
+                                model = place.imageUrls[idx],
+                                contentDescription = stringResource(R.string.place_detail_image_content_description),
+                                contentScale = ContentScale.Crop,
+                            )
+                        }
+
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(height = OVERLAY_HEIGHT)
+                                .padding(top = MemoripPadding.PaddingXXXLarge)
+                                .background(
+                                    brush = Brush.verticalGradient(
+                                        colorStops = arrayOf(
+                                            TOP_RATIO to MemoripTheme.colors.background.copy(alpha = TOP_ALPHA),
+                                            MIDDLE_RATIO to MemoripTheme.colors.background.copy(alpha = MIDDLE_ALPHA),
+                                            BOTTOM_RATIO to MemoripTheme.colors.background.copy(alpha = BOTTOM_ALPHA)
+                                        )
+                                    )
+                                )
+                                .padding(
+                                    horizontal = MemoripPadding.AppHorizontalPadding,
+                                    vertical = MemoripPadding.PaddingMedium
+                                ),
+                            verticalArrangement = Arrangement.spacedBy(
+                                alignment = Alignment.Bottom,
+                                space = MemoripSpace.SpaceXSmall
+                            )
+                        ) {
+                            Text(
+                                text = place.title,
+                                color = MemoripTheme.colors.onSurface,
+                                overflow = TextOverflow.Ellipsis,
+                                style = MemoripTheme.typography.headlineBold32
+                            )
+                            Row(horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceMedium)) {
+                                Icon(
+                                    imageVector = ImageVector.vectorResource(R.drawable.ic_location_on),
+                                    tint = MemoripTheme.colors.primary,
+                                    contentDescription = null
+                                )
+                                Text(
+                                    text = place.locationName,
+                                    color = MemoripTheme.colors.onSurface,
+                                    style = MemoripTheme.typography.bodyMedium14
+                                )
+                            }
+                            TagChipRow(tags = place.tags)
+                        }
+                    }
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = MemoripPadding.PaddingMedium),
+                        verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceMedium)
+                    ) {
+                        if (place.content.isNotEmpty()) {
+                            ContentCard(content = place.content)
+                        }
+                        LocationCard(
+                            location = place.locationName,
+                            latitude = place.latitude,
+                            longitude = place.longitude,
+                            onNavigateToExternalMap = {
+                                onNavigateToExternalMap(
+                                    LocationUiModel(
+                                        id = "",
+                                        name = place.locationName,
+                                        category = "",
+                                        address = place.locationName,
+                                        roadAddress = "",
+                                        latitude = place.latitude,
+                                        longitude = place.longitude
+                                    )
+                                )
+                            }
+                        )
+                    }
+                }
             }
         }
     }
