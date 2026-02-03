@@ -1,9 +1,9 @@
 package com.andone.memorip.data.place.model
 
-import com.andone.memorip.domain.model.response.TripCompact
-import com.andone.memorip.domain.model.response.PlaceDetail
 import com.andone.memorip.domain.model.Tag
 import com.andone.memorip.domain.model.request.Address
+import com.andone.memorip.domain.model.response.PlaceDetail
+import com.andone.memorip.domain.model.response.TripCompact
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -19,7 +19,8 @@ data class PlaceDetailResponse(
     val groups: List<GroupCompactResponse>,
     val address: Address,
     val isMine: Boolean,
-    val isInMyGroup: Boolean
+    val isInMyGroup: Boolean,
+    val isPublic: Boolean
 )
 
 @Serializable
@@ -40,7 +41,8 @@ fun PlaceDetailResponse.toDomain(): PlaceDetail = PlaceDetail(
     trips = this.groups.map { it.toDomain() },
     address = this.address,
     isMine = this.isMine,
-    isInMyTrip = this.isInMyGroup
+    isInMyGroup = this.isInMyGroup,
+    isPublic = this.isPublic
 )
 
 fun GroupCompactResponse.toDomain(): TripCompact = TripCompact(

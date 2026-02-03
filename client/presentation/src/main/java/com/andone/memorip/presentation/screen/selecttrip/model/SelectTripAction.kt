@@ -4,7 +4,7 @@ sealed interface SelectTripAction {
 
     data class OnInitialize(
         val placeId: String?,
-        val initialSelectedTripId: String?
+        val initialSelectedTripIds: List<String>?
     ) : SelectTripAction
 
     data object OnFABClick : SelectTripAction

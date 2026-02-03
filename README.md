@@ -1,3 +1,5 @@
+<img width="1100" alt="image" src="https://github.com/user-attachments/assets/22a4b0cc-be77-42a2-9147-9bf7d8c15b64" />
+
 # Memorip
 나만의 장소 저장 및 공유 서비스
 
@@ -14,70 +16,14 @@
 이 서비스는 사용자들의 실제 경험을 기반으로
 장소를 기록하고, 공유하고, 계획까지 이어질 수 있도록 돕는 것을 목표로 합니다.
 
-
-<img width="1100" alt="image" src="https://github.com/user-attachments/assets/22a4b0cc-be77-42a2-9147-9bf7d8c15b64" />
-
-
-## 정적 데이터 생성 자동화
-
-> 변경 빈도가 낮은 지역/행정구역 데이터를 서버 API 대신 정적 리소스로 관리하여  
-> 네트워크 의존도를 제거하고 즉시 응답 가능한 구조 설계
-
-<img width="1867" height="641" alt="image" src="https://github.com/user-attachments/assets/6c20e42c-b5e2-496d-9da5-6b596ce4fd36" />
-
-
-
-
-### 문제
-지역 필터링 시 매번 서버 API 호출이 발생하여 응답 지연과 불필요한 트래픽 비용 증가
-
-<img width="953" height="781" alt="image" src="https://github.com/user-attachments/assets/2f152e11-a246-41be-a797-aa899f5cd54e" />
-
-
-
-### 해결
-행정구역 데이터를 JSON 정적 리소스로 내장하고, 스크립트 기반 자동 생성으로 빌드 시점에 포함
-
-<img width="1190" height="750" alt="image" src="https://github.com/user-attachments/assets/dfa35a47-50da-49e6-a3eb-b6dfd8cf2730" />
-
-
-
----
-
-### 데이터 구조 설계
-
-> 지역 depth(시/도/구/동 등)를 고정하지 않고 트리 구조로 표현하여 단계 수와 무관하게 확장 가능한 구조 설계
-
-| 항목 | 설명 |
-| --- | --- |
-| Tree 기반 파싱 | JSON → Tree 재귀 탐색으로 변환|
-| Depth 자유도 | 행정 단계 추가 시 변환 코드 수정 불필요 |
-| 재사용성 | 해외 지역/다른 카테고리 데이터에도 동일 구조 적용 가능 |
-
----
-
-### 처리 흐름
-
-```
-원본 데이터
-   ↓
-변환 스크립트
-   ↓
-JSON 자동 생성
-   ↓
-앱 빌드 시 포함
-   ↓
-클라이언트 지역 필터 기능에 사용
-```
-
-
-
-## 주요 기능
-| 기능 | 설명 | 영상 |
-| --- | --- | --- |
-| **원하는 장소 사진들을 한눈에** | 사용자가 원하는 장소를 쉽게 찾을 수 있는 검색과 필터링 기능 | <img src="https://github.com/user-attachments/assets/0d79dd02-5585-44ea-a434-c969b604406a" width="150" /> <img src="https://github.com/user-attachments/assets/b1e9013c-0b97-400f-85cc-231f4f67044b" width="150" /> |
-| **간편한 앱 사용** | 기존 앱들의 UI와 달리 텍스트를 최소화하여 간단한 인터랙션으로 동작 | <img src="https://github.com/user-attachments/assets/79a85ad2-7995-40a2-a474-9010203f195f" width="150" /> |
-| **취향에 맞게 가져와 사용하는 장소 경험 공유 시스템** | 익명 공유를 통해 개인정보 노출 부담 없이 순수하게 장소에 대한 경험을 공유 | <img src="https://github.com/user-attachments/assets/1a705c9f-a12d-496b-aed1-b6e46f0eb42f" width="150" /> |
+## ✨ 주요 기능
+| 기능                      | 설명 | 미리보기 |
+|:------------------------| :-- | :--: |
+| **🔍 원하는 장소를 한눈에**      | 검색과 지역·태그 필터링으로 수많은 장소 중 목적지를 빠르게 탐색 | <img src="https://github.com/user-attachments/assets/99473c41-9e3c-4ba1-955d-aab9671e8afa" width="140" /> |
+| **📍 장소 상세 및 유연한 관리**   | 장소의 상세 정보를 확인하고 여행 그룹에 추가<br/>직접 등록한 장소 수정 및 삭제 가능 | <img src="https://github.com/user-attachments/assets/291c6296-9710-450d-a61e-31d71f8f34b1" width="140" /> |
+| **➕ 직관적인 3-Step 장소 추가** | 사진 크롭 → 위치 검색 → 추가 정보 입력<br/>단계별 플로우로 손쉬운 장소 등록 | <img src="https://github.com/user-attachments/assets/d224eaa5-eb5f-47e0-9d08-0eea99981251" width="140" /> |
+| **🗺️ 지도 기반 여행 시각화**    | 갤러리 뷰와 지도 클러스터링을 통해<br/>여행 동선을 한눈에 파악 | <img src="https://github.com/user-attachments/assets/57d9a5a0-ea1c-4874-bb90-595c30cb679a" width="140" /> |
+| **📅 드래그 앤 드롭 일정 계획**   | 날짜별 타임라인에 장소를 드래그하여<br/>복잡한 여행 일정을 직관적으로 구성 | <img src="https://github.com/user-attachments/assets/0a2344c1-3d64-4adc-a802-36744e7b8470" width="140" /> |
 
 ## 프로젝트 구조
 
@@ -87,16 +33,31 @@ JSON 자동 생성
 |:---:|:---:|:---:|:---:|
 | <img src="https://github.com/GwonDongHyeon21.png" width="150" height="150" style="border-radius:100%" > | <img src="https://github.com/uselessnaming.png" width="150" height="150" style="border-radius:100%" > | <img src="https://github.com/HJunng.png" width="150" height="150" style="border-radius:100%" > | <img src="https://github.com/hoyadong1.png" width="150" height="150" style="border-radius:100%" > |
 | [@GwonDongHyeon21](https://github.com/GwonDongHyeon21) | [@uselessnaming](https://github.com/uselessnaming) | [@HJunng](https://github.com/HJunng) | [@hoyadong1](https://github.com/hoyadong1) |
+| **장소 추가 화면**<br/>&nbsp;&nbsp;<sub>🔗 <a href="https://github.com/boostcampwm2025/and01-boostcamp/wiki/Image-Crop-System">이미지 편집 시스템</a></sub><br/>&nbsp;&nbsp;<sub>🔗 화면 전환 구조</sub><br><br/>**컨벤션 라이브러리**<br/>&nbsp;&nbsp;<sub>🔗 <a href="https://github.com/boostcampwm2025/and01-boostcamp/wiki/커스텀-린트-라이브러리">커스텀 린트 라이브러리</a></sub> | **장소 상세 화면** <br> <sub>🔗[애니메이션 최적화](https://github.com/boostcampwm2025/and01-boostcamp/wiki/%EC%95%A0%EB%8B%88%EB%A9%94%EC%9D%B4%EC%85%98-%EC%B5%9C%EC%A0%81%ED%99%94) <br><br></sub>**계획 화면** <br> <sub>🔗[다른 Composable 간 이동](https://github.com/boostcampwm2025/and01-boostcamp/wiki/%EB%8B%A4%EB%A5%B8-Composable-%EA%B0%84-%EC%9D%B4%EB%8F%99) </sub> <br> <sub>🔗[로컬과 서버 상태 동기화](https://github.com/boostcampwm2025/and01-boostcamp/wiki/%EB%A1%9C%EC%BB%AC%EA%B3%BC-%EC%84%9C%EB%B2%84%EC%9D%98-%EC%83%81%ED%83%9C-%EB%8F%99%EA%B8%B0%ED%99%94) </sub>| **여행** <br/> <sub>🔗 [여행 상세 지도](https://github.com/boostcampwm2025/and01-boostcamp/wiki/%EC%A7%80%EB%8F%84-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EB%A7%88%EC%BB%A4-%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%EB%A7%81-UX)</sub>|**장소 리스트 화면**<br/><sub>🔗 <a href="https://github.com/boostcampwm2025/and01-boostcamp/wiki/%EC%9E%A5%EC%86%8C-%EB%A6%AC%EC%8A%A4%ED%8A%B8-%ED%99%94%EB%A9%B4-UX-%EA%B0%9C%EC%84%A0">장소 리스트 UX 개선</a><br/>🔗 <a href="https://github.com/boostcampwm2025/and01-boostcamp/wiki/%EC%A0%95%EC%A0%81-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EC%83%9D%EC%84%B1-%EC%9E%90%EB%8F%99%ED%99%94">지역 데이터 관리</a><br></sub><br>**계획 화면**<br/><sub>🔗 <a href="https://github.com/boostcampwm2025/and01-boostcamp/wiki/%EC%8B%9C%EA%B0%84%ED%91%9C-%EA%B5%AC%EC%A1%B0-%EC%84%A4%EA%B3%84">시간표 구조 설계</a></sub>|
 
 ## 기술 스택
-![Android](https://img.shields.io/badge/Android-3DDC84?logo=android&logoColor=white)
-![Kotlin](https://img.shields.io/badge/Kotlin-7F52FF?logo=kotlin&logoColor=white)
-![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-4285F4?logo=android&logoColor=white)
-![MVI](https://img.shields.io/badge/MVI-000000)
 
-![Coroutines](https://img.shields.io/badge/Coroutines-0095D5)
-![Flow](https://img.shields.io/badge/Flow-0095D5)
-![Hilt](https://img.shields.io/badge/Hilt-59666C)
+### 📱 Android
+![Android](https://img.shields.io/badge/Android-3DDC84?logo=android&logoColor=white&style=for-the-badge)
+![Kotlin](https://img.shields.io/badge/Kotlin-7F52FF?logo=kotlin&logoColor=white&style=for-the-badge)
+![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-4285F4?logo=android&logoColor=white&style=for-the-badge)
+![MVI](https://img.shields.io/badge/MVI-000000?style=for-the-badge)
 
-![Firebase](https://img.shields.io/badge/Firebase%20App%20Distribution-FFCA28?logo=firebase&logoColor=black)
-![Naver Map](https://img.shields.io/badge/Naver%20Map-03C75A?logo=naver&logoColor=white)
+![Coroutines](https://img.shields.io/badge/Coroutines-0095D5?style=for-the-badge)
+![Flow](https://img.shields.io/badge/Flow-0095D5?style=for-the-badge)
+![Hilt](https://img.shields.io/badge/Hilt-59666C?style=for-the-badge)
+
+![Firebase](https://img.shields.io/badge/Firebase%20App%20Distribution-FFCA28?logo=firebase&logoColor=black&style=for-the-badge)
+![Naver Map](https://img.shields.io/badge/Naver%20Map-03C75A?logo=naver&logoColor=white&style=for-the-badge)
+
+
+### 💾 Server
+![Kotlin](https://img.shields.io/badge/Kotlin-7F52FF?logo=kotlin&logoColor=white&style=for-the-badge)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?logo=springboot&logoColor=white&style=for-the-badge)
+![Spring Data JPA](https://img.shields.io/badge/Spring_Data_JPA-6DB33F?logo=jpa&logoColor=white&style=for-the-badge)
+![Hibernate](https://img.shields.io/badge/Hibernate-59666C?logo=hibernate&logoColor=white&style=for-the-badge)
+![Spring Security](https://img.shields.io/badge/Spring_Security-6DB33F?logo=springsecurity&logoColor=white&style=for-the-badge)
+
+![Naver NCloud](https://img.shields.io/badge/Naver_NCloud-03C75A?logo=naver&logoColor=white&style=for-the-badge)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white&style=for-the-badge)
+![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white&style=for-the-badge)

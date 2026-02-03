@@ -85,8 +85,8 @@ fun MemoripNav(
 
             placeDetail(
                 onNavigateBack = navigator::popBackStack,
-                onNavigateTripList = navigator::navigateToTripList
+                onNavigateToTripList = navigator::navigateToTripList
             )
-        },
+        }
     )
 }
