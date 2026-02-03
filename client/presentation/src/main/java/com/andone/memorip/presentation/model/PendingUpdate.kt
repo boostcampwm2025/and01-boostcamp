@@ -14,4 +14,7 @@ sealed interface Payload {
 
     @Serializable
     class TripSavePayload(val title: String, val startAt: String?, val endAt: String?) : Payload
+
+    @Serializable
+    class TripDeletePayload(val id: String) : Payload
 }

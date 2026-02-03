@@ -95,6 +95,18 @@ class TripRemoteDataSourceImpl @Inject constructor(
         }
     }
 
+    override suspend fun deletePlaceTime(tripPlaceId: String): Result<Unit> {
+        return apiCall {
+            tripService.deletePlaceTime(tripPlaceId = tripPlaceId)
+        }
+    }
+
+    override suspend fun clearPlaceTime(tripPlaceId: String): Result<Unit> {
+        return apiCall {
+            tripService.clearPlaceTime(tripPlaceId = tripPlaceId)
+        }
+    }
+
     companion object {
         private const val FIRST_PAGE_SIZE = 20
         private const val DEFAULT_PAGE_SIZE = 10

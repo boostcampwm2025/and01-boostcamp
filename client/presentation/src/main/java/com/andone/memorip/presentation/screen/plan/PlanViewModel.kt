@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.screen.plan
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.BackoffPolicy
@@ -306,6 +307,17 @@ class PlanViewModel @Inject constructor(
                         }
                     }
                 }
+                uiState.value.places.forEach { place ->
+                    originPlaces.find { it.id == place.id }?.let { origin ->
+                        if ((origin.startDateTime != null && origin.endDateTime != null) && (place.startDateTime == null && place.endDateTime == null)) {
+                            pendingUpdates[place.id] = Payload.TripDeletePayload(place.id)
+                            tripRepository.clearPlaceTime(tripPlaceId = place.id)
+                                .onSuccess {
+                                    pendingUpdates.remove(place.id)
+                                }
+                        }
+                    }
+                }
             }
         }
     }
@@ -463,8 +475,10 @@ class PlanViewModel @Inject constructor(
 
     private fun deleteBlock(id: String) {
         val block = blockUiModelsFlow.value[id]
-        timeBlocksFlow.update { it.filter{ it.id != id } }
-        if (block is Place) { placesFlow.update { it + block } }
+        timeBlocksFlow.update { it.filter { it.id != id } }
+        if (block is Place) {
+            placesFlow.update { it + block.copy(startDateTime = null, endDateTime = null) }
+        }
     }
 
     private fun adjustCurrentDay(
@@ -611,7 +625,24 @@ class PlanViewModel @Inject constructor(
                     TripWorker.ID to id,
                     TripWorker.TITLE to payload.title,
                     TripWorker.START_AT to payload.startAt,
-                    TripWorker.END_AT to payload.endAt
+                    TripWorker.END_AT to payload.endAt,
+                    TripWorker.FLAG to TripWorker.UPDATE_FLAG
+                )
+
+                OneTimeWorkRequestBuilder<TripWorker>()
+                    .setInputData(data)
+                    .setBackoffCriteria(
+                        BackoffPolicy.EXPONENTIAL,
+                        10,
+                        TimeUnit.SECONDS
+                    )
+                    .build()
+            }
+
+            is Payload.TripDeletePayload -> {
+                val data = workDataOf(
+                    TripWorker.ID to id,
+                    TripWorker.FLAG to TripWorker.DELETE_FLAG
                 )
 
                 OneTimeWorkRequestBuilder<TripWorker>()
@@ -632,6 +663,7 @@ class PlanViewModel @Inject constructor(
             val name = when (payload) {
                 is Payload.PlaceTimeEditPayload -> PLACE_WORK_NAME + id
                 is Payload.TripSavePayload -> GROUP_WORK_NAME + id
+                is Payload.TripDeletePayload -> PLACE_WORK_NAME + id
             }
 
             workManager.enqueueUniqueWork(
