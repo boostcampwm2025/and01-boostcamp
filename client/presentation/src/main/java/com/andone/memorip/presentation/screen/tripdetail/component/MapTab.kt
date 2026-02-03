@@ -202,6 +202,7 @@ fun MapTab(
             sheetPeekHeight = MapTabDimen.SHEET_PEEK_HEIGHT,
             sheetContainerColor = MemoripTheme.colors.background,
             sheetDragHandle = null,
+            sheetSwipeEnabled = mapBottomSheetContent != MapBottomSheetStep.PlaceDetail,
             modifier = Modifier.fillMaxSize()
         ) {
             InteractiveMultiMarkerMapView(
@@ -283,42 +284,51 @@ private fun MapBottomSheetContent(
                     .background(MemoripTheme.colors.gray1)
             )
             Spacer(modifier = Modifier.height(MemoripPadding.PaddingXSmall))
-            when (bottomSheetContent) {
-                MapBottomSheetStep.PlaceList -> {
-                    Column(
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        PlaceListHeader(
-                            placeCount = places.size,
-                            viewMode = viewMode,
-                            onViewModeToggle = { onAction(TripDetailAction.OnViewModeToggle) }
-                        )
+            Box(modifier = Modifier.weight(1f)) {
+                when (bottomSheetContent) {
+                    MapBottomSheetStep.PlaceList -> {
+                        Column(
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            PlaceListHeader(
+                                placeCount = places.size,
+                                viewMode = viewMode,
+                                onViewModeToggle = { onAction(TripDetailAction.OnViewModeToggle) }
+                            )
 
-                        when (viewMode) {
-                            PlaceViewMode.LIST -> {
-                                BottomSheetPlaceListContent(
-                                    places = places,
-                                    listState = placeListState,
-                                    onAction = onAction
-                                )
-                            }
+                            when (viewMode) {
+                                PlaceViewMode.LIST -> {
+                                    BottomSheetPlaceListContent(
+                                        places = places,
+                                        listState = placeListState,
+                                        onAction = onAction
+                                    )
+                                }
 
-                            PlaceViewMode.GRID -> {
-                                BottomSheetPlaceGridContent(
-                                    places = places,
-                                    onAction = onAction
-                                )
+                                PlaceViewMode.GRID -> {
+                                    BottomSheetPlaceGridContent(
+                                        places = places,
+                                        onAction = onAction
+                                    )
+                                }
                             }
                         }
                     }
-                }
 
-                MapBottomSheetStep.PlaceDetail -> {
-                    selectedPlace?.let { place ->
-                        BottomSheetPlaceDetailContent(
-                            place = place,
-                            onCloseClick = { onAction(TripDetailAction.OnPlaceDetailBottomSheetClose) }
-                        )
+                    MapBottomSheetStep.PlaceDetail -> {
+                        selectedPlace?.let { place ->
+                            BottomSheetPlaceDetailContent(
+                                place = place,
+                                onCloseClick = { onAction(TripDetailAction.OnPlaceDetailBottomSheetClose) },
+                                onDetailClick = {
+                                    onAction(
+                                        TripDetailAction.OnNavigateToPlaceDetail(
+                                            place.placeId
+                                        )
+                                    )
+                                }
+                            )
+                        }
                     }
                 }
             }

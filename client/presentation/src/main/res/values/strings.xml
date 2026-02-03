@@ -132,6 +132,7 @@
     <string name="place_detail_view_in_map_app">지도 앱에서 보기</string>
     <string name="place_detail_chooser_title">지도 앱에서 위치 보기</string>
     <string name="place_detail_comma_separator">, </string>
+    <string name="place_detail_bottom_sheet_go_to_detail">상세 화면으로 이동하기</string>
 
     <!-- PlaceEdit -->
     <string name="place_edit_title">장소 수정</string>
