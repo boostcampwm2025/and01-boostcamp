@@ -375,6 +375,17 @@ class PlanViewModel @Inject constructor(
                 }
             }
         }
+        blockUiModelsFlow.update { blocks ->
+            val oldBlock = blocks[id] ?: return@update blocks
+            when (oldBlock) {
+                is Place -> {
+                    blocks + (id to oldBlock.copy(
+                        startDateTime = startDateTime,
+                        endDateTime = endDateTime
+                    ))
+                }
+            }
+        }
     }
 
     private fun updatePlaces(tripId: String) {
