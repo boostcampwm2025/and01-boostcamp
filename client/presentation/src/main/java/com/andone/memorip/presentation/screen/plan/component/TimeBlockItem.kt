@@ -1,9 +1,18 @@
 package com.andone.memorip.presentation.screen.plan.component
 
+import android.util.Log
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.DraggableState
+import androidx.compose.foundation.gestures.awaitDragOrCancellation
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.awaitLongPressOrCancellation
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.foundation.gestures.drag
+import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
@@ -92,19 +102,6 @@ fun TimeBlockItem(
             modifier = Modifier
                 .fillMaxSize()
                 .pointerInput(startYPx) {
-                    detectHorizontalDragGestures(
-                        onHorizontalDrag = { change, dragAmount ->
-                            change.consume()
-                            if (dragAmount > 0) dragOffsetX += dragAmount
-                        },
-                        onDragEnd = {
-                            if (dragOffsetX > DELETE_THRESHOLD) {
-                                onSlide(block.id)
-                            } else {
-                                dragOffsetX = 0f
-                            }
-                        }
-                    )
                     detectDragGesturesAfterLongPress(
                         onDragStart = {
                             isDragging = true
@@ -127,6 +124,23 @@ fun TimeBlockItem(
                         onDragCancel = {
                             dragOffsetY = 0f
                             isDragging = false
+                        }
+                    )
+
+                }
+                .pointerInput(Unit) {
+                    detectHorizontalDragGestures(
+                        onHorizontalDrag = { change, dragAmount ->
+                            change.consume()
+                            dragOffsetX += dragAmount
+                            if (dragOffsetX < 0) dragOffsetX = 0f
+                        },
+                        onDragEnd = {
+                            if (dragOffsetX > DELETE_THRESHOLD) {
+                                onSlide(block.id)
+                            } else {
+                                dragOffsetX = 0f
+                            }
                         }
                     )
                 },
