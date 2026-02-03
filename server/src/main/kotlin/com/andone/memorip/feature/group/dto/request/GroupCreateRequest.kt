@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Size
 
 data class GroupCreateRequest(
     @field:NotBlank(message = "그룹 제목은 필수입니다")
-    @field:Size(max = 50, message = "그룹 제목은 50자 이하여야 합니다")
+    @field:Size(max = 20, message = "그룹 제목은 20자 이하여야 합니다")
     @Schema(description = "그룹 제목", example = "제주도 여행", required = true)
     val title: String,
     
