@@ -27,14 +27,13 @@ fun DateSelectedContent(
         TimeTable(
             totalMinutes = state.date.totalMinutes,
             currentDay = state.date.selectedDay,
-            places = state.places.filter{ it.startDateTime == null && it.endDateTime == null }.toImmutableList(),
+            places = state.bottomItems,
             onBlockAdd = { place, start -> onAction(PlanAction.BottomBlockDragEnd(place, start)) },
             onDayScrolled = { day ->
                 onAction(PlanAction.DayScrolled(day))
             }
         ) { engine, scrollState ->
-            state.places.filter { it.startDateTime != null && it.endDateTime != null }
-                .forEach { block ->
+            state.blockItems.forEach { block ->
                     TimeBlockItem(
                         block = block,
                         startDate = state.date.startDay!!,
