@@ -197,7 +197,7 @@ private fun TimeSpinner(
     val amPm =
         remember { listOf(EMPTY_VALUE.toString()) + amPmList + listOf(EMPTY_VALUE.toString()) }
     val hours = remember { listOf(EMPTY_VALUE) + (0..11).plus(EMPTY_VALUE).toImmutableList() }
-    val minutes = remember { (EMPTY_VALUE..5).plus(EMPTY_VALUE).map { it * 10 }.toImmutableList() }
+    val minutes = remember { (EMPTY_VALUE..5).plus(EMPTY_VALUE).map { it * MINUTE_STEP }.toImmutableList() }
     val firstIndex = remember { if (time.hour > AM_PM_THRESHOLD) PM_IDX else AM_IDX }
     val amPmScrollState = rememberLazyListState(initialFirstVisibleItemIndex = firstIndex)
     val hourScrollState =
