@@ -61,7 +61,14 @@ fun MemoripInputDialog(
     ) {
         TextField(
             value = value,
-            onValueChange = onValueChange,
+            onValueChange = { newValue ->
+                val finalValue = if (maxLength != null) {
+                    newValue.take(maxLength)
+                } else {
+                    newValue
+                }
+                onValueChange(finalValue)
+            },
             label = {
                 if (label != null) {
                     Text(text = label)
@@ -88,14 +95,17 @@ fun MemoripInputDialog(
             ),
             singleLine = true,
             colors = TextFieldDefaults.colors(
-                focusedContainerColor = MemoripTheme.colors.primaryContainer,
-                unfocusedContainerColor = MemoripTheme.colors.primaryContainer,
                 focusedTextColor = MemoripTheme.colors.onSurface,
                 unfocusedTextColor = MemoripTheme.colors.onSurface,
+                focusedContainerColor = MemoripTheme.colors.primaryContainer,
+                unfocusedContainerColor = MemoripTheme.colors.primaryContainer,
                 focusedPlaceholderColor = MemoripTheme.colors.gray,
                 unfocusedPlaceholderColor = MemoripTheme.colors.gray,
                 focusedLabelColor = MemoripTheme.colors.primary,
-                unfocusedLabelColor = MemoripTheme.colors.primary,
+                unfocusedLabelColor = MemoripTheme.colors.onSurface,
+                focusedSupportingTextColor = MemoripTheme.colors.onSurface,
+                unfocusedSupportingTextColor = MemoripTheme.colors.onSurface,
+                disabledSupportingTextColor = MemoripTheme.colors.onSurface,
                 errorSupportingTextColor = MemoripTheme.colors.error,
                 errorLabelColor = MemoripTheme.colors.error,
             )
