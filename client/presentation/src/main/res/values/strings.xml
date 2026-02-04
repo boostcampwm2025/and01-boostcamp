@@ -22,6 +22,12 @@
     <string name="category_dialog_max_length_err_hint">6글자만 입력해주세요(# 제외)</string>
     <string name="category_dialog_valid_color_err_hint">0~9, A~F까지의 값만 입력해주세요</string>
     <string name="category_dialog_empty_name_err_hint">이름을 입력해주세요</string>
+    <string name="plan_edit_dialog_title">시간 변경</string>
+    <string-array name="plan_edit_dialog_am_pm">
+        <item>오전</item>
+        <item>오후</item>
+    </string-array>
+    <string name="plan_edit_dialog_divider">:</string>
     <string name="input_dialog_char_count_format">(%1$d/%2$d)</string>
 
     <!-- Loading Indicator -->
@@ -195,6 +201,7 @@
     <string name="snackbar_plan_days_validation_error">날짜는 최대 1달까지 지정 가능합니다</string>
     <string name="snackbar_plan_invalid_error">다른 계획과 중복 배치는 지원하지 않습니다</string>
     <string name="snackbar_image_count_error">이미지는 최소 1개 이상 있어야 합니다.</string>
+    <string name="snackbar_plan_date_invalid_error">시작 날짜와 종료 날짜는 동일할 수 없습니다</string>
     <string name="snackbar_success">성공적으로 완료되었습니다</string>
 
     <!-- UserScreen -->

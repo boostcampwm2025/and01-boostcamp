@@ -17,6 +17,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.theme.MemoripIconSize
 import com.andone.memorip.presentation.theme.MemoripLineWidth
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -39,7 +40,7 @@ fun TripImageGridCard(
                 .then(
                     if (isPlaceAdded) {
                         Modifier.border(
-                            width = MemoripLineWidth.Small,
+                            width = MemoripLineWidth.Medium,
                             color = MemoripTheme.colors.primary,
                             shape = memoripShapes.roundedSmall
                         )
@@ -67,7 +68,7 @@ fun TripImageGridCard(
                 Icon(
                     painter = painterResource(R.drawable.ic_check),
                     contentDescription = null,
-                    modifier = Modifier.size(20.dp),
+                    modifier = Modifier.size(MemoripIconSize.IconSizeSmall),
                     tint = MemoripTheme.colors.primary
                 )
             }
