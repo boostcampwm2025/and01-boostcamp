@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.screen.plan
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -181,6 +182,7 @@ class PlanViewModel @Inject constructor(
                 saveTrip(uiState.value.selectedTrip)
                 updateSelectedTrip(action.selectedTrip)
                 updatePlaces(tripId = action.selectedTrip.id)
+                originPlaces = uiState.value.places
             }
 
             PlanAction.ShowCalendarClick -> {
@@ -372,7 +374,7 @@ class PlanViewModel @Inject constructor(
 
             when (target) {
                 is Place -> {
-                    val endDateTime = uiState.value.date.endDay?.atStartOfDay()
+                    val endDateTime = uiState.value.date.startDay?.atStartOfDay()
                         ?.plusMinutes(newStartMinute + target.durationMinutes) ?: return@update it
                     if (isDuplicate(
                             targetId = id,
@@ -539,13 +541,11 @@ class PlanViewModel @Inject constructor(
         startDateTime: LocalDateTime,
         endDateTime: LocalDateTime
     ): Boolean {
-        val filteredPlaces = uiState.value.places
-            .filter { it.startDateTime != null && it.endDateTime != null }
-            .filterNot { it.id == targetId }
+        val filteredPlaces = uiState.value.blockItems.filterNot { it.id == targetId }
 
         return filteredPlaces.any {
             it.startDateTime!! in startDateTime..endDateTime.minusMinutes(1)
-                    || (it.startDateTime!! < startDateTime && it.endDateTime!! >= startDateTime)
+                || (it.startDateTime!! < startDateTime && it.endDateTime!! > startDateTime)
         }
     }
 

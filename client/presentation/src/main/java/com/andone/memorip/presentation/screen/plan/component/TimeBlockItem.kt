@@ -77,7 +77,6 @@ fun TimeBlockItem(
             var dragOffsetY by remember { mutableFloatStateOf(value = 0f) }
             var dragOffsetX by remember(block) { mutableFloatStateOf(value = 0f) }
             val startYPx = remember(block) { engine.blockStartYPx(startDate, block) }
-            Log.d("DEBUG TEST", "block : $block / startY : $startYPx")
             var isDragging by remember { mutableStateOf(value = false) }
 
             Box(
