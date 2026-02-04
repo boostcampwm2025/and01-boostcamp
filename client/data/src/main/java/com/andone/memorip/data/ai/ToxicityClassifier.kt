@@ -31,7 +31,7 @@ class ToxicityClassifier @Inject constructor(
 
         for (i in logits.indices) {
             val p = 1f / (1f + exp(-logits[i]))
-            if (p > 0.8f) {
+            if (p > 0.85f) {
                 result.add(labels[i] to p)
             }
         }
