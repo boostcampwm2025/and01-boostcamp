@@ -147,24 +147,24 @@ class PlaceCreateViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
 
-            val sentences =
-                splitSentences(_uiState.value.title) +
-                        splitSentences(_uiState.value.content)
-
-            for (sentence in sentences) {
-                val result = toxicityAnalyzer.predict(sentence)
-                val label = result.firstOrNull()?.first
-
-                if (label != null) {
-                    _uiState.update {
-                        it.copy(
-                            contentErrorLabel = label,
-                            isLoading = false
-                        )
-                    }
-                    return@launch
-                }
-            }
+//            val sentences =
+//                splitSentences(_uiState.value.title) +
+//                        splitSentences(_uiState.value.content)
+//
+//            for (sentence in sentences) {
+//                val result = toxicityAnalyzer.predict(sentence)
+//                val label = result.firstOrNull()?.first
+//
+//                if (label != null) {
+//                    _uiState.update {
+//                        it.copy(
+//                            contentErrorLabel = label,
+//                            isLoading = false
+//                        )
+//                    }
+//                    return@launch
+//                }
+//            }
 
             val imageUrls = uploadImages(context, uiStateValue.images)
 
