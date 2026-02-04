@@ -88,6 +88,12 @@ private fun TripListScreenContent(
     modifier: Modifier = Modifier,
 ) {
     val listState = rememberLazyListState()
+    val hasScrolled by remember {
+        derivedStateOf {
+            listState.firstVisibleItemIndex > 0 || listState.firstVisibleItemScrollOffset > 0
+        }
+    }
+    val topBarHasShadow = trips.isNotEmpty() && hasScrolled
 
     LaunchedEffect(listState) {
         var previousIndex = listState.firstVisibleItemIndex
@@ -120,7 +126,7 @@ private fun TripListScreenContent(
 
     Scaffold(
         modifier = modifier,
-        topBar = { TripListTopBar() },
+        topBar = { TripListTopBar(hasShadow = topBarHasShadow) },
         contentWindowInsets = WindowInsets()
     ) { innerPadding ->
         val contentModifier = Modifier
