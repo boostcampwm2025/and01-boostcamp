@@ -77,7 +77,7 @@ fun MemoripNav(
             )
 
             placeCreate(
-                onNavigateToHome = navigator::navigateToPlaceList,
+                onNavigateToPlaceList = { navigator.navigateToTab(MainBottomBarRoute.PLACE_LIST) },
                 onBackClick = navigator::popBackStack
             )
 
