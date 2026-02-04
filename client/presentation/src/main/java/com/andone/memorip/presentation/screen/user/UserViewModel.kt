@@ -10,7 +10,6 @@ import com.andone.memorip.presentation.screen.user.model.UserEvent
 import com.andone.memorip.presentation.screen.user.model.LoginMethod
 import com.andone.memorip.presentation.screen.user.model.UserUiState
 import com.andone.memorip.presentation.screen.user.model.toUiModel
-import com.andone.memorip.presentation.util.snackbar.SnackBarEvent
 import com.andone.memorip.presentation.util.snackbar.SnackBarManager
 import com.andone.memorip.presentation.util.toSnackBarEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
