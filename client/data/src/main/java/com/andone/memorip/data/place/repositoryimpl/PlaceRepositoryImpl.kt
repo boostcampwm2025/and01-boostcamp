@@ -29,6 +29,7 @@ class PlaceRepositoryImpl @Inject constructor(
     private val database: PlaceDatabase,
     private val placeDao: PlaceDao
 ) : PlaceRepository {
+
     override suspend fun getPlaceDetail(placeId: String): Result<PlaceDetail> {
         return placeRemoteDataSource.getPlaceDetail(placeId = placeId)
             .map { it.toDomain() }
