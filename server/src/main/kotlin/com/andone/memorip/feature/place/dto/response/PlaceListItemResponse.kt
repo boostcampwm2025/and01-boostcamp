@@ -12,6 +12,7 @@ data class PlaceListItemResponse(
     val address: String,
     val imageUrl: String?,
     val thumbnailImageRatio: Float,
+    val scrapCount: Int,
 
     @get:JsonProperty("isPublic")
     val isPublic: Boolean
@@ -26,7 +27,8 @@ fun Place.toPlaceListItemResponse(): PlaceListItemResponse {
         address = address.fullAddress,
         imageUrl = thumbnailUrl,
         thumbnailImageRatio = thumbnailImageRatio,
-        isPublic = isPublic
+        isPublic = isPublic,
+        scrapCount = scrapCount
     )
 }
 
