@@ -1,6 +1,5 @@
 package com.andone.memorip.presentation.screen.plan.component
 
-import android.util.Log
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
@@ -35,7 +34,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import com.andone.memorip.domain.model.TimeBlock
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.model.PlanBlockUiModel
@@ -53,11 +51,10 @@ import com.andone.memorip.presentation.theme.memoripShapes
 import com.andone.memorip.presentation.util.DummyData
 import com.andone.memorip.presentation.util.toPx
 import java.time.LocalDate
-import java.time.LocalDateTime
 import kotlin.math.roundToInt
 
 object TimeBlockItemConstants {
-    const val SNAP_MINUTE_UNIT = 60
+    const val SNAP_MINUTE_UNIT = 30
     const val DELETE_THRESHOLD = 200
 }
 
@@ -72,7 +69,7 @@ fun TimeBlockItem(
     modifier: Modifier = Modifier,
     content: @Composable BoxScope.() -> Unit
 ) {
-    when(block) {
+    when (block) {
         is Place -> {
             var dragOffsetY by remember { mutableFloatStateOf(value = 0f) }
             var dragOffsetX by remember(block) { mutableFloatStateOf(value = 0f) }
@@ -106,14 +103,15 @@ fun TimeBlockItem(
                     )
             ) {
                 Box(
-                    modifier = Modifier.fillMaxHeight()
+                    modifier = Modifier
+                        .fillMaxHeight()
                         .width(dragOffsetX.coerceAtLeast(0f).dp)
                         .background(
                             color = MemoripTheme.colors.error,
                             shape = MemoripTheme.shapes.roundedMedium
                         )
                         .padding(all = MemoripPadding.PaddingMedium)
-                        .graphicsLayer{
+                        .graphicsLayer {
                             scaleX = 0.8f + (dragOffsetX / DELETE_THRESHOLD).coerceIn(0f, 1f) * 0.2f
                             scaleY = 0.8f + (dragOffsetX / DELETE_THRESHOLD).coerceIn(0f, 1f) * 0.2f
                         },
