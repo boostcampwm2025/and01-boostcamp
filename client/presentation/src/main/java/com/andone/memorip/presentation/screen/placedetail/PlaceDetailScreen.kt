@@ -305,6 +305,7 @@ private fun PlaceDetailContent(
                                 text = place.title,
                                 color = MemoripTheme.colors.onSurface,
                                 overflow = TextOverflow.Ellipsis,
+                                maxLines = 1,
                                 style = MemoripTheme.typography.headlineBold32
                             )
                             Row(horizontalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceMedium)) {
@@ -314,8 +315,10 @@ private fun PlaceDetailContent(
                                     contentDescription = null
                                 )
                                 Text(
-                                    text = place.locationName,
+                                    text = place.locationName.ifEmpty { stringResource(R.string.place_list_no_address_title) },
                                     color = MemoripTheme.colors.onSurface,
+                                    overflow = TextOverflow.Ellipsis,
+                                    maxLines = 1,
                                     style = MemoripTheme.typography.bodyMedium14
                                 )
                             }
