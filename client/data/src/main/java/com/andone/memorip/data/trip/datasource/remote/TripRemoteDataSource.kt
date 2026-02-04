@@ -15,7 +15,8 @@ interface TripRemoteDataSource {
     suspend fun getMyTrips(
         page: Int,
         size: Int,
-        placeId: String? = null
+        placeId: String? = null,
+        query: String? = null
     ): Result<List<TripListResponse>>
 
     suspend fun getPublicTrips(page: Int, size: Int): Result<List<TripListResponse>>
