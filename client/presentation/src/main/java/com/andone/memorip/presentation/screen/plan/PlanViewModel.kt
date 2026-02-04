@@ -1,6 +1,5 @@
 package com.andone.memorip.presentation.screen.plan
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -25,7 +24,6 @@ import com.andone.memorip.presentation.screen.plan.model.PlanEvent.ShowDeleteDay
 import com.andone.memorip.presentation.screen.plan.model.PlanTripUiModel
 import com.andone.memorip.presentation.screen.plan.model.PlanUiState
 import com.andone.memorip.presentation.screen.plan.model.TripListUiModel
-import com.andone.memorip.presentation.screen.plan.utill.MINUTES_PER_DAY
 import com.andone.memorip.presentation.util.snackbar.SnackBarEvent
 import com.andone.memorip.presentation.util.snackbar.SnackBarManager
 import com.andone.memorip.presentation.util.toRemoteString
@@ -527,9 +525,8 @@ class PlanViewModel @Inject constructor(
 
                         if (startDate.isAfter(removedDate)) {
                             return@map originPlace.copy(
-                                startDateTime = originPlace.startDateTime.minusDays(
-                                    1
-                                ), endDateTime = originPlace.endDateTime.minusDays(1)
+                                startDateTime = originPlace.startDateTime.minusDays(1),
+                                endDateTime = originPlace.endDateTime.minusDays(1)
                             )
                         }
 
@@ -545,25 +542,18 @@ class PlanViewModel @Inject constructor(
         startDateTime: LocalDateTime,
         endDateTime: LocalDateTime
     ): Boolean {
-        val filteredPlaces = uiState.value.blockItems.filterNot { it.id == targetId }
-
-        return filteredPlaces.any {
-            it.startDateTime!! in startDateTime..endDateTime.minusMinutes(1)
-                || (it.startDateTime!! < startDateTime && it.endDateTime!! > startDateTime)
-        }
+        return uiState.value.blockItems.filterNot { it.id == targetId }
+            .any {
+                it.startDateTime!! in startDateTime..endDateTime.minusMinutes(1)
+                    || (it.startDateTime!! < startDateTime && it.endDateTime!! > startDateTime)
+            }
     }
 
     private fun addPlaceToTimetable(startMinute: Int, place: Place) {
         val date = uiState.value.date
         val baseDay = date.startDay ?: return
 
-        val dayOffset = startMinute / MINUTES_PER_DAY
-        val minuteInDay = startMinute % MINUTES_PER_DAY
-
-        val targetDay = baseDay.plusDays(dayOffset.toLong())
-
-        val startDateTime = targetDay.atStartOfDay()
-            .plusMinutes(minuteInDay.toLong())
+        val startDateTime = baseDay.atStartOfDay().plusMinutes(startMinute.toLong())
 
         val endDateTime = startDateTime.plusMinutes(place.durationMinutes)
 
