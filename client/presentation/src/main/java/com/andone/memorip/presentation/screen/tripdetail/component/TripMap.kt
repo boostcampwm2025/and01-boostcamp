@@ -41,6 +41,7 @@ private object TripMapConstant {
     const val MICRO_ANIMATION_DURATION = 1
     const val MICRO_ZOOM_DELTA = 0.0001
     const val CAMERA_UPDATE_DELAY = 100L
+    const val INITIAL_MAX_ZOOM = 10
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalNaverMapApi::class)
@@ -121,11 +122,19 @@ fun TripMap(
                     cameraPositionState.move(cameraUpdate)
                     scope.launch {
                         delay(TripMapConstant.CAMERA_UPDATE_DELAY)
-                        val microUpdate = CameraUpdate.zoomBy(TripMapConstant.MICRO_ZOOM_DELTA)
-                        cameraPositionState.animate(
-                            update = microUpdate,
-                            durationMs = TripMapConstant.MICRO_ANIMATION_DURATION
-                        )
+                        val currentZoom = cameraPositionState.position.zoom
+                        if (currentZoom > TripMapConstant.INITIAL_MAX_ZOOM) {
+                            cameraPositionState.animate(
+                                update = CameraUpdate.zoomTo(TripMapConstant.INITIAL_MAX_ZOOM.toDouble()),
+                                durationMs = TripMapConstant.CAMERA_ANIMATION_DURATION
+                            )
+                        } else {
+                            val microUpdate = CameraUpdate.zoomBy(TripMapConstant.MICRO_ZOOM_DELTA)
+                            cameraPositionState.animate(
+                                update = microUpdate,
+                                durationMs = TripMapConstant.MICRO_ANIMATION_DURATION
+                            )
+                        }
                     }
                     onAction(TripDetailAction.OnMapPlacesUpdate(currentPlaces))
 
