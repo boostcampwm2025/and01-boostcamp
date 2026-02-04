@@ -3,6 +3,7 @@ package com.andone.memorip.feature.place.service
 import com.andone.memorip.common.exception.BusinessException
 import com.andone.memorip.common.exception.CommonExceptionCode
 import com.andone.memorip.common.response.ApiResult
+import com.andone.memorip.common.util.RegionNormalizer
 import com.andone.memorip.feature.group.entity.Group
 import com.andone.memorip.feature.group.repository.GroupRepository
 import com.andone.memorip.feature.place.dto.PlaceListResult
@@ -68,10 +69,12 @@ class PlaceService(
         region2Depth: List<String>?,
         pageable: Pageable
     ): PlaceListResult {
+        val normalizedRegion1 = RegionNormalizer.normalize(region1Depth)
+
         val page = placeRepository.searchPlaces(
             query = query,
             tagIds = tagIds,
-            region1Depth = region1Depth,
+            region1Depth = normalizedRegion1,
             region2Depth = region2Depth,
             pageable = pageable
         )
