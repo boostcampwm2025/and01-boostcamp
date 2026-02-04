@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.andone.memorip.domain.ai.ToxicityAnalyzer
 import com.andone.memorip.domain.model.request.Address
 import com.andone.memorip.domain.model.request.PlaceCreateUpdate
 import com.andone.memorip.domain.repository.PlaceRepository
@@ -16,6 +17,7 @@ import com.andone.memorip.presentation.screen.placeedit.model.toUiState
 import com.andone.memorip.presentation.util.BitmapCropUtil.getAspectRatioFromUrl
 import com.andone.memorip.presentation.util.snackbar.SnackBarEvent
 import com.andone.memorip.presentation.util.snackbar.SnackBarManager
+import com.andone.memorip.presentation.util.splitSentences
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -35,7 +37,8 @@ import kotlinx.coroutines.launch
 class PlaceEditViewModel @AssistedInject constructor(
     @Assisted private val place: PlaceUiModel,
     private val placeRepository: PlaceRepository,
-    private val snackBarManager: SnackBarManager
+    private val snackBarManager: SnackBarManager,
+    private val toxicityAnalyzer: ToxicityAnalyzer
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(place.toUiState())
@@ -143,6 +146,26 @@ class PlaceEditViewModel @AssistedInject constructor(
 
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
+
+            val sentences =
+                splitSentences(_uiState.value.title) +
+                        splitSentences(_uiState.value.content)
+
+            for (sentence in sentences) {
+                val result = toxicityAnalyzer.predict(sentence)
+                val label = result.firstOrNull()?.first
+
+                if (label != null) {
+                    _uiState.update {
+                        it.copy(
+                            contentErrorLabel = label,
+                            isLoading = false
+                        )
+                    }
+                    return@launch
+                }
+            }
+
             placeRepository.updatePlace(
                 placeId = uiStateValue.id,
                 place = PlaceCreateUpdate(

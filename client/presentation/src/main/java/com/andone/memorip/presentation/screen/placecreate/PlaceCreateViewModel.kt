@@ -30,6 +30,7 @@ import java.io.File
 import java.io.FileOutputStream
 import javax.inject.Inject
 import com.andone.memorip.domain.ai.ToxicityAnalyzer
+import com.andone.memorip.presentation.util.splitSentences
 
 @HiltViewModel
 class PlaceCreateViewModel @Inject constructor(
@@ -225,12 +226,5 @@ class PlaceCreateViewModel @Inject constructor(
             e.printStackTrace()
             null
         }
-    }
-
-    private fun splitSentences(text: String): List<String> {
-        return text
-            .split(Regex("[.!?。！？\n]"))
-            .map { it.trim() }
-            .filter { it.isNotEmpty() }
     }
 }
