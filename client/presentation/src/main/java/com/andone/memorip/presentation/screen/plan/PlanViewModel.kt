@@ -311,7 +311,11 @@ class PlanViewModel @Inject constructor(
     private fun updatePlaces(tripId: String) {
         viewModelScope.launch {
             tripRepository.getPlaceByTripId(tripId = tripId)
-                .onSuccess { result -> placesFlow.update { result.map { it.toUiModel() } } }
+                .onSuccess { result ->
+                    val places = result.map { it.toUiModel() }
+                    placesFlow.update { places }
+                    originPlaces = places
+                }
                 .onFailure { snackBarManager.show(SnackBarEvent.NETWORK_ERROR) }
         }
     }
