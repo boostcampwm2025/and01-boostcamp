@@ -51,8 +51,6 @@ fun DateSelectedContent(
                                     onClick = { onAction(PlanAction.BlockClick(block.id)) }
                                 )
                             }
-
-                            null -> Unit
                         }
                     }
                 }
