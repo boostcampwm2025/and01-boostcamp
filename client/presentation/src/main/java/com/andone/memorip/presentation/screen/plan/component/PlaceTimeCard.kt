@@ -31,6 +31,7 @@ import com.andone.memorip.presentation.component.MemoripImage
 import com.andone.memorip.presentation.component.PlaceLocationText
 import com.andone.memorip.presentation.component.TagChipRow
 import com.andone.memorip.presentation.model.Place
+import com.andone.memorip.presentation.screen.plan.utill.MINUTE_HEIGHT_DP
 import com.andone.memorip.presentation.theme.MemoripIconSize
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
@@ -89,14 +90,18 @@ private fun TextPlaceTimeCard(
 ) {
     Surface(
         onClick = onClick,
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .height(height = (place.durationMinutes * MINUTE_HEIGHT_DP).dp),
         shape = MemoripTheme.shapes.roundedMedium,
         color = MemoripTheme.colors.primaryContainer,
         tonalElevation = PlaceTimeCardDimen.CARD_ELEVATION,
         contentColor = MemoripTheme.colors.onSurface,
     ) {
         Row(
-            modifier = Modifier.padding(MemoripPadding.PaddingMedium),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(MemoripPadding.PaddingMedium),
             horizontalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXSmall),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -107,14 +112,12 @@ private fun TextPlaceTimeCard(
             )
             Text(
                 text = place.name,
-                modifier = Modifier.alignByBaseline(),
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
                 style = MemoripTheme.typography.titleBold14,
             )
             Text(
                 text = place.address,
-                modifier = Modifier.alignByBaseline(),
                 style = MemoripTheme.typography.labelRegular12,
                 overflow = TextOverflow.Ellipsis,
             )
