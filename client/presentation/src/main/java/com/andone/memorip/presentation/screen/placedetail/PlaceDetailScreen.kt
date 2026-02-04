@@ -45,7 +45,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import com.andone.memorip.navigation.PlaceDetail
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.LoadingIndicatorScreen
 import com.andone.memorip.presentation.component.TagChipRow
@@ -95,17 +94,12 @@ private object PlaceDetailScreenDimens {
 
 @Composable
 fun PlaceDetailScreen(
-    route: PlaceDetail,
     onNavigateBack: () -> Unit,
     onNavigateToSelectTrip: () -> Unit,
     onNavigateToPlaceEdit: (PlaceUiModel) -> Unit,
     onNavigateToTripList: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: PlaceDetailViewModel = hiltViewModel<PlaceDetailViewModel, PlaceDetailViewModel.Factory>(
-        creationCallback = { factory ->
-            factory.create(route)
-        }
-    )
+    viewModel: PlaceDetailViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -368,7 +362,6 @@ fun heightLerp(start: Float, stop: Float, fraction: Float): Float {
 private fun PlaceDetailScreenPreview() {
     MemoripTheme {
         PlaceDetailScreen(
-            route = PlaceDetail(""),
             onNavigateBack = {},
             onNavigateToSelectTrip = {},
             onNavigateToPlaceEdit = {},
