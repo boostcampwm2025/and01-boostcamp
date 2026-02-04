@@ -17,6 +17,9 @@ import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
@@ -35,6 +38,7 @@ class TripListViewModel @Inject constructor(
         .onStart {
             observeTrips()
             fetchInitialTrips()
+            observeSearchQuery()
         }
         .stateIn(
             scope = viewModelScope,
@@ -45,15 +49,45 @@ class TripListViewModel @Inject constructor(
     private val _event = Channel<TripListEvent>(capacity = BUFFERED)
     val event = _event.receiveAsFlow()
 
+    /**
+     * Repository의 여행 목록을 관찰하여 UI 상태 업데이트
+     */
     private fun observeTrips() {
         viewModelScope.launch {
             tripRepository.myTrips.collect { trips ->
                 _uiState.update { current ->
-                    current.copy(
-                        trips = trips.map { TripUiModel.from(it) }.toImmutableList()
-                    )
+                    current.copy(trips = trips.map { TripUiModel.from(it) }.toImmutableList())
                 }
             }
+        }
+    }
+
+    /**
+     * 검색어를 관찰하고 debounce 적용
+     * 사용자가 입력을 멈춘 후 300ms가 지나면 서버에 검색 요청
+     */
+    private fun observeSearchQuery() {
+        viewModelScope.launch {
+            _uiState
+                .map { it.searchQuery } // searchQuery만 추출
+                .distinctUntilChanged() // 값이 변경될 때만 emit
+                .debounce(300) // 300ms 동안 입력이 없으면 실행
+                .collect { query ->
+                    fetchTripsWithQuery(query)
+                }
+        }
+    }
+
+    /**
+     * 검색어와 함께 여행 목록을 서버에서 가져오기
+     */
+    private fun fetchTripsWithQuery(query: String) {
+        viewModelScope.launch {
+            val queryParam = query.ifEmpty { null }
+            tripRepository.fetchMyTrips(query = queryParam)
+                .onFailure {
+                    snackBarManager.show(SnackBarEvent.NETWORK_ERROR)
+                }
         }
     }
 

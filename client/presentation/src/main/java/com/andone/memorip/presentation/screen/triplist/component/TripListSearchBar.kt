@@ -2,18 +2,21 @@ package com.andone.memorip.presentation.screen.triplist.component
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -59,12 +62,24 @@ fun TripListSearchBar(
                 }
                 innerTextField()
                 Spacer(modifier = Modifier.weight(1f))
-                Icon(
-                    painter = painterResource(R.drawable.ic_search),
-                    contentDescription = stringResource(R.string.trip_list_search_content_description),
-                    modifier = Modifier.size(size = MemoripIconSize.IconSizeXSmall),
-                    tint = MemoripTheme.colors.onSurface
-                )
+                if (value.isNotEmpty()) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_close),
+                        contentDescription = stringResource(R.string.trip_list_search_clear_description),
+                        modifier = Modifier
+                            .size(size = MemoripIconSize.IconSizeXSmall)
+                            .clip(CircleShape)
+                            .clickable { onValueChange("") },
+                        tint = MemoripTheme.colors.onSurface
+                    )
+                } else {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_search),
+                        contentDescription = stringResource(R.string.trip_list_search_content_description),
+                        modifier = Modifier.size(size = MemoripIconSize.IconSizeXSmall),
+                        tint = MemoripTheme.colors.onSurface
+                    )
+                }
             }
         }
     )

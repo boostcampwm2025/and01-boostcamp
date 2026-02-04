@@ -39,6 +39,7 @@
     <string name="trip_list_create_new_trip_description">여행에 장소들을 담아보세요.</string>
     <string name="trip_list_create_new_trip_button">+ 추가</string>
     <string name="trip_list_search_placeholder">여행지나 그룹을 검색해보세요</string>
+    <string name="trip_list_search_clear_description">검색어 지우기</string>
 
     <!-- SelectImageScreen -->
     <string name="select_image_cancel">취소</string>
