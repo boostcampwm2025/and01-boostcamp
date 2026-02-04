@@ -98,6 +98,7 @@ fun PlanEditDialog(
     DefaultDialog(
         title = stringResource(R.string.plan_edit_dialog_title),
         modifier = modifier,
+        confirmEnabled = startTime != endTime,
         onConfirmClick = { onConfirmClick(startTime, endTime) },
         onCancelClick = onCancelClick,
         onDismissRequest = onDismissRequest,
