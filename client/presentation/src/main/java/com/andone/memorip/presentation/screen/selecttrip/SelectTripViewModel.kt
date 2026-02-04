@@ -43,6 +43,7 @@ class SelectTripViewModel @Inject constructor(
 
     private var placeId: String? = null
     private var initialSelectedTripIds: List<String>? = null
+    private var isPlaceMine: Boolean = true
 
     private val _uiState = MutableStateFlow(SelectTripUiState())
     val uiState: StateFlow<SelectTripUiState> = _uiState
@@ -73,6 +74,7 @@ class SelectTripViewModel @Inject constructor(
                 trips = emptyList<SelectTripUiModel>().toImmutableList(),
                 selectedTripIds = persistentSetOf(),
                 initialSelectedTripIds = persistentSetOf(),
+                isPlaceMine = isPlaceMine,
                 isLoading = true
             )
         }
@@ -82,6 +84,7 @@ class SelectTripViewModel @Inject constructor(
     fun onAction(action: SelectTripAction) {
         when (action) {
             is SelectTripAction.OnInitialize -> {
+                isPlaceMine = action.isPlaceMine
                 setPlaceId(action.placeId)
                 if (action.placeId == null) {
                     setInitialSelectedTripIds(action.initialSelectedTripIds)

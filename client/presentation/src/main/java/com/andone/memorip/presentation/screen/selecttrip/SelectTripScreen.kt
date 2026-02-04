@@ -50,8 +50,9 @@ private object SelectTripScreenConstant {
 
 @Composable
 fun SelectTripScreen(
+    isPlaceMine: Boolean,
     onTripSelect: (List<SelectTripUiModel>) -> Unit,
-    onBackClick: () -> Unit,
+    onBackClick: (hasChanged: Boolean) -> Unit,
     modifier: Modifier = Modifier,
     title: String = stringResource(R.string.select_trip_title),
     placeId: String? = null,
@@ -66,10 +67,11 @@ fun SelectTripScreen(
         if (showDialog) dialogInputValue = ""
     }
 
-    LaunchedEffect(placeId, initialSelectedTripIds) {
+    LaunchedEffect(placeId, initialSelectedTripIds, isPlaceMine) {
         viewModel.onAction(
             SelectTripAction.OnInitialize(
                 placeId = placeId,
+                isPlaceMine = isPlaceMine,
                 initialSelectedTripIds = initialSelectedTripIds
             )
         )
@@ -78,7 +80,7 @@ fun SelectTripScreen(
     viewModel.event.collectWithLifecycle { event ->
         when (event) {
             SelectTripEvent.NavigateBack -> {
-                onBackClick()
+                onBackClick(false)
             }
 
             is SelectTripEvent.SelectTrip -> {
@@ -86,7 +88,7 @@ fun SelectTripScreen(
             }
 
             SelectTripEvent.PlaceTripsUpdated -> {
-                onBackClick()
+                onBackClick(true)
             }
 
             SelectTripEvent.ShowDialog -> {
