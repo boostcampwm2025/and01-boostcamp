@@ -10,6 +10,7 @@ import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 import kotlin.math.absoluteValue
 import kotlin.time.Duration.Companion.days
+import kotlin.time.Duration.Companion.minutes
 import kotlin.time.DurationUnit
 
 /**
@@ -67,3 +68,6 @@ fun getHourDiff(first: LocalDateTime, second: LocalDateTime) =
 
 fun getDayDiff(first: LocalDate, second: LocalDate) =
     ChronoUnit.DAYS.between(first, second).days.toInt(DurationUnit.DAYS)
+
+fun getMinuteDiff(first: LocalDateTime?, second: LocalDateTime?) =
+    ChronoUnit.MINUTES.between(first, second).minutes.toInt(DurationUnit.MINUTES)
