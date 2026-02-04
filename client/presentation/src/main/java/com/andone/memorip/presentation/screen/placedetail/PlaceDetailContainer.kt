@@ -10,7 +10,6 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -30,8 +29,8 @@ fun PlaceDetailContainer(
     modifier: Modifier = Modifier
 ) {
     var currentStep by rememberSaveable { mutableStateOf(PlaceDetailStep.PlaceDetail) }
+    var place by rememberSaveable { mutableStateOf(PlaceUiModel()) }
 
-    var place by remember { mutableStateOf(PlaceUiModel()) }
 
     BackHandler(enabled = currentStep != PlaceDetailStep.PlaceDetail) {
         currentStep = PlaceDetailStep.PlaceDetail
