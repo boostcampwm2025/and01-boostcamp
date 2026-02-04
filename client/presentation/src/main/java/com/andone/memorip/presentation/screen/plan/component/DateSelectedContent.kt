@@ -28,7 +28,7 @@ fun DateSelectedContent(
             totalMinutes = state.date.totalMinutes,
             currentDay = state.date.selectedDay,
             places = state.places,
-            onBlockAdd = { place, start -> onAction(PlanAction.ItemDragEnd(place, start)) },
+            onBlockAdd = { place, start -> onAction(PlanAction.BottomBlockDragEnd(place, start)) },
             onDayScrolled = { day ->
                 onAction(PlanAction.DayScrolled(day))
             }
@@ -74,9 +74,9 @@ private fun DateSection(
     DayChipRow(
         totalDays = state.date.totalDays,
         selectedDay = state.date.selectedDay,
-        onDaySelected = { onAction(PlanAction.SelectDay(day = it)) },
-        onLongClick = { onAction(PlanAction.LongClick(day = it)) },
-        onAddDayClick = { onAction(PlanAction.AddDay) },
+        onDaySelected = { onAction(PlanAction.DayClick(day = it)) },
+        onLongClick = { onAction(PlanAction.DayLongClick(day = it)) },
+        onAddDayClick = { onAction(PlanAction.AddDayClick) },
         longClickedDay = state.date.longClickedDay
     )
 }

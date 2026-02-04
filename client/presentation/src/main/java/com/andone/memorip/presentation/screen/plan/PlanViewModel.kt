@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.screen.plan
 
+import android.R.attr.action
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -113,7 +114,9 @@ class PlanViewModel @Inject constructor(
             .onSuccess { response ->
                 if (response.isNotEmpty()) {
                     val selectedTripId = savedStateHandle.get<String>(SELECTED_TRIP_ID)
-                    val defaultTrip = if(selectedTripId == null) response.first() else response.find{ it.id == selectedTripId } ?: response.first()
+                    val defaultTrip =
+                        if (selectedTripId == null) response.first() else response.find { it.id == selectedTripId }
+                            ?: response.first()
                     updateSelectedTrip(TripListUiModel.from(defaultTrip))
                     updatePlaces(tripId = defaultTrip.id)
                 }
@@ -148,89 +151,38 @@ class PlanViewModel @Inject constructor(
                 deleteBlock(action.id)
             }
 
-            PlanAction.AddDay -> {
+            is PlanAction.BottomBlockDragEnd -> {
+                addPlaceToTimetable(startMinute = action.startMinute, place = action.item)
+            }
+
+            PlanAction.AddDayClick -> {
                 selectedDateFlow.update { it.copy(endDay = it.endDay?.plusDays(1)) }
             }
 
-            is PlanAction.RemoveDay -> {
-                val date = uiState.value.date
-                val (newStart, newEnd) = date.deleteDay(dayIndex = action.day)
-
-                val newCurrent = adjustCurrentDay(
-                    date = date,
-                    dayIndex = action.day,
-                    newStart = newStart,
-                    newEnd = newEnd
-                )
-
-                adjustBlockUiModelsAfterDayRemoved(
-                    blockUiModels = uiState.value.blockUiModels,
-                    removedDayIndex = action.day,
-                    date = uiState.value.date,
-                    onUpdateState = { adjustedUiModels, value ->
-                        val newBlocks = newStart?.let {
-                            adjustedUiModels.values
-                                .filterIsInstance<Place>()
-                                .mapNotNull { place ->
-                                    place.startDateTime?.let {
-                                        place.toTimeBlock(dayStart = uiState.value.date.startDay!!.atStartOfDay())
-                                    }
-                                }
-                        } ?: emptyList()
-
-                        selectedDateFlow.update {
-                            it.copy(
-                                startDay = newStart,
-                                endDay = newEnd,
-                                currentDay = newCurrent,
-                                longClickedDay = null
-                            )
-                        }
-                        blockUiModelsFlow.update { adjustedUiModels }
-                        timeBlocksFlow.update { newBlocks }
-                        placesFlow.update { (it + value).toImmutableList() }
-                    }
-                )
-            }
-
-            is PlanAction.LongClick -> {
-                selectedDateFlow.update { it.copy(longClickedDay = action.day) }
-            }
-
-            is PlanAction.SelectDay -> {
-                selectedDateFlow.update {
-                    it.copy(currentDay = it.currentDayFromSelectedDay(selectedDay = action.day))
-                }
+            is PlanAction.RemoveDayDialogConfirmClick -> {
+                deleteDay(action.day)
             }
 
             PlanAction.RemoveDayClick -> {
                 _event.trySend(element = ShowDeleteDayDialog(day = uiState.value.date.longClickedDay))
             }
 
-            PlanAction.RemoveCancel -> {
+            is PlanAction.DayLongClick -> {
+                selectedDateFlow.update { it.copy(longClickedDay = action.day) }
+            }
+
+            is PlanAction.DayClick -> {
+                selectedDateFlow.update {
+                    it.copy(currentDay = it.currentDayFromSelectedDay(selectedDay = action.day))
+                }
+            }
+
+            PlanAction.RemoveDayCancelClick -> {
                 selectedDateFlow.update { it.copy(longClickedDay = null) }
             }
 
-            is PlanAction.DateSelected -> {
-                val dayDiff = ChronoUnit.DAYS.between(
-                    action.start,
-                    action.end
-                ).days.toInt(DurationUnit.DAYS)
-
-                if (dayDiff > DAYS_LIMIT) {
-                    snackBarManager.show(SnackBarEvent.PLAN_DAYS_VALIDATION_ERROR)
-                    return
-                }
-
-                selectedDateFlow.update {
-                    it.copy(
-                        startDay = action.start,
-                        endDay = action.end,
-                        currentDay = action.start
-                    )
-                }
-                updateTrip(startAt = action.start, endAt = action.end)
-                updatePlaces(tripId = uiState.value.selectedTrip!!.id)
+            is PlanAction.SelectDateDialogConfirmClick -> {
+                updateSelectedDate(action.start, action.end)
             }
 
             is PlanAction.DayScrolled -> {
@@ -239,15 +191,11 @@ class PlanViewModel @Inject constructor(
                 }
             }
 
-            is PlanAction.ItemDragEnd -> {
-                addPlaceToTimetable(startMinute = action.startMinute, place = action.item)
-            }
-
             PlanAction.TripChoiceClick -> {
                 _event.trySend(element = PlanEvent.ShowTripChoiceDialog)
             }
 
-            is PlanAction.TripChoiceConfirmClick -> {
+            is PlanAction.TripChoiceDialogConfirmClick -> {
                 savePlan()
                 saveTrip(uiState.value.selectedTrip)
                 updateSelectedTrip(action.selectedTrip)
@@ -262,7 +210,7 @@ class PlanViewModel @Inject constructor(
                 selectedBlockFlow.update { null }
             }
 
-            is PlanAction.PlanEditConfirmClick -> {
+            is PlanAction.PlanEditDialogConfirmClick -> {
                 if (action.startDateTime.isEqual(action.endDateTime)) {
                     snackBarManager.show(SnackBarEvent.PLAN_DATE_INVALID_ERROR)
                     return
@@ -466,6 +414,25 @@ class PlanViewModel @Inject constructor(
         }
     }
 
+    private fun updateSelectedDate(startAt: LocalDate, endAt: LocalDate) {
+        val dayDiff = ChronoUnit.DAYS.between(startAt, endAt).days.toInt(DurationUnit.DAYS)
+
+        if (dayDiff > DAYS_LIMIT) {
+            snackBarManager.show(SnackBarEvent.PLAN_DAYS_VALIDATION_ERROR)
+            return
+        }
+
+        selectedDateFlow.update {
+            it.copy(
+                startDay = startAt,
+                endDay = endAt,
+                currentDay = startAt
+            )
+        }
+        updateTrip(startAt = startAt, endAt = endAt)
+        updatePlaces(tripId = uiState.value.selectedTrip!!.id)
+    }
+
     private fun moveBlock(id: String, newStartMinute: Int) {
         timeBlocksFlow.update {
             val target = uiState.value.blocks.find { it.id == id } ?: return@update it
@@ -490,10 +457,51 @@ class PlanViewModel @Inject constructor(
 
     private fun deleteBlock(id: String) {
         val block = blockUiModelsFlow.value[id]
-        timeBlocksFlow.update { it.filter { it.id != id } }
+        timeBlocksFlow.update { blocks -> blocks.filter { it.id != id } }
         if (block is Place) {
             placesFlow.update { it + block.copy(startDateTime = null, endDateTime = null) }
         }
+    }
+
+    private fun deleteDay(day: Int) {
+        val date = uiState.value.date
+        val (newStart, newEnd) = date.deleteDay(dayIndex = day)
+
+        val newCurrent = adjustCurrentDay(
+            date = date,
+            dayIndex = day,
+            newStart = newStart,
+            newEnd = newEnd
+        )
+
+        adjustBlockUiModelsAfterDayRemoved(
+            blockUiModels = uiState.value.blockUiModels,
+            removedDayIndex = day,
+            date = uiState.value.date,
+            onUpdateState = { adjustedUiModels, value ->
+                val newBlocks = newStart?.let {
+                    adjustedUiModels.values
+                        .filterIsInstance<Place>()
+                        .mapNotNull { place ->
+                            place.startDateTime?.let {
+                                place.toTimeBlock(dayStart = uiState.value.date.startDay!!.atStartOfDay())
+                            }
+                        }
+                } ?: emptyList()
+
+                selectedDateFlow.update {
+                    it.copy(
+                        startDay = newStart,
+                        endDay = newEnd,
+                        currentDay = newCurrent,
+                        longClickedDay = null
+                    )
+                }
+                blockUiModelsFlow.update { adjustedUiModels }
+                timeBlocksFlow.update { newBlocks }
+                placesFlow.update { (it + value).toImmutableList() }
+            }
+        )
     }
 
     private fun adjustCurrentDay(
