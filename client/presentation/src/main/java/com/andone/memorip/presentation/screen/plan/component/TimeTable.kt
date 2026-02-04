@@ -293,6 +293,7 @@ private fun HorizontalTimeGridLines(
     majorIntervalMinutes: Int = MINUTES_PER_HOUR,
     minuteHeightPx: Float,
 ) {
+    val density = LocalDensity.current
     val lineColor = MemoripTheme.colors.lightGray
     val strokeDp = MemoripLineWidth.TimeTick
     Canvas(modifier = Modifier.fillMaxSize()) {
@@ -303,7 +304,7 @@ private fun HorizontalTimeGridLines(
                 color = lineColor,
                 start = Offset(0f, y),
                 end = Offset(size.width, y),
-                strokeWidth = strokeDp.toPx()
+                strokeWidth = strokeDp.toPx(density)
             )
             minute += majorIntervalMinutes
         }
