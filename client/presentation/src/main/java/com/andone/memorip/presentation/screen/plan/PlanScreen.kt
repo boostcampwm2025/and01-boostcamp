@@ -55,10 +55,6 @@ fun PlanScreen(
     var showTripChoice by rememberSaveable { mutableStateOf(false) }
     var showCalendar by rememberSaveable { mutableStateOf(false) }
 
-    LaunchedEffect(uiState){
-        Log.d("DEBUG TEST", "places: ${uiState.places}")
-    }
-
     viewModel.event.collectWithLifecycle { event ->
         when (event) {
             is PlanEvent.ShowDeleteDayDialog -> {
