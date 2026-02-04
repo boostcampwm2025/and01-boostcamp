@@ -74,6 +74,7 @@ interface GroupRepository: JpaRepository<Group, UUID> {
             ) pi ON true
             WHERE (:ownerId IS NULL OR g.owner_id = :ownerId)
               AND (:visibility IS NULL OR g.visibility = CAST(:visibility AS VARCHAR))
+              AND (:query IS NULL OR g.title ILIKE CONCAT('%', :query, '%'))
               AND g.deleted_at IS NULL
               AND u.deleted_at IS NULL
             ORDER BY g.created_at DESC
@@ -84,6 +85,7 @@ interface GroupRepository: JpaRepository<Group, UUID> {
     fun findGroupListByOwnerId(
         @Param("ownerId") ownerId: UUID?,
         @Param("placeId") placeId: UUID?,
+        @Param("query") query: String?,
         @Param("visibility") visibility: String?,
         @Param("limit") limit: Int,
         @Param("offset") offset: Int
@@ -95,12 +97,14 @@ interface GroupRepository: JpaRepository<Group, UUID> {
             FROM groups g
             WHERE (:ownerId IS NULL OR g.owner_id = :ownerId)
               AND (:visibility IS NULL OR g.visibility = CAST(:visibility AS VARCHAR))
+              AND (:query IS NULL OR g.title ILIKE CONCAT('%', :query, '%'))
               AND g.deleted_at IS NULL
         """,
         nativeQuery = true
     )
     fun countGroups(
         @Param("ownerId") ownerId: UUID?,
+        @Param("query") query: String?,
         @Param("visibility") visibility: String?
     ): Long
 

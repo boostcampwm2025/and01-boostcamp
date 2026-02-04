@@ -24,7 +24,8 @@ interface TripService {
         @Query("page") page: Int,
         @Query("size") size: Int,
         @Query("sort") sort: List<String>? = listOf("id,desc"),
-        @Query("placeId") placeId: String? = null
+        @Query("placeId") placeId: String? = null,
+        @Query("query") query: String? = null
     ): ApiResult<List<TripListResponse>>
 
     @GET("/api/public/groups")

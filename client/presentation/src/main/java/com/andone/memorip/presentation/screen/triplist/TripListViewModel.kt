@@ -2,6 +2,7 @@ package com.andone.memorip.presentation.screen.triplist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.andone.memorip.domain.model.Visibility
 import com.andone.memorip.domain.repository.TripRepository
 import com.andone.memorip.presentation.screen.triplist.model.TripListAction
 import com.andone.memorip.presentation.screen.triplist.model.TripListEvent
@@ -11,11 +12,15 @@ import com.andone.memorip.presentation.util.snackbar.SnackBarEvent
 import com.andone.memorip.presentation.util.snackbar.SnackBarManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
@@ -34,6 +39,7 @@ class TripListViewModel @Inject constructor(
         .onStart {
             observeTrips()
             fetchInitialTrips()
+            observeSearchQuery()
         }
         .stateIn(
             scope = viewModelScope,
@@ -48,11 +54,32 @@ class TripListViewModel @Inject constructor(
         viewModelScope.launch {
             tripRepository.myTrips.collect { trips ->
                 _uiState.update { current ->
-                    current.copy(
-                        trips = trips.map { TripUiModel.from(it) }.toImmutableList()
-                    )
+                    current.copy(trips = trips.map { TripUiModel.from(it) }.toImmutableList())
                 }
             }
+        }
+    }
+
+    @OptIn(FlowPreview::class)
+    private fun observeSearchQuery() {
+        viewModelScope.launch {
+            _uiState
+                .map { it.searchQuery }
+                .distinctUntilChanged()
+                .debounce(DEBOUNCE_SECOND)
+                .collect { query ->
+                    fetchTripsWithQuery(query)
+                }
+        }
+    }
+
+    private fun fetchTripsWithQuery(query: String) {
+        viewModelScope.launch {
+            val queryParam = query.ifEmpty { null }
+            tripRepository.fetchMyTrips(query = queryParam)
+                .onFailure {
+                    snackBarManager.show(SnackBarEvent.NETWORK_ERROR)
+                }
         }
     }
 
@@ -79,6 +106,73 @@ class TripListViewModel @Inject constructor(
             is TripListAction.OnTripClick -> {
                 _event.trySend(TripListEvent.NavigateToTripDetail(tripId = action.tripId))
             }
+
+            TripListAction.OnCreateNewTripClick -> {
+                _uiState.update {
+                    it.copy(
+                        isCreateTripDialogVisible = true,
+                        newTripName = ""
+                    )
+                }
+            }
+
+            is TripListAction.OnSearchQueryChange -> {
+                _uiState.update { it.copy(searchQuery = action.query) }
+            }
+
+            is TripListAction.OnScrollStateChange -> {
+                _uiState.update {
+                    it.copy(isStickyHeaderVisible = !action.isScrollingDown)
+                }
+            }
+
+            TripListAction.OnDismissCreateTripDialog -> {
+                _uiState.update {
+                    it.copy(
+                        isCreateTripDialogVisible = false,
+                        newTripName = ""
+                    )
+                }
+            }
+
+            is TripListAction.OnNewTripNameChange -> {
+                _uiState.update { it.copy(newTripName = action.name) }
+            }
+
+            TripListAction.OnConfirmCreateTrip -> {
+                createTrip()
+            }
         }
+    }
+
+    private fun createTrip() {
+        val tripName = _uiState.value.newTripName.trim()
+        if (tripName.isEmpty()) {
+            return
+        }
+
+        viewModelScope.launch {
+            tripRepository.createTrip(
+                title = tripName,
+                visibility = Visibility.PRIVATE
+            ).onSuccess {
+                _uiState.update {
+                    it.copy(
+                        isCreateTripDialogVisible = false,
+                        newTripName = ""
+                    )
+                }
+                fetchInitialTrips()
+            }.onFailure {
+                _uiState.update {
+                    it.copy(isCreateTripDialogVisible = false)
+                }
+                snackBarManager.show(SnackBarEvent.DATA_SAVE_FAILED)
+            }
+        }
+    }
+
+    companion object {
+        const val DEBOUNCE_SECOND = 300L
     }
 }

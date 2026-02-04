@@ -119,6 +119,7 @@ class GroupController(
             
             선택적 파라미터:
             - placeId: 특정 장소가 각 그룹에 포함되어 있는지 확인 (isPlaceAdded 필드)
+            - query: 그룹 제목 검색 키워드 (부분 일치, 대소문자 무관)
             
             응답 포함 정보:
             - 그룹 기본 정보 (id, title, visibility, type, createdAt, updatedAt)
@@ -133,6 +134,8 @@ class GroupController(
     fun getMyGroups(
         @Parameter(description = "특정 장소가 그룹에 포함되어 있는지 확인할 장소 ID (선택)")
         @RequestParam(required = false) placeId: UUID?,
+        @Parameter(description = "그룹 제목 검색 키워드 (선택)")
+        @RequestParam(required = false) query: String?,
         @PageableDefault(
             page = 0,
             size = 20,
@@ -142,7 +145,7 @@ class GroupController(
         pageable: Pageable,
         @AuthenticationPrincipal principal: UserPrincipal
     ): ApiResult<List<GroupListResponse>> {
-        val result = groupService.getMyGroups(pageable, placeId, principal.userId)
+        val result = groupService.getMyGroups(pageable, placeId, query, principal.userId)
         return ApiResult.success(result.content, result.pagination)
     }
 

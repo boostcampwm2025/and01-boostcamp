@@ -27,8 +27,8 @@ class TripRepositoryImpl @Inject constructor(
         fetchMyTrips()
     }
 
-    override suspend fun fetchMyTrips(page: Int, size: Int): Result<Unit> {
-        return remoteDataSource.getMyTrips(page, size)
+    override suspend fun fetchMyTrips(page: Int, size: Int, query: String?): Result<Unit> {
+        return remoteDataSource.getMyTrips(page, size, query = query)
             .map { dtoList -> dtoList.map { it.toDomain() } }
             .onSuccess { trips ->
                 _myTrips.value = trips
