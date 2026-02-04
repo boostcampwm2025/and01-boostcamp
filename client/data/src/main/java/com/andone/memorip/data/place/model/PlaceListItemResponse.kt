@@ -12,6 +12,7 @@ data class PlaceListItemResponse(
     val address: String,
     val imageUrl: String? = null,
     val thumbnailImageRatio: Float,
+    val scrapCount: Int,
     val isPublic: Boolean
 )
 
