@@ -5,10 +5,10 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.andone.memorip.data.place.datasource.local.dao.PlaceDao
 import com.andone.memorip.data.place.datasource.local.PlaceDatabase
-import com.andone.memorip.data.place.datasource.local.model.toEntity
+import com.andone.memorip.data.place.datasource.local.dao.PlaceDao
 import com.andone.memorip.data.place.datasource.local.model.toDomainModel
+import com.andone.memorip.data.place.datasource.local.model.toEntity
 import com.andone.memorip.data.place.datasource.remote.PlaceRemoteDataSource
 import com.andone.memorip.data.place.datasource.remote.PlaceRemoteMediator
 import com.andone.memorip.data.place.model.toDomain
@@ -43,7 +43,11 @@ class PlaceRepositoryImpl @Inject constructor(
         sort: List<String>?
     ): Flow<PagingData<PlaceListItem>> =
         Pager(
-            config = PagingConfig(pageSize = PAGE_SIZE),
+            config = PagingConfig(
+                pageSize = PAGE_SIZE,
+                prefetchDistance = PAGE_SIZE,
+                enablePlaceholders = false
+            ),
             remoteMediator = PlaceRemoteMediator(
                 remoteDataSource = placeRemoteDataSource,
                 database = database,
@@ -64,7 +68,9 @@ class PlaceRepositoryImpl @Inject constructor(
     override suspend fun createPlace(place: PlaceCreateUpdate): Result<PlaceCreated> {
         return placeRemoteDataSource.createPlace(place.toDomain())
             .onSuccess { response ->
-                placeDao.insertPlace(place.toEntity(response.placeId))
+                if (place.isPublic) {
+                    placeDao.insertPlace(place.toEntity(response.placeId))
+                }
             }
             .map { it.toDomain() }
     }
