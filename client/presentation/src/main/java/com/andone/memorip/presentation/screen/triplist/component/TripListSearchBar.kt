@@ -3,6 +3,7 @@ package com.andone.memorip.presentation.screen.triplist.component
 import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -53,15 +54,19 @@ fun TripListSearchBar(
                     )
                     .padding(horizontal = MemoripPadding.PaddingSmall)
             ) {
-                if (value.isEmpty()) {
-                    Text(
-                        text = stringResource(R.string.trip_list_search_placeholder),
-                        style = MemoripTheme.typography.labelRegular14,
-                        color = MemoripTheme.colors.gray1
-                    )
+                Box(
+                    modifier = Modifier.weight(1f),
+                    contentAlignment = Alignment.CenterStart
+                ) {
+                    if (value.isEmpty()) {
+                        Text(
+                            text = stringResource(R.string.trip_list_search_placeholder),
+                            style = MemoripTheme.typography.labelRegular14,
+                            color = MemoripTheme.colors.gray1
+                        )
+                    }
+                    innerTextField()
                 }
-                innerTextField()
-                Spacer(modifier = Modifier.weight(1f))
                 if (value.isNotEmpty()) {
                     Icon(
                         painter = painterResource(R.drawable.ic_close),
