@@ -2,6 +2,7 @@ package com.andone.memorip.presentation.screen.user
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.andone.memorip.domain.auth.TokenProvider
 import com.andone.memorip.domain.auth.TokenRefresher
 import com.andone.memorip.domain.repository.AuthRepository
 import com.andone.memorip.domain.repository.UserRepository
@@ -170,6 +171,7 @@ class UserViewModel @Inject constructor(
 
     private fun refreshAuthState() {
         viewModelScope.launch {
+            tokenRefresher.refreshToken(force = true)
             val loggedIn = authRepository.isLoggedIn()
 
             _uiState.update {
@@ -177,7 +179,6 @@ class UserViewModel @Inject constructor(
             }
 
             if (loggedIn) {
-                tokenRefresher.refreshToken(force = true)
                 updateUser()
             }
         }
