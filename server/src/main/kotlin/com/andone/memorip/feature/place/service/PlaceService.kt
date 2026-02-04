@@ -79,18 +79,7 @@ class PlaceService(
             pageable = pageable
         )
 
-        val content = page.content.map { place ->
-            PlaceListItemResponse(
-                id = place.id,
-                title = place.title,
-                latitude = place.latitude,
-                longitude = place.longitude,
-                address = place.address.fullAddress,
-                imageUrl = place.thumbnailUrl,
-                thumbnailImageRatio = place.thumbnailImageRatio,
-                isPublic = place.isPublic
-            )
-        }
+        val content = page.content.map { it.toPlaceListItemResponse()}
 
         val pagination = ApiResult.PaginationInfo(
             currentPage = page.number + 1,
@@ -244,18 +233,7 @@ class PlaceService(
 
         val places = placeRepository.findAllByGroupId(groupId, pageable)
 
-        val content = places.content.map { place ->
-            PlaceListItemResponse(
-                id = place.id,
-                title = place.title,
-                latitude = place.latitude,
-                longitude = place.longitude,
-                address = place.address.fullAddress,
-                imageUrl = place.thumbnailUrl,
-                thumbnailImageRatio = place.thumbnailImageRatio,
-                isPublic = place.isPublic
-            )
-        }
+        val content = places.content.map { it.toPlaceListItemResponse()}
 
         val pagination = ApiResult.PaginationInfo(
             currentPage = places.number + 1,
@@ -279,5 +257,13 @@ class PlaceService(
             }
         }
         return groups
+    }
+
+    @Transactional(readOnly = true)
+    fun getPopularPlaces(limit: Int = 5): List<PlaceListItemResponse> {
+
+        val places = placeRepository.findTopPopular(limit)
+
+        return places.map { it.toPlaceListItemResponse()}
     }
 }
