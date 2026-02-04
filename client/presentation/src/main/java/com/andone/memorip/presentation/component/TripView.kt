@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.R
-import com.andone.memorip.presentation.screen.triplist.component.EmptyTripPlaceholder
+import com.andone.memorip.presentation.screen.triplist.component.EmptyTripCard
 import com.andone.memorip.presentation.screen.triplist.component.TripLayout
 import com.andone.memorip.presentation.screen.triplist.component.ImageCard
 import com.andone.memorip.presentation.theme.MemoripSpace
@@ -21,7 +21,6 @@ import com.andone.memorip.presentation.util.buildBento5x3Items
 fun TripView(
     name: String,
     onTripClick: () -> Unit,
-    onAddClick: () -> Unit,
     modifier: Modifier = Modifier,
     images: List<String> = emptyList()
 ) {
@@ -38,7 +37,7 @@ fun TripView(
             style = MemoripTheme.typography.titleBold18
         )
         if (images.isEmpty()) {
-            EmptyTripPlaceholder(onClick = onAddClick)
+            EmptyTripCard()
         } else {
             TripLayout(
                 items = buildBento5x3Items(images),
@@ -58,7 +57,6 @@ private fun TripViewPreview() {
         TripView(
             name = "기본 그룹",
             onTripClick = {},
-            onAddClick = {},
             images = List(8) { "" }
         )
     }

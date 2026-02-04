@@ -231,7 +231,6 @@ private fun TripListNotEmptyContent(
             TripView(
                 name = trip.name,
                 onTripClick = { onAction(TripListAction.OnTripClick(tripId = trip.id)) },
-                onAddClick = { onAction(TripListAction.OnTripClick(tripId = trip.id)) },
                 images = trip.images
             )
         }
