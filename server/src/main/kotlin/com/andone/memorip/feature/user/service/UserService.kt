@@ -37,7 +37,7 @@ class UserService(
         groupRepository.save(
             Group.create(
                 owner = newUser,
-                title = "기본 그룹",
+                title = "기본",
                 visibility = Visibility.PRIVATE,
                 type = GroupType.DEFAULT
             )
