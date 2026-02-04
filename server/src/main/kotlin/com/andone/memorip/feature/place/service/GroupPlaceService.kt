@@ -37,8 +37,8 @@ class GroupPlaceService(
             place = place
         )
 
-        placeRepository.saveAndFlush(place)
         groupPlaceRepository.save(groupPlace)
+        placeRepository.increaseScrap(place.id)
     }
 
     @Transactional

@@ -59,4 +59,15 @@ interface PlaceRepository : JpaRepository<Place, UUID> {
     """)
     fun decreaseScrap(@Param("placeId") placeId: UUID): Int
 
+    @Query(value = """
+        SELECT *
+        FROM places
+        WHERE is_public = true
+        ORDER BY scrap_count DESC
+        LIMIT 5
+        """,
+        nativeQuery = true
+    )
+    fun findTop5Popular(): List<Place>
+
 }
