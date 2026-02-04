@@ -114,7 +114,8 @@ fun SelectTripScreen(
             initialSelectedTripIds = uiState.initialSelectedTripIds,
             onAction = viewModel::onAction,
             title = title,
-            modifier = modifier
+            modifier = modifier,
+            checkEnabled = uiState.canSave
         )
     }
 
@@ -148,6 +149,7 @@ private fun SelectTripContent(
     onAction: (SelectTripAction) -> Unit,
     modifier: Modifier = Modifier,
     title: String = stringResource(R.string.select_trip_title),
+    checkEnabled: Boolean = false,
 ) {
     val hasChanges = selectedTripIds != initialSelectedTripIds
     val isPlaceDetailScreen = trips.any { it.isPlaceAdded }
@@ -155,7 +157,7 @@ private fun SelectTripContent(
     Scaffold(
         topBar = {
             SelectTripTopBar(
-                enabled = hasChanges && selectedTripIds.isNotEmpty(),
+                enabled = checkEnabled,
                 onBackClick = { onAction(SelectTripAction.OnBackClick) },
                 onCheckClick = { onAction(SelectTripAction.OnCheckClick) },
                 title = title

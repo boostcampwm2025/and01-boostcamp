@@ -137,6 +137,16 @@ class SelectTripViewModel @Inject constructor(
     }
 
     private fun toggleTripSelection(tripId: String) {
+        val currentState = _uiState.value
+
+        if (currentState.isPlaceMine &&
+            tripId in currentState.selectedTripIds &&
+            currentState.selectedTripIds.size == 1
+        ) {
+            snackBarManager.show(SnackBarEvent.PLACE_MUST_HAVE_ONE_TRIP)
+            return
+        }
+
         _uiState.update { current ->
             val newSelectedIds = if (tripId in current.selectedTripIds) {
                 current.selectedTripIds.filter { it != tripId }.toImmutableSet()

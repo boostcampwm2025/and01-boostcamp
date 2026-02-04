@@ -27,6 +27,8 @@ enum class SnackBarEvent(
     PLAN_DATE_INVALID_ERROR(messageResId = R.string.snackbar_plan_date_invalid_error),
     IMAGE_COUNT_ERROR(messageResId = R.string.snackbar_image_count_error),
 
+    PLACE_MUST_HAVE_ONE_TRIP(messageResId = R.string.snackbar_place_must_have_one_trip),
+
     // 성공
     SUCCESS(messageResId = R.string.snackbar_success)
 }
