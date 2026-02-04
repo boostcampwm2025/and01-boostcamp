@@ -24,6 +24,7 @@ import com.andone.memorip.presentation.screen.plan.model.PlanEvent.ShowDeleteDay
 import com.andone.memorip.presentation.screen.plan.model.PlanTripUiModel
 import com.andone.memorip.presentation.screen.plan.model.PlanUiState
 import com.andone.memorip.presentation.screen.plan.model.TripListUiModel
+import com.andone.memorip.presentation.util.getDayDiff
 import com.andone.memorip.presentation.util.snackbar.SnackBarEvent
 import com.andone.memorip.presentation.util.snackbar.SnackBarManager
 import com.andone.memorip.presentation.util.toRemoteString
@@ -44,11 +45,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.temporal.ChronoUnit
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-import kotlin.time.Duration.Companion.days
-import kotlin.time.DurationUnit
 
 private object PlanViewModelConstants {
     const val DAYS_LIMIT = 30
@@ -349,9 +347,7 @@ class PlanViewModel @Inject constructor(
     }
 
     private fun updateSelectedDate(startAt: LocalDate, endAt: LocalDate) {
-        val dayDiff = ChronoUnit.DAYS.between(startAt, endAt).days.toInt(DurationUnit.DAYS)
-
-        if (dayDiff > DAYS_LIMIT) {
+        if (getDayDiff(startAt, endAt) > DAYS_LIMIT) {
             snackBarManager.show(SnackBarEvent.PLAN_DAYS_VALIDATION_ERROR)
             return
         }
@@ -545,7 +541,7 @@ class PlanViewModel @Inject constructor(
         return uiState.value.blockItems.filterNot { it.id == targetId }
             .any {
                 it.startDateTime!! in startDateTime..endDateTime.minusMinutes(1)
-                    || (it.startDateTime!! < startDateTime && it.endDateTime!! > startDateTime)
+                        || (it.startDateTime!! < startDateTime && it.endDateTime!! > startDateTime)
             }
     }
 

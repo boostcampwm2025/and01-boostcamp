@@ -9,6 +9,8 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 import kotlin.math.absoluteValue
+import kotlin.time.Duration.Companion.days
+import kotlin.time.DurationUnit
 
 /**
  * ex) 오후 03:00
@@ -62,3 +64,6 @@ fun LocalDate?.toRemoteString(): String? {
 
 fun getHourDiff(first: LocalDateTime, second: LocalDateTime) =
     ChronoUnit.HOURS.between(first, second).absoluteValue
+
+fun getDayDiff(first: LocalDate, second: LocalDate) =
+    ChronoUnit.DAYS.between(first, second).days.toInt(DurationUnit.DAYS)
