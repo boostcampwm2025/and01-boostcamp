@@ -5,7 +5,6 @@ data class UserUiState(
     val isLoading: Boolean = false,
     val isLoggedIn: Boolean = false,
 
-    val errorMessage: String? = null,
     val permissionUiState: PermissionUiState = PermissionUiState(),
     val alarmUiState: AlarmUiState = AlarmUiState(),
 

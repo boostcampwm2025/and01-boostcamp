@@ -12,6 +12,7 @@ import com.andone.memorip.presentation.screen.user.model.UserUiState
 import com.andone.memorip.presentation.screen.user.model.toUiModel
 import com.andone.memorip.presentation.util.snackbar.SnackBarEvent
 import com.andone.memorip.presentation.util.snackbar.SnackBarManager
+import com.andone.memorip.presentation.util.toSnackBarEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
@@ -55,8 +56,12 @@ class UserViewModel @Inject constructor(
             is UserAction.GoogleLoginSuccess -> {
                 viewModelScope.launch {
                     authRepository.signInWithGoogle(action.idToken)
-                        .onSuccess { onAuthSuccess() }
-                        .onFailure { onAuthFailure(it) }
+                        .onSuccess {
+                            onAuthSuccess()
+                        }
+                        .onFailure { e ->
+                            snackBarManager.show(event = e.toSnackBarEvent())
+                        }
                 }
             }
 
@@ -133,7 +138,7 @@ class UserViewModel @Inject constructor(
                     onAuthSuccess()
                 }
                 .onFailure { e ->
-                    onAuthFailure(e)
+                    snackBarManager.show(e.toSnackBarEvent())
                 }
 
             _uiState.update {
@@ -150,20 +155,14 @@ class UserViewModel @Inject constructor(
                         it.copy(user = it.user.copy(email = data))
                     }
                 }
-                .onFailure { e ->
-                    _uiState.update {
-                        it.copy(errorMessage = e.message)
-                    }
+                .onFailure {
                 }
         }
     }
 
     private suspend fun onAuthSuccess() {
         _uiState.update {
-            it.copy(
-                isLoggedIn = true,
-                errorMessage = null
-            )
+            it.copy(isLoggedIn = true)
         }
 
         tokenRefresher.refreshToken(force = true)
@@ -185,13 +184,6 @@ class UserViewModel @Inject constructor(
         }
     }
 
-    private fun onAuthFailure(e: Throwable) {
-        _uiState.update {
-            it.copy(errorMessage = e.message)
-        }
-        snackBarManager.show(event = SnackBarEvent.UNKNOWN_ERROR)
-    }
-
     private fun updateUser() {
         viewModelScope.launch {
             userRepository.getMe()
@@ -201,10 +193,7 @@ class UserViewModel @Inject constructor(
                     }
                     updateEmail()
                 }
-                .onFailure { e ->
-                    _uiState.update {
-                        it.copy(errorMessage = e.message)
-                    }
+                .onFailure {
                 }
         }
     }
