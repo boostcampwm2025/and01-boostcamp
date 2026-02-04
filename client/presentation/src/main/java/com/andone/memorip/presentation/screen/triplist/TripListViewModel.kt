@@ -2,6 +2,7 @@ package com.andone.memorip.presentation.screen.triplist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.andone.memorip.domain.model.Visibility
 import com.andone.memorip.domain.repository.TripRepository
 import com.andone.memorip.presentation.screen.triplist.model.TripListAction
 import com.andone.memorip.presentation.screen.triplist.model.TripListEvent
@@ -78,6 +79,69 @@ class TripListViewModel @Inject constructor(
 
             is TripListAction.OnTripClick -> {
                 _event.trySend(TripListEvent.NavigateToTripDetail(tripId = action.tripId))
+            }
+
+            TripListAction.OnCreateNewTripClick -> {
+                _uiState.update {
+                    it.copy(
+                        isCreateTripDialogVisible = true,
+                        newTripName = ""
+                    )
+                }
+            }
+
+            is TripListAction.OnSearchQueryChange -> {
+                _uiState.update { it.copy(searchQuery = action.query) }
+            }
+
+            is TripListAction.OnScrollStateChange -> {
+                _uiState.update {
+                    it.copy(isStickyHeaderVisible = !action.isScrollingDown)
+                }
+            }
+
+            TripListAction.OnDismissCreateTripDialog -> {
+                _uiState.update {
+                    it.copy(
+                        isCreateTripDialogVisible = false,
+                        newTripName = ""
+                    )
+                }
+            }
+
+            is TripListAction.OnNewTripNameChange -> {
+                _uiState.update { it.copy(newTripName = action.name) }
+            }
+
+            TripListAction.OnConfirmCreateTrip -> {
+                createTrip()
+            }
+        }
+    }
+
+    private fun createTrip() {
+        val tripName = _uiState.value.newTripName.trim()
+        if (tripName.isEmpty()) {
+            return
+        }
+
+        viewModelScope.launch {
+            tripRepository.createTrip(
+                title = tripName,
+                visibility = Visibility.PRIVATE
+            ).onSuccess {
+                _uiState.update {
+                    it.copy(
+                        isCreateTripDialogVisible = false,
+                        newTripName = ""
+                    )
+                }
+                fetchInitialTrips()
+            }.onFailure {
+                _uiState.update {
+                    it.copy(isCreateTripDialogVisible = false)
+                }
+                snackBarManager.show(SnackBarEvent.DATA_SAVE_FAILED)
             }
         }
     }
