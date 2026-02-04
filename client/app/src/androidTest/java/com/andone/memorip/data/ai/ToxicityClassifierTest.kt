@@ -57,7 +57,13 @@ class ToxicityClassifierTest {
             "데이트 하기 좋은 곳입니다",
             "과자",
             "손흥민",
-            "테스트요"
+            "테스트요",
+            "권동현",
+            "서호준",
+            "임현정",
+            "세종대왕",
+            "이순신",
+            "홍원택"
         )
 
         cleanSamples.forEach {
