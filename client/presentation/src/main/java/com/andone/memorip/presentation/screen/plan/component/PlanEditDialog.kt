@@ -109,7 +109,7 @@ fun PlanEditDialog(
             Text(
                 modifier = Modifier
                     .background(
-                        color = if (selectedTime == PlanTimeType.START) MemoripTheme.colors.primaryContainer else MemoripTheme.colors.transparent,
+                        color = MemoripTheme.colors.primaryContainer,
                         shape = MemoripTheme.shapes.roundedMedium
                     )
                     .clip(shape = MemoripTheme.shapes.roundedMedium)
@@ -119,7 +119,7 @@ fun PlanEditDialog(
                     },
                 text = startTime.toTimeString(),
                 color = MemoripTheme.colors.onSurface,
-                style = MemoripTheme.typography.bodyMedium16
+                style = if (selectedTime == PlanTimeType.START) MemoripTheme.typography.bodyBold18 else MemoripTheme.typography.bodyMedium16
             )
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_forward),
@@ -129,7 +129,7 @@ fun PlanEditDialog(
             Text(
                 modifier = Modifier
                     .background(
-                        color = if (selectedTime == PlanTimeType.END) MemoripTheme.colors.primaryContainer else MemoripTheme.colors.transparent,
+                        color = MemoripTheme.colors.primaryContainer,
                         shape = MemoripTheme.shapes.roundedMedium
                     )
                     .clip(shape = MemoripTheme.shapes.roundedMedium)
@@ -139,7 +139,7 @@ fun PlanEditDialog(
                     },
                 text = endTime.toTimeString(),
                 color = MemoripTheme.colors.onSurface,
-                style = MemoripTheme.typography.bodyMedium16
+                style = if (selectedTime == PlanTimeType.END) MemoripTheme.typography.bodyBold18 else MemoripTheme.typography.bodyMedium16
             )
         }
 
