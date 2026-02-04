@@ -1,8 +1,6 @@
 package com.andone.memorip.presentation.screen.placedetail
 
 import android.annotation.SuppressLint
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.LocalOverscrollFactory
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -327,8 +325,10 @@ private fun PlaceDetailContent(
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = MemoripPadding.PaddingMedium)
-                            .padding(bottom = MemoripPadding.PaddingMedium),
+                            .padding(
+                                horizontal = MemoripPadding.PaddingMedium,
+                                vertical = MemoripPadding.PaddingMedium
+                            ),
                         verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceMedium)
                     ) {
                         if (place.content.isNotEmpty()) {
