@@ -53,7 +53,7 @@ fun PlaceDetailResponse.toEntity(): PlaceEntity {
         longitude = longitude,
         address = address.fullAddress,
         imageUrl = images.first(),
-        thumbnailImageRatio = 1f, //thumbnailImageRatio,
+        thumbnailImageRatio = thumbnailImageRatio,
         isPublic = isPublic
     )
 }
