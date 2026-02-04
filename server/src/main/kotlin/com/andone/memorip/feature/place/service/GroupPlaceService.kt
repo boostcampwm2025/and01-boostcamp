@@ -37,6 +37,7 @@ class GroupPlaceService(
             place = place
         )
 
+        placeRepository.saveAndFlush(place)
         groupPlaceRepository.save(groupPlace)
     }
 

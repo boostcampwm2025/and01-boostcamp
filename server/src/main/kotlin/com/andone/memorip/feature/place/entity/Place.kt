@@ -30,6 +30,10 @@ class Place protected constructor(
         this.id = id
     }
 
+    @Column(name = "scrap_count", nullable = false)
+    var scrapCount: Int = 0
+        internal set
+
     @Column(name = "group_id", nullable = true, columnDefinition = "UUID")
     var groupId: UUID? = groupId
         internal set
