@@ -1,6 +1,6 @@
 package com.andone.memorip.presentation.screen.plan
 
-import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.BackoffPolicy
@@ -63,7 +63,8 @@ private object PlanViewModelConstants {
 class PlanViewModel @Inject constructor(
     private val tripRepository: TripRepository,
     private val snackBarManager: SnackBarManager,
-    private val workManager: WorkManager
+    private val workManager: WorkManager,
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val selectedTripFlow = MutableStateFlow<TripListUiModel?>(value = null)
     private val tripsFlow = MutableStateFlow(value = emptyList<TripListUiModel>())
@@ -111,7 +112,8 @@ class PlanViewModel @Inject constructor(
         tripRepository.getSimpleTrips()
             .onSuccess { response ->
                 if (response.isNotEmpty()) {
-                    val defaultTrip = response.first()
+                    val selectedTripId = savedStateHandle.get<String>(SELECTED_TRIP_ID)
+                    val defaultTrip = if(selectedTripId == null) response.first() else response.find{ it.id == selectedTripId } ?: response.first()
                     updateSelectedTrip(TripListUiModel.from(defaultTrip))
                     updatePlaces(tripId = defaultTrip.id)
                 }
@@ -685,11 +687,14 @@ class PlanViewModel @Inject constructor(
                 request
             )
         }
+        savedStateHandle[SELECTED_TRIP_ID] = selectedTripFlow.value?.id
+
         super.onCleared()
     }
 
     companion object {
         const val PLACE_WORK_NAME = "PLACE_TIME_EDIT"
         const val TRIP_WORK_NAME = "TRIP_TIME_SAVE"
+        const val SELECTED_TRIP_ID = "SELECTED_TRIP"
     }
 }
