@@ -22,7 +22,7 @@ class ToxicityClassifierTest {
     @Test
     fun toxic_sentences_should_be_detected() {
         val toxicSamples = listOf(
-            "개새기",
+            "개새끼",
             "씨발",
             "존나 짜증나",
             "병신 같은 소리하네",
@@ -32,7 +32,6 @@ class ToxicityClassifierTest {
             "뒤져라",
             "개같은 놈",
             "씨@발",
-            ""
         )
 
         toxicSamples.forEach {
@@ -55,7 +54,16 @@ class ToxicityClassifierTest {
             "도움이 많이 됐어요",
             "천천히 해도 괜찮아요",
             "착한 말",
-            "데이트 하기 좋은 곳입니다"
+            "데이트 하기 좋은 곳입니다",
+            "과자",
+            "손흥민",
+            "테스트요",
+            "권동현",
+            "서호준",
+            "임현정",
+            "세종대왕",
+            "이순신",
+            "홍원택"
         )
 
         cleanSamples.forEach {
