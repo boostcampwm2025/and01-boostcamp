@@ -45,6 +45,7 @@ import com.andone.memorip.presentation.screen.plan.component.PlanEditDialogConst
 import com.andone.memorip.presentation.screen.plan.component.PlanEditDialogConstant.FILL_CHAR
 import com.andone.memorip.presentation.screen.plan.component.PlanEditDialogConstant.MINUTE_LENGTH
 import com.andone.memorip.presentation.screen.plan.component.PlanEditDialogConstant.MINUTE_STEP
+import com.andone.memorip.presentation.screen.plan.component.PlanEditDialogConstant.MIN_DURATION_HOUR
 import com.andone.memorip.presentation.screen.plan.component.PlanEditDialogConstant.PM_IDX
 import com.andone.memorip.presentation.screen.plan.component.PlanEditDialogDimen.ITEM_SPACE
 import com.andone.memorip.presentation.screen.plan.component.PlanEditDialogDimen.SPINNER_ITEM_HEIGHT
@@ -52,12 +53,15 @@ import com.andone.memorip.presentation.screen.plan.component.PlanEditDialogDimen
 import com.andone.memorip.presentation.theme.MemoripLineWidth
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
+import com.andone.memorip.presentation.util.getHourDiff
 import com.andone.memorip.presentation.util.toPx
 import com.andone.memorip.presentation.util.toTimeString
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
+import kotlin.math.absoluteValue
 
 private object PlanEditDialogDimen {
     val SPINNER_MAX_HEIGHT = 170.dp
@@ -75,6 +79,7 @@ private object PlanEditDialogConstant {
     const val PM_IDX = 2
     const val MINUTE_STEP = 10
     const val DECO_ALPHA = 0.5f
+    const val MIN_DURATION_HOUR = 1
 }
 
 enum class PlanTimeType {
@@ -98,7 +103,7 @@ fun PlanEditDialog(
     DefaultDialog(
         title = stringResource(R.string.plan_edit_dialog_title),
         modifier = modifier,
-        confirmEnabled = startTime != endTime,
+        confirmEnabled = (startTime != endTime && getHourDiff(startTime, endTime) >= MIN_DURATION_HOUR),
         onConfirmClick = { onConfirmClick(startTime, endTime) },
         onCancelClick = onCancelClick,
         onDismissRequest = onDismissRequest,
@@ -384,7 +389,9 @@ private fun TimeSpinner(
                                 }
 
                                 val newTime =
-                                    if (lastestTime.hour > AM_PM_THRESHOLD) lastestTime.withHour(AM_PM_THRESHOLD + hour)
+                                    if (lastestTime.hour > AM_PM_THRESHOLD) lastestTime.withHour(
+                                        AM_PM_THRESHOLD + hour
+                                    )
                                     else lastestTime.withHour(hour)
                                 onTimeChange(newTime)
                             }
