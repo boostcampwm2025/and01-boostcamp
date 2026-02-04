@@ -15,7 +15,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -92,14 +94,22 @@ private fun TripListScreenContent(
         var previousOffset = listState.firstVisibleItemScrollOffset
 
         snapshotFlow {
-            listState.firstVisibleItemIndex to listState.firstVisibleItemScrollOffset
+            Triple(
+                listState.firstVisibleItemIndex,
+                listState.firstVisibleItemScrollOffset,
+                listState.canScrollForward
+            )
         }
             .distinctUntilChanged()
-            .collect { (currentIndex, currentOffset) ->
-                val isScrollingDown = if (currentIndex != previousIndex) {
-                    currentIndex > previousIndex
-                } else {
-                    currentOffset > previousOffset
+            .collect { (currentIndex, currentOffset, canScrollForward) ->
+                val isAtTop = currentIndex == 0 && currentOffset <= 0
+                val isAtBottom = !canScrollForward
+
+                val isScrollingDown = when {
+                    isAtTop -> false
+                    isAtBottom -> false
+                    currentIndex != previousIndex -> currentIndex > previousIndex
+                    else -> currentOffset > previousOffset
                 }
                 onAction(TripListAction.OnScrollStateChange(isScrollingDown))
 
