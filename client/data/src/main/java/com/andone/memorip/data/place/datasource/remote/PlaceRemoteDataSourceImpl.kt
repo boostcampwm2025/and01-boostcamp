@@ -1,10 +1,7 @@
 package com.andone.memorip.data.place.datasource.remote
 
 import android.content.Context
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
-import com.andone.memorip.data.place.datasource.PlaceListPagingSource
+import com.andone.memorip.data.common.ApiResult
 import com.andone.memorip.data.place.datasource.PlaceService
 import com.andone.memorip.data.place.model.PlaceCreateResponse
 import com.andone.memorip.data.place.model.PlaceCreateUpdateRequest
@@ -12,11 +9,9 @@ import com.andone.memorip.data.place.model.PlaceDetailResponse
 import com.andone.memorip.data.place.model.PlaceGroupsUpdateRequest
 import com.andone.memorip.data.place.model.PlaceListItemResponse
 import com.andone.memorip.data.util.apiCall
-import com.andone.memorip.domain.model.PlaceListItem
 import com.andone.memorip.domain.model.Region
 import com.andone.memorip.domain.model.response.PlaceImageUploadResponse
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.flow.Flow
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
@@ -36,31 +31,25 @@ class PlaceRemoteDataSourceImpl @Inject constructor(
         return apiCall { placeService.getPlaceDetail(placeId = placeId) }
     }
 
-    override fun getPlaceList(
+    override suspend fun getPlaceList(
         query: String?,
         tagIds: List<String>?,
         region1Depth: String?,
         region2Depth: List<String>?,
+        page: Int,
+        size: Int,
         sort: List<String>?
-    ): Flow<PagingData<PlaceListItem>> =
-        Pager(
-            config = PagingConfig(
-                pageSize = DEFAULT_PAGE_SIZE,
-                enablePlaceholders = false,
-                initialLoadSize = FIRST_PAGE_SIZE
-            ),
-            pagingSourceFactory = {
-                PlaceListPagingSource(
-                    service = placeService,
-                    pageSize = DEFAULT_PAGE_SIZE,
-                    sort = sort,
-                    query = query,
-                    tagIds = tagIds,
-                    region1Depth = region1Depth,
-                    region2Depth = region2Depth
-                )
-            }
-        ).flow
+    ): ApiResult<List<PlaceListItemResponse>> {
+        return placeService.getPlaces(
+            query = query,
+            tagIds = tagIds,
+            region1Depth = region1Depth,
+            region2Depth = region2Depth,
+            page = page,
+            size = size,
+            sort = sort
+        )
+    }
 
     override fun loadRegions(): List<Region> {
         val rootElement: JsonElement =
