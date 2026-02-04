@@ -24,7 +24,7 @@ import com.andone.memorip.presentation.screen.selecttrip.model.toTripUiModel
 @Composable
 fun PlaceEditContainer(
     place: PlaceUiModel,
-    onNavigateBack: () -> Unit,
+    onNavigateBack: (hasChanged: Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var currentStep by rememberSaveable { mutableStateOf(PlaceEditStep.PlaceEdit) }
@@ -58,7 +58,8 @@ fun PlaceEditContainer(
                     onCategoryClick = { currentStep = PlaceEditStep.SelectCategory },
                     onLocationClick = { currentStep = PlaceEditStep.SelectLocation },
                     onTripClick = { currentStep = PlaceEditStep.SelectTrip },
-                    onNavigateBack = onNavigateBack,
+                    onNavigateBack = { onNavigateBack(false) },
+                    onEditSuccess = { onNavigateBack(true) },
                     viewModel = viewModel
                 )
             }
@@ -69,11 +70,12 @@ fun PlaceEditContainer(
 
             PlaceEditStep.SelectTrip -> {
                 SelectTripScreen(
+                    isPlaceMine = true,
                     onTripSelect = { trips ->
                         viewModel.updateTrip(trips = trips.map { it.toTripUiModel() })
                         currentStep = PlaceEditStep.PlaceEdit
                     },
-                    onBackClick = { currentStep = PlaceEditStep.PlaceEdit },
+                    onBackClick = { _ -> currentStep = PlaceEditStep.PlaceEdit },
                     initialSelectedTripIds = uiState.trips.map { it.id }
                 )
             }

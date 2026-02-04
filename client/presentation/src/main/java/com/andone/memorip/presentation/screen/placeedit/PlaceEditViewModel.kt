@@ -161,7 +161,7 @@ class PlaceEditViewModel @AssistedInject constructor(
                     isPublic = uiStateValue.isPublic
                 )
             ).onSuccess {
-                _event.trySend(PlaceEditEvent.NavigateBack)
+                _event.trySend(PlaceEditEvent.NavigateBackAfterUpdate)
             }.onFailure {
                 snackBarManager.show(SnackBarEvent.NETWORK_ERROR)
             }
