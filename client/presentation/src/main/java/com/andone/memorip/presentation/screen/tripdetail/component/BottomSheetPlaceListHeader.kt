@@ -42,11 +42,12 @@ private object PlaceListHeaderDimen {
 }
 
 @Composable
-fun PlaceListHeader(
+fun BottomSheetPlaceListHeader(
     placeCount: Int,
     viewMode: PlaceViewMode,
     onViewModeToggle: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    hasMorePages: Boolean = false
 ) {
     Row(
         modifier = modifier
@@ -59,7 +60,11 @@ fun PlaceListHeader(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = stringResource(R.string.trip_detail_place_list_count_format, placeCount),
+            text = if (hasMorePages) {
+                stringResource(R.string.trip_detail_place_list_count_format_more, placeCount)
+            } else {
+                stringResource(R.string.trip_detail_place_list_count_format, placeCount)
+            },
             style = MemoripTheme.typography.headlineBold20,
             color = MemoripTheme.colors.onSurface
         )
@@ -153,7 +158,7 @@ private fun ViewModeToggleSegment(
 @Preview(showBackground = true)
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun ViewModeTogglePreview() {
+private fun BottomSheetViewModeTogglePreview() {
     MemoripTheme {
         Row(
             modifier = Modifier
@@ -176,12 +181,12 @@ private fun ViewModeTogglePreview() {
 @Preview(showBackground = true)
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun PlaceListHeaderPreview() {
+private fun BottomSheetPlaceListHeaderPreview() {
     MemoripTheme {
         androidx.compose.foundation.layout.Column(
             modifier = Modifier.background(MemoripTheme.colors.background)
         ) {
-            PlaceListHeader(
+            BottomSheetPlaceListHeader(
                 placeCount = 4,
                 viewMode = PlaceViewMode.LIST,
                 onViewModeToggle = {}

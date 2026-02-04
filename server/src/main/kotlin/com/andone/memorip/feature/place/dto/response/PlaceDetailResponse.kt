@@ -11,6 +11,7 @@ data class PlaceDetailResponse(
     val title: String,
     val tags: List<TagResponse>,
     val images: List<String>,
+    val thumbnailImageRatio: Float,
     val content: String?,
     val latitude: Double,
     val longitude: Double,

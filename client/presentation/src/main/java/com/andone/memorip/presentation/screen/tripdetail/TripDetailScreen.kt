@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.andone.memorip.navigation.TripDetail
 import com.andone.memorip.presentation.component.map.MapClusterManager
@@ -25,7 +26,7 @@ import com.andone.memorip.presentation.component.map.rememberBitmapMarkerLoader
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.model.TripUiModel
 import com.andone.memorip.presentation.screen.tripdetail.component.TripDetailTopBar
-import com.andone.memorip.presentation.screen.tripdetail.component.MapTab
+import com.andone.memorip.presentation.screen.tripdetail.component.TripMap
 import com.andone.memorip.presentation.screen.tripdetail.model.PlaceViewMode
 import com.andone.memorip.presentation.screen.tripdetail.model.TripDetailAction
 import com.andone.memorip.presentation.screen.tripdetail.model.TripDetailEvent
@@ -39,6 +40,7 @@ import com.naver.maps.geometry.LatLng
 fun TripDetailScreen(
     route: TripDetail,
     onBackClick: () -> Unit,
+    onNavigateToPlaceDetail: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: TripDetailViewModel = hiltViewModel<TripDetailViewModel, TripDetailViewModel.Factory>(
         creationCallback = { factory -> factory.create(route) }
@@ -48,6 +50,12 @@ fun TripDetailScreen(
     val placesPagingItems = viewModel.placesPagingFlow.collectAsLazyPagingItems()
     val clusteredItems by viewModel.clusteredItemsStateFlow.collectAsStateWithLifecycle()
     var places by remember { mutableStateOf<List<Place>>(emptyList()) }
+    var mapLoaded by rememberSaveable { mutableStateOf(false) }
+    val hasMorePages = (placesPagingItems.loadState.append as? LoadState.NotLoading)
+        ?.endOfPaginationReached == false
+    val markerImages = rememberBitmapMarkerLoader(
+        imageUrls = places.map { it.thumbnailImage.url }
+    )
 
     LaunchedEffect(placesPagingItems) {
         snapshotFlow { placesPagingItems.itemSnapshotList.items }
@@ -59,6 +67,7 @@ fun TripDetailScreen(
     viewModel.event.collectWithLifecycle { event ->
         when (event) {
             TripDetailEvent.NavigateBack -> onBackClick()
+            is TripDetailEvent.NavigateToPlaceDetail -> onNavigateToPlaceDetail(event.id)
         }
     }
 
@@ -66,10 +75,14 @@ fun TripDetailScreen(
         tripName = uiState.tripName,
         places = places,
         clusteredItems = clusteredItems,
+        markerImages = markerImages,
         mapSelectedPlace = uiState.mapSelectedPlace,
         mapBottomSheetContent = uiState.mapBottomSheetContent,
         tripInfo = uiState.tripInfo,
         viewMode = uiState.placeViewMode,
+        hasMorePages = hasMorePages,
+        mapLoaded = mapLoaded,
+        onMapLoaded = { mapLoaded = true },
         onAction = viewModel::onAction,
         modifier = modifier
     )
@@ -80,43 +93,47 @@ private fun TripDetailScreenContent(
     tripName: String,
     places: List<Place>,
     clusteredItems: List<MapClusterManager.ClusterItem>,
+    markerImages: Map<String, android.graphics.Bitmap>,
     mapSelectedPlace: Place?,
     mapBottomSheetContent: MapBottomSheetStep,
     tripInfo: TripUiModel?,
     viewMode: PlaceViewMode,
+    hasMorePages: Boolean,
+    mapLoaded: Boolean,
+    onMapLoaded: () -> Unit,
     onAction: (TripDetailAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var mapLoaded by rememberSaveable { mutableStateOf(false) }
-    val markerImages = rememberBitmapMarkerLoader(
-        imageUrls = places.map { it.thumbnailImage.url }
-    )
+    var isBottomSheetExpanded by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
             TripDetailTopBar(
                 title = tripName,
                 onBackClick = { onAction(TripDetailAction.OnBackClick) },
-                onMenuClick = { onAction(TripDetailAction.OnMenuClick) },
-                onSearchClick = { onAction(TripDetailAction.OnSearchClick) }
+                isBottomSheetExpanded = isBottomSheetExpanded
             )
         },
         contentWindowInsets = WindowInsets.navigationBars,
         modifier = modifier
     ) { innerPadding ->
-        MapTab(
+        TripMap(
             places = places,
             clusteredItems = clusteredItems,
             markerImages = markerImages,
             mapBottomSheetContent = mapBottomSheetContent,
             mapLoaded = mapLoaded,
-            onMapLoaded = { mapLoaded = true },
+            onMapLoaded = onMapLoaded,
             onAction = onAction,
             mapSelectedPlace = mapSelectedPlace,
             tripName = tripInfo?.name,
             startDate = tripInfo?.startDate,
             endDate = tripInfo?.endDate,
             viewMode = viewMode,
+            hasMorePages = hasMorePages,
+            onBottomSheetExpandedChange = { isExpanded ->
+                isBottomSheetExpanded = isExpanded
+            },
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues = innerPadding)
@@ -147,6 +164,7 @@ private fun TripDetailScreenContentPreview() {
             tripName = "서울대공원 주암 나들이",
             places = DummyData.places,
             clusteredItems = clusteredItems,
+            markerImages = emptyMap(),
             mapSelectedPlace = null,
             mapBottomSheetContent = MapBottomSheetStep.PlaceList,
             tripInfo = TripUiModel(
@@ -157,6 +175,9 @@ private fun TripDetailScreenContentPreview() {
                 endDate = "2026-02-07"
             ),
             viewMode = PlaceViewMode.LIST,
+            hasMorePages = false,
+            mapLoaded = true,
+            onMapLoaded = {},
             onAction = {}
         )
     }

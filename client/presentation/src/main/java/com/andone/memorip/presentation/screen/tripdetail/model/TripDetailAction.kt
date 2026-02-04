@@ -15,6 +15,8 @@ sealed interface TripDetailAction {
 
     data object OnPlaceDetailBottomSheetClose : TripDetailAction
 
+    data class OnNavigateToPlaceDetail(val placeId: String) : TripDetailAction
+
     data object OnViewModeToggle : TripDetailAction
 
     // Map 관련 액션
