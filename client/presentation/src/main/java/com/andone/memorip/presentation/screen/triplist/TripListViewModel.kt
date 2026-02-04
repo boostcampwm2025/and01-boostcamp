@@ -12,6 +12,7 @@ import com.andone.memorip.presentation.util.snackbar.SnackBarEvent
 import com.andone.memorip.presentation.util.snackbar.SnackBarManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -49,9 +50,6 @@ class TripListViewModel @Inject constructor(
     private val _event = Channel<TripListEvent>(capacity = BUFFERED)
     val event = _event.receiveAsFlow()
 
-    /**
-     * Repository의 여행 목록을 관찰하여 UI 상태 업데이트
-     */
     private fun observeTrips() {
         viewModelScope.launch {
             tripRepository.myTrips.collect { trips ->
@@ -62,25 +60,19 @@ class TripListViewModel @Inject constructor(
         }
     }
 
-    /**
-     * 검색어를 관찰하고 debounce 적용
-     * 사용자가 입력을 멈춘 후 300ms가 지나면 서버에 검색 요청
-     */
+    @OptIn(FlowPreview::class)
     private fun observeSearchQuery() {
         viewModelScope.launch {
             _uiState
-                .map { it.searchQuery } // searchQuery만 추출
-                .distinctUntilChanged() // 값이 변경될 때만 emit
-                .debounce(300) // 300ms 동안 입력이 없으면 실행
+                .map { it.searchQuery }
+                .distinctUntilChanged()
+                .debounce(DEBOUNCE_SECOND)
                 .collect { query ->
                     fetchTripsWithQuery(query)
                 }
         }
     }
 
-    /**
-     * 검색어와 함께 여행 목록을 서버에서 가져오기
-     */
     private fun fetchTripsWithQuery(query: String) {
         viewModelScope.launch {
             val queryParam = query.ifEmpty { null }
@@ -178,5 +170,9 @@ class TripListViewModel @Inject constructor(
                 snackBarManager.show(SnackBarEvent.DATA_SAVE_FAILED)
             }
         }
+    }
+
+    companion object {
+        const val DEBOUNCE_SECOND = 300L
     }
 }
