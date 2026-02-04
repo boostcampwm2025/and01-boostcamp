@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface TripRepository {
     val myTrips: Flow<List<Trip>>
-    suspend fun fetchMyTrips(page: Int = 0, size: Int = 20): Result<Unit>
+    suspend fun fetchMyTrips(page: Int = 0, size: Int = 20, query: String? = null): Result<Unit>
     suspend fun fetchMyTripsWithPlaceStatus(
         page: Int = 0,
         size: Int = 20,

@@ -27,9 +27,10 @@ class TripRemoteDataSourceImpl @Inject constructor(
     override suspend fun getMyTrips(
         page: Int,
         size: Int,
-        placeId: String?
+        placeId: String?,
+        query: String?
     ): Result<List<TripListResponse>> {
-        return apiCall { tripService.getMyTrips(page, size, placeId = placeId) }
+        return apiCall { tripService.getMyTrips(page, size, placeId = placeId, query = query) }
     }
 
     override suspend fun getPublicTrips(page: Int, size: Int): Result<List<TripListResponse>> {
