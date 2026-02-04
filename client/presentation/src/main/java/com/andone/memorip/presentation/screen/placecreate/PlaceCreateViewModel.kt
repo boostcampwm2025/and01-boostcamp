@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.andone.memorip.domain.ai.ToxicityAnalyzer
 import com.andone.memorip.domain.model.request.Address
 import com.andone.memorip.domain.model.request.PlaceCreateUpdate
 import com.andone.memorip.domain.repository.PlaceRepository
@@ -26,10 +27,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
 import java.io.File
 import java.io.FileOutputStream
 import javax.inject.Inject
-import com.andone.memorip.domain.ai.ToxicityAnalyzer
 
 @HiltViewModel
 class PlaceCreateViewModel @Inject constructor(
@@ -42,6 +43,8 @@ class PlaceCreateViewModel @Inject constructor(
 
     private val _event = Channel<PlaceCreateEvent>(capacity = BUFFERED)
     val event = _event.receiveAsFlow()
+
+    private val createPlaceMutex = Mutex()
 
     fun onAction(action: PlaceCreateAction) {
         when (action) {
@@ -145,6 +148,8 @@ class PlaceCreateViewModel @Inject constructor(
         ) return
 
         viewModelScope.launch {
+            if (!createPlaceMutex.tryLock()) return@launch
+
             _uiState.update { it.copy(isLoading = true) }
 
             val sentences =

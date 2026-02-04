@@ -30,6 +30,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
 
 @HiltViewModel(assistedFactory = PlaceEditViewModel.Factory::class)
 class PlaceEditViewModel @AssistedInject constructor(
@@ -43,6 +44,8 @@ class PlaceEditViewModel @AssistedInject constructor(
 
     private val _event = Channel<PlaceEditEvent>(capacity = BUFFERED)
     val event = _event.receiveAsFlow()
+
+    private val updatePlaceMutex = Mutex()
 
     val isUpdateEnabled = _uiState.map {
         val isValueRequired = it.images.isNotEmpty() &&
@@ -142,7 +145,10 @@ class PlaceEditViewModel @AssistedInject constructor(
         ) return
 
         viewModelScope.launch {
+            if (!updatePlaceMutex.tryLock()) return@launch
+
             _uiState.update { it.copy(isLoading = true) }
+
             placeRepository.updatePlace(
                 placeId = uiStateValue.id,
                 place = PlaceCreateUpdate(
@@ -165,6 +171,7 @@ class PlaceEditViewModel @AssistedInject constructor(
             }.onFailure {
                 snackBarManager.show(SnackBarEvent.NETWORK_ERROR)
             }
+
             _uiState.update { it.copy(isLoading = false) }
         }
     }
