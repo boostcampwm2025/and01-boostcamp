@@ -33,6 +33,8 @@ fun PlaceDetailContainer(
 
     var place by remember { mutableStateOf(PlaceUiModel()) }
 
+    var needsRefresh by rememberSaveable { mutableStateOf(false) }
+
     BackHandler(enabled = currentStep != PlaceDetailStep.PlaceDetail) {
         currentStep = PlaceDetailStep.PlaceDetail
     }
@@ -61,6 +63,8 @@ fun PlaceDetailContainer(
                         currentStep = PlaceDetailStep.PlaceEdit
                     },
                     onNavigateToTripList = onNavigateToTripList,
+                    needsRefresh = needsRefresh,
+                    onRefreshConsumed = { needsRefresh = false },
                     modifier = Modifier,
                 )
             }
@@ -68,14 +72,21 @@ fun PlaceDetailContainer(
             PlaceDetailStep.PlaceEdit -> {
                 PlaceEditContainer(
                     place = place,
-                    onNavigateBack = { currentStep = PlaceDetailStep.PlaceDetail }
+                    onNavigateBack = { hasChanged ->
+                        if (hasChanged) needsRefresh = true
+                        currentStep = PlaceDetailStep.PlaceDetail
+                    }
                 )
             }
 
             PlaceDetailStep.SelectTrip -> {
                 SelectTripScreen(
                     onTripSelect = { },
-                    onBackClick = { currentStep = PlaceDetailStep.PlaceDetail },
+                    onBackClick = { hasChanged ->
+                        if (hasChanged) needsRefresh = true
+                        currentStep = PlaceDetailStep.PlaceDetail
+                    },
+                    isPlaceMine = place.isMine,
                     title = stringResource(R.string.select_trip_add_to_my_trip_title),
                     placeId = route.placeId,
                     modifier = modifier
