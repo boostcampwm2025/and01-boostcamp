@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.screen.plan.component
 
+import android.util.Log
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
@@ -36,6 +37,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.andone.memorip.domain.model.TimeBlock
 import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.model.Place
+import com.andone.memorip.presentation.model.PlanBlockUiModel
 import com.andone.memorip.presentation.screen.plan.component.TimeBlockItemConstants.DELETE_THRESHOLD
 import com.andone.memorip.presentation.screen.plan.component.TimeBlockItemConstants.SNAP_MINUTE_UNIT
 import com.andone.memorip.presentation.screen.plan.utill.MINUTE_HEIGHT_DP
@@ -49,6 +52,8 @@ import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.theme.memoripShapes
 import com.andone.memorip.presentation.util.DummyData
 import com.andone.memorip.presentation.util.toPx
+import java.time.LocalDate
+import java.time.LocalDateTime
 import kotlin.math.roundToInt
 
 object TimeBlockItemConstants {
@@ -58,125 +63,131 @@ object TimeBlockItemConstants {
 
 @Composable
 fun TimeBlockItem(
-    block: TimeBlock,
+    block: PlanBlockUiModel,
     engine: TimeLayoutEngine,
+    startDate: LocalDate,
     scrollState: ScrollState,
     onMoved: (String, Int) -> Unit,
     onSlide: (String) -> Unit,
     modifier: Modifier = Modifier,
     content: @Composable BoxScope.() -> Unit
 ) {
-    var dragOffsetY by remember { mutableFloatStateOf(value = 0f) }
-    var dragOffsetX by remember(block) { mutableFloatStateOf(value = 0f) }
-    val startYPx = remember(block) { engine.blockStartYPx(block) }
-    var isDragging by remember { mutableStateOf(value = false) }
+    when(block) {
+        is Place -> {
+            var dragOffsetY by remember { mutableFloatStateOf(value = 0f) }
+            var dragOffsetX by remember(block) { mutableFloatStateOf(value = 0f) }
+            val startYPx = remember(block) { engine.blockStartYPx(startDate, block) }
+            Log.d("DEBUG TEST", "block : $block / startY : $startYPx")
+            var isDragging by remember { mutableStateOf(value = false) }
 
-    Box(
-        modifier = modifier
-            .offset {
-                IntOffset(
-                    x = 0,
-                    y = (startYPx + dragOffsetY).roundToInt()
-                )
-            }
-            .fillMaxWidth()
-            .height(height = (block.durationMinute * MINUTE_HEIGHT_DP).dp)
-            .padding(MemoripPadding.PaddingXSmall)
-            .graphicsLayer {
-                if (isDragging) {
-                    scaleX = DRAG_SCALE
-                    scaleY = DRAG_SCALE
-                    shadowElevation = DRAG_SHADOW_ELEVATION
-                    shape = memoripShapes.roundedMedium
-                    clip = true
-                }
-            }
-            .zIndex(zIndex = if (isDragging) DRAG_Z_INDEX else 0f)
-            .background(
-                color = MemoripTheme.colors.primaryContainer,
-                shape = memoripShapes.roundedMedium
-            )
-    ) {
-        Box(
-            modifier = Modifier.fillMaxHeight()
-                .width(dragOffsetX.coerceAtLeast(0f).dp)
-                .background(
-                    color = MemoripTheme.colors.error,
-                    shape = MemoripTheme.shapes.roundedMedium
-                )
-                .padding(all = MemoripPadding.PaddingMedium)
-                .graphicsLayer{
-                    scaleX = 0.8f + (dragOffsetX / DELETE_THRESHOLD).coerceIn(0f, 1f) * 0.2f
-                    scaleY = 0.8f + (dragOffsetX / DELETE_THRESHOLD).coerceIn(0f, 1f) * 0.2f
-                },
-            contentAlignment = Alignment.CenterStart
-        ) {
-            Icon(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_outline_delete_24),
-                contentDescription = stringResource(R.string.plan_delete),
-                modifier = Modifier.size(size = MemoripIconSize.IconSizeLarge),
-                tint = MemoripTheme.colors.white
-            )
-        }
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .offset {
-                    IntOffset(
-                        x = dragOffsetX.roundToInt(),
-                        y = 0
-                    )
-                }
-                .pointerInput(startYPx) {
-                    detectDragGesturesAfterLongPress(
-                        onDragStart = {
-                            isDragging = true
-                        },
-                        onDrag = { change, dragAmount ->
-                            change.consume()
-                            dragOffsetY += dragAmount.y
-                        },
-                        onDragEnd = {
-                            val rawYPx = startYPx + dragOffsetY
-                            val clampedYPx = rawYPx.coerceAtLeast(minimumValue = 0f)
-                            val newStartMinute = engine.yPxToStartMinute(clampedYPx)
-                            val snappedMinute =
-                                ((newStartMinute + SNAP_MINUTE_UNIT / 2) / SNAP_MINUTE_UNIT) * SNAP_MINUTE_UNIT
-
-                            dragOffsetY = 0f
-                            isDragging = false
-                            onMoved(block.id, snappedMinute)
-                        },
-                        onDragCancel = {
-                            dragOffsetY = 0f
-                            isDragging = false
+            Box(
+                modifier = modifier
+                    .offset {
+                        IntOffset(
+                            x = 0,
+                            y = (startYPx + dragOffsetY).roundToInt()
+                        )
+                    }
+                    .fillMaxWidth()
+                    .height(height = (block.durationMinutes * MINUTE_HEIGHT_DP).dp)
+                    .padding(MemoripPadding.PaddingXSmall)
+                    .graphicsLayer {
+                        if (isDragging) {
+                            scaleX = DRAG_SCALE
+                            scaleY = DRAG_SCALE
+                            shadowElevation = DRAG_SHADOW_ELEVATION
+                            shape = memoripShapes.roundedMedium
+                            clip = true
                         }
+                    }
+                    .zIndex(zIndex = if (isDragging) DRAG_Z_INDEX else 0f)
+                    .background(
+                        color = MemoripTheme.colors.primaryContainer,
+                        shape = memoripShapes.roundedMedium
                     )
-
+            ) {
+                Box(
+                    modifier = Modifier.fillMaxHeight()
+                        .width(dragOffsetX.coerceAtLeast(0f).dp)
+                        .background(
+                            color = MemoripTheme.colors.error,
+                            shape = MemoripTheme.shapes.roundedMedium
+                        )
+                        .padding(all = MemoripPadding.PaddingMedium)
+                        .graphicsLayer{
+                            scaleX = 0.8f + (dragOffsetX / DELETE_THRESHOLD).coerceIn(0f, 1f) * 0.2f
+                            scaleY = 0.8f + (dragOffsetX / DELETE_THRESHOLD).coerceIn(0f, 1f) * 0.2f
+                        },
+                    contentAlignment = Alignment.CenterStart
+                ) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_outline_delete_24),
+                        contentDescription = stringResource(R.string.plan_delete),
+                        modifier = Modifier.size(size = MemoripIconSize.IconSizeLarge),
+                        tint = MemoripTheme.colors.white
+                    )
                 }
-                .pointerInput(Unit) {
-                    detectHorizontalDragGestures(
-                        onHorizontalDrag = { change, dragAmount ->
-                            change.consume()
-                            dragOffsetX += dragAmount
-                            if (dragOffsetX < 0) dragOffsetX = 0f
-                        },
-                        onDragEnd = {
-                            if (dragOffsetX > DELETE_THRESHOLD) {
-                                onSlide(block.id)
-                            } else {
-                                dragOffsetX = 0f
-                            }
-                        },
-                        onDragCancel = {
-                            dragOffsetX = 0f
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .offset {
+                            IntOffset(
+                                x = dragOffsetX.roundToInt(),
+                                y = 0
+                            )
                         }
-                    )
-                },
-            contentAlignment = Alignment.CenterStart
-        ) {
-            content()
+                        .pointerInput(startYPx) {
+                            detectDragGesturesAfterLongPress(
+                                onDragStart = {
+                                    isDragging = true
+                                },
+                                onDrag = { change, dragAmount ->
+                                    change.consume()
+                                    dragOffsetY += dragAmount.y
+                                },
+                                onDragEnd = {
+                                    val rawYPx = startYPx + dragOffsetY
+                                    val clampedYPx = rawYPx.coerceAtLeast(minimumValue = 0f)
+                                    val newStartMinute = engine.yPxToStartMinute(clampedYPx)
+                                    val snappedMinute =
+                                        ((newStartMinute + SNAP_MINUTE_UNIT / 2) / SNAP_MINUTE_UNIT) * SNAP_MINUTE_UNIT
+
+                                    dragOffsetY = 0f
+                                    isDragging = false
+                                    onMoved(block.id, snappedMinute)
+                                },
+                                onDragCancel = {
+                                    dragOffsetY = 0f
+                                    isDragging = false
+                                }
+                            )
+
+                        }
+                        .pointerInput(Unit) {
+                            detectHorizontalDragGestures(
+                                onHorizontalDrag = { change, dragAmount ->
+                                    change.consume()
+                                    dragOffsetX += dragAmount
+                                    if (dragOffsetX < 0) dragOffsetX = 0f
+                                },
+                                onDragEnd = {
+                                    if (dragOffsetX > DELETE_THRESHOLD) {
+                                        onSlide(block.id)
+                                    } else {
+                                        dragOffsetX = 0f
+                                    }
+                                },
+                                onDragCancel = {
+                                    dragOffsetX = 0f
+                                }
+                            )
+                        },
+                    contentAlignment = Alignment.CenterStart
+                ) {
+                    content()
+                }
+            }
         }
     }
 }
@@ -193,7 +204,8 @@ private fun TimeBlockItemPreview() {
     }
 
     TimeBlockItem(
-        block = DummyData.timeBlocks[0],
+        block = DummyData.places[0],
+        startDate = LocalDate.now(),
         engine = engine,
         scrollState = rememberScrollState(),
         onMoved = { _, _ -> },

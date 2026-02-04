@@ -9,9 +9,8 @@ import kotlinx.collections.immutable.persistentListOf
 data class PlanUiState(
     val trips: ImmutableList<TripListUiModel> = persistentListOf(),
     val selectedTrip: TripListUiModel? = null,
-    val places: ImmutableList<Place> = persistentListOf(),
-    val blocks: List<TimeBlock> = emptyList(),
-    val blockUiModels: Map<String, PlanBlockUiModel> = emptyMap(),
+    val places: ImmutableList<PlanBlockUiModel> = persistentListOf(),
+//    val blocks: List<TimeBlock> = emptyList(),
     val date: DateUiModel = DateUiModel(),
     val updatedBlock: PlanBlockUiModel? = null,
     val isLoading: Boolean = false

@@ -1,6 +1,5 @@
 package com.andone.memorip.presentation.screen.plan
 
-import android.R.attr.action
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,20 +9,18 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
-import com.andone.memorip.domain.model.TimeBlock
 import com.andone.memorip.domain.model.Visibility
 import com.andone.memorip.domain.repository.TripRepository
 import com.andone.memorip.presentation.model.Payload
+import com.andone.memorip.presentation.model.Payload.PlaceTimeEditPayload
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.model.PlanBlockUiModel
-import com.andone.memorip.presentation.model.toTimeBlock
 import com.andone.memorip.presentation.model.toUiModel
 import com.andone.memorip.presentation.screen.plan.PlanViewModelConstants.DAYS_LIMIT
 import com.andone.memorip.presentation.screen.plan.model.DateUiModel
 import com.andone.memorip.presentation.screen.plan.model.PlanAction
 import com.andone.memorip.presentation.screen.plan.model.PlanEvent
 import com.andone.memorip.presentation.screen.plan.model.PlanEvent.ShowDeleteDayDialog
-import com.andone.memorip.presentation.screen.plan.model.PlanPlaceUiModel
 import com.andone.memorip.presentation.screen.plan.model.PlanTripUiModel
 import com.andone.memorip.presentation.screen.plan.model.PlanUiState
 import com.andone.memorip.presentation.screen.plan.model.TripListUiModel
@@ -35,7 +32,6 @@ import com.andone.memorip.presentation.util.workmanager.PlanWorker
 import com.andone.memorip.presentation.util.workmanager.TripWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
@@ -78,34 +74,19 @@ class PlanViewModel @Inject constructor(
         }
 
     private val placesFlow = MutableStateFlow(value = emptyList<Place>())
-    private val timeBlocksFlow = MutableStateFlow(value = emptyList<TimeBlock>())
     private val selectedDateFlow = MutableStateFlow(value = DateUiModel())
-    private val blockUiModelsFlow = MutableStateFlow(value = emptyMap<String, PlanBlockUiModel>())
-    private val planPlaceUiStateFlow = combine(
-        placesFlow,
-        timeBlocksFlow,
-        blockUiModelsFlow
-    ) { places, blocks, blockUiModels ->
-        PlanPlaceUiModel(
-            places = places.toImmutableList(),
-            blocks = blocks.toImmutableList(),
-            blockUiModels = blockUiModels.toImmutableMap()
-        )
-    }
     private val selectedBlockFlow = MutableStateFlow<PlanBlockUiModel?>(null)
 
     val uiState = combine(
         tripUiStateFlow,
         selectedDateFlow,
-        planPlaceUiStateFlow,
+        placesFlow,
         selectedBlockFlow
-    ) { tripUiState, dateUiState, planPlaceUiState, selectedBlock ->
+    ) { tripUiState, dateUiState, placeState, selectedBlock ->
         PlanUiState(
             trips = tripUiState.trips,
             selectedTrip = tripUiState.selectedTrip,
-            places = planPlaceUiState.places,
-            blocks = planPlaceUiState.blocks,
-            blockUiModels = planPlaceUiState.blockUiModels,
+            places = placeState.toImmutableList(),
             date = dateUiState,
             updatedBlock = selectedBlock
         )
@@ -132,7 +113,7 @@ class PlanViewModel @Inject constructor(
     private val _event = Channel<PlanEvent>(capacity = BUFFERED)
     val event = _event.receiveAsFlow()
 
-    private var originPlaces: List<Place> = uiState.value.places
+    private var originPlaces: List<PlanBlockUiModel> = uiState.value.places
 
     private val pendingUpdates = mutableMapOf<String, Payload>()
 
@@ -143,7 +124,7 @@ class PlanViewModel @Inject constructor(
             }
 
             is PlanAction.BlockClick -> {
-                val targetBlock = uiState.value.blockUiModels[action.id] ?: return
+                val targetBlock = uiState.value.places.find { it.id == action.id } ?: return
                 selectedBlockFlow.update { targetBlock }
             }
 
@@ -228,43 +209,48 @@ class PlanViewModel @Inject constructor(
 
     fun savePlan() {
         viewModelScope.launch {
-            uiState.value.date.startDay?.let { date ->
-                uiState.value.blocks.forEach { block ->
-                    val target = originPlaces.find { it.id == block.id }
-                    val originStartAt = target?.startDateTime
-                    val originEndAt = target?.endDateTime
+            uiState.value.places.forEach { place ->
+                when (place) {
+                    is Place -> {
+                        val target =
+                            originPlaces.find { it.id == place.id } as Place? ?: return@launch
+                        val originStartAt = target.startDateTime
+                        val originEndAt = target.endDateTime
 
-                    val startAtDate = date.atStartOfDay().plusDays((block.day - 1).toLong())
-                    val startAt =
-                        startAtDate.plusMinutes((block.startMinute % MINUTES_PER_DAY).toLong())
-                    val endAtDate = date.atStartOfDay().plusDays((block.day - 1).toLong())
-                    val endAt = endAtDate.plusMinutes((block.endMinute % MINUTES_PER_DAY).toLong())
+                        val startAt = place.startDateTime
+                        val endAt = place.endDateTime
 
-                    if (startAt != originStartAt || endAt != originEndAt) {
-                        val startAtString = startAt.toRemoteString()
-                        val endAtString = endAt.toRemoteString()
+                        if (startAt != null && endAt != null && startAt != originStartAt || endAt != originEndAt) {
+                            val startAtString = startAt.toRemoteString()
+                            val endAtString = endAt.toRemoteString()
 
-                        pendingUpdates[block.id] = Payload.PlaceTimeEditPayload(
-                            startAt = startAtString,
-                            endAt = endAtString
-                        )
-                        tripRepository.updatePlaceTime(
-                            tripPlaceId = block.id,
-                            startAt = startAtString!!,
-                            endAt = endAtString!!
-                        ).onSuccess {
-                            pendingUpdates.remove(block.id)
+                            pendingUpdates[place.id] = PlaceTimeEditPayload(
+                                startAt = startAtString,
+                                endAt = endAtString
+                            )
+                            tripRepository.updatePlaceTime(
+                                tripPlaceId = place.id,
+                                startAt = startAtString!!,
+                                endAt = endAtString!!
+                            ).onSuccess {
+                                pendingUpdates.remove(place.id)
+                            }
                         }
                     }
                 }
-                uiState.value.places.forEach { place ->
-                    originPlaces.find { it.id == place.id }?.let { origin ->
-                        if ((origin.startDateTime != null && origin.endDateTime != null) && (place.startDateTime == null && place.endDateTime == null)) {
-                            pendingUpdates[place.id] = Payload.TripDeletePayload(place.id)
-                            tripRepository.clearPlaceTime(tripPlaceId = place.id)
-                                .onSuccess {
-                                    pendingUpdates.remove(place.id)
-                                }
+            }
+            uiState.value.places.forEach { place ->
+                when (place) {
+                    is Place -> {
+                        originPlaces.find { it.id == place.id }?.let { origin ->
+                            val origin = origin as Place
+                            if ((origin.startDateTime != null && origin.endDateTime != null) && (place.startDateTime == null && place.endDateTime == null)) {
+                                pendingUpdates[place.id] = Payload.TripDeletePayload(place.id)
+                                tripRepository.clearPlaceTime(tripPlaceId = place.id)
+                                    .onSuccess {
+                                        pendingUpdates.remove(place.id)
+                                    }
+                            }
                         }
                     }
                 }
@@ -295,46 +281,25 @@ class PlanViewModel @Inject constructor(
     }
 
     private fun updatePlan(id: String, startDateTime: LocalDateTime, endDateTime: LocalDateTime) {
-        var isDup = false
-        timeBlocksFlow.update {
-            it.map { targetBlock ->
-                if (targetBlock.id == id) {
-                    val filteredPlaces = blockUiModelsFlow.value.filter { it.value is Place }
-                        .map { it.value as Place }
-                        .filter { it.startDateTime != null && it.endDateTime != null }
-                        .filterNot { it.id == id }
+        val targetBlock = uiState.value.places.find { it.id == id } ?: return
+        when (targetBlock) {
+            is Place -> {
+                placesFlow.update { places ->
+                    places.map { place ->
+                        if (targetBlock.id == place.id) {
+                            if (isDuplicate(
+                                    targetId = id,
+                                    startDateTime = startDateTime,
+                                    endDateTime = endDateTime
+                                )
+                            ) {
+                                return@update places
+                            }
 
-                    isDup = filteredPlaces.any {
-                        it.startDateTime!! in startDateTime..endDateTime.minusMinutes(1)
-                                || (it.startDateTime < startDateTime && it.endDateTime!! >= startDateTime)
-                    }
-
-                    if (isDup) {
-                        snackBarManager.show(SnackBarEvent.PLAN_INVALID_ERROR)
-                        return@update it
-                    }
-
-                    val duration = ChronoUnit.MINUTES.between(startDateTime, endDateTime).toInt()
-                    val startMinute = ChronoUnit.MINUTES.between(
-                        startDateTime.withHour(0).withMinute(0),
-                        startDateTime
-                    ).toInt()
-
-                    targetBlock.copy(startMinute = startMinute, durationMinute = duration)
-                } else {
-                    targetBlock
-                }
-            }
-        }
-        if (!isDup) {
-            blockUiModelsFlow.update { blocks ->
-                val oldBlock = blocks[id] ?: return@update blocks
-                when (oldBlock) {
-                    is Place -> {
-                        blocks + (id to oldBlock.copy(
-                            startDateTime = startDateTime,
-                            endDateTime = endDateTime
-                        ))
+                            place.copy(startDateTime = startDateTime, endDateTime = endDateTime)
+                        } else {
+                            place
+                        }
                     }
                 }
             }
@@ -344,43 +309,8 @@ class PlanViewModel @Inject constructor(
     private fun updatePlaces(tripId: String) {
         viewModelScope.launch {
             tripRepository.getPlaceByTripId(tripId = tripId)
-                .onSuccess { result ->
-                    originPlaces = result.map { it.toUiModel() }
-                    if (uiState.value.date.startDay != null && uiState.value.date.endDay != null) {
-                        placesFlow.update {
-                            val places = result.map { it.toUiModel() }
-                            val noTimePlaces =
-                                places.filter { it.startDateTime == null || it.endDateTime == null }
-                            val validPlaces =
-                                places.filter { it.startDateTime != null && it.endDateTime != null }
-                            val outOfDatePlaces = validPlaces.filter {
-                                it.startDateTime!!.toLocalDate() !in uiState.value.date.startDay!!..uiState.value.date.endDay!!
-                            }.map {
-                                it.copy(startDateTime = null, endDateTime = null)
-                            }
-                            val inDatePlaces = validPlaces.filter {
-                                it.startDateTime!!.toLocalDate() in uiState.value.date.startDay!!..uiState.value.date.endDay!!
-                            }.map {
-                                val limitTime =
-                                    uiState.value.date.endDay!!.plusDays(1).atStartOfDay()
-                                if (it.endDateTime!!.isAfter(limitTime)) {
-                                    it.copy(endDateTime = limitTime)
-                                } else {
-                                    it
-                                }
-                            }
-
-                            val timeBlocks =
-                                inDatePlaces.mapNotNull { it.toTimeBlock(uiState.value.date.startDay?.atStartOfDay()!!) }
-                            val uiBlocks = inDatePlaces.associateBy { it.id }
-                            timeBlocksFlow.update { timeBlocks }
-                            blockUiModelsFlow.update { uiBlocks }
-                            (noTimePlaces + outOfDatePlaces).distinct()
-                        }
-                    }
-                }
+                .onSuccess { result -> placesFlow.update { result.map { it.toUiModel() } } }
                 .onFailure { snackBarManager.show(SnackBarEvent.NETWORK_ERROR) }
-
         }
     }
 
@@ -434,32 +364,66 @@ class PlanViewModel @Inject constructor(
     }
 
     private fun moveBlock(id: String, newStartMinute: Int) {
-        timeBlocksFlow.update {
-            val target = uiState.value.blocks.find { it.id == id } ?: return@update it
-            if (!target.canMoveTo(
-                    newStartMinute = newStartMinute,
-                    blocks = uiState.value.blocks,
-                    totalMinutes = uiState.value.date.totalMinutes
-                )
-            ) {
-                return@update it
-            }
+        placesFlow.update {
+            val target = uiState.value.places.find { it.id == id } ?: return@update it
+            val startDateTime =
+                uiState.value.date.startDay?.atStartOfDay()?.plusMinutes(newStartMinute.toLong())
+                    ?: return@update it
 
-            uiState.value.blocks.map { block ->
-                if (block.id == id) {
-                    block.movedTo(newStartMinute, uiState.value.date.totalMinutes)
-                } else {
-                    block
+            when (target) {
+                is Place -> {
+                    val endDateTime = uiState.value.date.endDay?.atStartOfDay()
+                        ?.plusMinutes(newStartMinute + target.durationMinutes) ?: return@update it
+                    if (isDuplicate(
+                            targetId = id,
+                            startDateTime = startDateTime,
+                            endDateTime = endDateTime
+                        )
+                    ) {
+                        return@update it
+                    }
+
+                    uiState.value.places.map { place ->
+                        when (place) {
+                            is Place -> {
+                                if (place.id == id) {
+                                    val duration = place.durationMinutes
+                                    val startDateTime = uiState.value.date.startDay!!.atStartOfDay()
+                                        .plusMinutes(newStartMinute.toLong())
+                                    var endDateTime = startDateTime.plusMinutes(duration)
+
+                                    if (endDateTime.isAfter(uiState.value.date.endDay!!.atStartOfDay())) {
+                                        endDateTime = uiState.value.date.endDay!!.atStartOfDay()
+                                    }
+
+                                    place.copy(
+                                        startDateTime = startDateTime,
+                                        endDateTime = endDateTime
+                                    )
+                                } else {
+                                    place
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
     }
 
     private fun deleteBlock(id: String) {
-        val block = blockUiModelsFlow.value[id]
-        timeBlocksFlow.update { blocks -> blocks.filter { it.id != id } }
-        if (block is Place) {
-            placesFlow.update { it + block.copy(startDateTime = null, endDateTime = null) }
+        placesFlow.update { places ->
+            places.map { place ->
+                when (place) {
+                    is Place -> {
+                        if (place.id == id) {
+                            place.copy(startDateTime = null, endDateTime = null)
+                        } else {
+                            place
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -474,33 +438,19 @@ class PlanViewModel @Inject constructor(
             newEnd = newEnd
         )
 
-        adjustBlockUiModelsAfterDayRemoved(
-            blockUiModels = uiState.value.blockUiModels,
-            removedDayIndex = day,
-            date = uiState.value.date,
-            onUpdateState = { adjustedUiModels, value ->
-                val newBlocks = newStart?.let {
-                    adjustedUiModels.values
-                        .filterIsInstance<Place>()
-                        .mapNotNull { place ->
-                            place.startDateTime?.let {
-                                place.toTimeBlock(dayStart = uiState.value.date.startDay!!.atStartOfDay())
-                            }
-                        }
-                } ?: emptyList()
+        selectedDateFlow.update {
+            it.copy(
+                startDay = newStart,
+                endDay = newEnd,
+                currentDay = newCurrent,
+                longClickedDay = null
+            )
+        }
 
-                selectedDateFlow.update {
-                    it.copy(
-                        startDay = newStart,
-                        endDay = newEnd,
-                        currentDay = newCurrent,
-                        longClickedDay = null
-                    )
-                }
-                blockUiModelsFlow.update { adjustedUiModels }
-                timeBlocksFlow.update { newBlocks }
-                placesFlow.update { (it + value).toImmutableList() }
-            }
+        adjustBlockUiModelsAfterDayRemoved(
+            places = uiState.value.places,
+            removedDayIndex = day,
+            date = uiState.value.date
         )
     }
 
@@ -532,66 +482,79 @@ class PlanViewModel @Inject constructor(
     }
 
     private fun adjustBlockUiModelsAfterDayRemoved(
-        blockUiModels: Map<String, PlanBlockUiModel>,
+        places: List<PlanBlockUiModel>,
         removedDayIndex: Int,
-        date: DateUiModel,
-        onUpdateState: (Map<String, PlanBlockUiModel>, List<Place>) -> Unit
+        date: DateUiModel
     ) {
         val removedDate = date.currentDayFromSelectedDay(removedDayIndex)
 
-        val removedIds = blockUiModels
-            .mapNotNull { (id, uiModel) ->
-                if (uiModel is Place && removedDate != null) {
-                    val date = uiModel.startDateTime?.toLocalDate()
-                    if (date == removedDate) id else null
-                } else null
+        val removedIds = places
+            .mapNotNull { place ->
+                when (place) {
+                    is Place -> {
+                        if (removedDate != null) {
+                            if (place.startDateTime?.toLocalDate() == removedDate) {
+                                place.id
+                            } else {
+                                null
+                            }
+                        } else null
+                    }
+                }
             }
             .toSet()
 
-        val removedPlaces = originPlaces.filter { it.id in removedIds }
+        placesFlow.update { places ->
+            places.map { originPlace ->
+                when (originPlace) {
+                    is Place -> {
+                        val startDate = originPlace.startDateTime?.toLocalDate()
+                        val endDateTime = originPlace.endDateTime
 
-        val blockUiModel = blockUiModels.mapNotNull { (id, uiModel) ->
-            if (uiModel is Place && removedDate != null) {
-                val place = uiModel
+                        if (originPlace.id in removedIds) {
+                            return@map originPlace.copy(startDateTime = null, endDateTime = null)
+                        }
 
-                val startDate = place.startDateTime?.toLocalDate()
-                val endDateTime = place.endDateTime
+                        if (startDate == null || endDateTime == null) {
+                            return@map originPlace
+                        }
 
-                if (id in removedIds) {
-                    return@mapNotNull id to place.copy(
-                        startDateTime = null,
-                        endDateTime = null
-                    )
+                        if (startDate.isAfter(removedDate)) {
+                            return@map originPlace.copy(
+                                startDateTime = originPlace.startDateTime.minusDays(
+                                    1
+                                ), endDateTime = originPlace.endDateTime.minusDays(1)
+                            )
+                        }
+
+                        return@map originPlace
+                    }
                 }
-
-                if (startDate == null || endDateTime == null) {
-                    return@mapNotNull id to place
-                }
-
-                if (startDate.isAfter(removedDate)) {
-                    return@mapNotNull id to place.copy(
-                        startDateTime = place.startDateTime.minusDays(1),
-                        endDateTime = place.endDateTime.minusDays(1)
-                    )
-                }
-
-                return@mapNotNull id to place
             }
+        }
+    }
 
-            id to uiModel
-        }.toMap()
+    private fun isDuplicate(
+        targetId: String,
+        startDateTime: LocalDateTime,
+        endDateTime: LocalDateTime
+    ): Boolean {
+        val filteredPlaces = uiState.value.places
+            .filter { it.startDateTime != null && it.endDateTime != null }
+            .filterNot { it.id == targetId }
 
-        onUpdateState(blockUiModel, removedPlaces)
+        return filteredPlaces.any {
+            it.startDateTime!! in startDateTime..endDateTime.minusMinutes(1)
+                    || (it.startDateTime!! < startDateTime && it.endDateTime!! >= startDateTime)
+        }
     }
 
     private fun addPlaceToTimetable(startMinute: Int, place: Place) {
         val date = uiState.value.date
         val baseDay = date.startDay ?: return
 
-        val totalMinute = startMinute
-
-        val dayOffset = totalMinute / MINUTES_PER_DAY
-        val minuteInDay = totalMinute % MINUTES_PER_DAY
+        val dayOffset = startMinute / MINUTES_PER_DAY
+        val minuteInDay = startMinute % MINUTES_PER_DAY
 
         val targetDay = baseDay.plusDays(dayOffset.toLong())
 
@@ -600,28 +563,25 @@ class PlanViewModel @Inject constructor(
 
         val endDateTime = startDateTime.plusMinutes(place.durationMinutes)
 
-        val isDuplicated = uiState.value.blocks.any {
-            val rangeBaseDay = baseDay.plusDays((it.day - 1).toLong())
-            val startRange =
-                rangeBaseDay.atStartOfDay().plusMinutes(it.startMinute.toLong())
-            val endRange =
-                rangeBaseDay.atStartOfDay().plusMinutes(it.endMinute.toLong())
-            startDateTime in startRange..endRange.minusMinutes(1) || endDateTime in startRange.plusMinutes(
-                1
-            )..endRange
-        }
-        if (isDuplicated) {
+        if (isDuplicate(
+                targetId = place.id,
+                startDateTime = startDateTime,
+                endDateTime = endDateTime
+            )
+        ) {
             snackBarManager.show(SnackBarEvent.PLAN_INVALID_ERROR)
             return
         }
 
-        val newPlace = place.copy(
-            startDateTime = startDateTime,
-            endDateTime = endDateTime
-        )
-        blockUiModelsFlow.update { it + (place.id to newPlace) }
-        timeBlocksFlow.update { it + newPlace.toTimeBlock(dayStart = uiState.value.date.startDay!!.atStartOfDay())!! }
-        placesFlow.update { it.filter { it.id != place.id }.toImmutableList() }
+        placesFlow.update { places ->
+            places.map { targetPlace ->
+                if (targetPlace.id == place.id) {
+                    targetPlace.copy(startDateTime = startDateTime, endDateTime = endDateTime)
+                } else {
+                    targetPlace
+                }
+            }
+        }
     }
 
     private fun buildPendingUpdateWork(id: String, payload: Payload): OneTimeWorkRequest {

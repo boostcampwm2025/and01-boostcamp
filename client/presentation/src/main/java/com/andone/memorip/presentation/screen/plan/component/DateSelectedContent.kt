@@ -27,34 +27,36 @@ fun DateSelectedContent(
         TimeTable(
             totalMinutes = state.date.totalMinutes,
             currentDay = state.date.selectedDay,
-            places = state.places,
+            places = state.places.filter{ it.startDateTime == null && it.endDateTime == null }.toImmutableList(),
             onBlockAdd = { place, start -> onAction(PlanAction.BottomBlockDragEnd(place, start)) },
             onDayScrolled = { day ->
                 onAction(PlanAction.DayScrolled(day))
             }
         ) { engine, scrollState ->
-            state.blocks.forEach { block ->
-                TimeBlockItem(
-                    block = block,
-                    engine = engine,
-                    scrollState = scrollState,
-                    onSlide = { id -> onAction(PlanAction.BlockSlide(id)) },
-                    onMoved = { id, newStartMinute ->
-                        onAction(PlanAction.BlockMoved(id, newStartMinute))
-                    }
-                ) {
-                    when (val uiModel = state.blockUiModels[block.id]) {
-                        is Place -> {
-                            PlaceTimeCard(
-                                place = uiModel,
-                                onClick = { onAction(PlanAction.BlockClick(block.id)) }
-                            )
+            state.places.filter { it.startDateTime != null && it.endDateTime != null }
+                .forEach { block ->
+                    TimeBlockItem(
+                        block = block,
+                        startDate = state.date.startDay!!,
+                        engine = engine,
+                        scrollState = scrollState,
+                        onSlide = { id -> onAction(PlanAction.BlockSlide(id)) },
+                        onMoved = { id, newStartMinute ->
+                            onAction(PlanAction.BlockMoved(id, newStartMinute))
                         }
+                    ) {
+                        when (block) {
+                            is Place -> {
+                                PlaceTimeCard(
+                                    place = block,
+                                    onClick = { onAction(PlanAction.BlockClick(block.id)) }
+                                )
+                            }
 
-                        null -> Unit
+                            null -> Unit
+                        }
                     }
                 }
-            }
         }
     }
 }
@@ -86,10 +88,7 @@ private fun DateSection(
 private fun DateSelectedContentPreview() {
     MemoripTheme {
         DateSelectedContent(
-            state = PlanUiState(
-                places = DummyData.places.toImmutableList(),
-                blocks = emptyList()
-            ),
+            state = PlanUiState(places = DummyData.places.toImmutableList()),
             onAction = { }
         )
     }
