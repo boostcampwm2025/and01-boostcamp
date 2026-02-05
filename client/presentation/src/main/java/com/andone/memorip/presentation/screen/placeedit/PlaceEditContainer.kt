@@ -24,7 +24,6 @@ import com.andone.memorip.presentation.screen.selecttrip.model.toTripUiModel
 @Composable
 fun PlaceEditContainer(
     place: PlaceUiModel,
-    onPlaceUpdate: () -> Unit,
     onNavigateBack: (hasChanged: Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -56,7 +55,6 @@ fun PlaceEditContainer(
         when (targetStep) {
             PlaceEditStep.PlaceEdit -> {
                 PlaceEditScreen(
-                    onPlaceUpdate = onPlaceUpdate,
                     onCategoryClick = { currentStep = PlaceEditStep.SelectCategory },
                     onLocationClick = { currentStep = PlaceEditStep.SelectLocation },
                     onTripClick = { currentStep = PlaceEditStep.SelectTrip },

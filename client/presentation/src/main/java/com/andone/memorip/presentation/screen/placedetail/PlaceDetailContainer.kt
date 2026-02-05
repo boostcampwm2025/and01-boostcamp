@@ -31,11 +31,9 @@ fun PlaceDetailContainer(
 ) {
     var currentStep by rememberSaveable { mutableStateOf(PlaceDetailStep.PlaceDetail) }
     var place by rememberSaveable { mutableStateOf(PlaceUiModel()) }
-    var isEdit by rememberSaveable { mutableStateOf(false) }
     var needsRefresh by rememberSaveable { mutableStateOf(false) }
 
     val viewModel = hiltViewModel<PlaceDetailViewModel, PlaceDetailViewModel.Factory>(
-        key = isEdit.toString(),
         creationCallback = { factory ->
             factory.create(route)
         }
@@ -78,10 +76,6 @@ fun PlaceDetailContainer(
             PlaceDetailStep.PlaceEdit -> {
                 PlaceEditContainer(
                     place = place,
-                    onPlaceUpdate = {
-                        isEdit = !isEdit
-                        currentStep = PlaceDetailStep.PlaceDetail
-                    },
                     onNavigateBack = { hasChanged ->
                         if (hasChanged) needsRefresh = true
                         currentStep = PlaceDetailStep.PlaceDetail

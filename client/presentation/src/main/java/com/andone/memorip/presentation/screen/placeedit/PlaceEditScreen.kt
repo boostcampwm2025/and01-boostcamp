@@ -41,7 +41,6 @@ import com.andone.memorip.presentation.util.collectWithLifecycle
 
 @Composable
 fun PlaceEditScreen(
-    onPlaceUpdate: () -> Unit,
     onCategoryClick: () -> Unit,
     onLocationClick: () -> Unit,
     onTripClick: () -> Unit,
@@ -55,7 +54,6 @@ fun PlaceEditScreen(
 
     viewModel.event.collectWithLifecycle { event ->
         when (event) {
-            PlaceEditEvent.UpdatePlace -> onPlaceUpdate()
             PlaceEditEvent.NavigateBack -> onNavigateBack()
             PlaceEditEvent.NavigateBackAfterUpdate -> onEditSuccess()
             PlaceEditEvent.NavigateToCategory -> onCategoryClick()
