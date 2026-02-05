@@ -21,7 +21,7 @@ import kotlinx.coroutines.withContext
 private object MarkerImageConstant {
     const val WIDTH = 200
     const val HEIGHT = 200
-    val BITMAP_CONFIG = Bitmap.Config.ARGB_8888
+    val BITMAP_CONFIG = Bitmap.Config.RGB_565
 }
 
 @Composable
