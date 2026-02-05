@@ -18,7 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-private object MarkerImageConstants {
+private object MarkerImageConstant {
     const val WIDTH = 200
     const val HEIGHT = 200
     val BITMAP_CONFIG = Bitmap.Config.ARGB_8888
@@ -27,8 +27,8 @@ private object MarkerImageConstants {
 @Composable
 fun rememberBitmapMarkerLoader(
     imageUrls: List<String>,
-    width: Int = MarkerImageConstants.WIDTH,
-    height: Int = MarkerImageConstants.HEIGHT
+    width: Int = MarkerImageConstant.WIDTH,
+    height: Int = MarkerImageConstant.HEIGHT
 ): Map<String, Bitmap> {
     val context = LocalContext.current
     var markerImages by remember { mutableStateOf<Map<String, Bitmap>>(emptyMap()) }
@@ -52,7 +52,7 @@ fun rememberBitmapMarkerLoader(
                         result.image.toBitmap(
                             width = width,
                             height = height,
-                            config = MarkerImageConstants.BITMAP_CONFIG
+                            config = MarkerImageConstant.BITMAP_CONFIG
                         )
                     } else {
                         error("이미지 로드 실패")

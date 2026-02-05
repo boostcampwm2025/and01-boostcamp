@@ -16,7 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.screen.selectimage.component.ThumbnailItemDimens.imageSize
 import com.andone.memorip.presentation.theme.MemoripAlpha
