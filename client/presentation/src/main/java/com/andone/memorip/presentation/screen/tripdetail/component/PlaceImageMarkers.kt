@@ -24,6 +24,7 @@ import com.naver.maps.map.compose.rememberUpdatedMarkerState
 fun PlaceImageMarkers(
     clusteredItems: List<MapClusterManager.ClusterItem>,
     markerImages: Map<String, Bitmap>,
+    selectedPlace: Place?,
     onMarkerClick: (Place) -> Unit,
     onClusterClick: (MapClusterManager.ClusterItem) -> Unit
 ) {
@@ -54,20 +55,29 @@ fun PlaceImageMarkers(
     clusteredItems.filter { !it.isCluster }.forEach { clusterItem ->
         val placeData = clusterItem.places.firstOrNull() ?: return@forEach
         val place = placeData.placeData as? Place ?: return@forEach
+        val isSelected = selectedPlace != null && place.placeId == selectedPlace.placeId
+        
         key(place.placeId) {
             val imageUrl = placeData.imageUrl
             val bitmap = markerImages[imageUrl]
 
             if (bitmap != null) {
                 MarkerComposable(
-                    keys = arrayOf(place.placeId, imageUrl),
+                    keys = arrayOf(place.placeId, imageUrl, isSelected.toString()),
                     state = rememberUpdatedMarkerState(position = clusterItem.position),
                     onClick = {
                         onMarkerClick(place)
                         true
                     }
                 ) {
-                    ImageMarker(imageBitmap = bitmap)
+                    ImageMarker(
+                        imageBitmap = bitmap,
+                        borderColor = if (isSelected) {
+                            MemoripTheme.colors.primary
+                        } else {
+                            MemoripTheme.colors.white
+                        }
+                    )
                 }
             }
         }
@@ -105,6 +115,7 @@ private fun PlaceImageMarkersPreview() {
         PlaceImageMarkers(
             clusteredItems = clusteredItems,
             markerImages = markerImages,
+            selectedPlace = null,
             onMarkerClick = {},
             onClusterClick = {}
         )
