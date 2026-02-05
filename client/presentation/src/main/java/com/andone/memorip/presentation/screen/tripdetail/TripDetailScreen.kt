@@ -19,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.andone.memorip.navigation.TripDetail
 import com.andone.memorip.presentation.component.map.MapClusterManager
@@ -74,6 +75,7 @@ fun TripDetailScreen(
     TripDetailScreenContent(
         tripName = uiState.tripName,
         places = places,
+        placesPagingItems = placesPagingItems,
         clusteredItems = clusteredItems,
         markerImages = markerImages,
         mapSelectedPlace = uiState.mapSelectedPlace,
@@ -92,6 +94,7 @@ fun TripDetailScreen(
 private fun TripDetailScreenContent(
     tripName: String,
     places: List<Place>,
+    placesPagingItems: LazyPagingItems<Place>,
     clusteredItems: List<MapClusterManager.ClusterItem>,
     markerImages: Map<String, android.graphics.Bitmap>,
     mapSelectedPlace: Place?,
@@ -119,6 +122,7 @@ private fun TripDetailScreenContent(
     ) { innerPadding ->
         TripMap(
             places = places,
+            placesPagingItems = placesPagingItems,
             clusteredItems = clusteredItems,
             markerImages = markerImages,
             mapBottomSheetContent = mapBottomSheetContent,
@@ -163,6 +167,7 @@ private fun TripDetailScreenContentPreview() {
         TripDetailScreenContent(
             tripName = "서울대공원 주암 나들이",
             places = DummyData.places,
+            placesPagingItems = DummyData.getPlacePagingItems(),
             clusteredItems = clusteredItems,
             markerImages = emptyMap(),
             mapSelectedPlace = null,

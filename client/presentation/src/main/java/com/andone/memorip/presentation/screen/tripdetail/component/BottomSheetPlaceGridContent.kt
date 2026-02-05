@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
-import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -17,6 +16,7 @@ import com.andone.memorip.presentation.screen.tripdetail.model.TripDetailAction
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import androidx.compose.ui.unit.dp
+import androidx.paging.compose.LazyPagingItems
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
 
@@ -26,7 +26,7 @@ private object BottomSheetPlaceGridDimens {
 
 @Composable
 fun BottomSheetPlaceGridContent(
-    places: List<Place>,
+    placesPagingItems: LazyPagingItems<Place>,
     onAction: (TripDetailAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -46,17 +46,19 @@ fun BottomSheetPlaceGridContent(
         )
     ) {
         items(
-            items = places,
-            key = { it.placeId }
-        ) { place ->
-            val image = place.thumbnailImage
-            StaggeredImageItem(
-                imageUrl = image.url,
-                aspectRatio = image.aspectRatio,
-                onImageClick = { onAction(TripDetailAction.OnPlaceClick(place)) },
-                contentDescription = place.name,
-                location = place.address,
-            )
+            count = placesPagingItems.itemCount,
+            key = { index -> placesPagingItems.peek(index)?.placeId ?: index }
+        ) { index ->
+            placesPagingItems[index]?.let { place ->
+                val image = place.thumbnailImage
+                StaggeredImageItem(
+                    imageUrl = image.url,
+                    aspectRatio = image.aspectRatio,
+                    onImageClick = { onAction(TripDetailAction.OnPlaceClick(place)) },
+                    contentDescription = place.name,
+                    location = place.address,
+                )
+            }
         }
     }
 }
@@ -66,7 +68,7 @@ fun BottomSheetPlaceGridContent(
 private fun BottomSheetPlaceGridContentPreview() {
     MemoripTheme {
         BottomSheetPlaceGridContent(
-            places = DummyData.places,
+            placesPagingItems = DummyData.getPlacePagingItems(),
             onAction = {}
         )
     }
