@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.screen.selecttrip.component
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -15,8 +16,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.MemoripImage
 import com.andone.memorip.presentation.screen.selecttrip.component.TripImageGridMax3Constants.ASPECT_RATIO_HEIGHT
@@ -74,15 +77,22 @@ private fun EmptyImageState(
     }
 }
 
+@SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
 private fun SingleImageLayout(
     imageUrl: String,
     modifier: Modifier = Modifier
 ) {
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+    val containerHeight = screenWidth * ASPECT_RATIO_HEIGHT / ASPECT_RATIO_WIDTH
+
     MemoripImage(
         imageUrl = imageUrl,
         contentDescription = null,
-        modifier = modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize(),
+        targetWidth = screenWidth,
+        targetHeight = containerHeight
     )
 }
 
@@ -92,6 +102,11 @@ private fun TwoImagesLayout(
     secondImage: String,
     modifier: Modifier = Modifier
 ) {
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+    val containerHeight = screenWidth * ASPECT_RATIO_HEIGHT / ASPECT_RATIO_WIDTH
+    val imageWidth = screenWidth / 2
+
     Row(
         modifier = modifier.fillMaxSize(),
         horizontalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXXSmall)
@@ -101,14 +116,18 @@ private fun TwoImagesLayout(
             contentDescription = null,
             modifier = Modifier
                 .weight(1f)
-                .fillMaxHeight()
+                .fillMaxHeight(),
+            targetWidth = imageWidth,
+            targetHeight = containerHeight
         )
         MemoripImage(
             imageUrl = secondImage,
             contentDescription = null,
             modifier = Modifier
                 .weight(1f)
-                .fillMaxHeight()
+                .fillMaxHeight(),
+            targetWidth = imageWidth,
+            targetHeight = containerHeight
         )
     }
 }
@@ -120,6 +139,13 @@ private fun ThreeImagesLayout(
     thirdImage: String,
     modifier: Modifier = Modifier
 ) {
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+    val containerHeight = screenWidth * ASPECT_RATIO_HEIGHT / ASPECT_RATIO_WIDTH
+    val largeImageWidth = screenWidth * THREE_IMAGES_LARGE_WEIGHT / (THREE_IMAGES_LARGE_WEIGHT + THREE_IMAGES_SMALL_WEIGHT)
+    val smallImageWidth = screenWidth * THREE_IMAGES_SMALL_WEIGHT / (THREE_IMAGES_LARGE_WEIGHT + THREE_IMAGES_SMALL_WEIGHT)
+    val smallImageHeight = containerHeight / 2
+
     Row(
         modifier = modifier.fillMaxSize(),
         horizontalArrangement = Arrangement.spacedBy(MemoripSpace.SpaceXXSmall)
@@ -129,7 +155,9 @@ private fun ThreeImagesLayout(
             contentDescription = null,
             modifier = Modifier
                 .weight(THREE_IMAGES_LARGE_WEIGHT)
-                .fillMaxHeight()
+                .fillMaxHeight(),
+            targetWidth = largeImageWidth,
+            targetHeight = containerHeight
         )
 
         Column(
@@ -143,14 +171,18 @@ private fun ThreeImagesLayout(
                 contentDescription = null,
                 modifier = Modifier
                     .weight(1f)
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                targetWidth = smallImageWidth,
+                targetHeight = smallImageHeight
             )
             MemoripImage(
                 imageUrl = thirdImage,
                 contentDescription = null,
                 modifier = Modifier
                     .weight(1f)
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                targetWidth = smallImageWidth,
+                targetHeight = smallImageHeight
             )
         }
     }

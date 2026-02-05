@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -132,6 +133,8 @@ private fun CompactPlaceTimeCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val imageSize = (place.durationMinutes * MINUTE_HEIGHT_DP).dp - MemoripPadding.PaddingMedium * 2
+
     Surface(
         onClick = onClick,
         modifier = modifier.fillMaxWidth(),
@@ -151,7 +154,9 @@ private fun CompactPlaceTimeCard(
                     .fillMaxHeight()
                     .aspectRatio(ratio = 1f)
                     .clip(shape = RoundedCornerShape(size = PlaceTimeCardDimen.IMAGE_CORNER_RADIUS)),
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.Crop,
+                targetWidth = imageSize,
+                targetHeight = imageSize
             )
 
             Column(verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXXSmall)) {
@@ -179,6 +184,11 @@ private fun ExpandedPlaceTimeCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+    val cardHeight = (place.durationMinutes * MINUTE_HEIGHT_DP).dp
+    val imageHeight = cardHeight * 0.6f
+
     Surface(
         onClick = onClick,
         modifier = modifier.fillMaxWidth(),
@@ -194,7 +204,9 @@ private fun ExpandedPlaceTimeCard(
                     .fillMaxWidth()
                     .weight(weight = 1f)
                     .clip(shape = RoundedCornerShape(size = PlaceTimeCardDimen.IMAGE_CORNER_RADIUS)),
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.Crop,
+                targetWidth = screenWidth,
+                targetHeight = imageHeight
             )
 
             Column(

@@ -86,7 +86,9 @@ fun UserProfileSection(
                         modifier = Modifier
                             .fillMaxSize()
                             .clip(CircleShape),
-                        contentScale = ContentScale.Crop
+                        contentScale = ContentScale.Crop,
+                        targetWidth = PROFILE_IMAGE_SIZE,
+                        targetHeight = PROFILE_IMAGE_SIZE
                     )
                 }
             }

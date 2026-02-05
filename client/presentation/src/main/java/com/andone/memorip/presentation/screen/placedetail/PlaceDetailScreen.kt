@@ -45,8 +45,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.AsyncImage
 import com.andone.memorip.navigation.PlaceDetail
+import com.andone.memorip.presentation.component.MemoripImage
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.LoadingIndicatorScreen
 import com.andone.memorip.presentation.component.TagChipRow
@@ -225,6 +225,7 @@ private fun PlaceDetailContent(
     val statusBarHeightDp = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
     val maxHeaderHeight = LocalWindowInfo.current.containerDpSize.height - statusBarHeightDp
     val maxHeaderPx = maxHeaderHeight.toPx(density = density)
+    val screenWidth = LocalWindowInfo.current.containerDpSize.width
     val lazyListState = rememberLazyListState()
 
     CompositionLocalProvider(
@@ -277,11 +278,13 @@ private fun PlaceDetailContent(
                             state = pagerState,
                             key = { idx -> place.imageUrls[idx] }
                         ) { idx ->
-                            AsyncImage(
-                                modifier = Modifier.fillMaxSize(),
-                                model = place.imageUrls[idx],
+                            MemoripImage(
+                                imageUrl = place.imageUrls[idx],
                                 contentDescription = stringResource(R.string.place_detail_image_content_description),
+                                modifier = Modifier.fillMaxSize(),
                                 contentScale = ContentScale.Crop,
+                                targetWidth = screenWidth,
+                                targetHeight = maxHeaderHeight
                             )
                         }
 

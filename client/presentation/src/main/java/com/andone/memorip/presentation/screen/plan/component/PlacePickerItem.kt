@@ -15,8 +15,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.component.MemoripImage
 import com.andone.memorip.presentation.model.Place
 import com.andone.memorip.presentation.screen.plan.component.PlacePickerItemConstant.FULL_WEIGHT
 import com.andone.memorip.presentation.screen.plan.component.PlacePickerItemDimen.PLACE_PICKER_ITEM_HEIGHT
@@ -48,13 +48,15 @@ fun PlacePickerItem(
             )
             .clip(shape = MemoripTheme.shapes.roundedMedium)
     ) {
-        AsyncImage(
+        MemoripImage(
+            imageUrl = place.thumbnailImage.url,
+            contentDescription = stringResource(R.string.place_picker_item_image_description),
             modifier = Modifier
                 .weight(FULL_WEIGHT)
                 .fillMaxWidth(),
-            model = place.thumbnailImage.url,
-            contentDescription = stringResource(R.string.place_picker_item_image_description),
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Crop,
+            targetWidth = PLACE_PICKER_ITEM_WIDTH,
+            targetHeight = PLACE_PICKER_ITEM_HEIGHT / 2
         )
         Column(
             modifier = Modifier

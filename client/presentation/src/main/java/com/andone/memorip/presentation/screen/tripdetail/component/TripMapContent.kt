@@ -42,6 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.util.DummyData
 import com.naver.maps.map.compose.rememberCameraPositionState
 import androidx.compose.material3.rememberBottomSheetScaffoldState
+import androidx.paging.compose.LazyPagingItems
 
 private object TripMapContentDimen {
     val SHEET_PEEK_HEIGHT = 200.dp
@@ -51,6 +52,7 @@ private object TripMapContentDimen {
 @Composable
 fun TripMapContent(
     places: List<Place>,
+    placesPagingItems: LazyPagingItems<Place>,
     clusteredItems: List<MapClusterManager.ClusterItem>,
     markerImages: Map<String, Bitmap>,
     cameraPositionState: CameraPositionState,
@@ -80,6 +82,7 @@ fun TripMapContent(
                 MapBottomSheetContent(
                     bottomSheetContent = mapBottomSheetContent,
                     places = places,
+                    placesPagingItems = placesPagingItems,
                     selectedPlace = mapSelectedPlace,
                     viewMode = viewMode,
                     hasMorePages = hasMorePages,
@@ -134,6 +137,7 @@ fun TripMapContent(
 private fun MapBottomSheetContent(
     bottomSheetContent: MapBottomSheetStep,
     places: List<Place>,
+    placesPagingItems: LazyPagingItems<Place>,
     selectedPlace: Place?,
     viewMode: PlaceViewMode,
     onAction: (TripDetailAction) -> Unit,
@@ -180,7 +184,7 @@ private fun MapBottomSheetContent(
                             when (viewMode) {
                                 PlaceViewMode.LIST -> {
                                     BottomSheetPlaceListContent(
-                                        places = places,
+                                        placesPagingItems = placesPagingItems,
                                         listState = placeListState,
                                         onAction = onAction
                                     )
@@ -188,7 +192,7 @@ private fun MapBottomSheetContent(
 
                                 PlaceViewMode.GRID -> {
                                     BottomSheetPlaceGridContent(
-                                        places = places,
+                                        placesPagingItems = placesPagingItems,
                                         onAction = onAction
                                     )
                                 }
@@ -239,6 +243,7 @@ private fun TripMapContentPreview() {
 
         TripMapContent(
             places = DummyData.places,
+            placesPagingItems = DummyData.getPlacePagingItems(),
             clusteredItems = clusteredItems,
             markerImages = emptyMap(),
             cameraPositionState = rememberCameraPositionState(),

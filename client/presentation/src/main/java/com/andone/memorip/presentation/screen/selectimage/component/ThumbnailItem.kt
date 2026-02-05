@@ -16,8 +16,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import coil.compose.AsyncImage
 import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.component.MemoripImage
 import com.andone.memorip.presentation.screen.selectimage.component.ThumbnailItemDimens.imageSize
 import com.andone.memorip.presentation.theme.MemoripAlpha
 import com.andone.memorip.presentation.theme.MemoripLineWidth
@@ -47,10 +47,12 @@ fun ThumbnailItem(
             )
             .clickable { onClick() }
     ) {
-        AsyncImage(
-            model = imageUri,
+        MemoripImage(
+            imageUrl = imageUri.toString(),
             contentDescription = null,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
+            targetWidth = imageSize,
+            targetHeight = imageSize
         )
 
         if (isDone) {

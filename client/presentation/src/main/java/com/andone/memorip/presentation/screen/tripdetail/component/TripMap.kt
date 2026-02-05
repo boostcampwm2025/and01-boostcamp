@@ -32,6 +32,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.paging.compose.LazyPagingItems
 import com.andone.memorip.presentation.theme.MemoripTheme
 import com.andone.memorip.presentation.util.DummyData
 
@@ -48,6 +49,7 @@ private object TripMapConstant {
 @Composable
 fun TripMap(
     places: List<Place>,
+    placesPagingItems: LazyPagingItems<Place>,
     clusteredItems: List<MapClusterManager.ClusterItem>,
     markerImages: Map<String, Bitmap>,
     mapBottomSheetContent: MapBottomSheetStep,
@@ -186,6 +188,7 @@ fun TripMap(
 
     TripMapContent(
         places = places,
+        placesPagingItems = placesPagingItems,
         clusteredItems = clusteredItems,
         markerImages = markerImages,
         cameraPositionState = cameraPositionState,
@@ -243,6 +246,7 @@ private fun TripMapPreview() {
 
         TripMap(
             places = DummyData.places,
+            placesPagingItems = DummyData.getPlacePagingItems(),
             clusteredItems = clusteredItems,
             markerImages = emptyMap(),
             mapBottomSheetContent = MapBottomSheetStep.PlaceList,

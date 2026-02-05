@@ -26,7 +26,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImagePainter.State.Empty.painter
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.MemoripImage
 import com.andone.memorip.presentation.component.PlaceLocationText
@@ -98,7 +97,9 @@ fun BottomSheetPlaceDetailContent(
                         .size(BottomSheetPlaceDetailContentDimen.IMAGE_SIZE)
                         .aspectRatio(1f)
                         .clip(RoundedCornerShape(BottomSheetPlaceDetailContentDimen.IMAGE_CORNER_RADIUS)),
-                    contentScale = ContentScale.Crop
+                    contentScale = ContentScale.Crop,
+                    targetWidth = BottomSheetPlaceDetailContentDimen.IMAGE_SIZE,
+                    targetHeight = BottomSheetPlaceDetailContentDimen.IMAGE_SIZE
                 )
                 Column(
                     modifier = Modifier
