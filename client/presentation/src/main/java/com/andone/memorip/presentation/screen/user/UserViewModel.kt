@@ -55,6 +55,8 @@ class UserViewModel @Inject constructor(
 
             is UserAction.GoogleLoginSuccess -> {
                 viewModelScope.launch {
+                    _uiState.update { it.copy(isLoading = true) }
+
                     authRepository.signInWithGoogle(action.idToken)
                         .onSuccess {
                             onAuthSuccess()
@@ -62,6 +64,8 @@ class UserViewModel @Inject constructor(
                         .onFailure { e ->
                             snackBarManager.show(event = e.toSnackBarEvent())
                         }
+
+                    _uiState.update { it.copy(isLoading = false) }
                 }
             }
 
@@ -127,6 +131,11 @@ class UserViewModel @Inject constructor(
 
     private fun signInOrSignUpWithEmail(email: String, password: String) {
         viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
+            _uiState.update {
+                it.copy(showLoginDialog = false)
+            }
+
             val authResult = if (_uiState.value.isNewAccount) {
                 authRepository.signUpWithEmail(email, password)
             } else {
@@ -142,7 +151,7 @@ class UserViewModel @Inject constructor(
                 }
 
             _uiState.update {
-                it.copy(showLoginDialog = false)
+                it.copy(isLoading = false)
             }
         }
     }
@@ -171,6 +180,7 @@ class UserViewModel @Inject constructor(
 
     private fun refreshAuthState() {
         viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
             tokenRefresher.refreshToken(force = true)
             val loggedIn = authRepository.isLoggedIn()
 
@@ -178,9 +188,8 @@ class UserViewModel @Inject constructor(
                 it.copy(isLoggedIn = loggedIn)
             }
 
-            if (loggedIn) {
-                updateUser()
-            }
+            if (loggedIn) updateUser()
+            _uiState.update { it.copy(isLoading = false) }
         }
     }
 
