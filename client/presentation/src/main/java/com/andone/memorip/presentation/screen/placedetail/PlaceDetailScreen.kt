@@ -234,6 +234,8 @@ private fun PlaceDetailContent(
             modifier = modifier,
             topBar = {
                 PlaceDetailTopBar(
+                    currentPage = pagerState.currentPage,
+                    totalPage = pagerState.pageCount,
                     isMine = place.isMine,
                     isInMyTrip = place.isInMyTrip,
                     showMoreMenu = showMoreMenu,
