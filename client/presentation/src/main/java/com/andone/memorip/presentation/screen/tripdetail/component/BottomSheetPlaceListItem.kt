@@ -62,7 +62,9 @@ fun BottomSheetPlaceListItem(
                     modifier = Modifier
                         .size(size = BottomSheetPlaceListItemDimen.IMAGE_SIZE)
                         .clip(shape = RoundedCornerShape(size = BottomSheetPlaceListItemDimen.IMAGE_CORNER_RADIUS)),
-                    contentScale = ContentScale.Crop
+                    contentScale = ContentScale.Crop,
+                    targetWidth = BottomSheetPlaceListItemDimen.IMAGE_SIZE,
+                    targetHeight = BottomSheetPlaceListItemDimen.IMAGE_SIZE
                 )
 
                 Column(verticalArrangement = Arrangement.spacedBy(space = MemoripSpace.SpaceXXSmall)) {

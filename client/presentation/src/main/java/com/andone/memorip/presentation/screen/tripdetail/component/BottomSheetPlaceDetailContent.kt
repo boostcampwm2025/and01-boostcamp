@@ -97,7 +97,9 @@ fun BottomSheetPlaceDetailContent(
                         .size(BottomSheetPlaceDetailContentDimen.IMAGE_SIZE)
                         .aspectRatio(1f)
                         .clip(RoundedCornerShape(BottomSheetPlaceDetailContentDimen.IMAGE_CORNER_RADIUS)),
-                    contentScale = ContentScale.Crop
+                    contentScale = ContentScale.Crop,
+                    targetWidth = BottomSheetPlaceDetailContentDimen.IMAGE_SIZE,
+                    targetHeight = BottomSheetPlaceDetailContentDimen.IMAGE_SIZE
                 )
                 Column(
                     modifier = Modifier

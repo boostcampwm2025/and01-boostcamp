@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.screen.placelist.component
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -50,6 +52,7 @@ private object StaggeredImageItemConstant{
     val BOTTOM_RATIO = 1f
 }
 
+@SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
 fun StaggeredImageItem(
     imageUrl: String,
@@ -60,6 +63,10 @@ fun StaggeredImageItem(
     contentDescription: String? = null,
     location: String? = null
 ) {
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+    val imageHeight = screenWidth / aspectRatio
+
     Box(
         modifier = modifier
             .clickable(
@@ -76,7 +83,9 @@ fun StaggeredImageItem(
             contentDescription = contentDescription,
             modifier = Modifier
                 .fillMaxWidth()
-                .aspectRatio(aspectRatio)
+                .aspectRatio(aspectRatio),
+            targetWidth = screenWidth,
+            targetHeight = imageHeight
         )
 
         Box(

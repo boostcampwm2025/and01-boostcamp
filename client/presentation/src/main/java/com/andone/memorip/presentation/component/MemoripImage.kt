@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.component
 
+import android.graphics.Bitmap
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.ColorPainter
@@ -9,6 +10,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
+import coil3.request.bitmapConfig
 import coil3.request.crossfade
 import coil3.size.Precision
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -39,6 +41,7 @@ fun MemoripImage(
             }
             .precision(Precision.INEXACT)
             .crossfade(true)
+            .bitmapConfig(Bitmap.Config.RGB_565)
             .build(),
         contentDescription = contentDescription,
         modifier = modifier,

@@ -53,7 +53,9 @@ fun SelectedImageItem(
                     color = borderColor,
                     shape = MemoripTheme.shapes.roundedSmall
                 )
-                .clickable(onClick = onClick)
+                .clickable(onClick = onClick),
+            targetWidth = IMAGE_SIZE,
+            targetHeight = IMAGE_SIZE
         )
 
         Box(
