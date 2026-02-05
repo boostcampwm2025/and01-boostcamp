@@ -14,10 +14,8 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -88,12 +86,8 @@ private fun TripListScreenContent(
     modifier: Modifier = Modifier,
 ) {
     val listState = rememberLazyListState()
-    val hasScrolled by remember {
-        derivedStateOf {
-            listState.firstVisibleItemIndex > 0 || listState.firstVisibleItemScrollOffset > 0
-        }
-    }
-    val topBarHasShadow = trips.isNotEmpty() && hasScrolled
+    // 스크롤 내릴 때만 TopBar shadow, 올릴 때는 제거 (isStickyHeaderVisible = 스크롤 올리면 true)
+    val topBarHasShadow = trips.isNotEmpty() && !isStickyHeaderVisible
 
     LaunchedEffect(listState) {
         var previousIndex = listState.firstVisibleItemIndex
