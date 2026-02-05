@@ -19,13 +19,16 @@ fun MemoripButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true
 ) {
-    val textColor = if (enabled) MemoripTheme.colors.white else MemoripTheme.colors.gray
-
     Card(
         onClick = onClick,
         enabled = enabled,
         shape = MemoripTheme.shapes.roundedMedium,
-        colors = CardDefaults.cardColors(containerColor = MemoripTheme.colors.primary)
+        colors = CardDefaults.cardColors(
+            containerColor = MemoripTheme.colors.primary,
+            contentColor = MemoripTheme.colors.white,
+            disabledContainerColor = MemoripTheme.colors.lightGray,
+            disabledContentColor = MemoripTheme.colors.gray
+        )
     ) {
         Row(
             modifier = modifier,
@@ -33,7 +36,6 @@ fun MemoripButton(
         ) {
             Text(
                 text = value,
-                color = textColor,
                 style = MemoripTheme.typography.labelBold16
             )
         }

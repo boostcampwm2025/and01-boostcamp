@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.dagger.hilt.root)
     alias(libs.plugins.ksp)
     alias(libs.plugins.detekt)
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 android {

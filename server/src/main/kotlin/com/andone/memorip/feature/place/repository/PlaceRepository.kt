@@ -4,6 +4,7 @@ import com.andone.memorip.feature.place.entity.Place
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 import java.util.*
@@ -41,4 +42,32 @@ interface PlaceRepository : JpaRepository<Place, UUID> {
         @Param("region2Depth") region2Depth: List<String>?,
         pageable: Pageable
     ): Page<Place>
+
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query("""
+    update Place p
+    set p.scrapCount = p.scrapCount + 1
+    where p.id = :placeId
+    """)
+    fun increaseScrap(@Param("placeId") placeId: UUID): Int
+
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query("""
+    update Place p
+    set p.scrapCount = p.scrapCount - 1
+    where p.id = :placeId and p.scrapCount > 0
+    """)
+    fun decreaseScrap(@Param("placeId") placeId: UUID): Int
+
+    @Query(
+        value = """
+        SELECT *
+        FROM places
+        WHERE is_public = true
+        ORDER BY scrap_count DESC
+        LIMIT :limit
+    """,
+        nativeQuery = true
+    )
+    fun findTopPopular(@Param("limit") limit: Int): List<Place>
 }

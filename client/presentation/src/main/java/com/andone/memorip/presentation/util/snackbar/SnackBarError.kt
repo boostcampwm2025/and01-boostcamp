@@ -31,5 +31,13 @@ enum class SnackBarEvent(
     TRIP_NO_PLACES(messageResId = R.string.snackbar_trip_no_places),
 
     // 성공
-    SUCCESS(messageResId = R.string.snackbar_success)
+    SUCCESS(messageResId = R.string.snackbar_success),
+
+    // Auth Error
+    EMAIL_ALREADY_EXISTS(messageResId = R.string.snackbar_email_already_exists),
+    INVALID_EMAIL(messageResId = R.string.snackbar_invalid_email),
+    WEAK_PASSWORD(messageResId = R.string.snackbar_weak_password),
+    USER_NOT_FOUND(messageResId = R.string.snackbar_user_not_found),
+    WRONG_PASSWORD(messageResId = R.string.snackbar_wrong_password),
+    AUTH_NETWORK_ERROR(messageResId = R.string.snackbar_auth_network_error),
 }

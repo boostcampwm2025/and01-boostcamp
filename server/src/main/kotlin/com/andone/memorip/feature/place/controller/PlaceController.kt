@@ -209,4 +209,15 @@ class PlaceController(
         groupPlaceService.updatePlaceGroups(placeId, request)
         return ApiResult.success(Unit)
     }
+
+    @GetMapping("/places/popular")
+    @Operation(
+        summary = "인기 장소 조회",
+        description = "인기장소를 조회 합니다(기본 5개)",
+    )
+    fun getPopularPlaces(
+        @RequestParam(defaultValue = "5") limit: Int
+    ): ApiResult<List<PlaceListItemResponse>> {
+        return ApiResult.success(placeService.getPopularPlaces(limit))
+    }
 }

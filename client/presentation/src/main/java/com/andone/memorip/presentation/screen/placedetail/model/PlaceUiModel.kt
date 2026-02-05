@@ -1,9 +1,12 @@
 package com.andone.memorip.presentation.screen.placedetail.model
 
+import android.os.Parcelable
 import com.andone.memorip.presentation.model.TagUiModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class PlaceUiModel(
     val id: String = "",
     val title: String = "",
@@ -17,4 +20,4 @@ data class PlaceUiModel(
     val isMine: Boolean = false,
     val isInMyTrip: Boolean = false,
     val isPublic: Boolean = true
-)
+) : Parcelable

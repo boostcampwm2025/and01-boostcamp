@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.andone.memorip.domain.ai.ToxicityAnalyzer
 import com.andone.memorip.domain.model.request.Address
 import com.andone.memorip.domain.model.request.PlaceCreateUpdate
 import com.andone.memorip.domain.repository.PlaceRepository
@@ -16,6 +17,7 @@ import com.andone.memorip.presentation.screen.placeedit.model.toUiState
 import com.andone.memorip.presentation.util.BitmapCropUtil.getAspectRatioFromUrl
 import com.andone.memorip.presentation.util.snackbar.SnackBarEvent
 import com.andone.memorip.presentation.util.snackbar.SnackBarManager
+import com.andone.memorip.presentation.util.splitSentences
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -30,12 +32,14 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
 
 @HiltViewModel(assistedFactory = PlaceEditViewModel.Factory::class)
 class PlaceEditViewModel @AssistedInject constructor(
     @Assisted private val place: PlaceUiModel,
     private val placeRepository: PlaceRepository,
-    private val snackBarManager: SnackBarManager
+    private val snackBarManager: SnackBarManager,
+    private val toxicityAnalyzer: ToxicityAnalyzer
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(place.toUiState())
@@ -43,6 +47,8 @@ class PlaceEditViewModel @AssistedInject constructor(
 
     private val _event = Channel<PlaceEditEvent>(capacity = BUFFERED)
     val event = _event.receiveAsFlow()
+
+    private val updatePlaceMutex = Mutex()
 
     val isUpdateEnabled = _uiState.map {
         val isValueRequired = it.images.isNotEmpty() &&
@@ -141,31 +147,57 @@ class PlaceEditViewModel @AssistedInject constructor(
             || uiStateValue.trips.isEmpty()
         ) return
 
+        if (!updatePlaceMutex.tryLock()) return
+
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true) }
-            placeRepository.updatePlace(
-                placeId = uiStateValue.id,
-                place = PlaceCreateUpdate(
-                    tripIds = uiStateValue.trips.map { it.id },
-                    title = uiStateValue.title,
-                    content = uiStateValue.content,
-                    tags = uiStateValue.tags.map { it.id },
-                    latitude = uiStateValue.location.latitude,
-                    longitude = uiStateValue.location.longitude,
-                    address = Address.from(uiStateValue.location.address),
-                    imageUrls = uiStateValue.images.map { it.toString() },
-                    thumbnailImageRatio = getAspectRatioFromUrl(
-                        context = context,
-                        imageUrl = uiStateValue.images.first().toString()
-                    ),
-                    isPublic = uiStateValue.isPublic
-                )
-            ).onSuccess {
-                _event.trySend(PlaceEditEvent.NavigateBackAfterUpdate)
-            }.onFailure {
-                snackBarManager.show(SnackBarEvent.NETWORK_ERROR)
+            try {
+                _uiState.update { it.copy(isLoading = true) }
+
+                val sentences =
+                    splitSentences(_uiState.value.title) +
+                            splitSentences(_uiState.value.content)
+
+                for (sentence in sentences) {
+                    val result = toxicityAnalyzer.predict(sentence)
+                    val label = result.firstOrNull()?.first
+
+                    if (label != null) {
+                        _uiState.update {
+                            it.copy(
+                                contentErrorLabel = label,
+                                isLoading = false
+                            )
+                        }
+                        return@launch
+                    }
+                }
+
+                placeRepository.updatePlace(
+                    placeId = uiStateValue.id,
+                    place = PlaceCreateUpdate(
+                        tripIds = uiStateValue.trips.map { it.id },
+                        title = uiStateValue.title,
+                        content = uiStateValue.content,
+                        tags = uiStateValue.tags.map { it.id },
+                        latitude = uiStateValue.location.latitude,
+                        longitude = uiStateValue.location.longitude,
+                        address = Address.from(uiStateValue.location.address),
+                        imageUrls = uiStateValue.images.map { it.toString() },
+                        thumbnailImageRatio = getAspectRatioFromUrl(
+                            context = context,
+                            imageUrl = uiStateValue.images.first().toString()
+                        ),
+                        isPublic = uiStateValue.isPublic
+                    )
+                ).onSuccess {
+                    _event.trySend(PlaceEditEvent.NavigateBackAfterUpdate)
+                }.onFailure {
+                    snackBarManager.show(SnackBarEvent.NETWORK_ERROR)
+                }
+            } finally {
+                _uiState.update { it.copy(isLoading = false) }
+                updatePlaceMutex.unlock()
             }
-            _uiState.update { it.copy(isLoading = false) }
         }
     }
 

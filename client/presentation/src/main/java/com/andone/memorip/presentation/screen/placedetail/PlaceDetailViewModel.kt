@@ -67,9 +67,18 @@ class PlaceDetailViewModel @AssistedInject constructor(
 
     fun onAction(action: PlaceDetailAction) {
         when (action) {
-            PlaceDetailAction.OnBackClick -> _event.trySend(PlaceDetailEvent.NavigateBack)
-            PlaceDetailAction.OnAddToTripClick -> _event.trySend(PlaceDetailEvent.NavigateToSelectTrip)
-            PlaceDetailAction.TripClick -> _event.trySend(PlaceDetailEvent.NavigateToTripList)
+            PlaceDetailAction.OnBackClick -> {
+                _event.trySend(PlaceDetailEvent.NavigateBack)
+            }
+
+            PlaceDetailAction.OnAddToTripClick -> {
+                _event.trySend(PlaceDetailEvent.NavigateToSelectTrip)
+            }
+
+            PlaceDetailAction.TripClick -> {
+                _event.trySend(PlaceDetailEvent.NavigateToTripList)
+            }
+
             PlaceDetailAction.OnMoreClick -> {
                 _event.trySend(PlaceDetailEvent.ShowMoreMenu)
             }

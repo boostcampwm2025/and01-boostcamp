@@ -47,7 +47,7 @@ private object PlaceCreateContainerDimens {
 
 @Composable
 fun PlaceCreateContainer(
-    onNavigateToHome: () -> Unit,
+    onNavigateToPlaceList: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -86,7 +86,7 @@ fun PlaceCreateContainer(
                 },
                 onLocationChange = viewModel::updateLocation,
                 onStepChange = { currentStep = it },
-                onNavigateToHome = onNavigateToHome,
+                onNavigateToPlaceList = onNavigateToPlaceList,
                 onBackClick = handleBackAction,
                 viewModel = viewModel
             )
@@ -112,7 +112,7 @@ fun PlaceCreateMainStep(
     onImagesChange: (List<Uri>, Float) -> Unit,
     onLocationChange: (LocationUiModel) -> Unit,
     onStepChange: (PlaceCreateStep) -> Unit,
-    onNavigateToHome: () -> Unit,
+    onNavigateToPlaceList: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PlaceCreateViewModel = hiltViewModel()
@@ -178,7 +178,7 @@ fun PlaceCreateMainStep(
                             onCategoryClick = { onStepChange(PlaceCreateStep.SelectCategory) },
                             onLocationClick = { onStepChange(PlaceCreateStep.SelectLocation) },
                             onTripClick = { onStepChange(PlaceCreateStep.SelectTrip) },
-                            onNavigateToHome = onNavigateToHome,
+                            onNavigateToHome = onNavigateToPlaceList,
                             viewModel = viewModel
                         )
                     }
