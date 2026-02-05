@@ -14,7 +14,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.andone.memorip.navigation.PlaceDetail
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.screen.placedetail.model.PlaceDetailStep
@@ -32,12 +31,6 @@ fun PlaceDetailContainer(
     var currentStep by rememberSaveable { mutableStateOf(PlaceDetailStep.PlaceDetail) }
     var place by rememberSaveable { mutableStateOf(PlaceUiModel()) }
     var needsRefresh by rememberSaveable { mutableStateOf(false) }
-
-    val viewModel = hiltViewModel<PlaceDetailViewModel, PlaceDetailViewModel.Factory>(
-        creationCallback = { factory ->
-            factory.create(route)
-        }
-    )
 
     BackHandler(enabled = currentStep != PlaceDetailStep.PlaceDetail) {
         currentStep = PlaceDetailStep.PlaceDetail
@@ -57,6 +50,7 @@ fun PlaceDetailContainer(
         when (targetState) {
             PlaceDetailStep.PlaceDetail -> {
                 PlaceDetailScreen(
+                    route = route,
                     onNavigateBack = onNavigateBack,
                     onNavigateToSelectTrip = {
                         currentStep = PlaceDetailStep.SelectTrip
@@ -68,8 +62,7 @@ fun PlaceDetailContainer(
                     onNavigateToTripList = onNavigateToTripList,
                     needsRefresh = needsRefresh,
                     onRefreshConsumed = { needsRefresh = false },
-                    modifier = Modifier,
-                    viewModel = viewModel
+                    modifier = Modifier
                 )
             }
 
