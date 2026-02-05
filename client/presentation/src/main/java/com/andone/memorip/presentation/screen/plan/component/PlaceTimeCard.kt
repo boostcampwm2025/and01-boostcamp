@@ -167,12 +167,7 @@ private fun CompactPlaceTimeCard(
                     maxLines = 1,
                     style = MemoripTheme.typography.headlineBold24
                 )
-//                TagChipRow(tags = place.categories.toImmutableList())
                 PlaceLocationText(address = place.address, maxLines = 2)
-//                PlaceTimeText(
-//                    startDateTime = place.startDateTime,
-//                    endDateTime = place.endDateTime
-//                )
             }
         }
     }
