@@ -86,7 +86,6 @@ private fun TripListScreenContent(
     modifier: Modifier = Modifier,
 ) {
     val listState = rememberLazyListState()
-    // 스크롤 내릴 때만 TopBar shadow, 올릴 때는 제거 (isStickyHeaderVisible = 스크롤 올리면 true)
     val topBarHasShadow = trips.isNotEmpty() && !isStickyHeaderVisible
 
     LaunchedEffect(listState) {
