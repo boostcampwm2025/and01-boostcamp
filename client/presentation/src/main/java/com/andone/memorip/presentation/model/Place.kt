@@ -17,8 +17,8 @@ data class Place(
     val latitude: Double,
     val longitude: Double,
     val address: String,
-    val startDateTime: LocalDateTime?,
-    val endDateTime: LocalDateTime?,
+    override val startDateTime: LocalDateTime?,
+    override val endDateTime: LocalDateTime?,
     val categories: List<TagUiModel>,
     val thumbnailImage: ImageItem,
     val images: List<ImageItem>

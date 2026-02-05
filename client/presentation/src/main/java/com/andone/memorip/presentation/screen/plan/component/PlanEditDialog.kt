@@ -45,6 +45,7 @@ import com.andone.memorip.presentation.screen.plan.component.PlanEditDialogConst
 import com.andone.memorip.presentation.screen.plan.component.PlanEditDialogConstant.FILL_CHAR
 import com.andone.memorip.presentation.screen.plan.component.PlanEditDialogConstant.MINUTE_LENGTH
 import com.andone.memorip.presentation.screen.plan.component.PlanEditDialogConstant.MINUTE_STEP
+import com.andone.memorip.presentation.screen.plan.component.PlanEditDialogConstant.MIN_DURATION_HOUR
 import com.andone.memorip.presentation.screen.plan.component.PlanEditDialogConstant.PM_IDX
 import com.andone.memorip.presentation.screen.plan.component.PlanEditDialogDimen.ITEM_SPACE
 import com.andone.memorip.presentation.screen.plan.component.PlanEditDialogDimen.SPINNER_ITEM_HEIGHT
@@ -52,12 +53,15 @@ import com.andone.memorip.presentation.screen.plan.component.PlanEditDialogDimen
 import com.andone.memorip.presentation.theme.MemoripLineWidth
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
+import com.andone.memorip.presentation.util.getHourDiff
 import com.andone.memorip.presentation.util.toPx
 import com.andone.memorip.presentation.util.toTimeString
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
+import kotlin.math.absoluteValue
 
 private object PlanEditDialogDimen {
     val SPINNER_MAX_HEIGHT = 170.dp
@@ -75,6 +79,7 @@ private object PlanEditDialogConstant {
     const val PM_IDX = 2
     const val MINUTE_STEP = 10
     const val DECO_ALPHA = 0.5f
+    const val MIN_DURATION_HOUR = 1
 }
 
 enum class PlanTimeType {
@@ -98,6 +103,7 @@ fun PlanEditDialog(
     DefaultDialog(
         title = stringResource(R.string.plan_edit_dialog_title),
         modifier = modifier,
+        confirmEnabled = (startTime != endTime && getHourDiff(startTime, endTime) >= MIN_DURATION_HOUR),
         onConfirmClick = { onConfirmClick(startTime, endTime) },
         onCancelClick = onCancelClick,
         onDismissRequest = onDismissRequest,
@@ -109,7 +115,7 @@ fun PlanEditDialog(
             Text(
                 modifier = Modifier
                     .background(
-                        color = if (selectedTime == PlanTimeType.START) MemoripTheme.colors.primaryContainer else MemoripTheme.colors.transparent,
+                        color = MemoripTheme.colors.primaryContainer,
                         shape = MemoripTheme.shapes.roundedMedium
                     )
                     .clip(shape = MemoripTheme.shapes.roundedMedium)
@@ -119,7 +125,7 @@ fun PlanEditDialog(
                     },
                 text = startTime.toTimeString(),
                 color = MemoripTheme.colors.onSurface,
-                style = MemoripTheme.typography.bodyMedium16
+                style = if (selectedTime == PlanTimeType.START) MemoripTheme.typography.bodyBold18 else MemoripTheme.typography.bodyMedium16
             )
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_forward),
@@ -129,7 +135,7 @@ fun PlanEditDialog(
             Text(
                 modifier = Modifier
                     .background(
-                        color = if (selectedTime == PlanTimeType.END) MemoripTheme.colors.primaryContainer else MemoripTheme.colors.transparent,
+                        color = MemoripTheme.colors.primaryContainer,
                         shape = MemoripTheme.shapes.roundedMedium
                     )
                     .clip(shape = MemoripTheme.shapes.roundedMedium)
@@ -139,7 +145,7 @@ fun PlanEditDialog(
                     },
                 text = endTime.toTimeString(),
                 color = MemoripTheme.colors.onSurface,
-                style = MemoripTheme.typography.bodyMedium16
+                style = if (selectedTime == PlanTimeType.END) MemoripTheme.typography.bodyBold18 else MemoripTheme.typography.bodyMedium16
             )
         }
 
@@ -191,7 +197,7 @@ private fun TimeSpinner(
     val amPm =
         remember { listOf(EMPTY_VALUE.toString()) + amPmList + listOf(EMPTY_VALUE.toString()) }
     val hours = remember { listOf(EMPTY_VALUE) + (0..11).plus(EMPTY_VALUE).toImmutableList() }
-    val minutes = remember { (EMPTY_VALUE..5).plus(EMPTY_VALUE).map { it * 10 }.toImmutableList() }
+    val minutes = remember { (EMPTY_VALUE..5).plus(EMPTY_VALUE).map { it * MINUTE_STEP }.toImmutableList() }
     val firstIndex = remember { if (time.hour > AM_PM_THRESHOLD) PM_IDX else AM_IDX }
     val amPmScrollState = rememberLazyListState(initialFirstVisibleItemIndex = firstIndex)
     val hourScrollState =
@@ -383,7 +389,9 @@ private fun TimeSpinner(
                                 }
 
                                 val newTime =
-                                    if (lastestTime.hour > AM_PM_THRESHOLD) lastestTime.withHour(AM_PM_THRESHOLD + hour)
+                                    if (lastestTime.hour > AM_PM_THRESHOLD) lastestTime.withHour(
+                                        AM_PM_THRESHOLD + hour
+                                    )
                                     else lastestTime.withHour(hour)
                                 onTimeChange(newTime)
                             }

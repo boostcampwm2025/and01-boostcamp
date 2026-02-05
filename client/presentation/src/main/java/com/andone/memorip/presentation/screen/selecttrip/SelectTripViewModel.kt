@@ -43,6 +43,7 @@ class SelectTripViewModel @Inject constructor(
 
     private var placeId: String? = null
     private var initialSelectedTripIds: List<String>? = null
+    private var isPlaceMine: Boolean = true
 
     private val _uiState = MutableStateFlow(SelectTripUiState())
     val uiState: StateFlow<SelectTripUiState> = _uiState
@@ -73,6 +74,7 @@ class SelectTripViewModel @Inject constructor(
                 trips = emptyList<SelectTripUiModel>().toImmutableList(),
                 selectedTripIds = persistentSetOf(),
                 initialSelectedTripIds = persistentSetOf(),
+                isPlaceMine = isPlaceMine,
                 isLoading = true
             )
         }
@@ -82,6 +84,7 @@ class SelectTripViewModel @Inject constructor(
     fun onAction(action: SelectTripAction) {
         when (action) {
             is SelectTripAction.OnInitialize -> {
+                isPlaceMine = action.isPlaceMine
                 setPlaceId(action.placeId)
                 if (action.placeId == null) {
                     setInitialSelectedTripIds(action.initialSelectedTripIds)
@@ -134,6 +137,16 @@ class SelectTripViewModel @Inject constructor(
     }
 
     private fun toggleTripSelection(tripId: String) {
+        val currentState = _uiState.value
+
+        if (currentState.isPlaceMine &&
+            tripId in currentState.selectedTripIds &&
+            currentState.selectedTripIds.size == 1
+        ) {
+            snackBarManager.show(SnackBarEvent.PLACE_MUST_HAVE_ONE_TRIP)
+            return
+        }
+
         _uiState.update { current ->
             val newSelectedIds = if (tripId in current.selectedTripIds) {
                 current.selectedTripIds.filter { it != tripId }.toImmutableSet()

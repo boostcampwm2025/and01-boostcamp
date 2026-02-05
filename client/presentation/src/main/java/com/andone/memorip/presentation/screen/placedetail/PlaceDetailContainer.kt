@@ -10,7 +10,6 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -30,8 +29,8 @@ fun PlaceDetailContainer(
     modifier: Modifier = Modifier
 ) {
     var currentStep by rememberSaveable { mutableStateOf(PlaceDetailStep.PlaceDetail) }
-
-    var place by remember { mutableStateOf(PlaceUiModel()) }
+    var place by rememberSaveable { mutableStateOf(PlaceUiModel()) }
+    var needsRefresh by rememberSaveable { mutableStateOf(false) }
 
     BackHandler(enabled = currentStep != PlaceDetailStep.PlaceDetail) {
         currentStep = PlaceDetailStep.PlaceDetail
@@ -61,21 +60,30 @@ fun PlaceDetailContainer(
                         currentStep = PlaceDetailStep.PlaceEdit
                     },
                     onNavigateToTripList = onNavigateToTripList,
-                    modifier = Modifier,
+                    needsRefresh = needsRefresh,
+                    onRefreshConsumed = { needsRefresh = false },
+                    modifier = Modifier
                 )
             }
 
             PlaceDetailStep.PlaceEdit -> {
                 PlaceEditContainer(
                     place = place,
-                    onNavigateBack = { currentStep = PlaceDetailStep.PlaceDetail }
+                    onNavigateBack = { hasChanged ->
+                        if (hasChanged) needsRefresh = true
+                        currentStep = PlaceDetailStep.PlaceDetail
+                    }
                 )
             }
 
             PlaceDetailStep.SelectTrip -> {
                 SelectTripScreen(
                     onTripSelect = { },
-                    onBackClick = { currentStep = PlaceDetailStep.PlaceDetail },
+                    onBackClick = { hasChanged ->
+                        if (hasChanged) needsRefresh = true
+                        currentStep = PlaceDetailStep.PlaceDetail
+                    },
+                    isPlaceMine = place.isMine,
                     title = stringResource(R.string.select_trip_add_to_my_trip_title),
                     placeId = route.placeId,
                     modifier = modifier

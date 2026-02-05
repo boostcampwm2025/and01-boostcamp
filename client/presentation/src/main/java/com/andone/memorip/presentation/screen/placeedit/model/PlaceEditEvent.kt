@@ -4,6 +4,8 @@ sealed interface PlaceEditEvent {
 
     data object NavigateBack : PlaceEditEvent
 
+    data object NavigateBackAfterUpdate : PlaceEditEvent
+
     data object NavigateToCategory : PlaceEditEvent
 
     data object NavigateToLocation : PlaceEditEvent

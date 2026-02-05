@@ -92,7 +92,7 @@ fun CreateNewTripCard(
             Text(
                 text = stringResource(R.string.trip_list_create_new_trip_button),
                 style = MemoripTheme.typography.labelMedium14,
-                color = MemoripTheme.colors.background
+                color = MemoripTheme.colors.white
             )
         }
     }

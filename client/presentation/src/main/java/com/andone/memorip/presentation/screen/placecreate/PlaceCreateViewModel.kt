@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.andone.memorip.domain.ai.ToxicityAnalyzer
 import com.andone.memorip.domain.model.request.Address
 import com.andone.memorip.domain.model.request.PlaceCreateUpdate
 import com.andone.memorip.domain.repository.PlaceRepository
@@ -26,10 +27,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
 import java.io.File
 import java.io.FileOutputStream
 import javax.inject.Inject
-import com.andone.memorip.domain.ai.ToxicityAnalyzer
 
 @HiltViewModel
 class PlaceCreateViewModel @Inject constructor(
@@ -42,6 +43,8 @@ class PlaceCreateViewModel @Inject constructor(
 
     private val _event = Channel<PlaceCreateEvent>(capacity = BUFFERED)
     val event = _event.receiveAsFlow()
+
+    private val createPlaceMutex = Mutex()
 
     fun onAction(action: PlaceCreateAction) {
         when (action) {
@@ -144,50 +147,55 @@ class PlaceCreateViewModel @Inject constructor(
             || uiStateValue.trips.isEmpty()
         ) return
 
+        if (!createPlaceMutex.tryLock()) return
+
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true) }
+            try {
+                _uiState.update { it.copy(isLoading = true) }
 
-            val sentences =
-                splitSentences(_uiState.value.title) +
-                        splitSentences(_uiState.value.content)
+                val sentences =
+                    splitSentences(uiStateValue.title) +
+                            splitSentences(uiStateValue.content)
 
-            for (sentence in sentences) {
-                val result = toxicityAnalyzer.predict(sentence)
-                val label = result.firstOrNull()?.first
+                for (sentence in sentences) {
+                    val result = toxicityAnalyzer.predict(sentence)
+                    val label = result.firstOrNull()?.first
 
-                if (label != null) {
-                    _uiState.update {
-                        it.copy(
-                            contentErrorLabel = label,
-                            isLoading = false
-                        )
+                    if (label != null) {
+                        _uiState.update {
+                            it.copy(
+                                contentErrorLabel = label,
+                                isLoading = false
+                            )
+                        }
+                        return@launch
                     }
-                    return@launch
                 }
+
+                val imageUrls = uploadImages(context, uiStateValue.images)
+
+                placeRepository.createPlace(
+                    PlaceCreateUpdate(
+                        tripIds = uiStateValue.trips.map { it.id },
+                        title = uiStateValue.title,
+                        content = uiStateValue.content,
+                        tags = uiStateValue.tags.map { it.id },
+                        latitude = uiStateValue.location.latitude,
+                        longitude = uiStateValue.location.longitude,
+                        address = Address.from(uiStateValue.location.address),
+                        imageUrls = imageUrls,
+                        thumbnailImageRatio = uiStateValue.thumbnailImageRatio,
+                        isPublic = uiStateValue.isPublic
+                    )
+                ).onSuccess {
+                    onAction(PlaceCreateAction.OnCreateSuccess)
+                }.onFailure {
+                    snackBarManager.show(SnackBarEvent.DATA_SAVE_FAILED)
+                }
+            } finally {
+                _uiState.update { it.copy(isLoading = false) }
+                createPlaceMutex.unlock()
             }
-
-            val imageUrls = uploadImages(context, uiStateValue.images)
-
-            placeRepository.createPlace(
-                PlaceCreateUpdate(
-                    tripIds = uiStateValue.trips.map { it.id },
-                    title = uiStateValue.title,
-                    content = uiStateValue.content,
-                    tags = uiStateValue.tags.map { it.id },
-                    latitude = uiStateValue.location.latitude,
-                    longitude = uiStateValue.location.longitude,
-                    address = Address.from(uiStateValue.location.address),
-                    imageUrls = imageUrls,
-                    thumbnailImageRatio = uiStateValue.thumbnailImageRatio,
-                    isPublic = uiStateValue.isPublic
-                )
-            ).onSuccess { data ->
-                onAction(PlaceCreateAction.OnCreateSuccess)
-            }.onFailure { exception ->
-                snackBarManager.show(SnackBarEvent.DATA_SAVE_FAILED)
-            }
-
-            _uiState.update { it.copy(isLoading = false) }
         }
     }
 

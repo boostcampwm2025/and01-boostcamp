@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -77,11 +78,14 @@ internal fun DefaultDialog(
                     }
                     TextButton(
                         onClick = onConfirmClick,
-                        enabled = confirmEnabled
+                        enabled = confirmEnabled,
+                        colors = ButtonDefaults.textButtonColors(
+                            contentColor = MemoripTheme.colors.primary,
+                            disabledContentColor = MemoripTheme.colors.lightGray
+                        )
                     ) {
                         Text(
                             text = confirmButtonText,
-                            color = MemoripTheme.colors.primary,
                             style = MemoripTheme.typography.bodyBold16
                         )
                     }

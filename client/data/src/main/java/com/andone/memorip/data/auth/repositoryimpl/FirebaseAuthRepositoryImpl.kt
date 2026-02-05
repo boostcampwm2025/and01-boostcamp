@@ -1,7 +1,13 @@
 package com.andone.memorip.data.auth.repositoryimpl
 
+import com.andone.memorip.domain.auth.AuthError
 import com.andone.memorip.domain.repository.AuthRepository
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthException
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.PhoneAuthProvider
 import kotlinx.coroutines.tasks.await
@@ -21,7 +27,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         }
 
     override suspend fun signInWithGoogle(idToken: String): Result<Unit> =
-        runCatching {
+        mapFirebaseError {
             val credential =
                 GoogleAuthProvider.getCredential(idToken, null)
             firebaseAuth.signInWithCredential(credential).await()
@@ -31,7 +37,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         email: String,
         password: String
     ): Result<Unit> =
-        runCatching {
+        mapFirebaseError {
             firebaseAuth
                 .signInWithEmailAndPassword(email, password)
                 .await()
@@ -41,7 +47,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         email: String,
         password: String
     ): Result<Unit> =
-        runCatching {
+        mapFirebaseError {
             firebaseAuth
                 .createUserWithEmailAndPassword(email, password)
                 .await()
@@ -51,7 +57,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         verificationId: String,
         smsCode: String
     ): Result<Unit> =
-        runCatching {
+        mapFirebaseError {
             val credential =
                 PhoneAuthProvider.getCredential(
                     verificationId,
@@ -71,4 +77,38 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
 
             user.delete().await()
         }
+
+    private suspend inline fun mapFirebaseError(
+        block: suspend () -> Unit
+    ): Result<Unit> {
+        return try {
+            block()
+            Result.success(Unit)
+        } catch (e: FirebaseAuthUserCollisionException) {
+            Result.failure(AuthError.EmailAlreadyExists())
+
+        } catch (e: FirebaseAuthInvalidCredentialsException) {
+            Result.failure(AuthError.InvalidEmail())
+
+        } catch (e: FirebaseAuthWeakPasswordException) {
+            Result.failure(AuthError.WeakPassword())
+
+        } catch (e: FirebaseAuthInvalidUserException) {
+            Result.failure(AuthError.UserNotFound())
+
+        } catch (e: FirebaseAuthException) {
+            if (e.errorCode == ERROR_WRONG_PASSWORD) {
+                Result.failure(AuthError.WrongPassword())
+            } else {
+                Result.failure(AuthError.Unknown())
+            }
+
+        } catch (e: Exception) {
+            Result.failure(AuthError.Network())
+        }
+    }
+
+    private companion object {
+        const val ERROR_WRONG_PASSWORD = "ERROR_WRONG_PASSWORD"
+    }
 }

@@ -8,27 +8,18 @@ sealed interface PlanAction {
     data class BlockMoved(val id: String, val newStartMinute: Int) : PlanAction
     data class BlockClick(val id: String) : PlanAction
     data class BlockSlide(val id: String) : PlanAction
-
-    data class ItemDragEnd(val item: Place, val startMinute: Int) : PlanAction
-
-    object AddDay : PlanAction
-
+    data class BottomBlockDragEnd(val item: Place, val startMinute: Int) : PlanAction
+    object AddDayClick : PlanAction
     object RemoveDayClick : PlanAction
-
-    object RemoveCancel : PlanAction
-
-    data class RemoveDay(val day: Int) : PlanAction
-
-    data class LongClick(val day: Int) : PlanAction
-
-    data class SelectDay(val day: Int) : PlanAction
-
-    data class DateSelected(val start: LocalDate, val end: LocalDate) : PlanAction
-
+    object RemoveDayCancelClick : PlanAction
+    data class RemoveDayDialogConfirmClick(val day: Int) : PlanAction
+    data class DayLongClick(val day: Int) : PlanAction
+    data class DayClick(val day: Int) : PlanAction
+    data class SelectDateDialogConfirmClick(val start: LocalDate, val end: LocalDate) : PlanAction
     data class DayScrolled(val day: Int) : PlanAction
     data object TripChoiceClick : PlanAction
-    data class TripChoiceConfirmClick(val selectedTrip: TripListUiModel) : PlanAction
+    data class TripChoiceDialogConfirmClick(val selectedTrip: TripListUiModel) : PlanAction
     data object ShowCalendarClick : PlanAction
-    data class PlanEditConfirmClick(val id: String, val startDateTime: LocalDateTime, val endDateTime: LocalDateTime) : PlanAction
+    data class PlanEditDialogConfirmClick(val id: String, val startDateTime: LocalDateTime, val endDateTime: LocalDateTime) : PlanAction
     data object PlanEditCancelClick : PlanAction
 }

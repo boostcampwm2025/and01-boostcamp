@@ -27,34 +27,33 @@ fun DateSelectedContent(
         TimeTable(
             totalMinutes = state.date.totalMinutes,
             currentDay = state.date.selectedDay,
-            places = state.places,
-            onBlockAdd = { place, start -> onAction(PlanAction.ItemDragEnd(place, start)) },
+            places = state.bottomItems,
+            onBlockAdd = { place, start -> onAction(PlanAction.BottomBlockDragEnd(place, start)) },
             onDayScrolled = { day ->
                 onAction(PlanAction.DayScrolled(day))
             }
         ) { engine, scrollState ->
-            state.blocks.forEach { block ->
-                TimeBlockItem(
-                    block = block,
-                    engine = engine,
-                    scrollState = scrollState,
-                    onSlide = { id -> onAction(PlanAction.BlockSlide(id)) },
-                    onMoved = { id, newStartMinute ->
-                        onAction(PlanAction.BlockMoved(id, newStartMinute))
-                    }
-                ) {
-                    when (val uiModel = state.blockUiModels[block.id]) {
-                        is Place -> {
-                            PlaceTimeCard(
-                                place = uiModel,
-                                onClick = { onAction(PlanAction.BlockClick(block.id)) }
-                            )
+            state.blockItems.forEach { block ->
+                    TimeBlockItem(
+                        block = block,
+                        startDate = state.date.startDay!!,
+                        engine = engine,
+                        scrollState = scrollState,
+                        onSlide = { id -> onAction(PlanAction.BlockSlide(id)) },
+                        onMoved = { id, newStartMinute ->
+                            onAction(PlanAction.BlockMoved(id, newStartMinute))
                         }
-
-                        null -> Unit
+                    ) {
+                        when (block) {
+                            is Place -> {
+                                PlaceTimeCard(
+                                    place = block,
+                                    onClick = { onAction(PlanAction.BlockClick(block.id)) }
+                                )
+                            }
+                        }
                     }
                 }
-            }
         }
     }
 }
@@ -74,9 +73,9 @@ private fun DateSection(
     DayChipRow(
         totalDays = state.date.totalDays,
         selectedDay = state.date.selectedDay,
-        onDaySelected = { onAction(PlanAction.SelectDay(day = it)) },
-        onLongClick = { onAction(PlanAction.LongClick(day = it)) },
-        onAddDayClick = { onAction(PlanAction.AddDay) },
+        onDaySelected = { onAction(PlanAction.DayClick(day = it)) },
+        onLongClick = { onAction(PlanAction.DayLongClick(day = it)) },
+        onAddDayClick = { onAction(PlanAction.AddDayClick) },
         longClickedDay = state.date.longClickedDay
     )
 }
@@ -86,10 +85,7 @@ private fun DateSection(
 private fun DateSelectedContentPreview() {
     MemoripTheme {
         DateSelectedContent(
-            state = PlanUiState(
-                places = DummyData.places.toImmutableList(),
-                blocks = emptyList()
-            ),
+            state = PlanUiState(places = DummyData.places.toImmutableList()),
             onAction = { }
         )
     }

@@ -9,5 +9,16 @@ data class SelectTripUiState(
     val trips: ImmutableList<SelectTripUiModel> = emptyList<SelectTripUiModel>().toImmutableList(),
     val selectedTripIds: ImmutableSet<String> = persistentSetOf(),
     val initialSelectedTripIds: ImmutableSet<String> = persistentSetOf(),
+    val isPlaceMine: Boolean = true,
     val isLoading: Boolean = false
-)
+) {
+    val canSave: Boolean
+        get() {
+            val hasChanges = selectedTripIds != initialSelectedTripIds
+            return if (isPlaceMine) {
+                hasChanges && selectedTripIds.isNotEmpty()
+            } else {
+                hasChanges
+            }
+        }
+}

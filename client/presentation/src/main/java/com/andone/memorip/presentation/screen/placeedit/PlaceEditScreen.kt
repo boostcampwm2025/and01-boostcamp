@@ -45,6 +45,7 @@ fun PlaceEditScreen(
     onLocationClick: () -> Unit,
     onTripClick: () -> Unit,
     onNavigateBack: () -> Unit,
+    onEditSuccess: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PlaceEditViewModel = hiltViewModel()
 ) {
@@ -54,6 +55,7 @@ fun PlaceEditScreen(
     viewModel.event.collectWithLifecycle { event ->
         when (event) {
             PlaceEditEvent.NavigateBack -> onNavigateBack()
+            PlaceEditEvent.NavigateBackAfterUpdate -> onEditSuccess()
             PlaceEditEvent.NavigateToCategory -> onCategoryClick()
             PlaceEditEvent.NavigateToLocation -> onLocationClick()
             PlaceEditEvent.NavigateToTrip -> onTripClick()
@@ -139,6 +141,7 @@ private fun PlaceEditScreenContent(
                 content = uiState.content,
                 onTitleChange = { onAction(PlaceEditAction.OnTitleChange(it)) },
                 onContentChange = { onAction(PlaceEditAction.OnContentChange(it)) },
+                contentErrorLabel = uiState.contentErrorLabel
             )
 
             SelectSection(
