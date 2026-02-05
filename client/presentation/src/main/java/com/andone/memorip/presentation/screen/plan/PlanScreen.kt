@@ -82,11 +82,11 @@ fun PlanScreen(
         AlertDialog(
             onDismissRequest = {
                 deleteTargetDay = null
-                viewModel.onAction(action = PlanAction.RemoveCancel)
+                viewModel.onAction(action = PlanAction.RemoveDayCancelClick)
             },
             confirmButton = {
                 TextButton(onClick = {
-                    viewModel.onAction(action = PlanAction.RemoveDay(day))
+                    viewModel.onAction(action = PlanAction.RemoveDayDialogConfirmClick(day))
                     deleteTargetDay = null
                 }) {
                     Text(stringResource(R.string.plan_delete))
@@ -95,7 +95,7 @@ fun PlanScreen(
             dismissButton = {
                 TextButton(onClick = {
                     deleteTargetDay = null
-                    viewModel.onAction(action = PlanAction.RemoveCancel)
+                    viewModel.onAction(action = PlanAction.RemoveDayCancelClick)
                 }) {
                     Text(stringResource(R.string.plan_cancel))
                 }
@@ -113,7 +113,7 @@ fun PlanScreen(
             onDismissRequest = { showTripChoice = false },
             onConfirmClick = { trip ->
                 viewModel.onAction(
-                    action = PlanAction.TripChoiceConfirmClick(selectedTrip = trip)
+                    action = PlanAction.TripChoiceDialogConfirmClick(selectedTrip = trip)
                 )
             },
             onCancelClick = { showTripChoice = false }
@@ -126,7 +126,7 @@ fun PlanScreen(
             initialEndDate = uiState.date.endDay,
             onConfirm = { start, end ->
                 showCalendar = false
-                viewModel.onAction(PlanAction.DateSelected(start, end))
+                viewModel.onAction(PlanAction.SelectDateDialogConfirmClick(start, end))
             },
             onDismiss = { showCalendar = false }
         )
@@ -140,7 +140,7 @@ fun PlanScreen(
                     defaultEndTime = block.endDateTime!!.withMinute(block.endDateTime.minute - (block.endDateTime.minute % MINUTE_STEP)),
                     onConfirmClick = { startTime, endTime ->
                         viewModel.onAction(
-                            PlanAction.PlanEditConfirmClick(
+                            PlanAction.PlanEditDialogConfirmClick(
                                 id = block.id,
                                 startDateTime = startTime,
                                 endDateTime = endTime
@@ -156,14 +156,14 @@ fun PlanScreen(
 
     if (uiState.isLoading) {
         LoadingIndicatorScreen()
+    } else {
+        PlanScreenContents(
+            state = uiState,
+            showTripChoice = showTripChoice,
+            onAction = viewModel::onAction,
+            modifier = modifier
+        )
     }
-
-    PlanScreenContents(
-        state = uiState,
-        showTripChoice = showTripChoice,
-        onAction = viewModel::onAction,
-        modifier = modifier
-    )
 }
 
 @Composable
@@ -183,7 +183,7 @@ fun PlanScreenContents(
                 isDeleteMode = state.date.longClickedDay != null,
                 onTitleClick = { onAction(PlanAction.TripChoiceClick) },
                 onDeleteClick = { onAction(PlanAction.RemoveDayClick) },
-                onDismissClick = { onAction(PlanAction.RemoveCancel) }
+                onDismissClick = { onAction(PlanAction.RemoveDayCancelClick) }
             )
         },
         contentWindowInsets = WindowInsets()
@@ -217,7 +217,6 @@ private fun PlanScreenContentsPreview() {
                 selectedTrip = DummyData.tripListItems.first(),
                 trips = DummyData.tripListItems.toImmutableList(),
                 places = DummyData.places.toImmutableList(),
-                blocks = DummyData.timeBlocks
             ),
             showTripChoice = false,
             onAction = {},

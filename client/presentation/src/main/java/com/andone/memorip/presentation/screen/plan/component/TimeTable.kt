@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.andone.memorip.presentation.model.Place
+import com.andone.memorip.presentation.model.PlanBlockUiModel
 import com.andone.memorip.presentation.screen.plan.component.TimeBlockItemConstants.SNAP_MINUTE_UNIT
 import com.andone.memorip.presentation.screen.plan.component.TimeTableConstant.DEFAULT_ALPHA
 import com.andone.memorip.presentation.screen.plan.component.TimeTableConstant.DEFAULT_ZINDEX
@@ -81,7 +82,7 @@ private object TimeTableConstant {
 fun TimeTable(
     totalMinutes: Int,
     currentDay: Int?,
-    places: ImmutableList<Place>,
+    places: ImmutableList<PlanBlockUiModel>,
     onBlockAdd: (Place, Int) -> Unit,
     onDayScrolled: (Int) -> Unit = {},
     content: @Composable (TimeLayoutEngine, ScrollState) -> Unit
@@ -191,65 +192,71 @@ fun TimeTable(
                     var itemBottom by remember { mutableStateOf(value = 0f) }
                     var relativePos by remember { mutableStateOf(value = Offset.Zero) }
                     var isDraggable by remember { mutableStateOf(false) }
-                    PlacePickerItem(
-                        place = place,
-                        modifier = Modifier
-                            .onGloballyPositioned { layout ->
-                                val pos = layout.positionInRoot()
-                                itemTop = pos.y
-                                itemBottom = pos.y + layout.size.height
-                                relativePos = rootCoordinates?.localPositionOf(layout, Offset.Zero)
-                                    ?: Offset.Zero
-                            }
-                            .background(
-                                color = MemoripTheme.colors.primaryContainer,
-                                shape = backgroundShape
-                            )
-                            .pointerInput(key1 = place.id) {
-                                currentDay?.let {
-                                    detectDragGesturesAfterLongPress(
-                                        onDragStart = {
-                                            selectedPlace = DraggablePlace(
-                                                place = place,
-                                                originPos = relativePos,
-                                                offset = Offset.Zero
-                                            )
-                                            isDraggable = true
-                                        },
-                                        onDragEnd = {
-                                            selectedPlace?.let { selectedPlace ->
-                                                val isRowInside =
-                                                    (itemBottom + selectedPlace.offset.y) >= rowTop
-                                                if (!isRowInside) {
-                                                    val absoluteYPx =
-                                                        ((itemTop + itemBottom) / 2) + selectedPlace.offset.y + scrollState.value - timeTableTop
-                                                    val newStartMinute =
-                                                        engine.yPxToStartMinute(absoluteYPx)
-                                                    val snappedMinute =
-                                                        ((newStartMinute + SNAP_MINUTE_UNIT / 2) / SNAP_MINUTE_UNIT) * SNAP_MINUTE_UNIT
-                                                    onBlockAdd(place, snappedMinute)
-                                                }
-                                            }
-                                            selectedPlace = null
-                                            isDraggable = false
-                                        },
-                                        onDragCancel = {
-                                            selectedPlace = null
-                                            isDraggable = false
-                                        },
-                                        onDrag = { change, amount ->
-                                            change.consume()
-                                            selectedPlace?.let { place ->
-                                                selectedPlace =
-                                                    place.copy(offset = place.offset + amount)
-                                            }
-                                        }
+
+                    when (place) {
+                        is Place -> {
+                            PlacePickerItem(
+                                place = place,
+                                modifier = Modifier
+                                    .onGloballyPositioned { layout ->
+                                        val pos = layout.positionInRoot()
+                                        itemTop = pos.y
+                                        itemBottom = pos.y + layout.size.height
+                                        relativePos =
+                                            rootCoordinates?.localPositionOf(layout, Offset.Zero)
+                                                ?: Offset.Zero
+                                    }
+                                    .background(
+                                        color = MemoripTheme.colors.primaryContainer,
+                                        shape = backgroundShape
                                     )
-                                }
-                            }
-                            .zIndex(zIndex = if (isDraggable) PICKED_ZINDEX else DEFAULT_ZINDEX)
-                            .alpha(alpha = if (isDraggable) PICKED_ALPHA else DEFAULT_ALPHA)
-                    )
+                                    .pointerInput(key1 = place.id) {
+                                        currentDay?.let {
+                                            detectDragGesturesAfterLongPress(
+                                                onDragStart = {
+                                                    selectedPlace = DraggablePlace(
+                                                        place = place,
+                                                        originPos = relativePos,
+                                                        offset = Offset.Zero
+                                                    )
+                                                    isDraggable = true
+                                                },
+                                                onDragEnd = {
+                                                    selectedPlace?.let { selectedPlace ->
+                                                        val isRowInside =
+                                                            (itemBottom + selectedPlace.offset.y) >= rowTop
+                                                        if (!isRowInside) {
+                                                            val absoluteYPx =
+                                                                ((itemTop + itemBottom) / 2) + selectedPlace.offset.y + scrollState.value - timeTableTop
+                                                            val newStartMinute =
+                                                                engine.yPxToStartMinute(absoluteYPx)
+                                                            val snappedMinute =
+                                                                ((newStartMinute + SNAP_MINUTE_UNIT / 2) / SNAP_MINUTE_UNIT) * SNAP_MINUTE_UNIT
+                                                            onBlockAdd(place, snappedMinute)
+                                                        }
+                                                    }
+                                                    selectedPlace = null
+                                                    isDraggable = false
+                                                },
+                                                onDragCancel = {
+                                                    selectedPlace = null
+                                                    isDraggable = false
+                                                },
+                                                onDrag = { change, amount ->
+                                                    change.consume()
+                                                    selectedPlace?.let { place ->
+                                                        selectedPlace =
+                                                            place.copy(offset = place.offset + amount)
+                                                    }
+                                                }
+                                            )
+                                        }
+                                    }
+                                    .zIndex(zIndex = if (isDraggable) PICKED_ZINDEX else DEFAULT_ZINDEX)
+                                    .alpha(alpha = if (isDraggable) PICKED_ALPHA else DEFAULT_ALPHA)
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -293,6 +300,7 @@ private fun HorizontalTimeGridLines(
     majorIntervalMinutes: Int = MINUTES_PER_HOUR,
     minuteHeightPx: Float,
 ) {
+    val density = LocalDensity.current
     val lineColor = MemoripTheme.colors.lightGray
     val strokeDp = MemoripLineWidth.TimeTick
     Canvas(modifier = Modifier.fillMaxSize()) {
@@ -303,7 +311,7 @@ private fun HorizontalTimeGridLines(
                 color = lineColor,
                 start = Offset(0f, y),
                 end = Offset(size.width, y),
-                strokeWidth = strokeDp.toPx()
+                strokeWidth = strokeDp.toPx(density)
             )
             minute += majorIntervalMinutes
         }
