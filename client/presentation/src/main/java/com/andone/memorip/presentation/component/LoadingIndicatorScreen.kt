@@ -12,7 +12,8 @@ import androidx.compose.ui.tooling.preview.Preview
 @Composable
 fun LoadingIndicatorScreen(modifier: Modifier = Modifier) {
     Box(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier
+            .fillMaxSize()
             .clickable(enabled = true, onClick = {}),
         contentAlignment = Alignment.Center
     ) {
