@@ -69,6 +69,7 @@ fun TripMap(
     val scope = rememberCoroutineScope()
     val cameraPositionState: CameraPositionState = rememberCameraPositionState()
     var savedPlaceListSheetValue by remember { mutableStateOf<SheetValue?>(null) }
+    var isCameraInitialized by remember { mutableStateOf(false) }
 
     val isBottomSheetExpanded by remember {
         derivedStateOf {
@@ -88,10 +89,7 @@ fun TripMap(
         scaffoldState.bottomSheetState.partialExpand()
     }
 
-    LaunchedEffect(places, cameraPositionState, mapSelectedPlace) {
-        var isCameraInitialized = false
-        var lastSelectedPlaceId: String? = null
-
+    LaunchedEffect(places, cameraPositionState) {
         combine(
             snapshotFlow { places },
             snapshotFlow {
@@ -106,13 +104,11 @@ fun TripMap(
                 } else {
                     null
                 }
-            }.distinctUntilChanged(),
-            snapshotFlow { mapSelectedPlace }
-        ) { currentPlaces, cameraData, selectedPlace ->
-            Triple(currentPlaces, cameraData, selectedPlace)
+            }.distinctUntilChanged()
+        ) { currentPlaces, cameraData ->
+            Pair(currentPlaces, cameraData)
         }
-            .collect { (currentPlaces, cameraData, selectedPlace) ->
-                // 지도 초기화: 모든 장소를 포함하도록 카메라 설정
+            .collect { (currentPlaces, cameraData) ->
                 if (currentPlaces.isNotEmpty() && !isCameraInitialized) {
                     val bounds = LatLngBounds.Builder().apply {
                         currentPlaces.forEach { place ->
@@ -148,7 +144,13 @@ fun TripMap(
                     val (projection, zoom) = cameraData
                     onAction(TripDetailAction.OnMapCameraChange(projection, zoom))
                 }
+            }
+    }
 
+    LaunchedEffect(mapSelectedPlace) {
+        var lastSelectedPlaceId: String? = null
+        snapshotFlow { mapSelectedPlace }
+            .collect { selectedPlace ->
                 if (selectedPlace != null && selectedPlace.placeId != lastSelectedPlaceId) {
                     lastSelectedPlaceId = selectedPlace.placeId
                     scope.launch {
