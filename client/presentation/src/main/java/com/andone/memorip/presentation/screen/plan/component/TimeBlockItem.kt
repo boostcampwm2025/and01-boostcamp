@@ -67,7 +67,7 @@ fun TimeBlockItem(
     onMoved: (String, Int) -> Unit,
     onSlide: (String) -> Unit,
     modifier: Modifier = Modifier,
-    content: @Composable BoxScope.() -> Unit
+    content: @Composable BoxScope.(Boolean) -> Unit
 ) {
     when (block) {
         is Place -> {
@@ -182,7 +182,7 @@ fun TimeBlockItem(
                         },
                     contentAlignment = Alignment.CenterStart
                 ) {
-                    content()
+                    content(isDragging)
                 }
             }
         }

@@ -34,26 +34,27 @@ fun DateSelectedContent(
             }
         ) { engine, scrollState ->
             state.blockItems.forEach { block ->
-                    TimeBlockItem(
-                        block = block,
-                        startDate = state.date.startDay!!,
-                        engine = engine,
-                        scrollState = scrollState,
-                        onSlide = { id -> onAction(PlanAction.BlockSlide(id)) },
-                        onMoved = { id, newStartMinute ->
-                            onAction(PlanAction.BlockMoved(id, newStartMinute))
-                        }
-                    ) {
-                        when (block) {
-                            is Place -> {
-                                PlaceTimeCard(
-                                    place = block,
-                                    onClick = { onAction(PlanAction.BlockClick(block.id)) }
-                                )
-                            }
+                TimeBlockItem(
+                    block = block,
+                    startDate = state.date.startDay!!,
+                    engine = engine,
+                    scrollState = scrollState,
+                    onSlide = { id -> onAction(PlanAction.BlockSlide(id)) },
+                    onMoved = { id, newStartMinute ->
+                        onAction(PlanAction.BlockMoved(id, newStartMinute))
+                    }
+                ) { isDraggable ->
+                    when (block) {
+                        is Place -> {
+                            PlaceTimeCard(
+                                place = block,
+                                isDraggable = isDraggable,
+                                onClick = { onAction(PlanAction.BlockClick(block.id)) }
+                            )
                         }
                     }
                 }
+            }
         }
     }
 }
