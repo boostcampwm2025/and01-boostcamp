@@ -11,7 +11,7 @@ data class PlanUiState(
     val places: ImmutableList<PlanBlockUiModel> = persistentListOf(),
     val date: DateUiModel = DateUiModel(),
     val updatedBlock: PlanBlockUiModel? = null,
-    val isLoading: Boolean = false
+    val isLoading: Boolean = true
 ) {
     val bottomItems: ImmutableList<PlanBlockUiModel>
         get() = places.filter { it.startDateTime == null && it.endDateTime == null }

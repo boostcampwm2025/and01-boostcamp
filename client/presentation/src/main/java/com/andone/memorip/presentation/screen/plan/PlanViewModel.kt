@@ -85,7 +85,8 @@ class PlanViewModel @Inject constructor(
             selectedTrip = tripUiState.selectedTrip,
             places = placeState.toImmutableList(),
             date = dateUiState,
-            updatedBlock = selectedBlock
+            updatedBlock = selectedBlock,
+            isLoading = false
         )
     }.onStart {
         tripRepository.getSimpleTrips()

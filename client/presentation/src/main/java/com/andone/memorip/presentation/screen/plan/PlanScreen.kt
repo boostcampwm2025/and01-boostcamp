@@ -156,14 +156,14 @@ fun PlanScreen(
 
     if (uiState.isLoading) {
         LoadingIndicatorScreen()
+    } else {
+        PlanScreenContents(
+            state = uiState,
+            showTripChoice = showTripChoice,
+            onAction = viewModel::onAction,
+            modifier = modifier
+        )
     }
-
-    PlanScreenContents(
-        state = uiState,
-        showTripChoice = showTripChoice,
-        onAction = viewModel::onAction,
-        modifier = modifier
-    )
 }
 
 @Composable
