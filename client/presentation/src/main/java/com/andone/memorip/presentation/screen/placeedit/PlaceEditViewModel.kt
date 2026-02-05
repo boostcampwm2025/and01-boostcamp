@@ -144,35 +144,38 @@ class PlaceEditViewModel @AssistedInject constructor(
             || uiStateValue.trips.isEmpty()
         ) return
 
+        if (!updatePlaceMutex.tryLock()) return
+
         viewModelScope.launch {
-            if (!updatePlaceMutex.tryLock()) return@launch
+            try {
+                _uiState.update { it.copy(isLoading = true) }
 
-            _uiState.update { it.copy(isLoading = true) }
-
-            placeRepository.updatePlace(
-                placeId = uiStateValue.id,
-                place = PlaceCreateUpdate(
-                    tripIds = uiStateValue.trips.map { it.id },
-                    title = uiStateValue.title,
-                    content = uiStateValue.content,
-                    tags = uiStateValue.tags.map { it.id },
-                    latitude = uiStateValue.location.latitude,
-                    longitude = uiStateValue.location.longitude,
-                    address = Address.from(uiStateValue.location.address),
-                    imageUrls = uiStateValue.images.map { it.toString() },
-                    thumbnailImageRatio = getAspectRatioFromUrl(
-                        context = context,
-                        imageUrl = uiStateValue.images.first().toString()
-                    ),
-                    isPublic = uiStateValue.isPublic
-                )
-            ).onSuccess {
-                _event.trySend(PlaceEditEvent.UpdatePlace)
-            }.onFailure {
-                snackBarManager.show(SnackBarEvent.NETWORK_ERROR)
+                placeRepository.updatePlace(
+                    placeId = uiStateValue.id,
+                    place = PlaceCreateUpdate(
+                        tripIds = uiStateValue.trips.map { it.id },
+                        title = uiStateValue.title,
+                        content = uiStateValue.content,
+                        tags = uiStateValue.tags.map { it.id },
+                        latitude = uiStateValue.location.latitude,
+                        longitude = uiStateValue.location.longitude,
+                        address = Address.from(uiStateValue.location.address),
+                        imageUrls = uiStateValue.images.map { it.toString() },
+                        thumbnailImageRatio = getAspectRatioFromUrl(
+                            context = context,
+                            imageUrl = uiStateValue.images.first().toString()
+                        ),
+                        isPublic = uiStateValue.isPublic
+                    )
+                ).onSuccess {
+                    _event.trySend(PlaceEditEvent.UpdatePlace)
+                }.onFailure {
+                    snackBarManager.show(SnackBarEvent.NETWORK_ERROR)
+                }
+            } finally {
+                _uiState.update { it.copy(isLoading = false) }
+                updatePlaceMutex.unlock()
             }
-
-            _uiState.update { it.copy(isLoading = false) }
         }
     }
 

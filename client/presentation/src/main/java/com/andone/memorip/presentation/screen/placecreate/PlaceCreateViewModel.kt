@@ -147,52 +147,55 @@ class PlaceCreateViewModel @Inject constructor(
             || uiStateValue.trips.isEmpty()
         ) return
 
+        if (!createPlaceMutex.tryLock()) return
+
         viewModelScope.launch {
-            if (!createPlaceMutex.tryLock()) return@launch
+            try {
+                _uiState.update { it.copy(isLoading = true) }
 
-            _uiState.update { it.copy(isLoading = true) }
+                val sentences =
+                    splitSentences(uiStateValue.title) +
+                            splitSentences(uiStateValue.content)
 
-            val sentences =
-                splitSentences(_uiState.value.title) +
-                        splitSentences(_uiState.value.content)
+                for (sentence in sentences) {
+                    val result = toxicityAnalyzer.predict(sentence)
+                    val label = result.firstOrNull()?.first
 
-            for (sentence in sentences) {
-                val result = toxicityAnalyzer.predict(sentence)
-                val label = result.firstOrNull()?.first
-
-                if (label != null) {
-                    _uiState.update {
-                        it.copy(
-                            contentErrorLabel = label,
-                            isLoading = false
-                        )
+                    if (label != null) {
+                        _uiState.update {
+                            it.copy(
+                                contentErrorLabel = label,
+                                isLoading = false
+                            )
+                        }
+                        return@launch
                     }
-                    return@launch
                 }
+
+                val imageUrls = uploadImages(context, uiStateValue.images)
+
+                placeRepository.createPlace(
+                    PlaceCreateUpdate(
+                        tripIds = uiStateValue.trips.map { it.id },
+                        title = uiStateValue.title,
+                        content = uiStateValue.content,
+                        tags = uiStateValue.tags.map { it.id },
+                        latitude = uiStateValue.location.latitude,
+                        longitude = uiStateValue.location.longitude,
+                        address = Address.from(uiStateValue.location.address),
+                        imageUrls = imageUrls,
+                        thumbnailImageRatio = uiStateValue.thumbnailImageRatio,
+                        isPublic = uiStateValue.isPublic
+                    )
+                ).onSuccess {
+                    onAction(PlaceCreateAction.OnCreateSuccess)
+                }.onFailure {
+                    snackBarManager.show(SnackBarEvent.DATA_SAVE_FAILED)
+                }
+            } finally {
+                _uiState.update { it.copy(isLoading = false) }
+                createPlaceMutex.unlock()
             }
-
-            val imageUrls = uploadImages(context, uiStateValue.images)
-
-            placeRepository.createPlace(
-                PlaceCreateUpdate(
-                    tripIds = uiStateValue.trips.map { it.id },
-                    title = uiStateValue.title,
-                    content = uiStateValue.content,
-                    tags = uiStateValue.tags.map { it.id },
-                    latitude = uiStateValue.location.latitude,
-                    longitude = uiStateValue.location.longitude,
-                    address = Address.from(uiStateValue.location.address),
-                    imageUrls = imageUrls,
-                    thumbnailImageRatio = uiStateValue.thumbnailImageRatio,
-                    isPublic = uiStateValue.isPublic
-                )
-            ).onSuccess { data ->
-                onAction(PlaceCreateAction.OnCreateSuccess)
-            }.onFailure { exception ->
-                snackBarManager.show(SnackBarEvent.DATA_SAVE_FAILED)
-            }
-
-            _uiState.update { it.copy(isLoading = false) }
         }
     }
 
