@@ -3,15 +3,15 @@ package com.andone.memorip.presentation.component.map
 import android.graphics.Bitmap
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.platform.LocalContext
 import coil3.imageLoader
 import coil3.request.ImageRequest
 import coil3.request.SuccessResult
 import coil3.request.allowHardware
+import coil3.size.Precision
 import coil3.size.Scale
 import coil3.toBitmap
 import kotlinx.coroutines.Dispatchers
@@ -29,9 +29,9 @@ fun rememberBitmapMarkerLoader(
     imageUrls: List<String>,
     width: Int = MarkerImageConstant.WIDTH,
     height: Int = MarkerImageConstant.HEIGHT
-): Map<String, Bitmap> {
+): SnapshotStateMap<String, Bitmap> {
     val context = LocalContext.current
-    var markerImages by remember { mutableStateOf<Map<String, Bitmap>>(emptyMap()) }
+    val markerImages = remember { mutableStateMapOf<String, Bitmap>() }
 
     LaunchedEffect(imageUrls) {
         imageUrls.forEach { imageUrl ->
@@ -43,6 +43,7 @@ fun rememberBitmapMarkerLoader(
                     val request = ImageRequest.Builder(context)
                         .data(imageUrl)
                         .size(width, height)
+                        .precision(Precision.INEXACT)
                         .scale(Scale.FILL)
                         .allowHardware(false)
                         .build()
@@ -59,7 +60,7 @@ fun rememberBitmapMarkerLoader(
                     }
                 }.onSuccess { bitmap ->
                     withContext(Dispatchers.Main) {
-                        markerImages = markerImages + (imageUrl to bitmap)
+                        markerImages[imageUrl] = bitmap
                     }
                 }
             }
