@@ -8,7 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
-import coil3.ImageLoader
+import coil3.imageLoader
 import coil3.request.ImageRequest
 import coil3.request.SuccessResult
 import coil3.request.allowHardware
@@ -39,7 +39,7 @@ fun rememberBitmapMarkerLoader(
 
             launch(Dispatchers.IO) {
                 runCatching {
-                    val imageLoader = ImageLoader(context)
+                    val imageLoader = context.imageLoader
                     val request = ImageRequest.Builder(context)
                         .data(imageUrl)
                         .size(width, height)

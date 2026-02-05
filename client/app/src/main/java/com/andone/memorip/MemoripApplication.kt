@@ -4,17 +4,16 @@ import android.app.Application
 import android.util.Log
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
-import com.andone.memorip.domain.auth.TokenRefresher
-import com.andone.memorip.domain.repository.AuthRepository
+import coil3.ImageLoader
+import coil3.PlatformContext
+import coil3.SingletonImageLoader
+import coil3.network.okhttp.OkHttpNetworkFetcherFactory
+import coil3.request.crossfade
 import dagger.hilt.android.HiltAndroidApp
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltAndroidApp
-class MemoripApplication : Application(), Configuration.Provider {
+class MemoripApplication : Application(), Configuration.Provider, SingletonImageLoader.Factory {
     @Inject
     lateinit var workerFactory: HiltWorkerFactory
 
@@ -23,4 +22,16 @@ class MemoripApplication : Application(), Configuration.Provider {
             .setWorkerFactory(workerFactory)
             .setMinimumLoggingLevel(loggingLevel = Log.DEBUG)
             .build()
+
+    override fun newImageLoader(context: PlatformContext): ImageLoader {
+        return ImageLoader.Builder(context)
+            .components {
+                add(OkHttpNetworkFetcherFactory())
+            }
+            .crossfade(true)
+//            .apply {
+//                eventListenerFactory(ImageLoadingMetrics.Factory())
+//            }
+            .build()
+    }
 }
