@@ -42,6 +42,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.andone.memorip.presentation.BuildConfig
 import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.component.LoadingIndicatorScreen
 import com.andone.memorip.presentation.screen.user.UserScreenDimen.ACCOUNT_SECTION_HEIGHT
 import com.andone.memorip.presentation.screen.user.component.AccountDialog
 import com.andone.memorip.presentation.screen.user.component.AccountSection
@@ -129,11 +130,16 @@ fun UserScreen(
         }
     }
 
-    UserScreenContent(
-        state = uiState,
-        onAction = viewModel::onAction,
-        modifier = modifier,
-    )
+    Box(modifier = modifier.fillMaxSize()) {
+        UserScreenContent(
+            state = uiState,
+            onAction = viewModel::onAction,
+        )
+
+        if (uiState.isLoading) {
+            LoadingIndicatorScreen()
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
