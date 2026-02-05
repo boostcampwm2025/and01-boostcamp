@@ -1,6 +1,11 @@
 package com.andone.memorip.presentation.screen.placedetail.component
 
+import android.R.attr.navigationIcon
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -11,17 +16,21 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.andone.memorip.presentation.R
+import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlaceDetailTopBar(
+    currentPage: Int,
+    totalPage: Int,
     isMine: Boolean,
     isInMyTrip: Boolean,
     showMoreMenu: Boolean,
@@ -33,8 +42,25 @@ fun PlaceDetailTopBar(
     onDeleteClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    TopAppBar(
-        title = {},
+    CenterAlignedTopAppBar(
+        title = {
+            Row (
+                modifier = Modifier
+                    .background(
+                        color = MemoripTheme.colors.primaryContainer,
+                        shape = MemoripTheme.shapes.roundedMedium
+                    )
+                    .padding(all = MemoripPadding.PaddingXSmall),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "${currentPage+1}/$totalPage",
+                    color = MemoripTheme.colors.onSurface,
+                    style = MemoripTheme.typography.titleBold14
+                )
+            }
+        },
         modifier = modifier,
         navigationIcon = {
             IconButton(
@@ -152,6 +178,8 @@ private fun PlaceDetailActions(
 private fun PlaceDetailTopBarPreview() {
     MemoripTheme {
         PlaceDetailTopBar(
+            currentPage = 1,
+            totalPage = 3,
             isMine = false,
             isInMyTrip = false,
             showMoreMenu = false,
@@ -170,6 +198,8 @@ private fun PlaceDetailTopBarPreview() {
 private fun PlaceDetailTopBarisMinePreview() {
     MemoripTheme {
         PlaceDetailTopBar(
+            currentPage = 1,
+            totalPage = 3,
             isMine = true,
             isInMyTrip = false,
             showMoreMenu = true,
