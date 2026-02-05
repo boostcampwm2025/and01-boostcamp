@@ -95,7 +95,6 @@ dependencies {
 
     // Coil
     implementation(libs.coil.compose)
-    implementation(libs.coil.network.okhttp)
 
     // Naver Map
     implementation(libs.naver.map.sdk)

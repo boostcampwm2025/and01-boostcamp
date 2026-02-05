@@ -86,4 +86,8 @@ dependencies {
 
     // Java 8+ API desugaring (java.time 라이브러리 지원)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
+
+    // Coil3
+    implementation(libs.coil)
+    implementation(libs.coil.network.okhttp)
 }
