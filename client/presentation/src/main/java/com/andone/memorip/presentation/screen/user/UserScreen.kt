@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -58,6 +59,7 @@ import com.andone.memorip.presentation.screen.user.model.UserEvent
 import com.andone.memorip.presentation.screen.user.model.LoginMethod
 import com.andone.memorip.presentation.screen.user.model.UserUiModel
 import com.andone.memorip.presentation.screen.user.model.UserUiState
+import com.andone.memorip.presentation.theme.MemoripAlpha
 import com.andone.memorip.presentation.theme.MemoripPadding
 import com.andone.memorip.presentation.theme.MemoripSpace
 import com.andone.memorip.presentation.theme.MemoripTheme
@@ -137,7 +139,7 @@ fun UserScreen(
         )
 
         if (uiState.isLoading) {
-            LoadingIndicatorScreen()
+            LoadingIndicatorScreen(modifier = Modifier.background(color = MemoripTheme.colors.black.copy(alpha = MemoripAlpha.DIM)))
         }
     }
 }
