@@ -14,7 +14,7 @@ interface PlaceDao {
     @Query("SELECT COUNT(*) FROM places")
     suspend fun getCount(): Int
 
-    @Query("SELECT * FROM places")
+    @Query("SELECT * FROM places ORDER BY id DESC")
     fun getPlacesPaging(): PagingSource<Int, PlaceEntity>
 
     @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)

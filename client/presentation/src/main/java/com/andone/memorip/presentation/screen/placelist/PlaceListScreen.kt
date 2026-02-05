@@ -23,6 +23,7 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -263,13 +264,21 @@ fun PlaceListGrid(
     clearFocusOnScroll: NestedScrollConnection? = null,
     focusManager: FocusManager? = null
 ) {
-    val isRefreshing =
-        placePagingItems.loadState.refresh is LoadState.Loading && placePagingItems.itemCount > 0
     val pullToRefreshState = rememberPullToRefreshState()
+    var isRefreshing by remember { mutableStateOf(false) }
+
+    LaunchedEffect(placePagingItems.loadState.refresh) {
+        if (placePagingItems.loadState.refresh is LoadState.NotLoading) {
+            isRefreshing = false
+        }
+    }
 
     PullToRefreshBox(
         isRefreshing = isRefreshing,
-        onRefresh = onRefresh,
+        onRefresh = {
+            isRefreshing
+            onRefresh()
+        },
         state = pullToRefreshState,
         modifier = modifier,
         indicator = {

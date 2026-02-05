@@ -32,6 +32,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
 
 @HiltViewModel(assistedFactory = PlaceEditViewModel.Factory::class)
 class PlaceEditViewModel @AssistedInject constructor(
@@ -46,6 +47,8 @@ class PlaceEditViewModel @AssistedInject constructor(
 
     private val _event = Channel<PlaceEditEvent>(capacity = BUFFERED)
     val event = _event.receiveAsFlow()
+
+    private val updatePlaceMutex = Mutex()
 
     val isUpdateEnabled = _uiState.map {
         val isValueRequired = it.images.isNotEmpty() &&
@@ -144,51 +147,57 @@ class PlaceEditViewModel @AssistedInject constructor(
             || uiStateValue.trips.isEmpty()
         ) return
 
+        if (!updatePlaceMutex.tryLock()) return
+
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true) }
+            try {
+                _uiState.update { it.copy(isLoading = true) }
 
-            val sentences =
-                splitSentences(_uiState.value.title) +
-                        splitSentences(_uiState.value.content)
+                val sentences =
+                    splitSentences(_uiState.value.title) +
+                            splitSentences(_uiState.value.content)
 
-            for (sentence in sentences) {
-                val result = toxicityAnalyzer.predict(sentence)
-                val label = result.firstOrNull()?.first
+                for (sentence in sentences) {
+                    val result = toxicityAnalyzer.predict(sentence)
+                    val label = result.firstOrNull()?.first
 
-                if (label != null) {
-                    _uiState.update {
-                        it.copy(
-                            contentErrorLabel = label,
-                            isLoading = false
-                        )
+                    if (label != null) {
+                        _uiState.update {
+                            it.copy(
+                                contentErrorLabel = label,
+                                isLoading = false
+                            )
+                        }
+                        return@launch
                     }
-                    return@launch
                 }
-            }
 
-            placeRepository.updatePlace(
-                placeId = uiStateValue.id,
-                place = PlaceCreateUpdate(
-                    tripIds = uiStateValue.trips.map { it.id },
-                    title = uiStateValue.title,
-                    content = uiStateValue.content,
-                    tags = uiStateValue.tags.map { it.id },
-                    latitude = uiStateValue.location.latitude,
-                    longitude = uiStateValue.location.longitude,
-                    address = Address.from(uiStateValue.location.address),
-                    imageUrls = uiStateValue.images.map { it.toString() },
-                    thumbnailImageRatio = getAspectRatioFromUrl(
-                        context = context,
-                        imageUrl = uiStateValue.images.first().toString()
-                    ),
-                    isPublic = uiStateValue.isPublic
-                )
-            ).onSuccess {
-                _event.trySend(PlaceEditEvent.NavigateBack)
-            }.onFailure {
-                snackBarManager.show(SnackBarEvent.NETWORK_ERROR)
+                placeRepository.updatePlace(
+                    placeId = uiStateValue.id,
+                    place = PlaceCreateUpdate(
+                        tripIds = uiStateValue.trips.map { it.id },
+                        title = uiStateValue.title,
+                        content = uiStateValue.content,
+                        tags = uiStateValue.tags.map { it.id },
+                        latitude = uiStateValue.location.latitude,
+                        longitude = uiStateValue.location.longitude,
+                        address = Address.from(uiStateValue.location.address),
+                        imageUrls = uiStateValue.images.map { it.toString() },
+                        thumbnailImageRatio = getAspectRatioFromUrl(
+                            context = context,
+                            imageUrl = uiStateValue.images.first().toString()
+                        ),
+                        isPublic = uiStateValue.isPublic
+                    )
+                ).onSuccess {
+                    _event.trySend(PlaceEditEvent.UpdatePlace)
+                }.onFailure {
+                    snackBarManager.show(SnackBarEvent.NETWORK_ERROR)
+                }
+            } finally {
+                _uiState.update { it.copy(isLoading = false) }
+                updatePlaceMutex.unlock()
             }
-            _uiState.update { it.copy(isLoading = false) }
         }
     }
 
