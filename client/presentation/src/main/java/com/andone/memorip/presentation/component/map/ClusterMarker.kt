@@ -1,5 +1,6 @@
 package com.andone.memorip.presentation.component.map
 
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -47,7 +48,7 @@ fun ClusterMarker(
         modifier = modifier
             .size(size = InnerSize + BorderWidth * 2)
             .clip(shape = RoundedCornerShape(size = CornerRadius))
-            .background(MemoripTheme.colors.background)
+            .background(MemoripTheme.colors.white)
     ) {
         Box(
             modifier = Modifier
@@ -77,7 +78,7 @@ fun ClusterMarker(
                     } else {
                         count.toString()
                     },
-                    color = MemoripTheme.colors.background,
+                    color = MemoripTheme.colors.white,
                     style = MemoripTheme.typography.labelMedium14
                 )
             }
@@ -86,6 +87,7 @@ fun ClusterMarker(
 }
 
 @Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun ClusterMarkerPreview() {
     MemoripTheme {
