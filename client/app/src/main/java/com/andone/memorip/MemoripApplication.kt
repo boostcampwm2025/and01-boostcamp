@@ -29,9 +29,6 @@ class MemoripApplication : Application(), Configuration.Provider, SingletonImage
                 add(OkHttpNetworkFetcherFactory())
             }
             .crossfade(true)
-//            .apply {
-//                eventListenerFactory(ImageLoadingMetrics.Factory())
-//            }
             .build()
     }
 }
