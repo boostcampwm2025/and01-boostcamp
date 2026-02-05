@@ -203,6 +203,12 @@
     <string name="snackbar_image_count_error">이미지는 최소 1개 이상 있어야 합니다.</string>
     <string name="snackbar_plan_date_invalid_error">시작 날짜와 종료 날짜는 동일할 수 없습니다</string>
     <string name="snackbar_success">성공적으로 완료되었습니다</string>
+    <string name="snackbar_email_already_exists">이미 가입된 이메일입니다</string>
+    <string name="snackbar_invalid_email">이메일 형식이 올바르지 않습니다</string>
+    <string name="snackbar_weak_password">비밀번호가 너무 약합니다</string>
+    <string name="snackbar_user_not_found">존재하지 않는 계정입니다</string>
+    <string name="snackbar_wrong_password">비밀번호가 일치하지 않습니다</string>
+    <string name="snackbar_auth_network_error">네트워크 오류가 발생했습니다</string>
 
     <!-- UserScreen -->
     <string name="login_user_profile_image">유저 프로필 이미지</string>
@@ -247,6 +253,7 @@
     <string name="login_delete_account_description">계정을 삭제하면 모든 데이터가 영구적으로 삭제됩니다.\n되돌릴 수 없습니다.</string>
     <string name="login_delete_account_confirm">삭제</string>
     <string name="login_cancel">취소</string>
+    <string name="login_screen_title">My</string>
 
     <!-- PlanScreen -->
     <string name="plan_time_axis_hour">%1$02d:00</string>

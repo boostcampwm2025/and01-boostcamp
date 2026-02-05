@@ -8,5 +8,6 @@ data class PlaceListItem(
     val address: String,
     val imageUrl: String,
     val thumbnailImageRatio: Float,
+    val scrapCount: Int = 0,
     val isPublic: Boolean
 )

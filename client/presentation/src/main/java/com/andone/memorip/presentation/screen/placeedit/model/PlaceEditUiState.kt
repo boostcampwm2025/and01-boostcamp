@@ -19,7 +19,8 @@ data class PlaceEditUiState(
     val tags: List<TagUiModel> = emptyList(),
     val scrollPosition: Int = 0,
     val isPublic: Boolean = false,
-    val isLoading: Boolean = true
+    val isLoading: Boolean = true,
+    val contentErrorLabel: String? = null
 )
 
 fun PlaceUiModel.toUiState(): PlaceEditUiState {

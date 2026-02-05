@@ -63,7 +63,10 @@ class ToxicityClassifierTest {
             "임현정",
             "세종대왕",
             "이순신",
-            "홍원택"
+            "홍원택",
+            "일본",
+            "온천",
+            "일본 온천",
         )
 
         cleanSamples.forEach {

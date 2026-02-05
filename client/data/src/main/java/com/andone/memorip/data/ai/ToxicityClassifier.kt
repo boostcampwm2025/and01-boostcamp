@@ -34,19 +34,22 @@ class ToxicityClassifier @Inject constructor(
             probes[i] = 1f / (1f + exp(-logits[i]))
         }
 
-        val cleanIdx = labels.indexOf("clean")
-        val cleanProb = probes[cleanIdx]
+        val cleanProb = probes[9]
 
         if (cleanProb > 0.45f) return emptyList()
 
         val result = mutableListOf<Pair<String, Float>>()
 
-        for (i in probes.indices) {
+        for (i in 0 until probes.size - 1) {
             val label = labels[i]
-            if (label == "clean") continue
+            val p = probes[i]
 
-            if (probes[i] > 0.8f) {
-                result.add(label to probes[i])
+            if ((label == labels[8] || label == labels[7]) && p > 0.8f) {
+                return listOf(label to p)
+            }
+
+            if (p > 0.95f) {
+                if (probes[7] > 0.25f || probes[8] > 0.25f) return listOf(label to p)
             }
         }
 

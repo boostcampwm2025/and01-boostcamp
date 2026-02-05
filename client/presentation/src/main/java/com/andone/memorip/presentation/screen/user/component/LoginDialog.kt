@@ -105,7 +105,7 @@ fun LoginDialog(
                     modifier = Modifier.fillMaxWidth(),
                     enabled = state.email.isNotBlank()
                             && state.password.isNotBlank()
-                            && (!state.isNewAccount || !isPasswordMismatch)
+                            && (!state.isNewAccount || (!isPasswordMismatch && state.passwordConfirm.isNotBlank()))
                 ) {
                     Text(
                         text = if (state.isNewAccount) stringResource(R.string.login_new_account)

@@ -18,7 +18,11 @@ class FirebaseTokenRepositoryImpl @Inject constructor(
     override fun getAccessToken(): String? = cachedToken
 
     override suspend fun refreshToken(force: Boolean): String? {
-        val user = firebaseAuth.currentUser ?: return null
+        val user = firebaseAuth.currentUser ?: run {
+            cachedToken = null
+            return null
+        }
+
         val result = user.getIdToken(force).await()
         cachedToken = result.token
         return cachedToken
