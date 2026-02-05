@@ -19,4 +19,6 @@ sealed interface PlaceDetailAction {
     data object OnDeleteDismiss : PlaceDetailAction
 
     data object OnDeleteConfirm : PlaceDetailAction
+
+    data object OnRefreshRequested : PlaceDetailAction
 }

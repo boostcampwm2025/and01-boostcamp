@@ -24,6 +24,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -45,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
+import com.andone.memorip.navigation.PlaceDetail
 import com.andone.memorip.presentation.R
 import com.andone.memorip.presentation.component.LoadingIndicatorScreen
 import com.andone.memorip.presentation.component.TagChipRow
@@ -92,14 +94,22 @@ private object PlaceDetailScreenDimens {
     val OVERLAY_HEIGHT = 180.dp
 }
 
+@Suppress("ComposeParameterRule")
 @Composable
 fun PlaceDetailScreen(
+    route: PlaceDetail,
     onNavigateBack: () -> Unit,
     onNavigateToSelectTrip: () -> Unit,
     onNavigateToPlaceEdit: (PlaceUiModel) -> Unit,
     onNavigateToTripList: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: PlaceDetailViewModel = hiltViewModel()
+    needsRefresh: Boolean = false,
+    onRefreshConsumed: () -> Unit = {},
+    viewModel: PlaceDetailViewModel = hiltViewModel<PlaceDetailViewModel, PlaceDetailViewModel.Factory>(
+        creationCallback = { factory ->
+            factory.create(route)
+        }
+    )
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -108,6 +118,13 @@ fun PlaceDetailScreen(
     var selectedImageUrl by rememberSaveable { mutableStateOf(value = "") }
     var showMoreMenu by rememberSaveable { mutableStateOf(false) }
     var showDeleteDialog by rememberSaveable { mutableStateOf(false) }
+
+    LaunchedEffect(needsRefresh) {
+        if (needsRefresh) {
+            viewModel.onAction(PlaceDetailAction.OnRefreshRequested)
+            onRefreshConsumed()
+        }
+    }
 
     viewModel.event.collectWithLifecycle { event ->
         when (event) {
@@ -362,6 +379,7 @@ fun heightLerp(start: Float, stop: Float, fraction: Float): Float {
 private fun PlaceDetailScreenPreview() {
     MemoripTheme {
         PlaceDetailScreen(
+            route = PlaceDetail(""),
             onNavigateBack = {},
             onNavigateToSelectTrip = {},
             onNavigateToPlaceEdit = {},

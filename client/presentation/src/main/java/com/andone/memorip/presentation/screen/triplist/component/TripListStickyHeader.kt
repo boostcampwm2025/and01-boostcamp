@@ -40,13 +40,13 @@ fun TripListStickyHeader(
                 .wrapContentHeight()
                 .background(MemoripTheme.colors.background)
         ) {
-            CreateNewTripCard(
-                onClick = onCreateNewTripClick,
-                modifier = Modifier.padding(bottom = MemoripPadding.PaddingSmall)
-            )
             TripListSearchBar(
                 value = searchQuery,
                 onValueChange = onSearchQueryChange,
+                modifier = Modifier.padding(bottom = MemoripPadding.PaddingSmall)
+            )
+            CreateNewTripCard(
+                onClick = onCreateNewTripClick,
                 modifier = Modifier.padding(bottom = MemoripPadding.PaddingSmall)
             )
         }

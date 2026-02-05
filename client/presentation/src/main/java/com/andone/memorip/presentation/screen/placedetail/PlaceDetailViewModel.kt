@@ -14,12 +14,16 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @HiltViewModel(assistedFactory = PlaceDetailViewModel.Factory::class)
@@ -31,26 +35,32 @@ class PlaceDetailViewModel @AssistedInject constructor(
 
     private val placeId = route.placeId
 
-    val uiState = flow {
-        placeRepository.getPlaceDetail(placeId = placeId)
-            .onSuccess {
-                emit(
-                    value = PlaceDetailUiState(
-                        place = it.toUiModel(),
-                        isLoading = false
-                    )
-                )
+    private val refreshTrigger = MutableStateFlow(0)
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val uiState = refreshTrigger
+        .flatMapLatest {
+            flow {
+                placeRepository.getPlaceDetail(placeId = placeId)
+                    .onSuccess {
+                        emit(
+                            value = PlaceDetailUiState(
+                                place = it.toUiModel(),
+                                isLoading = false
+                            )
+                        )
+                    }
+                    .onFailure {
+                        emit(value = PlaceDetailUiState(isLoading = false))
+                        snackBarManager.show(event = SnackBarEvent.NETWORK_ERROR)
+                        _event.trySend(PlaceDetailEvent.NavigateBack)
+                    }
             }
-            .onFailure {
-                emit(value = PlaceDetailUiState(isLoading = false))
-                snackBarManager.show(event = SnackBarEvent.NETWORK_ERROR)
-                _event.trySend(PlaceDetailEvent.NavigateBack)
-            }
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = PlaceDetailUiState(isLoading = true)
-    )
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = PlaceDetailUiState(isLoading = true)
+        )
 
     private val _event = Channel<PlaceDetailEvent>(BUFFERED)
     val event = _event.receiveAsFlow()
@@ -92,6 +102,10 @@ class PlaceDetailViewModel @AssistedInject constructor(
             PlaceDetailAction.OnDeleteConfirm -> {
                 _event.trySend(PlaceDetailEvent.HideDeleteDialog)
                 deletePlace()
+            }
+
+            PlaceDetailAction.OnRefreshRequested -> {
+                refreshTrigger.update { it + 1 }
             }
         }
     }

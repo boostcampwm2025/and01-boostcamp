@@ -104,7 +104,13 @@ class TripListViewModel @Inject constructor(
             }
 
             is TripListAction.OnTripClick -> {
-                _event.trySend(TripListEvent.NavigateToTripDetail(tripId = action.tripId))
+                // todo: 이후에 그룹 상세에서 장소 추가하기 기능 넣기.
+                val selectedTrip = _uiState.value.trips.find { it.id == action.tripId }
+                if (selectedTrip != null && selectedTrip.images.isEmpty()) {
+                    snackBarManager.show(SnackBarEvent.TRIP_NO_PLACES)
+                } else {
+                    _event.trySend(TripListEvent.NavigateToTripDetail(tripId = action.tripId))
+                }
             }
 
             TripListAction.OnCreateNewTripClick -> {

@@ -215,11 +215,12 @@ fun PlaceCreateSubStep(
 
         PlaceCreateStep.SelectTrip -> {
             SelectTripScreen(
+                isPlaceMine = true,
                 onTripSelect = { selectTrip ->
                     onTripChange(selectTrip.map { it.toTripUiModel() })
                     onStepChange(PlaceCreateStep.PlaceCreate)
                 },
-                onBackClick = { onStepChange(PlaceCreateStep.PlaceCreate) },
+                onBackClick = { _ -> onStepChange(PlaceCreateStep.PlaceCreate) },
                 placeId = null,
                 initialSelectedTripIds = selectedTrips?.map { it.id },
                 modifier = modifier

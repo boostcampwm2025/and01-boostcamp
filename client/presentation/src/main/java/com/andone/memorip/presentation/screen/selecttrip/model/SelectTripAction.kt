@@ -4,6 +4,7 @@ sealed interface SelectTripAction {
 
     data class OnInitialize(
         val placeId: String?,
+        val isPlaceMine: Boolean,
         val initialSelectedTripIds: List<String>?
     ) : SelectTripAction
 
