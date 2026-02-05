@@ -141,6 +141,7 @@ private fun PlaceEditScreenContent(
                 content = uiState.content,
                 onTitleChange = { onAction(PlaceEditAction.OnTitleChange(it)) },
                 onContentChange = { onAction(PlaceEditAction.OnContentChange(it)) },
+                contentErrorLabel = uiState.contentErrorLabel
             )
 
             SelectSection(

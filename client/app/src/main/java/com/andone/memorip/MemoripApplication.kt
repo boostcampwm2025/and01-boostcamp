@@ -15,27 +15,8 @@ import javax.inject.Inject
 
 @HiltAndroidApp
 class MemoripApplication : Application(), Configuration.Provider {
-
-    @Inject
-    lateinit var authRepository: AuthRepository
-
-    @Inject
-    lateinit var tokenRefresher: TokenRefresher
-
     @Inject
     lateinit var workerFactory: HiltWorkerFactory
-
-    override fun onCreate() {
-        super.onCreate()
-
-        CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
-            try {
-                tokenRefresher.refreshToken(force = true)
-            } catch (e: Exception) {
-                authRepository.signOut()
-            }
-        }
-    }
 
     override val workManagerConfiguration: Configuration
         get() = Configuration.Builder()
