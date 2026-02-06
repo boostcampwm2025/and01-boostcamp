@@ -36,7 +36,7 @@ private object ImageMarkerDimen {
 fun ImageMarker(
     imageBitmap: Bitmap,
     modifier: Modifier = Modifier,
-    borderColor: Color = MemoripTheme.colors.primary
+    borderColor: Color = MemoripTheme.colors.white
 ) {
     Box(
         modifier = modifier

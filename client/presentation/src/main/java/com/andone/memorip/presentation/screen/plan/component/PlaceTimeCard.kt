@@ -53,6 +53,7 @@ private object PlaceTimeCardConstants {
 @Composable
 fun PlaceTimeCard(
     place: Place,
+    isDraggable: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -60,6 +61,7 @@ fun PlaceTimeCard(
         place.durationMinutes < PlaceTimeCardConstants.COMPACT_LAYOUT_THRESHOLD_MINUTES -> {
             TextPlaceTimeCard(
                 place = place,
+                isDraggable = isDraggable,
                 onClick = onClick,
                 modifier = modifier
             )
@@ -68,6 +70,7 @@ fun PlaceTimeCard(
         place.durationMinutes < PlaceTimeCardConstants.EXPANDED_LAYOUT_THRESHOLD_MINUTES -> {
             CompactPlaceTimeCard(
                 place = place,
+                isDraggable = isDraggable,
                 onClick = onClick,
                 modifier = modifier
             )
@@ -76,6 +79,7 @@ fun PlaceTimeCard(
         else -> {
             ExpandedPlaceTimeCard(
                 place = place,
+                isDraggable = isDraggable,
                 onClick = onClick,
                 modifier = modifier
             )
@@ -86,11 +90,12 @@ fun PlaceTimeCard(
 @Composable
 private fun TextPlaceTimeCard(
     place: Place,
+    isDraggable: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Surface(
-        onClick = onClick,
+        onClick = { if (!isDraggable) onClick() },
         modifier = modifier
             .fillMaxWidth()
             .height(height = (place.durationMinutes * MINUTE_HEIGHT_DP).dp),
@@ -130,13 +135,14 @@ private fun TextPlaceTimeCard(
 @Composable
 private fun CompactPlaceTimeCard(
     place: Place,
+    isDraggable: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val imageSize = (place.durationMinutes * MINUTE_HEIGHT_DP).dp - MemoripPadding.PaddingMedium * 2
 
     Surface(
-        onClick = onClick,
+        onClick = { if (!isDraggable) onClick() },
         modifier = modifier.fillMaxWidth(),
         shape = MemoripTheme.shapes.roundedMedium,
         color = MemoripTheme.colors.primaryContainer,
@@ -167,12 +173,7 @@ private fun CompactPlaceTimeCard(
                     maxLines = 1,
                     style = MemoripTheme.typography.headlineBold24
                 )
-//                TagChipRow(tags = place.categories.toImmutableList())
                 PlaceLocationText(address = place.address, maxLines = 2)
-//                PlaceTimeText(
-//                    startDateTime = place.startDateTime,
-//                    endDateTime = place.endDateTime
-//                )
             }
         }
     }
@@ -181,6 +182,7 @@ private fun CompactPlaceTimeCard(
 @Composable
 private fun ExpandedPlaceTimeCard(
     place: Place,
+    isDraggable: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -190,7 +192,7 @@ private fun ExpandedPlaceTimeCard(
     val imageHeight = cardHeight * 0.6f
 
     Surface(
-        onClick = onClick,
+        onClick = { if (!isDraggable) onClick() },
         modifier = modifier.fillMaxWidth(),
         shape = MemoripTheme.shapes.roundedMedium,
         color = MemoripTheme.colors.primaryContainer,
@@ -245,21 +247,25 @@ private fun PlaceTimeCardPreview() {
             // Compact: 30분
             PlaceTimeCard(
                 place = DummyData.places[0],
+                isDraggable = false,
                 onClick = {}
             )
             // Compact: 60분
             PlaceTimeCard(
                 place = DummyData.places[5],
+                isDraggable = false,
                 onClick = {}
             )
             // Expanded: 120분
             PlaceTimeCard(
                 place = DummyData.places[4],
+                isDraggable = false,
                 onClick = {}
             )
             // Expanded: 240분
             PlaceTimeCard(
                 place = DummyData.places[1],
+                isDraggable = false,
                 onClick = {}
             )
         }

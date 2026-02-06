@@ -109,6 +109,7 @@ fun TripMapContent(
                     PlaceImageMarkers(
                         clusteredItems = clusteredItems,
                         markerImages = markerImages,
+                        selectedPlace = mapSelectedPlace,
                         onMarkerClick = onMarkerClick,
                         onClusterClick = onClusterClick
                     )

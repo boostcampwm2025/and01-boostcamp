@@ -21,7 +21,7 @@ fun ContentCard(
     Surface(
         modifier = modifier.fillMaxWidth(),
         shape = MemoripTheme.shapes.roundedMedium,
-        contentColor = MemoripTheme.colors.black,
+        contentColor = MemoripTheme.colors.onSurface,
         color = MemoripTheme.colors.primaryContainer
     ) {
         Text(

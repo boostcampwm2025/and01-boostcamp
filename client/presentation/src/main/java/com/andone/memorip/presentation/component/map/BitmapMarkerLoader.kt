@@ -11,60 +11,74 @@ import coil3.imageLoader
 import coil3.request.ImageRequest
 import coil3.request.SuccessResult
 import coil3.request.allowHardware
-import coil3.size.Precision
 import coil3.size.Scale
 import coil3.toBitmap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.math.min
+import androidx.core.graphics.scale
+import coil3.size.Precision
 
 private object MarkerImageConstant {
-    const val WIDTH = 200
-    const val HEIGHT = 200
+    const val SIZE = 200
     val BITMAP_CONFIG = Bitmap.Config.RGB_565
 }
 
 @Composable
 fun rememberBitmapMarkerLoader(
     imageUrls: List<String>,
-    width: Int = MarkerImageConstant.WIDTH,
-    height: Int = MarkerImageConstant.HEIGHT
+    size: Int = MarkerImageConstant.SIZE
 ): SnapshotStateMap<String, Bitmap> {
     val context = LocalContext.current
     val markerImages = remember { mutableStateMapOf<String, Bitmap>() }
 
     LaunchedEffect(imageUrls) {
-        imageUrls.forEach { imageUrl ->
-            if (markerImages.containsKey(imageUrl)) return@forEach
+        val targets = imageUrls.filterNot { markerImages.containsKey(it) }
 
+        targets.forEach { url ->
             launch(Dispatchers.IO) {
                 runCatching {
-                    val imageLoader = context.imageLoader
                     val request = ImageRequest.Builder(context)
-                        .data(imageUrl)
-                        .size(width, height)
+                        .data(url)
+                        .size(size)
+                        .scale(Scale.FIT)
                         .precision(Precision.INEXACT)
-                        .scale(Scale.FILL)
                         .allowHardware(false)
                         .build()
 
-                    val result = imageLoader.execute(request)
-                    if (result is SuccessResult) {
-                        result.image.toBitmap(
-                            width = width,
-                            height = height,
-                            config = MarkerImageConstant.BITMAP_CONFIG
-                        )
+                    val result = context.imageLoader.execute(request)
+                    if (result !is SuccessResult) throw IllegalStateException("Load failed")
+
+                    val bitmap = result.image.toBitmap()
+                    val configuredBitmap = if (bitmap.config != MarkerImageConstant.BITMAP_CONFIG) {
+                        bitmap.copy(MarkerImageConstant.BITMAP_CONFIG, false).also { bitmap.recycle() }
                     } else {
-                        error("이미지 로드 실패")
+                        bitmap
                     }
-                }.onSuccess { bitmap ->
+                    configuredBitmap.centerSquareCrop(size)
+                }.onSuccess { processedBitmap ->
                     withContext(Dispatchers.Main) {
-                        markerImages[imageUrl] = bitmap
+                        markerImages[url] = processedBitmap
                     }
                 }
             }
         }
     }
     return markerImages
+}
+
+private fun Bitmap.centerSquareCrop(targetSize: Int): Bitmap {
+    val minDimension = min(width, height)
+    val x = (width - minDimension) / 2
+    val y = (height - minDimension) / 2
+
+    val cropped = Bitmap.createBitmap(this, x, y, minDimension, minDimension)
+    return if (minDimension != targetSize) {
+        cropped.scale(targetSize, targetSize).also {
+            if (cropped != it) cropped.recycle()
+        }
+    } else {
+        cropped
+    }
 }
