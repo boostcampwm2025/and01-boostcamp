@@ -38,7 +38,6 @@ class StorageService(
                 .key(key)
                 .contentType(file.contentType)
                 .contentLength(file.size)
-                .acl(ObjectCannedACL.PUBLIC_READ)
                 .build(),
             RequestBody.fromInputStream(file.inputStream, file.size)
         )
