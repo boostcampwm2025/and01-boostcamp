@@ -44,3 +44,9 @@ naver:
     endpoint: https://kr.object.ncloudstorage.com
     region: kr-standard
 
+# Google/Cloud Storage
+gcp:
+  storage:
+    access-key: ${GCP_STORAGE_ACCESS_KEY}
+    secret-key: ${GCP_STORAGE_SECRET_KEY}
+

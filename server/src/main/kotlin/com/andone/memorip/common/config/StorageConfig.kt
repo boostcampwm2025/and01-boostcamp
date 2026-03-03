@@ -15,16 +15,14 @@ class StorageConfig {
 
     @Bean
     fun s3Client(
-        @Value("\${naver.s3.access-key}") accessKey: String,
-        @Value("\${naver.s3.secret-key}") secretKey: String,
-        @Value("\${naver.s3.endpoint}") endpoint: String,
-        @Value("\${naver.s3.region}") region: String
+        @Value("\${gcp.storage.access-key}") accessKey: String,
+        @Value("\${gcp.storage.secret-key}") secretKey: String
     ): S3Client {
         val credentials = AwsBasicCredentials.create(accessKey, secretKey)
 
         return S3Client.builder()
-            .endpointOverride(URI.create(endpoint))
-            .region(Region.of(region))
+            .endpointOverride(URI.create("https://storage.googleapis.com"))
+            .region(Region.US_EAST_1)
             .credentialsProvider(StaticCredentialsProvider.create(credentials))
             .serviceConfiguration(
                 S3Configuration.builder()
